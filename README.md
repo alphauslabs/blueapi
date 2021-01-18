@@ -9,5 +9,5 @@ $ buf generate
 
 Generate OpenAPI v2 definitions:
 ```bash
-$ protoc -I . --openapiv2_out ./gen/openapiv2 --openapiv2_opt logtostderr=true service/v1/service.proto
+$ protoc -I . --openapiv2_out ./gen/openapiv2 --openapiv2_opt logtostderr=true echo/v1/echo.proto
 ```
