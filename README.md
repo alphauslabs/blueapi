@@ -3,8 +3,10 @@ Directory structure:
 ./{service-name}
 ├── v[0-9]*/*
 │   └── {file}.proto
+│
 ├── {subapi}/v[0-9]*/*
 │   └── {file}.proto
+│
 └── types/*
 ```
 
