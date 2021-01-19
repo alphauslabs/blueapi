@@ -1,4 +1,4 @@
-> The design, structure, and CI is not yet final.
+_The design, structure, and CI is not yet final._
 
 Install [buf](https://docs.buf.build/).
 
