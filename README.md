@@ -1,5 +1,7 @@
 _The design, structure, and CI is not yet final._
 
+----
+
 Install [buf](https://docs.buf.build/).
 
 Clone and copy [github.com/googleapis/api-common-protos](https://github.com/googleapis/api-common-protos).
