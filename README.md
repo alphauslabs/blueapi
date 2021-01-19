@@ -1,4 +1,4 @@
-Directory structure:
+Directory structure for new services:
 ```
 ./{service-name}
 ├── v[0-9]*/*
