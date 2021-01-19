@@ -1,16 +1,3 @@
-Directory structure for new services:
-```
-./{service-name}
-├── v[0-9]*/*
-│   └── {file}.proto
-│
-├── {subapi}/v[0-9]*/*
-│   └── {file}.proto
-│
-└── types/*
-```
-
-
 Install [buf](https://docs.buf.build/).
 
 Clone and copy [github.com/googleapis/api-common-protos](https://github.com/googleapis/api-common-protos).
