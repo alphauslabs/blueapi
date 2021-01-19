@@ -1,4 +1,4 @@
-_The design, structure, and CI is not yet final._
+_The design, structure, and CI are not finalized yet._
 
 ----
 
