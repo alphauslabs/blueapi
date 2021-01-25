@@ -1,4 +1,4 @@
-_The design, structure, and CI are not finalized yet._
+**The design, structure, and CI are not finalized yet.**
 
 The folder `google/*` was cloned from [github.com/googleapis/api-common-protos](https://github.com/googleapis/api-common-protos).
 
