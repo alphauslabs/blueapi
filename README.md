@@ -1,7 +1,5 @@
 _The design, structure, and CI are not finalized yet._
 
-----
-
 The folder `google/*` was cloned from [github.com/googleapis/api-common-protos](https://github.com/googleapis/api-common-protos).
 
 To build locally, install [buf](https://docs.buf.build/), then run:
