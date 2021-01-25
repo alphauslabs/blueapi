@@ -15,4 +15,4 @@ $ protoc -I . --openapiv2_out ./gen/openapiv2 --openapiv2_opt logtostderr=true s
 ```
 
 Updates to this repo will also update the following repos:
-* [blue-sdk-go](https://github.com/alphauslabs/blue-sdk-go)
+* [blue-sdk-go](https://github.com/alphauslabs/blue-sdk-go) - generated SDK for Go
