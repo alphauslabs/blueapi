@@ -41,6 +41,8 @@ jobs:
           cp -rv $WORKSPACE_ROOT/generated/go/* . && git status
           git config user.email "dev@mobingi.com"
           git config user.name "mobingideployer"
-          git add . && git commit -am "deployer: $GITHUB_SHA $GITHUB_SHA"
-          git remote add origin-tmp https://$DEPLOYER_TOKEN@github.com/alphauslabs/blue-sdk-go.git > /dev/null 2>&1
-          git push --set-upstream origin-tmp
+          git add . && git commit -am "deployer: $GITHUB_SHA"
+          if [ $? -eq 0 ]; then
+            git remote add origin-tmp https://$DEPLOYER_TOKEN@github.com/alphauslabs/blue-sdk-go.git > /dev/null 2>&1
+            git push --set-upstream origin-tmp
+          fi
