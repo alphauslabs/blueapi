@@ -2,16 +2,14 @@ _The design, structure, and CI are not finalized yet._
 
 ----
 
-Install [buf](https://docs.buf.build/).
+The folder `google/*` was cloned from [github.com/googleapis/api-common-protos](https://github.com/googleapis/api-common-protos).
 
-Clone and copy [github.com/googleapis/api-common-protos](https://github.com/googleapis/api-common-protos).
-
-Run:
+To build locally, install [buf](https://docs.buf.build/), then run:
 ```bash
 $ buf generate
 ```
 
-Generate OpenAPI v2 definitions:
+To generate OpenAPI v2 definitions, run:
 ```bash
-$ protoc -I . --openapiv2_out ./gen/openapiv2 --openapiv2_opt logtostderr=true echo/v1/echo.proto
+$ protoc -I . --openapiv2_out ./gen/openapiv2 --openapiv2_opt logtostderr=true service/v1/file.proto
 ```
