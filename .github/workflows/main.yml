@@ -20,6 +20,8 @@ jobs:
           go-version: ^1.13
 
       - name: Build all
+        env:
+          DEPLOYER_TOKEN: ${{secrets.GH_TOKEN}}
         run: |
           PB_REL="https://github.com/protocolbuffers/protobuf/releases"
           curl -LO $PB_REL/download/v3.14.0/protoc-3.14.0-linux-x86_64.zip
@@ -36,4 +38,6 @@ jobs:
           buf generate
           WORKSPACE_ROOT=$PWD
           cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-go && cd blue-sdk-go
-          cp -rv $WORKSPACE_ROOT/generated/go/* . && git status
+          cp -rv $WORKSPACE_ROOT/generated/go/* . && git status && git add . && git commit -am "$GITHUB_REF $GITHUB_SHA"
+          git remote add origin-tmp https://$DEPLOYER_TOKEN@github.com/alphauslabs/blue-sdk-go.git > /dev/null 2>&1
+          git push --set-upstream origin-tmp
