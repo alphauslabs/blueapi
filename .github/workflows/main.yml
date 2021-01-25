@@ -21,6 +21,7 @@ jobs:
 
       - name: Build all
         run: |
+          pwd
           PB_REL="https://github.com/protocolbuffers/protobuf/releases"
           curl -LO $PB_REL/download/v3.14.0/protoc-3.14.0-linux-x86_64.zip
           unzip protoc-3.14.0-linux-x86_64.zip -d $HOME/.local
@@ -34,4 +35,4 @@ jobs:
             github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2
           export PATH="$PATH:$HOME/.local/bin:$(go env GOPATH)/bin"
           buf generate
-          ls -laF ./ && ls -laF ./generated/
+          cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-go && cd blue-sdk-go && ls -laF
