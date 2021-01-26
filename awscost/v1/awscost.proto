@@ -7,17 +7,17 @@ option go_package = "github.com/alphauslabs/blue-api/awscost";
 import "google/api/annotations.proto";
 
 service AwsCost {
-  rpc GetCosts (GetCostsRequest) returns (stream GetCostsReply) {
+  rpc GetAccountCosts (GetAccountCostsRequest) returns (stream GetAccountCostsReply) {
     option (google.api.http) = {
       get: "/v1/accounts/{name}/costs"
     };
   }
 }
 
-message GetCostsRequest {
+message GetAccountCostsRequest {
   string name = 1;
 }
 
-message GetCostsReply {
+message GetAccountCostsReply {
   string message = 1;
 }
