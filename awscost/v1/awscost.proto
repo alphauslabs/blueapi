@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package blueapi.awscost.v1;
+
+option go_package = "github.com/alphauslabs/blue-api/awscost";
+
+import "google/api/annotations.proto";
+import "google/protobuf/wrappers.proto";
+
+service AwsCost {
+  rpc GetCosts (GetCostsRequest) returns (GetCostsReply) {
+    option (google.api.http) = {
+      get: "/v1/accounts/{name}"
+    };
+  }
+}
+
+message GetCostsRequest {
+  string name = 1;
+}
+
+message GetCostsReply {
+  string message = 1;
+}
