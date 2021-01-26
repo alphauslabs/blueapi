@@ -9,7 +9,7 @@ $ buf generate
 
 To generate OpenAPI v2 definitions, run:
 ```bash
-$ protoc -I . --openapiv2_out ./gen/openapiv2 --openapiv2_opt logtostderr=true svc/v1/file.proto
+$ protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true svc/v1/file.proto
 ```
 
 Updates to this repo will also update the following repos:
