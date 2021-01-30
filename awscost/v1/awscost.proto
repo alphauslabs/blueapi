@@ -2,16 +2,17 @@ syntax = "proto3";
 
 package blueapi.awscost.v1;
 
-option go_package = "github.com/alphauslabs/blueapi/awscost";
-option java_package = "cloud.alphaus.api.awscost";
-option java_outer_classname = "Costs";
-
 import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
 
+option go_package = "github.com/alphauslabs/blueapi/awscost";
+option java_package = "cloud.alphaus.api.awscost";
+option java_outer_classname = "Costs";
+
+// Service for reading aggregated costs for AWS CUR (cost and usage report).
 service AwsCost {
-  // Streams back the cost details of an account. If date range parameters are not set,
+  // Streams back the cost details of an account. If datetime range parameters are not set,
   // month-to-date (current month) will be returned.
   rpc StreamReadAccountCosts (StreamReadAccountCostsRequest) returns (stream Cost) {
     option (google.api.http) = {
@@ -21,9 +22,22 @@ service AwsCost {
   }
 }
 
+// Response message for AwsCost.StreamReadAccountCosts.
 message Cost {
-  google.protobuf.Timestamp date = 1;
-  string payer_id = 2;
+  string account = 1;
+  google.protobuf.Timestamp date = 2;
+  string product_code = 3;
+  string service_code = 4;
+  string region = 5;
+  string zone = 6;
+  string usage_type = 7;
+  string instance_type = 8;
+  string operation = 9;
+  string invoice_id = 10;
+  string description = 11;
+  double usage_amount = 12;
+  double cost = 13;
+  double blended_cost = 14;
 }
 
 // Request message for AwsCost.StreamReadAccountCosts.
@@ -31,6 +45,10 @@ message StreamReadAccountCostsRequest {
   // Required. The AWS account to stream.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
+  // Optional. Timestamp to start streaming data from. If not set, the first day of the
+  // current month will be used.
   google.protobuf.Timestamp start_time = 2;
+
+  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   google.protobuf.Timestamp end_time = 3;
 }

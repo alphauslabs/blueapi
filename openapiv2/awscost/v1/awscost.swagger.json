@@ -18,7 +18,7 @@
   "paths": {
     "/v1/accounts/{name}/costs:streamReadAccountCosts": {
       "post": {
-        "summary": "Streams back the cost details of an account. If date range parameters are not set,\nmonth-to-date (current month) will be returned.",
+        "summary": "Streams back the cost details of an account. If datetime range parameters are not set,\nmonth-to-date (current month) will be returned.",
         "operationId": "AwsCost_StreamReadAccountCosts",
         "responses": {
           "200": {
@@ -100,10 +100,54 @@
     "v1Cost": {
       "type": "object",
       "properties": {
-        "payerId": {
+        "account": {
           "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "productCode": {
+          "type": "string"
+        },
+        "serviceCode": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "zone": {
+          "type": "string"
+        },
+        "usageType": {
+          "type": "string"
+        },
+        "instanceType": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "invoiceId": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "usageAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "cost": {
+          "type": "number",
+          "format": "double"
+        },
+        "blendedCost": {
+          "type": "number",
+          "format": "double"
         }
-      }
+      },
+      "description": "Response message for AwsCost.StreamReadAccountCosts."
     },
     "v1StreamReadAccountCostsRequest": {
       "type": "object",
@@ -114,6 +158,16 @@
           "required": [
             "name"
           ]
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
         }
       },
       "description": "Request message for AwsCost.StreamReadAccountCosts.",
