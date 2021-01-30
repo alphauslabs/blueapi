@@ -16,9 +16,10 @@
     "application/json"
   ],
   "paths": {
-    "/v1/accounts/{name}/costs": {
-      "get": {
-        "operationId": "AwsCost_GetAccountCosts",
+    "/v1/accounts/{name}/costs:streamReadAccountCosts": {
+      "post": {
+        "summary": "Streams back the cost details of an account. If date range parameters are not set,\nmonth-to-date (current month) will be returned.",
+        "operationId": "AwsCost_StreamReadAccountCosts",
         "responses": {
           "200": {
             "description": "A successful response.(streaming responses)",
@@ -26,13 +27,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1GetAccountCostsReply"
+                  "$ref": "#/definitions/v1Cost"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of v1GetAccountCostsReply"
+              "title": "Stream result of v1Cost"
             }
           },
           "default": {
@@ -45,9 +46,18 @@
         "parameters": [
           {
             "name": "name",
+            "description": "Required. The AWS account to stream.",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1StreamReadAccountCostsRequest"
+            }
           }
         ],
         "tags": [
@@ -87,13 +97,29 @@
         }
       }
     },
-    "v1GetAccountCostsReply": {
+    "v1Cost": {
       "type": "object",
       "properties": {
-        "message": {
+        "payerId": {
           "type": "string"
         }
       }
+    },
+    "v1StreamReadAccountCostsRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. The AWS account to stream.",
+          "required": [
+            "name"
+          ]
+        }
+      },
+      "description": "Request message for AwsCost.StreamReadAccountCosts.",
+      "required": [
+        "name"
+      ]
     }
   }
 }

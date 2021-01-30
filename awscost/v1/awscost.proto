@@ -6,22 +6,31 @@ option go_package = "github.com/alphauslabs/blueapi/awscost";
 option java_package = "cloud.alphaus.api.awscost";
 option java_outer_classname = "Costs";
 
+import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
 
 service AwsCost {
-  rpc GetAccountCosts (GetAccountCostsRequest) returns (stream GetAccountCostsReply) {
+  // Streams back the cost details of an account. If date range parameters are not set,
+  // month-to-date (current month) will be returned.
+  rpc StreamReadAccountCosts (StreamReadAccountCostsRequest) returns (stream Cost) {
     option (google.api.http) = {
-      get: "/v1/accounts/{name}/costs"
+      post: "/v1/accounts/{name}/costs:streamReadAccountCosts"
+      body: "*"
     };
   }
 }
 
-// Request message.
-message GetAccountCostsRequest {
-  string name = 1;
+message Cost {
+  google.protobuf.Timestamp date = 1;
+  string payer_id = 2;
 }
 
-// Response message.
-message GetAccountCostsReply {
-  string message = 1;
+// Request message for AwsCost.StreamReadAccountCosts.
+message StreamReadAccountCostsRequest {
+  // Required. The AWS account to stream.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Timestamp end_time = 3;
 }
