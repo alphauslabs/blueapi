@@ -18,7 +18,7 @@
   "paths": {
     "/v1/accounts/{name}/costs:streamReadAccountCosts": {
       "post": {
-        "summary": "Streams back the cost details of an account. If datetime range parameters are not set,\nmonth-to-date (current month) will be returned.",
+        "summary": "Streams back the usage-based cost details of an account. If datetime range parameters\nare not set, month-to-date (current month) will be returned.",
         "operationId": "AwsCost_StreamReadAccountCosts",
         "responses": {
           "200": {
@@ -57,6 +57,55 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1StreamReadAccountCostsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AwsCost"
+        ]
+      }
+    },
+    "/v1/accounts/{name}/fees:streamReadAccountFees": {
+      "post": {
+        "summary": "Streams back the fee-based details of an account. This API covers non-usage-based fees,\nsuch as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range parameters\nare not set, month-to-date (current month) will be returned.",
+        "operationId": "AwsCost_StreamReadAccountFees",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1Fee"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1Fee"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Required. The AWS account to stream.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1StreamReadAccountFeesRequest"
             }
           }
         ],
@@ -145,6 +194,32 @@
       },
       "description": "Response message for AwsCost.StreamReadAccountCosts."
     },
+    "v1Fee": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "type": {
+          "type": "string"
+        },
+        "productCode": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "cost": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "description": "Response message for AwsCost.StreamReadAccountFees."
+    },
     "v1StreamReadAccountCostsRequest": {
       "type": "object",
       "properties": {
@@ -167,6 +242,32 @@
         }
       },
       "description": "Request message for AwsCost.StreamReadAccountCosts.",
+      "required": [
+        "name"
+      ]
+    },
+    "v1StreamReadAccountFeesRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. The AWS account to stream.",
+          "required": [
+            "name"
+          ]
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
+        }
+      },
+      "description": "Request message for AwsCost.StreamReadAccountFees.",
       "required": [
         "name"
       ]

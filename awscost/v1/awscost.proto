@@ -12,11 +12,21 @@ option java_outer_classname = "Costs";
 
 // Service for reading aggregated costs for your AWS costs and usages.
 service AwsCost {
-  // Streams back the cost details of an account. If datetime range parameters are not set,
-  // month-to-date (current month) will be returned.
+  // Streams back the usage-based cost details of an account. If datetime range parameters
+  // are not set, month-to-date (current month) will be returned.
   rpc StreamReadAccountCosts (StreamReadAccountCostsRequest) returns (stream Cost) {
     option (google.api.http) = {
       post: "/v1/accounts/{name}/costs:streamReadAccountCosts"
+      body: "*"
+    };
+  }
+
+  // Streams back the fee-based details of an account. This API covers non-usage-based fees,
+  // such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range parameters
+  // are not set, month-to-date (current month) will be returned.
+  rpc StreamReadAccountFees (StreamReadAccountFeesRequest) returns (stream Fee) {
+    option (google.api.http) = {
+      post: "/v1/accounts/{name}/fees:streamReadAccountFees"
       body: "*"
     };
   }
@@ -41,6 +51,29 @@ message Cost {
 
 // Request message for AwsCost.StreamReadAccountCosts.
 message StreamReadAccountCostsRequest {
+  // Required. The AWS account to stream.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Timestamp to start streaming data from. If not set, the first day of the
+  // current month will be used.
+  google.protobuf.Timestamp start_time = 2;
+
+  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
+  google.protobuf.Timestamp end_time = 3;
+}
+
+// Response message for AwsCost.StreamReadAccountFees.
+message Fee {
+  string account = 1;
+  google.protobuf.Timestamp date = 2;
+  string type = 3;
+  string product_code = 4;
+  string description = 5;
+  double cost = 6;
+}
+
+// Request message for AwsCost.StreamReadAccountFees.
+message StreamReadAccountFeesRequest {
   // Required. The AWS account to stream.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
