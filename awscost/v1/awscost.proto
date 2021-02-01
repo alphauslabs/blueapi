@@ -20,7 +20,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 			url: "https://github.com/alphauslabs/blueapi/tree/main/awscost";
 		};
 		license: {
-			name: "Apache License 2.0";
+			name: "License: Apache License 2.0";
 			url: "https://github.com/alphauslabs/blueapi/blob/main/LICENSE";
 		};
 	};
@@ -32,8 +32,8 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 // Service for reading aggregated costs for your AWS costs and usages.
 service AwsCost {
-  // Streams back the usage-based cost details of an account. If datetime range parameters
-  // are not set, month-to-date (current month) will be returned.
+  // Streams back the usage-based cost details of an AWS account. If datetime range
+  // parameters are not set, month-to-date (current month) will be returned.
   rpc StreamReadAccountCosts (StreamReadAccountCostsRequest) returns (stream Cost) {
     option (google.api.http) = {
       post: "/v1/accounts/{name}/costs:streamReadAccountCosts"
@@ -41,9 +41,9 @@ service AwsCost {
     };
   }
 
-  // Streams back the fee-based details of an account. This API covers non-usage-based fees,
-  // such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range parameters
-  // are not set, month-to-date (current month) will be returned.
+  // Streams back the fee-based details of an AWS account. This API covers non-usage-based
+  // fees, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range
+  // parameters are not set, month-to-date (current month) will be returned.
   rpc StreamReadAccountFees (StreamReadAccountFeesRequest) returns (stream Fee) {
     option (google.api.http) = {
       post: "/v1/accounts/{name}/fees:streamReadAccountFees"
