@@ -73,6 +73,55 @@
         ]
       }
     },
+    "/v1/accounts/{name}/costs:streamReadBillingGroupCosts": {
+      "post": {
+        "summary": "Streams back the usage-based cost details of a billing group. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
+        "operationId": "AwsCost_StreamReadBillingGroupCosts",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1Cost"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1Cost"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Required. The billing group to stream.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1StreamReadBillingGroupCostsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AwsCost"
+        ]
+      }
+    },
     "/v1/accounts/{name}/fees:streamReadAccountFees": {
       "post": {
         "summary": "Streams back the fee-based details of an AWS account. This API covers non-usage-based\nfees, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
@@ -276,6 +325,32 @@
         }
       },
       "description": "Request message for AwsCost.StreamReadAccountFees.",
+      "required": [
+        "name"
+      ]
+    },
+    "v1StreamReadBillingGroupCostsRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. The billing group to stream.",
+          "required": [
+            "name"
+          ]
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
+        }
+      },
+      "description": "Request message for AwsCost.StreamReadBillingGroupCosts.",
       "required": [
         "name"
       ]

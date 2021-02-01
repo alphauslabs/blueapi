@@ -50,6 +50,15 @@ service AwsCost {
       body: "*"
     };
   }
+
+  // Streams back the usage-based cost details of a billing group. If datetime range
+  // parameters are not set, month-to-date (current month) will be returned.
+  rpc StreamReadBillingGroupCosts (StreamReadBillingGroupCostsRequest) returns (stream Cost) {
+    option (google.api.http) = {
+      post: "/v1/accounts/{name}/costs:streamReadBillingGroupCosts"
+      body: "*"
+    };
+  }
 }
 
 // Response message for AwsCost.StreamReadAccountCosts.
@@ -95,6 +104,19 @@ message Fee {
 // Request message for AwsCost.StreamReadAccountFees.
 message StreamReadAccountFeesRequest {
   // Required. The AWS account to stream.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Timestamp to start streaming data from. If not set, the first day of the
+  // current month will be used.
+  google.protobuf.Timestamp start_time = 2;
+
+  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
+  google.protobuf.Timestamp end_time = 3;
+}
+
+// Request message for AwsCost.StreamReadBillingGroupCosts.
+message StreamReadBillingGroupCostsRequest {
+  // Required. The billing group to stream.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
