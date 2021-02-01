@@ -7,7 +7,7 @@ To build locally, install [buf](https://docs.buf.build/), then run:
 $ buf generate
 ```
 
-To generate OpenAPI v2 definitions, run:
+To generate OpenAPI v2 definitions, run the following command for your proto file:
 ```bash
 $ protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true svc/v1/file.proto
 ```
