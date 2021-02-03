@@ -1,4 +1,2 @@
-## Alphaus Blue API
-
-### Overview
+## Overview
 Todo
