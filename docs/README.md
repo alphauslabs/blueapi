@@ -6,7 +6,7 @@ At the moment, Blue API is still a work in progress. Most of the endpoints curre
 
 ### Supported APIs
 
-- AWSCost - API for streaming/querying aggregated trueunblended/unblended costs and fees.
+- [AWSCost](https://alphauslabs.github.io/blueapi/apis/awscost.html) - API for streaming/querying aggregated trueunblended/unblended costs and fees.
 
 ### Supported SDKs
 
