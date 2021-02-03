@@ -10,4 +10,4 @@ At the moment, Blue API is still a work in progress. Most of the endpoints curre
 
 ### Supported SDKs
 
-- [blue-sdk-go](https://github.com/alphauslabs/blue-sdk-go) - SDK for the [Go](https://golang.org/) programming language
+- [blue-sdk-go](https://alphauslabs.github.io/blueapi/sdks/sdks.html) - SDK for the [Go](https://golang.org/) programming language
