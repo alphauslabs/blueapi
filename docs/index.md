@@ -2,8 +2,8 @@ Blue API is [Alphaus](https://alphaus.cloud/en/)' unified platform API for [Ripp
 
 The following APIs are supported:
 
-1) AWSCost - API for streaming/querying aggregated trueunblended/unblended costs and fees.
+AWSCost - API for streaming/querying aggregated trueunblended/unblended costs and fees.
 
 The following SDKs are supported:
 
-1) [blue-sdk-go](https://github.com/alphauslabs/blue-sdk-go) - Go (golang) SDK
+[blue-sdk-go](https://github.com/alphauslabs/blue-sdk-go) - Go (golang) SDK
