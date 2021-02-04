@@ -4,6 +4,10 @@
 
 At the moment, Blue API is still a work in progress. Most of the endpoints currently supported in Ripple and Wave are still not available. However, you can still use our current RESTful API. You can check out [https://docs.mobingi.com/v/api-reference/](https://docs.mobingi.com/v/api-reference/) for more information.
 
+### Getting started
+
+Todo.
+
 ### Supported APIs
 
 - [AWSCost](https://alphauslabs.github.io/blueapi/apis/awscost.html) - API for streaming/querying aggregated trueunblended/unblended costs and fees.
