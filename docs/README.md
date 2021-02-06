@@ -6,14 +6,14 @@ At the moment, Blue API is still a work in progress. Most of the APIs currently 
 
 We also plan to release client libraries for mainstream languages in the near future. In the meantime, we are making the service definitions [public](https://github.com/alphauslabs/blueapi) so you can generate your own client libraries for it in any gRPC-supported language. You can follow the instructions for your preferred language on [grpc.io](https://grpc.io/) to generate and use your client.
 
-### Getting started
+# Getting started
 
 Todo.
 
-### Supported APIs
+# Supported APIs
 
 - [AWSCost](https://alphauslabs.github.io/blueapi/apis/awscost.html) - API for streaming/querying aggregated trueunblended/unblended costs and fees.
 
-### Supported SDKs
+# Supported SDKs
 
 - [blue-sdk-go](https://alphauslabs.github.io/blueapi/sdks/go.html) - SDK for the [Go](https://golang.org/) programming language
