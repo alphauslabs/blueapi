@@ -15,7 +15,7 @@ Todo.
 # Supported APIs
 
 - [Core API for AWS](https://alphauslabs.github.io/blueapi/apis/blueaws.html) - Core API for AWS-specific features.
-- [AWSCost](https://alphauslabs.github.io/blueapi/apis/awscost.html) - API for streaming/querying aggregated trueunblended/unblended costs and fees.
+- [AWSCost API](https://alphauslabs.github.io/blueapi/apis/awscost.html) - API for streaming/querying aggregated trueunblended/unblended costs and fees.
 
 # Supported SDKs
 
