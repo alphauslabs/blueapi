@@ -6,7 +6,7 @@ At the moment, Blue API is still a work in progress. Most of the APIs currently 
 
 We also plan to release client libraries for mainstream languages in the near future. In the meantime, we are making the service definitions [public](https://github.com/alphauslabs/blueapi) so you can generate your own client libraries for it in any gRPC-supported language. You can follow the instructions for your preferred language on [grpc.io](https://grpc.io/) to generate and use your client.
 
-You can also use [bluectl](https://github.com/alphauslabs/bluectl), our command line interface for Alphaus services if you prefer not to write code yourself.
+You can also use [bluectl](https://github.com/alphauslabs/bluectl), our official CLI tool if you prefer not to write code yourself.
 
 # Getting started
 
