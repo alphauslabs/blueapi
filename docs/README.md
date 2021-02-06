@@ -14,8 +14,9 @@ Todo.
 
 # Supported APIs
 
+- [Core API for AWS](https://alphauslabs.github.io/blueapi/apis/blueaws.html) - Core API for AWS-specific features.
 - [AWSCost](https://alphauslabs.github.io/blueapi/apis/awscost.html) - API for streaming/querying aggregated trueunblended/unblended costs and fees.
 
 # Supported SDKs
 
-- [blue-sdk-go](https://alphauslabs.github.io/blueapi/sdks/go.html) - SDK for the [Go](https://golang.org/) programming language
+- [blue-sdk-go](https://alphauslabs.github.io/blueapi/sdks/go.html) - SDK for the [Go](https://golang.org/) programming language.
