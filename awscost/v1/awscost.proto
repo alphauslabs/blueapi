@@ -59,6 +59,15 @@ service AwsCost {
     };
   }
 
+  // Streams back the usage-based cost details of an MSP (Ripple) or company (Wave). If
+  // datetime range parameters are not set, month-to-date (current month) will be returned.
+  rpc StreamReadCosts (StreamReadCostsRequest) returns (stream Fee) {
+    option (google.api.http) = {
+      post: "/v1/costs:streamReadCosts"
+      body: "*"
+    };
+  }
+
   // Streams back the fee-based details of an AWS account. This API covers non-usage-based
   // fees, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range
   // parameters are not set, month-to-date (current month) will be returned.
@@ -85,6 +94,16 @@ service AwsCost {
   rpc StreamReadBillingGroupFees (StreamReadBillingGroupFeesRequest) returns (stream Fee) {
     option (google.api.http) = {
       post: "/v1/billinggroups/{name}/fees:streamReadBillingGroupFees"
+      body: "*"
+    };
+  }
+
+  // Streams back the fee-based details of an MSP (Ripple) or company (Wave). This API covers
+  // non-usage-based fees, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If
+  // datetime range parameters are not set, month-to-date (current month) will be returned.
+  rpc StreamReadFees (StreamReadFeesRequest) returns (stream Fee) {
+    option (google.api.http) = {
+      post: "/v1/fees:streamReadFees"
       body: "*"
     };
   }
@@ -146,6 +165,20 @@ message StreamReadBillingGroupCostsRequest {
   google.protobuf.Timestamp end_time = 3;
 }
 
+// Request message for AwsCost.StreamReadCosts.
+message StreamReadCostsRequest {
+  // Optional. The MSP id or company id to stream. If not provided, the parent MSP or
+  // company will be used.
+  string name = 1;
+
+  // Optional. Timestamp to start streaming data from. If not set, the first day of the
+  // current month will be used.
+  google.protobuf.Timestamp start_time = 2;
+
+  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
+  google.protobuf.Timestamp end_time = 3;
+}
+
 // Response message for AwsCost.StreamReadAccountFees.
 message Fee {
   string account = 1;
@@ -186,6 +219,20 @@ message StreamReadCompanyFeesRequest {
 message StreamReadBillingGroupFeesRequest {
   // Required. The billing group id to stream.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Timestamp to start streaming data from. If not set, the first day of the
+  // current month will be used.
+  google.protobuf.Timestamp start_time = 2;
+
+  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
+  google.protobuf.Timestamp end_time = 3;
+}
+
+// Request message for AwsCost.StreamReadFees.
+message StreamReadFeesRequest {
+  // Optional. The MSP id or company id to stream. If not provided, the parent MSP or
+  // company will be used.
+  string name = 1;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
   // current month will be used.
