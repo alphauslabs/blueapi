@@ -124,8 +124,10 @@ message Cost {
   string operation = 11;
   string invoice_id = 12;
   string description = 13;
-  double usage_amount = 14;
-  double cost = 15;
+  map<string, string> tags = 14;
+  map<string, string> cost_categories = 15;
+  double usage_amount = 16;
+  double cost = 17;
 }
 
 // Request message for AwsCost.StreamReadAccountCosts.
@@ -139,6 +141,15 @@ message StreamReadAccountCostsRequest {
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   google.protobuf.Timestamp end_time = 3;
+
+  // Optional. If set to true, stream will include resource tags. Note that this could
+  // potentially increase the data size if you have lots of tag information.
+  bool include_tags = 4;
+
+  // Optional. If set to true, stream will include resource cost category information.
+  // Note that this could potentially increase the data size if you have lots of cost
+  // category information.
+  bool include_cost_categories = 5;
 }
 
 // Request message for AwsCost.StreamReadCompanyCosts.
@@ -152,6 +163,15 @@ message StreamReadCompanyCostsRequest {
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   google.protobuf.Timestamp end_time = 3;
+
+  // Optional. If set to true, stream will include resource tags. Note that this could
+  // potentially increase the data size if you have lots of tag information.
+  bool include_tags = 4;
+
+  // Optional. If set to true, stream will include resource cost category information.
+  // Note that this could potentially increase the data size if you have lots of cost
+  // category information.
+  bool include_cost_categories = 5;
 }
 
 // Request message for AwsCost.StreamReadBillingGroupCosts.
@@ -165,6 +185,15 @@ message StreamReadBillingGroupCostsRequest {
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   google.protobuf.Timestamp end_time = 3;
+
+  // Optional. If set to true, stream will include resource tags. Note that this could
+  // potentially increase the data size if you have lots of tag information.
+  bool include_tags = 4;
+
+  // Optional. If set to true, stream will include resource cost category information.
+  // Note that this could potentially increase the data size if you have lots of cost
+  // category information.
+  bool include_cost_categories = 5;
 }
 
 // Request message for AwsCost.StreamReadCosts.
@@ -179,6 +208,15 @@ message StreamReadCostsRequest {
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   google.protobuf.Timestamp end_time = 3;
+
+  // Optional. If set to true, stream will include resource tags. Note that this could
+  // potentially increase the data size if you have lots of tag information.
+  bool include_tags = 4;
+
+  // Optional. If set to true, stream will include resource cost category information.
+  // Note that this could potentially increase the data size if you have lots of cost
+  // category information.
+  bool include_cost_categories = 5;
 }
 
 // Response message for AwsCost.StreamReadAccountFees.
