@@ -32,8 +32,6 @@ $ curl -H "Authorization: Bearer $(bluectl access-token)" https://api.alphaus.cl
 
 If successful, it will print some information about the authenticated user.
 
-After validation, you should now be able to use our supported SDKs if you prefer to code by yourself, or [bluectl](https://github.com/alphauslabs/bluectl) if you don't.
-
 # Supported APIs
 
 - [Core API for AWS](https://alphauslabs.github.io/blueapi/apis/blueaws.html) - Core API for AWS-specific features.
