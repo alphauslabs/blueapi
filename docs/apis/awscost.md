@@ -10,7 +10,7 @@ Before you can use this API, you need to register your AWS management (or billin
 
 Once registered, and the correct permissions are setup, our calculation engines will start downloading your [CUR](https://aws.amazon.com/aws-cost-management/aws-cost-and-usage-reporting/) files from your S3 bucket everytime your CUR files are updated by AWS. These checks are done periodically, several times a day. After downloading, calculations will be done based on your billing group settings, whether it will be AWS unblended or Alphaus trueunblended values.
 
-Typically, you will download both usage-based costs and fee-based costs from this API to get the whole spending data. To demontrate, let's use [bluectl](https://github.com/alphauslabs/bluectl) tool.
+Typically, you will download both usage-based costs and fee-based costs from this API to get the whole spending data. To demontrate, let's use the [bluectl](https://github.com/alphauslabs/bluectl) tool.
 
 Make sure to setup authentication [here](https://alphauslabs.github.io/blueapi/authentication/apikey.html). Here are some example usage scenarios.
 
