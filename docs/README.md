@@ -27,7 +27,7 @@ If successful, it will print some information about the authenticated user.
 * Using [curl](https://curl.se/)
 
 ```bash
-$ curl -H "Authentication: Bearer $(bluectl access-token)" https://api.alphaus.cloud/blueaws/v1/me
+$ curl -H "Authorization: Bearer $(bluectl access-token)" https://api.alphaus.cloud/blueaws/v1/me
 ```
 
 If successful, it will print some information about the authenticated user.
