@@ -15,7 +15,11 @@ We recommend you to install our CLI tool, [bluectl](https://github.com/alphausla
 Run the following command:
 
 ```bash
+# Default target is Ripple.
 $ bluectl me
+
+# If you're on Wave, you can do:
+$ bluectl me --target=wave
 ```
 
 If successful, it will print some information about the authenticated user.
