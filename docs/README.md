@@ -28,7 +28,7 @@ $ curl -H "Authorization: Bearer $(bluectl access-token)" https://api.alphaus.cl
 
 # Supported APIs
 
-- [Core API for AWS](https://alphauslabs.github.io/blueapi/apis/blueaws.html) - Core API for AWS-specific features.
+- [Core API](https://alphauslabs.github.io/blueapi/apis/blue.html) - Core API for Blue.
 - [AWSCost API](https://alphauslabs.github.io/blueapi/apis/awscost.html) - API for streaming/querying aggregated trueunblended/unblended costs and fees.
 
 # Supported client libraries
