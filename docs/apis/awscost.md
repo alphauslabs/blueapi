@@ -42,6 +42,16 @@ Download current month's fees for a specific billing group and save as CSV file:
 $ bluectl awsfees bill001 --type=billinggroup --out=/tmp/out.csv
 ```
 
+Although these APIs are designed to be streamed due to potentially large amounts of data, you can still use the JSON/REST API like so:
+
+```bash
+$ curl -X POST \
+    -H "Authorization: Bearer $(bluectl access-token)" \
+    https://api.alphaus.cloud/awscost/v1/accounts/131920598436/costs:streamReadAccountCosts
+```
+
+We will be publishing the OpenAPI documentations for these JSON/REST APIs. In the meantime, check them out [here](https://github.com/alphauslabs/blueapi/tree/main/openapiv2).
+
 # Pricing
 
 This API is still in beta, so its usage will be free. Once released, we will also announce the pricing details.
