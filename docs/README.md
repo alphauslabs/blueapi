@@ -23,7 +23,7 @@ If successful, it will print some information about the authenticated user.
 You can also use bluectl to generate the access token for you, and then you can call the JSON/REST API directly using [curl](https://curl.se/).
 
 ```bash
-$ curl -H "Authorization: Bearer $(bluectl access-token)" https://api.alphaus.cloud/blueaws/v1/me
+$ curl -H "Authorization: Bearer $(bluectl access-token)" https://api.alphaus.cloud/blue/v1/me
 ```
 
 # Supported APIs
