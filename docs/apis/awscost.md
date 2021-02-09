@@ -50,7 +50,7 @@ $ curl -X POST \
     https://api.alphaus.cloud/awscost/v1/accounts/1234567890/costs:streamReadAccountCosts
 ```
 
-We will be publishing the OpenAPI documentations for these JSON/REST APIs soon. In the meantime, check them out [here](https://github.com/alphauslabs/blueapi/tree/main/openapiv2).
+We will be publishing the OpenAPI documentations for these JSON/REST APIs soon. In the meantime, check them out [here](https://github.com/alphauslabs/blueapi/tree/main/openapiv2). You can use something like [editor.swagger.io](https://editor.swagger.io/).
 
 # Pricing
 
