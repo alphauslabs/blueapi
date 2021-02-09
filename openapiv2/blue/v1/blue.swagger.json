@@ -1,0 +1,95 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Alphaus Blue: Core service",
+    "version": "1.0",
+    "contact": {
+      "name": "Alphaus Blue: Core service",
+      "url": "https://alphauslabs.github.io/blueapi/apis/blue.html"
+    },
+    "license": {
+      "name": "License: Apache License 2.0",
+      "url": "https://github.com/alphauslabs/blueapi/blob/main/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "Blue"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/me": {
+      "get": {
+        "operationId": "Blue_Me",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1MeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Blue"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "typeUrl": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1MeResponse": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "description": "Response message for Blue.Me."
+    }
+  },
+  "externalDocs": {
+    "description": "More about Alphaus Blue: Core service",
+    "url": "https://alphauslabs.github.io/blueapi/apis/blue.html"
+  }
+}

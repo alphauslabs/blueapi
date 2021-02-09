@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package blueapi.blue.v1;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/blue";
+option java_package = "cloud.alphaus.api.blue";
+option java_outer_classname = "BlueCore";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Alphaus Blue: Core service";
+    version: "1.0";
+    contact: {
+      name: "Alphaus Blue: Core service";
+      url: "https://alphauslabs.github.io/blueapi/apis/blue.html";
+    };
+    license: {
+      name: "License: Apache License 2.0";
+      url: "https://github.com/alphauslabs/blueapi/blob/main/LICENSE";
+    };
+  };
+  external_docs: {
+    url: "https://alphauslabs.github.io/blueapi/apis/blue.html";
+    description: "More about Alphaus Blue: Core service";
+  }
+};
+
+// Core service.
+service Blue {
+  rpc Me(MeRequest) returns (MeResponse) {
+    option (google.api.http) = {
+      get: "/v1/me"
+    };
+  }
+}
+
+// Request message for Blue.Me.
+message MeRequest {}
+
+// Response message for Blue.Me.
+message MeResponse {
+  string name = 1;
+}
