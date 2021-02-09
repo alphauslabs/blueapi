@@ -46,6 +46,7 @@ $ bluectl awsfees bill001 --type=billinggroup --out=/tmp/out.csv
 Although these APIs are designed to be streamed due to potentially large amounts of data, you can still use the JSON/REST API like so:
 
 ```bash
+# Output is a newline-delimited rows of JSON data.
 $ curl -X POST \
     -H "Authorization: Bearer $(bluectl access-token)" \
     https://api.alphaus.cloud/awscost/v1/accounts/1234567890/costs:streamReadAccountCosts
