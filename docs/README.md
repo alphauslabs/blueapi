@@ -10,7 +10,25 @@ You can also use [bluectl](https://github.com/alphauslabs/bluectl), our official
 
 # Getting started
 
-Todo.
+First, setup your environment variables for authentication. See this [page](https://alphauslabs.github.io/blueapi/authentication/apikey.html) for more information.
+
+We recommend you to install our CLI tool, [bluectl](https://github.com/alphauslabs/bluectl). You can use this to validate your authentication, among other features. Use one of the steps below to check your authentication:
+
+* Using the CLI
+
+Run the following command:
+```bash
+$ bluectl me
+```
+
+If successful, it will print some information about the authenticated user.
+
+* Using [`curl`](https://curl.se/)
+```bash
+$ curl -H "Authentication: Bearer $(bluectl access-token)" https://api.alphaus.cloud/blueaws/v1/me
+```
+
+If successful, it will print some information about the authenticated user.
 
 # Supported APIs
 
