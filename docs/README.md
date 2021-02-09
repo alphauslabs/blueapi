@@ -28,7 +28,7 @@ $ curl -H "Authorization: Bearer $(bluectl access-token)" https://api.alphaus.cl
 
 # Supported APIs
 
-- [Core API](https://alphauslabs.github.io/blueapi/apis/blue.html) - Core API for Blue.
+- [Core API](https://alphauslabs.github.io/blueapi/apis/blue.html) - Core management and administration API.
 - [AWSCost API](https://alphauslabs.github.io/blueapi/apis/awscost.html) - API for streaming/querying aggregated trueunblended/unblended costs and fees.
 
 # Supported client libraries
