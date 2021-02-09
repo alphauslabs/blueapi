@@ -47,7 +47,7 @@ Although these APIs are designed to be streamed due to potentially large amounts
 ```bash
 $ curl -X POST \
     -H "Authorization: Bearer $(bluectl access-token)" \
-    https://api.alphaus.cloud/awscost/v1/accounts/131920598436/costs:streamReadAccountCosts
+    https://api.alphaus.cloud/awscost/v1/accounts/1234567890/costs:streamReadAccountCosts
 ```
 
 We will be publishing the OpenAPI documentations for these JSON/REST APIs. In the meantime, check them out [here](https://github.com/alphauslabs/blueapi/tree/main/openapiv2).
