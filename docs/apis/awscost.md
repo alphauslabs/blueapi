@@ -28,7 +28,7 @@ Download current month's fees and save as CSV file:
 $ bluectl awsfees --type=all --out=/tmp/out.csv
 ```
 
-You can also provide the `--start` and `--end` flags for data ranges.
+You can also provide the `--start=yyyy-mm-dd` and `--end=yyyy-mm-dd` flags for data ranges.
 
 Download current month's usage costs for a specific account and save as CSV file:
 
