@@ -39,6 +39,7 @@ $ bluectl awscost 1234567890 --type=account --out=/tmp/out.csv
 Download current month's fees for a specific billing group and save as CSV file:
 
 ```bash
+# Here, 'bill001' is your billing group id.
 $ bluectl awsfees bill001 --type=billinggroup --out=/tmp/out.csv
 ```
 
