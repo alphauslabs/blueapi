@@ -43,7 +43,7 @@ Download current month's fees for a specific billing group and save as CSV file:
 $ bluectl awsfees bill001 --type=billinggroup --out=/tmp/out.csv
 ```
 
-You can also provide the `--include-tags` and/or `--include-costcategories` flags to include the tags and/or cost category information in the streaming data. At the moment, only the cost data supports tags and/or cost categories. Support for fees will be coming soon.
+You can also provide the `--include-tags` and/or `--include-costcategories` flag(s) to include the tags and/or cost category information in the streaming data. At the moment, only the usage-based data supports tags and cost categories. Support for fees will be coming soon.
 
 Although these APIs are designed to be streamed due to potentially large amounts of data, you can still use the JSON/REST API like so:
 
