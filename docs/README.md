@@ -19,7 +19,7 @@ Run the following command:
 $ bluectl me
 
 # If you're on Wave, you can do:
-$ bluectl me --target=wave
+$ bluectl me --target wave
 ```
 
 If successful, it will print some information about the authenticated user.
