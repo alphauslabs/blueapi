@@ -15,12 +15,7 @@ $ go get -u -v google.golang.org/protobuf/cmd/protoc-gen-go \
 ```
 * The [buf](https://docs.buf.build/installation) tool
 
-To build locally, install [buf](https://docs.buf.build/installation), then run:
+Then run:
 ```bash
-$ buf generate
-```
-
-To generate OpenAPI v2 definitions, run the following command for your proto file:
-```bash
-$ protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true svc/v1/file.proto
+$ ./build.sh
 ```
