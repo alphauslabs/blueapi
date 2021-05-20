@@ -12,7 +12,7 @@ First, setup your environment variables for authentication. See this [page](http
 
 We recommend you to install our CLI tool, [bluectl](https://github.com/alphauslabs/bluectl). You can use this to validate your authentication, among other features.
 
-Run the following command:
+To validate, run the following command(s):
 
 ```bash
 # If you have Ripple credentials:
