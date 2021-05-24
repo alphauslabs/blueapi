@@ -28,19 +28,19 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   }
 };
 
-// Core service.
+// IAM service.
 service Iam {
-  rpc Me(MeRequest) returns (MeResponse) {
+  rpc WhoAmI(WhoAmIRequest) returns (WhoAmIResponse) {
     option (google.api.http) = {
-      get: "/v1/me"
+      get: "/v1/iam/whoami"
     };
   }
 }
 
-// Request message for Blue.Me.
-message MeRequest {}
+// Request message for Iam.WhoAmI rpc.
+message WhoAmIRequest {}
 
-// Response message for Blue.Me.
-message MeResponse {
+// Response message for Iam.WhoAmI rpc.
+message WhoAmIResponse {
   string name = 1;
 }
