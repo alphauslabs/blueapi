@@ -64,7 +64,28 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1StreamReadAccountCostsRequest"
+              "type": "object",
+              "properties": {
+                "startTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
+                },
+                "endTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
+                },
+                "includeTags": {
+                  "type": "boolean",
+                  "description": "Optional. If set to true, stream will include resource tags. Note that this could\npotentially increase the data size if you have lots of tag information."
+                },
+                "includeCostCategories": {
+                  "type": "boolean",
+                  "description": "Optional. If set to true, stream will include resource cost category information.\nNote that this could potentially increase the data size if you have lots of cost\ncategory information."
+                }
+              },
+              "description": "Request message for AwsCost.StreamReadAccountCosts."
             }
           }
         ],
@@ -113,7 +134,20 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1StreamReadAccountFeesRequest"
+              "type": "object",
+              "properties": {
+                "startTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
+                },
+                "endTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
+                }
+              },
+              "description": "Request message for AwsCost.StreamReadAccountFees."
             }
           }
         ],
@@ -162,7 +196,28 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1StreamReadBillingGroupCostsRequest"
+              "type": "object",
+              "properties": {
+                "startTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
+                },
+                "endTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
+                },
+                "includeTags": {
+                  "type": "boolean",
+                  "description": "Optional. If set to true, stream will include resource tags. Note that this could\npotentially increase the data size if you have lots of tag information."
+                },
+                "includeCostCategories": {
+                  "type": "boolean",
+                  "description": "Optional. If set to true, stream will include resource cost category information.\nNote that this could potentially increase the data size if you have lots of cost\ncategory information."
+                }
+              },
+              "description": "Request message for AwsCost.StreamReadBillingGroupCosts."
             }
           }
         ],
@@ -211,7 +266,20 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1StreamReadBillingGroupFeesRequest"
+              "type": "object",
+              "properties": {
+                "startTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
+                },
+                "endTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
+                }
+              },
+              "description": "Request message for AwsCost.StreamReadBillingGroupFees."
             }
           }
         ],
@@ -260,7 +328,28 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1StreamReadCompanyCostsRequest"
+              "type": "object",
+              "properties": {
+                "startTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
+                },
+                "endTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
+                },
+                "includeTags": {
+                  "type": "boolean",
+                  "description": "Optional. If set to true, stream will include resource tags. Note that this could\npotentially increase the data size if you have lots of tag information."
+                },
+                "includeCostCategories": {
+                  "type": "boolean",
+                  "description": "Optional. If set to true, stream will include resource cost category information.\nNote that this could potentially increase the data size if you have lots of cost\ncategory information."
+                }
+              },
+              "description": "Request message for AwsCost.StreamReadCompanyCosts."
             }
           }
         ],
@@ -309,7 +398,20 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1StreamReadCompanyFeesRequest"
+              "type": "object",
+              "properties": {
+                "startTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
+                },
+                "endTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
+                }
+              },
+              "description": "Request message for AwsCost.StreamReadCompanyFees."
             }
           }
         ],
@@ -531,186 +633,6 @@
         }
       },
       "description": "Response message for AwsCost.StreamReadAccountFees."
-    },
-    "v1StreamReadAccountCostsRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Required. The AWS account to stream.",
-          "required": [
-            "name"
-          ]
-        },
-        "startTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
-        },
-        "endTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
-        },
-        "includeTags": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource tags. Note that this could\npotentially increase the data size if you have lots of tag information."
-        },
-        "includeCostCategories": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource cost category information.\nNote that this could potentially increase the data size if you have lots of cost\ncategory information."
-        }
-      },
-      "description": "Request message for AwsCost.StreamReadAccountCosts.",
-      "required": [
-        "name"
-      ]
-    },
-    "v1StreamReadAccountFeesRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Required. The AWS account id to stream.",
-          "required": [
-            "name"
-          ]
-        },
-        "startTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
-        },
-        "endTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
-        }
-      },
-      "description": "Request message for AwsCost.StreamReadAccountFees.",
-      "required": [
-        "name"
-      ]
-    },
-    "v1StreamReadBillingGroupCostsRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Required. The billing group id to stream.",
-          "required": [
-            "name"
-          ]
-        },
-        "startTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
-        },
-        "endTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
-        },
-        "includeTags": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource tags. Note that this could\npotentially increase the data size if you have lots of tag information."
-        },
-        "includeCostCategories": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource cost category information.\nNote that this could potentially increase the data size if you have lots of cost\ncategory information."
-        }
-      },
-      "description": "Request message for AwsCost.StreamReadBillingGroupCosts.",
-      "required": [
-        "name"
-      ]
-    },
-    "v1StreamReadBillingGroupFeesRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Required. The billing group id to stream.",
-          "required": [
-            "name"
-          ]
-        },
-        "startTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
-        },
-        "endTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
-        }
-      },
-      "description": "Request message for AwsCost.StreamReadBillingGroupFees.",
-      "required": [
-        "name"
-      ]
-    },
-    "v1StreamReadCompanyCostsRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Required. The company id to stream.",
-          "required": [
-            "name"
-          ]
-        },
-        "startTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
-        },
-        "endTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
-        },
-        "includeTags": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource tags. Note that this could\npotentially increase the data size if you have lots of tag information."
-        },
-        "includeCostCategories": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource cost category information.\nNote that this could potentially increase the data size if you have lots of cost\ncategory information."
-        }
-      },
-      "description": "Request message for AwsCost.StreamReadCompanyCosts.",
-      "required": [
-        "name"
-      ]
-    },
-    "v1StreamReadCompanyFeesRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Required. The company id to stream.",
-          "required": [
-            "name"
-          ]
-        },
-        "startTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
-        },
-        "endTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
-        }
-      },
-      "description": "Request message for AwsCost.StreamReadCompanyFees.",
-      "required": [
-        "name"
-      ]
     },
     "v1StreamReadCostsRequest": {
       "type": "object",

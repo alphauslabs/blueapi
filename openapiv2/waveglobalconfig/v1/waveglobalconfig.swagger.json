@@ -1,0 +1,117 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Alphaus Blue: WaveGlobalConfig service",
+    "version": "1.0",
+    "contact": {
+      "name": "Alphaus Blue: WaveGlobalConfig service",
+      "url": "https://alphauslabs.github.io/blueapi/apis/waveglobalconfig.html"
+    },
+    "license": {
+      "name": "License: Apache License 2.0",
+      "url": "https://github.com/alphauslabs/blueapi/blob/main/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "WaveGlobalConfig"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/config": {
+      "get": {
+        "operationId": "WaveGlobalConfig_Config",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListConfigResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "WaveGlobalConfig"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "typeUrl": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1Config": {
+      "type": "object",
+      "properties": {
+        "featureId": {
+          "type": "string",
+          "description": "The feature name of wave."
+        },
+        "featureName": {
+          "type": "string",
+          "description": "Required. The feature id of wave."
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "The feature of wave enabled or disabled.\nSet value to enable or disable the use of the feature."
+        }
+      },
+      "description": "Response message for Config."
+    },
+    "v1ListConfigResponse": {
+      "type": "object",
+      "properties": {
+        "configs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Config"
+          },
+          "title": "A list of global configs"
+        }
+      },
+      "description": "Response message for WaveGlobalConfig.Config."
+    }
+  },
+  "externalDocs": {
+    "description": "More about Alphaus Blue: WaveGlobalConfig service",
+    "url": "https://alphauslabs.github.io/blueapi/apis/waveglobalconfig.html"
+  }
+}
