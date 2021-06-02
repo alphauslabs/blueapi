@@ -1,0 +1,95 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Alphaus Blue: Org service",
+    "version": "1.0",
+    "contact": {
+      "name": "Alphaus Blue: Org service",
+      "url": "https://alphauslabs.github.io/blueapi/apis/org.html"
+    },
+    "license": {
+      "name": "License: Apache License 2.0",
+      "url": "https://github.com/alphauslabs/blueapi/blob/main/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "Org"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/org/v1/info": {
+      "get": {
+        "operationId": "Org_GetInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetInfoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Org"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "typeUrl": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1GetInfoResponse": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "description": "Response message for Org.GetInfo."
+    }
+  },
+  "externalDocs": {
+    "description": "More about Alphaus Blue: Org service",
+    "url": "https://alphauslabs.github.io/blueapi/apis/org.html"
+  }
+}
