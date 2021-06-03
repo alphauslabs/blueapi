@@ -19,3 +19,6 @@ Then run:
 ```bash
 $ ./build.sh
 ```
+
+Generated SDKs from updates to this repository:
+* [blue-sdk-go](https://github.com/alphauslabs/blue-sdk-go)
