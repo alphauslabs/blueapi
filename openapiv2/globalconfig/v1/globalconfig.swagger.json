@@ -1,0 +1,157 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Alphaus Blue: GlobalConfig service",
+    "version": "1.0",
+    "contact": {
+      "name": "Alphaus Blue: GlobalConfig service",
+      "url": "https://alphauslabs.github.io/blueapi/apis/globalconfig.html"
+    },
+    "license": {
+      "name": "License: Apache License 2.0",
+      "url": "https://github.com/alphauslabs/blueapi/blob/main/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "GlobalConfig"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/ripple/v1/config": {
+      "get": {
+        "operationId": "GlobalConfig_StreamReadRippleConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1StreamListConfigResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1StreamListConfigResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "GlobalConfig"
+        ]
+      }
+    },
+    "/wave/v1/config": {
+      "get": {
+        "operationId": "GlobalConfig_StreamReadWaveConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1StreamListConfigResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1StreamListConfigResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "GlobalConfig"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "typeUrl": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1Config": {
+      "type": "object",
+      "properties": {
+        "featureId": {
+          "type": "string",
+          "description": "The feature name."
+        },
+        "featureName": {
+          "type": "string",
+          "description": "Required. The feature id."
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "The feature enabled or disabled.\nSet value to enable or disable the use of the feature."
+        }
+      },
+      "description": "Response message for Config."
+    },
+    "v1StreamListConfigResponse": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Config"
+          },
+          "title": "A list of global configs"
+        }
+      },
+      "description": "Response message for GlobalConfig.Config."
+    }
+  },
+  "externalDocs": {
+    "description": "More about Alphaus Blue: GlobalConfig service",
+    "url": "https://alphauslabs.github.io/blueapi/apis/globalconfig.html"
+  }
+}

@@ -175,26 +175,26 @@
         
           
           <li>
-            <a href="#waveglobalconfig%2fv1%2fwaveglobalconfig.proto">waveglobalconfig/v1/waveglobalconfig.proto</a>
+            <a href="#globalconfig%2fv1%2fglobalconfig.proto">globalconfig/v1/globalconfig.proto</a>
             <ul>
               
                 <li>
-                  <a href="#blueapi.waveglobalconfig.v1.Config"><span class="badge">M</span>Config</a>
+                  <a href="#blueapi.globalconfig.v1.Config"><span class="badge">M</span>Config</a>
                 </li>
               
                 <li>
-                  <a href="#blueapi.waveglobalconfig.v1.ConfigRequest"><span class="badge">M</span>ConfigRequest</a>
+                  <a href="#blueapi.globalconfig.v1.StreamConfigRequest"><span class="badge">M</span>StreamConfigRequest</a>
                 </li>
               
                 <li>
-                  <a href="#blueapi.waveglobalconfig.v1.ListConfigResponse"><span class="badge">M</span>ListConfigResponse</a>
+                  <a href="#blueapi.globalconfig.v1.StreamListConfigResponse"><span class="badge">M</span>StreamListConfigResponse</a>
                 </li>
               
               
               
               
                 <li>
-                  <a href="#blueapi.waveglobalconfig.v1.WaveGlobalConfig"><span class="badge">S</span>WaveGlobalConfig</a>
+                  <a href="#blueapi.globalconfig.v1.GlobalConfig"><span class="badge">S</span>GlobalConfig</a>
                 </li>
               
             </ul>
@@ -207,12 +207,12 @@
     
       
       <div class="file-heading">
-        <h2 id="waveglobalconfig/v1/waveglobalconfig.proto">waveglobalconfig/v1/waveglobalconfig.proto</h2><a href="#title">Top</a>
+        <h2 id="globalconfig/v1/globalconfig.proto">globalconfig/v1/globalconfig.proto</h2><a href="#title">Top</a>
       </div>
       <p></p>
 
       
-        <h3 id="blueapi.waveglobalconfig.v1.Config">Config</h3>
+        <h3 id="blueapi.globalconfig.v1.Config">Config</h3>
         <p>Response message for Config.</p>
 
         
@@ -226,21 +226,21 @@
                   <td>feature_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>The feature name of wave. </p></td>
+                  <td><p>The feature name. </p></td>
                 </tr>
               
                 <tr>
                   <td>feature_name</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Required. The feature id of wave. </p></td>
+                  <td><p>Required. The feature id. </p></td>
                 </tr>
               
                 <tr>
                   <td>enabled</td>
                   <td><a href="#bool">bool</a></td>
                   <td></td>
-                  <td><p>The feature of wave enabled or disabled.
+                  <td><p>The feature enabled or disabled.
 Set value to enable or disable the use of the feature. </p></td>
                 </tr>
               
@@ -251,15 +251,15 @@ Set value to enable or disable the use of the feature. </p></td>
 
         
       
-        <h3 id="blueapi.waveglobalconfig.v1.ConfigRequest">ConfigRequest</h3>
-        <p>Request message for WaveGlobalConfig.Config.</p>
+        <h3 id="blueapi.globalconfig.v1.StreamConfigRequest">StreamConfigRequest</h3>
+        <p>Request message for GlobalConfig.Config.</p>
 
         
 
         
       
-        <h3 id="blueapi.waveglobalconfig.v1.ListConfigResponse">ListConfigResponse</h3>
-        <p>Response message for WaveGlobalConfig.Config.</p>
+        <h3 id="blueapi.globalconfig.v1.StreamListConfigResponse">StreamListConfigResponse</h3>
+        <p>Response message for GlobalConfig.Config.</p>
 
         
           <table class="field-table">
@@ -269,8 +269,8 @@ Set value to enable or disable the use of the feature. </p></td>
             <tbody>
               
                 <tr>
-                  <td>configs</td>
-                  <td><a href="#blueapi.waveglobalconfig.v1.Config">Config</a></td>
+                  <td>config</td>
+                  <td><a href="#blueapi.globalconfig.v1.Config">Config</a></td>
                   <td>repeated</td>
                   <td><p>A list of global configs </p></td>
                 </tr>
@@ -288,8 +288,8 @@ Set value to enable or disable the use of the feature. </p></td>
       
 
       
-        <h3 id="blueapi.waveglobalconfig.v1.WaveGlobalConfig">WaveGlobalConfig</h3>
-        <p>WaveGlobalConfig service.</p>
+        <h3 id="blueapi.globalconfig.v1.GlobalConfig">GlobalConfig</h3>
+        <p>GlobalConfig service.</p>
         <table class="enum-table">
           <thead>
             <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>
@@ -297,9 +297,16 @@ Set value to enable or disable the use of the feature. </p></td>
           <tbody>
             
               <tr>
-                <td>Config</td>
-                <td><a href="#blueapi.waveglobalconfig.v1.ConfigRequest">ConfigRequest</a></td>
-                <td><a href="#blueapi.waveglobalconfig.v1.ListConfigResponse">ListConfigResponse</a></td>
+                <td>StreamReadWaveConfig</td>
+                <td><a href="#blueapi.globalconfig.v1.StreamConfigRequest">StreamConfigRequest</a></td>
+                <td><a href="#blueapi.globalconfig.v1.StreamListConfigResponse">StreamListConfigResponse</a> stream</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>StreamReadRippleConfig</td>
+                <td><a href="#blueapi.globalconfig.v1.StreamConfigRequest">StreamConfigRequest</a></td>
+                <td><a href="#blueapi.globalconfig.v1.StreamListConfigResponse">StreamListConfigResponse</a> stream</td>
                 <td><p></p></td>
               </tr>
             
@@ -324,9 +331,19 @@ Set value to enable or disable the use of the feature. </p></td>
               
               
               <tr>
-                <td>Config</td>
+                <td>StreamReadWaveConfig</td>
                 <td>GET</td>
-                <td>/v1/config</td>
+                <td>/wave/v1/config</td>
+                <td></td>
+              </tr>
+              
+            
+              
+              
+              <tr>
+                <td>StreamReadRippleConfig</td>
+                <td>GET</td>
+                <td>/ripple/v1/config</td>
                 <td></td>
               </tr>
               

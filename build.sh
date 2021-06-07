@@ -6,7 +6,7 @@ protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true $(find 
 protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true $(find ./curmgt -name '*.proto')
 protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true $(find ./awscost -name '*.proto')
 protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true $(find ./operations -name '*.proto')
-protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true $(find ./waveglobalconfig -name '*.proto')
+protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true $(find ./globalconfig -name '*.proto')
 
 echo "Generating html docs..."
 protoc --doc_out=./htmldocs --doc_opt=html,awscost.html $(find ./iam -name '*.proto')
@@ -14,4 +14,4 @@ protoc --doc_out=./htmldocs --doc_opt=html,awscost.html $(find ./org -name '*.pr
 protoc --doc_out=./htmldocs --doc_opt=html,awscost.html $(find ./curmgt -name '*.proto')
 protoc --doc_out=./htmldocs --doc_opt=html,awscost.html $(find ./awscost -name '*.proto')
 protoc --doc_out=./htmldocs --doc_opt=html,operations.html $(find ./operations -name '*.proto')
-protoc --doc_out=./htmldocs --doc_opt=html,operations.html $(find ./waveglobalconfig -name '*.proto')
+protoc --doc_out=./htmldocs --doc_opt=html,operations.html $(find ./globalconfig -name '*.proto')
