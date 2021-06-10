@@ -15,11 +15,7 @@ We recommend you to install our CLI tool, [bluectl](https://github.com/alphausla
 To validate, run the following command(s):
 
 ```bash
-# If you have Ripple credentials:
-$ bluectl ripple me
-
-# If you have Wave credentials:
-$ bluectl wave me
+$ bluectl whoami
 ```
 
 If successful, it will print some information about the authenticated user.
@@ -27,7 +23,7 @@ If successful, it will print some information about the authenticated user.
 You can also use bluectl to generate the access token for you, and then you can call the JSON/REST API directly using [curl](https://curl.se/).
 
 ```bash
-$ curl -H "Authorization: Bearer $(bluectl ripple access-token)" https://api.alphaus.cloud/blue/v1/me
+$ curl -H "Authorization: Bearer $(bluectl access-token)" https://api.alphaus.cloud/m/blue/iam/v1/whoami
 ```
 
 # Supported APIs
