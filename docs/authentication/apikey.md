@@ -29,4 +29,4 @@ ALPHAUS_CLIENT_SECRET=myclientsecret
 ALPHAUS_AUTH_URL=https://login.alphaus.cloud/access_token
 ```
 
-After this, you should now be able to authenticate whether you use [bluectl](https://github.com/alphauslabs/bluectl), or our [supported client libraries](https://alphauslabs.github.io/blueapi/sdks/), or call our JSON/REST APIs directly.
+After this, you should now be able to authenticate whether you use [bluectl](https://github.com/alphauslabs/bluectl), or our [supported client libraries](https://alphauslabs.github.io/blueapi/sdks/).
