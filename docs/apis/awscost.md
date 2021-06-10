@@ -18,14 +18,14 @@ Download current month's usage costs and save as CSV file:
 
 ```bash
 # Here, 'all' could mean MSP-level or billing group level.
-$ bluectl ripple awscost --type all --out /tmp/out.csv
+$ bluectl awscost --type all --out /tmp/out.csv
 ```
 
 Download current month's fees and save as CSV file:
 
 ```bash
 # Here, 'all' could mean MSP-level or billing group level.
-$ bluectl ripple awsfees --type all --out /tmp/out.csv
+$ bluectl awsfees --type all --out /tmp/out.csv
 ```
 
 You can also provide the `--start yyyy-mm-dd` and `--end yyyy-mm-dd` flags for date ranges.
@@ -33,14 +33,14 @@ You can also provide the `--start yyyy-mm-dd` and `--end yyyy-mm-dd` flags for d
 Download current month's usage costs for a specific account and save as CSV file:
 
 ```bash
-$ bluectl ripple awscost 1234567890 --type account --out /tmp/out.csv
+$ bluectl awscost 1234567890 --type account --out /tmp/out.csv
 ```
 
 Download current month's fees for a specific billing group and save as CSV file:
 
 ```bash
 # Here, 'bill001' is your billing group id.
-$ bluectl ripple awsfees bill001 --type billinggroup --out /tmp/out.csv
+$ bluectl awsfees bill001 --type billinggroup --out /tmp/out.csv
 ```
 
 You can also provide the `--include-tags` and/or `--include-costcategories` flag(s) to include the tags and/or cost category information in the streaming data. At the moment, only the usage-based data supports tags and cost categories. Support for fees will be coming soon.
@@ -50,8 +50,8 @@ Although these APIs are designed to be streamed due to potentially large amounts
 ```bash
 # Output is a newline-delimited rows of JSON data.
 $ curl -X POST \
-    -H "Authorization: Bearer $(bluectl ripple access-token)" \
-    https://api.alphaus.cloud/awscost/v1/accounts/1234567890/costs:streamReadAccountCosts
+    -H "Authorization: Bearer $(bluectl access-token)" \
+    https://api.alphaus.cloud/m/blue/awscost/v1/accounts/1234567890/costs:streamReadAccountCosts
 ```
 
 We will be publishing the OpenAPI documentations for these JSON/REST APIs soon. In the meantime, check them out [here](https://github.com/alphauslabs/blueapi/tree/main/openapiv2). You can use something like [editor.swagger.io](https://editor.swagger.io/).
