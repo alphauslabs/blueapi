@@ -14,7 +14,7 @@
   },
   "tags": [
     {
-      "name": "Org"
+      "name": "OrgApi"
     }
   ],
   "consumes": [
@@ -24,14 +24,14 @@
     "application/json"
   ],
   "paths": {
-    "/org/v1/info": {
+    "/org/v1/org": {
       "get": {
-        "operationId": "Org_GetInfo",
+        "operationId": "OrgApi_GetOrg",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetInfoResponse"
+              "$ref": "#/definitions/v1Org"
             }
           },
           "default": {
@@ -42,7 +42,7 @@
           }
         },
         "tags": [
-          "Org"
+          "OrgApi"
         ]
       }
     }
@@ -78,14 +78,26 @@
         }
       }
     },
-    "v1GetInfoResponse": {
+    "v1Org": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
-      "description": "Response message for Org.GetInfo."
+      "description": "Org resource definition."
     }
   },
   "externalDocs": {

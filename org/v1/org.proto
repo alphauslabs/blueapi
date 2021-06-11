@@ -28,20 +28,22 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   }
 };
 
-// Org service definition.
-// TODO:
-service Org {
-  rpc GetInfo(GetInfoRequest) returns (GetInfoResponse) {
+// OrgApi service definition.
+service OrgApi {
+  rpc GetOrg(GetOrgRequest) returns (Org) {
     option (google.api.http) = {
-      get: "/org/v1/info"
+      get: "/org/v1/org"
     };
   }
 }
 
-// Request message for Org.GetInfo.
-message GetInfoRequest {}
-
-// Response message for Org.GetInfo.
-message GetInfoResponse {
+// Org resource definition.
+message Org {
   string name = 1;
+  string description = 2;
+  string email = 3;
+  map<string, string> metadata = 4;
 }
+
+// Request message for OrgApi.GetOrg rpc.
+message GetOrgRequest {}
