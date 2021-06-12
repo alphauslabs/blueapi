@@ -30,9 +30,30 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 // OrgApi service definition.
 service OrgApi {
+  rpc CreateOrg(CreateOrgRequest) returns (Org) {
+    option (google.api.http) = {
+      post: "/org/v1/orgs"
+      body: "*"
+    };
+  }
+
+  rpc SendVerification(SendVerificationRequest) returns (Org) {
+    option (google.api.http) = {
+      post: "/org/v1/orgs/{name}:sendVerification"
+      body: "*"
+    };
+  }
+
+  rpc VerifyOrg(VerifyOrgRequest) returns (Org) {
+    option (google.api.http) = {
+      post: "/org/v1/orgs/{name}:verifyOrg"
+      body: "*"
+    };
+  }
+
   rpc GetOrg(GetOrgRequest) returns (Org) {
     option (google.api.http) = {
-      get: "/org/v1/org"
+      get: "/org/v1/orgs"
     };
   }
 }
@@ -40,9 +61,23 @@ service OrgApi {
 // Org resource definition.
 message Org {
   string name = 1;
-  string description = 2;
-  string email = 3;
+  string email = 2;
+  string description = 3;
   map<string, string> metadata = 4;
+}
+
+message CreateOrgRequest {
+  string email = 1;
+  string description = 2;
+}
+
+message SendVerificationRequest {
+  string name = 1;
+}
+
+message VerifyOrgRequest {
+  string name = 1;
+  string key = 2;
 }
 
 // Request message for OrgApi.GetOrg rpc.

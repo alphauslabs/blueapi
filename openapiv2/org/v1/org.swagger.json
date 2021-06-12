@@ -24,7 +24,7 @@
     "application/json"
   ],
   "paths": {
-    "/org/v1/org": {
+    "/org/v1/orgs": {
       "get": {
         "operationId": "OrgApi_GetOrg",
         "responses": {
@@ -41,6 +41,112 @@
             }
           }
         },
+        "tags": [
+          "OrgApi"
+        ]
+      },
+      "post": {
+        "operationId": "OrgApi_CreateOrg",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1Org"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateOrgRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OrgApi"
+        ]
+      }
+    },
+    "/org/v1/orgs/{name}:sendVerification": {
+      "post": {
+        "operationId": "OrgApi_SendVerification",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1Org"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SendVerificationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OrgApi"
+        ]
+      }
+    },
+    "/org/v1/orgs/{name}:verifyOrg": {
+      "post": {
+        "operationId": "OrgApi_VerifyOrg",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1Org"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1VerifyOrgRequest"
+            }
+          }
+        ],
         "tags": [
           "OrgApi"
         ]
@@ -78,16 +184,27 @@
         }
       }
     },
+    "v1CreateOrgRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
     "v1Org": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string"
         },
-        "description": {
+        "email": {
           "type": "string"
         },
-        "email": {
+        "description": {
           "type": "string"
         },
         "metadata": {
@@ -98,6 +215,25 @@
         }
       },
       "description": "Org resource definition."
+    },
+    "v1SendVerificationRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "v1VerifyOrgRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        }
+      }
     }
   },
   "externalDocs": {
