@@ -32,78 +32,78 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 // Service for reading aggregated costs for your AWS costs and usages.
 service AwsCost {
-  // Streams back the usage-based cost details of an AWS account. If datetime range
+  // Reads the usage-based cost details of an AWS account. If datetime range
   // parameters are not set, month-to-date (current month) will be returned.
-  rpc StreamReadAccountCosts (StreamReadAccountCostsRequest) returns (stream Cost) {
+  rpc ReadAccountCosts (ReadAccountCostsRequest) returns (stream Cost) {
     option (google.api.http) = {
-      post: "/v1/accounts/{name}/costs:streamReadAccountCosts"
+      post: "/v1/accounts/{name}/costs:readAccountCosts"
       body: "*"
     };
   }
 
-  // Streams back the usage-based cost details of a company. If datetime range
+  // Reads the usage-based cost details of a company. If datetime range
   // parameters are not set, month-to-date (current month) will be returned.
-  rpc StreamReadCompanyCosts (StreamReadCompanyCostsRequest) returns (stream Cost) {
+  rpc ReadCompanyCosts (ReadCompanyCostsRequest) returns (stream Cost) {
     option (google.api.http) = {
-      post: "/v1/companies/{name}/costs:streamReadCompanyCosts"
+      post: "/v1/companies/{name}/costs:readCompanyCosts"
       body: "*"
     };
   }
 
-  // Streams back the usage-based cost details of a billing group. If datetime range
+  // Reads the usage-based cost details of a billing group. If datetime range
   // parameters are not set, month-to-date (current month) will be returned.
-  rpc StreamReadBillingGroupCosts (StreamReadBillingGroupCostsRequest) returns (stream Cost) {
+  rpc ReadBillingGroupCosts (ReadBillingGroupCostsRequest) returns (stream Cost) {
     option (google.api.http) = {
-      post: "/v1/billinggroups/{name}/costs:streamReadBillingGroupCosts"
+      post: "/v1/billinggroups/{name}/costs:readBillingGroupCosts"
       body: "*"
     };
   }
 
-  // Streams back the usage-based cost details of an organization (Ripple) or company (Wave).
+  // Reads the usage-based cost details of an organization (Ripple) or company (Wave).
   // If datetime range parameters are not set, month-to-date (current month) will be returned.
-  rpc StreamReadCosts (StreamReadCostsRequest) returns (stream Cost) {
+  rpc ReadCosts (ReadCostsRequest) returns (stream Cost) {
     option (google.api.http) = {
-      post: "/v1/costs:streamReadCosts"
+      post: "/v1/costs:readCosts"
       body: "*"
     };
   }
 
-  // Streams back the fee-based details of an AWS account. This API covers non-usage-based
+  // Reads the non-usaged-based details of an AWS account. This API covers non-usage-based
   // fees, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range
   // parameters are not set, month-to-date (current month) will be returned.
-  rpc StreamReadAccountFees (StreamReadAccountFeesRequest) returns (stream Fee) {
+  rpc ReadAccountFees (ReadAccountFeesRequest) returns (stream Fee) {
     option (google.api.http) = {
-      post: "/v1/accounts/{name}/fees:streamReadAccountFees"
+      post: "/v1/accounts/{name}/fees:readAccountFees"
       body: "*"
     };
   }
 
-  // Streams back the fee-based details of a company. This API covers non-usage-based
+  // Reads the non-usage-based details of a company. This API covers non-usage-based
   // fees, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range
   // parameters are not set, month-to-date (current month) will be returned.
-  rpc StreamReadCompanyFees (StreamReadCompanyFeesRequest) returns (stream Fee) {
+  rpc ReadCompanyFees (ReadCompanyFeesRequest) returns (stream Fee) {
     option (google.api.http) = {
-      post: "/v1/companies/{name}/fees:streamReadCompanyFees"
+      post: "/v1/companies/{name}/fees:readCompanyFees"
       body: "*"
     };
   }
 
-  // Streams back the fee-based details of a billing group. This API covers non-usage-based
+  // Reads the non-usage-based details of a billing group. This API covers non-usage-based
   // fees, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range
   // parameters are not set, month-to-date (current month) will be returned.
-  rpc StreamReadBillingGroupFees (StreamReadBillingGroupFeesRequest) returns (stream Fee) {
+  rpc ReadBillingGroupFees (ReadBillingGroupFeesRequest) returns (stream Fee) {
     option (google.api.http) = {
-      post: "/v1/billinggroups/{name}/fees:streamReadBillingGroupFees"
+      post: "/v1/billinggroups/{name}/fees:readBillingGroupFees"
       body: "*"
     };
   }
 
-  // Streams back the fee-based details of an organization (Ripple) or company (Wave). This API covers
+  // Reads the non-usage-based details of an organization (Ripple) or company (Wave). This API covers
   // non-usage-based fees, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime
   // range parameters are not set, month-to-date (current month) will be returned.
-  rpc StreamReadFees (StreamReadFeesRequest) returns (stream Fee) {
+  rpc ReadFees (ReadFeesRequest) returns (stream Fee) {
     option (google.api.http) = {
-      post: "/v1/fees:streamReadFees"
+      post: "/v1/fees:readFees"
       body: "*"
     };
   }
@@ -130,8 +130,8 @@ message Cost {
   double cost = 17;
 }
 
-// Request message for AwsCost.StreamReadAccountCosts.
-message StreamReadAccountCostsRequest {
+// Request message for AwsCost.ReadAccountCosts.
+message ReadAccountCostsRequest {
   // Required. The AWS account to stream.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
@@ -152,8 +152,8 @@ message StreamReadAccountCostsRequest {
   bool include_cost_categories = 5;
 }
 
-// Request message for AwsCost.StreamReadCompanyCosts.
-message StreamReadCompanyCostsRequest {
+// Request message for AwsCost.ReadCompanyCosts.
+message ReadCompanyCostsRequest {
   // Required. The company id to stream.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
@@ -174,8 +174,8 @@ message StreamReadCompanyCostsRequest {
   bool include_cost_categories = 5;
 }
 
-// Request message for AwsCost.StreamReadBillingGroupCosts.
-message StreamReadBillingGroupCostsRequest {
+// Request message for AwsCost.ReadBillingGroupCosts.
+message ReadBillingGroupCostsRequest {
   // Required. The billing group id to stream.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
@@ -196,8 +196,8 @@ message StreamReadBillingGroupCostsRequest {
   bool include_cost_categories = 5;
 }
 
-// Request message for AwsCost.StreamReadCosts.
-message StreamReadCostsRequest {
+// Request message for AwsCost.ReadCosts.
+message ReadCostsRequest {
   // Optional. The MSP id or company id to stream. If not provided, the parent MSP or
   // company will be used.
   string name = 1;
@@ -219,7 +219,7 @@ message StreamReadCostsRequest {
   bool include_cost_categories = 5;
 }
 
-// Response message for AwsCost.StreamReadAccountFees.
+// Response message for AwsCost.ReadAccountFees.
 message Fee {
   string account = 1;
   string company_id = 2;
@@ -231,8 +231,8 @@ message Fee {
   double cost = 8;
 }
 
-// Request message for AwsCost.StreamReadAccountFees.
-message StreamReadAccountFeesRequest {
+// Request message for AwsCost.ReadAccountFees.
+message ReadAccountFeesRequest {
   // Required. The AWS account id to stream.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
@@ -244,8 +244,8 @@ message StreamReadAccountFeesRequest {
   google.protobuf.Timestamp end_time = 3;
 }
 
-// Request message for AwsCost.StreamReadCompanyFees.
-message StreamReadCompanyFeesRequest {
+// Request message for AwsCost.ReadCompanyFees.
+message ReadCompanyFeesRequest {
   // Required. The company id to stream.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
@@ -257,8 +257,8 @@ message StreamReadCompanyFeesRequest {
   google.protobuf.Timestamp end_time = 3;
 }
 
-// Request message for AwsCost.StreamReadBillingGroupFees.
-message StreamReadBillingGroupFeesRequest {
+// Request message for AwsCost.ReadBillingGroupFees.
+message ReadBillingGroupFeesRequest {
   // Required. The billing group id to stream.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
@@ -270,8 +270,8 @@ message StreamReadBillingGroupFeesRequest {
   google.protobuf.Timestamp end_time = 3;
 }
 
-// Request message for AwsCost.StreamReadFees.
-message StreamReadFeesRequest {
+// Request message for AwsCost.ReadFees.
+message ReadFeesRequest {
   // Optional. The MSP id or company id to stream. If not provided, the parent MSP or
   // company will be used.
   string name = 1;
