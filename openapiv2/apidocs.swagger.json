@@ -15,17 +15,19 @@
   "tags": [
     {
       "name": "OrgApi",
-      "description": "OrgApi service definition.",
+      "description": "Base URL: https://api.alphaus.cloud/m/blue",
       "externalDocs": {
-        "description": "Find out more about OrgApi service.",
+        "description": "Find out more about OrgApi service",
         "url": "https://alphauslabs.github.io/blueapi/"
       }
     },
     {
-      "name": "Iam"
-    },
-    {
-      "name": "CurMgt"
+      "name": "Iam",
+      "description": "Base URL: https://api.alphaus.cloud/m/blue",
+      "externalDocs": {
+        "description": "Find out more about Iam service",
+        "url": "https://alphauslabs.github.io/blueapi/"
+      }
     },
     {
       "name": "AwsCost"
@@ -44,28 +46,6 @@
     "application/json"
   ],
   "paths": {
-    "/curmgt/v1/accounts": {
-      "get": {
-        "operationId": "CurMgt_ListAccounts",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListAccountsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "CurMgt"
-        ]
-      }
-    },
     "/iam/v1/whoami": {
       "get": {
         "operationId": "Iam_WhoAmI",
@@ -244,8 +224,32 @@
         ]
       }
     },
+    "/org/v1/masteraccts": {
+      "get": {
+        "summary": "Lists master accounts that belongs to the caller's organization.",
+        "operationId": "OrgApi_ListMasterAccounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListMasterAccountsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "OrgApi"
+        ]
+      }
+    },
     "/org/v1/orgs": {
       "get": {
+        "summary": "Gets information about the caller's organization.",
         "operationId": "OrgApi_GetOrg",
         "responses": {
           "200": {
@@ -266,6 +270,7 @@
         ]
       },
       "post": {
+        "summary": "Creates the organization account.",
         "operationId": "OrgApi_CreateOrg",
         "responses": {
           "200": {
@@ -298,6 +303,7 @@
     },
     "/org/v1/orgs/{name}:sendVerification": {
       "post": {
+        "summary": "Sends (or resends) the verification email. Only valid for unverified\norganizations.",
         "operationId": "OrgApi_SendVerification",
         "responses": {
           "200": {
@@ -336,6 +342,7 @@
     },
     "/org/v1/orgs/{name}:verifyOrg": {
       "post": {
+        "summary": "Verifies an organization using the key received from the verification email.",
         "operationId": "OrgApi_VerifyOrg",
         "responses": {
           "200": {
@@ -1025,7 +1032,7 @@
       },
       "description": "Response message for AwsCost.ReadAccountFees."
     },
-    "v1ListAccountsResponse": {
+    "v1ListMasterAccountsResponse": {
       "type": "object",
       "properties": {
         "accounts": {
@@ -1035,7 +1042,7 @@
           }
         }
       },
-      "description": "Response message for CurMgt.ListAccounts."
+      "description": "Response message for OrgApi.ListMasterAccounts rpc."
     },
     "v1ListOperationsResponse": {
       "type": "object",

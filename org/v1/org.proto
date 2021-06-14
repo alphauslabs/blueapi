@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package blueapi.org.v1;
 
+import "types/aws/v1.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -69,6 +70,13 @@ service OrgApi {
       get: "/org/v1/orgs"
     };
   }
+
+  // Lists master accounts that belongs to the caller's organization.
+  rpc ListMasterAccounts(ListMasterAccountsRequest) returns (ListMasterAccountsResponse) {
+    option (google.api.http) = {
+      get: "/org/v1/masteraccts"
+    };
+  }
 }
 
 // Org resource definition.
@@ -95,3 +103,11 @@ message VerifyOrgRequest {
 
 // Request message for OrgApi.GetOrg rpc.
 message GetOrgRequest {}
+
+// Request message for OrgApi.ListMasterAccounts rpc.
+message ListMasterAccountsRequest {}
+
+// Response message for OrgApi.ListMasterAccounts rpc.
+message ListMasterAccountsResponse {
+  repeated types.aws.Account accounts = 1;
+}
