@@ -5,6 +5,7 @@ package blueapi.org.v1;
 import "types/aws/v1.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/org";
 option java_package = "cloud.alphaus.api.org";
@@ -94,6 +95,13 @@ service OrgApi {
       get: "/org/v1/me/masteraccts"
     };
   }
+
+  // Deletes the organization.
+  rpc DeleteOrg(DeleteOrgRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/org/v1/me"
+    };
+  }
 }
 
 // Org resource definition.
@@ -153,3 +161,6 @@ message ListMasterAccountsRequest {}
 message ListMasterAccountsResponse {
   repeated types.aws.Account accounts = 1;
 }
+
+// Request message for OrgApi.DeleteOrg rpc.
+message DeleteOrgRequest {}
