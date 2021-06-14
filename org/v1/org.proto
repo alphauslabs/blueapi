@@ -31,13 +31,14 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 // OrgApi service definition.
 service OrgApi {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
-		description: "OrgApi service definition."
+		description: "Base URL: https://api.alphaus.cloud/m/blue"
 		external_docs: {
 			url: "https://alphauslabs.github.io/blueapi/";
-			description: "Find out more about OrgApi service.";
+			description: "Find out more about OrgApi service";
 		}
 	};
 
+  // Creates the organization account.
   rpc CreateOrg(CreateOrgRequest) returns (Org) {
     option (google.api.http) = {
       post: "/org/v1/orgs"
@@ -45,6 +46,8 @@ service OrgApi {
     };
   }
 
+  // Sends (or resends) the verification email. Only valid for unverified
+  // organizations.
   rpc SendVerification(SendVerificationRequest) returns (Org) {
     option (google.api.http) = {
       post: "/org/v1/orgs/{name}:sendVerification"
@@ -52,6 +55,7 @@ service OrgApi {
     };
   }
 
+  // Verifies an organization using the key received from the verification email.
   rpc VerifyOrg(VerifyOrgRequest) returns (Org) {
     option (google.api.http) = {
       post: "/org/v1/orgs/{name}:verifyOrg"
@@ -59,6 +63,7 @@ service OrgApi {
     };
   }
 
+  // Gets information about the caller's organization.
   rpc GetOrg(GetOrgRequest) returns (Org) {
     option (google.api.http) = {
       get: "/org/v1/orgs"
