@@ -48,7 +48,7 @@ service OrgApi {
   }
 
   // Sends (or resends) the verification email. Only valid for unverified
-  // organizations.
+  // organizations. The verification key will be valid for a day.
   rpc SendVerification(SendVerificationRequest) returns (Org) {
     option (google.api.http) = {
       post: "/org/v1/me:sendVerification"
@@ -57,6 +57,7 @@ service OrgApi {
   }
 
   // Verifies an organization using the key received from the verification email.
+  // The verification key is only valid for a day.
   rpc VerifyOrg(VerifyOrgRequest) returns (Org) {
     option (google.api.http) = {
       post: "/org/v1/me:verifyOrg"
@@ -71,9 +72,7 @@ service OrgApi {
     };
   }
 
-  // Updates organization attributes. Supported attributes include:
-  // - email
-  // - description
+  // Updates organization attributes. Supported attributes include 'email', and 'description'.
   rpc UpdateAttribute(UpdateAttributeRequest) returns (Org) {
     option (google.api.http) = {
       put: "/org/v1/me/attr"
@@ -108,8 +107,7 @@ message Org {
   // The optional description of the organization.
   string description = 3;
 
-  // The attributes (key/value pair) of the organization. Supported attributes include:
-  // - createTime
+  // The attributes (key/value pair) of the organization. Supported attributes include 'createTime'.
   map<string, string> metadata = 4;
 }
 
