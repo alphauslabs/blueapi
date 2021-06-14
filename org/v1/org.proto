@@ -30,6 +30,14 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 // OrgApi service definition.
 service OrgApi {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+		description: "OrgApi service definition."
+		external_docs: {
+			url: "https://github.com/grpc-ecosystem/grpc-gateway";
+			description: "Find out more about OrgApi service.";
+		}
+	};
+
   rpc CreateOrg(CreateOrgRequest) returns (Org) {
     option (google.api.http) = {
       post: "/org/v1/orgs"
