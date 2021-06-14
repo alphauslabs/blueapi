@@ -50,4 +50,7 @@ jobs:
           git push --set-upstream origin-tmp
           # Update OpenAPI docs repo:
           cd /tmp/ && git clone https://github.com/alphauslabs/blueapidocs && cd blueapidocs
-          cp $WORKSPACE_ROOT/openapiv2/apidocs.swagger.json ./swagger.yaml && git status && ls -laF
+          cp $WORKSPACE_ROOT/openapiv2/apidocs.swagger.json ./swagger.yaml && git status
+          git add . && git commit -am "$GITHUB_REF $GITHUB_SHA" || true
+          git remote add origin-tmp https://$DEPLOYER_TOKEN@github.com/alphauslabs/blueapidocs.git > /dev/null 2>&1
+          git push --set-upstream origin-tmp
