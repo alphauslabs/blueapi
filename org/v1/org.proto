@@ -81,21 +81,38 @@ service OrgApi {
 
 // Org resource definition.
 message Org {
+  // The unique name (or id) of the organization.
   string name = 1;
+
+  // The registered email of the organization.
   string email = 2;
+
+  // The optional description of the organization.
   string description = 3;
+
+  // The attributes (key/value pair) of the organization. Supported attributes include:
+  // - createTime
   map<string, string> metadata = 4;
 }
 
+// Request message for OrgApi.CreateOrg rpc.
 message CreateOrgRequest {
   string email = 1;
   string description = 2;
 }
 
+// Response message for OrgApi.CreateOrg rpc.
+message CreateOrgResponse {
+  Org org = 1;
+  password = 2;
+}
+
+// Request message for OrgApi.SendVerification rpc.
 message SendVerificationRequest {
   string name = 1;
 }
 
+// Request message for OrgApi.VerifyOrg rpc.
 message VerifyOrgRequest {
   string name = 1;
   string key = 2;
