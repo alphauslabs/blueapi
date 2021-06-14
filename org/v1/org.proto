@@ -51,7 +51,7 @@ service OrgApi {
   // organizations.
   rpc SendVerification(SendVerificationRequest) returns (Org) {
     option (google.api.http) = {
-      post: "/org/v1/orgs/{name}:sendVerification"
+      post: "/org/v1/orgs:sendVerification"
       body: "*"
     };
   }
@@ -59,7 +59,7 @@ service OrgApi {
   // Verifies an organization using the key received from the verification email.
   rpc VerifyOrg(VerifyOrgRequest) returns (Org) {
     option (google.api.http) = {
-      post: "/org/v1/orgs/{name}:verifyOrg"
+      post: "/org/v1/orgs:verifyOrg"
       body: "*"
     };
   }
@@ -68,6 +68,24 @@ service OrgApi {
   rpc GetOrg(GetOrgRequest) returns (Org) {
     option (google.api.http) = {
       get: "/org/v1/orgs"
+    };
+  }
+
+  // Updates organization attributes. Supported attributes include:
+  // - email
+  // - description
+  rpc UpdateAttribute(UpdateAttributeRequest) returns (Org) {
+    option (google.api.http) = {
+      put: "/org/v1/orgs/attr"
+      body: "*"
+    };
+  }
+
+  // Updates the organization password.
+  rpc UpdatePassword(UpdatePasswordRequest) returns (Org) {
+    option (google.api.http) = {
+      put: "/org/v1/orgs/passwd"
+      body: "*"
     };
   }
 
@@ -108,18 +126,27 @@ message CreateOrgResponse {
 }
 
 // Request message for OrgApi.SendVerification rpc.
-message SendVerificationRequest {
-  string name = 1;
-}
+message SendVerificationRequest {}
 
 // Request message for OrgApi.VerifyOrg rpc.
 message VerifyOrgRequest {
-  string name = 1;
-  string key = 2;
+  string key = 1;
 }
 
 // Request message for OrgApi.GetOrg rpc.
 message GetOrgRequest {}
+
+// Request message for OrgApi.UpdateAttribute rpc.
+message UpdateAttributeRequest {
+  string key = 1;
+  string value = 2;
+}
+
+// Request message for OrgApi.UpdatePassword rpc.
+message UpdatePasswordRequest {
+  string old_password = 1;
+  string new_password = 2;
+}
 
 // Request message for OrgApi.ListMasterAccounts rpc.
 message ListMasterAccountsRequest {}
