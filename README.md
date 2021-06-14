@@ -1,3 +1,5 @@
+[![main](https://github.com/alphauslabs/blueapi/actions/workflows/main.yml/badge.svg)](https://github.com/alphauslabs/blueapi/actions/workflows/main.yml)
+
 **Work-in-progress. The design, structure, and CI are not finalized (nor backwards-compatible) yet.**
 
 The folder `google/*` was cloned from [github.com/googleapis/api-common-protos](https://github.com/googleapis/api-common-protos). The folder `protoc-gen-openapiv2/*` was cloned from [github.com/grpc-ecosystem/grpc-gateway/protoc-gen-openapiv2](https://github.com/grpc-ecosystem/grpc-gateway/tree/master/protoc-gen-openapiv2).
