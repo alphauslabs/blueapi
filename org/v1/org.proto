@@ -42,7 +42,7 @@ service OrgApi {
   // Creates the organization account.
   rpc CreateOrg(CreateOrgRequest) returns (Org) {
     option (google.api.http) = {
-      post: "/org/v1/orgs"
+      post: "/org/v1/me"
       body: "*"
     };
   }
@@ -51,7 +51,7 @@ service OrgApi {
   // organizations.
   rpc SendVerification(SendVerificationRequest) returns (Org) {
     option (google.api.http) = {
-      post: "/org/v1/orgs:sendVerification"
+      post: "/org/v1/me:sendVerification"
       body: "*"
     };
   }
@@ -59,7 +59,7 @@ service OrgApi {
   // Verifies an organization using the key received from the verification email.
   rpc VerifyOrg(VerifyOrgRequest) returns (Org) {
     option (google.api.http) = {
-      post: "/org/v1/orgs:verifyOrg"
+      post: "/org/v1/me:verifyOrg"
       body: "*"
     };
   }
@@ -67,7 +67,7 @@ service OrgApi {
   // Gets information about the caller's organization.
   rpc GetOrg(GetOrgRequest) returns (Org) {
     option (google.api.http) = {
-      get: "/org/v1/orgs"
+      get: "/org/v1/me"
     };
   }
 
@@ -76,7 +76,7 @@ service OrgApi {
   // - description
   rpc UpdateAttribute(UpdateAttributeRequest) returns (Org) {
     option (google.api.http) = {
-      put: "/org/v1/orgs/attr"
+      put: "/org/v1/me/attr"
       body: "*"
     };
   }
@@ -84,7 +84,7 @@ service OrgApi {
   // Updates the organization password.
   rpc UpdatePassword(UpdatePasswordRequest) returns (Org) {
     option (google.api.http) = {
-      put: "/org/v1/orgs/passwd"
+      put: "/org/v1/me/passwd"
       body: "*"
     };
   }
@@ -92,7 +92,7 @@ service OrgApi {
   // Lists master accounts that belongs to the caller's organization.
   rpc ListMasterAccounts(ListMasterAccountsRequest) returns (ListMasterAccountsResponse) {
     option (google.api.http) = {
-      get: "/org/v1/masteraccts"
+      get: "/org/v1/me/masteraccts"
     };
   }
 }

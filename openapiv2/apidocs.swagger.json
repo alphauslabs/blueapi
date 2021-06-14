@@ -230,30 +230,7 @@
         ]
       }
     },
-    "/org/v1/masteraccts": {
-      "get": {
-        "summary": "Lists master accounts that belongs to the caller's organization.",
-        "operationId": "OrgApi_ListMasterAccounts",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListMasterAccountsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "OrgApi"
-        ]
-      }
-    },
-    "/org/v1/orgs": {
+    "/org/v1/me": {
       "get": {
         "summary": "Gets information about the caller's organization.",
         "operationId": "OrgApi_GetOrg",
@@ -307,7 +284,7 @@
         ]
       }
     },
-    "/org/v1/orgs/attr": {
+    "/org/v1/me/attr": {
       "put": {
         "summary": "Updates organization attributes. Supported attributes include:\n- email\n- description",
         "operationId": "OrgApi_UpdateAttribute",
@@ -340,7 +317,30 @@
         ]
       }
     },
-    "/org/v1/orgs/passwd": {
+    "/org/v1/me/masteraccts": {
+      "get": {
+        "summary": "Lists master accounts that belongs to the caller's organization.",
+        "operationId": "OrgApi_ListMasterAccounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListMasterAccountsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "OrgApi"
+        ]
+      }
+    },
+    "/org/v1/me/passwd": {
       "put": {
         "summary": "Updates the organization password.",
         "operationId": "OrgApi_UpdatePassword",
@@ -373,7 +373,7 @@
         ]
       }
     },
-    "/org/v1/orgs:sendVerification": {
+    "/org/v1/me:sendVerification": {
       "post": {
         "summary": "Sends (or resends) the verification email. Only valid for unverified\norganizations.",
         "operationId": "OrgApi_SendVerification",
@@ -406,7 +406,7 @@
         ]
       }
     },
-    "/org/v1/orgs:verifyOrg": {
+    "/org/v1/me:verifyOrg": {
       "post": {
         "summary": "Verifies an organization using the key received from the verification email.",
         "operationId": "OrgApi_VerifyOrg",
