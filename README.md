@@ -22,3 +22,5 @@ $ ./build.sh
 
 Generated SDKs from updates to this repository:
 * [blue-sdk-go](https://github.com/alphauslabs/blue-sdk-go)
+
+Generated OpenAPI documentation can be found [here](https://alphauslabs.github.io/blueapidocs/).
