@@ -26,11 +26,6 @@ You can also use bluectl to generate the access token for you, and then you can 
 $ curl -H "Authorization: Bearer $(bluectl access-token)" https://api.alphaus.cloud/m/blue/iam/v1/whoami
 ```
 
-# Supported APIs
+# Pricing
 
-- [Core API](https://alphauslabs.github.io/blueapi/apis/blue.html) - Core management and administration API.
-- [AWSCost API](https://alphauslabs.github.io/blueapi/apis/awscost.html) - API for streaming/querying aggregated trueunblended/unblended costs and fees.
-
-# Supported client libraries
-
-- [blue-sdk-go](https://alphauslabs.github.io/blueapi/sdks/go.html) - client library for the [Go](https://golang.org/) programming language.
+This API is still in beta, so its usage will be free. Once released, we will also announce the pricing details.
