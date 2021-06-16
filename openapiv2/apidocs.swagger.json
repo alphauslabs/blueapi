@@ -361,6 +361,37 @@
         ]
       }
     },
+    "/org/v1/me/masteraccts/{id}": {
+      "get": {
+        "summary": "Get master account. This call includes all of the account's metadata.",
+        "operationId": "OrgApi_GetMasterAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/awsAccount"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "OrgApi"
+        ]
+      }
+    },
     "/org/v1/me/passwd": {
       "put": {
         "summary": "Updates the organization password.",
@@ -905,11 +936,20 @@
     "awsAccount": {
       "type": "object",
       "properties": {
-        "name": {
-          "type": "string"
+        "id": {
+          "type": "string",
+          "description": "The AWS account id."
         },
-        "isPayer": {
-          "type": "boolean"
+        "name": {
+          "type": "string",
+          "description": "The account name."
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "The attributes (key/value pair) of the account. If hierarchy is supported, it will be\nseparated by '/', such as 'metakey/subkey=value'. Supported attributes include 'createTime'.\nIf the account is a master (or payer) account, additional attributes include 'bucketName',\n'lastModified' (last timestamp AWS updated CUR), 'prefix', 'reportName', 'roleArn', and\n'lastImported' (last timestamp CUR is imported to Alphaus)."
         }
       }
     },
@@ -1175,7 +1215,7 @@
           "additionalProperties": {
             "type": "string"
           },
-          "description": "The attributes (key/value pair) of the organization. Supported attributes include 'createTime'."
+          "description": "The attributes (key/value pair) of the organization. If hierarchy is supported, it will be\nseparated by '/', such as 'metakey/subkey=value'. Supported attributes include 'createTime'."
         }
       },
       "description": "Org resource definition."

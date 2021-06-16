@@ -96,6 +96,13 @@ service OrgApi {
     };
   }
 
+  // Get master account. This call includes all of the account's metadata.
+  rpc GetMasterAccount(GetMasterAccountRequest) returns (types.aws.Account) {
+    option (google.api.http) = {
+      get: "/org/v1/me/masteraccts/{id}"
+    };
+  }
+
   // Deletes the organization.
   rpc DeleteOrg(DeleteOrgRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -115,7 +122,8 @@ message Org {
   // The optional description of the organization.
   string description = 3;
 
-  // The attributes (key/value pair) of the organization. Supported attributes include 'createTime'.
+  // The attributes (key/value pair) of the organization. If hierarchy is supported, it will be
+  // separated by '/', such as 'metakey/subkey=value'. Supported attributes include 'createTime'.
   map<string, string> metadata = 4;
 }
 
@@ -160,6 +168,11 @@ message ListMasterAccountsRequest {}
 // Response message for OrgApi.ListMasterAccounts rpc.
 message ListMasterAccountsResponse {
   repeated types.aws.Account accounts = 1;
+}
+
+// Request message for OrgApi.GetMasterAccount rpc.
+message GetMasterAccountRequest {
+  string id = 1;
 }
 
 // Request message for OrgApi.DeleteOrg rpc.
