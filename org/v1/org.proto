@@ -73,10 +73,10 @@ service OrgApi {
     };
   }
 
-  // Updates organization attributes. Supported attributes include 'email', and 'description'.
-  rpc UpdateAttribute(UpdateAttributeRequest) returns (Org) {
+  // Updates organization metadata. Supported metadata include 'email', and 'description'.
+  rpc UpdateMetadata(UpdateMetadataRequest) returns (Org) {
     option (google.api.http) = {
-      put: "/org/v1/me/attr"
+      put: "/org/v1/me/metadata"
       body: "*"
     };
   }
@@ -122,8 +122,8 @@ message Org {
   // The optional description of the organization.
   string description = 3;
 
-  // The attributes (key/value pair) of the organization. If hierarchy is supported, it will be
-  // separated by '/', such as 'metakey/subkey=value'. Supported attributes include 'createTime'.
+  // The metadata (key/value pair) of the organization. If hierarchy is supported, it will be
+  // separated by '/', such as 'metakey/subkey=value'. Supported metadata include 'createTime'.
   map<string, string> metadata = 4;
 }
 
@@ -150,8 +150,8 @@ message VerifyOrgRequest {
 // Request message for OrgApi.GetOrg rpc.
 message GetOrgRequest {}
 
-// Request message for OrgApi.UpdateAttribute rpc.
-message UpdateAttributeRequest {
+// Request message for OrgApi.UpdateMetadata rpc.
+message UpdateMetadataRequest {
   string key = 1;
   string value = 2;
 }

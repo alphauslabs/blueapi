@@ -305,39 +305,6 @@
         ]
       }
     },
-    "/org/v1/me/attr": {
-      "put": {
-        "summary": "Updates organization attributes. Supported attributes include 'email', and 'description'.",
-        "operationId": "OrgApi_UpdateAttribute",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1Org"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1UpdateAttributeRequest"
-            }
-          }
-        ],
-        "tags": [
-          "OrgApi"
-        ]
-      }
-    },
     "/org/v1/me/masteraccts": {
       "get": {
         "summary": "Lists master accounts that belongs to the caller's organization.",
@@ -385,6 +352,39 @@
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "OrgApi"
+        ]
+      }
+    },
+    "/org/v1/me/metadata": {
+      "put": {
+        "summary": "Updates organization metadata. Supported metadata include 'email', and 'description'.",
+        "operationId": "OrgApi_UpdateMetadata",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1Org"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateMetadataRequest"
+            }
           }
         ],
         "tags": [
@@ -1215,7 +1215,7 @@
           "additionalProperties": {
             "type": "string"
           },
-          "description": "The attributes (key/value pair) of the organization. If hierarchy is supported, it will be\nseparated by '/', such as 'metakey/subkey=value'. Supported attributes include 'createTime'."
+          "description": "The metadata (key/value pair) of the organization. If hierarchy is supported, it will be\nseparated by '/', such as 'metakey/subkey=value'. Supported metadata include 'createTime'."
         }
       },
       "description": "Org resource definition."
@@ -1465,7 +1465,7 @@
       },
       "description": "Response message for GlobalConfig.Config."
     },
-    "v1UpdateAttributeRequest": {
+    "v1UpdateMetadataRequest": {
       "type": "object",
       "properties": {
         "key": {
@@ -1475,7 +1475,7 @@
           "type": "string"
         }
       },
-      "description": "Request message for OrgApi.UpdateAttribute rpc."
+      "description": "Request message for OrgApi.UpdateMetadata rpc."
     },
     "v1UpdatePasswordRequest": {
       "type": "object",
