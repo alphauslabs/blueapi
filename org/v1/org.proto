@@ -74,7 +74,8 @@ service OrgApi {
     };
   }
 
-  // Updates organization metadata. Supported metadata include 'email', and 'description'.
+  // Updates organization metadata. See https://alphauslabs.github.io/blueapi/
+  // for the list of supported attributes.
   rpc UpdateMetadata(UpdateMetadataRequest) returns (types.ripple.Org) {
     option (google.api.http) = {
       put: "/org/v1/me/metadata"
@@ -97,7 +98,8 @@ service OrgApi {
     };
   }
 
-  // Get master account. This call includes all of the account's metadata.
+  // Get master account. This call includes all of the account's metadata. See
+  // https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
   rpc GetMasterAccount(GetMasterAccountRequest) returns (types.aws.Account) {
     option (google.api.http) = {
       get: "/org/v1/me/masteraccts/{id}"

@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package blueapi.iam.v1;
 
+import "types/user.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -19,10 +20,28 @@ service Iam {
 		}
 	};
 
-  // Gets information about the caller.
-  rpc WhoAmI(WhoAmIRequest) returns (WhoAmIResponse) {
+  // Gets user information about the caller. This call includes all of the user metadata.
+  // See https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
+  rpc WhoAmI(WhoAmIRequest) returns (types.User) {
     option (google.api.http) = {
       get: "/iam/v1/whoami"
+    };
+  }
+
+  // List users.
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
+    option (google.api.http) = {
+      get: "/iam/v1/users"
+    };
+  }
+
+  // Get user information. This call includes all of the user metadata. See
+  // https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
+  // If {name} parameter is 'me' or '-', return the caller information, which is
+  // equivalent to `WhoAmI()` or `GET:/iam/v*/whoami`.
+  rpc GetUser(GetUserRequest) returns (types.User) {
+    option (google.api.http) = {
+      get: "/iam/v1/users/{name}"
     };
   }
 }
@@ -30,7 +49,15 @@ service Iam {
 // Request message for Iam.WhoAmI rpc.
 message WhoAmIRequest {}
 
-// Response message for Iam.WhoAmI rpc.
-message WhoAmIResponse {
+// Request message for Iam.ListUsers rpc.
+message ListUsersRequest {}
+
+// Response message for Iam.ListUsers rpc.
+message ListUsersResponse {
+  repeated types.User users = 1;
+}
+
+// Request message for Iam.GetUser rpc.
+message GetUserRequest {
   string name = 1;
 }

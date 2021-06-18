@@ -51,15 +51,69 @@
     "application/json"
   ],
   "paths": {
+    "/iam/v1/users": {
+      "get": {
+        "summary": "List users.",
+        "operationId": "Iam_ListUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListUsersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
+    "/iam/v1/users/{name}": {
+      "get": {
+        "summary": "Get user information. This call includes all of the user metadata. See\nhttps://alphauslabs.github.io/blueapi/ for the list of supported attributes.\nIf {name} parameter is 'me' or '-', return the caller information, which is\nequivalent to `WhoAmI()` or `GET:/iam/v*/whoami`.",
+        "operationId": "Iam_GetUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/typesUser"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
     "/iam/v1/whoami": {
       "get": {
-        "summary": "Gets information about the caller.",
+        "summary": "Gets user information about the caller. This call includes all of the user metadata.\nSee https://alphauslabs.github.io/blueapi/ for the list of supported attributes.",
         "operationId": "Iam_WhoAmI",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1WhoAmIResponse"
+              "$ref": "#/definitions/typesUser"
             }
           },
           "default": {
@@ -330,7 +384,7 @@
     },
     "/org/v1/me/masteraccts/{id}": {
       "get": {
-        "summary": "Get master account. This call includes all of the account's metadata.",
+        "summary": "Get master account. This call includes all of the account's metadata. See\nhttps://alphauslabs.github.io/blueapi/ for the list of supported attributes.",
         "operationId": "OrgApi_GetMasterAccount",
         "responses": {
           "200": {
@@ -361,7 +415,7 @@
     },
     "/org/v1/me/metadata": {
       "put": {
-        "summary": "Updates organization metadata. Supported metadata include 'email', and 'description'.",
+        "summary": "Updates organization metadata. See https://alphauslabs.github.io/blueapi/\nfor the list of supported attributes.",
         "operationId": "OrgApi_UpdateMetadata",
         "responses": {
           "200": {
@@ -1037,6 +1091,26 @@
       },
       "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors)."
     },
+    "typesUser": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "User's unique name (or id)."
+        },
+        "parent": {
+          "type": "string",
+          "description": "The user's parent. If empty or non-existent, it means this user is a root user;\notherwise, it's a subuser."
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "The attributes (key/value pair) of the user. If hierarchy is supported, it will be\nseparated by '/', such as 'key/subkey=value'. See https://alphauslabs.github.io/blueapi/\nfor the list of supported attributes."
+        }
+      }
+    },
     "v1CancelOperationRequest": {
       "type": "object",
       "properties": {
@@ -1215,6 +1289,18 @@
         }
       },
       "description": "The response message for Operations.ListOperations."
+    },
+    "v1ListUsersResponse": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/typesUser"
+          }
+        }
+      },
+      "description": "Response message for Iam.ListUsers rpc."
     },
     "v1ReadAccountCostsRequest": {
       "type": "object",
@@ -1493,15 +1579,6 @@
         }
       },
       "description": "Request message for OrgApi.VerifyOrg rpc."
-    },
-    "v1WhoAmIResponse": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      },
-      "description": "Response message for Iam.WhoAmI rpc."
     }
   },
   "externalDocs": {
