@@ -28,17 +28,17 @@ service Iam {
     };
   }
 
-  // List users.
+  // Lists users.
   rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
     option (google.api.http) = {
       get: "/iam/v1/users"
     };
   }
 
-  // Get user information. This call includes all of the user metadata. See
+  // Gets user information. This call includes all of the user metadata. See
   // https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
-  // If {name} parameter is 'me' or '-', return the caller information, which is
-  // equivalent to `WhoAmI()` or `GET:/iam/v*/whoami`.
+  // If the {name} parameter is 'me' or '-', returns the caller information, which
+  // is equivalent to `WhoAmI()` or `GET:/iam/v*/whoami`.
   rpc GetUser(GetUserRequest) returns (types.User) {
     option (google.api.http) = {
       get: "/iam/v1/users/{name}"
