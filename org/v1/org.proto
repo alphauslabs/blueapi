@@ -2,7 +2,8 @@ syntax = "proto3";
 
 package blueapi.org.v1;
 
-import "types/aws/v1.proto";
+import "types/ripple/org.proto";
+import "types/aws/account.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -50,7 +51,7 @@ service OrgApi {
 
   // Sends (or resends) the verification email. Only valid for unverified
   // organizations. The verification key will be valid for a day.
-  rpc SendVerification(SendVerificationRequest) returns (Org) {
+  rpc SendVerification(SendVerificationRequest) returns (types.ripple.Org) {
     option (google.api.http) = {
       post: "/org/v1/me:sendVerification"
       body: "*"
@@ -59,7 +60,7 @@ service OrgApi {
 
   // Verifies an organization using the key received from the verification email.
   // The verification key is only valid for a day.
-  rpc VerifyOrg(VerifyOrgRequest) returns (Org) {
+  rpc VerifyOrg(VerifyOrgRequest) returns (types.ripple.Org) {
     option (google.api.http) = {
       post: "/org/v1/me:verifyOrg"
       body: "*"
@@ -67,14 +68,14 @@ service OrgApi {
   }
 
   // Gets information about the caller's organization.
-  rpc GetOrg(GetOrgRequest) returns (Org) {
+  rpc GetOrg(GetOrgRequest) returns (types.ripple.Org) {
     option (google.api.http) = {
       get: "/org/v1/me"
     };
   }
 
   // Updates organization metadata. Supported metadata include 'email', and 'description'.
-  rpc UpdateMetadata(UpdateMetadataRequest) returns (Org) {
+  rpc UpdateMetadata(UpdateMetadataRequest) returns (types.ripple.Org) {
     option (google.api.http) = {
       put: "/org/v1/me/metadata"
       body: "*"
@@ -82,7 +83,7 @@ service OrgApi {
   }
 
   // Updates the organization password.
-  rpc UpdatePassword(UpdatePasswordRequest) returns (Org) {
+  rpc UpdatePassword(UpdatePasswordRequest) returns (types.ripple.Org) {
     option (google.api.http) = {
       put: "/org/v1/me/passwd"
       body: "*"
@@ -111,22 +112,6 @@ service OrgApi {
   }
 }
 
-// Org resource definition.
-message Org {
-  // The unique name (or id) of the organization.
-  string name = 1;
-
-  // The registered email of the organization.
-  string email = 2;
-
-  // The optional description of the organization.
-  string description = 3;
-
-  // The metadata (key/value pair) of the organization. If hierarchy is supported, it will be
-  // separated by '/', such as 'metakey/subkey=value'. Supported metadata include 'createTime', and 'status'.
-  map<string, string> metadata = 4;
-}
-
 // Request message for OrgApi.CreateOrg rpc.
 message CreateOrgRequest {
   string email = 1;
@@ -135,7 +120,7 @@ message CreateOrgRequest {
 
 // Response message for OrgApi.CreateOrg rpc.
 message CreateOrgResponse {
-  Org org = 1;
+  types.ripple.Org org = 1;
   string password = 2;
 }
 

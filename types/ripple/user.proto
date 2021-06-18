@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package blueapi.types.ripple;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/types/ripple";
+option java_package = "cloud.alphaus.api.types.ripple";
+option java_outer_classname = "RippleTypesUserProto";
+
+message User {
+  // User's unique name (or id).
+  string name = 1;
+
+  // The user's parent. If empty or non-existent, it means this user is a root user;
+  // otherwise, it's a subuser.
+  string parent = 2;
+
+  // The attributes (key/value pair) of the user. If hierarchy is supported, it will be
+  // separated by '/', such as 'key/subkey=value'. See https://alphauslabs.github.io/blueapi/
+  // for the list of supported attributes.
+  map<string, string> metadata = 3;
+}
