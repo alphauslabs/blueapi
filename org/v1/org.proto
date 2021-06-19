@@ -44,7 +44,7 @@ service OrgApi {
   // Creates the organization account.
   rpc CreateOrg(CreateOrgRequest) returns (CreateOrgResponse) {
     option (google.api.http) = {
-      post: "/org/v1/me"
+      post: "/org/v1"
       body: "*"
     };
   }
@@ -53,7 +53,7 @@ service OrgApi {
   // organizations. The verification key will be valid for a day.
   rpc SendVerification(SendVerificationRequest) returns (types.ripple.Org) {
     option (google.api.http) = {
-      post: "/org/v1/me:sendVerification"
+      post: "/org/v1:sendVerification"
       body: "*"
     };
   }
@@ -62,7 +62,7 @@ service OrgApi {
   // The verification key is only valid for a day.
   rpc VerifyOrg(VerifyOrgRequest) returns (types.ripple.Org) {
     option (google.api.http) = {
-      post: "/org/v1/me:verifyOrg"
+      post: "/org/v1:verifyOrg"
       body: "*"
     };
   }
@@ -70,7 +70,7 @@ service OrgApi {
   // Gets information about the caller's organization.
   rpc GetOrg(GetOrgRequest) returns (types.ripple.Org) {
     option (google.api.http) = {
-      get: "/org/v1/me"
+      get: "/org/v1"
     };
   }
 
@@ -78,7 +78,7 @@ service OrgApi {
   // for the list of supported attributes.
   rpc UpdateMetadata(UpdateMetadataRequest) returns (types.ripple.Org) {
     option (google.api.http) = {
-      put: "/org/v1/me/metadata"
+      put: "/org/v1/metadata"
       body: "*"
     };
   }
@@ -86,7 +86,7 @@ service OrgApi {
   // Updates the organization password.
   rpc UpdatePassword(UpdatePasswordRequest) returns (types.ripple.Org) {
     option (google.api.http) = {
-      put: "/org/v1/me/passwd"
+      put: "/org/v1/passwd"
       body: "*"
     };
   }
@@ -94,7 +94,7 @@ service OrgApi {
   // Lists master accounts that belongs to the caller's organization.
   rpc ListMasterAccounts(ListMasterAccountsRequest) returns (ListMasterAccountsResponse) {
     option (google.api.http) = {
-      get: "/org/v1/me/masteraccts"
+      get: "/org/v1/masteraccts"
     };
   }
 
@@ -102,14 +102,14 @@ service OrgApi {
   // https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
   rpc GetMasterAccount(GetMasterAccountRequest) returns (types.aws.Account) {
     option (google.api.http) = {
-      get: "/org/v1/me/masteraccts/{id}"
+      get: "/org/v1/masteraccts/{id}"
     };
   }
 
   // Deletes the organization.
   rpc DeleteOrg(DeleteOrgRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/org/v1/me"
+      delete: "/org/v1"
     };
   }
 }
