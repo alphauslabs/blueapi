@@ -31,13 +31,13 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   }
 };
 
-// OrgApi service definition.
-service OrgApi {
+// Organization service definition.
+service Organization {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
 		description: "Base URL: https://api.alphaus.cloud/m/blue"
 		external_docs: {
 			url: "https://alphauslabs.github.io/blueapi/";
-			description: "Find out more about OrgApi service";
+			description: "Find out more about Organization service";
 		}
 	};
 
@@ -114,53 +114,53 @@ service OrgApi {
   }
 }
 
-// Request message for OrgApi.CreateOrg rpc.
+// Request message for Organization.CreateOrg rpc.
 message CreateOrgRequest {
   string email = 1;
   string description = 2;
 }
 
-// Response message for OrgApi.CreateOrg rpc.
+// Response message for Organization.CreateOrg rpc.
 message CreateOrgResponse {
   types.ripple.Org org = 1;
   string password = 2;
 }
 
-// Request message for OrgApi.SendVerification rpc.
+// Request message for Organization.SendVerification rpc.
 message SendVerificationRequest {}
 
-// Request message for OrgApi.VerifyOrg rpc.
+// Request message for Organization.VerifyOrg rpc.
 message VerifyOrgRequest {
   string key = 1;
 }
 
-// Request message for OrgApi.GetOrg rpc.
+// Request message for Organization.GetOrg rpc.
 message GetOrgRequest {}
 
-// Request message for OrgApi.UpdateMetadata rpc.
+// Request message for Organization.UpdateMetadata rpc.
 message UpdateMetadataRequest {
   string key = 1;
   string value = 2;
 }
 
-// Request message for OrgApi.UpdatePassword rpc.
+// Request message for Organization.UpdatePassword rpc.
 message UpdatePasswordRequest {
   string old_password = 1;
   string new_password = 2;
 }
 
-// Request message for OrgApi.ListMasterAccounts rpc.
+// Request message for Organization.ListMasterAccounts rpc.
 message ListMasterAccountsRequest {}
 
-// Response message for OrgApi.ListMasterAccounts rpc.
+// Response message for Organization.ListMasterAccounts rpc.
 message ListMasterAccountsResponse {
   repeated types.aws.Account accounts = 1;
 }
 
-// Request message for OrgApi.GetMasterAccount rpc.
+// Request message for Organization.GetMasterAccount rpc.
 message GetMasterAccountRequest {
   string id = 1;
 }
 
-// Request message for OrgApi.DeleteOrg rpc.
+// Request message for Organization.DeleteOrg rpc.
 message DeleteOrgRequest {}
