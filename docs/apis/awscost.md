@@ -55,7 +55,7 @@ Although these APIs are designed to be streamed due to potentially large amounts
 # Output is a newline-delimited rows of JSON data.
 $ curl -X POST \
     -H "Authorization: Bearer $(bluectl access-token)" \
-    https://api.alphaus.cloud/m/blue/awscost/v1/accounts/1234567890/costs:streamReadAccountCosts
+    https://api.alphaus.cloud/m/blue/awscost/v1/accounts/1234567890/costs:readAccountCosts
 ```
 
 We will be publishing the OpenAPI documentations for these JSON/REST APIs soon. In the meantime, check them out [here](https://github.com/alphauslabs/blueapi/tree/main/openapiv2). You can use something like [editor.swagger.io](https://editor.swagger.io/).
