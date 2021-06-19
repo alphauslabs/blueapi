@@ -4,6 +4,10 @@ sort: 2
 
 # AWS Cost API
 
+``` .. note::
+    Testing for note.
+```
+
 AWS Cost API allows you to stream your AWS-related usage costs and fees, including credits, and refunds. This is the same data that Ripple/Wave uses to create invoices, graphs, and reports, aggregated at daily level.
 
 Before you can use this API, you need to register your AWS management (or billing, or payer) account to Ripple. We will be releasing an API for this registration process in the near future so stay tuned. In the meantime, you can contact us [here](https://alphaus.cloud/en/inquiry/).
