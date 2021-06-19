@@ -1,5 +1,6 @@
 ---
-sort: 2
+sort: 3
+show_sorted: false
 ---
 
 # AWS Cost API
