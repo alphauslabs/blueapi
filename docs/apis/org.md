@@ -1,7 +1,8 @@
 ---
 sort: 1
+show_sorted: false
 ---
 
-# Core API for AWS
+# Organization API
 
 Still work in progress. Stay tuned!
