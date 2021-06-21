@@ -82,7 +82,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/typesUser"
+              "$ref": "#/definitions/apiUser"
             }
           },
           "default": {
@@ -113,7 +113,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/typesUser"
+              "$ref": "#/definitions/apiUser"
             }
           },
           "default": {
@@ -987,6 +987,26 @@
     }
   },
   "definitions": {
+    "apiUser": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "User's unique name (or id)."
+        },
+        "parent": {
+          "type": "string",
+          "description": "The user's parent. If empty or non-existent, it means this user is a root user;\notherwise, it's a subuser."
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "The attributes (key/value pair) of the user. If hierarchy is supported, it will be\nseparated by '/', such as 'key/subkey=value'. See https://alphauslabs.github.io/blueapi/\nfor the list of supported attributes."
+        }
+      }
+    },
     "awsAccount": {
       "type": "object",
       "properties": {
@@ -1090,26 +1110,6 @@
         }
       },
       "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors)."
-    },
-    "typesUser": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "User's unique name (or id)."
-        },
-        "parent": {
-          "type": "string",
-          "description": "The user's parent. If empty or non-existent, it means this user is a root user;\notherwise, it's a subuser."
-        },
-        "metadata": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "The attributes (key/value pair) of the user. If hierarchy is supported, it will be\nseparated by '/', such as 'key/subkey=value'. See https://alphauslabs.github.io/blueapi/\nfor the list of supported attributes."
-        }
-      }
     },
     "v1CancelOperationRequest": {
       "type": "object",
@@ -1296,7 +1296,7 @@
         "users": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/typesUser"
+            "$ref": "#/definitions/apiUser"
           }
         }
       },

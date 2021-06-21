@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package blueapi.org.v1;
 
-import "types/ripple/org.proto";
-import "types/aws/account.proto";
+import "api/ripple/org.proto";
+import "api/aws/account.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -51,7 +51,7 @@ service Organization {
 
   // Sends (or resends) the verification email. Only valid for unverified
   // organizations. The verification key will be valid for a day.
-  rpc SendVerification(SendVerificationRequest) returns (types.ripple.Org) {
+  rpc SendVerification(SendVerificationRequest) returns (api.ripple.Org) {
     option (google.api.http) = {
       post: "/org/v1:sendVerification"
       body: "*"
@@ -60,7 +60,7 @@ service Organization {
 
   // Verifies an organization using the key received from the verification email.
   // The verification key is only valid for a day.
-  rpc VerifyOrg(VerifyOrgRequest) returns (types.ripple.Org) {
+  rpc VerifyOrg(VerifyOrgRequest) returns (api.ripple.Org) {
     option (google.api.http) = {
       post: "/org/v1:verify"
       body: "*"
@@ -68,7 +68,7 @@ service Organization {
   }
 
   // Gets information about the caller's organization.
-  rpc GetOrg(GetOrgRequest) returns (types.ripple.Org) {
+  rpc GetOrg(GetOrgRequest) returns (api.ripple.Org) {
     option (google.api.http) = {
       get: "/org/v1"
     };
@@ -76,7 +76,7 @@ service Organization {
 
   // Updates organization metadata. See https://alphauslabs.github.io/blueapi/
   // for the list of supported attributes.
-  rpc UpdateMetadata(UpdateMetadataRequest) returns (types.ripple.Org) {
+  rpc UpdateMetadata(UpdateMetadataRequest) returns (api.ripple.Org) {
     option (google.api.http) = {
       put: "/org/v1/metadata"
       body: "*"
@@ -84,7 +84,7 @@ service Organization {
   }
 
   // Updates the organization password.
-  rpc UpdatePassword(UpdatePasswordRequest) returns (types.ripple.Org) {
+  rpc UpdatePassword(UpdatePasswordRequest) returns (api.ripple.Org) {
     option (google.api.http) = {
       put: "/org/v1/passwd"
       body: "*"
@@ -100,7 +100,7 @@ service Organization {
 
   // Get master account. This call includes all of the account's metadata. See
   // https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
-  rpc GetMasterAccount(GetMasterAccountRequest) returns (types.aws.Account) {
+  rpc GetMasterAccount(GetMasterAccountRequest) returns (api.aws.Account) {
     option (google.api.http) = {
       get: "/org/v1/masteraccts/{id}"
     };
@@ -122,7 +122,7 @@ message CreateOrgRequest {
 
 // Response message for Organization.CreateOrg rpc.
 message CreateOrgResponse {
-  types.ripple.Org org = 1;
+  api.ripple.Org org = 1;
   string password = 2;
 }
 
@@ -154,7 +154,7 @@ message ListMasterAccountsRequest {}
 
 // Response message for Organization.ListMasterAccounts rpc.
 message ListMasterAccountsResponse {
-  repeated types.aws.Account accounts = 1;
+  repeated api.aws.Account accounts = 1;
 }
 
 // Request message for Organization.GetMasterAccount rpc.
