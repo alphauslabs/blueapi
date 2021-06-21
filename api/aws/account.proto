@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package blueapi.api.aws;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/aws";
+option java_package = "cloud.alphaus.blueapi.api.aws";
+option java_outer_classname = "ApiAwsProto";
+
+message Account {
+  // The AWS account id.
+  string id = 1;
+
+  // The account name.
+  string name = 2;
+
+  // The attributes (key/value pair) of the account. If hierarchy is supported, it will be
+  // separated by '/', such as 'metakey/subkey=value'. Supported attributes include 'createTime'.
+  // If the account is a master (or payer) account, additional attributes include 'bucketName',
+  // 'lastModified' (last timestamp AWS updated CUR), 'prefix', 'reportName', 'roleArn', and
+  // 'lastImported' (last timestamp CUR is imported to Alphaus).
+  map<string, string> metadata = 3;
+}
