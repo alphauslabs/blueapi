@@ -105,6 +105,18 @@ message CostItem {
   api.aws.Cost aws = 1;
 }
 
+// AWS-specific options.
+message AwsOptions {
+  // Optional. If set to true, stream will include resource tags. Note that this could
+  // potentially increase the data size if you have lots of tag information.
+  bool include_tags = 1;
+
+  // Optional. If set to true, stream will include resource cost category information.
+  // Note that this could potentially increase the data size if you have lots of cost
+  // category information.
+  bool include_cost_categories = 2;
+}
+
 // Request message for Cost.ReadCosts.
 message ReadCostsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
@@ -117,16 +129,8 @@ message ReadCostsRequest {
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   google.protobuf.Timestamp end_time = 3;
 
-  message AwsOptions {
-    // Optional. If set to true, stream will include resource tags. Note that this could
-    // potentially increase the data size if you have lots of tag information.
-    bool include_tags = 1;
-
-    // Optional. If set to true, stream will include resource cost category information.
-    // Note that this could potentially increase the data size if you have lots of cost
-    // category information.
-    bool include_cost_categories = 2;
-  }
+  // Optional. AWS-specific request options.
+  AwsOptions aws_options = 4;
 }
 
 // Request message for Cost.ReadBillingGroupCosts.
@@ -144,16 +148,8 @@ message ReadBillingGroupCostsRequest {
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   google.protobuf.Timestamp end_time = 4;
 
-  message AwsOptions {
-    // Optional. If set to true, stream will include resource tags. Note that this could
-    // potentially increase the data size if you have lots of tag information.
-    bool include_tags = 1;
-
-    // Optional. If set to true, stream will include resource cost category information.
-    // Note that this could potentially increase the data size if you have lots of cost
-    // category information.
-    bool include_cost_categories = 2;
-  }
+  // Optional. AWS-specific request options.
+  AwsOptions aws_options = 5;
 }
 
 // Request message for Cost.ReadAccountCosts.
@@ -171,16 +167,8 @@ message ReadAccountCostsRequest {
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   google.protobuf.Timestamp end_time = 4;
 
-  message AwsOptions {
-    // Optional. If set to true, stream will include resource tags. Note that this could
-    // potentially increase the data size if you have lots of tag information.
-    bool include_tags = 1;
-
-    // Optional. If set to true, stream will include resource cost category information.
-    // Note that this could potentially increase the data size if you have lots of cost
-    // category information.
-    bool include_cost_categories = 2;
-  }
+  // Optional. AWS-specific request options.
+  AwsOptions aws_options = 5;
 }
 
 // Response message wrapper for cloud cost adjustments.
