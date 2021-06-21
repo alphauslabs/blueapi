@@ -30,10 +30,10 @@
       }
     },
     {
-      "name": "AwsCost",
-      "description": "Base URL: https://api.alphaus.cloud/m/blue/awscost",
+      "name": "Cost",
+      "description": "Base URL: https://api.alphaus.cloud/m/blue/cost",
       "externalDocs": {
-        "description": "Find out more about AwsCost service",
+        "description": "Find out more about Cost service",
         "url": "https://alphauslabs.github.io/blueapi/"
       }
     },
@@ -576,10 +576,10 @@
         ]
       }
     },
-    "/v1/accounts/{name}/costs:readAccountCosts": {
+    "/v1/{vendor}/accounts/{name}/adjustments:readAccountAdjustments": {
       "post": {
-        "summary": "Reads the usage-based cost details of an AWS account. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
-        "operationId": "AwsCost_ReadAccountCosts",
+        "summary": "Reads the non-usaged-based details of an AWS account. This API covers non-usage-based\nadjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
+        "operationId": "Cost_ReadAccountAdjustments",
         "responses": {
           "200": {
             "description": "A successful response.(streaming responses)",
@@ -587,13 +587,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1Cost"
+                  "$ref": "#/definitions/v1AdjustmentItem"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of v1Cost"
+              "title": "Stream result of v1AdjustmentItem"
             }
           },
           "default": {
@@ -605,8 +605,71 @@
         },
         "parameters": [
           {
+            "name": "vendor",
+            "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "name",
-            "description": "Required. The AWS account to stream.",
+            "description": "Required. The AWS account id to stream.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ReadAccountAdjustmentsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/accounts/{name}/costs:readAccountCosts": {
+      "post": {
+        "summary": "Reads the usage-based cost details of an account. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
+        "operationId": "Cost_ReadAccountCosts",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1CostItem"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1CostItem"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "Required. The account to stream.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -621,14 +684,14 @@
           }
         ],
         "tags": [
-          "AwsCost"
+          "Cost"
         ]
       }
     },
-    "/v1/accounts/{name}/fees:readAccountFees": {
+    "/v1/{vendor}/adjustments:readAdjustments": {
       "post": {
-        "summary": "Reads the non-usaged-based details of an AWS account. This API covers non-usage-based\nfees, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
-        "operationId": "AwsCost_ReadAccountFees",
+        "summary": "Reads the non-usage-based details of an organization (Ripple) or company (Wave). This API covers\nnon-usage-based adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime\nrange parameters are not set, month-to-date (current month) will be returned.",
+        "operationId": "Cost_ReadAdjustments",
         "responses": {
           "200": {
             "description": "A successful response.(streaming responses)",
@@ -636,13 +699,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1Fee"
+                  "$ref": "#/definitions/v1AdjustmentItem"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of v1Fee"
+              "title": "Stream result of v1AdjustmentItem"
             }
           },
           "default": {
@@ -654,8 +717,8 @@
         },
         "parameters": [
           {
-            "name": "name",
-            "description": "Required. The AWS account id to stream.",
+            "name": "vendor",
+            "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -665,19 +728,19 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ReadAccountFeesRequest"
+              "$ref": "#/definitions/v1ReadAdjustmentsRequest"
             }
           }
         ],
         "tags": [
-          "AwsCost"
+          "Cost"
         ]
       }
     },
-    "/v1/billinggroups/{name}/costs:readBillingGroupCosts": {
+    "/v1/{vendor}/billinggroups/{name}/adjustments:readBillingGroupAdjustments": {
       "post": {
-        "summary": "Reads the usage-based cost details of a billing group. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
-        "operationId": "AwsCost_ReadBillingGroupCosts",
+        "summary": "Reads the non-usage-based details of a billing group. This API covers non-usage-based\nadjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
+        "operationId": "Cost_ReadBillingGroupAdjustments",
         "responses": {
           "200": {
             "description": "A successful response.(streaming responses)",
@@ -685,13 +748,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1Cost"
+                  "$ref": "#/definitions/v1AdjustmentItem"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of v1Cost"
+              "title": "Stream result of v1AdjustmentItem"
             }
           },
           "default": {
@@ -702,6 +765,69 @@
           }
         },
         "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "Required. The billing group id to stream.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ReadBillingGroupAdjustmentsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/billinggroups/{name}/costs:readBillingGroupCosts": {
+      "post": {
+        "summary": "Reads the usage-based cost details of a billing group. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
+        "operationId": "Cost_ReadBillingGroupCosts",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1CostItem"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1CostItem"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "name",
             "description": "Required. The billing group id to stream.",
@@ -719,161 +845,14 @@
           }
         ],
         "tags": [
-          "AwsCost"
+          "Cost"
         ]
       }
     },
-    "/v1/billinggroups/{name}/fees:readBillingGroupFees": {
-      "post": {
-        "summary": "Reads the non-usage-based details of a billing group. This API covers non-usage-based\nfees, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
-        "operationId": "AwsCost_ReadBillingGroupFees",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1Fee"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1Fee"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "name",
-            "description": "Required. The billing group id to stream.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ReadBillingGroupFeesRequest"
-            }
-          }
-        ],
-        "tags": [
-          "AwsCost"
-        ]
-      }
-    },
-    "/v1/companies/{name}/costs:readCompanyCosts": {
-      "post": {
-        "summary": "Reads the usage-based cost details of a company. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
-        "operationId": "AwsCost_ReadCompanyCosts",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1Cost"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1Cost"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "name",
-            "description": "Required. The company id to stream.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ReadCompanyCostsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "AwsCost"
-        ]
-      }
-    },
-    "/v1/companies/{name}/fees:readCompanyFees": {
-      "post": {
-        "summary": "Reads the non-usage-based details of a company. This API covers non-usage-based\nfees, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
-        "operationId": "AwsCost_ReadCompanyFees",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1Fee"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1Fee"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "name",
-            "description": "Required. The company id to stream.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ReadCompanyFeesRequest"
-            }
-          }
-        ],
-        "tags": [
-          "AwsCost"
-        ]
-      }
-    },
-    "/v1/costs:readCosts": {
+    "/v1/{vendor}/costs:readCosts": {
       "post": {
         "summary": "Reads the usage-based cost details of an organization (Ripple) or company (Wave).\nIf datetime range parameters are not set, month-to-date (current month) will be returned.",
-        "operationId": "AwsCost_ReadCosts",
+        "operationId": "Cost_ReadCosts",
         "responses": {
           "200": {
             "description": "A successful response.(streaming responses)",
@@ -881,13 +860,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1Cost"
+                  "$ref": "#/definitions/v1CostItem"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of v1Cost"
+              "title": "Stream result of v1CostItem"
             }
           },
           "default": {
@@ -898,6 +877,13 @@
           }
         },
         "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
@@ -908,49 +894,7 @@
           }
         ],
         "tags": [
-          "AwsCost"
-        ]
-      }
-    },
-    "/v1/fees:readFees": {
-      "post": {
-        "summary": "Reads the non-usage-based details of an organization (Ripple) or company (Wave). This API covers\nnon-usage-based fees, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime\nrange parameters are not set, month-to-date (current month) will be returned.",
-        "operationId": "AwsCost_ReadFees",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1Fee"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1Fee"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ReadFeesRequest"
-            }
-          }
-        ],
-        "tags": [
-          "AwsCost"
+          "Cost"
         ]
       }
     },
@@ -1024,6 +968,96 @@
             "type": "string"
           },
           "description": "The attributes (key/value pair) of the account. If hierarchy is supported, it will be\nseparated by '/', such as 'metakey/subkey=value'. Supported attributes include 'createTime'.\nIf the account is a master (or payer) account, additional attributes include 'bucketName',\n'lastModified' (last timestamp AWS updated CUR), 'prefix', 'reportName', 'roleArn', and\n'lastImported' (last timestamp CUR is imported to Alphaus)."
+        }
+      }
+    },
+    "awsAdjustment": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "billingGroupId": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "type": {
+          "type": "string"
+        },
+        "productCode": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "cost": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "awsCost": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "billingGroupId": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "productCode": {
+          "type": "string"
+        },
+        "serviceCode": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "zone": {
+          "type": "string"
+        },
+        "usageType": {
+          "type": "string"
+        },
+        "instanceType": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "invoiceId": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "costCategories": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "usage": {
+          "type": "number",
+          "format": "double"
+        },
+        "cost": {
+          "type": "number",
+          "format": "double"
         }
       }
     },
@@ -1111,6 +1145,15 @@
       },
       "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors)."
     },
+    "v1AdjustmentItem": {
+      "type": "object",
+      "properties": {
+        "aws": {
+          "$ref": "#/definitions/awsAdjustment"
+        }
+      },
+      "description": "Response message wrapper for cloud cost adjustments."
+    },
     "v1CancelOperationRequest": {
       "type": "object",
       "properties": {
@@ -1139,71 +1182,14 @@
       },
       "description": "Response message for Config."
     },
-    "v1Cost": {
+    "v1CostItem": {
       "type": "object",
       "properties": {
-        "account": {
-          "type": "string"
-        },
-        "companyId": {
-          "type": "string"
-        },
-        "billingGroupId": {
-          "type": "string"
-        },
-        "date": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "productCode": {
-          "type": "string"
-        },
-        "serviceCode": {
-          "type": "string"
-        },
-        "region": {
-          "type": "string"
-        },
-        "zone": {
-          "type": "string"
-        },
-        "usageType": {
-          "type": "string"
-        },
-        "instanceType": {
-          "type": "string"
-        },
-        "operation": {
-          "type": "string"
-        },
-        "invoiceId": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "tags": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        },
-        "costCategories": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        },
-        "usageAmount": {
-          "type": "number",
-          "format": "double"
-        },
-        "cost": {
-          "type": "number",
-          "format": "double"
+        "aws": {
+          "$ref": "#/definitions/awsCost"
         }
       },
-      "description": "Response message for AwsCost.StreamReadAccountCosts."
+      "description": "Response message wrapper for cloud costs."
     },
     "v1CreateOrgRequest": {
       "type": "object",
@@ -1228,38 +1214,6 @@
         }
       },
       "description": "Response message for Organization.CreateOrg rpc."
-    },
-    "v1Fee": {
-      "type": "object",
-      "properties": {
-        "account": {
-          "type": "string"
-        },
-        "companyId": {
-          "type": "string"
-        },
-        "billingGroupId": {
-          "type": "string"
-        },
-        "date": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "type": {
-          "type": "string"
-        },
-        "productCode": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "cost": {
-          "type": "number",
-          "format": "double"
-        }
-      },
-      "description": "Response message for AwsCost.ReadAccountFees."
     },
     "v1ListMasterAccountsResponse": {
       "type": "object",
@@ -1302,43 +1256,16 @@
       },
       "description": "Response message for Iam.ListUsers rpc."
     },
-    "v1ReadAccountCostsRequest": {
+    "v1ReadAccountAdjustmentsRequest": {
       "type": "object",
       "properties": {
-        "name": {
+        "vendor": {
           "type": "string",
-          "description": "Required. The AWS account to stream.",
+          "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
           "required": [
-            "name"
+            "vendor"
           ]
         },
-        "startTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
-        },
-        "endTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
-        },
-        "includeTags": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource tags. Note that this could\npotentially increase the data size if you have lots of tag information."
-        },
-        "includeCostCategories": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource cost category information.\nNote that this could potentially increase the data size if you have lots of cost\ncategory information."
-        }
-      },
-      "description": "Request message for AwsCost.ReadAccountCosts.",
-      "required": [
-        "name"
-      ]
-    },
-    "v1ReadAccountFeesRequest": {
-      "type": "object",
-      "properties": {
         "name": {
           "type": "string",
           "description": "Required. The AWS account id to stream.",
@@ -1357,48 +1284,116 @@
           "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
         }
       },
-      "description": "Request message for AwsCost.ReadAccountFees.",
+      "description": "Request message for Cost.ReadAccountAdjustments.",
       "required": [
+        "vendor",
+        "name"
+      ]
+    },
+    "v1ReadAccountCostsRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
+          "required": [
+            "vendor"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "description": "Required. The account to stream.",
+          "required": [
+            "name"
+          ]
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
+        }
+      },
+      "description": "Request message for Cost.ReadAccountCosts.",
+      "required": [
+        "vendor",
+        "name"
+      ]
+    },
+    "v1ReadAdjustmentsRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
+          "required": [
+            "vendor"
+          ]
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
+        }
+      },
+      "description": "Request message for Cost.ReadAdjustments.",
+      "required": [
+        "vendor"
+      ]
+    },
+    "v1ReadBillingGroupAdjustmentsRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
+          "required": [
+            "vendor"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "description": "Required. The billing group id to stream.",
+          "required": [
+            "name"
+          ]
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
+        }
+      },
+      "description": "Request message for Cost.ReadBillingGroupAdjustments.",
+      "required": [
+        "vendor",
         "name"
       ]
     },
     "v1ReadBillingGroupCostsRequest": {
       "type": "object",
       "properties": {
-        "name": {
+        "vendor": {
           "type": "string",
-          "description": "Required. The billing group id to stream.",
+          "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
           "required": [
-            "name"
+            "vendor"
           ]
         },
-        "startTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
-        },
-        "endTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
-        },
-        "includeTags": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource tags. Note that this could\npotentially increase the data size if you have lots of tag information."
-        },
-        "includeCostCategories": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource cost category information.\nNote that this could potentially increase the data size if you have lots of cost\ncategory information."
-        }
-      },
-      "description": "Request message for AwsCost.ReadBillingGroupCosts.",
-      "required": [
-        "name"
-      ]
-    },
-    "v1ReadBillingGroupFeesRequest": {
-      "type": "object",
-      "properties": {
         "name": {
           "type": "string",
           "description": "Required. The billing group id to stream.",
@@ -1417,105 +1412,21 @@
           "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
         }
       },
-      "description": "Request message for AwsCost.ReadBillingGroupFees.",
+      "description": "Request message for Cost.ReadBillingGroupCosts.",
       "required": [
-        "name"
-      ]
-    },
-    "v1ReadCompanyCostsRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Required. The company id to stream.",
-          "required": [
-            "name"
-          ]
-        },
-        "startTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
-        },
-        "endTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
-        },
-        "includeTags": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource tags. Note that this could\npotentially increase the data size if you have lots of tag information."
-        },
-        "includeCostCategories": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource cost category information.\nNote that this could potentially increase the data size if you have lots of cost\ncategory information."
-        }
-      },
-      "description": "Request message for AwsCost.ReadCompanyCosts.",
-      "required": [
-        "name"
-      ]
-    },
-    "v1ReadCompanyFeesRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Required. The company id to stream.",
-          "required": [
-            "name"
-          ]
-        },
-        "startTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
-        },
-        "endTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
-        }
-      },
-      "description": "Request message for AwsCost.ReadCompanyFees.",
-      "required": [
+        "vendor",
         "name"
       ]
     },
     "v1ReadCostsRequest": {
       "type": "object",
       "properties": {
-        "name": {
+        "vendor": {
           "type": "string",
-          "description": "Optional. The MSP id or company id to stream. If not provided, the parent MSP or\ncompany will be used."
-        },
-        "startTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used."
-        },
-        "endTime": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
-        },
-        "includeTags": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource tags. Note that this could\npotentially increase the data size if you have lots of tag information."
-        },
-        "includeCostCategories": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource cost category information.\nNote that this could potentially increase the data size if you have lots of cost\ncategory information."
-        }
-      },
-      "description": "Request message for AwsCost.ReadCosts."
-    },
-    "v1ReadFeesRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Optional. The MSP id or company id to stream. If not provided, the parent MSP or\ncompany will be used."
+          "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
+          "required": [
+            "vendor"
+          ]
         },
         "startTime": {
           "type": "string",
@@ -1528,7 +1439,10 @@
           "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used."
         }
       },
-      "description": "Request message for AwsCost.ReadFees."
+      "description": "Request message for Cost.ReadCosts.",
+      "required": [
+        "vendor"
+      ]
     },
     "v1SendVerificationRequest": {
       "type": "object",

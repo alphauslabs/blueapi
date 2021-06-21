@@ -1,0 +1,234 @@
+syntax = "proto3";
+
+package blueapi.cost.v1;
+
+import "api/aws/cost.proto";
+import "api/aws/adjustment.proto";
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/cost";
+option java_package = "cloud.alphaus.api.cost";
+option java_outer_classname = "CostProto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Alphaus Blue: Cost Service";
+    version: "1.0";
+    contact: {
+      name: "Alphaus Blue: Cost Service";
+      url: "https://alphauslabs.github.io/blueapi/apis/cost.html";
+    };
+    license: {
+      name: "License: Apache License 2.0";
+      url: "https://github.com/alphauslabs/blueapi/blob/main/LICENSE";
+    };
+  };
+  external_docs: {
+    url: "https://alphauslabs.github.io/blueapi/apis/cost.html";
+    description: "More about Alphaus Blue: Cost Service";
+  }
+};
+
+// Service for reading aggregated costs for your cloud costs and usages.
+service Cost {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+		description: "Base URL: https://api.alphaus.cloud/m/blue/cost"
+		external_docs: {
+			url: "https://alphauslabs.github.io/blueapi/";
+			description: "Find out more about Cost service";
+		}
+	};
+
+  // Reads the usage-based cost details of an organization (Ripple) or company (Wave).
+  // If datetime range parameters are not set, month-to-date (current month) will be returned.
+  rpc ReadCosts (ReadCostsRequest) returns (stream CostItem) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/costs:readCosts"
+      body: "*"
+    };
+  }
+
+  // Reads the usage-based cost details of a billing group. If datetime range
+  // parameters are not set, month-to-date (current month) will be returned.
+  rpc ReadBillingGroupCosts (ReadBillingGroupCostsRequest) returns (stream CostItem) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/billinggroups/{name}/costs:readBillingGroupCosts"
+      body: "*"
+    };
+  }
+
+  // Reads the usage-based cost details of an account. If datetime range
+  // parameters are not set, month-to-date (current month) will be returned.
+  rpc ReadAccountCosts (ReadAccountCostsRequest) returns (stream CostItem) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/accounts/{name}/costs:readAccountCosts"
+      body: "*"
+    };
+  }
+
+  // Reads the non-usage-based details of an organization (Ripple) or company (Wave). This API covers
+  // non-usage-based adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime
+  // range parameters are not set, month-to-date (current month) will be returned.
+  rpc ReadAdjustments (ReadAdjustmentsRequest) returns (stream AdjustmentItem) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/adjustments:readAdjustments"
+      body: "*"
+    };
+  }
+
+  // Reads the non-usage-based details of a billing group. This API covers non-usage-based
+  // adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range
+  // parameters are not set, month-to-date (current month) will be returned.
+  rpc ReadBillingGroupAdjustments (ReadBillingGroupAdjustmentsRequest) returns (stream AdjustmentItem) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/billinggroups/{name}/adjustments:readBillingGroupAdjustments"
+      body: "*"
+    };
+  }
+
+  // Reads the non-usaged-based details of an AWS account. This API covers non-usage-based
+  // adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range
+  // parameters are not set, month-to-date (current month) will be returned.
+  rpc ReadAccountAdjustments (ReadAccountAdjustmentsRequest) returns (stream AdjustmentItem) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/accounts/{name}/adjustments:readAccountAdjustments"
+      body: "*"
+    };
+  }
+}
+
+// Response message wrapper for cloud costs.
+message CostItem {
+  api.aws.Cost aws = 1;
+}
+
+// Request message for Cost.ReadCosts.
+message ReadCostsRequest {
+  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Timestamp to start streaming data from. If not set, the first day of the
+  // current month will be used.
+  google.protobuf.Timestamp start_time = 2;
+
+  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
+  google.protobuf.Timestamp end_time = 3;
+
+  message AwsOptions {
+    // Optional. If set to true, stream will include resource tags. Note that this could
+    // potentially increase the data size if you have lots of tag information.
+    bool include_tags = 1;
+
+    // Optional. If set to true, stream will include resource cost category information.
+    // Note that this could potentially increase the data size if you have lots of cost
+    // category information.
+    bool include_cost_categories = 2;
+  }
+}
+
+// Request message for Cost.ReadBillingGroupCosts.
+message ReadBillingGroupCostsRequest {
+  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. The billing group id to stream.
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Timestamp to start streaming data from. If not set, the first day of the
+  // current month will be used.
+  google.protobuf.Timestamp start_time = 3;
+
+  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
+  google.protobuf.Timestamp end_time = 4;
+
+  message AwsOptions {
+    // Optional. If set to true, stream will include resource tags. Note that this could
+    // potentially increase the data size if you have lots of tag information.
+    bool include_tags = 1;
+
+    // Optional. If set to true, stream will include resource cost category information.
+    // Note that this could potentially increase the data size if you have lots of cost
+    // category information.
+    bool include_cost_categories = 2;
+  }
+}
+
+// Request message for Cost.ReadAccountCosts.
+message ReadAccountCostsRequest {
+  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. The account to stream.
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Timestamp to start streaming data from. If not set, the first day of the
+  // current month will be used.
+  google.protobuf.Timestamp start_time = 3;
+
+  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
+  google.protobuf.Timestamp end_time = 4;
+
+  message AwsOptions {
+    // Optional. If set to true, stream will include resource tags. Note that this could
+    // potentially increase the data size if you have lots of tag information.
+    bool include_tags = 1;
+
+    // Optional. If set to true, stream will include resource cost category information.
+    // Note that this could potentially increase the data size if you have lots of cost
+    // category information.
+    bool include_cost_categories = 2;
+  }
+}
+
+// Response message wrapper for cloud cost adjustments.
+message AdjustmentItem {
+  api.aws.Adjustment aws = 1;
+}
+
+// Request message for Cost.ReadAdjustments.
+message ReadAdjustmentsRequest {
+  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Timestamp to start streaming data from. If not set, the first day of the
+  // current month will be used.
+  google.protobuf.Timestamp start_time = 2;
+
+  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
+  google.protobuf.Timestamp end_time = 3;
+}
+
+// Request message for Cost.ReadBillingGroupAdjustments.
+message ReadBillingGroupAdjustmentsRequest {
+  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. The billing group id to stream.
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Timestamp to start streaming data from. If not set, the first day of the
+  // current month will be used.
+  google.protobuf.Timestamp start_time = 3;
+
+  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
+  google.protobuf.Timestamp end_time = 4;
+}
+
+// Request message for Cost.ReadAccountAdjustments.
+message ReadAccountAdjustmentsRequest {
+  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. The AWS account id to stream.
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Timestamp to start streaming data from. If not set, the first day of the
+  // current month will be used.
+  google.protobuf.Timestamp start_time = 3;
+
+  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
+  google.protobuf.Timestamp end_time = 4;
+}
