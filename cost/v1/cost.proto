@@ -36,14 +36,15 @@ service Cost {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
 		description: "Base URL: https://api.alphaus.cloud/m/blue/cost"
 		external_docs: {
-			url: "https://alphauslabs.github.io/blueapi/";
-			description: "Find out more about Cost service";
+			url: "https://github.com/alphauslabs/blueapi/blob/main/cost/v1/cost.proto";
+			description: "Cost service definition";
 		}
 	};
 
   // Reads the usage-based cost details of an organization (Ripple) or company (Wave).
   // At the moment, the supported {vendor} is 'aws'. If datetime range parameters are
-  // not set, month-to-date (current month) will be returned.
+  // not set, month-to-date (current month) will be returned. Date range parameters
+  // are 'start_time' and 'end_time, with the 'yyyymmdd' format.
   rpc ReadCosts (ReadCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costs:readCosts"
