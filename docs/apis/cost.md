@@ -6,7 +6,7 @@ show_sorted: false
 # Cost API
 
 ```note
-OpenAPI documentation: [https://alphauslabs.github.io/blueapidocs/#/AwsCost](https://alphauslabs.github.io/blueapidocs/#/Cost)
+OpenAPI documentation: [https://alphauslabs.github.io/blueapidocs/#/Cost](https://alphauslabs.github.io/blueapidocs/#/Cost)
 ```
 
 AWS Cost API allows you to stream your AWS-related usage costs and fees, including credits, and refunds. This is the same data that Ripple/Wave uses to create invoices, graphs, and reports, aggregated at daily level.
