@@ -617,14 +617,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ReadAccountAdjustmentsRequest"
-            }
           }
         ],
         "tags": [
@@ -673,14 +665,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ReadAccountCostsRequest"
-            }
           }
         ],
         "tags": [
@@ -722,14 +706,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ReadAdjustmentsRequest"
-            }
           }
         ],
         "tags": [
@@ -778,14 +754,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ReadBillingGroupAdjustmentsRequest"
-            }
           }
         ],
         "tags": [
@@ -834,14 +802,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ReadBillingGroupCostsRequest"
-            }
           }
         ],
         "tags": [
@@ -883,14 +843,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ReadCostsRequest"
-            }
           }
         ],
         "tags": [
@@ -1269,194 +1221,6 @@
         }
       },
       "description": "Response message for Iam.ListUsers rpc."
-    },
-    "v1ReadAccountAdjustmentsRequest": {
-      "type": "object",
-      "properties": {
-        "vendor": {
-          "type": "string",
-          "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
-          "required": [
-            "vendor"
-          ]
-        },
-        "name": {
-          "type": "string",
-          "description": "Required. The AWS account id to stream.",
-          "required": [
-            "name"
-          ]
-        },
-        "startTime": {
-          "type": "string",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: yyyymmdd."
-        },
-        "endTime": {
-          "type": "string",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used.\nFormat: yyyymmdd."
-        }
-      },
-      "description": "Request message for Cost.ReadAccountAdjustments.",
-      "required": [
-        "vendor",
-        "name"
-      ]
-    },
-    "v1ReadAccountCostsRequest": {
-      "type": "object",
-      "properties": {
-        "vendor": {
-          "type": "string",
-          "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
-          "required": [
-            "vendor"
-          ]
-        },
-        "name": {
-          "type": "string",
-          "description": "Required. The account to stream.",
-          "required": [
-            "name"
-          ]
-        },
-        "startTime": {
-          "type": "string",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: yyyymmdd."
-        },
-        "endTime": {
-          "type": "string",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used.\nFormat: yyyymmdd."
-        },
-        "awsOptions": {
-          "$ref": "#/definitions/v1AwsOptions",
-          "description": "Optional. AWS-specific request options."
-        }
-      },
-      "description": "Request message for Cost.ReadAccountCosts.",
-      "required": [
-        "vendor",
-        "name"
-      ]
-    },
-    "v1ReadAdjustmentsRequest": {
-      "type": "object",
-      "properties": {
-        "vendor": {
-          "type": "string",
-          "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
-          "required": [
-            "vendor"
-          ]
-        },
-        "startTime": {
-          "type": "string",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: yyyymmdd."
-        },
-        "endTime": {
-          "type": "string",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used.\nFormat: yyyymmdd."
-        }
-      },
-      "description": "Request message for Cost.ReadAdjustments.",
-      "required": [
-        "vendor"
-      ]
-    },
-    "v1ReadBillingGroupAdjustmentsRequest": {
-      "type": "object",
-      "properties": {
-        "vendor": {
-          "type": "string",
-          "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
-          "required": [
-            "vendor"
-          ]
-        },
-        "name": {
-          "type": "string",
-          "description": "Required. The billing group id to stream.",
-          "required": [
-            "name"
-          ]
-        },
-        "startTime": {
-          "type": "string",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: yyyymmdd."
-        },
-        "endTime": {
-          "type": "string",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used.\nFormat: yyyymmdd."
-        }
-      },
-      "description": "Request message for Cost.ReadBillingGroupAdjustments.",
-      "required": [
-        "vendor",
-        "name"
-      ]
-    },
-    "v1ReadBillingGroupCostsRequest": {
-      "type": "object",
-      "properties": {
-        "vendor": {
-          "type": "string",
-          "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
-          "required": [
-            "vendor"
-          ]
-        },
-        "name": {
-          "type": "string",
-          "description": "Required. The billing group id to stream.",
-          "required": [
-            "name"
-          ]
-        },
-        "startTime": {
-          "type": "string",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: yyyymmd."
-        },
-        "endTime": {
-          "type": "string",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used.\nFormat: yyyymmdd."
-        },
-        "awsOptions": {
-          "$ref": "#/definitions/v1AwsOptions",
-          "description": "Optional. AWS-specific request options."
-        }
-      },
-      "description": "Request message for Cost.ReadBillingGroupCosts.",
-      "required": [
-        "vendor",
-        "name"
-      ]
-    },
-    "v1ReadCostsRequest": {
-      "type": "object",
-      "properties": {
-        "vendor": {
-          "type": "string",
-          "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
-          "required": [
-            "vendor"
-          ]
-        },
-        "startTime": {
-          "type": "string",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: yyyymmdd."
-        },
-        "endTime": {
-          "type": "string",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used.\nFormat: yyyymmd."
-        },
-        "awsOptions": {
-          "$ref": "#/definitions/v1AwsOptions",
-          "description": "Optional. AWS-specific request options."
-        }
-      },
-      "description": "Request message for Cost.ReadCosts.",
-      "required": [
-        "vendor"
-      ]
     },
     "v1SendVerificationRequest": {
       "type": "object",
