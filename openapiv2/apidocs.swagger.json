@@ -497,16 +497,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1SendVerificationRequest"
-            }
-          }
-        ],
         "tags": [
           "Organization"
         ]
@@ -530,16 +520,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1VerifyOrgRequest"
-            }
-          }
-        ],
         "tags": [
           "Organization"
         ]
@@ -578,7 +558,7 @@
     },
     "/v1/{vendor}/accounts/{name}/adjustments:readAccountAdjustments": {
       "post": {
-        "summary": "Reads the non-usaged-based details of an AWS account. This API covers non-usage-based\nadjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
+        "summary": "Reads the non-usaged-based details of an AWS account. This API covers non-usage-based\nadjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment,\nthe supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date\n(current month) will be returned.",
         "operationId": "Cost_ReadAccountAdjustments",
         "responses": {
           "200": {
@@ -626,7 +606,7 @@
     },
     "/v1/{vendor}/accounts/{name}/costs:readAccountCosts": {
       "post": {
-        "summary": "Reads the usage-based cost details of an account. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
+        "summary": "Reads the usage-based cost details of an account. At the moment, the supported\n{vendor} is 'aws'. If datetime range parameters are not set, month-to-date\n(current month) will be returned.",
         "operationId": "Cost_ReadAccountCosts",
         "responses": {
           "200": {
@@ -674,7 +654,7 @@
     },
     "/v1/{vendor}/adjustments:readAdjustments": {
       "post": {
-        "summary": "Reads the non-usage-based details of an organization (Ripple) or company (Wave). This API covers\nnon-usage-based adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime\nrange parameters are not set, month-to-date (current month) will be returned.",
+        "summary": "Reads the non-usage-based details of an organization (Ripple) or company (Wave).\nThis API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax,\nUpfront Fees, etc. At the moment, the supported {vendor} is 'aws'. If datetime\nrange parameters are not set, month-to-date (current month) will be returned.",
         "operationId": "Cost_ReadAdjustments",
         "responses": {
           "200": {
@@ -715,7 +695,7 @@
     },
     "/v1/{vendor}/billinggroups/{name}/adjustments:readBillingGroupAdjustments": {
       "post": {
-        "summary": "Reads the non-usage-based details of a billing group. This API covers non-usage-based\nadjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
+        "summary": "Reads the non-usage-based details of a billing group. This API covers non-usage-based\nadjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment,\nthe supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date\n(current month) will be returned.",
         "operationId": "Cost_ReadBillingGroupAdjustments",
         "responses": {
           "200": {
@@ -763,7 +743,7 @@
     },
     "/v1/{vendor}/billinggroups/{name}/costs:readBillingGroupCosts": {
       "post": {
-        "summary": "Reads the usage-based cost details of a billing group. If datetime range\nparameters are not set, month-to-date (current month) will be returned.",
+        "summary": "Reads the usage-based cost details of a billing group. At the moment, the supported\n{vendor} is 'aws'. If datetime range parameters are not set, month-to-date\n(current month) will be returned.",
         "operationId": "Cost_ReadBillingGroupCosts",
         "responses": {
           "200": {
@@ -811,7 +791,7 @@
     },
     "/v1/{vendor}/costs:readCosts": {
       "post": {
-        "summary": "Reads the usage-based cost details of an organization (Ripple) or company (Wave).\nIf datetime range parameters are not set, month-to-date (current month) will be returned.",
+        "summary": "Reads the usage-based cost details of an organization (Ripple) or company (Wave).\nAt the moment, the supported {vendor} is 'aws'. If datetime range parameters are\nnot set, month-to-date (current month) will be returned.",
         "operationId": "Cost_ReadCosts",
         "responses": {
           "200": {
@@ -1222,10 +1202,6 @@
       },
       "description": "Response message for Iam.ListUsers rpc."
     },
-    "v1SendVerificationRequest": {
-      "type": "object",
-      "description": "Request message for Organization.SendVerification rpc."
-    },
     "v1StreamListConfigResponse": {
       "type": "object",
       "properties": {
@@ -1262,15 +1238,6 @@
         }
       },
       "description": "Request message for Organization.UpdatePassword rpc."
-    },
-    "v1VerifyOrgRequest": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string"
-        }
-      },
-      "description": "Request message for Organization.VerifyOrg rpc."
     }
   },
   "externalDocs": {

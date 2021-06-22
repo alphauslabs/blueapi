@@ -42,31 +42,35 @@ service Cost {
 	};
 
   // Reads the usage-based cost details of an organization (Ripple) or company (Wave).
-  // If datetime range parameters are not set, month-to-date (current month) will be returned.
+  // At the moment, the supported {vendor} is 'aws'. If datetime range parameters are
+  // not set, month-to-date (current month) will be returned.
   rpc ReadCosts (ReadCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costs:readCosts"
     };
   }
 
-  // Reads the usage-based cost details of a billing group. If datetime range
-  // parameters are not set, month-to-date (current month) will be returned.
+  // Reads the usage-based cost details of a billing group. At the moment, the supported
+  // {vendor} is 'aws'. If datetime range parameters are not set, month-to-date
+  // (current month) will be returned.
   rpc ReadBillingGroupCosts (ReadBillingGroupCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/billinggroups/{name}/costs:readBillingGroupCosts"
     };
   }
 
-  // Reads the usage-based cost details of an account. If datetime range
-  // parameters are not set, month-to-date (current month) will be returned.
+  // Reads the usage-based cost details of an account. At the moment, the supported
+  // {vendor} is 'aws'. If datetime range parameters are not set, month-to-date
+  // (current month) will be returned.
   rpc ReadAccountCosts (ReadAccountCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/accounts/{name}/costs:readAccountCosts"
     };
   }
 
-  // Reads the non-usage-based details of an organization (Ripple) or company (Wave). This API covers
-  // non-usage-based adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime
+  // Reads the non-usage-based details of an organization (Ripple) or company (Wave).
+  // This API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax,
+  // Upfront Fees, etc. At the moment, the supported {vendor} is 'aws'. If datetime
   // range parameters are not set, month-to-date (current month) will be returned.
   rpc ReadAdjustments (ReadAdjustmentsRequest) returns (stream AdjustmentItem) {
     option (google.api.http) = {
@@ -75,8 +79,9 @@ service Cost {
   }
 
   // Reads the non-usage-based details of a billing group. This API covers non-usage-based
-  // adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range
-  // parameters are not set, month-to-date (current month) will be returned.
+  // adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment,
+  // the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date
+  // (current month) will be returned.
   rpc ReadBillingGroupAdjustments (ReadBillingGroupAdjustmentsRequest) returns (stream AdjustmentItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/billinggroups/{name}/adjustments:readBillingGroupAdjustments"
@@ -84,8 +89,9 @@ service Cost {
   }
 
   // Reads the non-usaged-based details of an AWS account. This API covers non-usage-based
-  // adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. If datetime range
-  // parameters are not set, month-to-date (current month) will be returned.
+  // adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment,
+  // the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date
+  // (current month) will be returned.
   rpc ReadAccountAdjustments (ReadAccountAdjustmentsRequest) returns (stream AdjustmentItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/accounts/{name}/adjustments:readAccountAdjustments"
