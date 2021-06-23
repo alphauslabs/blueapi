@@ -53,6 +53,14 @@ service Iam {
     };
   }
 
+  // Creates an IP filter. At the moment, this API is only available for root users.
+  rpc CreateIpFilter(CreateIpFilterRequest) returns (IpFilter) {
+    option (google.api.http) = {
+      post: "/iam/v1/ipfilters"
+      body: "*"
+    };
+  }
+
   // Deletes an IP filter item. At the moment, this API is only available for root users.
   rpc DeleteIpFilter(DeleteIpFilterRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -102,6 +110,24 @@ message ListIpFiltersRequest {}
 // Response message for Iam.ListIpFilters rpc.
 message ListIpFiltersResponse {
   repeated IpFilter items = 1;
+}
+
+// Request message for Iam.CreateIpFilter rpc.
+message CreateIpFilterRequest {
+  // Required. The IP input to filter, either blacklist or whitelist. Should be in
+  // CIDR format, i.e. 1.2.3.4/32
+  string value = 1;
+
+  // Optional. Can be 'whitelist' or 'blacklist'. Defaults to 'blacklist' if empty.
+  string type = 2;
+
+  // Optional. If valid rootuser and sub_user is empty, filter is for this rootuser.
+  // If both root_user and sub_user inputs are empty, filter is at global scope.
+  string root_user = 3;
+
+  // Optional. If valid subuser, filter is for this subuser; root_user value is discarded.
+  // If both root_user and sub_user inputs are empty, filter is at global scope.
+  string sub_user = 4;
 }
 
 // Request message for Iam.DeleteIpFilter rpc.
