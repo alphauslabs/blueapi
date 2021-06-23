@@ -116,18 +116,18 @@ message ListIpFiltersResponse {
 message CreateIpFilterRequest {
   // Required. The IP input to filter, either blacklist or whitelist. Should be in
   // CIDR format (i.e. 1.2.3.4/32).
-  string value = 1;
+  string value = 1 [json_name = "value"];
 
   // Optional. Can be 'whitelist' or 'blacklist'. Defaults to 'blacklist' if empty.
-  string type = 2;
+  string type = 2 [json_name = "type"];
 
   // Optional. If valid rootuser and sub_user is empty, filter is for this rootuser.
   // If both root_user and sub_user inputs are empty, filter is at global scope.
-  string root_user = 3;
+  string root_user = 3 [json_name = "root_user"];
 
   // Optional. If valid subuser, filter is for this subuser; root_user value is discarded.
   // If both root_user and sub_user inputs are empty, filter is at global scope.
-  string sub_user = 4;
+  string sub_user = 4 [json_name = "sub_user"];
 }
 
 // Request message for Iam.DeleteIpFilter rpc.
