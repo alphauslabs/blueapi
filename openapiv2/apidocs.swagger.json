@@ -18,7 +18,7 @@
       "description": "Base URL: https://api.alphaus.cloud/m/blue",
       "externalDocs": {
         "description": "Service definition",
-        "url": "https://github.com/alphauslabs/blueapi/blob/main/org/v1/org.proto"
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/org/"
       }
     },
     {
@@ -26,7 +26,7 @@
       "description": "Base URL: https://api.alphaus.cloud/m/blue",
       "externalDocs": {
         "description": "Service definition",
-        "url": "https://github.com/alphauslabs/blueapi/blob/main/iam/v1/iam.proto"
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/iam/"
       }
     },
     {
@@ -34,7 +34,7 @@
       "description": "Base URL: https://api.alphaus.cloud/m/blue/cost",
       "externalDocs": {
         "description": "Service definition",
-        "url": "https://github.com/alphauslabs/blueapi/blob/main/cost/v1/cost.proto"
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/cost/"
       }
     },
     {
@@ -51,6 +51,60 @@
     "application/json"
   ],
   "paths": {
+    "/iam/v1/ipfilters": {
+      "get": {
+        "summary": "Lists all IP filters. At the moment, this API is only for root users.",
+        "operationId": "Iam_ListIpFilters",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListIpFiltersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
+    "/iam/v1/ipfilters/{id}": {
+      "delete": {
+        "summary": "Deletes an IP filter item. At the moment, this API is only for root users.",
+        "operationId": "Iam_DeleteIpFilter",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
     "/iam/v1/users": {
       "get": {
         "summary": "Lists all subusers.",
@@ -1160,6 +1214,43 @@
         }
       },
       "description": "Response message for Organization.CreateOrg rpc."
+    },
+    "v1IpFilter": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Ip filter id. Note that this id is transcient and is not fixed."
+        },
+        "scope": {
+          "type": "string",
+          "description": "Can be 'global', 'rootuser', or 'subuser'."
+        },
+        "target": {
+          "type": "string",
+          "description": "The target of the filter. If global scope, this could be the organization\nid or billing group id. Rootuser id for rootuser scope, and subuser id\nfor subuser scope. For subuser targets, format is 'rootuserid/subuserid'."
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of ip filter. It could be 'whitelist' or 'blacklist'."
+        },
+        "value": {
+          "type": "string",
+          "description": "The ip filter value. Should be in CIDR format."
+        }
+      }
+    },
+    "v1ListIpFiltersResponse": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1IpFilter"
+          }
+        }
+      },
+      "description": "Response message for Iam.ListIpFilters rpc."
     },
     "v1ListMasterAccountsResponse": {
       "type": "object",

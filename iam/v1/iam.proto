@@ -5,6 +5,7 @@ package blueapi.iam.v1;
 import "api/user.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/iam";
 option java_package = "cloud.alphaus.api.iam";
@@ -44,6 +45,20 @@ service Iam {
       get: "/iam/v1/users/{name}"
     };
   }
+
+  // Lists all IP filters. At the moment, this API is only for root users.
+  rpc ListIpFilters(ListIpFiltersRequest) returns (ListIpFiltersResponse) {
+    option (google.api.http) = {
+      get: "/iam/v1/ipfilters"
+    };
+  }
+
+  // Deletes an IP filter item. At the moment, this API is only for root users.
+  rpc DeleteIpFilter(DeleteIpFilterRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/iam/v1/ipfilters/{id}"
+    };
+  }
 }
 
 // Request message for Iam.WhoAmI rpc.
@@ -60,4 +75,36 @@ message ListUsersResponse {
 // Request message for Iam.GetUser rpc.
 message GetUserRequest {
   string name = 1;
+}
+
+message IpFilter {
+  // Ip filter id. Note that this id is transcient and is not fixed.
+  string id = 1;
+
+  // Can be 'global', 'rootuser', or 'subuser'.
+  string scope = 2;
+
+  // The target of the filter. If global scope, this could be the organization
+  // id or billing group id. Rootuser id for rootuser scope, and subuser id
+  // for subuser scope. For subuser targets, format is 'rootuserid/subuserid'.
+  string target = 3;
+
+  // The type of ip filter. It could be 'whitelist' or 'blacklist'.
+  string type = 4;
+
+  // The ip filter value. Should be in CIDR format.
+  string value = 5;
+}
+
+// Request message for Iam.ListIpFilters rpc.
+message ListIpFiltersRequest {}
+
+// Response message for Iam.ListIpFilters rpc.
+message ListIpFiltersResponse {
+  repeated IpFilter items = 1;
+}
+
+// Request message for Iam.DeleteIpFilter rpc.
+message DeleteIpFilterRequest {
+  string id = 1;
 }
