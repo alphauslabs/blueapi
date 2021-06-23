@@ -72,6 +72,37 @@
         "tags": [
           "Iam"
         ]
+      },
+      "post": {
+        "summary": "Creates an IP filter. At the moment, this API is only available for root users.",
+        "operationId": "Iam_CreateIpFilter",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IpFilter"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateIpFilterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
       }
     },
     "/iam/v1/ipfilters/{id}": {
@@ -1190,6 +1221,28 @@
         }
       },
       "description": "Response message wrapper for cloud costs."
+    },
+    "v1CreateIpFilterRequest": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "title": "Required. The IP input to filter, either blacklist or whitelist. Should be in\nCIDR format, i.e. 1.2.3.4/32"
+        },
+        "type": {
+          "type": "string",
+          "description": "Optional. Can be 'whitelist' or 'blacklist'. Defaults to 'blacklist' if empty."
+        },
+        "rootUser": {
+          "type": "string",
+          "description": "Optional. If valid rootuser and sub_user is empty, filter is for this rootuser.\nIf both root_user and sub_user inputs are empty, filter is at global scope."
+        },
+        "subUser": {
+          "type": "string",
+          "description": "Optional. If valid subuser, filter is for this subuser; root_user value is discarded.\nIf both root_user and sub_user inputs are empty, filter is at global scope."
+        }
+      },
+      "description": "Request message for Iam.CreateIpFilter rpc."
     },
     "v1CreateOrgRequest": {
       "type": "object",
