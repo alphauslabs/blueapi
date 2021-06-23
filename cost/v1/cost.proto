@@ -109,69 +109,69 @@ message CostItem {
 message AwsOptions {
   // Optional. If set to true, stream will include resource tags. Note that this could
   // potentially increase the data size if you have lots of tag information.
-  bool include_tags = 1;
+  bool include_tags = 1 [json_name = "include_tags"];
 
   // Optional. If set to true, stream will include resource cost category information.
   // Note that this could potentially increase the data size if you have lots of cost
   // category information.
-  bool include_cost_categories = 2;
+  bool include_cost_categories = 2 [json_name = "include_cost_categories"];
 }
 
 // Request message for Cost.ReadCosts.
 message ReadCostsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
-  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+  string vendor = 1;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
   // current month will be used. Format: yyyymmdd.
-  string start_time = 2;
+  string start_time = 2 [json_name = "start_time"];
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   // Format: yyyymmd.
-  string end_time = 3;
+  string end_time = 3 [json_name = "end_time"];
 
   // Optional. AWS-specific request options.
-  AwsOptions aws_options = 4;
+  AwsOptions aws_options = 4 [json_name = "aws_options"];
 }
 
 // Request message for Cost.ReadBillingGroupCosts.
 message ReadBillingGroupCostsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
-  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+  string vendor = 1;
 
   // Required. The billing group id to stream.
-  string name = 2 [(google.api.field_behavior) = REQUIRED];
+  string name = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
   // current month will be used. Format: yyyymmd.
-  string start_time = 3;
+  string start_time = 3 [json_name = "start_time"];
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   // Format: yyyymmdd.
-  string end_time = 4;
+  string end_time = 4 [json_name = "end_time"];
 
   // Optional. AWS-specific request options.
-  AwsOptions aws_options = 5;
+  AwsOptions aws_options = 5 [json_name = "aws_options"];
 }
 
 // Request message for Cost.ReadAccountCosts.
 message ReadAccountCostsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
-  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+  string vendor = 1;
 
   // Required. The account to stream.
-  string name = 2 [(google.api.field_behavior) = REQUIRED];
+  string name = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
   // current month will be used. Format: yyyymmdd.
-  string start_time = 3;
+  string start_time = 3 [json_name = "start_time"];
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   // Format: yyyymmdd.
-  string end_time = 4;
+  string end_time = 4 [json_name = "end_time"];
 
   // Optional. AWS-specific request options.
-  AwsOptions aws_options = 5;
+  AwsOptions aws_options = 5 [json_name = "aws_options"];
 }
 
 // Response message wrapper for cloud cost adjustments.
@@ -182,47 +182,47 @@ message AdjustmentItem {
 // Request message for Cost.ReadAdjustments.
 message ReadAdjustmentsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
-  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+  string vendor = 1;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
   // current month will be used. Format: yyyymmdd.
-  string start_time = 2;
+  string start_time = 2 [json_name = "start_time"];
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   // Format: yyyymmdd.
-  string end_time = 3;
+  string end_time = 3 [json_name = "end_time"];
 }
 
 // Request message for Cost.ReadBillingGroupAdjustments.
 message ReadBillingGroupAdjustmentsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
-  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+  string vendor = 1;
 
   // Required. The billing group id to stream.
-  string name = 2 [(google.api.field_behavior) = REQUIRED];
+  string name = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
   // current month will be used. Format: yyyymmdd.
-  string start_time = 3;
+  string start_time = 3 [json_name = "start_time"];
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   // Format: yyyymmdd.
-  string end_time = 4;
+  string end_time = 4 [json_name = "end_time"];
 }
 
 // Request message for Cost.ReadAccountAdjustments.
 message ReadAccountAdjustmentsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
-  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+  string vendor = 1;
 
   // Required. The AWS account id to stream.
-  string name = 2 [(google.api.field_behavior) = REQUIRED];
+  string name = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
   // current month will be used. Format: yyyymmdd.
-  string start_time = 3;
+  string start_time = 3 [json_name = "start_time"];
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   // Format: yyyymmdd.
-  string end_time = 4;
+  string end_time = 4 [json_name = "end_time"];
 }
