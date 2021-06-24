@@ -9,9 +9,11 @@ show_sorted: false
 OpenAPI documentation: [https://alphauslabs.github.io/blueapidocs/#/Cost](https://alphauslabs.github.io/blueapidocs/#/Cost)
 ```
 
-AWS Cost API allows you to stream your AWS-related usage costs and fees, including credits, and refunds. This is the same data that Ripple/Wave uses to create invoices, graphs, and reports, aggregated at daily level.
+Cost API allows you to stream your vendor-related usage costs and adjustment costs. This is the same data that Ripple/Wave uses to create invoices, graphs, and reports, aggregated at daily level.
 
-Before you can use this API, you need to register your AWS management (or billing, or payer) account to Ripple. We will be releasing an API for this registration process in the near future so stay tuned. In the meantime, you can contact us [here](https://alphaus.cloud/en/inquiry/).
+### Cloud vendor: AWS
+
+To use the AWS-specific APIs, you need to first register your AWS management (or billing, or payer) account to Ripple. We will be releasing an API for this registration process in the near future so stay tuned. In the meantime, you can contact us [here](https://alphaus.cloud/en/inquiry/).
 
 Once registered, and the correct permissions are setup, our calculation engines will start downloading your [CUR](https://aws.amazon.com/aws-cost-management/aws-cost-and-usage-reporting/) files from your S3 bucket everytime your CUR files are updated by AWS. These checks are done periodically, several times a day. After downloading, calculations will be done based on your billing group settings, whether it will be AWS unblended or Alphaus trueunblended values.
 
