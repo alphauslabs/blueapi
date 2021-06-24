@@ -11,7 +11,7 @@ OpenAPI documentation: [https://alphauslabs.github.io/blueapidocs/#/Cost](https:
 
 Cost API allows you to stream your vendor-related usage costs and adjustment costs. This is the same data that Ripple/Wave uses to create invoices, graphs, and reports, aggregated at daily level.
 
-### Cloud vendor: AWS
+## Cloud vendor: AWS
 
 To use the AWS-specific APIs, you need to first register your AWS management (or billing, or payer) account to Ripple. We will be releasing an API for this registration process in the near future so stay tuned. In the meantime, you can contact us [here](https://alphaus.cloud/en/inquiry/).
 
@@ -63,6 +63,6 @@ $ curl -X POST \
 
 We will be publishing the OpenAPI documentations for these JSON/REST APIs soon. In the meantime, check them out [here](https://github.com/alphauslabs/blueapi/tree/main/openapiv2). You can use something like [editor.swagger.io](https://editor.swagger.io/).
 
-# Pricing
+## Pricing
 
 This API is still in beta, so its usage will be free. Once released, we will also announce the pricing details.
