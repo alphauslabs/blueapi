@@ -4,6 +4,7 @@ package blueapi.cost.v1;
 
 import "api/aws/cost.proto";
 import "api/aws/adjustment.proto";
+import "api/aws/account.proto";
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -41,13 +42,29 @@ service Cost {
 		}
 	};
 
+  // Lists master (or billing, payer) accounts. Only applies to the 'aws' vendor at the moment.
+  rpc ListMasterAccounts(ListMasterAccountsRequest) returns (ListMasterAccountsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/masteraccts"
+    };
+  }
+
+  // Get master (or billing, payer) account. This call includes all of the account's metadata.
+  // See https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
+  // Only applies to the 'aws' vendor at the moment.
+  rpc GetMasterAccount(GetMasterAccountRequest) returns (api.aws.Account) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/masteraccts/{id}"
+    };
+  }
+
   // Reads the usage-based cost details of an organization (Ripple) or company (Wave).
   // At the moment, the supported {vendor} is 'aws'. If datetime range parameters are
   // not set, month-to-date (current month) will be returned. Date range parameters
   // are 'start_time' and 'end_time, with the 'yyyymmdd' format.
   rpc ReadCosts (ReadCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/costs:readCosts"
+      post: "/v1/{vendor}/costs:read"
     };
   }
 
@@ -56,7 +73,7 @@ service Cost {
   // (current month) will be returned.
   rpc ReadBillingGroupCosts (ReadBillingGroupCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/billinggroups/{name}/costs:readBillingGroupCosts"
+      post: "/v1/{vendor}/billinggroups/{name}/costs:read"
     };
   }
 
@@ -65,7 +82,7 @@ service Cost {
   // (current month) will be returned.
   rpc ReadAccountCosts (ReadAccountCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/accounts/{name}/costs:readAccountCosts"
+      post: "/v1/{vendor}/accounts/{name}/costs:read"
     };
   }
 
@@ -75,7 +92,7 @@ service Cost {
   // range parameters are not set, month-to-date (current month) will be returned.
   rpc ReadAdjustments (ReadAdjustmentsRequest) returns (stream AdjustmentItem) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/adjustments:readAdjustments"
+      post: "/v1/{vendor}/adjustments:read"
     };
   }
 
@@ -85,7 +102,7 @@ service Cost {
   // (current month) will be returned.
   rpc ReadBillingGroupAdjustments (ReadBillingGroupAdjustmentsRequest) returns (stream AdjustmentItem) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/billinggroups/{name}/adjustments:readBillingGroupAdjustments"
+      post: "/v1/{vendor}/billinggroups/{name}/adjustments:read"
     };
   }
 
@@ -95,7 +112,7 @@ service Cost {
   // (current month) will be returned.
   rpc ReadAccountAdjustments (ReadAccountAdjustmentsRequest) returns (stream AdjustmentItem) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/accounts/{name}/adjustments:readAccountAdjustments"
+      post: "/v1/{vendor}/accounts/{name}/adjustments:read"
     };
   }
 }
@@ -115,6 +132,26 @@ message AwsOptions {
   // Note that this could potentially increase the data size if you have lots of cost
   // category information.
   bool include_cost_categories = 2 [json_name = "include_cost_categories"];
+}
+
+// Request message for Organization.ListMasterAccounts rpc.
+message ListMasterAccountsRequest {
+  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  string vendor = 1;
+}
+
+// Response message for Organization.ListMasterAccounts rpc.
+message ListMasterAccountsResponse {
+  repeated api.aws.Account accounts = 1;
+}
+
+// Request message for Organization.GetMasterAccount rpc.
+message GetMasterAccountRequest {
+  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  string vendor = 1;
+
+  // Required. The id of the account to get.
+  string id = 2;
 }
 
 // Request message for Cost.ReadCosts.

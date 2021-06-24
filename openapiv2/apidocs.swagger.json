@@ -38,9 +38,6 @@
       }
     },
     {
-      "name": "GlobalConfig"
-    },
-    {
       "name": "Operations"
     }
   ],
@@ -74,7 +71,7 @@
         ]
       },
       "post": {
-        "summary": "Creates an IP filter. At the moment, this API is only available for root users.",
+        "summary": "Creates an IP filter item for IP blacklisting or whitelisting. At the moment,\nthis API is only available for root users.",
         "operationId": "Iam_CreateIpFilter",
         "responses": {
           "200": {
@@ -445,60 +442,6 @@
         ]
       }
     },
-    "/org/v1/masteraccts": {
-      "get": {
-        "summary": "Lists master accounts that belongs to the caller's organization.",
-        "operationId": "Organization_ListMasterAccounts",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListMasterAccountsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Organization"
-        ]
-      }
-    },
-    "/org/v1/masteraccts/{id}": {
-      "get": {
-        "summary": "Get master account. This call includes all of the account's metadata. See\nhttps://alphauslabs.github.io/blueapi/ for the list of supported attributes.",
-        "operationId": "Organization_GetMasterAccount",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/awsAccount"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Organization"
-        ]
-      }
-    },
     "/org/v1/metadata": {
       "put": {
         "summary": "Updates organization metadata. See https://alphauslabs.github.io/blueapi/\nfor the list of supported attributes.",
@@ -606,43 +549,22 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1VerifyOrgRequest"
+            }
+          }
+        ],
         "tags": [
           "Organization"
         ]
       }
     },
-    "/ripple/v1/config": {
-      "get": {
-        "operationId": "GlobalConfig_StreamReadRippleConfig",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1StreamListConfigResponse"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1StreamListConfigResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "GlobalConfig"
-        ]
-      }
-    },
-    "/v1/{vendor}/accounts/{name}/adjustments:readAccountAdjustments": {
+    "/v1/{vendor}/accounts/{name}/adjustments:read": {
       "post": {
         "summary": "Reads the non-usaged-based details of an AWS account. This API covers non-usage-based\nadjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment,\nthe supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date\n(current month) will be returned.",
         "operationId": "Cost_ReadAccountAdjustments",
@@ -690,7 +612,7 @@
         ]
       }
     },
-    "/v1/{vendor}/accounts/{name}/costs:readAccountCosts": {
+    "/v1/{vendor}/accounts/{name}/costs:read": {
       "post": {
         "summary": "Reads the usage-based cost details of an account. At the moment, the supported\n{vendor} is 'aws'. If datetime range parameters are not set, month-to-date\n(current month) will be returned.",
         "operationId": "Cost_ReadAccountCosts",
@@ -738,7 +660,7 @@
         ]
       }
     },
-    "/v1/{vendor}/adjustments:readAdjustments": {
+    "/v1/{vendor}/adjustments:read": {
       "post": {
         "summary": "Reads the non-usage-based details of an organization (Ripple) or company (Wave).\nThis API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax,\nUpfront Fees, etc. At the moment, the supported {vendor} is 'aws'. If datetime\nrange parameters are not set, month-to-date (current month) will be returned.",
         "operationId": "Cost_ReadAdjustments",
@@ -779,7 +701,7 @@
         ]
       }
     },
-    "/v1/{vendor}/billinggroups/{name}/adjustments:readBillingGroupAdjustments": {
+    "/v1/{vendor}/billinggroups/{name}/adjustments:read": {
       "post": {
         "summary": "Reads the non-usage-based details of a billing group. This API covers non-usage-based\nadjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment,\nthe supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date\n(current month) will be returned.",
         "operationId": "Cost_ReadBillingGroupAdjustments",
@@ -827,7 +749,7 @@
         ]
       }
     },
-    "/v1/{vendor}/billinggroups/{name}/costs:readBillingGroupCosts": {
+    "/v1/{vendor}/billinggroups/{name}/costs:read": {
       "post": {
         "summary": "Reads the usage-based cost details of a billing group. At the moment, the supported\n{vendor} is 'aws'. If datetime range parameters are not set, month-to-date\n(current month) will be returned.",
         "operationId": "Cost_ReadBillingGroupCosts",
@@ -875,7 +797,7 @@
         ]
       }
     },
-    "/v1/{vendor}/costs:readCosts": {
+    "/v1/{vendor}/costs:read": {
       "post": {
         "summary": "Reads the usage-based cost details of an organization (Ripple) or company (Wave).\nAt the moment, the supported {vendor} is 'aws'. If datetime range parameters are\nnot set, month-to-date (current month) will be returned. Date range parameters\nare 'start_time' and 'end_time, with the 'yyyymmdd' format.",
         "operationId": "Cost_ReadCosts",
@@ -916,23 +838,15 @@
         ]
       }
     },
-    "/wave/v1/config": {
+    "/v1/{vendor}/masteraccts": {
       "get": {
-        "operationId": "GlobalConfig_StreamReadWaveConfig",
+        "summary": "Lists master (or billing, payer) accounts. Only applies to the 'aws' vendor at the moment.",
+        "operationId": "Cost_ListMasterAccounts",
         "responses": {
           "200": {
-            "description": "A successful response.(streaming responses)",
+            "description": "A successful response.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1StreamListConfigResponse"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1StreamListConfigResponse"
+              "$ref": "#/definitions/v1ListMasterAccountsResponse"
             }
           },
           "default": {
@@ -942,8 +856,56 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "tags": [
-          "GlobalConfig"
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/masteraccts/{id}": {
+      "get": {
+        "summary": "Get master (or billing, payer) account. This call includes all of the account's metadata.\nSee https://alphauslabs.github.io/blueapi/ for the list of supported attributes.\nOnly applies to the 'aws' vendor at the moment.",
+        "operationId": "Cost_GetMasterAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/awsAccount"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. The id of the account to get.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
         ]
       }
     }
@@ -1196,24 +1158,6 @@
       },
       "description": "The request message for Operations.CancelOperation."
     },
-    "v1Config": {
-      "type": "object",
-      "properties": {
-        "featureId": {
-          "type": "string",
-          "description": "The feature name."
-        },
-        "featureName": {
-          "type": "string",
-          "description": "Required. The feature id."
-        },
-        "enabled": {
-          "type": "boolean",
-          "description": "The feature enabled or disabled.\nSet value to enable or disable the use of the feature."
-        }
-      },
-      "description": "Response message for Config."
-    },
     "v1CostItem": {
       "type": "object",
       "properties": {
@@ -1347,19 +1291,6 @@
       },
       "description": "Response message for Iam.ListUsers rpc."
     },
-    "v1StreamListConfigResponse": {
-      "type": "object",
-      "properties": {
-        "config": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1Config"
-          },
-          "title": "A list of global configs"
-        }
-      },
-      "description": "Response message for GlobalConfig.Config."
-    },
     "v1UpdateMetadataRequest": {
       "type": "object",
       "properties": {
@@ -1383,6 +1314,15 @@
         }
       },
       "description": "Request message for Organization.UpdatePassword rpc."
+    },
+    "v1VerifyOrgRequest": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        }
+      },
+      "description": "Request message for Organization.VerifyOrg rpc."
     }
   },
   "externalDocs": {
