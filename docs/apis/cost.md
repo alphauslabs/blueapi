@@ -56,8 +56,7 @@ Although these APIs are designed to be streamed due to potentially large amounts
 
 ```bash
 # Output is a newline-delimited rows of JSON data.
-$ curl -X POST \
-    -H "Authorization: Bearer $(bluectl access-token)" \
+$ curl -X POST -H "Authorization: Bearer $(bluectl access-token)" \
     https://api.alphaus.cloud/m/blue/cost/v1/aws/accounts/1234567890/costs:readAccountCosts
 ```
 
