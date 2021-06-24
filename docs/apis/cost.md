@@ -60,8 +60,6 @@ $ curl -X POST -H "Authorization: Bearer $(bluectl access-token)" \
     https://api.alphaus.cloud/m/blue/cost/v1/aws/accounts/1234567890/costs:readAccountCosts
 ```
 
-We will be publishing the OpenAPI documentations for these JSON/REST APIs soon. In the meantime, check them out [here](https://github.com/alphauslabs/blueapi/tree/main/openapiv2). You can use something like [editor.swagger.io](https://editor.swagger.io/).
-
 ## Pricing
 
 This API is still in beta, so its usage will be free. Once released, we will also announce the pricing details.
