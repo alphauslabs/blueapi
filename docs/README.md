@@ -14,7 +14,7 @@ First, setup your environment variables for authentication. See this [page](http
 $ bluectl whoami
 ```
 
-If successful, it will print some information about the authenticated user.
+If successful, it will output some information about the authenticated user.
 
 You can also use bluectl to generate the access token for you, and then you can call the JSON/REST API directly using [curl](https://curl.se/).
 
