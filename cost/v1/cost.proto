@@ -42,19 +42,19 @@ service Cost {
 		}
 	};
 
-  // Lists master (or billing, payer) accounts. Only applies to the 'aws' vendor at the moment.
-  rpc ListMasterAccounts(ListMasterAccountsRequest) returns (ListMasterAccountsResponse) {
+  // Lists management accounts. Only applies to the 'aws' vendor at the moment.
+  rpc ListManagementAccounts(ListManagementAccountsRequest) returns (ListManagementAccountsResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/masteraccts"
+      get: "/v1/{vendor}/mgtaccts"
     };
   }
 
-  // Get master (or billing, payer) account. This call includes all of the account's metadata.
-  // See https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
-  // Only applies to the 'aws' vendor at the moment.
-  rpc GetMasterAccount(GetMasterAccountRequest) returns (api.aws.Account) {
+  // Get management account. This call includes all of the account's metadata.
+  // See https://alphauslabs.github.io/blueapi/ for the list of supported
+  // attributes. Only applies to the 'aws' vendor at the moment.
+  rpc GetManagementAccount(GetManagementAccountRequest) returns (api.aws.Account) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/masteraccts/{id}"
+      get: "/v1/{vendor}/mgtaccts/{id}"
     };
   }
 
@@ -134,19 +134,19 @@ message AwsOptions {
   bool include_cost_categories = 2 [json_name = "include_cost_categories"];
 }
 
-// Request message for Organization.ListMasterAccounts rpc.
-message ListMasterAccountsRequest {
+// Request message for Cost.ListManagementAccounts rpc.
+message ListManagementAccountsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
   string vendor = 1;
 }
 
-// Response message for Organization.ListMasterAccounts rpc.
-message ListMasterAccountsResponse {
+// Response message for Organization.ListManagementAccounts rpc.
+message ListManagementAccountsResponse {
   repeated api.aws.Account accounts = 1;
 }
 
-// Request message for Organization.GetMasterAccount rpc.
-message GetMasterAccountRequest {
+// Request message for Cost.GetManagementAccount rpc.
+message GetManagementAccountRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
   string vendor = 1;
 
