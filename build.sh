@@ -5,7 +5,6 @@ protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true --opena
        ./org/v1/*.proto \
        ./iam/v1/*.proto \
        ./cost/v1/*.proto \
-       ./globalconfig/v1/*.proto \
        ./operations/v1/*.proto
 
 # echo "Generating html docs..."
