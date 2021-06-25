@@ -7,6 +7,7 @@ import "api/aws/adjustment.proto";
 import "api/aws/account.proto";
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
+import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/cost";
@@ -42,19 +43,35 @@ service Cost {
 		}
 	};
 
-  // Lists management accounts. Only applies to the 'aws' vendor at the moment.
+  // Lists AWS management accounts.
   rpc ListManagementAccounts(ListManagementAccountsRequest) returns (ListManagementAccountsResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/managementaccts"
+      get: "/v1/aws/managementaccts"
     };
   }
 
-  // Get management account. This call includes all of the account's metadata.
-  // See https://alphauslabs.github.io/blueapi/ for the list of supported
-  // attributes. Only applies to the 'aws' vendor at the moment.
+  // Get an AWS management account. This call includes all of the account's metadata.
+  // See https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
   rpc GetManagementAccount(GetManagementAccountRequest) returns (api.aws.Account) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/managementaccts/{id}"
+      get: "/v1/aws/managementaccts/{id}"
+    };
+  }
+
+  // Register an AWS management account. See https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html
+  // for more information. Requirements include: Additional report details = 'Include Resource IDS' enabled,
+  // Prefix = non-empty (recommendation only), Time granularity = 'Hourly', File format = 'text/csv'.
+  rpc CreateManagementAccount(CreateManagementAccountRequest) returns (api.aws.Account) {
+    option (google.api.http) = {
+      post: "/v1/aws/managementaccts"
+      body: "*"
+    };
+  }
+
+  // Delete an AWS management account.
+  rpc DeleteManagementAccount(DeleteManagementAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/aws/managementaccts/{id}"
     };
   }
 
@@ -135,10 +152,7 @@ message AwsOptions {
 }
 
 // Request message for Cost.ListManagementAccounts rpc.
-message ListManagementAccountsRequest {
-  // Required. Valid values are 'aws', 'azure', and 'gcp'.
-  string vendor = 1;
-}
+message ListManagementAccountsRequest {}
 
 // Response message for Organization.ListManagementAccounts rpc.
 message ListManagementAccountsResponse {
@@ -147,11 +161,36 @@ message ListManagementAccountsResponse {
 
 // Request message for Cost.GetManagementAccount rpc.
 message GetManagementAccountRequest {
-  // Required. Valid values are 'aws', 'azure', and 'gcp'.
-  string vendor = 1;
-
   // Required. The id of the account to get.
-  string id = 2;
+  string id = 1;
+}
+
+// Request message for Cost.CreateManagementAccount rpc.
+message CreateManagementAccountRequest {
+  // Required. The id of the management account.
+  string id = 1;
+
+  // Optional. The name, or description of the management account.
+  // This is set to 'id' when not specified.
+  string name = 2;
+
+  // Required. S3 Bucket name.
+  string bucket_name = 3 [json_name = "bucket_name"];
+
+  // Optional. Prefix.
+  string prefix = 4;
+
+  // Required. Report name.
+  string report_name = 5 [json_name = "report_name"];
+
+  // Required. Role ARN.
+  string role_arn = 6 [json_name = "role_arn"];
+}
+
+// Request message for Cost.DeleteManagementAccount rpc.
+message DeleteManagementAccountRequest {
+  // Required. The id of the management account.
+  string id = 1;
 }
 
 // Request message for Cost.ReadCosts.
