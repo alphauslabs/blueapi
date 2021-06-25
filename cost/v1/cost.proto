@@ -98,7 +98,7 @@ service Cost {
   // (current month) will be returned.
   rpc ReadAccountCosts (ReadAccountCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/accounts/{name}/costs:read"
+      post: "/v1/{vendor}/accounts/{id}/costs:read"
     };
   }
 
@@ -128,7 +128,7 @@ service Cost {
   // (current month) will be returned.
   rpc ReadAccountAdjustments (ReadAccountAdjustmentsRequest) returns (stream AdjustmentItem) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/accounts/{name}/adjustments:read"
+      post: "/v1/{vendor}/accounts/{id}/adjustments:read"
     };
   }
 
@@ -144,7 +144,7 @@ service Cost {
   // 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
   rpc ReadAccountTagCosts (ReadAccountTagCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/accounts/{name}/tagcosts:read"
+      post: "/v1/{vendor}/accounts/{id}/tagcosts:read"
     };
   }
 }
@@ -250,8 +250,8 @@ message ReadAccountCostsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
   string vendor = 1;
 
-  // Required. The account to stream.
-  string name = 2;
+  // Required. The account id to stream.
+  string id = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
   // current month will be used. Format: yyyymmdd.
@@ -307,7 +307,7 @@ message ReadAccountAdjustmentsRequest {
   string vendor = 1;
 
   // Required. The AWS account id to stream.
-  string name = 2;
+  string id = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
   // current month will be used. Format: yyyymmdd.
@@ -341,7 +341,7 @@ message ReadAccountTagCostsRequest {
   string vendor = 1;
 
   // Required. The AWS account id to stream.
-  string name = 2;
+  string id = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
   // current month will be used. Format: yyyymmdd.
