@@ -33,6 +33,9 @@ jobs:
             github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@v2.4.0
           export PATH="$PATH:$HOME/.local/bin:$(go env GOPATH)/bin"
           chmod +x ./build.sh && ./build.sh
+          if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
+            exit 0
+          fi
           # Update blue-sdk-go:
           WORKSPACE_ROOT=$PWD
           cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-go && cd blue-sdk-go
@@ -50,7 +53,3 @@ jobs:
           git add . && git commit -am "$GITHUB_REF $GITHUB_SHA" || true
           git remote add origin-tmp https://$DEPLOYER_TOKEN@github.com/alphauslabs/blueapidocs.git > /dev/null 2>&1
           git push --set-upstream origin-tmp
-          echo "ref = $GITHUB_REF"
-          if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-            echo "main here"
-          fi
