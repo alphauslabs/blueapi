@@ -107,7 +107,7 @@
         ]
       }
     },
-    "/iam/v1/ipfilters/{id}": {
+    "/iam/v1/ipfilters/{name}": {
       "delete": {
         "summary": "Deletes an IP filter item. At the moment, this API is only available for root users.",
         "operationId": "Iam_DeleteIpFilter",
@@ -127,8 +127,8 @@
         },
         "parameters": [
           {
-            "name": "id",
-            "description": "The id to delete.",
+            "name": "name",
+            "description": "The IP filter name to delete.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -1385,9 +1385,9 @@
     "v1IpFilter": {
       "type": "object",
       "properties": {
-        "id": {
+        "name": {
           "type": "string",
-          "description": "Ip filter item id. Note that this id is transcient and is not fixed. However,\nyou can use any of its permutations to endpoints that accept it, such as\nthe 'DELETE:/iam/v?/ipfilters/{id}' endpoint, without issues."
+          "description": "IP filter item name. Note that this name is transcient and is not fixed. However,\nyou can use any of its permutations to endpoints that accept it, such as\nthe 'DELETE:/iam/v?/ipfilters/{name}' endpoint, without issues."
         },
         "scope": {
           "type": "string",
@@ -1395,15 +1395,15 @@
         },
         "target": {
           "type": "string",
-          "description": "The target of the filter. If global scope, this is usually empty.\nRootuser id for rootuser scope, and subuser id for subuser scope.\nFor subuser targets, format is 'rootuserid/subuserid'."
+          "description": "The target of the filter. If global scope, this is usually empty.\nRootuser name for rootuser scope, and subuser name for subuser scope.\nFor subuser targets, format is 'rootuser/subuser'."
         },
         "type": {
           "type": "string",
-          "description": "The type of ip filter. It could be 'whitelist' or 'blacklist'."
+          "description": "The type of IP filter. It could be 'whitelist' or 'blacklist'."
         },
         "value": {
           "type": "string",
-          "description": "The ip filter value. Should be in CIDR format."
+          "description": "The IP filter value. Should be in CIDR format."
         }
       }
     },

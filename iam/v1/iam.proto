@@ -65,7 +65,7 @@ service Iam {
   // Deletes an IP filter item. At the moment, this API is only available for root users.
   rpc DeleteIpFilter(DeleteIpFilterRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/iam/v1/ipfilters/{id}"
+      delete: "/iam/v1/ipfilters/{name}"
     };
   }
 }
@@ -87,23 +87,23 @@ message GetUserRequest {
 }
 
 message IpFilter {
-  // Ip filter item id. Note that this id is transcient and is not fixed. However,
+  // IP filter item name. Note that this name is transcient and is not fixed. However,
   // you can use any of its permutations to endpoints that accept it, such as
-  // the 'DELETE:/iam/v?/ipfilters/{id}' endpoint, without issues.
-  string id = 1;
+  // the 'DELETE:/iam/v?/ipfilters/{name}' endpoint, without issues.
+  string name = 1;
 
   // Can be 'global', 'rootuser', or 'subuser'.
   string scope = 2;
 
   // The target of the filter. If global scope, this is usually empty.
-  // Rootuser id for rootuser scope, and subuser id for subuser scope.
-  // For subuser targets, format is 'rootuserid/subuserid'.
+  // Rootuser name for rootuser scope, and subuser name for subuser scope.
+  // For subuser targets, format is 'rootuser/subuser'.
   string target = 3;
 
-  // The type of ip filter. It could be 'whitelist' or 'blacklist'.
+  // The type of IP filter. It could be 'whitelist' or 'blacklist'.
   string type = 4;
 
-  // The ip filter value. Should be in CIDR format.
+  // The IP filter value. Should be in CIDR format.
   string value = 5;
 }
 
@@ -135,6 +135,6 @@ message CreateIpFilterRequest {
 
 // Request message for Iam.DeleteIpFilter rpc.
 message DeleteIpFilterRequest {
-  // The id to delete.
-  string id = 1;
+  // The IP filter name to delete.
+  string name = 1;
 }
