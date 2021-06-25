@@ -79,6 +79,7 @@ service Cost {
   rpc ImportCurFiles(ImportCurFilesRequest) returns (api.Operation) {
     option (google.api.http) = {
       post: "/v1/aws:importCurFiles"
+      body: "*"
     };
   }
 
@@ -225,7 +226,11 @@ message DeleteManagementAccountRequest {
 }
 
 // Request message for the Cost.ImportCurFiles rpc.
-message ImportCurFilesRequest {}
+message ImportCurFilesRequest {
+  // Optional. The month to import. If empty, it defaults to the current month.
+  // Format is 'yyyymm'. For example, June 2021 will be '202106'.
+  string month = 1;
+}
 
 // Request message for the Cost.CalculateCosts rpc.
 message CalculateCostsRequest {
@@ -233,7 +238,11 @@ message CalculateCostsRequest {
   string vendor = 1;
 
   // Optional. If set to a particular billing group, calculate for that billing group.
-  // If empty, calculate for the whole organization.
+  // If empty, calculate for all billing groups.
+  //
+  // At the moment, for AWS, this is only valid for account type billing groups, not
+  // tag billing groups. If a tag billing group is provided, it is discarded and the
+  // calculation is done for the whole organization.
   string billing_group = 2 [json_name = "billing_group"];
 
   // Optional. The month to calculate. If empty, it defaults to the previous month.

@@ -690,6 +690,16 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ImportCurFilesRequest"
+            }
+          }
+        ],
         "tags": [
           "Cost"
         ]
@@ -1363,7 +1373,7 @@
         },
         "billing_group": {
           "type": "string",
-          "description": "Optional. If set to a particular billing group, calculate for that billing group.\nIf empty, calculate for the whole organization."
+          "description": "Optional. If set to a particular billing group, calculate for that billing group.\nIf empty, calculate for all billing groups.\n\nAt the moment, for AWS, this is only valid for account type billing groups, not\ntag billing groups. If a tag billing group is provided, it is discarded and the\ncalculation is done for the whole organization."
         },
         "month": {
           "type": "string",
@@ -1466,6 +1476,16 @@
         }
       },
       "description": "Response message for the Organization.CreateOrg rpc."
+    },
+    "v1ImportCurFilesRequest": {
+      "type": "object",
+      "properties": {
+        "month": {
+          "type": "string",
+          "description": "Optional. The month to import. If empty, it defaults to the current month.\nFormat is 'yyyymm'. For example, June 2021 will be '202106'."
+        }
+      },
+      "description": "Request message for the Cost.ImportCurFiles rpc."
     },
     "v1IpFilter": {
       "type": "object",
