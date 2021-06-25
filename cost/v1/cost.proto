@@ -133,21 +133,19 @@ service Cost {
     };
   }
 
-  // Reads the usage-based report details of a billing group. At the moment, the supported 
-  // {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) 
-  // will be returned.
-  rpc ReadBillingGroupReports (ReadBillingGroupReportsRequest) returns (stream ReportItem) {
+  // Reads the usage-based tag costs of a billing group. At the moment, the supported {vendor} is 
+  // 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
+  rpc ReadBillingGroupTagCosts (ReadBillingGroupTagCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/billinggroups/{name}/reports:read"
+      post: "/v1/{vendor}/billinggroups/{name}/tagcosts:read"
     };
   }
 
-  // Reads the usage-based report details of an AWS account. At the moment, the supported 
-  // {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) 
-  // will be returned.
-  rpc ReadAccountReports (ReadAccountReportsRequest) returns (stream ReportItem) {
+  // Reads the usage-based tag costs of an AWS account. At the moment, the supported {vendor} is 
+  // 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
+  rpc ReadAccountTagCosts (ReadAccountTagCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/accounts/{name}/reports:read"
+      post: "/v1/{vendor}/accounts/{name}/tagcosts:read"
     };
   }
 }
@@ -321,13 +319,8 @@ message ReadAccountAdjustmentsRequest {
   string end_time = 4 [json_name = "end_time"];
 }
 
-// Response message wrapper for cloud cost report.
-message ReportItem {
-  api.aws.Report aws = 1;
-}
-
-// Request message for Cost.ReadBillingGroupReports.
-message ReadBillingGroupReportsRequest {
+// Request message for Cost.ReadBillingGroupTagCosts.
+message ReadBillingGroupTagCostsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
   string vendor = 1;
 
@@ -343,8 +336,8 @@ message ReadBillingGroupReportsRequest {
   string end_time = 4 [json_name = "end_time"];
 }
 
-// Request message for Cost.ReadAccountReports.
-message ReadAccountReportsRequest {
+// Request message for Cost.ReadAccountTagCosts.
+message ReadAccountTagCostsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
   string vendor = 1;
 
