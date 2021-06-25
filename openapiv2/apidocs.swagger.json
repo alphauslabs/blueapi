@@ -38,7 +38,12 @@
       }
     },
     {
-      "name": "Operations"
+      "name": "Operations",
+      "description": "Base URL: https://api.alphaus.cloud/m/blue",
+      "externalDocs": {
+        "description": "Service definition",
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/operations/"
+      }
     }
   ],
   "consumes": [
@@ -213,13 +218,22 @@
     },
     "/ops/v1": {
       "get": {
-        "summary": "Lists operations that match the specified filter in the request. If the\nserver doesn't support this method, it returns `UNIMPLEMENTED`.",
+        "summary": "Lists long-running operations.",
         "operationId": "Operations_ListOperations",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response.(streaming responses)",
             "schema": {
-              "$ref": "#/definitions/v1ListOperationsResponse"
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/blueapiapiOperation"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of blueapiapiOperation"
             }
           },
           "default": {
@@ -236,28 +250,6 @@
             "in": "query",
             "required": false,
             "type": "string"
-          },
-          {
-            "name": "filter",
-            "description": "The standard list filter.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "pageSize",
-            "description": "The standard list page size.",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "pageToken",
-            "description": "The standard list page token.",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "tags": [
@@ -267,13 +259,13 @@
     },
     "/ops/v1/{name}": {
       "get": {
-        "summary": "Gets the latest state of a long-running operation.  Clients can use this\nmethod to poll the operation result at intervals as recommended by the API\nservice.",
+        "summary": "Gets the latest state of a long-running operation.  Clients can use this method\nto poll the operation result at intervals as recommended by the API service.",
         "operationId": "Operations_GetOperation",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/operationsv1Operation"
+              "$ref": "#/definitions/blueapiapiOperation"
             }
           },
           "default": {
@@ -297,7 +289,7 @@
         ]
       },
       "delete": {
-        "summary": "Deletes a long-running operation. This method indicates that the client is\nno longer interested in the operation result. It does not cancel the\noperation. If the server doesn't support this method, it returns\n`google.rpc.Code.UNIMPLEMENTED`.",
+        "summary": "Deletes a long-running operation. This method indicates that the client is no\nlonger interested in the operation result. It does not cancel the operation.",
         "operationId": "Operations_DeleteOperation",
         "responses": {
           "200": {
@@ -329,7 +321,7 @@
     },
     "/ops/v1/{name}:cancel": {
       "post": {
-        "summary": "Starts asynchronous cancellation on a long-running operation.  The server\nmakes a best effort to cancel the operation, but success is not\nguaranteed.  If the server doesn't support this method, it returns\n`google.rpc.Code.UNIMPLEMENTED`.  Clients can use\n[Operations.GetOperation][google.longrunning.Operations.GetOperation] or\nother methods to check whether the cancellation succeeded or whether the\noperation completed despite cancellation. On successful cancellation,\nthe operation is not deleted; instead, it becomes an operation with\nan [Operation.error][google.longrunning.Operation.error] value with a [google.rpc.Status.code][google.rpc.Status.code] of 1,\ncorresponding to `Code.CANCELLED`.",
+        "summary": "Starts asynchronous cancellation on a long-running operation. The server makes\na best effort to cancel the operation, but success is not guaranteed. On successful\ncancellation, the operation is not deleted; instead, it becomes an operation with\na value of [google.rpc.Status.code][google.rpc.Status.code] 1, corresponding\nto `Code.CANCELLED`.",
         "operationId": "Operations_CancelOperation",
         "responses": {
           "200": {
@@ -1041,7 +1033,7 @@
         }
       }
     },
-    "operationsv1Operation": {
+    "blueapiapiOperation": {
       "type": "object",
       "properties": {
         "name": {
@@ -1156,7 +1148,7 @@
           "description": "The name of the operation resource to be cancelled."
         }
       },
-      "description": "The request message for Operations.CancelOperation."
+      "description": "Request message for Operations.CancelOperation."
     },
     "v1CostItem": {
       "type": "object",
@@ -1261,23 +1253,6 @@
         }
       },
       "description": "Response message for Organization.ListManagementAccounts rpc."
-    },
-    "v1ListOperationsResponse": {
-      "type": "object",
-      "properties": {
-        "operations": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/operationsv1Operation"
-          },
-          "description": "A list of operations that matches the specified filter in the request."
-        },
-        "nextPageToken": {
-          "type": "string",
-          "description": "The standard List next-page token."
-        }
-      },
-      "description": "The response message for Operations.ListOperations."
     },
     "v1ListUsersResponse": {
       "type": "object",

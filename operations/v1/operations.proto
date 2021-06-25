@@ -4,11 +4,11 @@ syntax = "proto3";
 
 package blueapi.operations.v1;
 
+import "api/operation.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
-import "google/rpc/status.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/operations";
 option java_package = "cloud.alphaus.api.operations";
@@ -24,43 +24,42 @@ option java_outer_classname = "OperationsProto";
 // returns long-running operations should implement the `Operations` interface
 // so developers can have a consistent client experience.
 service Operations {
-  // Lists operations that match the specified filter in the request. If the
-  // server doesn't support this method, it returns `UNIMPLEMENTED`.
-  rpc ListOperations(ListOperationsRequest) returns (ListOperationsResponse) {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+		description: "Base URL: https://api.alphaus.cloud/m/blue"
+		external_docs: {
+			url: "https://github.com/alphauslabs/blueapi/tree/main/operations/";
+			description: "Service definition";
+		}
+	};
+
+  // Lists long-running operations.
+  rpc ListOperations(ListOperationsRequest) returns (stream api.Operation) {
     option (google.api.http) = {
       get: "/ops/v1"
     };
   }
 
-  // Gets the latest state of a long-running operation.  Clients can use this
-  // method to poll the operation result at intervals as recommended by the API
-  // service.
-  rpc GetOperation(GetOperationRequest) returns (Operation) {
+  // Gets the latest state of a long-running operation.  Clients can use this method
+  // to poll the operation result at intervals as recommended by the API service.
+  rpc GetOperation(GetOperationRequest) returns (api.Operation) {
     option (google.api.http) = {
       get: "/ops/v1/{name}"
     };
   }
 
-  // Deletes a long-running operation. This method indicates that the client is
-  // no longer interested in the operation result. It does not cancel the
-  // operation. If the server doesn't support this method, it returns
-  // `google.rpc.Code.UNIMPLEMENTED`.
+  // Deletes a long-running operation. This method indicates that the client is no
+  // longer interested in the operation result. It does not cancel the operation.
   rpc DeleteOperation(DeleteOperationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/ops/v1/{name}"
     };
   }
 
-  // Starts asynchronous cancellation on a long-running operation.  The server
-  // makes a best effort to cancel the operation, but success is not
-  // guaranteed.  If the server doesn't support this method, it returns
-  // `google.rpc.Code.UNIMPLEMENTED`.  Clients can use
-  // [Operations.GetOperation][google.longrunning.Operations.GetOperation] or
-  // other methods to check whether the cancellation succeeded or whether the
-  // operation completed despite cancellation. On successful cancellation,
-  // the operation is not deleted; instead, it becomes an operation with
-  // an [Operation.error][google.longrunning.Operation.error] value with a [google.rpc.Status.code][google.rpc.Status.code] of 1,
-  // corresponding to `Code.CANCELLED`.
+  // Starts asynchronous cancellation on a long-running operation. The server makes
+  // a best effort to cancel the operation, but success is not guaranteed. On successful
+  // cancellation, the operation is not deleted; instead, it becomes an operation with
+  // a value of [google.rpc.Status.code][google.rpc.Status.code] 1, corresponding
+  // to `Code.CANCELLED`.
   rpc CancelOperation(CancelOperationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/ops/v1/{name}:cancel"
@@ -69,93 +68,37 @@ service Operations {
   }
 
   // Waits for the specified long-running operation until it is done or reaches
-  // at most a specified timeout, returning the latest state.  If the operation
-  // is already done, the latest state is immediately returned.  If the timeout
+  // at most a specified timeout, returning the latest state. If the operation
+  // is already done, the latest state is immediately returned. If the timeout
   // specified is greater than the default HTTP/RPC timeout, the HTTP/RPC
-  // timeout is used.  If the server does not support this method, it returns
+  // timeout is used. If the server does not support this method, it returns
   // `google.rpc.Code.UNIMPLEMENTED`.
-  // Note that this method is on a best-effort basis.  It may return the latest
+  // Note that this method is on a best-effort basis. It may return the latest
   // state before the specified timeout (including immediately), meaning even an
   // immediate response is no guarantee that the operation is done.
-  rpc WaitOperation(WaitOperationRequest) returns (Operation) {
+  rpc WaitOperation(WaitOperationRequest) returns (api.Operation) {
   }
 }
 
-// This resource represents a long-running operation that is the result of a
-// network API call.
-message Operation {
-  // The server-assigned name, which is only unique within the same service that
-  // originally returns it. If you use the default HTTP mapping, the
-  // `name` should be a resource name ending with `operations/{unique_id}`.
-  string name = 1;
-
-  // Service-specific metadata associated with the operation.  It typically
-  // contains progress information and common metadata such as create time.
-  // Some services might not provide such metadata.  Any method that returns a
-  // long-running operation should document the metadata type, if any.
-  google.protobuf.Any metadata = 2;
-
-  // If the value is `false`, it means the operation is still in progress.
-  // If `true`, the operation is completed, and either `error` or `response` is
-  // available.
-  bool done = 3;
-
-  // The operation result, which can be either an `error` or a valid `response`.
-  // If `done` == `false`, neither `error` nor `response` is set.
-  // If `done` == `true`, exactly one of `error` or `response` is set.
-  oneof result {
-    // The error result of the operation in case of failure or cancellation.
-    google.rpc.Status error = 4;
-
-    // The normal response of the operation in case of success.  If the original
-    // method returns no data on success, such as `Delete`, the response is
-    // `google.protobuf.Empty`.  If the original method is standard
-    // `Get`/`Create`/`Update`, the response should be the resource.  For other
-    // methods, the response should have the type `XxxResponse`, where `Xxx`
-    // is the original method name.  For example, if the original method name
-    // is `TakeSnapshot()`, the inferred response type is
-    // `TakeSnapshotResponse`.
-    google.protobuf.Any response = 5;
-  }
-}
-
-// The request message for Operations.ListOperations.
+// Request message for Operations.ListOperations.
 message ListOperationsRequest {
   // The name of the operation's parent resource.
   string name = 4;
-
-  // The standard list filter.
-  string filter = 1;
-
-  // The standard list page size.
-  int32 page_size = 2;
-
-  // The standard list page token.
-  string page_token = 3;
 }
 
-// The response message for Operations.ListOperations.
-message ListOperationsResponse {
-  // A list of operations that matches the specified filter in the request.
-  repeated Operation operations = 1;
-
-  // The standard List next-page token.
-  string next_page_token = 2;
-}
-
-// The request message for Operations.GetOperation.
+// Request message for Operations.GetOperation.
 message GetOperationRequest {
   // The name of the operation resource.
   string name = 1;
 }
 
-// The request message for Operations.DeleteOperation.
+// Request message for Operations.DeleteOperation.
 message DeleteOperationRequest {
   // The name of the operation resource to be deleted.
   string name = 1;
 }
 
-// The request message for Operations.CancelOperation.
+// Request message for Operations.CancelOperation.
 message CancelOperationRequest {
   // The name of the operation resource to be cancelled.
   string name = 1;
