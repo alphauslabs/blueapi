@@ -768,6 +768,54 @@
         ]
       }
     },
+    "/v1/{vendor}/accounts/{name}/tagcosts:read": {
+      "post": {
+        "summary": "Reads the usage-based tag costs of an AWS account. At the moment, the supported {vendor} is \n'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
+        "operationId": "Cost_ReadAccountTagCosts",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1CostItem"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1CostItem"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "Required. The AWS account id to stream.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/{vendor}/adjustments:read": {
       "post": {
         "summary": "Reads the non-usage-based details of an organization (Ripple) or company (Wave).\nThis API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax,\nUpfront Fees, etc. At the moment, the supported {vendor} is 'aws'. If datetime\nrange parameters are not set, month-to-date (current month) will be returned.",
@@ -861,6 +909,54 @@
       "post": {
         "summary": "Reads the usage-based cost details of a billing group. At the moment, the supported\n{vendor} is 'aws'. If datetime range parameters are not set, month-to-date\n(current month) will be returned.",
         "operationId": "Cost_ReadBillingGroupCosts",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1CostItem"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1CostItem"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are 'aws', 'azure', and 'gcp'.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "Required. The billing group id to stream.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/billinggroups/{name}/tagcosts:read": {
+      "post": {
+        "summary": "Reads the usage-based tag costs of a billing group. At the moment, the supported {vendor} is \n'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
+        "operationId": "Cost_ReadBillingGroupTagCosts",
         "responses": {
           "200": {
             "description": "A successful response.(streaming responses)",
@@ -1075,6 +1171,12 @@
         "cost": {
           "type": "number",
           "format": "double"
+        },
+        "resource_id": {
+          "type": "string"
+        },
+        "tag_id": {
+          "type": "string"
         }
       }
     },
