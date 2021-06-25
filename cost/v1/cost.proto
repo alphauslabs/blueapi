@@ -50,7 +50,7 @@ service Cost {
     };
   }
 
-  // Get an AWS management account. This call includes all of the account's metadata.
+  // Gets an AWS management account. This call includes all of the account's metadata.
   // See https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
   rpc GetManagementAccount(GetManagementAccountRequest) returns (api.aws.Account) {
     option (google.api.http) = {
@@ -58,7 +58,7 @@ service Cost {
     };
   }
 
-  // Register an AWS management account. See https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html
+  // Registers an AWS management account. See https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html
   // for more information. Requirements include: Additional report details = 'Include Resource IDS' enabled,
   // Prefix = non-empty (recommendation only), Time granularity = 'Hourly', File format = 'text/csv'.
   rpc CreateManagementAccount(CreateManagementAccountRequest) returns (api.aws.Account) {
@@ -68,7 +68,7 @@ service Cost {
     };
   }
 
-  // Delete an AWS management account.
+  // Deletes an AWS management account.
   rpc DeleteManagementAccount(DeleteManagementAccountRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/aws/managementaccts/{id}"
