@@ -38,7 +38,7 @@ service Iam {
 
   // Gets subuser information. This call includes all of the subuser metadata. See
   // https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
-  // If the {name} parameter is 'me' or '-', returns the caller information, which
+  // If the `{name}` parameter is `me` or `-`, returns the caller information, which
   // is equivalent to `WhoAmI()` or `GET:/iam/v*/whoami`.
   rpc GetUser(GetUserRequest) returns (api.User) {
     option (google.api.http) = {
@@ -89,18 +89,18 @@ message GetUserRequest {
 message IpFilter {
   // IP filter item name. Note that this name is transcient and is not fixed. However,
   // you can use any of its permutations to endpoints that accept it, such as
-  // the 'DELETE:/iam/v?/ipfilters/{name}' endpoint, without issues.
+  // the `DELETE:/iam/v?/ipfilters/{name}` endpoint, without issues.
   string name = 1;
 
-  // Can be 'global', 'rootuser', or 'subuser'.
+  // Can be `global`, `rootuser`, or `subuser`.
   string scope = 2;
 
   // The target of the filter. If global scope, this is usually empty.
   // Rootuser name for rootuser scope, and subuser name for subuser scope.
-  // For subuser targets, format is 'rootuser/subuser'.
+  // For subuser targets, format is `rootuser/subuser`.
   string target = 3;
 
-  // The type of IP filter. It could be 'whitelist' or 'blacklist'.
+  // The type of IP filter. It could be `whitelist` or `blacklist`.
   string type = 4;
 
   // The IP filter value. Should be in CIDR format.
@@ -121,7 +121,7 @@ message CreateIpFilterRequest {
   // CIDR format (i.e. 1.2.3.4/32).
   string value = 1;
 
-  // Optional. Can be 'whitelist' or 'blacklist'. Defaults to 'blacklist' if empty.
+  // Optional. Can be `whitelist` or `blacklist`. Defaults to `blacklist` if empty.
   string type = 2;
 
   // Optional. If valid rootuser and sub_user is empty, filter is for this rootuser.

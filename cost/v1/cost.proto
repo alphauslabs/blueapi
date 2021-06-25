@@ -203,7 +203,7 @@ message CreateManagementAccountRequest {
   string id = 1;
 
   // Optional. The name, or description of the management account.
-  // This is set to 'id' when not specified.
+  // This is set to `id` when not specified.
   string name = 2;
 
   // Required. S3 Bucket name.
@@ -228,13 +228,13 @@ message DeleteManagementAccountRequest {
 // Request message for the Cost.ImportCurFiles rpc.
 message ImportCurFilesRequest {
   // Optional. The month to import. If empty, it defaults to the current month.
-  // Format is 'yyyymm'. For example, June 2021 will be '202106'.
+  // Format is `yyyymm`. For example, June 2021 will be `202106`.
   string month = 1;
 }
 
 // Request message for the Cost.CalculateCosts rpc.
 message CalculateCostsRequest {
-  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
 
   // Optional. If set to a particular billing group, calculate for that billing group.
@@ -246,13 +246,13 @@ message CalculateCostsRequest {
   string billing_group = 2 [json_name = "billing_group"];
 
   // Optional. The month to calculate. If empty, it defaults to the previous month.
-  // Format is 'yyyymm'. For example, June 2021 will be '202106'.
+  // Format is `yyyymm`. For example, June 2021 will be `202106`.
   string month = 3;
 }
 
 // Request message for the Cost.ReadCosts rpc.
 message ReadCostsRequest {
-  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
@@ -260,7 +260,7 @@ message ReadCostsRequest {
   string start_time = 2 [json_name = "start_time"];
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
-  // Format: yyyymmd.
+  // Format: `yyyymmd`.
   string end_time = 3 [json_name = "end_time"];
 
   // Optional. AWS-specific request options.
@@ -269,18 +269,18 @@ message ReadCostsRequest {
 
 // Request message for the Cost.ReadBillingGroupCosts rpc.
 message ReadBillingGroupCostsRequest {
-  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
 
   // Required. The billing group id to stream.
   string name = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
-  // current month will be used. Format: yyyymmd.
+  // current month will be used. Format: `yyyymmd`.
   string start_time = 3 [json_name = "start_time"];
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
-  // Format: yyyymmdd.
+  // Format: `yyyymmdd`.
   string end_time = 4 [json_name = "end_time"];
 
   // Optional. AWS-specific request options.
@@ -289,18 +289,18 @@ message ReadBillingGroupCostsRequest {
 
 // Request message for the Cost.ReadAccountCosts rpc.
 message ReadAccountCostsRequest {
-  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
 
   // Required. The account id to stream.
   string id = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
-  // current month will be used. Format: yyyymmdd.
+  // current month will be used. Format: `yyyymmdd`.
   string start_time = 3 [json_name = "start_time"];
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
-  // Format: yyyymmdd.
+  // Format: `yyyymmdd`.
   string end_time = 4 [json_name = "end_time"];
 
   // Optional. AWS-specific request options.
@@ -314,82 +314,82 @@ message AdjustmentItem {
 
 // Request message for the Cost.ReadAdjustments rpc.
 message ReadAdjustmentsRequest {
-  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
-  // current month will be used. Format: yyyymmdd.
+  // current month will be used. Format: `yyyymmdd`.
   string start_time = 2 [json_name = "start_time"];
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
-  // Format: yyyymmdd.
+  // Format: `yyyymmdd`.
   string end_time = 3 [json_name = "end_time"];
 }
 
 // Request message for the Cost.ReadBillingGroupAdjustments rpc.
 message ReadBillingGroupAdjustmentsRequest {
-  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
 
   // Required. The billing group id to stream.
   string name = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
-  // current month will be used. Format: yyyymmdd.
+  // current month will be used. Format: `yyyymmdd`.
   string start_time = 3 [json_name = "start_time"];
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
-  // Format: yyyymmdd.
+  // Format: `yyyymmdd`.
   string end_time = 4 [json_name = "end_time"];
 }
 
 // Request message for the Cost.ReadAccountAdjustments rpc.
 message ReadAccountAdjustmentsRequest {
-  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
 
   // Required. The AWS account id to stream.
   string id = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
-  // current month will be used. Format: yyyymmdd.
+  // current month will be used. Format: `yyyymmdd`.
   string start_time = 3 [json_name = "start_time"];
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
-  // Format: yyyymmdd.
+  // Format: `yyyymmdd`.
   string end_time = 4 [json_name = "end_time"];
 }
 
 // Request message for the Cost.ReadBillingGroupTagCosts rpc.
 message ReadBillingGroupTagCostsRequest {
-  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
 
   // Required. The billing group id to stream.
   string name = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
-  // current month will be used. Format: yyyymmdd.
+  // current month will be used. Format: `yyyymmdd`.
   string start_time = 3 [json_name = "start_time"];
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
-  // Format: yyyymmdd.
+  // Format: `yyyymmdd`.
   string end_time = 4 [json_name = "end_time"];
 }
 
 // Request message for the Cost.ReadAccountTagCosts rpc.
 message ReadAccountTagCostsRequest {
-  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
 
   // Required. The AWS account id to stream.
   string id = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
-  // current month will be used. Format: yyyymmdd.
+  // current month will be used. Format: `yyyymmdd`.
   string start_time = 3 [json_name = "start_time"];
 
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
-  // Format: yyyymmdd.
+  // Format: `yyyymmdd`.
   string end_time = 4 [json_name = "end_time"];
 }
