@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package blueapi.cost.v1;
 
+import "api/operation.proto";
 import "api/aws/cost.proto";
 import "api/aws/adjustment.proto";
 import "api/aws/account.proto";
@@ -71,6 +72,21 @@ service Cost {
   rpc DeleteManagementAccount(DeleteManagementAccountRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/aws/managementaccts/{id}"
+    };
+  }
+
+  // Initiates an ondemand import of all registered CUR files.
+  rpc ImportCurFiles(ImportCurFilesRequest) returns (api.Operation) {
+    option (google.api.http) = {
+      post: "/v1/aws:importCurFiles"
+    };
+  }
+
+  // Triggers monthly calculations for costs and invoice at either organization or billing group level.
+  rpc CalculateCosts(CalculateCostsRequest) returns (api.Operation) {
+    option (google.api.http) = {
+      post: "/v1/aws:calculateCosts"
+      body: "*"
     };
   }
 
@@ -166,21 +182,21 @@ message AwsOptions {
   bool include_cost_categories = 2 [json_name = "include_cost_categories"];
 }
 
-// Request message for Cost.ListManagementAccounts rpc.
+// Request message for the Cost.ListManagementAccounts rpc.
 message ListManagementAccountsRequest {}
 
-// Response message for Organization.ListManagementAccounts rpc.
+// Response message for the Organization.ListManagementAccounts rpc.
 message ListManagementAccountsResponse {
   repeated api.aws.Account accounts = 1;
 }
 
-// Request message for Cost.GetManagementAccount rpc.
+// Request message for the Cost.GetManagementAccount rpc.
 message GetManagementAccountRequest {
   // Required. The id of the account to get.
   string id = 1;
 }
 
-// Request message for Cost.CreateManagementAccount rpc.
+// Request message for the Cost.CreateManagementAccount rpc.
 message CreateManagementAccountRequest {
   // Required. The id of the management account.
   string id = 1;
@@ -202,13 +218,27 @@ message CreateManagementAccountRequest {
   string role_arn = 6 [json_name = "role_arn"];
 }
 
-// Request message for Cost.DeleteManagementAccount rpc.
+// Request message for the Cost.DeleteManagementAccount rpc.
 message DeleteManagementAccountRequest {
   // Required. The id of the management account.
   string id = 1;
 }
 
-// Request message for Cost.ReadCosts.
+// Request message for the Cost.ImportCurFiles rpc.
+message ImportCurFilesRequest {}
+
+// Request message for the Cost.CalculateCosts rpc.
+message CalculateCostsRequest {
+  // Optional. If set to a particular billing group, calculate for that billing group.
+  // If empty, calculate for the whole organization.
+  string billing_group = 1 [json_name = "billing_group"];
+
+  // Optional. The month to calculate. If empty, it defaults to the previous month.
+  // Format is 'yyyymm'. For example, June 2021 will be '202106'.
+  string month = 2;
+}
+
+// Request message for the Cost.ReadCosts rpc.
 message ReadCostsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
   string vendor = 1;
@@ -225,7 +255,7 @@ message ReadCostsRequest {
   AwsOptions aws_options = 4 [json_name = "aws_options"];
 }
 
-// Request message for Cost.ReadBillingGroupCosts.
+// Request message for the Cost.ReadBillingGroupCosts rpc.
 message ReadBillingGroupCostsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
   string vendor = 1;
@@ -245,7 +275,7 @@ message ReadBillingGroupCostsRequest {
   AwsOptions aws_options = 5 [json_name = "aws_options"];
 }
 
-// Request message for Cost.ReadAccountCosts.
+// Request message for the Cost.ReadAccountCosts rpc.
 message ReadAccountCostsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
   string vendor = 1;
@@ -270,7 +300,7 @@ message AdjustmentItem {
   api.aws.Adjustment aws = 1;
 }
 
-// Request message for Cost.ReadAdjustments.
+// Request message for the Cost.ReadAdjustments rpc.
 message ReadAdjustmentsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
   string vendor = 1;
@@ -284,7 +314,7 @@ message ReadAdjustmentsRequest {
   string end_time = 3 [json_name = "end_time"];
 }
 
-// Request message for Cost.ReadBillingGroupAdjustments.
+// Request message for the Cost.ReadBillingGroupAdjustments rpc.
 message ReadBillingGroupAdjustmentsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
   string vendor = 1;
@@ -301,7 +331,7 @@ message ReadBillingGroupAdjustmentsRequest {
   string end_time = 4 [json_name = "end_time"];
 }
 
-// Request message for Cost.ReadAccountAdjustments.
+// Request message for the Cost.ReadAccountAdjustments rpc.
 message ReadAccountAdjustmentsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
   string vendor = 1;
@@ -318,7 +348,7 @@ message ReadAccountAdjustmentsRequest {
   string end_time = 4 [json_name = "end_time"];
 }
 
-// Request message for Cost.ReadBillingGroupTagCosts.
+// Request message for the Cost.ReadBillingGroupTagCosts rpc.
 message ReadBillingGroupTagCostsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
   string vendor = 1;
@@ -335,7 +365,7 @@ message ReadBillingGroupTagCostsRequest {
   string end_time = 4 [json_name = "end_time"];
 }
 
-// Request message for Cost.ReadAccountTagCosts.
+// Request message for the Cost.ReadAccountTagCosts rpc.
 message ReadAccountTagCostsRequest {
   // Required. Valid values are 'aws', 'azure', and 'gcp'.
   string vendor = 1;
