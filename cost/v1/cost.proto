@@ -85,7 +85,7 @@ service Cost {
   // Triggers monthly calculations for costs and invoice at either organization or billing group level.
   rpc CalculateCosts(CalculateCostsRequest) returns (api.Operation) {
     option (google.api.http) = {
-      post: "/v1/aws:calculateCosts"
+      post: "/v1/{vendor}:calculateCosts"
       body: "*"
     };
   }
@@ -229,13 +229,16 @@ message ImportCurFilesRequest {}
 
 // Request message for the Cost.CalculateCosts rpc.
 message CalculateCostsRequest {
+  // Required. Valid values are 'aws', 'azure', and 'gcp'.
+  string vendor = 1;
+
   // Optional. If set to a particular billing group, calculate for that billing group.
   // If empty, calculate for the whole organization.
-  string billing_group = 1 [json_name = "billing_group"];
+  string billing_group = 2 [json_name = "billing_group"];
 
   // Optional. The month to calculate. If empty, it defaults to the previous month.
   // Format is 'yyyymm'. For example, June 2021 will be '202106'.
-  string month = 2;
+  string month = 3;
 }
 
 // Request message for the Cost.ReadCosts rpc.
