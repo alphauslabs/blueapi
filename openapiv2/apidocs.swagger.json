@@ -672,6 +672,45 @@
         ]
       }
     },
+    "/v1/aws/managementaccts/{id}/updatehistory": {
+      "get": {
+        "summary": "Gets an AWS management account's update history, which is a list of timestamps our system tracks when the account's CUR files are\nexported to your S3, which in turn, triggers the import from your S3 to our system for processing.",
+        "operationId": "Cost_GetManagementAccountUpdateHistory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetManagementAccountUpdateHistoryResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. The management account id to query.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "month",
+            "description": "Optional. The month to query. If empty, defaults to current month.\nFormat is `yyyymm`. For example, June 2021 will be `202106`.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/aws:importCurFiles": {
       "post": {
         "summary": "Initiates an ondemand import of all registered CUR files.",
@@ -1476,6 +1515,27 @@
         }
       },
       "description": "Response message for the Organization.CreateOrg rpc."
+    },
+    "v1GetManagementAccountUpdateHistoryResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The management account id being queried."
+        },
+        "month": {
+          "type": "string",
+          "description": "The month being queried."
+        },
+        "timestamps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The list of timestamps the account was updated and imported."
+        }
+      },
+      "description": "Response message for the Cost.GetManagementAccountUpdateHistory rpc."
     },
     "v1ImportCurFilesRequest": {
       "type": "object",

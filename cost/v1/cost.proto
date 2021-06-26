@@ -58,6 +58,14 @@ service Cost {
     };
   }
 
+  // Gets an AWS management account's update history, which is a list of timestamps our system tracks when the account's CUR files are
+  // exported to your S3, which in turn, triggers the import from your S3 to our system for processing.
+  rpc GetManagementAccountUpdateHistory(GetManagementAccountUpdateHistoryRequest) returns (GetManagementAccountUpdateHistoryResponse) {
+    option (google.api.http) = {
+      get: "/v1/aws/managementaccts/{id}/updatehistory"
+    };
+  }
+
   // Registers an AWS management account. See [https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html]
   // for more information. Requirements include: Additional report details = 'Include Resource IDS' enabled,
   // Prefix = non-empty (recommendation only), Time granularity = 'Hourly', File format = 'text/csv'.
@@ -195,6 +203,28 @@ message ListManagementAccountsResponse {
 message GetManagementAccountRequest {
   // Required. The id of the account to get.
   string id = 1;
+}
+
+// Request message for the Cost.GetManagementAccountUpdateHistory rpc.
+message GetManagementAccountUpdateHistoryRequest {
+  // Required. The management account id to query.
+  string id = 1;
+
+  // Optional. The month to query. If empty, defaults to current month.
+  // Format is `yyyymm`. For example, June 2021 will be `202106`.
+  string month = 2;
+}
+
+// Response message for the Cost.GetManagementAccountUpdateHistory rpc.
+message GetManagementAccountUpdateHistoryResponse {
+  // The management account id being queried.
+  string id = 1;
+
+  // The month being queried.
+  string month = 2;
+
+  // The list of timestamps the account was updated and imported.
+  repeated string timestamps = 3;
 }
 
 // Request message for the Cost.CreateManagementAccount rpc.
