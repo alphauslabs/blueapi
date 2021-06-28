@@ -6,6 +6,8 @@ import "api/operation.proto";
 import "api/aws/cost.proto";
 import "api/aws/adjustment.proto";
 import "api/aws/account.proto";
+import "api/aws/budget.proto";
+import "api/aws/forecast.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -172,6 +174,51 @@ service Cost {
       post: "/v1/{vendor}/accounts/{id}/tagcosts:read"
     };
   }
+
+  // Saves Budget Configuration to database
+  rpc SetBudgetConfiguration(BudgetConfigRequest) returns (ResultResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/budgets/configuration"
+      body: "budget_config"
+    };
+  }
+
+  // Updates Budget Configuration in database
+  rpc UpdateBudgetConfiguration(BudgetConfigRequest) returns (ResultResponse) {
+    option (google.api.http) = {
+      put: "/v1/{vendor}/budgets/configuration/{budget_config.id}"
+      body: "budget_config"
+    };
+  }
+
+  // Fetches Budget Configurations for all accounts under the specified Billing Group 
+  rpc GetBudgetConfigurationBG(GetBudgetConfigRequest) returns (BudgetConfigResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/budgets/configuration/{company_id}"
+    };
+  }
+
+  // Fetches Budget Configuration for the specified account id
+  rpc GetBudgetConfigurationAccount(GetBudgetConfigRequest) returns (BudgetConfigResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/budgets/configuration/{company_id}/{account_id}"
+    };
+  }
+
+  // Fetches Cost Forecasts for the specified Billing Group
+  rpc GetForecasts(GetForecastsRequest) returns (GetForecastsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/forecasts/{company_id}"
+    };
+  }
+
+  // Fetches Month-to-Date Costs for the specified Billing Group
+  rpc GetMonthToDate(GetMonthToDateRequest) returns (GetMonthToDateResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/forecasts/month-to-date/{company_id}"
+    };
+  }
+
 }
 
 // Response message wrapper for cloud costs.
@@ -426,4 +473,74 @@ message ReadAccountTagCostsRequest {
   // Optional. Timestamp to end the streaming data. If not set, current date will be used.
   // Format: `yyyymmdd`.
   string end_time = 4 [json_name = "end_time"];
+}
+
+// Request message for SetBudgetConfiguration and UpdateBudgetConfiguration.
+message BudgetConfigRequest {
+  // Required. Valid values are `aws`, `azure`, and `gcp`.
+  string vendor = 1;
+  // Required. Budget configuration to save
+  api.aws.BudgetConfiguration budget_config = 2 [json_name = "budget_config"];
+}
+
+// Request message for GetBudgetConfigurationBG and GetBudgetConfigurationAccount.
+message GetBudgetConfigRequest {
+  // Required. Valid values are `aws`, `azure`, and `gcp`.
+  string vendor = 1;
+  // Required. Company ID of Billing Group
+  string company_id = 2 [json_name = "company_id"];
+  // Optional. 
+  string account_id = 3 [json_name = "account_id"];
+}
+
+// Response message for GetBudgetConfigurationBG and GetBudgetConfigurationAccount.
+// If account id is specified in the request, only one Budget Configuration is returned.
+message BudgetConfigResponse {
+  repeated api.aws.BudgetConfiguration data = 1;
+}
+
+// Response message for SetBudgetConfiguration and UpdateBudgetConfiguration.
+message ResultResponse {
+  string code = 1;
+  string description = 2;
+  string message = 3;
+}
+
+// Request message for GetForecasts per Billing Group
+message GetForecastsRequest {
+  // Required. Valid values are `aws`, `azure`, and `gcp`.
+  string vendor = 1;
+  // Required. Company ID of Billing Group
+  string company_id = 2 [json_name = "company_id"];
+  // Required. Forecast frequency. Valid values are `daily` and `monthly`.
+  string frequency = 3;
+  // Optional. Forecast granularity. Valid values are `account`, `category` and `product`. Default value is `account`.
+  string level = 4;
+  // Optional. Starting date to get data.
+  // If from_date is less than current date, actual cost is returned.
+  // If from_date is greater than current date, forecast cost is returned.
+  // Format: `yyyymmdd`.
+  string from_date = 5 [json_name = "from_date"]; 
+  // Optional. Last date to get forecast cost. 
+  // Currently, we only support 90days forecasting from the first day of current month.
+  // Format: `yyyymmdd`.
+  string to_date = 6 [json_name = "to_date"];
+}
+
+// Response message for GetForecasts per Billing Group
+message GetForecastsResponse {
+  api.aws.BillingGroupForecast data = 1;
+}
+
+// Request message for GetMonthToDate per Billing Group
+message GetMonthToDateRequest {
+  // Required. Valid values are `aws`, `azure`, and `gcp`.
+  string vendor = 1;
+  // Required. Company ID of Billing Group
+  string company_id = 2 [json_name = "company_id"];
+}
+
+// Response message for GetMonthToDate per Billing Group
+message GetMonthToDateResponse {
+  api.aws.BillingGroupMonthToDate data = 1;
 }
