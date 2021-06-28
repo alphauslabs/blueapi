@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package blueapi.api.aws;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/aws";
+option java_package = "cloud.alphaus.blueapi.api.aws";
+option java_outer_classname = "ApiAwsForecastProto";
+
+message ForecastData {
+  string account_id = 1 [json_name = "account_id"];
+  string product_category = 2 [json_name = "product_category"];
+  string product_code = 3 [json_name = "product_code"];
+  string frequency = 4; //daily, monthly
+  google.protobuf.Timestamp date = 5;
+  double historical_cost = 6 [json_name = "historical_cost"];
+  double forecasted_cost = 7 [json_name = "forecasted_cost"];
+}
+
+message BillingGroupForecast {
+  string company_id = 1;
+  repeated ForecastData data = 2;
+}
+
+message MspForecast {
+  string msp_id = 1;
+  repeated BillingGroupForecast data = 2;
+}
+
+message MonthToDateData {
+  string account_id = 1 [json_name = "account_id"];
+  string product_category = 2 [json_name = "product_category"];
+  string product_code = 3 [json_name = "product_code"];
+  google.protobuf.Timestamp date = 4;
+  double accumulated_cost = 5 [json_name = "accumulated_cost"];
+  double forecast_cost = 6 [json_name = "forecast_cost"];
+  double budget = 7;
+}
+
+message BillingGroupMonthToDate {
+  string company_id = 1;
+  repeated MonthToDateData data = 2;
+}
