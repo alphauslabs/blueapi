@@ -46,6 +46,21 @@ service Iam {
     };
   }
 
+  // Creates a subuser.
+  rpc CreateUser(CreateUserRequest) returns (api.User) {
+    option (google.api.http) = {
+      post: "/iam/v1/users"
+      body: "*"
+    };
+  }
+
+  // Deletes a subuser.
+  rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/iam/v1/users/{name}"
+    };
+  }
+
   // Lists all IP filters. At the moment, this API is only available for root users.
   rpc ListIpFilters(ListIpFiltersRequest) returns (ListIpFiltersResponse) {
     option (google.api.http) = {
@@ -83,6 +98,25 @@ message ListUsersResponse {
 
 // Request message for the Iam.GetUser rpc.
 message GetUserRequest {
+  string name = 1;
+}
+
+// Request message for the Iam.CreateUser rpc.
+message CreateUserRequest {
+  // Required. Min: 4, max: 18, allowed characters: letters, numbers, `_` (underscore),
+  // `.` (period) and `-` (hyphen) characters.
+  string name = 1;
+
+  // Required. Minimum of 8 characters.
+  string password = 2;
+
+  // Optional. Email address of the subuser.
+  string email = 3;
+}
+
+// Request message for the Iam.DeleteUser rpc.
+message DeleteUserRequest {
+  // Required. The subuser name to delete.
   string name = 1;
 }
 

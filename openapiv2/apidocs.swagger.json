@@ -160,6 +160,37 @@
         "tags": [
           "Iam"
         ]
+      },
+      "post": {
+        "summary": "Creates a subuser.",
+        "operationId": "Iam_CreateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiUser"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
       }
     },
     "/iam/v1/users/{name}": {
@@ -183,6 +214,36 @@
         "parameters": [
           {
             "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes a subuser.",
+        "operationId": "Iam_DeleteUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Required. The subuser name to delete.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -1511,6 +1572,24 @@
         }
       },
       "description": "Response message for the Organization.CreateOrg rpc."
+    },
+    "v1CreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Min: 4, max: 18, allowed characters: letters, numbers, `_` (underscore),\n`.` (period) and `-` (hyphen) characters."
+        },
+        "password": {
+          "type": "string",
+          "description": "Required. Minimum of 8 characters."
+        },
+        "email": {
+          "type": "string",
+          "description": "Optional. Email address of the subuser."
+        }
+      },
+      "description": "Request message for the Iam.CreateUser rpc."
     },
     "v1GetManagementAccountUpdateHistoryResponse": {
       "type": "object",
