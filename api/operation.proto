@@ -4,6 +4,7 @@ package blueapi.api;
 
 import "google/api/annotations.proto";
 import "google/rpc/status.proto";
+import "google/protobuf/any.proto";
 
 option go_package = "github.com/alphauslabs/blue-sdk-go/api";
 option java_package = "cloud.alphaus.blueapi.api";
@@ -21,7 +22,7 @@ message Operation {
   // contains progress information and common metadata such as create time.
   // Some services might not provide such metadata.  Any method that returns a
   // long-running operation should document the metadata type, if any.
-  map<string, string> metadata = 2;
+  google.protobuf.Any metadata = 2;
 
   // If the value is `false`, it means the operation is still in progress.
   // If `true`, the operation is completed, and either `error` or `response` is
@@ -43,6 +44,6 @@ message Operation {
     // is the original method name.  For example, if the original method name
     // is `TakeSnapshot()`, the inferred response type is
     // `TakeSnapshotResponse`.
-    bytes response = 5;
+    google.protobuf.Any response = 5;
   }
 }
