@@ -42,7 +42,7 @@ service Iam {
   // is equivalent to `WhoAmI()` or `GET:/iam/v*/whoami`.
   rpc GetUser(GetUserRequest) returns (api.User) {
     option (google.api.http) = {
-      get: "/iam/v1/users/{name}"
+      get: "/iam/v1/users/{id}"
     };
   }
 
@@ -57,7 +57,7 @@ service Iam {
   // Deletes a subuser.
   rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/iam/v1/users/{name}"
+      delete: "/iam/v1/users/{id}"
     };
   }
 
@@ -80,7 +80,7 @@ service Iam {
   // Deletes an IP filter item. At the moment, this API is only available for root users.
   rpc DeleteIpFilter(DeleteIpFilterRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/iam/v1/ipfilters/{name}"
+      delete: "/iam/v1/ipfilters/{id}"
     };
   }
 }
@@ -98,7 +98,7 @@ message ListUsersResponse {
 
 // Request message for the Iam.GetUser rpc.
 message GetUserRequest {
-  string name = 1;
+  string id = 1;
 }
 
 // Request message for the Iam.CreateUser rpc.
@@ -120,14 +120,14 @@ message CreateUserRequest {
 // Request message for the Iam.DeleteUser rpc.
 message DeleteUserRequest {
   // Required. The subuser name to delete.
-  string name = 1;
+  string id = 1;
 }
 
 message IpFilter {
-  // IP filter item name. Note that this name is transcient and is not fixed. However,
+  // IP filter item id. Note that this name is transcient and is not fixed. However,
   // you can use any of its permutations to endpoints that accept it, such as
-  // the `DELETE:/iam/v?/ipfilters/{name}` endpoint, without issues.
-  string name = 1;
+  // the `DELETE:/iam/v?/ipfilters/{id}` endpoint, without issues.
+  string id = 1;
 
   // Can be `global`, `rootuser`, or `subuser`.
   string scope = 2;
@@ -172,6 +172,6 @@ message CreateIpFilterRequest {
 
 // Request message for the Iam.DeleteIpFilter rpc.
 message DeleteIpFilterRequest {
-  // The IP filter name to delete.
-  string name = 1;
+  // The IP filter id to delete.
+  string id = 1;
 }

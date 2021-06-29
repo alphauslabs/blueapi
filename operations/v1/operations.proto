@@ -43,7 +43,7 @@ service Operations {
   // to poll the operation result at intervals as recommended by the API service.
   rpc GetOperation(GetOperationRequest) returns (api.Operation) {
     option (google.api.http) = {
-      get: "/ops/v1/{name}"
+      get: "/ops/v1/{id}"
     };
   }
 
@@ -51,7 +51,7 @@ service Operations {
   // longer interested in the operation result. It does not cancel the operation.
   rpc DeleteOperation(DeleteOperationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/ops/v1/{name}"
+      delete: "/ops/v1/{id}"
     };
   }
 
@@ -62,7 +62,7 @@ service Operations {
   // to `Code.CANCELLED`.
   rpc CancelOperation(CancelOperationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/ops/v1/{name}:cancel"
+      post: "/ops/v1/{id}:cancel"
       body: "*"
     };
   }
@@ -82,26 +82,26 @@ service Operations {
 
 // Request message for the Operations.ListOperations rpc.
 message ListOperationsRequest {
-  // The name of the operation's parent resource.
-  string name = 4;
+  // Optional. The name of the operation's parent resource.
+  string parent = 4;
 }
 
 // Request message for the Operations.GetOperation rpc.
 message GetOperationRequest {
-  // The name of the operation resource.
-  string name = 1;
+  // The id of the operation resource.
+  string id = 1;
 }
 
 // Request message for the Operations.DeleteOperation rpc.
 message DeleteOperationRequest {
-  // The name of the operation resource to be deleted.
-  string name = 1;
+  // The id of the operation resource to be deleted.
+  string id = 1;
 }
 
 // Request message for the Operations.CancelOperation rpc.
 message CancelOperationRequest {
-  // The name of the operation resource to be cancelled.
-  string name = 1;
+  // The id of the operation resource to be cancelled.
+  string id = 1;
 }
 
 // The request message for the Operations.WaitOperation rpc.

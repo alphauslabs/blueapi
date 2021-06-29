@@ -107,7 +107,7 @@
         ]
       }
     },
-    "/iam/v1/ipfilters/{name}": {
+    "/iam/v1/ipfilters/{id}": {
       "delete": {
         "summary": "Deletes an IP filter item. At the moment, this API is only available for root users.",
         "operationId": "Iam_DeleteIpFilter",
@@ -127,8 +127,8 @@
         },
         "parameters": [
           {
-            "name": "name",
-            "description": "The IP filter name to delete.",
+            "name": "id",
+            "description": "The IP filter id to delete.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -193,7 +193,7 @@
         ]
       }
     },
-    "/iam/v1/users/{name}": {
+    "/iam/v1/users/{id}": {
       "get": {
         "summary": "Gets subuser information. This call includes all of the subuser metadata. See\n[https://alphauslabs.github.io/blueapi/] for the list of supported attributes.\nIf the `{name}` parameter is `me` or `-`, returns the caller information, which\nis equivalent to `WhoAmI()` or `GET:/iam/v*/whoami`.",
         "operationId": "Iam_GetUser",
@@ -213,7 +213,7 @@
         },
         "parameters": [
           {
-            "name": "name",
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -242,7 +242,7 @@
         },
         "parameters": [
           {
-            "name": "name",
+            "name": "id",
             "description": "Required. The subuser name to delete.",
             "in": "path",
             "required": true,
@@ -306,8 +306,8 @@
         },
         "parameters": [
           {
-            "name": "name",
-            "description": "The name of the operation's parent resource.",
+            "name": "parent",
+            "description": "Optional. The name of the operation's parent resource.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -318,7 +318,7 @@
         ]
       }
     },
-    "/ops/v1/{name}": {
+    "/ops/v1/{id}": {
       "get": {
         "summary": "Gets the latest state of a long-running operation.  Clients can use this method\nto poll the operation result at intervals as recommended by the API service.",
         "operationId": "Operations_GetOperation",
@@ -338,8 +338,8 @@
         },
         "parameters": [
           {
-            "name": "name",
-            "description": "The name of the operation resource.",
+            "name": "id",
+            "description": "The id of the operation resource.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -368,8 +368,8 @@
         },
         "parameters": [
           {
-            "name": "name",
-            "description": "The name of the operation resource to be deleted.",
+            "name": "id",
+            "description": "The id of the operation resource to be deleted.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -380,7 +380,7 @@
         ]
       }
     },
-    "/ops/v1/{name}:cancel": {
+    "/ops/v1/{id}:cancel": {
       "post": {
         "summary": "Starts asynchronous cancellation on a long-running operation. The server makes\na best effort to cancel the operation, but success is not guaranteed. On successful\ncancellation, the operation is not deleted; instead, it becomes an operation with\na value of [google.rpc.Status.code][google.rpc.Status.code] 1, corresponding\nto `Code.CANCELLED`.",
         "operationId": "Operations_CancelOperation",
@@ -400,8 +400,8 @@
         },
         "parameters": [
           {
-            "name": "name",
-            "description": "The name of the operation resource to be cancelled.",
+            "name": "id",
+            "description": "The id of the operation resource to be cancelled.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -1481,9 +1481,9 @@
     "v1CancelOperationRequest": {
       "type": "object",
       "properties": {
-        "name": {
+        "id": {
           "type": "string",
-          "description": "The name of the operation resource to be cancelled."
+          "description": "The id of the operation resource to be cancelled."
         }
       },
       "description": "Request message for the Operations.CancelOperation rpc."
@@ -1633,9 +1633,9 @@
     "v1IpFilter": {
       "type": "object",
       "properties": {
-        "name": {
+        "id": {
           "type": "string",
-          "description": "IP filter item name. Note that this name is transcient and is not fixed. However,\nyou can use any of its permutations to endpoints that accept it, such as\nthe `DELETE:/iam/v?/ipfilters/{name}` endpoint, without issues."
+          "description": "IP filter item id. Note that this name is transcient and is not fixed. However,\nyou can use any of its permutations to endpoints that accept it, such as\nthe `DELETE:/iam/v?/ipfilters/{id}` endpoint, without issues."
         },
         "scope": {
           "type": "string",
