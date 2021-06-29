@@ -194,28 +194,28 @@ service Cost {
   // Fetches Budget Configurations for all accounts under the specified Billing Group 
   rpc GetBudgetConfigurationBG(GetBudgetConfigRequest) returns (BudgetConfigResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/budgets/configuration/{company_id}"
+      get: "/v1/{vendor}/budgets/configuration/{billinggroup_id}"
     };
   }
 
   // Fetches Budget Configuration for the specified account id
   rpc GetBudgetConfigurationAccount(GetBudgetConfigRequest) returns (BudgetConfigResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/budgets/configuration/{company_id}/{account_id}"
+      get: "/v1/{vendor}/budgets/configuration/{billinggroup_id}/{account_id}"
     };
   }
 
   // Fetches Cost Forecasts for the specified Billing Group
   rpc GetForecasts(GetForecastsRequest) returns (GetForecastsResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/forecasts/{company_id}"
+      get: "/v1/{vendor}/forecasts/{billinggroup_id}"
     };
   }
 
   // Fetches Month-to-Date Costs for the specified Billing Group
   rpc GetMonthToDate(GetMonthToDateRequest) returns (GetMonthToDateResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/forecasts/month-to-date/{company_id}"
+      get: "/v1/{vendor}/forecasts/month-to-date/{billinggroup_id}"
     };
   }
 
@@ -488,7 +488,7 @@ message GetBudgetConfigRequest {
   // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
   // Required. Company ID of Billing Group
-  string company_id = 2 [json_name = "company_id"];
+  string billinggroup_id = 2 [json_name = "billinggroup_id"];
   // Optional. 
   string account_id = 3 [json_name = "account_id"];
 }
@@ -511,7 +511,7 @@ message GetForecastsRequest {
   // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
   // Required. Company ID of Billing Group
-  string company_id = 2 [json_name = "company_id"];
+  string billinggroup_id = 2 [json_name = "billinggroup_id"];
   // Required. Forecast frequency. Valid values are `daily` and `monthly`.
   string frequency = 3;
   // Optional. Forecast granularity. Valid values are `account`, `category` and `product`. Default value is `account`.
@@ -537,7 +537,7 @@ message GetMonthToDateRequest {
   // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
   // Required. Company ID of Billing Group
-  string company_id = 2 [json_name = "company_id"];
+  string billinggroup_id = 2 [json_name = "billinggroup_id"];
 }
 
 // Response message for GetMonthToDate per Billing Group
