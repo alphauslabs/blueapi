@@ -254,6 +254,115 @@
         ]
       }
     },
+    "/iam/v1/users/{id}/apiclients": {
+      "get": {
+        "summary": "Lists all API clients. Setting `{id}` to `me` or `-` (hyphen) will return\nthe caller's API clients.",
+        "operationId": "Iam_ListApiClients",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListApiClientsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. The parent resource id. Could be set to `me` or `-`, which implies\nthe caller.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      },
+      "post": {
+        "summary": "Creates an API client. Setting `{id}` to `me` or `-` (hyphen) will create\nthe API client under the caller.",
+        "operationId": "Iam_CreateApiClient",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiApiClient"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. The parent resource id. Could be set to `me` or `-`, which implies\nthe caller.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateApiClientRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
+    "/iam/v1/users/{userId}/apiclients/{clientId}": {
+      "delete": {
+        "summary": "Deletes an API client. Setting `{userId}` to `me` or `-` (hyphen) will delete\nthe caller's specified API client.",
+        "operationId": "Iam_DeleteApiClient",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "description": "Required. The parent resource id. Could be set to `me` or `-`, which implies\nthe caller.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "clientId",
+            "description": "Required. The client id to delete.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
     "/iam/v1/whoami": {
       "get": {
         "summary": "Gets user information about the caller. This call includes all of the user metadata.\nSee [https://alphauslabs.github.io/blueapi/] for the list of supported attributes.",
@@ -1217,6 +1326,34 @@
     }
   },
   "definitions": {
+    "apiApiClient": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "API client id."
+        },
+        "clientSecret": {
+          "type": "string",
+          "description": "API client secret. Only available during creation; otherwise, redacted."
+        },
+        "name": {
+          "type": "string",
+          "description": "API client name."
+        },
+        "grantType": {
+          "type": "string",
+          "description": "Grant type. Always set to `client_credentials`."
+        },
+        "parent": {
+          "type": "string",
+          "description": "The client's parent resource."
+        },
+        "createTime": {
+          "type": "string"
+        }
+      }
+    },
     "apiUser": {
       "type": "object",
       "properties": {
@@ -1497,6 +1634,20 @@
       },
       "description": "Response message wrapper for cloud costs."
     },
+    "v1CreateApiClientRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Required. The parent resource id. Could be set to `me` or `-`, which implies\nthe caller."
+        },
+        "name": {
+          "type": "string",
+          "description": "Required. The descriptive name of the API client to create."
+        }
+      },
+      "description": "Request message for the Iam.CreateApiClient rpc."
+    },
     "v1CreateIpFilterRequest": {
       "type": "object",
       "properties": {
@@ -1654,6 +1805,18 @@
           "description": "The IP filter value. Should be in CIDR format."
         }
       }
+    },
+    "v1ListApiClientsResponse": {
+      "type": "object",
+      "properties": {
+        "clients": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiApiClient"
+          }
+        }
+      },
+      "description": "Response message for the Iam.ListApiClients rpc."
     },
     "v1ListIpFiltersResponse": {
       "type": "object",

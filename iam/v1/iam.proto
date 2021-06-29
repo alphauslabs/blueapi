@@ -3,6 +3,7 @@ syntax = "proto3";
 package blueapi.iam.v1;
 
 import "api/user.proto";
+import "api/apiclient.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -58,6 +59,31 @@ service Iam {
   rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/iam/v1/users/{id}"
+    };
+  }
+
+  // Lists all API clients. Setting `{id}` to `me` or `-` (hyphen) will return
+  // the caller's API clients.
+  rpc ListApiClients(ListApiClientsRequest) returns (ListApiClientsResponse) {
+    option (google.api.http) = {
+      get: "/iam/v1/users/{id}/apiclients"
+    };
+  }
+
+  // Creates an API client. Setting `{id}` to `me` or `-` (hyphen) will create
+  // the API client under the caller.
+  rpc CreateApiClient(CreateApiClientRequest) returns (api.ApiClient) {
+    option (google.api.http) = {
+      post: "/iam/v1/users/{id}/apiclients"
+      body: "*"
+    };
+  }
+
+  // Deletes an API client. Setting `{userId}` to `me` or `-` (hyphen) will delete
+  // the caller's specified API client.
+  rpc DeleteApiClient(DeleteApiClientRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/iam/v1/users/{userId}/apiclients/{clientId}"
     };
   }
 
@@ -121,6 +147,38 @@ message CreateUserRequest {
 message DeleteUserRequest {
   // Required. The subuser name to delete.
   string id = 1;
+}
+
+// Request message for the Iam.ListApiClients rpc.
+message ListApiClientsRequest {
+  // Required. The parent resource id. Could be set to `me` or `-`, which implies
+  // the caller.
+  string id = 1;
+}
+
+// Response message for the Iam.ListApiClients rpc.
+message ListApiClientsResponse {
+  repeated api.ApiClient clients = 1;
+}
+
+// Request message for the Iam.CreateApiClient rpc.
+message CreateApiClientRequest {
+  // Required. The parent resource id. Could be set to `me` or `-`, which implies
+  // the caller.
+  string id = 1;
+
+  // Required. The descriptive name of the API client to create.
+  string name = 2;
+}
+
+// Request message for the Iam.DeleteApiClient rpc.
+message DeleteApiClientRequest {
+  // Required. The parent resource id. Could be set to `me` or `-`, which implies
+  // the caller.
+  string userId = 1;
+
+  // Required. The client id to delete.
+  string clientId = 2;
 }
 
 message IpFilter {
