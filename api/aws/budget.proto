@@ -6,12 +6,11 @@ option go_package = "github.com/alphauslabs/blue-sdk-go/api/aws";
 option java_package = "cloud.alphaus.blueapi.api.aws";
 option java_outer_classname = "ApiAwsBudgetProto";
 
-message BudgetTracker {
+message BudgetAlerts {
   string id = 1;
-  string as_of = 2 [json_name = "as_of"];
-  string budget_configuration_id = 3 [json_name = "budget_configuration_id"];
-  repeated string notification_channel_ids = 4 [json_name = "notification_channel_ids"];
-  int32 percentage = 5;
+  string budget_configuration_id = 2 [json_name = "budget_configuration_id"];
+  int32 percentage = 3;
+  repeated string channel_ids = 4 [json_name = "channel_ids"];
 }
 
 message BudgetConfiguration {
@@ -22,7 +21,6 @@ message BudgetConfiguration {
   string company_id = 5 [json_name = "company_id"];
   string account_id = 6 [json_name = "account_id"];
   map<string, string> month_budget = 7 [json_name = "month_budget"];
-  bool tracking_enabled = 8 [json_name = "tracking_enabled"];
-  repeated BudgetTracker budget_trackers = 9 [json_name = "budget_trackers"];
+  bool alerts_enabled = 8 [json_name = "alerts_enabled"];
+  repeated BudgetAlerts budget_alerts = 9 [json_name = "budget_alerts"];
 }
-
