@@ -62,28 +62,25 @@ service Iam {
     };
   }
 
-  // Lists all API clients. Setting `{id}` to `me` or `-` (hyphen) will return
-  // the caller's API clients.
+  // Lists all API clients belonging to the caller.
   rpc ListApiClients(ListApiClientsRequest) returns (ListApiClientsResponse) {
     option (google.api.http) = {
-      get: "/iam/v1/users/{id}/apiclients"
+      get: "/iam/v1/apiclients"
     };
   }
 
-  // Creates an API client. Setting `{id}` to `me` or `-` (hyphen) will create
-  // the API client under the caller.
+  // Creates an API client for the caller.
   rpc CreateApiClient(CreateApiClientRequest) returns (api.ApiClient) {
     option (google.api.http) = {
-      post: "/iam/v1/users/{id}/apiclients"
+      post: "/iam/v1/apiclients"
       body: "*"
     };
   }
 
-  // Deletes an API client. Setting `{userId}` to `me` or `-` (hyphen) will delete
-  // the caller's specified API client.
+  // Deletes an API client belonging to the caller.
   rpc DeleteApiClient(DeleteApiClientRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/iam/v1/users/{userId}/apiclients/{clientId}"
+      delete: "/iam/v1/apiclients/{id}"
     };
   }
 
@@ -150,11 +147,7 @@ message DeleteUserRequest {
 }
 
 // Request message for the Iam.ListApiClients rpc.
-message ListApiClientsRequest {
-  // Required. The parent resource id. Could be set to `me` or `-`, which implies
-  // the caller.
-  string id = 1;
-}
+message ListApiClientsRequest {}
 
 // Response message for the Iam.ListApiClients rpc.
 message ListApiClientsResponse {
@@ -163,22 +156,14 @@ message ListApiClientsResponse {
 
 // Request message for the Iam.CreateApiClient rpc.
 message CreateApiClientRequest {
-  // Required. The parent resource id. Could be set to `me` or `-`, which implies
-  // the caller.
-  string id = 1;
-
   // Required. The descriptive name of the API client to create.
-  string name = 2;
+  string name = 1;
 }
 
 // Request message for the Iam.DeleteApiClient rpc.
 message DeleteApiClientRequest {
-  // Required. The parent resource id. Could be set to `me` or `-`, which implies
-  // the caller.
-  string userId = 1;
-
   // Required. The client id to delete.
-  string clientId = 2;
+  string id = 1;
 }
 
 message IpFilter {

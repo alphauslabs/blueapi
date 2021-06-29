@@ -53,6 +53,92 @@
     "application/json"
   ],
   "paths": {
+    "/iam/v1/apiclients": {
+      "get": {
+        "summary": "Lists all API clients belonging to the caller.",
+        "operationId": "Iam_ListApiClients",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListApiClientsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Iam"
+        ]
+      },
+      "post": {
+        "summary": "Creates an API client for the caller.",
+        "operationId": "Iam_CreateApiClient",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiApiClient"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateApiClientRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
+    "/iam/v1/apiclients/{id}": {
+      "delete": {
+        "summary": "Deletes an API client belonging to the caller.",
+        "operationId": "Iam_DeleteApiClient",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. The client id to delete.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
     "/iam/v1/ipfilters": {
       "get": {
         "summary": "Lists all IP filters. At the moment, this API is only available for root users.",
@@ -244,115 +330,6 @@
           {
             "name": "id",
             "description": "Required. The subuser name to delete.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Iam"
-        ]
-      }
-    },
-    "/iam/v1/users/{id}/apiclients": {
-      "get": {
-        "summary": "Lists all API clients. Setting `{id}` to `me` or `-` (hyphen) will return\nthe caller's API clients.",
-        "operationId": "Iam_ListApiClients",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListApiClientsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "Required. The parent resource id. Could be set to `me` or `-`, which implies\nthe caller.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Iam"
-        ]
-      },
-      "post": {
-        "summary": "Creates an API client. Setting `{id}` to `me` or `-` (hyphen) will create\nthe API client under the caller.",
-        "operationId": "Iam_CreateApiClient",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apiApiClient"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "Required. The parent resource id. Could be set to `me` or `-`, which implies\nthe caller.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateApiClientRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Iam"
-        ]
-      }
-    },
-    "/iam/v1/users/{userId}/apiclients/{clientId}": {
-      "delete": {
-        "summary": "Deletes an API client. Setting `{userId}` to `me` or `-` (hyphen) will delete\nthe caller's specified API client.",
-        "operationId": "Iam_DeleteApiClient",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "userId",
-            "description": "Required. The parent resource id. Could be set to `me` or `-`, which implies\nthe caller.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "clientId",
-            "description": "Required. The client id to delete.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -1637,10 +1614,6 @@
     "v1CreateApiClientRequest": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Required. The parent resource id. Could be set to `me` or `-`, which implies\nthe caller."
-        },
         "name": {
           "type": "string",
           "description": "Required. The descriptive name of the API client to create."
