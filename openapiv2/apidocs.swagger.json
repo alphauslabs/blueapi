@@ -990,7 +990,7 @@
         ]
       }
     },
-    "/v1/{vendor}/billinggroups/{name}/adjustments:read": {
+    "/v1/{vendor}/billinggroups/{id}/adjustments:read": {
       "post": {
         "summary": "Reads the non-usage-based details of a billing group. This API covers non-usage-based\nadjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment,\nthe supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date\n(current month) will be returned.",
         "operationId": "Cost_ReadBillingGroupAdjustments",
@@ -1026,7 +1026,7 @@
             "type": "string"
           },
           {
-            "name": "name",
+            "name": "id",
             "description": "Required. The billing group id to stream.",
             "in": "path",
             "required": true,
@@ -1038,7 +1038,7 @@
         ]
       }
     },
-    "/v1/{vendor}/billinggroups/{name}/costs:read": {
+    "/v1/{vendor}/billinggroups/{id}/costs:read": {
       "post": {
         "summary": "Reads the usage-based cost details of a billing group. At the moment, the supported\n{vendor} is 'aws'. If datetime range parameters are not set, month-to-date\n(current month) will be returned.",
         "operationId": "Cost_ReadBillingGroupCosts",
@@ -1074,7 +1074,7 @@
             "type": "string"
           },
           {
-            "name": "name",
+            "name": "id",
             "description": "Required. The billing group id to stream.",
             "in": "path",
             "required": true,
@@ -1086,7 +1086,7 @@
         ]
       }
     },
-    "/v1/{vendor}/billinggroups/{name}/tagcosts:read": {
+    "/v1/{vendor}/billinggroups/{id}/tagcosts:read": {
       "post": {
         "summary": "Reads the usage-based tag costs of a billing group. At the moment, the supported {vendor} is \n'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
         "operationId": "Cost_ReadBillingGroupTagCosts",
@@ -1122,7 +1122,7 @@
             "type": "string"
           },
           {
-            "name": "name",
+            "name": "id",
             "description": "Required. The billing group id to stream.",
             "in": "path",
             "required": true,
@@ -1263,7 +1263,7 @@
         "account": {
           "type": "string"
         },
-        "billing_group_id": {
+        "billingGroupId": {
           "type": "string"
         },
         "date": {
@@ -1273,7 +1273,7 @@
         "type": {
           "type": "string"
         },
-        "product_code": {
+        "productCode": {
           "type": "string"
         },
         "description": {
@@ -1291,17 +1291,17 @@
         "account": {
           "type": "string"
         },
-        "billing_group_id": {
+        "billingGroupId": {
           "type": "string"
         },
         "date": {
           "type": "string",
           "format": "date-time"
         },
-        "product_code": {
+        "productCode": {
           "type": "string"
         },
-        "service_code": {
+        "serviceCode": {
           "type": "string"
         },
         "region": {
@@ -1310,16 +1310,16 @@
         "zone": {
           "type": "string"
         },
-        "usage_type": {
+        "usageType": {
           "type": "string"
         },
-        "instance_type": {
+        "instanceType": {
           "type": "string"
         },
         "operation": {
           "type": "string"
         },
-        "invoice_id": {
+        "invoiceId": {
           "type": "string"
         },
         "description": {
@@ -1331,7 +1331,7 @@
             "type": "string"
           }
         },
-        "cost_categories": {
+        "costCategories": {
           "type": "object",
           "additionalProperties": {
             "type": "string"
@@ -1345,10 +1345,10 @@
           "type": "number",
           "format": "double"
         },
-        "resource_id": {
+        "resourceId": {
           "type": "string"
         },
-        "tag_id": {
+        "tagId": {
           "type": "string"
         }
       }
@@ -1449,11 +1449,11 @@
     "v1AwsOptions": {
       "type": "object",
       "properties": {
-        "include_tags": {
+        "includeTags": {
           "type": "boolean",
           "description": "Optional. If set to true, stream will include resource tags. Note that this could\npotentially increase the data size if you have lots of tag information."
         },
-        "include_cost_categories": {
+        "includeCostCategories": {
           "type": "boolean",
           "description": "Optional. If set to true, stream will include resource cost category information.\nNote that this could potentially increase the data size if you have lots of cost\ncategory information."
         }
@@ -1467,7 +1467,7 @@
           "type": "string",
           "description": "Required. Valid values are `aws`, `azure`, and `gcp`."
         },
-        "billing_group": {
+        "billingGroupId": {
           "type": "string",
           "description": "Optional. If set to a particular billing group, calculate for that billing group.\nIf empty, calculate for all billing groups.\n\nAt the moment, for AWS, this is only valid for account type billing groups, not\ntag billing groups. If a tag billing group is provided, it is discarded and the\ncalculation is done for the whole organization."
         },
@@ -1530,7 +1530,7 @@
           "type": "string",
           "description": "Optional. The name, or description of the management account.\nThis is set to `id` when not specified."
         },
-        "bucket_name": {
+        "bucketName": {
           "type": "string",
           "description": "Required. S3 Bucket name."
         },
@@ -1538,13 +1538,13 @@
           "type": "string",
           "description": "Optional. Prefix."
         },
-        "report_name": {
+        "reportName": {
           "type": "string",
           "description": "Required. Report name."
         },
-        "role_arn": {
+        "roleArn": {
           "type": "string",
-          "description": "Required. Role ARN."
+          "description": "Required. Role ARN for Alphaus to assume for access."
         }
       },
       "description": "Request message for the Cost.CreateManagementAccount rpc."
