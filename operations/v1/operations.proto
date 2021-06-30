@@ -43,7 +43,7 @@ service Operations {
   // to poll the operation result at intervals as recommended by the API service.
   rpc GetOperation(GetOperationRequest) returns (api.Operation) {
     option (google.api.http) = {
-      get: "/ops/v1/{id}"
+      get: "/ops/v1/{name}"
     };
   }
 
@@ -51,7 +51,7 @@ service Operations {
   // longer interested in the operation result. It does not cancel the operation.
   rpc DeleteOperation(DeleteOperationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/ops/v1/{id}"
+      delete: "/ops/v1/{name}"
     };
   }
 
@@ -62,7 +62,7 @@ service Operations {
   // to `Code.CANCELLED`.
   rpc CancelOperation(CancelOperationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/ops/v1/{id}:cancel"
+      post: "/ops/v1/{name}:cancel"
       body: "*"
     };
   }
@@ -88,26 +88,26 @@ message ListOperationsRequest {
 
 // Request message for the Operations.GetOperation rpc.
 message GetOperationRequest {
-  // The id of the operation resource.
-  string id = 1;
+  // The name of the operation resource.
+  string name = 1;
 }
 
 // Request message for the Operations.DeleteOperation rpc.
 message DeleteOperationRequest {
-  // The id of the operation resource to be deleted.
-  string id = 1;
+  // The name of the operation resource to be deleted.
+  string name = 1;
 }
 
 // Request message for the Operations.CancelOperation rpc.
 message CancelOperationRequest {
-  // The id of the operation resource to be cancelled.
-  string id = 1;
+  // The name of the operation resource to be cancelled.
+  string name = 1;
 }
 
 // The request message for the Operations.WaitOperation rpc.
 message WaitOperationRequest {
-  // The id of the operation resource to wait on.
-  string id = 1;
+  // The name of the operation resource to wait on.
+  string name = 1;
 
   // The maximum duration to wait before timing out. If left blank, the wait
   // will be at most the time permitted by the underlying HTTP/RPC protocol.
