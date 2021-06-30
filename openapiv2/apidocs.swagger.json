@@ -393,7 +393,7 @@
         "parameters": [
           {
             "name": "parent",
-            "description": "Optional. The name of the operation's parent resource.",
+            "description": "Optional. The name of the operation's parent resource. Not used at the moment.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -1220,6 +1220,141 @@
         ]
       }
     },
+    "/v1/{vendor}/budgets/configuration": {
+      "post": {
+        "summary": "Saves Budget Configuration to database",
+        "operationId": "Cost_CreateBudgetConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": "Required. Budget configuration to save",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiBudgetConfiguration"
+            }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/budgets/configuration/{billingGroupId}": {
+      "get": {
+        "summary": "Fetches Budget Configurations for all accounts under the specified Billing Group.\nSet accountId to fetch Budget Configuration for specific account only.",
+        "operationId": "Cost_GetBudgetConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBudgetConfigResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "billingGroupId",
+            "description": "Required. Billing Group ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Optional. If set, only Budget Configuration for the specified account is returned.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/budgets/configuration/{budgetConfigId}": {
+      "put": {
+        "summary": "Updates Budget Configuration in database",
+        "operationId": "Cost_UpdateBudgetConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "budgetConfigId",
+            "description": "Required. Budget configuration Id to update",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": "Required. Budget configuration with update information",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiBudgetConfiguration"
+            }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/{vendor}/costs:read": {
       "post": {
         "summary": "Reads the usage-based cost details of an organization (Ripple) or company (Wave).\nAt the moment, the supported {vendor} is 'aws'. If datetime range parameters are\nnot set, month-to-date (current month) will be returned. Date range parameters\nare 'start_time' and 'end_time, with the 'yyyymmdd' format.",
@@ -1253,6 +1388,112 @@
             "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
             "in": "path",
             "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/forecasts/month-to-date/{billingGroupId}": {
+      "get": {
+        "summary": "Fetches Month-to-Date Accumulated Costs vs Forecasted Cost vs Budget for the specified Billing Group",
+        "operationId": "Cost_GetMonthToDateForecast",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetMonthToDateForecastResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "billingGroupId",
+            "description": "Required. Billing Group ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/forecasts/{billingGroupId}": {
+      "get": {
+        "summary": "Fetches Cost Forecasts for the specified Billing Group.\nIncludes historical cost (up to previous month) and forecasted cost (up to three months for now)",
+        "operationId": "Cost_GetForecasts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetForecastsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "billingGroupId",
+            "description": "Required. Billing Group ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "frequency",
+            "description": "Optional. Forecast frequency. Valid values are `daily` and `monthly`. \nDefault value is `daily`.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "level",
+            "description": "Optional. Forecast granularity. Valid values are `account`, `category` and `product`.\nDefault value is `account`.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "fromDate",
+            "description": "Optional. Starting date to get data.\nIf from_date is less than current date, historical costs are included.\nIf from_date is greater than current date, only forecasted costs are returned.\nFormat: `yyyymmdd`.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "toDate",
+            "description": "Optional. Last date to get forecast cost. \nCurrently, we only support 90 days forecasting from the first day of current month.\nFormat: `yyyymmdd`.",
+            "in": "query",
+            "required": false,
             "type": "string"
           }
         ],
@@ -1328,6 +1569,153 @@
         },
         "createTime": {
           "type": "string"
+        }
+      }
+    },
+    "apiBillingGroupForecast": {
+      "type": "object",
+      "properties": {
+        "billingGroupId": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiForecastData"
+          }
+        }
+      }
+    },
+    "apiBillingGroupMonthToDateForecast": {
+      "type": "object",
+      "properties": {
+        "billingGroupId": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiMonthToDateForecastData"
+          }
+        }
+      }
+    },
+    "apiBudgetAlert": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "budgetConfigurationId": {
+          "type": "string"
+        },
+        "percentage": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "channelIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "apiBudgetConfiguration": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "length": {
+          "type": "string"
+        },
+        "startingMonth": {
+          "type": "string"
+        },
+        "billingGroupId": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
+        },
+        "monthBudget": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "alertsEnabled": {
+          "type": "boolean"
+        },
+        "budgetAlerts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiBudgetAlert"
+          }
+        }
+      }
+    },
+    "apiForecastData": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "productCategory": {
+          "type": "string"
+        },
+        "productCode": {
+          "type": "string"
+        },
+        "frequency": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "historicalCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "forecastedCost": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "apiMonthToDateForecastData": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "productCategory": {
+          "type": "string"
+        },
+        "productCode": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "accumulatedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "forecastCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "budget": {
+          "type": "number",
+          "format": "double"
         }
       }
     },
@@ -1719,6 +2107,27 @@
       },
       "description": "Request message for the Iam.CreateUser rpc."
     },
+    "v1GetBudgetConfigResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiBudgetConfiguration"
+          }
+        }
+      },
+      "description": "Response message for GetBudgetConfig.\nIf accountId is specified in the request, only one Budget Configuration is returned."
+    },
+    "v1GetForecastsResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/apiBillingGroupForecast"
+        }
+      },
+      "title": "Response message for GetForecasts per Billing Group"
+    },
     "v1GetManagementAccountUpdateHistoryResponse": {
       "type": "object",
       "properties": {
@@ -1739,6 +2148,15 @@
         }
       },
       "description": "Response message for the Cost.GetManagementAccountUpdateHistory rpc."
+    },
+    "v1GetMonthToDateForecastResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/apiBillingGroupMonthToDateForecast"
+        }
+      },
+      "title": "Response message for GetMonthToDateForecast per Billing Group"
     },
     "v1ImportCurFilesRequest": {
       "type": "object",
