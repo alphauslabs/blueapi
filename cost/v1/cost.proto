@@ -191,22 +191,24 @@ service Cost {
     };
   }
 
-  // Fetches Budget Configurations for all accounts under the specified Billing Group 
-  rpc GetBudgetConfig(GetBudgetConfigRequest) returns (BudgetConfigResponse) {
+  // Fetches Budget Configurations for all accounts under the specified Billing Group.
+  // Set accountId to fetch Budget Configuration for specific account only.
+  rpc GetBudgetConfig(GetBudgetConfigRequest) returns (GetBudgetConfigResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/budgets/configuration/{billingGroupId}"
     };
   }
 
-  // Fetches Cost Forecasts for the specified Billing Group
+  // Fetches Cost Forecasts for the specified Billing Group.
+  // Includes historical cost (up to previous month) and forecasted cost (up to three months for now)
   rpc GetForecasts(GetForecastsRequest) returns (GetForecastsResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/forecasts/{billingGroupId}"
     };
   }
 
-  // Fetches Month-to-Date Costs for the specified Billing Group
-  rpc GetMonthToDate(GetMonthToDateRequest) returns (GetMonthToDateResponse) {
+  // Fetches Month-to-Date Accumulated Costs vs Forecasted Cost vs Budget for the specified Billing Group
+  rpc GetMonthToDateForecast(GetMonthToDateForecastRequest) returns (GetMonthToDateForecastResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/forecasts/month-to-date/{billingGroupId}"
     };
@@ -468,7 +470,7 @@ message ReadAccountTagCostsRequest {
   string end_time = 4 [json_name = "end_time"];
 }
 
-// Request message for SetBudgetConfiguration and UpdateBudgetConfiguration.
+// Request message for CreateBudgetConfig and UpdateBudgetConfig.
 message BudgetConfigRequest {
   // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
@@ -476,7 +478,7 @@ message BudgetConfigRequest {
   api.BudgetConfiguration budgetConfig = 2;
 }
 
-// Request message for GetBudgetConfigurationBG and GetBudgetConfigurationAccount.
+// Request message for GetBudgetConfig.
 message GetBudgetConfigRequest {
   // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
@@ -488,9 +490,9 @@ message GetBudgetConfigRequest {
   string accountId = 3;
 }
 
-// Response message for GetBudgetConfigurationBG and GetBudgetConfigurationAccount.
+// Response message for GetBudgetConfig.
 // If accountId is specified in the request, only one Budget Configuration is returned.
-message BudgetConfigResponse {
+message GetBudgetConfigResponse {
   repeated api.BudgetConfiguration data = 1;
 }
 
@@ -511,8 +513,8 @@ message GetForecastsRequest {
   string level = 4;
   
   // Optional. Starting date to get data.
-  // If from_date is less than current date, actual cost is returned.
-  // If from_date is greater than current date, forecast cost is returned.
+  // If from_date is less than current date, historical costs are included.
+  // If from_date is greater than current date, only forecasted costs are returned.
   // Format: `yyyymmdd`.
   string fromDate = 5; 
  
@@ -527,8 +529,8 @@ message GetForecastsResponse {
   api.BillingGroupForecast data = 1;
 }
 
-// Request message for GetMonthToDate per Billing Group
-message GetMonthToDateRequest {
+// Request message for GetMonthToDateForecast per Billing Group
+message GetMonthToDateForecastRequest {
   // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
   
@@ -536,7 +538,7 @@ message GetMonthToDateRequest {
   string billingGroupId = 2;
 }
 
-// Response message for GetMonthToDate per Billing Group
-message GetMonthToDateResponse {
-  api.BillingGroupMonthToDate data = 1;
+// Response message for GetMonthToDateForecast per Billing Group
+message GetMonthToDateForecastResponse {
+  api.BillingGroupMonthToDateForecast data = 1;
 }
