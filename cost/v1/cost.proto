@@ -176,7 +176,7 @@ service Cost {
   }
 
   // Saves Budget Configuration to database
-  rpc CreateBudgetConfig(BudgetConfigRequest) returns (google.protobuf.Empty) {
+  rpc CreateBudgetConfig(CreateBudgetConfigRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/v1/{vendor}/budgets/configuration"
       body: "budgetConfig"
@@ -184,9 +184,9 @@ service Cost {
   }
 
   // Updates Budget Configuration in database
-  rpc UpdateBudgetConfig(BudgetConfigRequest) returns (google.protobuf.Empty) {
+  rpc UpdateBudgetConfig(UpdateBudgetConfigRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/v1/{vendor}/budgets/configuration/{budgetConfig.id}"
+      put: "/v1/{vendor}/budgets/configuration/{budgetConfigId}"
       body: "budgetConfig"
     };
   }
@@ -470,12 +470,25 @@ message ReadAccountTagCostsRequest {
   string end_time = 4 [json_name = "end_time"];
 }
 
-// Request message for CreateBudgetConfig and UpdateBudgetConfig.
-message BudgetConfigRequest {
+// Request message for CreateBudgetConfig.
+message CreateBudgetConfigRequest {
   // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
+
   // Required. Budget configuration to save
   api.BudgetConfiguration budgetConfig = 2;
+}
+
+// Request message for UpdateBudgetConfig.
+message UpdateBudgetConfigRequest {
+  // Required. Valid values are `aws`, `azure`, and `gcp`.
+  string vendor = 1;
+  
+  // Required. Budget configuration Id to update
+  string budgetConfigId = 2;
+
+  // Required. Budget configuration with update information
+  api.BudgetConfiguration budgetConfig = 3;
 }
 
 // Request message for GetBudgetConfig.
