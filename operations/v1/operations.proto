@@ -39,8 +39,8 @@ service Operations {
     };
   }
 
-  // Gets the latest state of a long-running operation.  Clients can use this method
-  // to poll the operation result at intervals as recommended by the API service.
+  // Gets the latest state of a long-running operation. You can use this method to
+  // poll the operation result at intervals.
   rpc GetOperation(GetOperationRequest) returns (api.Operation) {
     option (google.api.http) = {
       get: "/ops/v1/{name}"
@@ -74,8 +74,9 @@ service Operations {
   // timeout is used. If the server does not support this method, it returns
   // `google.rpc.Code.UNIMPLEMENTED`.
   // Note that this method is on a best-effort basis. It may return the latest
-  // state before the specified timeout (including immediately), meaning even an
+  // state before the specified timeout (including immediately), meaning, even an
   // immediate response is no guarantee that the operation is done.
+  // At the moment, Blue's default RPC timeout is around one hour.
   rpc WaitOperation(WaitOperationRequest) returns (api.Operation) {
   }
 }
