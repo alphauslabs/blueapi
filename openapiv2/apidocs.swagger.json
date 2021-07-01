@@ -406,7 +406,7 @@
     },
     "/ops/v1/{name}": {
       "get": {
-        "summary": "Gets the latest state of a long-running operation.  Clients can use this method\nto poll the operation result at intervals as recommended by the API service.",
+        "summary": "Gets the latest state of a long-running operation. You can use this method to\npoll the operation result at intervals.",
         "operationId": "Operations_GetOperation",
         "responses": {
           "200": {
@@ -1222,7 +1222,7 @@
     },
     "/v1/{vendor}/budgets/configuration": {
       "post": {
-        "summary": "Saves Budget Configuration to database",
+        "summary": "Creates a budget configuration.",
         "operationId": "Cost_CreateBudgetConfig",
         "responses": {
           "200": {
@@ -1248,7 +1248,7 @@
           },
           {
             "name": "body",
-            "description": "Required. Budget configuration to save",
+            "description": "Required. Budget configuration to save.",
             "in": "body",
             "required": true,
             "schema": {
@@ -1263,7 +1263,7 @@
     },
     "/v1/{vendor}/budgets/configuration/{billingGroupId}": {
       "get": {
-        "summary": "Fetches Budget Configurations for all accounts under the specified Billing Group.\nSet accountId to fetch Budget Configuration for specific account only.",
+        "summary": "Fetches budget configurations for all accounts under the specified billing group.\nSet accountId to fetch budget configuration for specific account only.",
         "operationId": "Cost_GetBudgetConfig",
         "responses": {
           "200": {
@@ -1289,14 +1289,14 @@
           },
           {
             "name": "billingGroupId",
-            "description": "Required. Billing Group ID",
+            "description": "Required. Billing group id to retrieve.",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "accountId",
-            "description": "Optional. If set, only Budget Configuration for the specified account is returned.",
+            "description": "Optional. If set, only budget configuration for the specified account is returned.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -1309,7 +1309,7 @@
     },
     "/v1/{vendor}/budgets/configuration/{budgetConfigId}": {
       "put": {
-        "summary": "Updates Budget Configuration in database",
+        "summary": "Updates an existing budget configuration.",
         "operationId": "Cost_UpdateBudgetConfig",
         "responses": {
           "200": {
@@ -1335,14 +1335,14 @@
           },
           {
             "name": "budgetConfigId",
-            "description": "Required. Budget configuration Id to update",
+            "description": "Required. Budget configuration id to update.",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "body",
-            "description": "Required. Budget configuration with update information",
+            "description": "Required. Budget configuration with update information.",
             "in": "body",
             "required": true,
             "schema": {
@@ -1398,7 +1398,7 @@
     },
     "/v1/{vendor}/forecasts/month-to-date/{billingGroupId}": {
       "get": {
-        "summary": "Fetches Month-to-Date Accumulated Costs vs Forecasted Cost vs Budget for the specified Billing Group",
+        "summary": "Fetches month-to-date accumulated costs vs forecasted cost vs budget for the specified billing group.",
         "operationId": "Cost_GetMonthToDateForecast",
         "responses": {
           "200": {
@@ -1424,7 +1424,7 @@
           },
           {
             "name": "billingGroupId",
-            "description": "Required. Billing Group ID",
+            "description": "Required. Billing group id to retrieve.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -1437,7 +1437,7 @@
     },
     "/v1/{vendor}/forecasts/{billingGroupId}": {
       "get": {
-        "summary": "Fetches Cost Forecasts for the specified Billing Group.\nIncludes historical cost (up to previous month) and forecasted cost (up to three months for now)",
+        "summary": "Fetches cost forecasts for the specified billing group.\nIncludes historical cost (up to previous month) and forecasted cost (up to three months for now).",
         "operationId": "Cost_GetForecasts",
         "responses": {
           "200": {
@@ -1463,7 +1463,7 @@
           },
           {
             "name": "billingGroupId",
-            "description": "Required. Billing Group ID",
+            "description": "Required. Billing group id to retrieve.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -1722,9 +1722,9 @@
     "apiUser": {
       "type": "object",
       "properties": {
-        "name": {
+        "id": {
           "type": "string",
-          "description": "User's unique name (or id)."
+          "description": "User's unique id."
         },
         "parent": {
           "type": "string",
@@ -2117,7 +2117,7 @@
           }
         }
       },
-      "description": "Response message for GetBudgetConfig.\nIf accountId is specified in the request, only one Budget Configuration is returned."
+      "description": "Response message for GetBudgetConfig.\nIf accountId is specified in the request, only one budget configuration is returned."
     },
     "v1GetForecastsResponse": {
       "type": "object",
@@ -2126,7 +2126,7 @@
           "$ref": "#/definitions/apiBillingGroupForecast"
         }
       },
-      "title": "Response message for GetForecasts per Billing Group"
+      "description": "Response message for GetForecasts per billing group."
     },
     "v1GetManagementAccountUpdateHistoryResponse": {
       "type": "object",
@@ -2156,7 +2156,7 @@
           "$ref": "#/definitions/apiBillingGroupMonthToDateForecast"
         }
       },
-      "title": "Response message for GetMonthToDateForecast per Billing Group"
+      "description": "Response message for GetMonthToDateForecast per billing group."
     },
     "v1ImportCurFilesRequest": {
       "type": "object",
@@ -2167,7 +2167,7 @@
         },
         "filter": {
           "type": "string",
-          "description": "Optional. A comma-separated list of management accounts to import. If empty,\nall CURs associated will all your management accounts will be imported."
+          "description": "Optional. A comma-separated list of management accounts to import. If empty,\nall CURs associated with all your management accounts will be imported."
         }
       },
       "description": "Request message for the Cost.ImportCurFiles rpc."
