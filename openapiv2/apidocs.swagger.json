@@ -973,6 +973,14 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ReadAdjustmentsRequest"
+            }
           }
         ],
         "tags": [
@@ -1165,7 +1173,7 @@
     },
     "/v1/{vendor}/costs:read": {
       "post": {
-        "summary": "Reads the usage-based cost details of an organization (Ripple) or company (Wave).\nAt the moment, the supported {vendor} is 'aws'. If datetime range parameters are\nnot set, month-to-date (current month) will be returned. Date range parameters\nare 'start_time' and 'end_time, with the 'yyyymmdd' format.",
+        "summary": "Reads the usage-based cost details of an organization (Ripple) or company (Wave).\nAt the moment, the supported {vendor} is 'aws'. If datetime range parameters are\nnot set, month-to-date (current month) will be returned.",
         "operationId": "Cost_ReadCosts",
         "responses": {
           "200": {
@@ -1197,6 +1205,14 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ReadCostsRequest"
+            }
           }
         ],
         "tags": [
@@ -2052,6 +2068,62 @@
         }
       },
       "description": "Response message for the Iam.ListUsers rpc."
+    },
+    "v1ReadAdjustmentsRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. Valid values are `aws`, `azure`, and `gcp`."
+        },
+        "billingGroupId": {
+          "type": "string",
+          "description": "Optional. If set, reads the non-usage-based adjustment details of this billing group.\nValid only if `accountId` is not set. If both `billingGroupId` and `accountId` are not\nset, reads the adjustment details of the whole organization.\nOnly valid for Ripple users. Implied for Wave(Pro) users."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Optional. If set, reads the non-usaged-based adjustment details of this account. Also\ninvalidates the `billingGroupId` value even if set. If both `billingGroupId` and\n`accountId` are not set, reads the adjustment details of the whole organization."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: `yyyymmdd`."
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used.\nFormat: `yyyymmdd`."
+        }
+      },
+      "description": "Request message for the Cost.ReadAdjustments rpc."
+    },
+    "v1ReadCostsRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. Valid values are `aws`, `azure`, and `gcp`."
+        },
+        "billingGroupId": {
+          "type": "string",
+          "description": "Optional. If set, reads the usage-based cost details of this billing group. Valid only\nif `accountId` is not set. If both `billingGroupId` and `accountId` are not set,\nreads the usage-based cost details of the whole organization.\nOnly valid for Ripple users. Implied for Wave(Pro) users."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Optional. If set, reads the usage-based cost details of this account. Also invalidates\nthe `billingGroupId` value even if set. If both `billingGroupId` and `accountId` are\nnot set, reads the usage-based cost details of the whole organization."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: yyyymmdd."
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used.\nFormat: `yyyymmd`."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1AwsOptions",
+          "description": "Optional. AWS-specific request options."
+        }
+      },
+      "description": "Request message for the Cost.ReadCosts rpc."
     },
     "v1UpdateMetadataRequest": {
       "type": "object",
