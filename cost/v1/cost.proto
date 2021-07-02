@@ -158,7 +158,7 @@ service Cost {
   // Set accountId to fetch budget configuration for specific account only.
   rpc GetBudgetConfig(GetBudgetConfigRequest) returns (GetBudgetConfigResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/budgets/configuration/{billingGroupId}"
+      get: "/v1/{vendor}/budgets/configuration"
     };
   }
 
@@ -166,14 +166,14 @@ service Cost {
   // Includes historical cost (up to previous month) and forecasted cost (up to three months for now).
   rpc GetForecasts(GetForecastsRequest) returns (GetForecastsResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/forecasts/{billingGroupId}"
+      get: "/v1/{vendor}/forecasts"
     };
   }
 
   // Fetches month-to-date accumulated costs vs forecasted cost vs budget for the specified billing group.
   rpc GetMonthToDateForecast(GetMonthToDateForecastRequest) returns (GetMonthToDateForecastResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/forecasts/month-to-date/{billingGroupId}"
+      get: "/v1/{vendor}/forecasts/month-to-date"
     };
   }
 
@@ -420,8 +420,9 @@ message GetForecastsRequest {
   // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
   
-  // Required. Billing group id to retrieve.
-  string billingGroupId = 2;
+  // Optional. Company Id of Billing Group to retrieve.
+  // Default value is user's Company Id
+  string companyId = 2;
   
   // Optional. Forecast frequency. Valid values are `daily` and `monthly`. 
   // Default value is `daily`.
@@ -453,8 +454,9 @@ message GetMonthToDateForecastRequest {
   // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
   
-  // Required. Billing group id to retrieve.
-  string billingGroupId = 2;
+  // Optional. Company Id of Billing Group to retrieve.
+  // Default value is user's Company Id
+  string companyId = 2;
 }
 
 // Response message for GetMonthToDateForecast per billing group.
