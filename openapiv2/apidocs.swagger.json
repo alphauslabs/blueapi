@@ -941,7 +941,7 @@
     },
     "/v1/{vendor}/adjustments:read": {
       "post": {
-        "summary": "Reads the non-usage-based details of an organization (Ripple) or company (Wave).\nThis API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax,\nUpfront Fees, etc. At the moment, the supported {vendor} is 'aws'. If datetime\nrange parameters are not set, month-to-date (current month) will be returned.",
+        "summary": "Reads the non-usage-based details of an organization (Ripple) or billing group (Wave).\nThis API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax,\nUpfront Fees, etc. At the moment, the supported {vendor} is 'aws'. If datetime\nrange parameters are not set, month-to-date (current month) will be returned.",
         "operationId": "Cost_ReadAdjustments",
         "responses": {
           "200": {
@@ -1173,7 +1173,7 @@
     },
     "/v1/{vendor}/costs:read": {
       "post": {
-        "summary": "Reads the usage-based cost details of an organization (Ripple) or company (Wave).\nAt the moment, the supported {vendor} is 'aws'. If datetime range parameters are\nnot set, month-to-date (current month) will be returned.",
+        "summary": "Reads the usage-based cost details of an organization (Ripple) or billing group (Wave).\nAt the moment, the supported {vendor} is 'aws'. If datetime range parameters are\nnot set, month-to-date (current month) will be returned.",
         "operationId": "Cost_ReadCosts",
         "responses": {
           "200": {
@@ -2076,9 +2076,9 @@
           "type": "string",
           "description": "Required. Valid values are `aws`, `azure`, and `gcp`."
         },
-        "billingGroupId": {
+        "companyId": {
           "type": "string",
-          "description": "Optional. If set, reads the non-usage-based adjustment details of this billing group.\nValid only if `accountId` is not set. If both `billingGroupId` and `accountId` are not\nset, reads the adjustment details of the whole organization.\nOnly valid for Ripple users. Implied for Wave(Pro) users."
+          "description": "Optional. If set, reads the non-usage-based adjustment details of this billing group.\nValid only if `accountId` is not set. If both `companyId` and `accountId` are not\nset, reads the adjustment details of the whole organization.\nOnly valid for Ripple users. Implied (or discarded) for Wave(Pro) users."
         },
         "accountId": {
           "type": "string",
@@ -2102,9 +2102,9 @@
           "type": "string",
           "description": "Required. Valid values are `aws`, `azure`, and `gcp`."
         },
-        "billingGroupId": {
+        "companyId": {
           "type": "string",
-          "description": "Optional. If set, reads the usage-based cost details of this billing group. Valid only\nif `accountId` is not set. If both `billingGroupId` and `accountId` are not set,\nreads the usage-based cost details of the whole organization.\nOnly valid for Ripple users. Implied for Wave(Pro) users."
+          "description": "Optional. If set, reads the usage-based cost details of this billing group. Valid\nonly if `accountId` is not set. If both `companyId` and `accountId` are not set,\nreads the usage-based cost details of the whole organization.\nOnly valid for Ripple users. Implied (or discarded) for Wave(Pro) users."
         },
         "accountId": {
           "type": "string",
