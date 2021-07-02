@@ -31,7 +31,7 @@ service Iam {
   }
 
   // Lists all subusers.
-  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
+  rpc ListUsers(ListUsersRequest) returns (stream api.User) {
     option (google.api.http) = {
       get: "/iam/v1/users"
     };
@@ -63,7 +63,7 @@ service Iam {
   }
 
   // Lists all API clients belonging to the caller.
-  rpc ListApiClients(ListApiClientsRequest) returns (ListApiClientsResponse) {
+  rpc ListApiClients(ListApiClientsRequest) returns (stream api.ApiClient) {
     option (google.api.http) = {
       get: "/iam/v1/apiclients"
     };
@@ -85,7 +85,7 @@ service Iam {
   }
 
   // Lists all IP filters. At the moment, this API is only available for root users.
-  rpc ListIpFilters(ListIpFiltersRequest) returns (ListIpFiltersResponse) {
+  rpc ListIpFilters(ListIpFiltersRequest) returns (stream IpFilter) {
     option (google.api.http) = {
       get: "/iam/v1/ipfilters"
     };
@@ -113,11 +113,6 @@ message WhoAmIRequest {}
 
 // Request message for the Iam.ListUsers rpc.
 message ListUsersRequest {}
-
-// Response message for the Iam.ListUsers rpc.
-message ListUsersResponse {
-  repeated api.User users = 1;
-}
 
 // Request message for the Iam.GetUser rpc.
 message GetUserRequest {
@@ -148,11 +143,6 @@ message DeleteUserRequest {
 
 // Request message for the Iam.ListApiClients rpc.
 message ListApiClientsRequest {}
-
-// Response message for the Iam.ListApiClients rpc.
-message ListApiClientsResponse {
-  repeated api.ApiClient clients = 1;
-}
 
 // Request message for the Iam.CreateApiClient rpc.
 message CreateApiClientRequest {
@@ -189,11 +179,6 @@ message IpFilter {
 
 // Request message for the Iam.ListIpFilters rpc.
 message ListIpFiltersRequest {}
-
-// Response message for the Iam.ListIpFilters rpc.
-message ListIpFiltersResponse {
-  repeated IpFilter items = 1;
-}
 
 // Request message for the Iam.CreateIpFilter rpc.
 message CreateIpFilterRequest {

@@ -46,7 +46,7 @@ service Cost {
   };
 
   // Lists AWS management accounts.
-  rpc ListManagementAccounts(ListManagementAccountsRequest) returns (ListManagementAccountsResponse) {
+  rpc ListManagementAccounts(ListManagementAccountsRequest) returns (stream api.aws.Account) {
     option (google.api.http) = {
       get: "/v1/aws/managementaccts"
     };
@@ -181,11 +181,6 @@ service Cost {
 
 // Request message for the Cost.ListManagementAccounts rpc.
 message ListManagementAccountsRequest {}
-
-// Response message for the Organization.ListManagementAccounts rpc.
-message ListManagementAccountsResponse {
-  repeated api.aws.Account accounts = 1;
-}
 
 // Request message for the Cost.GetManagementAccount rpc.
 message GetManagementAccountRequest {

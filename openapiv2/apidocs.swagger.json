@@ -67,9 +67,18 @@
         "operationId": "Iam_ListApiClients",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response.(streaming responses)",
             "schema": {
-              "$ref": "#/definitions/v1ListApiClientsResponse"
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/apiApiClient"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of apiApiClient"
             }
           },
           "default": {
@@ -153,9 +162,18 @@
         "operationId": "Iam_ListIpFilters",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response.(streaming responses)",
             "schema": {
-              "$ref": "#/definitions/v1ListIpFiltersResponse"
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1IpFilter"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1IpFilter"
             }
           },
           "default": {
@@ -239,9 +257,18 @@
         "operationId": "Iam_ListUsers",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response.(streaming responses)",
             "schema": {
-              "$ref": "#/definitions/v1ListUsersResponse"
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/apiUser"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of apiUser"
             }
           },
           "default": {
@@ -717,9 +744,18 @@
         "operationId": "Cost_ListManagementAccounts",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response.(streaming responses)",
             "schema": {
-              "$ref": "#/definitions/v1ListManagementAccountsResponse"
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/awsAccount"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of awsAccount"
             }
           },
           "default": {
@@ -2075,54 +2111,6 @@
           "description": "The IP filter value. Should be in CIDR format."
         }
       }
-    },
-    "v1ListApiClientsResponse": {
-      "type": "object",
-      "properties": {
-        "clients": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/apiApiClient"
-          }
-        }
-      },
-      "description": "Response message for the Iam.ListApiClients rpc."
-    },
-    "v1ListIpFiltersResponse": {
-      "type": "object",
-      "properties": {
-        "items": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1IpFilter"
-          }
-        }
-      },
-      "description": "Response message for the Iam.ListIpFilters rpc."
-    },
-    "v1ListManagementAccountsResponse": {
-      "type": "object",
-      "properties": {
-        "accounts": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/awsAccount"
-          }
-        }
-      },
-      "description": "Response message for the Organization.ListManagementAccounts rpc."
-    },
-    "v1ListUsersResponse": {
-      "type": "object",
-      "properties": {
-        "users": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/apiUser"
-          }
-        }
-      },
-      "description": "Response message for the Iam.ListUsers rpc."
     },
     "v1ReadAdjustmentsRequest": {
       "type": "object",
