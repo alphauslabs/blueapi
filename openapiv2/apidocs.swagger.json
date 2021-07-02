@@ -30,6 +30,14 @@
       }
     },
     {
+      "name": "Billing",
+      "description": "Base URL: https://api.alphaus.cloud/m/billing",
+      "externalDocs": {
+        "description": "Service definition",
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/billing/"
+      }
+    },
+    {
       "name": "Cost",
       "description": "Base URL: https://api.alphaus.cloud/m/blue/cost",
       "externalDocs": {
@@ -891,6 +899,38 @@
         ]
       }
     },
+    "/v1/billinggroups": {
+      "get": {
+        "summary": "Lists all billing groups.",
+        "operationId": "Billing_ListBillingGroups",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1BillingGroup"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1BillingGroup"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/{vendor}/accounts/{id}/tagcosts:read": {
       "post": {
         "summary": "Reads the usage-based tag costs of an AWS account. At the moment, the supported {vendor} is \n'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
@@ -1308,14 +1348,14 @@
           },
           {
             "name": "fromDate",
-            "description": "Optional. Starting date to get data.\nIf from_date is less than current date, historical costs are included.\nIf from_date is greater than current date, only forecasted costs are returned.\nFormat: `yyyymmdd`.",
+            "description": "Optional. Starting date to get data.\nIf from_date is less than current date, historical costs are included.\nIf from_date is greater than current date, only forecasted costs are returned.\nFormat: `yyyy-mm-dd`.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "toDate",
-            "description": "Optional. Last date to get forecast cost. \nCurrently, we only support 90 days forecasting from the first day of current month.\nFormat: `yyyymmdd`.",
+            "description": "Optional. Last date to get forecast cost. \nCurrently, we only support 90 days forecasting from the first day of current month.\nFormat: `yyyy-mm-dd`.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -1500,8 +1540,7 @@
           "type": "string"
         },
         "date": {
-          "type": "string",
-          "format": "date-time"
+          "type": "string"
         },
         "historicalCost": {
           "type": "number",
@@ -1526,8 +1565,7 @@
           "type": "string"
         },
         "date": {
-          "type": "string",
-          "format": "date-time"
+          "type": "string"
         },
         "accumulatedCost": {
           "type": "number",
@@ -1785,6 +1823,23 @@
         }
       },
       "description": "AWS-specific options."
+    },
+    "v1BillingGroup": {
+      "type": "object",
+      "properties": {
+        "companyId": {
+          "type": "string",
+          "description": "The billing group's internal company id."
+        },
+        "billingGroupId": {
+          "type": "string",
+          "description": "The billing group id."
+        },
+        "billingGroupName": {
+          "type": "string",
+          "description": "The billing group name."
+        }
+      }
     },
     "v1CalculateCostsRequest": {
       "type": "object",

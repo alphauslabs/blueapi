@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package blueapi.billing.v1;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/billing";
+option java_package = "cloud.alphaus.api.billing";
+option java_outer_classname = "BillingProto";
+
+// Billing service definition.
+service Billing {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "Base URL: https://api.alphaus.cloud/m/billing"
+    external_docs: {
+      url: "https://github.com/alphauslabs/blueapi/tree/main/billing/";
+      description: "Service definition";
+    }
+  };
+
+  // Lists all billing groups.
+  rpc ListBillingGroups(ListBillingGroupsRequest) returns (stream BillingGroup) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups"
+    };
+  }
+}
+
+message BillingGroup {
+  // The billing group's internal company id.
+  string companyId = 1;
+
+  // The billing group id.
+  string billingGroupId = 2;
+
+  // The billing group name.
+  string billingGroupName = 3;
+}
+
+// Request message for the Billing.ListBillingGroups rpc.
+message ListBillingGroupsRequest {}
