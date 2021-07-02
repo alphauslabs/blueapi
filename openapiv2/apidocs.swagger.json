@@ -740,7 +740,7 @@
     },
     "/v1/aws/managementaccts": {
       "get": {
-        "summary": "Lists AWS management accounts.",
+        "summary": "Lists AWS management accounts (formerly known as master or payer accounts).",
         "operationId": "Cost_ListManagementAccounts",
         "responses": {
           "200": {
@@ -1113,6 +1113,50 @@
       }
     },
     "/v1/{vendor}/budgets/configuration": {
+      "get": {
+        "summary": "Fetches budget configurations for all accounts under the specified billing group.\nSet accountId to fetch budget configuration for specific account only.",
+        "operationId": "Cost_GetBudgetConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBudgetConfigResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "billingGroupId",
+            "description": "Required. Billing group id to retrieve.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Optional. If set, only budget configuration for the specified account is returned.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      },
       "post": {
         "summary": "Creates a budget configuration.",
         "operationId": "Cost_CreateBudgetConfig",
@@ -1146,52 +1190,6 @@
             "schema": {
               "$ref": "#/definitions/apiBudgetConfiguration"
             }
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
-    "/v1/{vendor}/budgets/configuration/{billingGroupId}": {
-      "get": {
-        "summary": "Fetches budget configurations for all accounts under the specified billing group.\nSet accountId to fetch budget configuration for specific account only.",
-        "operationId": "Cost_GetBudgetConfig",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetBudgetConfigResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "billingGroupId",
-            "description": "Required. Billing group id to retrieve.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "accountId",
-            "description": "Optional. If set, only budget configuration for the specified account is returned.",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "tags": [
@@ -1296,46 +1294,7 @@
         ]
       }
     },
-    "/v1/{vendor}/forecasts/month-to-date/{billingGroupId}": {
-      "get": {
-        "summary": "Fetches month-to-date accumulated costs vs forecasted cost vs budget for the specified billing group.",
-        "operationId": "Cost_GetMonthToDateForecast",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetMonthToDateForecastResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "billingGroupId",
-            "description": "Required. Billing group id to retrieve.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
-    "/v1/{vendor}/forecasts/{billingGroupId}": {
+    "/v1/{vendor}/forecasts": {
       "get": {
         "summary": "Fetches cost forecasts for the specified billing group.\nIncludes historical cost (up to previous month) and forecasted cost (up to three months for now).",
         "operationId": "Cost_GetForecasts",
@@ -1362,10 +1321,10 @@
             "type": "string"
           },
           {
-            "name": "billingGroupId",
-            "description": "Required. Billing group id to retrieve.",
-            "in": "path",
-            "required": true,
+            "name": "companyId",
+            "description": "Optional. Company Id of Billing Group to retrieve.\nDefault value is user's Company Id.",
+            "in": "query",
+            "required": false,
             "type": "string"
           },
           {
@@ -1392,6 +1351,45 @@
           {
             "name": "toDate",
             "description": "Optional. Last date to get forecast cost. \nCurrently, we only support 90 days forecasting from the first day of current month.\nFormat: `yyyy-mm-dd`.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/forecasts/month-to-date": {
+      "get": {
+        "summary": "Fetches month-to-date accumulated costs vs forecasted cost vs budget for the specified billing group.",
+        "operationId": "Cost_GetMonthToDateForecast",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetMonthToDateForecastResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "companyId",
+            "description": "Optional. Company Id of Billing Group to retrieve.\nDefault value is user's Company Id.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -1475,7 +1473,7 @@
     "apiBillingGroupForecast": {
       "type": "object",
       "properties": {
-        "billingGroupId": {
+        "companyId": {
           "type": "string"
         },
         "data": {
@@ -1489,7 +1487,7 @@
     "apiBillingGroupMonthToDateForecast": {
       "type": "object",
       "properties": {
-        "billingGroupId": {
+        "companyId": {
           "type": "string"
         },
         "data": {
@@ -1536,7 +1534,7 @@
         "startingMonth": {
           "type": "string"
         },
-        "billingGroupId": {
+        "companyId": {
           "type": "string"
         },
         "accountId": {
@@ -1884,7 +1882,7 @@
           "type": "string",
           "description": "Required. Valid values are `aws`, `azure`, and `gcp`."
         },
-        "billingGroupId": {
+        "companyId": {
           "type": "string",
           "description": "Optional. If set to a particular billing group, calculate for that billing group.\nIf empty, calculate for all billing groups.\n\nAt the moment, for AWS, this is only valid for account type billing groups, not\ntag billing groups. If a tag billing group is provided, it is discarded and the\ncalculation is done for the whole organization."
         },
