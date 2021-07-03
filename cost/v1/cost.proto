@@ -85,22 +85,22 @@ service Cost {
     };
   }
 
-  // Lists all AWS linked accounts.
+  // Lists all vendor accounts.
   rpc ListAccounts(ListAccountsRequest) returns (stream ListAccountsResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/accounts"
     };
   }
 
-  // Gets an AWS linked account. This API includes all of the account's metadata.
-  // See https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
+  // Gets a vendor account. This API includes all of the account's metadata. See
+  // https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
   rpc GetAccount(GetAccountRequest) returns (GetAccountResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/accounts/{id}"
     };
   }
 
-  // Registers an AWS linked account.
+  // Registers an vendor account.
   rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse) {
     option (google.api.http) = {
       post: "/v1/{vendor}/accounts"
@@ -108,7 +108,7 @@ service Cost {
     };
   }
 
-  // Deletes an AWS linked account.
+  // Deletes a vendor account.
   rpc DeleteAccount(DeleteAccountRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/{vendor}/accounts/{id}"
