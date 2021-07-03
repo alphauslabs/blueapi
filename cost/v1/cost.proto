@@ -52,7 +52,7 @@ service Cost {
     };
   }
 
-  // Gets an AWS management account. This call includes all of the account's metadata.
+  // Gets an AWS management account. This API includes all of the account's metadata.
   // See https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
   rpc GetManagementAccount(GetManagementAccountRequest) returns (api.aws.Account) {
     option (google.api.http) = {
@@ -82,6 +82,36 @@ service Cost {
   rpc DeleteManagementAccount(DeleteManagementAccountRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/aws/managementaccts/{id}"
+    };
+  }
+
+  // Lists all AWS linked accounts.
+  rpc ListAccounts(ListAccountsRequest) returns (stream ListAccountsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/accounts"
+    };
+  }
+
+  // Gets an AWS linked account. This API includes all of the account's metadata.
+  // See https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
+  rpc GetAccount(GetAccountRequest) returns (GetAccountResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/accounts/{id}"
+    };
+  }
+
+  // Registers an AWS linked account.
+  rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/accounts"
+      body: "*"
+    };
+  }
+
+  // Deletes an AWS linked account.
+  rpc DeleteAccount(DeleteAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/{vendor}/accounts/{id}"
     };
   }
 
@@ -176,7 +206,6 @@ service Cost {
       get: "/v1/{vendor}/forecasts/month-to-date"
     };
   }
-
 }
 
 // Request message for the Cost.ListManagementAccounts rpc.
@@ -236,6 +265,73 @@ message CreateManagementAccountRequest {
 message DeleteManagementAccountRequest {
   // Required. The id of the management account.
   string id = 1;
+}
+
+// Request message for the Cost.ListAccounts rpc.
+message ListAccountsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+}
+
+// Response message for the Cost.ListAccounts rpc.
+message ListAccountsResponse {
+  api.aws.Account aws = 1;
+}
+
+// Request message for the Cost.GetAccount rpc.
+message GetAccountRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. The account id to retrieve.
+  string id = 2;
+}
+
+// Response message for the Cost.GetAccount rpc.
+message GetAccountResponse {
+  api.aws.Account aws = 1;
+}
+
+// AWS-specific options for registering an account.
+message CreateAccountOptionsAws {
+  // Optional. The management account id (formerly known as master, or payer) to
+  // which an account belongs to, initially. If the account is moved to another
+  // management account, the system is able to detect it and set this value
+  // accordingly.
+  string managementAccountId = 1;
+}
+
+// Request message for the Cost.CreateAccount rpc.
+message CreateAccountRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. The account id to register.
+  string id = 2;
+
+  // Optional. If empty, set to the value of `id`.
+  string name = 3;
+
+  // Optional. The parent `companyId` of the billing group to which this account
+  // will belong to.
+  string parent = 4;
+
+  // Optional. AWS-specific options.
+  CreateAccountOptionsAws awsOptions = 5;
+}
+
+// Response message for the Cost.CreateAccount rpc.
+message CreateAccountResponse {
+  api.aws.Account aws = 1;
+}
+
+// Request message for the Cost.DeleteAccount rpc.
+message DeleteAccountRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. The account id to delete.
+  string id = 2;
 }
 
 // Request message for the Cost.ImportCurFiles rpc.
