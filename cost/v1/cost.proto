@@ -164,11 +164,11 @@ service Cost {
     };
   }
 
-  // Reads the usage-based tag costs of an AWS account. At the moment, the supported {vendor} is 
+  // Reads the usage-based non tag costs of a billing group. At the moment, the supported {vendor} is 
   // 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
-  rpc ReadAccountTagCosts (ReadAccountTagCostsRequest) returns (stream CostItem) {
+  rpc ReadBillingGroupNonTagCosts (ReadBillingGroupNonTagCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/accounts/{id}/tagcosts:read"
+      post: "/v1/{vendor}/billinggroups/{id}/nontagcosts:read"
     };
   }
 
@@ -447,7 +447,7 @@ message ReadBillingGroupTagCostsRequest {
   // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
 
-  // Required. The billing group id to stream.
+  // Required. The company id to stream.
   string id = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
@@ -459,12 +459,12 @@ message ReadBillingGroupTagCostsRequest {
   string endTime = 4;
 }
 
-// Request message for the Cost.ReadAccountTagCosts rpc.
-message ReadAccountTagCostsRequest {
+// Request message for the Cost.ReadBillingGroupNonTagCosts rpc.
+message ReadBillingGroupNonTagCostsRequest {
   // Required. Valid values are `aws`, `azure`, and `gcp`.
   string vendor = 1;
 
-  // Required. The AWS account id to stream.
+  // Required. The company id to stream.
   string id = 2;
 
   // Optional. Timestamp to start streaming data from. If not set, the first day of the
