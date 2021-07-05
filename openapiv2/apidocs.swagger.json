@@ -30,19 +30,19 @@
       }
     },
     {
-      "name": "Billing",
-      "description": "Base URL: https://api.alphaus.cloud/m/blue/billing",
-      "externalDocs": {
-        "description": "Service definition",
-        "url": "https://github.com/alphauslabs/blueapi/tree/main/billing/"
-      }
-    },
-    {
       "name": "Cost",
       "description": "Base URL: https://api.alphaus.cloud/m/blue/cost",
       "externalDocs": {
         "description": "Service definition",
         "url": "https://github.com/alphauslabs/blueapi/tree/main/cost/"
+      }
+    },
+    {
+      "name": "Billing",
+      "description": "Base URL: https://api.alphaus.cloud/m/blue/billing",
+      "externalDocs": {
+        "description": "Service definition",
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/billing/"
       }
     },
     {
@@ -770,7 +770,7 @@
         ]
       },
       "post": {
-        "summary": "Registers an AWS management account. See [https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html]\nfor more information. Requirements include: Additional report details = 'Include Resource IDS' enabled,\nPrefix = non-empty (recommendation only), Time granularity = 'Hourly', File format = 'text/csv'.",
+        "summary": "Registers an AWS management account. See [https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html]\nfor more information. Requirements include: Additional report details = 'Include Resource IDS' enabled,\nPrefix = non-empty (recommendation only), Time granularity = 'Hourly', File format = 'text/csv'.\nSee [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting]\nfor more information.",
         "operationId": "Cost_CreateManagementAccount",
         "responses": {
           "200": {
@@ -904,7 +904,7 @@
     },
     "/v1/aws:importCurFiles": {
       "post": {
-        "summary": "Initiates an ondemand import of all registered CUR files.",
+        "summary": "Initiates an ondemand import of all registered CUR files. See\n[https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting]\nfor more information.",
         "operationId": "Cost_ImportCurFiles",
         "responses": {
           "200": {
@@ -1122,54 +1122,6 @@
         ]
       }
     },
-    "/v1/{vendor}/accounts/{id}/tagcosts:read": {
-      "post": {
-        "summary": "Reads the usage-based tag costs of an AWS account. At the moment, the supported {vendor} is \n'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
-        "operationId": "Cost_ReadAccountTagCosts",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1CostItem"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1CostItem"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "Required. The AWS account id to stream.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
     "/v1/{vendor}/adjustments:read": {
       "post": {
         "summary": "Reads the non-usage-based details of an organization (Ripple) or billing group (Wave).\nThis API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax,\nUpfront Fees, etc. At the moment, the supported {vendor} is 'aws'. If datetime\nrange parameters are not set, month-to-date (current month) will be returned.",
@@ -1219,6 +1171,54 @@
         ]
       }
     },
+    "/v1/{vendor}/billinggroups/{id}/nontagcosts:read": {
+      "post": {
+        "summary": "Reads the usage-based non tag costs of a billing group. At the moment, the supported {vendor} is \n'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
+        "operationId": "Cost_ReadBillingGroupNonTagCosts",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1CostItem"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1CostItem"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. The company id to stream.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/{vendor}/billinggroups/{id}/tagcosts:read": {
       "post": {
         "summary": "Reads the usage-based tag costs of a billing group. At the moment, the supported {vendor} is \n'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
@@ -1256,7 +1256,7 @@
           },
           {
             "name": "id",
-            "description": "Required. The billing group id to stream.",
+            "description": "Required. The company id to stream.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -2178,10 +2178,16 @@
       "type": "object",
       "properties": {
         "email": {
-          "type": "string"
+          "type": "string",
+          "title": "Required. Organization's email"
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "title": "Required. Organization's description or company name"
+        },
+        "password": {
+          "type": "string",
+          "description": "Optional. User can decide to let the system generates the password."
         }
       },
       "description": "Request message for the Organization.CreateOrg rpc."
