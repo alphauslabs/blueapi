@@ -4,27 +4,49 @@ sort: 1
 
 # Using API keys
 
-Authentication for Blue uses API keys. You can generate your API keys either from Ripple or Wave consoles. By default, the following environment variables applies, unless indicated otherwise (i.e. by a specific tool, or SDK):
+Authentication for Blue uses API keys. You can generate your API keys either from Ripple or Wave consoles.
 
+First, it will look for:
 ```bash
-# First, it will look for:
 ALPHAUS_CLIENT_ID
 ALPHAUS_CLIENT_SECRET
+```
 
-# If those are not set, it will then look for:
+The following environment variable is optional.
+```bash
+ALPHAUS_AUTH_URL
+```
+
+For Ripple users, this can be set to:
+```bash
+ALPHAUS_AUTH_URL=https://login.alphaus.cloud/ripple/access_token
+```
+
+For Wave(Pro) users, this can be set to:
+```bash
+ALPHAUS_AUTH_URL=https://login.alphaus.cloud/access_token
+```
+
+In most cases, the environment variables above should be sufficient. If those are not set, it will then look for:
+```bash
 ALPHAUS_RIPPLE_CLIENT_ID
 ALPHAUS_RIPPLE_CLIENT_SECRET
+```
 
-# If those are not set, it will then look for:
+If those are not set, it will finally look for:
+```bash
 ALPHAUS_WAVE_CLIENT_ID
 ALPHAUS_WAVE_CLIENT_SECRET
+```
 
-# If you're mainly a Ripple user, we recommend you to set the following:
+If you're mainly a Ripple user, we recommend you to set the following:
+```bash
 ALPHAUS_CLIENT_ID={ripple-client-id}
 ALPHAUS_CLIENT_SECRET={ripple-client-secret}
-# (optional) ALPHAUS_AUTH_URL=https://login.alphaus.cloud/ripple/access_token
+```
 
-# If you're mainly a Wave(Pro) user, we recommend you to set the following:
+If you're mainly a Wave(Pro) user, we recommend you to set the following:
+```bash
 ALPHAUS_CLIENT_ID={wave-client-id}
 ALPHAUS_CLIENT_SECRET={wave-client-secret}
 ALPHAUS_AUTH_URL=https://login.alphaus.cloud/access_token
