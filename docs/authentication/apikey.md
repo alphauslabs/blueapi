@@ -4,9 +4,7 @@ sort: 1
 
 # Using API keys
 
-Authentication for Blue uses API keys. You can generate your API keys either from Ripple or Wave consoles.
-
-First, it will look for:
+Authentication for Blue uses API keys. You can generate your API keys either from Ripple or Wave consoles. First, it will look for:
 ```bash
 ALPHAUS_CLIENT_ID
 ALPHAUS_CLIENT_SECRET
