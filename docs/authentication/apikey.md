@@ -53,5 +53,5 @@ ALPHAUS_AUTH_URL=https://login.alphaus.cloud/access_token
 After this, you should now be able to authenticate whether you use [bluectl](https://github.com/alphauslabs/bluectl), or our [supported client libraries](https://alphauslabs.github.io/blueapi/sdks/).
 
 ```warning
-Currently, setting both Ripple and Wave(Pro) client credentials is not supported. If both set, authentication will default to Ripple.
+Currently, setting both Ripple and Wave(Pro) client credentials is not supported. If both are set, authentication will default to Ripple.
 ```
