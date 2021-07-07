@@ -24,10 +24,14 @@ ALPHAUS_CLIENT_ID={ripple-client-id}
 ALPHAUS_CLIENT_SECRET={ripple-client-secret}
 # (optional) ALPHAUS_AUTH_URL=https://login.alphaus.cloud/ripple/access_token
 
-# If you're mainly a Wave/WavePro user, we recommend you to set the following:
+# If you're mainly a Wave(Pro) user, we recommend you to set the following:
 ALPHAUS_CLIENT_ID={wave-client-id}
 ALPHAUS_CLIENT_SECRET={wave-client-secret}
 ALPHAUS_AUTH_URL=https://login.alphaus.cloud/access_token
 ```
 
 After this, you should now be able to authenticate whether you use [bluectl](https://github.com/alphauslabs/bluectl), or our [supported client libraries](https://alphauslabs.github.io/blueapi/sdks/).
+
+```warning
+Currently, setting both Ripple and Wave(Pro) client credentials is not supported. If both set, authentication will default to Ripple.
+```
