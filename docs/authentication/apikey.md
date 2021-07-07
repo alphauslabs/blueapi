@@ -20,13 +20,13 @@ ALPHAUS_WAVE_CLIENT_ID
 ALPHAUS_WAVE_CLIENT_SECRET
 
 # If you're mainly a Ripple user, we recommend you to set the following:
-ALPHAUS_CLIENT_ID=myclientid
-ALPHAUS_CLIENT_SECRET=myclientsecret
+ALPHAUS_CLIENT_ID={ripple-client-id}
+ALPHAUS_CLIENT_SECRET={ripple-client-secret}
 # (optional) ALPHAUS_AUTH_URL=https://login.alphaus.cloud/ripple/access_token
 
 # If you're mainly a Wave/WavePro user, we recommend you to set the following:
-ALPHAUS_CLIENT_ID=myclientid
-ALPHAUS_CLIENT_SECRET=myclientsecret
+ALPHAUS_CLIENT_ID={wave-client-id}
+ALPHAUS_CLIENT_SECRET={wave-client-secret}
 ALPHAUS_AUTH_URL=https://login.alphaus.cloud/access_token
 ```
 
