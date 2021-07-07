@@ -2,12 +2,12 @@ syntax = "proto3";
 
 package blueapi.cost.v1;
 
+import "api/account.proto";
 import "api/operation.proto";
 import "api/budget.proto";
 import "api/forecast.proto";
 import "api/aws/cost.proto";
 import "api/aws/adjustment.proto";
-import "api/aws/account.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -45,50 +45,50 @@ service Cost {
     }
   };
 
-  // Lists AWS management accounts (formerly known as master or payer accounts).
-  rpc ListManagementAccounts(ListManagementAccountsRequest) returns (stream api.aws.Account) {
+  // Lists vendor payer accounts. For AWS, these are management accounts (formerly known
+  // as master or payer accounts); for Azure, these are subscriptions, for GCP, these
+  // are projects.
+  rpc ListPayerAccounts(ListPayerAccountsRequest) returns (stream api.Account) {
     option (google.api.http) = {
-      get: "/v1/aws/managementaccts"
+      get: "/v1/{vendor}/payers"
     };
   }
 
-  // Gets an AWS management account. This API includes all of the account's metadata.
+  // Gets a vendor payer account. This API includes all of the account's metadata.
   // See https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
-  rpc GetManagementAccount(GetManagementAccountRequest) returns (api.aws.Account) {
+  // For AWS, this means a management account (formerly known as master or payer account);
+  // for Azure, this means a subscription, for GCP, this means a project.
+  rpc GetPayerAccount(GetPayerAccountRequest) returns (api.Account) {
     option (google.api.http) = {
-      get: "/v1/aws/managementaccts/{id}"
+      get: "/v1/{vendor}/payers/{id}"
     };
   }
 
-  // Gets an AWS management account's update history, which is a list of timestamps our system tracks when the account's CUR files are
-  // exported to your S3 by AWS, which in turn, triggers the import from your S3 to our system for processing.
-  rpc GetManagementAccountUpdateHistory(GetManagementAccountUpdateHistoryRequest) returns (GetManagementAccountUpdateHistoryResponse) {
+  // Gets a payer account's import history, which is a list of timestamps our system tracks when the account's data are
+  // imported to our system, which in turn, triggers processing. At the moment, this only supports AWS (CUR files).
+  rpc GetPayerAccountImportHistory(GetPayerAccountImportHistoryRequest) returns (GetPayerAccountImportHistoryResponse) {
     option (google.api.http) = {
-      get: "/v1/aws/managementaccts/{id}/updatehistory"
+      get: "/v1/{vendor}/payers/{id}/importhistory"
     };
   }
 
-  // Registers an AWS management account. See [https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html]
-  // for more information. Requirements include: Additional report details = 'Include Resource IDS' enabled,
-  // Prefix = non-empty (recommendation only), Time granularity = 'Hourly', File format = 'text/csv'.
-  // See [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting]
-  // for more information.
-  rpc CreateManagementAccount(CreateManagementAccountRequest) returns (api.aws.Account) {
+  // Registers a vendor payer account.
+  rpc CreatePayerAccount(CreatePayerAccountRequest) returns (api.Account) {
     option (google.api.http) = {
-      post: "/v1/aws/managementaccts"
+      post: "/v1/{vendor}/payers"
       body: "*"
     };
   }
 
-  // Deletes an AWS management account.
-  rpc DeleteManagementAccount(DeleteManagementAccountRequest) returns (google.protobuf.Empty) {
+  // Deletes a vendor payer account.
+  rpc DeletePayerAccount(DeletePayerAccountRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1/aws/managementaccts/{id}"
+      delete: "/v1/{vendor}/payers/{id}"
     };
   }
 
   // Lists all vendor accounts.
-  rpc ListAccounts(ListAccountsRequest) returns (stream ListAccountsResponse) {
+  rpc ListAccounts(ListAccountsRequest) returns (stream api.Account) {
     option (google.api.http) = {
       get: "/v1/{vendor}/accounts"
     };
@@ -96,14 +96,14 @@ service Cost {
 
   // Gets a vendor account. This API includes all of the account's metadata. See
   // https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
-  rpc GetAccount(GetAccountRequest) returns (GetAccountResponse) {
+  rpc GetAccount(GetAccountRequest) returns (api.Account) {
     option (google.api.http) = {
       get: "/v1/{vendor}/accounts/{id}"
     };
   }
 
   // Registers a vendor account.
-  rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse) {
+  rpc CreateAccount(CreateAccountRequest) returns (api.Account) {
     option (google.api.http) = {
       post: "/v1/{vendor}/accounts"
       body: "*"
@@ -212,39 +212,53 @@ service Cost {
   }
 }
 
-// Request message for the Cost.ListManagementAccounts rpc.
-message ListManagementAccountsRequest {}
+// Request message for the Cost.ListPayerAccounts rpc.
+message ListPayerAccountsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+}
 
-// Request message for the Cost.GetManagementAccount rpc.
-message GetManagementAccountRequest {
+// Request message for the Cost.GetPayerAccount rpc.
+message GetPayerAccountRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
   // Required. The id of the account to get.
-  string id = 1;
+  string id = 2;
 }
 
-// Request message for the Cost.GetManagementAccountUpdateHistory rpc.
-message GetManagementAccountUpdateHistoryRequest {
-  // Required. The management account id to query.
-  string id = 1;
+// Request message for the Cost.GetPayerAccountImportHistory rpc.
+message GetPayerAccountImportHistoryRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
 
-  // Optional. The month to query. If empty, defaults to current month.
+  // Required. The account id to query.
+  string id = 2;
+
+  // Optional. The UTC month to query. If empty, defaults to current month.
   // Format is `yyyymm`. For example, June 2021 will be `202106`.
-  string month = 2;
+  string month = 3;
 }
 
-// Response message for the Cost.GetManagementAccountUpdateHistory rpc.
-message GetManagementAccountUpdateHistoryResponse {
-  // The management account id being queried.
+// Response message for the Cost.GetPayerAccountImportHistory rpc.
+message GetPayerAccountImportHistoryResponse {
+  // The queried account id.
   string id = 1;
 
-  // The month being queried.
+  // The queried UTC month.
   string month = 2;
 
-  // The list of timestamps the account was updated and imported.
+  // List of timestamps in RFC3339 format with the `T` separator.
+  // Example: `2019-10-12T07:20:50.52Z`
   repeated string timestamps = 3;
 }
 
-// Request message for the Cost.CreateManagementAccount rpc.
-message CreateManagementAccountRequest {
+// See [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting]
+// for more information.
+// See [https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html] for more information.
+// Requirements include: Additional report details = 'Include Resource IDS' enabled,
+// Prefix = non-empty (recommendation only), Time granularity = 'Hourly', File format = 'text/csv'.
+message CreatePayerAccountRequestAwsOptions {
   // Required. The id of the management account.
   string id = 1;
 
@@ -265,21 +279,28 @@ message CreateManagementAccountRequest {
   string roleArn = 6;
 }
 
-// Request message for the Cost.DeleteManagementAccount rpc.
-message DeleteManagementAccountRequest {
-  // Required. The id of the management account.
-  string id = 1;
+// Request message for the Cost.CreatePayerAccount rpc.
+message CreatePayerAccountRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required for `aws` vendor. AWS-specific options.
+  CreatePayerAccountRequestAwsOptions awsOptions = 2;
+}
+
+// Request message for the Cost.DeletePayerAccount rpc.
+message DeletePayerAccountRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. The id of the account.
+  string id = 2;
 }
 
 // Request message for the Cost.ListAccounts rpc.
 message ListAccountsRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
-}
-
-// Response message for the Cost.ListAccounts rpc.
-message ListAccountsResponse {
-  api.aws.Account aws = 1;
 }
 
 // Request message for the Cost.GetAccount rpc.
@@ -291,13 +312,8 @@ message GetAccountRequest {
   string id = 2;
 }
 
-// Response message for the Cost.GetAccount rpc.
-message GetAccountResponse {
-  api.aws.Account aws = 1;
-}
-
 // AWS-specific options for registering an account.
-message CreateAccountOptionsAws {
+message CreateAccountRequestAwsOptions {
   // Optional. The management account id (formerly known as master, or payer) to
   // which an account belongs to, initially. If the account is moved to another
   // management account, the system is able to detect it and set this value
@@ -316,17 +332,12 @@ message CreateAccountRequest {
   // Optional. If empty, set to the value of `id`.
   string name = 3;
 
-  // Optional. The parent `companyId` of the billing group to which this account
+  // Optional. The parent `billingInternalId` of the billing group to which this account
   // will belong to.
   string parent = 4;
 
-  // Optional. AWS-specific options.
-  CreateAccountOptionsAws awsOptions = 5;
-}
-
-// Response message for the Cost.CreateAccount rpc.
-message CreateAccountResponse {
-  api.aws.Account aws = 1;
+  // Required for `aws` vendor. AWS-specific options.
+  CreateAccountRequestAwsOptions awsOptions = 5;
 }
 
 // Request message for the Cost.DeleteAccount rpc.
@@ -340,7 +351,7 @@ message DeleteAccountRequest {
 
 // Request message for the Cost.ImportCurFiles rpc.
 message ImportCurFilesRequest {
-  // Optional. The month to import. If empty, it defaults to the current month.
+  // Optional. The UTC month to import. If empty, it defaults to the current month.
   // Format is `yyyymm`. For example, June 2021 will be `202106`.
   string month = 1;
 
@@ -354,18 +365,6 @@ message CostItem {
   api.aws.Cost aws = 1;
 }
 
-// AWS-specific options.
-message AwsOptions {
-  // Optional. If set to true, stream will include resource tags. Note that this could
-  // potentially increase the data size if you have lots of tag information.
-  bool includeTags = 1;
-
-  // Optional. If set to true, stream will include resource cost category information.
-  // Note that this could potentially increase the data size if you have lots of cost
-  // category information.
-  bool includeCostCategories = 2;
-}
-
 // Request message for the Cost.CalculateCosts rpc.
 message CalculateCostsRequest {
   // Required. At the moment, only `aws` is supported.
@@ -377,11 +376,23 @@ message CalculateCostsRequest {
   // At the moment, for AWS, this is only valid for account type billing groups, not
   // tag billing groups. If a tag billing group is provided, it is discarded and the
   // calculation is done for the whole organization.
-  string companyId = 2;
+  string billingInternalId = 2;
 
-  // Optional. The month to calculate. If empty, it defaults to the previous month.
+  // Optional. The UTC month to calculate. If empty, it defaults to the previous month.
   // Format is `yyyymm`. For example, June 2021 will be `202106`.
   string month = 3;
+}
+
+// AWS-specific options.
+message ReadCostsRequestAwsOptions {
+  // Optional. If set to true, stream will include resource tags. Note that this could
+  // potentially increase the data size if you have lots of tag information.
+  bool includeTags = 1;
+
+  // Optional. If set to true, stream will include resource cost category information.
+  // Note that this could potentially increase the data size if you have lots of cost
+  // category information.
+  bool includeCostCategories = 2;
 }
 
 // Request message for the Cost.ReadCosts rpc.
@@ -390,26 +401,26 @@ message ReadCostsRequest {
   string vendor = 1;
 
   // Optional. If set, reads the usage-based cost details of this billing group. Valid
-  // only if `accountId` is not set. If both `companyId` and `accountId` are not set,
-  // reads the usage-based cost details of the whole organization.
-  // Only valid for Ripple users. Implied (or discarded) for Wave(Pro) users.
-  string companyId = 2;
+  // only if `accountId` is not set. If both `billingInternalId` and `accountId` are
+  // not set, reads the usage-based cost details of the whole organization. Only valid
+  // for Ripple users. Implied (or discarded) for Wave(Pro) users.
+  string billingInternalId = 2;
 
   // Optional. If set, reads the usage-based cost details of this account. Also invalidates
-  // the `billingGroupId` value even if set. If both `billingGroupId` and `accountId` are
-  // not set, reads the usage-based cost details of the whole organization.
+  // the `billingInternalId` value even if set. If both `billingInternalId` and `accountId`
+  // are not set, reads the usage-based cost details of the whole organization.
   string accountId = 3;
 
-  // Optional. Timestamp to start streaming data from. If not set, the first day of the
+  // Optional. The UTC date to start streaming data from. If not set, the first day of the
   // current month will be used. Format: yyyymmdd.
   string startTime = 4;
 
-  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
-  // Format: `yyyymmd`.
+  // Optional. The UTC date to end the streaming data. If not set, current date will be
+  // used. Format: `yyyymmd`.
   string endTime = 5;
 
-  // Optional. AWS-specific request options.
-  AwsOptions awsOptions = 6;
+  // Required for `aws` vendor. AWS-specific options.
+  ReadCostsRequestAwsOptions awsOptions = 6;
 }
 
 // Response message wrapper for cloud cost adjustments.
@@ -423,22 +434,22 @@ message ReadAdjustmentsRequest {
   string vendor = 1;
 
   // Optional. If set, reads the non-usage-based adjustment details of this billing group.
-  // Valid only if `accountId` is not set. If both `companyId` and `accountId` are not
-  // set, reads the adjustment details of the whole organization.
-  // Only valid for Ripple users. Implied (or discarded) for Wave(Pro) users.
-  string companyId = 2;
+  // Valid only if `accountId` is not set. If both `billingInternalId` and `accountId` are
+  // not set, reads the adjustment details of the whole organization. Only valid for
+  // Ripple users. Implied (or discarded) for Wave(Pro) users.
+  string billingInternalId = 2;
 
   // Optional. If set, reads the non-usaged-based adjustment details of this account. Also
-  // invalidates the `billingGroupId` value even if set. If both `billingGroupId` and
-  // `accountId` are not set, reads the adjustment details of the whole organization.
+  // invalidates the `billingInternalId` value even if set. If both `billingInternalId`
+  // and `accountId` are not set, reads the adjustment details of the whole organization.
   string accountId = 3;
 
-  // Optional. Timestamp to start streaming data from. If not set, the first day of the
+  // Optional. The UTC date to start streaming data from. If not set, the first day of the
   // current month will be used. Format: `yyyymmdd`.
   string startTime = 4;
 
-  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
-  // Format: `yyyymmdd`.
+  // Optional. The UTC date to end the streaming data. If not set, current date will be
+  // used. Format: `yyyymmdd`.
   string endTime = 5;
 }
 

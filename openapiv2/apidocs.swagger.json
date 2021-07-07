@@ -738,170 +738,6 @@
         ]
       }
     },
-    "/v1/aws/managementaccts": {
-      "get": {
-        "summary": "Lists AWS management accounts (formerly known as master or payer accounts).",
-        "operationId": "Cost_ListManagementAccounts",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/awsAccount"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of awsAccount"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Cost"
-        ]
-      },
-      "post": {
-        "summary": "Registers an AWS management account. See [https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html]\nfor more information. Requirements include: Additional report details = 'Include Resource IDS' enabled,\nPrefix = non-empty (recommendation only), Time granularity = 'Hourly', File format = 'text/csv'.\nSee [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting]\nfor more information.",
-        "operationId": "Cost_CreateManagementAccount",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/awsAccount"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateManagementAccountRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
-    "/v1/aws/managementaccts/{id}": {
-      "get": {
-        "summary": "Gets an AWS management account. This API includes all of the account's metadata.\nSee https://alphauslabs.github.io/blueapi/ for the list of supported attributes.",
-        "operationId": "Cost_GetManagementAccount",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/awsAccount"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "Required. The id of the account to get.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      },
-      "delete": {
-        "summary": "Deletes an AWS management account.",
-        "operationId": "Cost_DeleteManagementAccount",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "Required. The id of the management account.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
-    "/v1/aws/managementaccts/{id}/updatehistory": {
-      "get": {
-        "summary": "Gets an AWS management account's update history, which is a list of timestamps our system tracks when the account's CUR files are\nexported to your S3 by AWS, which in turn, triggers the import from your S3 to our system for processing.",
-        "operationId": "Cost_GetManagementAccountUpdateHistory",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetManagementAccountUpdateHistoryResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "Required. The management account id to query.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "month",
-            "description": "Optional. The month to query. If empty, defaults to current month.\nFormat is `yyyymm`. For example, June 2021 will be `202106`.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
     "/v1/aws:importCurFiles": {
       "post": {
         "summary": "Initiates an ondemand import of all registered CUR files. See\n[https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting]\nfor more information.",
@@ -978,13 +814,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1ListAccountsResponse"
+                  "$ref": "#/definitions/apiAccount"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of v1ListAccountsResponse"
+              "title": "Stream result of apiAccount"
             }
           },
           "default": {
@@ -1014,7 +850,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CreateAccountResponse"
+              "$ref": "#/definitions/apiAccount"
             }
           },
           "default": {
@@ -1054,7 +890,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetAccountResponse"
+              "$ref": "#/definitions/apiAccount"
             }
           },
           "default": {
@@ -1555,6 +1391,207 @@
         ]
       }
     },
+    "/v1/{vendor}/payers": {
+      "get": {
+        "summary": "Lists vendor payer accounts. For AWS, these are management accounts (formerly known\nas master or payer accounts); for Azure, these are subscriptions, for GCP, these\nare projects.",
+        "operationId": "Cost_ListPayerAccounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/apiAccount"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of apiAccount"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      },
+      "post": {
+        "summary": "Registers a vendor payer account.",
+        "operationId": "Cost_CreatePayerAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiAccount"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreatePayerAccountRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/payers/{id}": {
+      "get": {
+        "summary": "Gets a vendor payer account. This API includes all of the account's metadata.\nSee https://alphauslabs.github.io/blueapi/ for the list of supported attributes.\nFor AWS, this means a management account (formerly known as master or payer account);\nfor Azure, this means a subscription, for GCP, this means a project.",
+        "operationId": "Cost_GetPayerAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiAccount"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. The id of the account to get.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes a vendor payer account.",
+        "operationId": "Cost_DeletePayerAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. The id of the account.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/payers/{id}/importhistory": {
+      "get": {
+        "summary": "Gets a payer account's import history, which is a list of timestamps our system tracks when the account's data are\nimported to our system, which in turn, triggers processing. At the moment, this only supports AWS (CUR files).",
+        "operationId": "Cost_GetPayerAccountImportHistory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetPayerAccountImportHistoryResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. The account id to query.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "month",
+            "description": "Optional. The UTC month to query. If empty, defaults to current month.\nFormat is `yyyymm`. For example, June 2021 will be `202106`.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/{vendor}:calculateCosts": {
       "post": {
         "summary": "Triggers monthly calculations for costs and invoices at either organization or billing group level.",
@@ -1597,6 +1634,23 @@
     }
   },
   "definitions": {
+    "apiAccount": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The account id."
+        },
+        "name": {
+          "type": "string",
+          "description": "The account name."
+        },
+        "metadata": {
+          "$ref": "#/definitions/protobufAny",
+          "description": "The attributes (key/value pair) of the account. At the moment,\nthis maps to `AccountMetadataV1`."
+        }
+      }
+    },
     "apiApiClient": {
       "type": "object",
       "properties": {
@@ -1790,26 +1844,6 @@
         }
       }
     },
-    "awsAccount": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The AWS account id."
-        },
-        "name": {
-          "type": "string",
-          "description": "The account name."
-        },
-        "metadata": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "The attributes (key/value pair) of the account. If hierarchy is supported, it will be\nseparated by '/', such as 'metakey/subkey=value'. Supported attributes include 'createTime'.\nIf the account is a master (or payer) account, additional attributes include 'bucketName',\n'lastModified' (last timestamp AWS updated CUR), 'prefix', 'reportName', 'roleArn', and\n'lastImported' (last timestamp CUR is imported to Alphaus)."
-        }
-      }
-    },
     "awsAdjustment": {
       "type": "object",
       "properties": {
@@ -1999,26 +2033,12 @@
       },
       "description": "Response message wrapper for cloud cost adjustments."
     },
-    "v1AwsOptions": {
-      "type": "object",
-      "properties": {
-        "includeTags": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource tags. Note that this could\npotentially increase the data size if you have lots of tag information."
-        },
-        "includeCostCategories": {
-          "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource cost category information.\nNote that this could potentially increase the data size if you have lots of cost\ncategory information."
-        }
-      },
-      "description": "AWS-specific options."
-    },
     "v1BillingGroup": {
       "type": "object",
       "properties": {
-        "companyId": {
+        "billingInternalId": {
           "type": "string",
-          "description": "The billing group's internal company id."
+          "description": "The billing group's internal id."
         },
         "billingGroupId": {
           "type": "string",
@@ -2037,13 +2057,13 @@
           "type": "string",
           "description": "Required. At the moment, only `aws` is supported."
         },
-        "companyId": {
+        "billingInternalId": {
           "type": "string",
           "description": "Optional. If set to a particular billing group, calculate for that billing group.\nIf empty, calculate for all billing groups.\n\nAt the moment, for AWS, this is only valid for account type billing groups, not\ntag billing groups. If a tag billing group is provided, it is discarded and the\ncalculation is done for the whole organization."
         },
         "month": {
           "type": "string",
-          "description": "Optional. The month to calculate. If empty, it defaults to the previous month.\nFormat is `yyyymm`. For example, June 2021 will be `202106`."
+          "description": "Optional. The UTC month to calculate. If empty, it defaults to the previous month.\nFormat is `yyyymm`. For example, June 2021 will be `202106`."
         }
       },
       "description": "Request message for the Cost.CalculateCosts rpc."
@@ -2067,16 +2087,6 @@
       },
       "description": "Response message wrapper for cloud costs."
     },
-    "v1CreateAccountOptionsAws": {
-      "type": "object",
-      "properties": {
-        "managementAccountId": {
-          "type": "string",
-          "description": "Optional. The management account id (formerly known as master, or payer) to\nwhich an account belongs to, initially. If the account is moved to another\nmanagement account, the system is able to detect it and set this value\naccordingly."
-        }
-      },
-      "description": "AWS-specific options for registering an account."
-    },
     "v1CreateAccountRequest": {
       "type": "object",
       "properties": {
@@ -2094,23 +2104,24 @@
         },
         "parent": {
           "type": "string",
-          "description": "Optional. The parent `companyId` of the billing group to which this account\nwill belong to."
+          "description": "Optional. The parent `billingInternalId` of the billing group to which this account\nwill belong to."
         },
         "awsOptions": {
-          "$ref": "#/definitions/v1CreateAccountOptionsAws",
-          "description": "Optional. AWS-specific options."
+          "$ref": "#/definitions/v1CreateAccountRequestAwsOptions",
+          "description": "Required for `aws` vendor. AWS-specific options."
         }
       },
       "description": "Request message for the Cost.CreateAccount rpc."
     },
-    "v1CreateAccountResponse": {
+    "v1CreateAccountRequestAwsOptions": {
       "type": "object",
       "properties": {
-        "aws": {
-          "$ref": "#/definitions/awsAccount"
+        "managementAccountId": {
+          "type": "string",
+          "description": "Optional. The management account id (formerly known as master, or payer) to\nwhich an account belongs to, initially. If the account is moved to another\nmanagement account, the system is able to detect it and set this value\naccordingly."
         }
       },
-      "description": "Response message for the Cost.CreateAccount rpc."
+      "description": "AWS-specific options for registering an account."
     },
     "v1CreateApiClientRequest": {
       "type": "object",
@@ -2144,36 +2155,6 @@
       },
       "description": "Request message for the Iam.CreateIpFilter rpc."
     },
-    "v1CreateManagementAccountRequest": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Required. The id of the management account."
-        },
-        "name": {
-          "type": "string",
-          "description": "Optional. The name, or description of the management account.\nThis is set to `id` when not specified."
-        },
-        "bucketName": {
-          "type": "string",
-          "description": "Required. S3 Bucket name."
-        },
-        "prefix": {
-          "type": "string",
-          "description": "Optional. Prefix."
-        },
-        "reportName": {
-          "type": "string",
-          "description": "Required. Report name."
-        },
-        "roleArn": {
-          "type": "string",
-          "description": "Required. Role ARN for Alphaus to assume for access."
-        }
-      },
-      "description": "Request message for the Cost.CreateManagementAccount rpc."
-    },
     "v1CreateOrgRequest": {
       "type": "object",
       "properties": {
@@ -2204,6 +2185,50 @@
       },
       "description": "Response message for the Organization.CreateOrg rpc."
     },
+    "v1CreatePayerAccountRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1CreatePayerAccountRequestAwsOptions",
+          "description": "Required for `aws` vendor. AWS-specific options."
+        }
+      },
+      "description": "Request message for the Cost.CreatePayerAccount rpc."
+    },
+    "v1CreatePayerAccountRequestAwsOptions": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Required. The id of the management account."
+        },
+        "name": {
+          "type": "string",
+          "description": "Optional. The name, or description of the management account.\nThis is set to `id` when not specified."
+        },
+        "bucketName": {
+          "type": "string",
+          "description": "Required. S3 Bucket name."
+        },
+        "prefix": {
+          "type": "string",
+          "description": "Optional. Prefix."
+        },
+        "reportName": {
+          "type": "string",
+          "description": "Required. Report name."
+        },
+        "roleArn": {
+          "type": "string",
+          "description": "Required. Role ARN for Alphaus to assume for access."
+        }
+      },
+      "description": "See [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting]\nfor more information.\nSee [https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html] for more information.\nRequirements include: Additional report details = 'Include Resource IDS' enabled,\nPrefix = non-empty (recommendation only), Time granularity = 'Hourly', File format = 'text/csv'."
+    },
     "v1CreateUserRequest": {
       "type": "object",
       "properties": {
@@ -2226,15 +2251,6 @@
       },
       "description": "Request message for the Iam.CreateUser rpc."
     },
-    "v1GetAccountResponse": {
-      "type": "object",
-      "properties": {
-        "aws": {
-          "$ref": "#/definitions/awsAccount"
-        }
-      },
-      "description": "Response message for the Cost.GetAccount rpc."
-    },
     "v1GetBudgetConfigResponse": {
       "type": "object",
       "properties": {
@@ -2256,27 +2272,6 @@
       },
       "description": "Response message for GetForecasts per billing group."
     },
-    "v1GetManagementAccountUpdateHistoryResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The management account id being queried."
-        },
-        "month": {
-          "type": "string",
-          "description": "The month being queried."
-        },
-        "timestamps": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "The list of timestamps the account was updated and imported."
-        }
-      },
-      "description": "Response message for the Cost.GetManagementAccountUpdateHistory rpc."
-    },
     "v1GetMonthToDateForecastResponse": {
       "type": "object",
       "properties": {
@@ -2286,12 +2281,33 @@
       },
       "description": "Response message for GetMonthToDateForecast per billing group."
     },
+    "v1GetPayerAccountImportHistoryResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The queried account id."
+        },
+        "month": {
+          "type": "string",
+          "description": "The queried UTC month."
+        },
+        "timestamps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "List of timestamps in RFC3339 format with the `T` separator.\nExample: `2019-10-12T07:20:50.52Z`"
+        }
+      },
+      "description": "Response message for the Cost.GetPayerAccountImportHistory rpc."
+    },
     "v1ImportCurFilesRequest": {
       "type": "object",
       "properties": {
         "month": {
           "type": "string",
-          "description": "Optional. The month to import. If empty, it defaults to the current month.\nFormat is `yyyymm`. For example, June 2021 will be `202106`."
+          "description": "Optional. The UTC month to import. If empty, it defaults to the current month.\nFormat is `yyyymm`. For example, June 2021 will be `202106`."
         },
         "filter": {
           "type": "string",
@@ -2325,15 +2341,6 @@
         }
       }
     },
-    "v1ListAccountsResponse": {
-      "type": "object",
-      "properties": {
-        "aws": {
-          "$ref": "#/definitions/awsAccount"
-        }
-      },
-      "description": "Response message for the Cost.ListAccounts rpc."
-    },
     "v1ReadAdjustmentsRequest": {
       "type": "object",
       "properties": {
@@ -2341,21 +2348,21 @@
           "type": "string",
           "description": "Required. At the moment, only `aws` is supported."
         },
-        "companyId": {
+        "billingInternalId": {
           "type": "string",
-          "description": "Optional. If set, reads the non-usage-based adjustment details of this billing group.\nValid only if `accountId` is not set. If both `companyId` and `accountId` are not\nset, reads the adjustment details of the whole organization.\nOnly valid for Ripple users. Implied (or discarded) for Wave(Pro) users."
+          "description": "Optional. If set, reads the non-usage-based adjustment details of this billing group.\nValid only if `accountId` is not set. If both `billingInternalId` and `accountId` are\nnot set, reads the adjustment details of the whole organization. Only valid for\nRipple users. Implied (or discarded) for Wave(Pro) users."
         },
         "accountId": {
           "type": "string",
-          "description": "Optional. If set, reads the non-usaged-based adjustment details of this account. Also\ninvalidates the `billingGroupId` value even if set. If both `billingGroupId` and\n`accountId` are not set, reads the adjustment details of the whole organization."
+          "description": "Optional. If set, reads the non-usaged-based adjustment details of this account. Also\ninvalidates the `billingInternalId` value even if set. If both `billingInternalId`\nand `accountId` are not set, reads the adjustment details of the whole organization."
         },
         "startTime": {
           "type": "string",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: `yyyymmdd`."
+          "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: `yyyymmdd`."
         },
         "endTime": {
           "type": "string",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used.\nFormat: `yyyymmdd`."
+          "description": "Optional. The UTC date to end the streaming data. If not set, current date will be\nused. Format: `yyyymmdd`."
         }
       },
       "description": "Request message for the Cost.ReadAdjustments rpc."
@@ -2367,28 +2374,42 @@
           "type": "string",
           "description": "Required. At the moment, only `aws` is supported."
         },
-        "companyId": {
+        "billingInternalId": {
           "type": "string",
-          "description": "Optional. If set, reads the usage-based cost details of this billing group. Valid\nonly if `accountId` is not set. If both `companyId` and `accountId` are not set,\nreads the usage-based cost details of the whole organization.\nOnly valid for Ripple users. Implied (or discarded) for Wave(Pro) users."
+          "description": "Optional. If set, reads the usage-based cost details of this billing group. Valid\nonly if `accountId` is not set. If both `billingInternalId` and `accountId` are\nnot set, reads the usage-based cost details of the whole organization. Only valid\nfor Ripple users. Implied (or discarded) for Wave(Pro) users."
         },
         "accountId": {
           "type": "string",
-          "description": "Optional. If set, reads the usage-based cost details of this account. Also invalidates\nthe `billingGroupId` value even if set. If both `billingGroupId` and `accountId` are\nnot set, reads the usage-based cost details of the whole organization."
+          "description": "Optional. If set, reads the usage-based cost details of this account. Also invalidates\nthe `billingInternalId` value even if set. If both `billingInternalId` and `accountId`\nare not set, reads the usage-based cost details of the whole organization."
         },
         "startTime": {
           "type": "string",
-          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: yyyymmdd."
+          "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: yyyymmdd."
         },
         "endTime": {
           "type": "string",
-          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used.\nFormat: `yyyymmd`."
+          "description": "Optional. The UTC date to end the streaming data. If not set, current date will be\nused. Format: `yyyymmd`."
         },
         "awsOptions": {
-          "$ref": "#/definitions/v1AwsOptions",
-          "description": "Optional. AWS-specific request options."
+          "$ref": "#/definitions/v1ReadCostsRequestAwsOptions",
+          "description": "Required for `aws` vendor. AWS-specific options."
         }
       },
       "description": "Request message for the Cost.ReadCosts rpc."
+    },
+    "v1ReadCostsRequestAwsOptions": {
+      "type": "object",
+      "properties": {
+        "includeTags": {
+          "type": "boolean",
+          "description": "Optional. If set to true, stream will include resource tags. Note that this could\npotentially increase the data size if you have lots of tag information."
+        },
+        "includeCostCategories": {
+          "type": "boolean",
+          "description": "Optional. If set to true, stream will include resource cost category information.\nNote that this could potentially increase the data size if you have lots of cost\ncategory information."
+        }
+      },
+      "description": "AWS-specific options."
     },
     "v1UpdateMetadataRequest": {
       "type": "object",
