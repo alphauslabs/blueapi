@@ -1236,6 +1236,46 @@
         ]
       }
     },
+    "/v1/{vendor}/costs:calculate": {
+      "post": {
+        "summary": "Triggers monthly calculations for costs and invoices at either organization or billing group level.",
+        "operationId": "Cost_CalculateCosts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/blueapiapiOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CalculateCostsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/{vendor}/costs:read": {
       "post": {
         "summary": "Reads the usage-based cost details of an organization (Ripple) or billing group (Wave).\nAt the moment, the supported {vendor} is 'aws'. If datetime range parameters are\nnot set, month-to-date (current month) will be returned.",
@@ -1585,46 +1625,6 @@
             "in": "query",
             "required": false,
             "type": "string"
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
-    "/v1/{vendor}:calculateCosts": {
-      "post": {
-        "summary": "Triggers monthly calculations for costs and invoices at either organization or billing group level.",
-        "operationId": "Cost_CalculateCosts",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/blueapiapiOperation"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CalculateCostsRequest"
-            }
           }
         ],
         "tags": [
