@@ -284,7 +284,7 @@ message CreatePayerAccountRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
-  // Required for `aws` vendor. AWS-specific options.
+  // Required for the `aws` vendor. AWS-specific options.
   CreatePayerAccountRequestAwsOptions awsOptions = 2;
 }
 
@@ -336,7 +336,7 @@ message CreateAccountRequest {
   // will belong to.
   string parent = 4;
 
-  // Required for `aws` vendor. AWS-specific options.
+  // Required for the `aws` vendor. AWS-specific options.
   CreateAccountRequestAwsOptions awsOptions = 5;
 }
 
@@ -385,14 +385,37 @@ message CalculateCostsRequest {
 
 // AWS-specific options.
 message ReadCostsRequestAwsOptions {
-  // Optional. If set to true, stream will include resource tags. Note that this could
-  // potentially increase the data size if you have lots of tag information.
-  bool includeTags = 1;
+  // Optional. If set to true, aggregate data to monthly. Default is daily.
+  bool groupByMonth = 1;
+
+  // Optional. A comma-separated list of columns to aggregate the data into. Valid values
+  // are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`,
+  // `operation`, `invoiceId`, `description`, and `resourceId`. A special value of `none`
+  // is also supported, which means no additional columns will be queried, which translates
+  // to data aggregated only at either daily or monthly.
+  //
+  // For example, if you only want the services and region data, you can set this field to
+  // `productCode,region`. Your input sequence doesn't matter (although the sequence above
+  // is recommended) as the actual sequence is already fixed in the return data (see the
+  // definition in `api/aws/cost.proto`), which is generic to specific, top to bottom.
+  // Invalid values are discarded. Excluded columns will be empty.
+  string groupByColumns = 2;
+
+  // Optional. If set to true, stream will include resource tags. Discarded when either
+  // `groupByMonth` or `groupByColumns` (or both) are set.
+  bool includeTags = 3;
 
   // Optional. If set to true, stream will include resource cost category information.
-  // Note that this could potentially increase the data size if you have lots of cost
-  // category information.
-  bool includeCostCategories = 2;
+  // Discarded when either `groupByMonth` or `groupByColumns` (or both) are set.
+  bool includeCostCategories = 4;
+
+  // Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can
+  // set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which
+  // case, it will use the latest exchange rates provided by https://fixer.io. If you
+  // prefer a custom exchange rate, you can append the rate to the currency's three-letter
+  // symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate
+  // should be against the US dollar (USD).
+  string toCurrency = 5;
 }
 
 // Request message for the Cost.ReadCosts rpc.
@@ -419,13 +442,23 @@ message ReadCostsRequest {
   // used. Format: `yyyymmd`.
   string endTime = 5;
 
-  // Required for `aws` vendor. AWS-specific options.
+  // Optional. Valid only for the `aws` vendor. AWS-specific options.
   ReadCostsRequestAwsOptions awsOptions = 6;
 }
 
 // Response message wrapper for cloud cost adjustments.
 message AdjustmentItem {
   api.aws.Adjustment aws = 1;
+}
+
+message ReadAdjustmentsRequestAwsOptions {
+  // Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can
+  // set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which
+  // case, it will use the latest exchange rates provided by https://fixer.io. If you
+  // prefer a custom exchange rate, you can append the rate to the currency's three-letter
+  // symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate
+  // should be against the US dollar (USD).
+  string toCurrency = 1;
 }
 
 // Request message for the Cost.ReadAdjustments rpc.
@@ -451,6 +484,9 @@ message ReadAdjustmentsRequest {
   // Optional. The UTC date to end the streaming data. If not set, current date will be
   // used. Format: `yyyymmdd`.
   string endTime = 5;
+
+  // Optional. Valid only for the `aws` vendor. AWS-specific options.
+  ReadAdjustmentsRequestAwsOptions awsOptions = 6;
 }
 
 // Request message for the Cost.ReadBillingGroupTagCosts rpc.

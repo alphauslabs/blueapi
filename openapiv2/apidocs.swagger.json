@@ -1912,6 +1912,9 @@
         "description": {
           "type": "string"
         },
+        "resourceId": {
+          "type": "string"
+        },
         "tags": {
           "type": "object",
           "additionalProperties": {
@@ -1931,9 +1934,6 @@
         "cost": {
           "type": "number",
           "format": "double"
-        },
-        "resourceId": {
-          "type": "string"
         },
         "tagId": {
           "type": "string"
@@ -2108,7 +2108,7 @@
         },
         "awsOptions": {
           "$ref": "#/definitions/v1CreateAccountRequestAwsOptions",
-          "description": "Required for `aws` vendor. AWS-specific options."
+          "description": "Required for the `aws` vendor. AWS-specific options."
         }
       },
       "description": "Request message for the Cost.CreateAccount rpc."
@@ -2194,7 +2194,7 @@
         },
         "awsOptions": {
           "$ref": "#/definitions/v1CreatePayerAccountRequestAwsOptions",
-          "description": "Required for `aws` vendor. AWS-specific options."
+          "description": "Required for the `aws` vendor. AWS-specific options."
         }
       },
       "description": "Request message for the Cost.CreatePayerAccount rpc."
@@ -2363,9 +2363,22 @@
         "endTime": {
           "type": "string",
           "description": "Optional. The UTC date to end the streaming data. If not set, current date will be\nused. Format: `yyyymmdd`."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1ReadAdjustmentsRequestAwsOptions",
+          "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
         }
       },
       "description": "Request message for the Cost.ReadAdjustments rpc."
+    },
+    "v1ReadAdjustmentsRequestAwsOptions": {
+      "type": "object",
+      "properties": {
+        "toCurrency": {
+          "type": "string",
+          "description": "Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can\nset it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which\ncase, it will use the latest exchange rates provided by https://fixer.io. If you\nprefer a custom exchange rate, you can append the rate to the currency's three-letter\nsymbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate\nshould be against the US dollar (USD)."
+        }
+      }
     },
     "v1ReadCostsRequest": {
       "type": "object",
@@ -2392,7 +2405,7 @@
         },
         "awsOptions": {
           "$ref": "#/definitions/v1ReadCostsRequestAwsOptions",
-          "description": "Required for `aws` vendor. AWS-specific options."
+          "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
         }
       },
       "description": "Request message for the Cost.ReadCosts rpc."
@@ -2400,13 +2413,25 @@
     "v1ReadCostsRequestAwsOptions": {
       "type": "object",
       "properties": {
+        "groupByMonth": {
+          "type": "boolean",
+          "description": "Optional. If set to true, aggregate data to monthly. Default is daily."
+        },
+        "groupByColumns": {
+          "type": "string",
+          "description": "Optional. A comma-separated list of columns to aggregate the data into. Valid values\nare `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`,\n`operation`, `invoiceId`, `description`, and `resourceId`. A special value of `none`\nis also supported, which means no additional columns will be queried, which translates\nto data aggregated only at either daily or monthly.\n\nFor example, if you only want the services and region data, you can set this field to\n`productCode,region`. Your input sequence doesn't matter (although the sequence above\nis recommended) as the actual sequence is already fixed in the return data (see the\ndefinition in `api/aws/cost.proto`), which is generic to specific, top to bottom.\nInvalid values are discarded. Excluded columns will be empty."
+        },
         "includeTags": {
           "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource tags. Note that this could\npotentially increase the data size if you have lots of tag information."
+          "description": "Optional. If set to true, stream will include resource tags. Discarded when either\n`groupByMonth` or `groupByColumns` (or both) are set."
         },
         "includeCostCategories": {
           "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource cost category information.\nNote that this could potentially increase the data size if you have lots of cost\ncategory information."
+          "description": "Optional. If set to true, stream will include resource cost category information.\nDiscarded when either `groupByMonth` or `groupByColumns` (or both) are set."
+        },
+        "toCurrency": {
+          "type": "string",
+          "description": "Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can\nset it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which\ncase, it will use the latest exchange rates provided by https://fixer.io. If you\nprefer a custom exchange rate, you can append the rate to the currency's three-letter\nsymbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate\nshould be against the US dollar (USD)."
         }
       },
       "description": "AWS-specific options."
