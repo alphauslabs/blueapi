@@ -383,11 +383,8 @@ message CalculateCostsRequest {
   string month = 3;
 }
 
-// AWS-specific options.
+// AWS-specific options for ReadCostsRequest.
 message ReadCostsRequestAwsOptions {
-  // Optional. If set to true, aggregate data to monthly. Default is daily.
-  bool groupByMonth = 1;
-
   // Optional. A comma-separated list of columns to aggregate the data into. Valid values
   // are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`,
   // `operation`, `invoiceId`, `description`, and `resourceId`. A special value of `none`
@@ -399,15 +396,15 @@ message ReadCostsRequestAwsOptions {
   // is recommended) as the actual sequence is already fixed in the return data (see the
   // definition in `api/aws/cost.proto`), which is generic to specific, top to bottom.
   // Invalid values are discarded. Excluded columns will be empty.
-  string groupByColumns = 2;
+  string groupByColumns = 1;
 
   // Optional. If set to true, stream will include resource tags. Discarded when either
   // `groupByMonth` or `groupByColumns` (or both) are set.
-  bool includeTags = 3;
+  bool includeTags = 2;
 
   // Optional. If set to true, stream will include resource cost category information.
   // Discarded when either `groupByMonth` or `groupByColumns` (or both) are set.
-  bool includeCostCategories = 4;
+  bool includeCostCategories = 3;
 
   // Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can
   // set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which
@@ -415,7 +412,7 @@ message ReadCostsRequestAwsOptions {
   // prefer a custom exchange rate, you can append the rate to the currency's three-letter
   // symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate
   // should be against the US dollar (USD).
-  string toCurrency = 5;
+  string toCurrency = 4;
 }
 
 // Request message for the Cost.ReadCosts rpc.

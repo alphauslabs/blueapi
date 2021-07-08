@@ -2426,10 +2426,6 @@
     "v1ReadCostsRequestAwsOptions": {
       "type": "object",
       "properties": {
-        "groupByMonth": {
-          "type": "boolean",
-          "description": "Optional. If set to true, aggregate data to monthly. Default is daily."
-        },
         "groupByColumns": {
           "type": "string",
           "description": "Optional. A comma-separated list of columns to aggregate the data into. Valid values\nare `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`,\n`operation`, `invoiceId`, `description`, and `resourceId`. A special value of `none`\nis also supported, which means no additional columns will be queried, which translates\nto data aggregated only at either daily or monthly.\n\nFor example, if you only want the services and region data, you can set this field to\n`productCode,region`. Your input sequence doesn't matter (although the sequence above\nis recommended) as the actual sequence is already fixed in the return data (see the\ndefinition in `api/aws/cost.proto`), which is generic to specific, top to bottom.\nInvalid values are discarded. Excluded columns will be empty."
@@ -2447,7 +2443,7 @@
           "description": "Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can\nset it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which\ncase, it will use the latest exchange rates provided by https://fixer.io. If you\nprefer a custom exchange rate, you can append the rate to the currency's three-letter\nsymbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate\nshould be against the US dollar (USD)."
         }
       },
-      "description": "AWS-specific options."
+      "description": "AWS-specific options for ReadCostsRequest."
     },
     "v1UpdateMetadataRequest": {
       "type": "object",
