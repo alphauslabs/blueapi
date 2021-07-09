@@ -291,6 +291,153 @@
         ]
       }
     },
+    "/iam/v1/roles": {
+      "get": {
+        "summary": "Lists all available roles.",
+        "operationId": "Iam_ListRoles",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListRolesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "namespace",
+            "description": "Optional. If not set, all roles will be returned.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      },
+      "post": {
+        "summary": "Creates a role. If your `permissions` list contains an `Admin` entry, all other\nentries will be discarded except `Admin`. Roles are root user-level. That means\nall roles created by the root user, or any subuser that has permissions to\ncreate roles, are available to all subusers.",
+        "operationId": "Iam_CreateRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiRole"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateRoleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
+    "/iam/v1/roles/{namespace}/{name}": {
+      "delete": {
+        "summary": "Deletes a role. Deleting a role will also remove all mappings.",
+        "operationId": "Iam_DeleteRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiRole"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "namespace",
+            "description": "Required. The parent namespace.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "Required. The role name to delete.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      },
+      "put": {
+        "summary": "Updates a role. If role name is different, rename mapped role name.",
+        "operationId": "Iam_UpdateRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "namespace",
+            "description": "Required. The new namespace.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "Required. The role name to update.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateRoleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
     "/iam/v1/users": {
       "get": {
         "summary": "Lists all subusers.",
@@ -2057,6 +2204,32 @@
         }
       }
     },
+    "apiRole": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "policies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiPolicy"
+          }
+        }
+      }
+    },
     "apiUser": {
       "type": "object",
       "properties": {
@@ -2491,6 +2664,27 @@
       },
       "description": "See [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting]\nfor more information.\nSee [https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html] for more information.\nRequirements include: Additional report details = 'Include Resource IDS' enabled,\nPrefix = non-empty (recommendation only), Time granularity = 'Hourly', File format = 'text/csv'."
     },
+    "v1CreateRoleRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. The name of the role to create. Role names should have at least 6\ncharacters in length and 32 characters maximum. It should also be alphanumeric.\nHyphens and underscores are allowed in between. The regular expression used\nfor validation is `^[A-Za-z0-9][A-Za-z0-9_-]*[A-Za-z0-9]$`."
+        },
+        "namespace": {
+          "type": "string",
+          "description": "Required. The namespace where this role will belong."
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required. The list of permissions to attach to this role."
+        }
+      },
+      "description": "Request message for the Iam.CreateRole rpc."
+    },
     "v1CreateUserRequest": {
       "type": "object",
       "properties": {
@@ -2623,6 +2817,18 @@
         }
       },
       "description": "Response message for the Iam.ListPermissions rpc."
+    },
+    "v1ListRolesResponse": {
+      "type": "object",
+      "properties": {
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiRole"
+          }
+        }
+      },
+      "description": "Response message for the Iam.ListRoles rpc."
     },
     "v1Preference": {
       "type": "object"
@@ -2789,6 +2995,27 @@
         }
       },
       "description": "Request message for the Organization.UpdatePassword rpc."
+    },
+    "v1UpdateRoleRequest": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string",
+          "description": "Required. The new namespace."
+        },
+        "name": {
+          "type": "string",
+          "description": "Required. The role name to update."
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required. The list of permissions to attach to this role."
+        }
+      },
+      "description": "Request message for the Iam.UpdateRole rpc."
     },
     "v1VerifyOrgRequest": {
       "type": "object",
