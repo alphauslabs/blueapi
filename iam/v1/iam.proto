@@ -85,7 +85,8 @@ service Iam {
     };
   }
 
-  // Lists currently supported permissions.
+  // Lists all permissions based on the input's scope. For reference, supported
+  // permissions can be found on [https://github.com/mobingi/rbac-permissions].
   rpc ListPermissions(ListPermissionsRequest) returns (ListPermissionsResponse) {
     option (google.api.http) = {
       get: "/iam/v1/permissions"
@@ -186,7 +187,12 @@ message IpFilter {
 }
 
 // Request message for the Iam.ListPermissions rpc.
-message ListPermissionsRequest {}
+message ListPermissionsRequest {
+  // Optional. The subuser to query. If empty (default), query all available permissions.
+  // If set to a valid subuser, query that subuser's permissions, if allowed. You can
+  // also set this field to `me` to query your own permissions.
+  string subUser = 1;
+}
 
 // Response message for the Iam.ListPermissions rpc.
 message ListPermissionsResponse {

@@ -261,7 +261,7 @@
     },
     "/iam/v1/permissions": {
       "get": {
-        "summary": "Lists currently supported permissions.",
+        "summary": "Lists all permissions based on the input's scope. For reference, supported\npermissions can be found on [https://github.com/mobingi/rbac-permissions].",
         "operationId": "Iam_ListPermissions",
         "responses": {
           "200": {
@@ -277,6 +277,15 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "subUser",
+            "description": "Optional. The subuser to query. If empty (default), query all available permissions.\nIf set to a valid subuser, query that subuser's permissions, if allowed. You can\nalso set this field to `me` to query your own permissions.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "tags": [
           "Iam"
         ]
