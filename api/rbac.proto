@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package blueapi.api;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api";
+option java_package = "cloud.alphaus.blueapi.api";
+option java_outer_classname = "ApiRbacProto";
+
+message Policy {
+  string action = 1;
+  string effect = 2;
+  string key = 3;
+  repeated string values = 4;
+}
+
+message Permission {
+  string namespace = 1;
+  repeated string permissions = 2;
+  repeated Policy policies = 3;
+}

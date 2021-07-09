@@ -4,6 +4,7 @@ package blueapi.iam.v1;
 
 import "api/user.proto";
 import "api/apiclient.proto";
+import "api/rbac.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -81,6 +82,13 @@ service Iam {
   rpc DeleteApiClient(DeleteApiClientRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/iam/v1/apiclients/{id}"
+    };
+  }
+
+  // Lists currently supported permissions.
+  rpc ListPermissions(ListPermissionsRequest) returns (ListPermissionsResponse) {
+    option (google.api.http) = {
+      get: "/iam/v1/permissions"
     };
   }
 
@@ -175,6 +183,14 @@ message IpFilter {
 
   // The IP filter value. Should be in CIDR format.
   string value = 5;
+}
+
+// Request message for the Iam.ListPermissions rpc.
+message ListPermissionsRequest {}
+
+// Response message for the Iam.ListPermissions rpc.
+message ListPermissionsResponse {
+  repeated api.Permission permissions = 1;
 }
 
 // Request message for the Iam.ListIpFilters rpc.

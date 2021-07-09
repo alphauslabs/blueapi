@@ -259,6 +259,29 @@
         ]
       }
     },
+    "/iam/v1/permissions": {
+      "get": {
+        "summary": "Lists currently supported permissions.",
+        "operationId": "Iam_ListPermissions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListPermissionsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
     "/iam/v1/users": {
       "get": {
         "summary": "Lists all subusers.",
@@ -1985,6 +2008,46 @@
         }
       }
     },
+    "apiPermission": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "policies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiPolicy"
+          }
+        }
+      }
+    },
+    "apiPolicy": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "effect": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "apiUser": {
       "type": "object",
       "properties": {
@@ -2539,6 +2602,18 @@
           "description": "The IP filter value. Should be in CIDR format."
         }
       }
+    },
+    "v1ListPermissionsResponse": {
+      "type": "object",
+      "properties": {
+        "permissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiPermission"
+          }
+        }
+      },
+      "description": "Response message for the Iam.ListPermissions rpc."
     },
     "v1Preference": {
       "type": "object"
