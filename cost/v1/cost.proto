@@ -8,6 +8,7 @@ import "api/budget.proto";
 import "api/forecast.proto";
 import "api/aws/cost.proto";
 import "api/aws/adjustment.proto";
+import "api/aws/calculatorconfig.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -114,6 +115,13 @@ service Cost {
   rpc DeleteAccount(DeleteAccountRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/{vendor}/accounts/{id}"
+    };
+  }
+
+  // Gets the vendor cost calculator's current configuration.
+  rpc GetCalculatorConfig(GetCalculatorConfigRequest) returns (GetCalculatorConfigResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/calculator"
     };
   }
 
@@ -367,6 +375,17 @@ message DeleteAccountRequest {
 
   // Required. The account id to delete.
   string id = 2;
+}
+
+// Request message for the Cost.GetCalculatorConfig rpc.
+message GetCalculatorConfigRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+}
+
+// Response message for the Cost.GetCalculatorConfig rpc.
+message GetCalculatorConfigResponse {
+  api.aws.CalculatorConfig aws = 1;
 }
 
 // Request message for the Cost.ImportCurFiles rpc.

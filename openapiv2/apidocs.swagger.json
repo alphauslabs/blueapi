@@ -1267,6 +1267,38 @@
         ]
       }
     },
+    "/v1/{vendor}/calculator": {
+      "get": {
+        "summary": "Gets the vendor cost calculator's current configuration.",
+        "operationId": "Cost_GetCalculatorConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCalculatorConfigResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/{vendor}/costs:calculate": {
       "post": {
         "summary": "Triggers monthly calculations for costs and invoices at either organization or billing group level.",
@@ -2014,6 +2046,9 @@
         }
       }
     },
+    "awsCalculatorConfig": {
+      "type": "object"
+    },
     "awsCost": {
       "type": "object",
       "properties": {
@@ -2417,6 +2452,15 @@
         }
       },
       "description": "Response message for GetBudgetConfig.\nIf accountId is specified in the request, only one budget configuration is returned."
+    },
+    "v1GetCalculatorConfigResponse": {
+      "type": "object",
+      "properties": {
+        "aws": {
+          "$ref": "#/definitions/awsCalculatorConfig"
+        }
+      },
+      "description": "Response message for the Cost.GetCalculatorConfig rpc."
     },
     "v1GetForecastsResponse": {
       "type": "object",
