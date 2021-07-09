@@ -414,6 +414,15 @@ message ReadCostsRequestAwsOptions {
   // symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate
   // should be against the US dollar (USD).
   string toCurrency = 4;
+
+  // Optional. If set to true, always get the up-to-date calculation results. This data
+  // isn't necessarily in-sync with your invoice data as AWS could still have updated your
+  // CUR files even after you created your invoices. By default, returned data are those
+  // that are always in-sync with your invoices.
+  //
+  // This field is discarded for Wave(Pro) users. You will always get the latest data that
+  // is in-sync with your invoices.
+  bool forceLatest = 5;
 }
 
 // Request message for the Cost.ReadCosts rpc.
