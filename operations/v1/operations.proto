@@ -84,7 +84,16 @@ service Operations {
 // Request message for the Operations.ListOperations rpc.
 message ListOperationsRequest {
   // Optional. The name of the operation's parent resource. Not used at the moment.
-  string parent = 4;
+  string parent = 1;
+
+  // Optional. List operations on and after this date. Format is yyyymmdd. For example,
+  // if you want to list all operations starting from June 01, 2021, set to `20210601`.
+  // If not set, defaults to the first day of the current UTC month.
+  string asOf = 2;
+
+  // Optional. If true, include all operations that are marked as done. Exclude by
+  // default.
+  bool includeDone = 3;
 }
 
 // Request message for the Operations.GetOperation rpc.
