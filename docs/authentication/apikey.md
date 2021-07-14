@@ -6,13 +6,13 @@ sort: 1
 
 Authentication for Blue uses API keys. You can generate your API keys either from Ripple or Wave consoles.
 
-If you're mainly a Ripple user, we recommend you to set the following:
+If you're mainly a Ripple user, we recommend you to set the following environment variables:
 ```sh
 ALPHAUS_CLIENT_ID={ripple-client-id}
 ALPHAUS_CLIENT_SECRET={ripple-client-secret}
 ```
 
-If you're mainly a Wave(Pro) user, we recommend you to set the following:
+If you're mainly a Wave(Pro) user, we recommend you to set the following environment variables:
 ```sh
 ALPHAUS_CLIENT_ID={wave-client-id}
 ALPHAUS_CLIENT_SECRET={wave-client-secret}
