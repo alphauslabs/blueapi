@@ -60,7 +60,7 @@ Currently, setting both Ripple and Wave(Pro) client credentials is not supported
 
 Once you set the environment variables above, we recommend you to install our official command line tool, [`bluectl`](https://github.com/alphauslabs/bluectl), to handle token generation:
 
-```bash
+```sh
 # Should work with Linux, MacOS, and Windows through WSL/2:
 $ brew install alphauslabs/tap/bluectl
 
@@ -68,7 +68,7 @@ $ brew install alphauslabs/tap/bluectl
 $ bluectl access-token
 eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhd...
 
-# You can use the command above to provide token to your other commands. For example:
+# You can use the command above to provide access tokens to your other commands. For example:
 $ curl -H "Authorization: Bearer $(bluectl access-token)" https://api.alphaus.cloud/m/blue/iam/v1/whoami | jq
 {
   "id":"test",
@@ -83,5 +83,13 @@ $ curl -H "Authorization: Bearer $(bluectl access-token --client-id $MY_CLIENT_I
   "id":"test",
   "parent":"MSP-xxxxxxx",
   "metadata":{}
+}
+```
+
+You can also use `bluectl` to provide access tokens to our current, non-Blue APIs [here](https://docs.mobingi.com/v/api-reference/). For example:
+```sh
+$ curl -H "Authorization: Bearer $(bluectl access-token)" https://api.alphaus.cloud/m/ripple/user | jq
+{
+  ...
 }
 ```
