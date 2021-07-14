@@ -55,3 +55,32 @@ After this, you should now be able to authenticate whether you use [bluectl](htt
 ```warning
 Currently, setting both Ripple and Wave(Pro) client credentials is not supported. If both are set, authentication will default to Ripple.
 ```
+
+## Using `bluectl` tool
+
+Once you set the environment variables above, we recommend you to install our official command line tool, [`bluectl`](https://github.com/alphauslabs/bluectl) to handle token generation:
+
+```bash
+# Should work with Linux, MacOS, and Windows through WSL/2:
+$ brew install alphauslabs/tap/bluectl
+
+# Get access token for production:
+$ bluectl access-token
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhd...
+
+# You can use the command above to provide token in your other commands. For example:
+$ curl -H "Authorization: Bearer $(bluectl access-token)" https://api.alphaus.cloud/m/blue/iam/v1/whoami | jq
+{
+  "id":"test",
+  "parent":"MSP-xxxxxxx",
+  "metadata":{}
+}
+
+# If you want to access our NEXT (BETA) environment, you can do:
+$ curl -H "Authorization: Bearer $(bluectl access-token --client-id $MY_CLIENT_ID_NEXT --client-secret $MY_CLIENT_SECRET_NEXT --beta)" https://apinext.alphaus.cloud/m/blue/iam/v1/whoami | jq
+{
+  "id":"test",
+  "parent":"MSP-xxxxxxx",
+  "metadata":{}
+}
+```
