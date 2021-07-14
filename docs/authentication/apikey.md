@@ -68,7 +68,7 @@ $ brew install alphauslabs/tap/bluectl
 $ bluectl access-token
 eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhd...
 
-# You can use the command above to provide token in your other commands. For example:
+# You can use the command above to provide token to your other commands. For example:
 $ curl -H "Authorization: Bearer $(bluectl access-token)" https://api.alphaus.cloud/m/blue/iam/v1/whoami | jq
 {
   "id":"test",
