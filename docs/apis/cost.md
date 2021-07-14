@@ -23,14 +23,14 @@ Make sure to setup authentication [here](https://alphauslabs.github.io/blueapi/a
 
 Download current month's usage costs and save as CSV file:
 
-```bash
+```sh
 # Here, 'all' could mean MSP-level or billing group level.
 $ bluectl aws-costs --type all --out /tmp/out.csv
 ```
 
 Download current month's adjustment costs and save as CSV file:
 
-```bash
+```sh
 # Here, 'all' could mean MSP-level or billing group level.
 $ bluectl aws-adjustments --type all --out /tmp/out.csv
 ```
@@ -39,13 +39,13 @@ You can also provide the `--start yyyy-mm-dd` and `--end yyyy-mm-dd` flags for d
 
 Download current month's usage costs for a specific account and save as CSV file:
 
-```bash
+```sh
 $ bluectl aws-costs 1234567890 --type account --out /tmp/out.csv
 ```
 
 Download current month's adjustment costs for a specific billing group and save as CSV file:
 
-```bash
+```sh
 # Here, 'bill001' is your billing group id.
 $ bluectl aws-adjustments bill001 --type billinggroup --out /tmp/out.csv
 ```
@@ -54,7 +54,7 @@ You can also provide the `--include-tags` and/or `--include-costcategories` flag
 
 Although these APIs are designed to be streamed due to potentially large amounts of data, you can still use the JSON/REST API like so:
 
-```bash
+```sh
 # Output is a newline-delimited rows of JSON data.
 $ curl -X POST -H "Authorization: Bearer $(bluectl access-token)" \
     https://api.alphaus.cloud/m/blue/cost/v1/aws/accounts/1234567890/costs:readAccountCosts
