@@ -77,7 +77,8 @@ $ curl -H "Authorization: Bearer $(bluectl access-token)" https://api.alphaus.cl
 }
 
 # If you want to access our NEXT (BETA) environment, you can do:
-$ curl -H "Authorization: Bearer $(bluectl access-token --client-id $MY_CLIENT_ID_NEXT --client-secret $MY_CLIENT_SECRET_NEXT --beta)" https://apinext.alphaus.cloud/m/blue/iam/v1/whoami | jq
+$ curl -H "Authorization: Bearer $(bluectl access-token --client-id $MY_CLIENT_ID_NEXT \
+  --client-secret $MY_CLIENT_SECRET_NEXT --beta)" https://apinext.alphaus.cloud/m/blue/iam/v1/whoami | jq
 {
   "id":"test",
   "parent":"MSP-xxxxxxx",
