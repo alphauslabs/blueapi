@@ -58,7 +58,7 @@ Currently, setting both Ripple and Wave(Pro) client credentials is not supported
 
 ## Using bluectl
 
-Once you set the environment variables above, we recommend you to install our official command line tool, [`bluectl`](https://github.com/alphauslabs/bluectl) to handle token generation:
+Once you set the environment variables above, we recommend you to install our official command line tool, [`bluectl`](https://github.com/alphauslabs/bluectl), to handle token generation:
 
 ```bash
 # Should work with Linux, MacOS, and Windows through WSL/2:
