@@ -428,7 +428,7 @@ message ReadCostsRequestAwsOptions {
   // are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`,
   // `operation`, `invoiceId`, `description`, and `resourceId`. A special value of `none`
   // is also supported, which means no additional columns will be queried, which translates
-  // to data aggregated daily per account.
+  // to data aggregated daily (or monthly, see `groupByMonth`) per account.
   //
   // For example, if you only want the services and region data, you can set this field to
   // `productCode,region`. Your input sequence doesn't matter (although the sequence above
@@ -438,13 +438,19 @@ message ReadCostsRequestAwsOptions {
   // columns will be empty.
   string groupByColumns = 1;
 
+  // Optional. If set to true, return data grouped by month. At the moment, it only supports
+  // `productCode` column when enabled; meaning, costs per account per service per month.
+  // If you want data that is grouped per account per month, set this to `true`, then set
+  // `groupByColumns` to `none`.
+  bool groupByMonth = 2;
+
   // Optional. If set to true, stream will include resource tags. Discarded when
   // `groupByColumns` field is set.
-  bool includeTags = 2;
+  bool includeTags = 3;
 
   // Optional. If set to true, stream will include resource cost category information.
   // Discarded when `groupByColumns` field is set.
-  bool includeCostCategories = 3;
+  bool includeCostCategories = 4;
 
   // Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can
   // set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which
@@ -452,7 +458,7 @@ message ReadCostsRequestAwsOptions {
   // prefer a custom exchange rate, you can append the rate to the currency's three-letter
   // symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate
   // should be against the US dollar (USD).
-  string toCurrency = 4;
+  string toCurrency = 5;
 
   // Optional. If set to true, always get the up-to-date calculation results. This data
   // isn't necessarily in-sync with your invoice data as AWS could still have updated your
@@ -461,7 +467,7 @@ message ReadCostsRequestAwsOptions {
   //
   // This field is discarded for Wave(Pro) users. You will always get the latest data that
   // is in-sync with your invoices.
-  bool forceLatest = 5;
+  bool forceLatest = 6;
 }
 
 // Request message for the Cost.ReadCosts rpc.
