@@ -19,7 +19,7 @@ ALPHAUS_CLIENT_SECRET={wave-client-secret}
 ALPHAUS_AUTH_URL=https://login.alphaus.cloud/access_token
 ```
 
-If you're using either `bluectl` or any of our supported client libraries, the authentication flow is as follows. First, it will look for the following environment variables:
+If you're using either `bluectl` or any of our [supported client libraries](https://alphauslabs.github.io/blueapi/sdks/), the authentication flow is as follows. First, it will look for the following environment variables:
 ```sh
 ALPHAUS_CLIENT_ID
 ALPHAUS_CLIENT_SECRET
