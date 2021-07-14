@@ -56,7 +56,7 @@ After this, you should now be able to authenticate whether you use [bluectl](htt
 Currently, setting both Ripple and Wave(Pro) client credentials is not supported. If both are set, authentication will default to Ripple.
 ```
 
-## Using `bluectl`
+## Using bluectl
 
 Once you set the environment variables above, we recommend you to install our official command line tool, [`bluectl`](https://github.com/alphauslabs/bluectl) to handle token generation:
 
