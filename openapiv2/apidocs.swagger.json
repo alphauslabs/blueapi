@@ -444,6 +444,100 @@
         ]
       }
     },
+    "/iam/v1/userroles": {
+      "get": {
+        "summary": "Lists roles attached to the caller or the input.",
+        "operationId": "Iam_ListUserRoleMappings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListUserRoleMappingsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subUser",
+            "description": "Optional. The subuser to query. Defaults to caller if not set.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      },
+      "post": {
+        "summary": "Maps roles to a subuser. You can only map (or attach) up to 5 roles to a user per namespace.\nThere is no limit for filtering rules per user.",
+        "operationId": "Iam_CreateUserRoleMapping",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateUserRoleMappingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateUserRoleMappingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      },
+      "put": {
+        "summary": "Updates user-to-role mappings. You can only map (or attach) up to 5 roles to a user per namespace.\nThere is no limit for filtering rules per user.",
+        "operationId": "Iam_UpdateUserRoleMapping",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserRoleMappingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserRoleMappingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
     "/iam/v1/users": {
       "get": {
         "summary": "Lists all subusers.",
@@ -2267,6 +2361,26 @@
         }
       }
     },
+    "apiUserRoleMapping": {
+      "type": "object",
+      "properties": {
+        "rootUser": {
+          "type": "string"
+        },
+        "subUser": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "filter": {
+          "type": "string"
+        }
+      }
+    },
     "awsAdjustment": {
       "type": "object",
       "properties": {
@@ -2724,6 +2838,47 @@
       },
       "description": "Request message for the Iam.CreateUser rpc."
     },
+    "v1CreateUserRoleMappingRequest": {
+      "type": "object",
+      "properties": {
+        "subUser": {
+          "type": "string",
+          "description": "Optional. The subuser to map the roles. Defaults to caller if not set."
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1MapRole"
+          },
+          "description": "Required. The roles to map to the user. Limited to 5 items."
+        }
+      },
+      "description": "Request message for the Iam.CreateUserRoleMapping rpc."
+    },
+    "v1CreateUserRoleMappingResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "failed": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Response message for the Iam.CreateUserRoleMapping rpc."
+    },
     "v1GetBudgetConfigResponse": {
       "type": "object",
       "properties": {
@@ -2846,6 +3001,29 @@
         }
       },
       "description": "Response message for the Iam.ListRoles rpc."
+    },
+    "v1ListUserRoleMappingsResponse": {
+      "type": "object",
+      "properties": {
+        "userRoleMappings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiUserRoleMapping"
+          }
+        }
+      },
+      "description": "Response message for the Iam.ListUserRoleMappings rpc."
+    },
+    "v1MapRole": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
     },
     "v1Preference": {
       "type": "object"
@@ -3049,6 +3227,47 @@
         }
       },
       "description": "Request message for the Iam.UpdateRole rpc."
+    },
+    "v1UpdateUserRoleMappingRequest": {
+      "type": "object",
+      "properties": {
+        "subUser": {
+          "type": "string",
+          "description": "Optional. The subuser to map the roles. Defaults to caller if not set."
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1MapRole"
+          },
+          "description": "Required. The roles to map to the user. Limited to 5 items."
+        }
+      },
+      "description": "Request message for the Iam.UpdateUserRoleMapping rpc."
+    },
+    "v1UpdateUserRoleMappingResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "failed": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Response message for the Iam.UpdateUserRoleMapping rpc."
     },
     "v1VerifyOrgRequest": {
       "type": "object",

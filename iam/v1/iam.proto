@@ -126,6 +126,31 @@ service Iam {
     };
   }
 
+  // Lists roles attached to the caller or the input.
+  rpc ListUserRoleMappings(ListUserRoleMappingsRequest) returns (ListUserRoleMappingsResponse) {
+    option (google.api.http) = {
+      get: "/iam/v1/userroles"
+    };
+  }
+
+  // Maps roles to a subuser. You can only map (or attach) up to 5 roles to a user per namespace.
+  // There is no limit for filtering rules per user.
+  rpc CreateUserRoleMapping(CreateUserRoleMappingRequest) returns (CreateUserRoleMappingResponse) {
+    option (google.api.http) = {
+      post: "/iam/v1/userroles"
+      body: "*"
+    };
+  }
+
+  // Updates user-to-role mappings. You can only map (or attach) up to 5 roles to a user per namespace.
+  // There is no limit for filtering rules per user.
+  rpc UpdateUserRoleMapping(UpdateUserRoleMappingRequest) returns (UpdateUserRoleMappingResponse) {
+    option (google.api.http) = {
+      put: "/iam/v1/userroles"
+      body: "*"
+    };
+  }
+
   // Lists all IP filters. At the moment, this API is only available for root users.
   rpc ListIpFilters(ListIpFiltersRequest) returns (stream IpFilter) {
     option (google.api.http) = {
@@ -198,27 +223,6 @@ message DeleteApiClientRequest {
   string id = 1;
 }
 
-message IpFilter {
-  // IP filter item id. Note that this name is transcient and is not fixed. However,
-  // you can use any of its permutations to endpoints that accept it, such as
-  // the `DELETE:/iam/v?/ipfilters/{id}` endpoint, without issues.
-  string id = 1;
-
-  // Can be `global`, `rootuser`, or `subuser`.
-  string scope = 2;
-
-  // The target of the filter. If global scope, this is usually empty.
-  // Rootuser name for rootuser scope, and subuser name for subuser scope.
-  // For subuser targets, format is `rootuser/subuser`.
-  string target = 3;
-
-  // The type of IP filter. It could be `whitelist` or `blacklist`.
-  string type = 4;
-
-  // The IP filter value. Should be in CIDR format.
-  string value = 5;
-}
-
 // Request message for the Iam.ListPermissions rpc.
 message ListPermissionsRequest {
   // Optional. The subuser to query. If empty (default), query all available permissions.
@@ -280,6 +284,75 @@ message DeleteRoleRequest {
 
   // Required. The role name to delete.
   string name = 2;
+}
+
+// Request message for the Iam.ListUserRoleMappings rpc.
+message ListUserRoleMappingsRequest {
+  // Optional. The subuser to query. Defaults to caller if not set.
+  string subUser = 1;
+}
+
+// Response message for the Iam.ListUserRoleMappings rpc.
+message ListUserRoleMappingsResponse {
+  repeated api.UserRoleMapping userRoleMappings = 1;
+}
+
+message MapRole {
+  string namespace = 1;
+  string role = 2;
+}
+
+// Request message for the Iam.CreateUserRoleMapping rpc.
+message CreateUserRoleMappingRequest {
+  // Optional. The subuser to map the roles. Defaults to caller if not set.
+  string subUser = 1;
+
+  // Required. The roles to map to the user. Limited to 5 items.
+  repeated MapRole roles = 2;
+}
+
+// Response message for the Iam.CreateUserRoleMapping rpc.
+message CreateUserRoleMappingResponse {
+  repeated string success = 1;
+  repeated string failed = 2;
+  repeated string filters = 3;
+}
+
+// Request message for the Iam.UpdateUserRoleMapping rpc.
+message UpdateUserRoleMappingRequest {
+  // Optional. The subuser to map the roles. Defaults to caller if not set.
+  string subUser = 1;
+
+  // Required. The roles to map to the user. Limited to 5 items.
+  repeated MapRole roles = 2;
+}
+
+// Response message for the Iam.UpdateUserRoleMapping rpc.
+message UpdateUserRoleMappingResponse {
+  repeated string success = 1;
+  repeated string failed = 2;
+  repeated string filters = 3;
+}
+
+message IpFilter {
+  // IP filter item id. Note that this name is transcient and is not fixed. However,
+  // you can use any of its permutations to endpoints that accept it, such as
+  // the `DELETE:/iam/v?/ipfilters/{id}` endpoint, without issues.
+  string id = 1;
+
+  // Can be `global`, `rootuser`, or `subuser`.
+  string scope = 2;
+
+  // The target of the filter. If global scope, this is usually empty.
+  // Rootuser name for rootuser scope, and subuser name for subuser scope.
+  // For subuser targets, format is `rootuser/subuser`.
+  string target = 3;
+
+  // The type of IP filter. It could be `whitelist` or `blacklist`.
+  string type = 4;
+
+  // The IP filter value. Should be in CIDR format.
+  string value = 5;
 }
 
 // Request message for the Iam.ListIpFilters rpc.
