@@ -1560,6 +1560,52 @@
         ]
       }
     },
+    "/v1/{vendor}/calculations/history": {
+      "get": {
+        "summary": "Lists vendor costs calculations history and statuses.",
+        "operationId": "Cost_ListCalculationsHistory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListCalculationsHistoryResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "asOf",
+            "description": "Optional. List operations on and after this date. Format is yyyymmdd. For example,\nif you want to list all operations starting from June 01, 2021, set to `20210601`.\nIf not set, defaults to the first day of the current UTC month.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "excludeDone",
+            "description": "Optional. If true, exclude all operations that are marked as done. Include by\ndefault.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/{vendor}/calculator": {
       "get": {
         "summary": "Gets the vendor cost calculator's current configuration.",
@@ -2977,6 +3023,27 @@
           "description": "The IP filter value. Should be in CIDR format."
         }
       }
+    },
+    "v1ListCalculationsHistoryAwsResponse": {
+      "type": "object",
+      "properties": {
+        "operations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/blueapiapiOperation"
+          }
+        }
+      },
+      "description": "AWS-specific response message for the Cost.ListCalculationsHistory rpc. Should be\ncompatible with the Operations API."
+    },
+    "v1ListCalculationsHistoryResponse": {
+      "type": "object",
+      "properties": {
+        "aws": {
+          "$ref": "#/definitions/v1ListCalculationsHistoryAwsResponse"
+        }
+      },
+      "description": "Response message for the Cost.ListCalculationsHistory rpc."
     },
     "v1ListPermissionsResponse": {
       "type": "object",
