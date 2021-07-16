@@ -1581,7 +1581,7 @@
         "parameters": [
           {
             "name": "vendor",
-            "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
+            "description": "Required. At the moment, only `aws` is supported.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -2676,9 +2676,22 @@
         "month": {
           "type": "string",
           "description": "Optional. The UTC month to calculate. If empty, it defaults to the previous month.\nFormat is `yyyymm`. For example, June 2021 will be `202106`."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1CalculateCostsRequestAwsOptions",
+          "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
         }
       },
       "description": "Request message for the Cost.CalculateCosts rpc."
+    },
+    "v1CalculateCostsRequestAwsOptions": {
+      "type": "object",
+      "properties": {
+        "force": {
+          "type": "boolean",
+          "description": "Optional. If set to true, discard existing calculation operation(s), if any, and\nmake this as the active/latest one. By default, if there is an ongoing operation\nduring the call, the request will fail."
+        }
+      }
     },
     "v1CancelOperationRequest": {
       "type": "object",

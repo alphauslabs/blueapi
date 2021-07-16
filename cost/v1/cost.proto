@@ -411,6 +411,13 @@ message CostItem {
   api.aws.Cost aws = 1;
 }
 
+message CalculateCostsRequestAwsOptions {
+  // Optional. If set to true, discard existing calculation operation(s), if any, and
+  // make this as the active/latest one. By default, if there is an ongoing operation
+  // during the call, the request will fail.
+  bool force = 1;
+}
+
 // Request message for the Cost.CalculateCosts rpc.
 message CalculateCostsRequest {
   // Required. At the moment, only `aws` is supported.
@@ -427,11 +434,14 @@ message CalculateCostsRequest {
   // Optional. The UTC month to calculate. If empty, it defaults to the previous month.
   // Format is `yyyymm`. For example, June 2021 will be `202106`.
   string month = 3;
+
+  // Optional. Valid only for the `aws` vendor. AWS-specific options.
+  CalculateCostsRequestAwsOptions awsOptions = 4;
 }
 
 // Request message for the Cost.ListCalculationsHistory rpc.
 message ListCalculationsHistoryRequest {
-  // Required. Valid values are `aws`, `azure`, and `gcp`.
+  // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
   // Optional. List operations on and after this date. Format is yyyymmdd. For example,
