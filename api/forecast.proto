@@ -14,6 +14,13 @@ message ForecastData {
   string date = 5;
   double historicalCost = 6;
   double forecastedCost = 7;
+  double upperBound = 8;
+  double lowerBound = 9;
+}
+
+message AccountGroupForecast {
+  string groupId = 1;
+  repeated ForecastData data = 2;
 }
 
 message BillingGroupForecast {
@@ -45,3 +52,32 @@ message OrgMonthToDateForecast {
   string orgId = 1;
   repeated BillingGroupMonthToDateForecast data = 2;
 }
+
+message MonthlyCostForecast {
+  string date = 1;
+  double costActual = 2;
+  double costForecast = 3;
+  double budget = 4;
+  double upperBound = 5;
+  double lowerBound = 6;
+}
+
+message MonthOnMonthCostForecast {
+  string category = 1;
+  double costCurrent = 2;
+  double costPrev = 3;
+  double costForecast = 4;
+  double upperBound = 5; 
+  double lowerBound = 6;
+}
+
+message MonthToDateCostForecast {
+  string date = 1;
+  double costAccumulated = 2;
+  double costForecast = 3;
+  double budget = 4;
+  double upperBound = 5;
+  double lowerBound = 6;
+}
+
+

@@ -4,7 +4,6 @@ package blueapi.cost.v1;
 
 import "api/account.proto";
 import "api/operation.proto";
-import "api/budget.proto";
 import "api/forecast.proto";
 import "api/aws/cost.proto";
 import "api/aws/adjustment.proto";
@@ -200,30 +199,6 @@ service Cost {
     };
   }
 
-  // Creates a budget configuration.
-  rpc CreateBudgetConfig(CreateBudgetConfigRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      post: "/v1/{vendor}/budgets/configuration"
-      body: "budgetConfig"
-    };
-  }
-
-  // Updates an existing budget configuration.
-  rpc UpdateBudgetConfig(UpdateBudgetConfigRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      put: "/v1/{vendor}/budgets/configuration/{budgetConfigId}"
-      body: "budgetConfig"
-    };
-  }
-
-  // Fetches budget configurations for all accounts under the specified billing group.
-  // Set accountId to fetch budget configuration for specific account only.
-  rpc GetBudgetConfig(GetBudgetConfigRequest) returns (GetBudgetConfigResponse) {
-    option (google.api.http) = {
-      get: "/v1/{vendor}/budgets/configuration"
-    };
-  }
-
   // Fetches cost forecasts for the specified billing group.
   // Includes historical cost (up to previous month) and forecasted cost (up to three months for now).
   rpc GetForecasts(GetForecastsRequest) returns (GetForecastsResponse) {
@@ -232,10 +207,24 @@ service Cost {
     };
   }
 
-  // Fetches month-to-date accumulated costs vs forecasted cost vs budget for the specified billing group.
-  rpc GetMonthToDateForecast(GetMonthToDateForecastRequest) returns (GetMonthToDateForecastResponse) {
+  // Fetches monthly accumulated costs vs forecasted cost vs budget for the id.
+  rpc GetMonthlyCostForecast(GetMonthlyCostForecastRequest) returns (GetMonthlyCostForecastResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/forecasts/month-to-date"
+      get: "/v1/{vendor}/forecasts/monthly/{level}/{id}"
+    };
+  }
+
+  // Fetches previous month cost vs current month forecast vs current accumulated cost per category for id 
+  rpc GetMonthOnMonthCostForecast(GetMonthOnMonthCostForecastRequest) returns (GetMonthOnMonthCostForecastResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/forecasts/month-on-month/{level}/{id}"
+    };
+  }
+
+  // Fetches current month daily forecast vs current accumulated daily cost for id 
+  rpc GetMonthToDateCostForecast(GetMonthToDateCostForecastRequest) returns (GetMonthToDateCostForecastResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/forecasts/month-to-date/{level}/{id}"
     };
   }
 }
@@ -617,45 +606,6 @@ message ReadNonTagCostsRequest {
   bool groupByMonths = 5;
 }
 
-// Request message for CreateBudgetConfig.
-message CreateBudgetConfigRequest {
-  // Required. At the moment, only `aws` is supported.
-  string vendor = 1;
-
-  // Required. Budget configuration to save.
-  api.BudgetConfiguration budgetConfig = 2;
-}
-
-// Request message for UpdateBudgetConfig.
-message UpdateBudgetConfigRequest {
-  // Required. At the moment, only `aws` is supported.
-  string vendor = 1;
-  
-  // Required. Budget configuration id to update.
-  string budgetConfigId = 2;
-
-  // Required. Budget configuration with update information.
-  api.BudgetConfiguration budgetConfig = 3;
-}
-
-// Request message for GetBudgetConfig.
-message GetBudgetConfigRequest {
-  // Required. Valid values are `aws`, `azure`, and `gcp`.
-  string vendor = 1;
-  
-  // Required. Billing group id to retrieve.
-  string billingGroupId = 2;
-  
-  // Optional. If set, only budget configuration for the specified account is returned.
-  string accountId = 3;
-}
-
-// Response message for GetBudgetConfig.
-// If accountId is specified in the request, only one budget configuration is returned.
-message GetBudgetConfigResponse {
-  repeated api.BudgetConfiguration data = 1;
-}
-
 // Request message for GetForecasts per billing group.
 message GetForecastsRequest {
   // Required. At the moment, only `aws` is supported.
@@ -673,13 +623,13 @@ message GetForecastsRequest {
   // Default value is `account`.
   string level = 4;
   
-  // Optional. Starting date to get data.
+  // Optional. Start date to get cost forecast. 
   // If from_date is less than current date, historical costs are included.
   // If from_date is greater than current date, only forecasted costs are returned.
   // Format: `yyyy-mm-dd`.
   string fromDate = 5; 
  
-  // Optional. Last date to get forecast cost. 
+  // Optional. End date to get cost forecast. 
   // Currently, we only support 90 days forecasting from the first day of current month.
   // Format: `yyyy-mm-dd`.
   string toDate = 6;
@@ -690,17 +640,64 @@ message GetForecastsResponse {
   api.BillingGroupForecast data = 1;
 }
 
-// Request message for GetMonthToDateForecast per billing group.
-message GetMonthToDateForecastRequest {
+// Request message for GetMonthlyCostForecast
+message GetMonthlyCostForecastRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
   
-  // Optional. Company Id of Billing Group to retrieve.
-  // Default value is user's Company Id
-  string companyId = 2;
+  // Required. 'account' or 'acctgroup'
+  string level = 2;
+
+  // Required. Account or AccountGroup Id
+  string id = 3;
+
+  // Optional. Start month to get cost forecast. 
+  // Format: `yyyymm`.
+  string fromDate = 4; 
+
+  // Optional. Last month to get cost forecast. 
+  // Format: `yyyymm`.
+  string toDate = 5; 
 }
 
-// Response message for GetMonthToDateForecast per billing group.
-message GetMonthToDateForecastResponse {
-  api.BillingGroupMonthToDateForecast data = 1;
+// Response message for GetMonthlyCostForecast
+message GetMonthlyCostForecastResponse {
+  string id = 1;
+  repeated api.MonthlyCostForecast data = 2;
+}
+
+// Request message for GetMonthOnMonthCostForecast
+message GetMonthOnMonthCostForecastRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+  
+  // Required. 'account' or 'acctgroup'
+  string level = 2;
+
+  // Required. Account or AccountGroup Id
+  string id = 3;
+}
+
+// Response message for GetMonthOnMonthCostForecast
+message GetMonthOnMonthCostForecastResponse {
+  string id = 1;
+  repeated api.MonthOnMonthCostForecast data = 2;
+}
+
+// Request message for GetMonthToDateCostForecast
+message GetMonthToDateCostForecastRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+  
+  // Required. 'account' or 'acctgroup'
+  string level = 2;
+
+  // Required. Account or AccountGroup Id
+  string id = 3;
+}
+
+// Response message for GetMonthToDateCostForecast
+message GetMonthToDateCostForecastResponse {
+  string id = 1;
+  repeated api.MonthToDateCostForecast data = 2;
 }
