@@ -1427,139 +1427,6 @@
         ]
       }
     },
-    "/v1/{vendor}/budgets/configuration": {
-      "get": {
-        "summary": "Fetches budget configurations for all accounts under the specified billing group.\nSet accountId to fetch budget configuration for specific account only.",
-        "operationId": "Cost_GetBudgetConfig",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetBudgetConfigResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. Valid values are `aws`, `azure`, and `gcp`.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "billingGroupId",
-            "description": "Required. Billing group id to retrieve.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "accountId",
-            "description": "Optional. If set, only budget configuration for the specified account is returned.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      },
-      "post": {
-        "summary": "Creates a budget configuration.",
-        "operationId": "Cost_CreateBudgetConfig",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "description": "Required. Budget configuration to save.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/apiBudgetConfiguration"
-            }
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
-    "/v1/{vendor}/budgets/configuration/{budgetConfigId}": {
-      "put": {
-        "summary": "Updates an existing budget configuration.",
-        "operationId": "Cost_UpdateBudgetConfig",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "budgetConfigId",
-            "description": "Required. Budget configuration id to update.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "description": "Required. Budget configuration with update information.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/apiBudgetConfiguration"
-            }
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
     "/v1/{vendor}/calculations/history": {
       "get": {
         "summary": "Lists vendor costs calculations history and statuses.",
@@ -1776,14 +1643,14 @@
           },
           {
             "name": "fromDate",
-            "description": "Optional. Starting date to get data.\nIf from_date is less than current date, historical costs are included.\nIf from_date is greater than current date, only forecasted costs are returned.\nFormat: `yyyy-mm-dd`.",
+            "description": "Optional. Start date to get cost forecast. \nIf from_date is less than current date, historical costs are included.\nIf from_date is greater than current date, only forecasted costs are returned.\nFormat: `yyyy-mm-dd`.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "toDate",
-            "description": "Optional. Last date to get forecast cost. \nCurrently, we only support 90 days forecasting from the first day of current month.\nFormat: `yyyy-mm-dd`.",
+            "description": "Optional. End date to get cost forecast. \nCurrently, we only support 90 days forecasting from the first day of current month.\nFormat: `yyyy-mm-dd`.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -1794,15 +1661,15 @@
         ]
       }
     },
-    "/v1/{vendor}/forecasts/month-to-date": {
+    "/v1/{vendor}/forecasts/month-on-month/{level}/{id}": {
       "get": {
-        "summary": "Fetches month-to-date accumulated costs vs forecasted cost vs budget for the specified billing group.",
-        "operationId": "Cost_GetMonthToDateForecast",
+        "summary": "Fetches previous month cost vs current month forecast vs current accumulated cost per category for id",
+        "operationId": "Cost_GetMonthOnMonthCostForecast",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetMonthToDateForecastResponse"
+              "$ref": "#/definitions/v1GetMonthOnMonthCostForecastResponse"
             }
           },
           "default": {
@@ -1821,8 +1688,121 @@
             "type": "string"
           },
           {
-            "name": "companyId",
-            "description": "Optional. Company Id of Billing Group to retrieve.\nDefault value is user's Company Id.",
+            "name": "level",
+            "description": "Required. 'account' or 'acctgroup'",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. Account or AccountGroup Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/forecasts/month-to-date/{level}/{id}": {
+      "get": {
+        "summary": "Fetches current month daily forecast vs current accumulated daily cost for id",
+        "operationId": "Cost_GetMonthToDateCostForecast",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetMonthToDateCostForecastResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "level",
+            "description": "Required. 'account' or 'acctgroup'",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. Account or AccountGroup Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/forecasts/monthly/{level}/{id}": {
+      "get": {
+        "summary": "Fetches monthly accumulated costs vs forecasted cost vs budget for the id.",
+        "operationId": "Cost_GetMonthlyCostForecast",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetMonthlyCostForecastResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "level",
+            "description": "Required. 'account' or 'acctgroup'",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. Account or AccountGroup Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "fromDate",
+            "description": "Optional. Start month to get cost forecast. \nFormat: `yyyymm`.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "toDate",
+            "description": "Optional. Last month to get cost forecast. \nFormat: `yyyymm`.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -2193,80 +2173,6 @@
         }
       }
     },
-    "apiBillingGroupMonthToDateForecast": {
-      "type": "object",
-      "properties": {
-        "companyId": {
-          "type": "string"
-        },
-        "data": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/apiMonthToDateForecastData"
-          }
-        }
-      }
-    },
-    "apiBudgetAlert": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "budgetConfigurationId": {
-          "type": "string"
-        },
-        "percentage": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "channelIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "apiBudgetConfiguration": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "length": {
-          "type": "string"
-        },
-        "startingMonth": {
-          "type": "string"
-        },
-        "companyId": {
-          "type": "string"
-        },
-        "accountId": {
-          "type": "string"
-        },
-        "monthBudget": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "number",
-            "format": "double"
-          }
-        },
-        "alertsEnabled": {
-          "type": "boolean"
-        },
-        "budgetAlerts": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/apiBudgetAlert"
-          }
-        }
-      }
-    },
     "apiForecastData": {
       "type": "object",
       "properties": {
@@ -2292,33 +2198,96 @@
         "forecastedCost": {
           "type": "number",
           "format": "double"
-        }
-      }
-    },
-    "apiMonthToDateForecastData": {
-      "type": "object",
-      "properties": {
-        "accountId": {
-          "type": "string"
         },
-        "productCategory": {
-          "type": "string"
-        },
-        "productCode": {
-          "type": "string"
-        },
-        "date": {
-          "type": "string"
-        },
-        "accumulatedCost": {
+        "upperBound": {
           "type": "number",
           "format": "double"
         },
-        "forecastCost": {
+        "lowerBound": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "apiMonthOnMonthCostForecast": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+        "costCurrent": {
+          "type": "number",
+          "format": "double"
+        },
+        "costPrev": {
+          "type": "number",
+          "format": "double"
+        },
+        "costForecast": {
+          "type": "number",
+          "format": "double"
+        },
+        "upperBound": {
+          "type": "number",
+          "format": "double"
+        },
+        "lowerBound": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "apiMonthToDateCostForecast": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "costAccumulated": {
+          "type": "number",
+          "format": "double"
+        },
+        "costForecast": {
           "type": "number",
           "format": "double"
         },
         "budget": {
+          "type": "number",
+          "format": "double"
+        },
+        "upperBound": {
+          "type": "number",
+          "format": "double"
+        },
+        "lowerBound": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "apiMonthlyCostForecast": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "costActual": {
+          "type": "number",
+          "format": "double"
+        },
+        "costForecast": {
+          "type": "number",
+          "format": "double"
+        },
+        "budget": {
+          "type": "number",
+          "format": "double"
+        },
+        "upperBound": {
+          "type": "number",
+          "format": "double"
+        },
+        "lowerBound": {
           "type": "number",
           "format": "double"
         }
@@ -2946,18 +2915,6 @@
       },
       "description": "Response message for the Iam.CreateUserRoleMapping rpc."
     },
-    "v1GetBudgetConfigResponse": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/apiBudgetConfiguration"
-          }
-        }
-      },
-      "description": "Response message for GetBudgetConfig.\nIf accountId is specified in the request, only one budget configuration is returned."
-    },
     "v1GetCalculatorConfigResponse": {
       "type": "object",
       "properties": {
@@ -2976,14 +2933,50 @@
       },
       "description": "Response message for GetForecasts per billing group."
     },
-    "v1GetMonthToDateForecastResponse": {
+    "v1GetMonthOnMonthCostForecastResponse": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "data": {
-          "$ref": "#/definitions/apiBillingGroupMonthToDateForecast"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiMonthOnMonthCostForecast"
+          }
         }
       },
-      "description": "Response message for GetMonthToDateForecast per billing group."
+      "title": "Response message for GetMonthOnMonthCostForecast"
+    },
+    "v1GetMonthToDateCostForecastResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiMonthToDateCostForecast"
+          }
+        }
+      },
+      "title": "Response message for GetMonthToDateCostForecast"
+    },
+    "v1GetMonthlyCostForecastResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiMonthlyCostForecast"
+          }
+        }
+      },
+      "title": "Response message for GetMonthlyCostForecast"
     },
     "v1GetPayerAccountImportHistoryResponse": {
       "type": "object",
