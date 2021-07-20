@@ -406,11 +406,13 @@ message CalculateCostsRequestAwsOptions {
   // during the call, the request will fail.
   bool force = 1;
 
-  // Optional. If set to true, only calculate for account-type billing groups.
+  // Optional. If set to true, only calculate for account-type billing groups. If both
+  // `accountsOnly` and `tagsOnly` are set to true, `accountsOnly` will prevail.
   bool accountsOnly = 2;
 
   // Optional. If set to true, only calculate for tags-type billing groups. Discarded
-  // when the organization doesn't have any tag-based billing groups configured.
+  // when the organization doesn't have any tag-based billing groups configured. If
+  // both `accountsOnly` and `tagsOnly` are set to true, `accountsOnly` will prevail.
   bool tagsOnly = 3;
 }
 
