@@ -151,7 +151,7 @@ service Cost {
 
   // Reads the usage-based cost details of an organization (Ripple) or billing group (Wave).
   // At the moment, the supported {vendor} is 'aws'. If datetime range parameters are
-  // not set, month-to-date (current month) will be returned.
+  // not set, month-to-date (current month) will be returned. Also returns the enterprise costs by default.
   rpc ReadCosts (ReadCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costs:read"
@@ -537,10 +537,6 @@ message ReadCostsRequest {
 
   // Optional. Valid only for the `aws` vendor. AWS-specific options.
   ReadCostsRequestAwsOptions awsOptions = 6;
-
-  // Optional. Boolean indicator if enterprise costs are to be returned as well.
-  // If true, will return the enterprise costs together with the initial costs returned (unblended/trueunblended).
-  bool includeEnterprise = 7;
 }
 
 // Response message wrapper for cloud cost adjustments.
