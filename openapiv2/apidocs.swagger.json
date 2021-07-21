@@ -2425,8 +2425,33 @@
         }
       }
     },
+    "awsAdjustmentsTypeList": {
+      "type": "object",
+      "properties": {
+        "types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "awsCalculatorConfig": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "adjustmentsTypeList": {
+          "$ref": "#/definitions/awsAdjustmentsTypeList",
+          "description": "CUR lineitem types included in Ripple's 'Adjusting Entries'."
+        },
+        "excludedServicesFromUsage": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/awsExcludedServiceFromUsage"
+          },
+          "description": "List of services that are of type 'Usage' in CUR that are excluded,\noptionally converted to Adjustments."
+        }
+      },
+      "description": "AWS's calculation engine configuration(s)."
     },
     "awsCost": {
       "type": "object",
@@ -2522,6 +2547,23 @@
         },
         "tagId": {
           "type": "string"
+        }
+      }
+    },
+    "awsExcludedServiceFromUsage": {
+      "type": "object",
+      "properties": {
+        "managementAccount": {
+          "type": "string",
+          "description": "The management account (formerly master account) the `productCode` belongs to."
+        },
+        "productCode": {
+          "type": "string",
+          "description": "The excluded product code."
+        },
+        "convertedToAdjustments": {
+          "type": "boolean",
+          "description": "If the product code is converted to Adjustments or not."
         }
       }
     },
