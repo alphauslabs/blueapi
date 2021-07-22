@@ -239,7 +239,7 @@ service Cost {
   // Creates monthly budget for the account/acctgroup id.
   rpc CreateAccountBudget(CreateAccountBudgetRequest) returns (CreateAccountBudgetResponse) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/budget/{level}"
+      post: "/v1/{vendor}/budget/{level}/{id}"
       body: "*"
     };
   }
@@ -763,7 +763,10 @@ message CreateAccountBudgetRequest {
   // Required. 'account' or 'acctgroup'
   string level = 2;
 
-  api.Budget data = 3;
+  // Required. Account or AccountGroup Id
+  string id = 3;
+
+  api.Budget data = 4;
 }
 
 // Response message for CreateAccountBudget
@@ -777,7 +780,7 @@ message UpdateAccountBudgetRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
-  // Required. Account or AccountGroup Id
+  // Required. Budget Id
   string budgetId = 2; 
 
   api.Budget data = 3;
