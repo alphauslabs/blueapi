@@ -4,6 +4,7 @@ package blueapi.cost.v1;
 
 import "api/account.proto";
 import "api/operation.proto";
+import "api/budget.proto";
 import "api/forecast.proto";
 import "api/aws/cost.proto";
 import "api/aws/adjustment.proto";
@@ -232,6 +233,36 @@ service Cost {
   rpc GetMonthToDateCostForecast(GetMonthToDateCostForecastRequest) returns (GetMonthToDateCostForecastResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/forecasts/month-to-date/{level}/{id}"
+    };
+  }
+
+  // Fetches monthly budget for the account/acctgroup id.
+  rpc GetAccountBudget(GetAccountBudgetRequest) returns (GetAccountBudgetResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/budget/{level}/{id}"
+    };
+  }
+
+  // Creates monthly budget for the account/acctgroup id.
+  rpc CreateAccountBudget(CreateAccountBudgetRequest) returns (CreateAccountBudgetResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/budget/{level}"
+      body: "*"
+    };
+  }
+
+  // Updates monthly budget for the account/acctgroup id.
+  rpc UpdateAccountBudget(UpdateAccountBudgetRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/{vendor}/budget/{budgetId}"
+      body: "*"
+    };
+  }
+
+  // Removes monthly budget for the account/acctgroup id from database.
+  rpc DeleteAccountBudget(DeleteAccountBudgetRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/{vendor}/budget/{budgetId}"
     };
   }
 }
@@ -753,4 +784,63 @@ message GetMonthToDateCostForecastResponse {
   string id = 1;
   double budget = 2;
   repeated api.MonthToDateCostForecast data = 3;
+}
+
+// Request message for GetAccountBudget
+message GetAccountBudgetRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+  
+  // Required. 'account' or 'acctgroup'
+  string level = 2;
+
+  // Required. Account or AccountGroup Id
+  string id = 3; 
+
+  // Optional. Default is current year
+  // Format: yyyy
+  string year = 4;
+}
+
+// Response message for GetAccountBudget
+message GetAccountBudgetResponse {
+  api.Budget data = 1;
+}
+
+// Request message for CreateAccountBudget
+message CreateAccountBudgetRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+  
+  // Required. 'account' or 'acctgroup'
+  string level = 2;
+
+  api.Budget data = 3;
+}
+
+// Response message for CreateAccountBudget
+message CreateAccountBudgetResponse {
+  //Budget Id
+  string budgetId = 1; 
+  bool isSuccess = 2;
+}
+
+// Request message for UpdateAccountBudget
+message UpdateAccountBudgetRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Account or AccountGroup Id
+  string budgetId = 2; 
+
+  api.Budget data = 3;
+}
+
+// Request message for DeleteAccountBudget
+message DeleteAccountBudgetRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Budget Id
+  string budgetId = 2; 
 }
