@@ -25,6 +25,14 @@ service Billing {
       get: "/v1/billinggroups"
     };
   }
+
+  // Registers a billing group.
+  rpc CreateBillingGroup(CreateBillingGroupRequest) returns (BillingGroup) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups"
+      body: "*"
+    };
+  }
 }
 
 message BillingGroup {
@@ -40,3 +48,45 @@ message BillingGroup {
 
 // Request message for the Billing.ListBillingGroups rpc.
 message ListBillingGroupsRequest {}
+
+// Request message for the Billing.CreateBillingGroup rpc.
+message CreateBillingGroupRequest {
+   // Required. The billing group's id.
+  string billingGroupId = 1;
+
+  // Required. The billing group's name.
+  string billingGroupName = 2;
+
+  // Required. Company’s name
+  string companyName = 3;
+
+  // Optional. The title of the billing
+  string billingTitle = 4;
+
+  // Optional. Company’s phone number
+  string phoneNumber = 5;
+
+  // Optional. Company’s postal code
+  string postalCode = 6;
+
+  // Optional. Company’s address
+  string address = 7;
+
+  // Optional. Addressee
+  string personal = 8;
+
+  // Optional. Any remarks about the billing group
+  string remarks = 9;
+
+  // Optional. Project code
+  string projectId = 10;
+
+  // Optional. Invoice language
+  string language = 11;
+
+  // Optional. Calculation type, true unblended or unblended
+  string displayCost = 12;
+
+  // Optional. Exchange rate type, payer or billing group
+  string exchangeRateType = 13;
+}
