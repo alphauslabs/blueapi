@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package blueapi.cost.v1;
 
+import "api/keyvalue.proto";
 import "api/account.proto";
 import "api/operation.proto";
 import "api/budget.proto";
@@ -130,7 +131,7 @@ service Cost {
   // for more information.
   rpc ImportCurFiles(ImportCurFilesRequest) returns (api.Operation) {
     option (google.api.http) = {
-      post: "/v1/aws:importCurFiles"
+      post: "/v1/aws/cur:import"
       body: "*"
     };
   }
@@ -516,13 +517,40 @@ message ReadCostsRequestAwsOptions {
   // `groupByColumns` to `none`.
   bool groupByMonth = 2;
 
+  // Optional. A list of column filters. Dependent on `groupByColumns` and/or `groupByMonth`.
+  // The `key` field indicates the column name while the `value` field is the filter value
+  // prefixed by either `eq:` (equal), `re:` (regexp based on https://github.com/google/re2),
+  // or `!re:` (reverse `re:`). For example, if you like to filter `productCode` to return
+  // only `AmazonEC2`, set to:
+  //
+  //   [{
+  //     "key": "productCode",
+  //     "value": "eq:AmazonEC2"
+  //   }]
+  //
+  // You can also use a regular expression like so:
+  //
+  //   [{
+  //     "key": "description",
+  //     "value": "re:.*napshot.*"
+  //   }]
+  //
+  // Or reverse regexp, such as, return all items except `AmazonEC2`:
+  //
+  //   [{
+  //     "key": "productCode",
+  //     "value": "!re:^AmazonEC2$"
+  //   }]
+  //
+  repeated api.KeyValue filters = 3;
+
   // Optional. If set to true, stream will include resource tags. Discarded when
   // `groupByColumns` field is set.
-  bool includeTags = 3;
+  bool includeTags = 4;
 
   // Optional. If set to true, stream will include resource cost category information.
   // Discarded when `groupByColumns` field is set.
-  bool includeCostCategories = 4;
+  bool includeCostCategories = 5;
 
   // Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can
   // set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which
@@ -530,7 +558,7 @@ message ReadCostsRequestAwsOptions {
   // prefer a custom exchange rate, you can append the rate to the currency's three-letter
   // symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate
   // should be against the US dollar (USD).
-  string toCurrency = 5;
+  string toCurrency = 6;
 
   // Optional. If set to true, always get the up-to-date calculation results. This data
   // isn't necessarily in-sync with your invoice data as AWS could still have updated your
@@ -539,7 +567,7 @@ message ReadCostsRequestAwsOptions {
   //
   // This field is discarded for Wave(Pro) users. You will always get the latest data that
   // is in-sync with your invoices.
-  bool forceLatest = 6;
+  bool forceLatest = 7;
 }
 
 // Request message for the Cost.ReadCosts rpc.
