@@ -89,4 +89,40 @@ message CreateBillingGroupRequest {
 
   // Optional. Exchange rate type, payer or billing group
   string exchangeRateType = 13;
+
+  // Invoice settings
+  CreateBillingGroupRequestInvoice invoices = 14;
+}
+
+// Vendor invoice setttings
+message CreateBillingGroupRequestInvoice {
+  // AWS invoice settings
+  CreateBillingGroupRequestInvoiceVendor aws = 1;
+
+  // Azure invoice settings
+  CreateBillingGroupRequestInvoiceVendor azure = 2;
+
+  // GCP invoice settings
+  CreateBillingGroupRequestInvoiceVendor gcp = 3;
+}
+
+// Specific settings per vendor
+message CreateBillingGroupRequestInvoiceVendor {
+  string calcType = 1;
+  double discountRate = 2;
+  string substitutionFee = 3;
+  double substitutionFix = 4;
+  double substitutionRate = 5;
+  string supportFee = 6;
+  double supportRate = 7;
+  double supportFix = 8;
+  double taxRate = 9;
+  string currency = 10;
+  string discountTargetUsage = 11;
+  string substitutionFeeTargetUsage = 12;
+  string discountCalcLogic = 13;
+  string substitutionFeeCalcTarget = 14;
+  string substitutionFeeCalcType = 15;
+  string supportAmountTarget = 16;
+  string supportFeeCalcTarget = 17;
 }
