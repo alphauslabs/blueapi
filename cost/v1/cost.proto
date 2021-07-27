@@ -517,29 +517,26 @@ message ReadCostsRequestAwsOptions {
   // `groupByColumns` to `none`.
   bool groupByMonth = 2;
 
-  // Optional. A list of column filters. Dependent on `groupByColumns` and/or `groupByMonth`.
-  // The `key` field indicates the column name while the `value` field is the filter value
+  // Optional. A list of "key:value" column filters. Dependent on `groupByColumns` and/or
+  // `groupByMonth`. The key indicates the column name while the value is the filter value
   // prefixed by either "eq:" (equal), "re:" (regexp based on https://github.com/google/re2),
   // or "!re:" (reverse "re:"). For example, if you like to filter `productCode` to return
   // only `AmazonEC2`, set to
   //
   //   [{
-  //     "key": "productCode",
-  //     "value": "eq:AmazonEC2"
+  //     "productCode": "eq:AmazonEC2"
   //   }]
   //
   // You can also use a regular expression like so
   //
   //   [{
-  //     "key": "description",
-  //     "value": "re:.*napshot.*"
+  //     "description": "re:.*napshot.*"
   //   }]
   //
   // Or reverse regexp, such as, return all items except `AmazonEC2`
   //
   //   [{
-  //     "key": "productCode",
-  //     "value": "!re:^AmazonEC2$"
+  //     "productCode": "!re:^AmazonEC2$"
   //   }]
   repeated api.KeyValue filters = 3;
 
