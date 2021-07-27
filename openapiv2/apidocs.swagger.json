@@ -2447,17 +2447,6 @@
         }
       }
     },
-    "apiKeyValue": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
-        }
-      }
-    },
     "apiMonthOnMonthCostForecast": {
       "type": "object",
       "properties": {
@@ -3689,12 +3678,11 @@
           "description": "Optional. If set to true, return data grouped by month. At the moment, it only supports\n`productCode` column when enabled; meaning, costs per account per service per month.\nIf you want data that is grouped per account per month, set this to `true`, then set\n`groupByColumns` to `none`."
         },
         "filters": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/apiKeyValue"
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
           },
-          "description": "[{\n    \"productCode\": \"eq:AmazonEC2\"\n  }]\n\nYou can also use a regular expression like so\n\n  [{\n    \"productCode\": \"re:AmazonEC2|AmazonRDS\"\n  }]\n\nOr reverse regexp, such as, return all items except `AmazonEC2`\n\n  [{\n    \"productCode\": \"!re:^AmazonEC2$\"\n  }]",
-          "title": "Optional. A list of \"key:value\" column filters. Dependent on `groupByColumns` and/or\n`groupByMonth`. The key indicates the column name while the value is the filter value\nprefixed by either \"eq:\" (equal), \"re:\" (regexp based on https://github.com/google/re2),\nor \"!re:\" (reverse \"re:\"). For example, if you like to filter `productCode` to return\nonly `AmazonEC2`, set to"
+          "description": "Optional. A list of \"key:value\" column filters. Dependent on `groupByColumns` and/or\n`groupByMonth`. The key indicates the column name while the value is the filter value\nprefixed by either \"eq:\" (equal), \"re:\" (regexp based on https://github.com/google/re2),\nor \"!re:\" (reverse \"re:\").\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to\n`[{\"productCode\":\"eq:AmazonEC2\"}]`. You can also use a regular expression like\n`[{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}]`. Or reverse regexp, such as, return all\nitems except `AmazonEC2`, e.g `[{\"productCode\":\"!re:^AmazonEC2$\"}]`."
         },
         "includeTags": {
           "type": "boolean",
