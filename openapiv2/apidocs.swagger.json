@@ -3678,11 +3678,11 @@
           "description": "Optional. If set to true, return data grouped by month. At the moment, it only supports\n`productCode` column when enabled; meaning, costs per account per service per month.\nIf you want data that is grouped per account per month, set this to `true`, then set\n`groupByColumns` to `none`."
         },
         "filters": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ReadCostsRequestAwsOptionsFilters"
           },
-          "description": "Optional. A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or\n`groupByMonth`. The key indicates the column name while the value is the filter value\nprefixed by either \"eq:\" (equal), \"re:\" (regexp based on https://github.com/google/re2),\nor \"!re:\" (reverse \"re:\").\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to\n`{\"productCode\":\"eq:AmazonEC2\"}`. You can also use a regular expression like\n`{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`. Or reverse regexp, such as, return all\nitems except `AmazonEC2`, e.g `{\"productCode\":\"!re:^AmazonEC2$\"}`."
+          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more\ninformation on each filter item. Multiple filter items will use the logical 'or' operator,\ne.g. filter1 || filter2 || filter3, etc."
         },
         "includeTags": {
           "type": "boolean",
@@ -3702,6 +3702,18 @@
         }
       },
       "description": "AWS-specific options for ReadCostsRequest."
+    },
+    "v1ReadCostsRequestAwsOptionsFilters": {
+      "type": "object",
+      "properties": {
+        "filters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`.\nThe key indicates the column name while the value is the filter value prefixed by either\n\"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or\n\"!re:\" (reverse \"re:\"). Multiple map items will use the logical 'and' operator, e.g.\nmapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to\n`{\"productCode\":\"eq:AmazonEC2\"}`. You can also use a regular expression like \n`{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS\nlineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means\nreturn all items except `AmazonEC2`."
     },
     "v1ReadNonTagCostsRequest": {
       "type": "object",

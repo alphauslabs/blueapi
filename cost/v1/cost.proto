@@ -494,6 +494,21 @@ message ListCalculationsHistoryResponse {
   ListCalculationsHistoryAwsResponse aws = 1;
 }
 
+// A map of "key:value" column filters. Dependent on `groupByColumns` and/or `groupByMonth`.
+// The key indicates the column name while the value is the filter value prefixed by either
+// "eq:" (equal), "re:" (regular expressions based on https://github.com/google/re2), or
+// "!re:" (reverse "re:"). Multiple map items will use the logical 'and' operator, e.g.
+// mapfilter1 && mapfilter2 && mapfilter3, etc.
+//
+// For example, if you like to filter `productCode` to return only `AmazonEC2`, set to
+// `{"productCode":"eq:AmazonEC2"}`. You can also use a regular expression like 
+// `{"productCode":"re:AmazonEC2|AmazonRDS"}`, which means return all AmazonEC2 or AmazonRDS
+// lineitems. Or reverse regexp, such as `{"productCode":"!re:^AmazonEC2$"}`, which means
+// return all items except `AmazonEC2`.
+message ReadCostsRequestAwsOptionsFilters {
+  map<string, string> filters = 1;
+}
+
 // AWS-specific options for ReadCostsRequest.
 message ReadCostsRequestAwsOptions {
   // Optional. A comma-separated list of columns to aggregate the data into. Valid values
@@ -516,16 +531,10 @@ message ReadCostsRequestAwsOptions {
   // `groupByColumns` to `none`.
   bool groupByMonth = 2;
 
-  // Optional. A map of "key:value" column filters. Dependent on `groupByColumns` and/or
-  // `groupByMonth`. The key indicates the column name while the value is the filter value
-  // prefixed by either "eq:" (equal), "re:" (regexp based on https://github.com/google/re2),
-  // or "!re:" (reverse "re:").
-  //
-  // For example, if you like to filter `productCode` to return only `AmazonEC2`, set to
-  // `{"productCode":"eq:AmazonEC2"}`. You can also use a regular expression like
-  // `{"productCode":"re:AmazonEC2|AmazonRDS"}`. Or reverse regexp, such as, return all
-  // items except `AmazonEC2`, e.g `{"productCode":"!re:^AmazonEC2$"}`.
-  map<string, string> filters = 3;
+  // Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more
+  // information on each filter item. Multiple filter items will use the logical 'or' operator,
+  // e.g. filter1 || filter2 || filter3, etc.
+  repeated ReadCostsRequestAwsOptionsFilters filters = 3;
 
   // Optional. If set to true, stream will include resource tags. Discarded when
   // `groupByColumns` field is set.
