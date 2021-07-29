@@ -35,7 +35,7 @@ Download current month's adjustment costs and save as CSV file:
 $ bluectl aws-adjustments --type all --out /tmp/out.csv
 ```
 
-You can also provide the `--start yyyy-mm-dd` and `--end yyyy-mm-dd` flags for date ranges.
+You can also provide the `--start yyyymmdd` and `--end yyyymmdd` flags for date ranges.
 
 Download current month's usage costs for a specific account and save as CSV file:
 
@@ -60,7 +60,3 @@ $ curl -X POST -H "Authorization: Bearer $(bluectl access-token)" \
     https://api.alphaus.cloud/m/blue/cost/v1/aws/costs:read \
     -d '{"accountId":"1234567890"}'
 ```
-
-## Pricing
-
-This API is still in beta, so its usage will be free. Once released, we will also announce the pricing details.
