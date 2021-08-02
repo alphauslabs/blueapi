@@ -567,15 +567,15 @@ message ReadCostsRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
-  // Optional. If set, reads the usage-based cost details of this billing group. Valid
-  // only if `accountId` is not set. If both `billingInternalId` and `accountId` are
-  // not set, reads the usage-based cost details of the whole organization. Only valid
-  // for Ripple users. Implied (or discarded) for Wave(Pro) users.
-  string billingInternalId = 2;
+  // Optional. At the moment, only billing internal ids are supported. If set, reads the
+  // usage-based cost details of this group. Valid only if `accountId` is not set. If both
+  // `groupId` and `accountId` are not set, reads the usage-based cost details of the whole
+  // organization. Only valid for Ripple users. Implied (or discarded) for Wave(Pro) users.
+  string groupId = 2;
 
   // Optional. If set, reads the usage-based cost details of this account. Also invalidates
-  // the `billingInternalId` value even if set. If both `billingInternalId` and `accountId`
-  // are not set, reads the usage-based cost details of the whole organization.
+  // the `groupId` value even if set. If both `billingInternalId` and `accountId` are not
+  // set, reads the usage-based cost details of the whole organization.
   string accountId = 3;
 
   // Optional. The UTC date to start streaming data from. If not set, the first day of the
