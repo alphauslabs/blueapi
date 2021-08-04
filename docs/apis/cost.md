@@ -9,7 +9,7 @@ show_sorted: false
 OpenAPI documentation: [https://alphauslabs.github.io/blueapidocs/#/Cost](https://alphauslabs.github.io/blueapidocs/#/Cost)
 ```
 
-Cost API allows you to stream your vendor-related usage costs and adjustment costs. This is the same data that Ripple/Wave uses to create invoices, graphs, and reports, aggregated at daily level.
+Cost API allows you to query your vendor-related usage costs and adjustment costs. This is the same data that Ripple/Wave uses to create invoices, graphs, and reports, aggregated at daily level.
 
 ## Cloud vendor: AWS
 
