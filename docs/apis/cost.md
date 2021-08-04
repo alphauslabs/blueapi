@@ -25,14 +25,14 @@ Download current month's usage costs and save as CSV file:
 
 ```sh
 # Here, 'all' could mean MSP-level or billing group level.
-$ bluectl aws-costs --type all --out /tmp/out.csv
+$ bluectl awscosts get --type all --out /tmp/out.csv
 ```
 
 Download current month's adjustment costs and save as CSV file:
 
 ```sh
 # Here, 'all' could mean MSP-level or billing group level.
-$ bluectl aws-adjustments --type all --out /tmp/out.csv
+$ bluectl awscosts get-adjustments --type all --out /tmp/out.csv
 ```
 
 You can also provide the `--start yyyymmdd` and `--end yyyymmdd` flags for date ranges.
@@ -40,14 +40,14 @@ You can also provide the `--start yyyymmdd` and `--end yyyymmdd` flags for date 
 Download current month's usage costs for a specific account and save as CSV file:
 
 ```sh
-$ bluectl aws-costs 1234567890 --type account --out /tmp/out.csv
+$ bluectl awscosts get 1234567890 --type account --out /tmp/out.csv
 ```
 
 Download current month's adjustment costs for a specific billing group and save as CSV file:
 
 ```sh
 # Here, 'bill001' is your billing group id.
-$ bluectl aws-adjustments bill001 --type billinggroup --out /tmp/out.csv
+$ bluectl awscosts get-adjustments bill001 --type billinggroup --out /tmp/out.csv
 ```
 
 You can also provide the `--include-tags` and/or `--include-costcategories` flag(s) to include the tags and/or cost category information in the streaming data. At the moment, only the usage-based data supports tags and cost categories.
