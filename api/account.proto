@@ -3,7 +3,6 @@ syntax = "proto3";
 package blueapi.api;
 
 import "api/keyvalue.proto";
-import "google/protobuf/any.proto";
 
 option go_package = "github.com/alphauslabs/blue-sdk-go/api";
 option java_package = "cloud.alphaus.blueapi.api";
@@ -16,11 +15,6 @@ message Account {
   // The account name.
   string name = 2;
 
-  // The attributes (key/value pair) of the account. At the moment,
-  // this maps to `AccountMetadataV1`.
-  google.protobuf.Any metadata = 3;
-}
-
-message AccountMetadataV1 {
-  repeated KeyValue kv = 1;
+  // The attributes (key/value pair) of the account.
+  repeated KeyValue metadata = 3;
 }
