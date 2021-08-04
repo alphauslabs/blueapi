@@ -47,7 +47,7 @@ Download current month's adjustment costs for a specific billing group and save 
 
 ```sh
 # Here, 'bill001' is your billing group id.
-$ bluectl awscosts get-adjustments --id bill001 --type billinggroup --out /tmp/out.csv
+$ bluectl awscost get-adjustments --id bill001 --type billinggroup --out /tmp/out.csv
 ```
 
 You can also provide the `--include-tags` and/or `--include-costcategories` flag(s) to include the tags and/or cost category information in the streaming data. At the moment, only the usage-based data supports tags and cost categories.
