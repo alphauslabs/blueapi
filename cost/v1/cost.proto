@@ -174,24 +174,6 @@ service Cost {
     };
   }
 
-  // (Deprecated, use cost.ReadTagCosts instead) Reads the usage-based tag costs of a billing group. 
-  // At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date 
-  // (current month) will be returned.
-  rpc ReadBillingGroupTagCosts (ReadBillingGroupTagCostsRequest) returns (stream CostItem) {
-    option (google.api.http) = {
-      post: "/v1/{vendor}/billinggroups/{id}/tagcosts:read"
-    };
-  }
-
-  // (Deprecated, use cost.ReadNonTagCosts instead) Reads the usage-based non tag costs of a billing group.
-  // At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date 
-  // (current month) will be returned.
-  rpc ReadBillingGroupNonTagCosts (ReadBillingGroupNonTagCostsRequest) returns (stream CostItem) {
-    option (google.api.http) = {
-      post: "/v1/{vendor}/billinggroups/{id}/nontagcosts:read"
-    };
-  }
-
   // Reads the usage-based tag costs of a billing group. At the moment, the supported {vendor} is 
   // 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
   rpc ReadTagCosts (ReadTagCostsRequest) returns (stream CostItem) {
@@ -634,40 +616,6 @@ message ReadAdjustmentsRequest {
 
   // Optional. Valid only for the `aws` vendor. AWS-specific options.
   ReadAdjustmentsRequestAwsOptions awsOptions = 6;
-}
-
-// (Deprecated, use ReadTagCostsRequest instead) Request message for the Cost.ReadBillingGroupTagCosts rpc.
-message ReadBillingGroupTagCostsRequest {
-  // Required. At the moment, only `aws` is supported.
-  string vendor = 1;
-
-  // Required. The company id to stream.
-  string id = 2;
-
-  // Optional. Timestamp to start streaming data from. If not set, the first day of the
-  // current month will be used. Format: `yyyymmdd`.
-  string startTime = 3;
-
-  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
-  // Format: `yyyymmdd`.
-  string endTime = 4;
-}
-
-// (Deprecated, use ReadNonTagCostsRequest instead) Request message for the Cost.ReadBillingGroupNonTagCosts rpc.
-message ReadBillingGroupNonTagCostsRequest {
-  // Required. At the moment, only `aws` is supported.
-  string vendor = 1;
-
-  // Required. The company id to stream.
-  string id = 2;
-
-  // Optional. Timestamp to start streaming data from. If not set, the first day of the
-  // current month will be used. Format: `yyyymmdd`.
-  string startTime = 3;
-
-  // Optional. Timestamp to end the streaming data. If not set, current date will be used.
-  // Format: `yyyymmdd`.
-  string endTime = 4;
 }
 
 // Request message for the Cost.ReadTagCosts rpc.
