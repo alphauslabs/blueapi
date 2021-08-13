@@ -618,6 +618,11 @@ message ReadAdjustmentsRequest {
   ReadAdjustmentsRequestAwsOptions awsOptions = 6;
 }
 
+message ReadTagCostsRequestAwsOptions {
+  // Optional. If set, only return data for this tagId.
+  string tagId = 1;
+}
+
 // Request message for the Cost.ReadTagCosts rpc.
 message ReadTagCostsRequest {
   // Required. At the moment, only `aws` is supported.
@@ -637,6 +642,9 @@ message ReadTagCostsRequest {
   // Optional. Group services and costs by months in the range of `startTime` and `endTime`.
   // If not set, daily data will be returned.
   bool groupByMonths = 5;
+
+  // Optional. Valid only for the `aws` vendor. AWS-specific options.
+  ReadTagCostsRequestAwsOptions awsOptions = 6;
 }
 
 // Request message for the Cost.ReadNonTagCosts rpc.
