@@ -3546,9 +3546,9 @@
           "type": "string",
           "description": "Required. At the moment, only `aws` is supported."
         },
-        "billingInternalId": {
+        "groupId": {
           "type": "string",
-          "description": "Optional. If set, reads the non-usage-based adjustment details of this billing group.\nValid only if `accountId` is not set. If both `billingInternalId` and `accountId` are\nnot set, reads the adjustment details of the whole organization. Only valid for\nRipple users. Implied (or discarded) for Wave(Pro) users."
+          "description": "Optional. At the moment, only billing internal ids are supported. If set, reads the\nnon-usage-based adjustment details of this group. Valid only if `accountId` is not set.\nIf both `groupId` and `accountId` are not set, reads the adjustment details of the whole\norganization. Only valid for Ripple users. Implied (or discarded) for Wave(Pro) users."
         },
         "accountId": {
           "type": "string",
@@ -3705,9 +3705,22 @@
         "groupByMonths": {
           "type": "boolean",
           "description": "Optional. Group services and costs by months in the range of `startTime` and `endTime`.\nIf not set, daily data will be returned."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1ReadTagCostsRequestAwsOptions",
+          "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
         }
       },
       "description": "Request message for the Cost.ReadTagCosts rpc."
+    },
+    "v1ReadTagCostsRequestAwsOptions": {
+      "type": "object",
+      "properties": {
+        "tagId": {
+          "type": "string",
+          "description": "Optional. If set, only return data for this tagId."
+        }
+      }
     },
     "v1UpdateAccountBudgetRequest": {
       "type": "object",
