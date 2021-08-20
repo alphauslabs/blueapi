@@ -8,7 +8,10 @@ option java_outer_classname = "ApiAwsCostProto";
 
 message Cost {
   string account = 1;
-  string billingGroupId = 2;
+
+  // The group id the account is associated with during the query.
+  string groupId = 2;
+
   string date = 3;
   string productCode = 4;
   string serviceCode = 5;
@@ -25,15 +28,42 @@ message Cost {
 
   map<string, string> tags = 14;
   map<string, string> costCategories = 15;
+
+  // Only set when all columns are specified. Any type of grouping will set
+  // this value to zero.
   double usage = 16;
+
+  // The true cost (calculated) for this lineitem.
   double cost = 17;
+
+  // The unblended cost as reflected in the CUR for this lineitem.
+  double unblendedCost = 27;
+
+  // The base currency for cost, unblendedCost, effectiveCost, amortizedCost.
+  // Always set to USD, CUR's default currency.
   string baseCurrency = 18;
+
+  // The exchange rate used to convert baseCurrency to targetCurrency.
   double exchangeRate = 19;
+
+  // Converted cost.
   double targetCost = 20;
+
+  // Converted unblendedCost.
+  double targetUnblendedCost = 28;
+
+  // The currency set by `toCurrency`.
   string targetCurrency = 21;
+
   double effectiveCost = 23;
+
+  // Converted effectiveCost.
   double targetEffectiveCost = 24;
+
   double amortizedCost = 25;
+
+  // Converted amortizedCost.
   double targetAmortizedCost = 26;
+
   string tagId = 22;
 }

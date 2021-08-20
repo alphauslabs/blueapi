@@ -2655,8 +2655,9 @@
         "account": {
           "type": "string"
         },
-        "billingGroupId": {
-          "type": "string"
+        "groupId": {
+          "type": "string",
+          "description": "The group id the account is associated with during the query."
         },
         "date": {
           "type": "string"
@@ -2706,25 +2707,41 @@
         },
         "usage": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "Only set when all columns are specified. Any type of grouping will set\nthis value to zero."
         },
         "cost": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "The true cost (calculated) for this lineitem."
+        },
+        "unblendedCost": {
+          "type": "number",
+          "format": "double",
+          "description": "The unblended cost as reflected in the CUR for this lineitem."
         },
         "baseCurrency": {
-          "type": "string"
+          "type": "string",
+          "description": "The base currency for cost, unblendedCost, effectiveCost, amortizedCost.\nAlways set to USD, CUR's default currency."
         },
         "exchangeRate": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "The exchange rate used to convert baseCurrency to targetCurrency."
         },
         "targetCost": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "Converted cost."
+        },
+        "targetUnblendedCost": {
+          "type": "number",
+          "format": "double",
+          "description": "Converted unblendedCost."
         },
         "targetCurrency": {
-          "type": "string"
+          "type": "string",
+          "description": "The currency set by `toCurrency`."
         },
         "effectiveCost": {
           "type": "number",
@@ -2732,7 +2749,8 @@
         },
         "targetEffectiveCost": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "Converted effectiveCost."
         },
         "amortizedCost": {
           "type": "number",
@@ -2740,7 +2758,8 @@
         },
         "targetAmortizedCost": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "Converted amortizedCost."
         },
         "tagId": {
           "type": "string"
