@@ -273,7 +273,7 @@ message GetPayerAccountImportHistoryRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
-  // Required. The account id to query.
+  // Required. The account id to query. Could be `*`, which implies all payers.
   string id = 2;
 
   // Optional. The UTC month to query. If empty, defaults to current month.
@@ -283,10 +283,10 @@ message GetPayerAccountImportHistoryRequest {
 
 // Response message for the Cost.GetPayerAccountImportHistory rpc.
 message GetPayerAccountImportHistoryResponse {
-  // The queried account id. Could be `*`, which implies all payers.
+  // The queried account id.
   string id = 1;
 
-  // The queried UTC month using the format `yyyymm`.
+  // The queried UTC month.
   string month = 2;
 
   // List of timestamps in RFC3339 format with the `T` separator.
