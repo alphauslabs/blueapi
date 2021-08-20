@@ -67,7 +67,8 @@ service Cost {
 
   // Gets a payer account's import history, which is a list of timestamps our system tracks when the account's data are
   // imported to our system, which in turn, triggers processing. At the moment, this only supports AWS (CUR files).
-  rpc GetPayerAccountImportHistory(GetPayerAccountImportHistoryRequest) returns (GetPayerAccountImportHistoryResponse) {
+  // You can also set {id} to `*` to return all payers' information under the organization.
+  rpc GetPayerAccountImportHistory(GetPayerAccountImportHistoryRequest) returns (stream GetPayerAccountImportHistoryResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/payers/{id}/importhistory"
     };
@@ -282,10 +283,10 @@ message GetPayerAccountImportHistoryRequest {
 
 // Response message for the Cost.GetPayerAccountImportHistory rpc.
 message GetPayerAccountImportHistoryResponse {
-  // The queried account id.
+  // The queried account id. Could be `*`, which implies all payers.
   string id = 1;
 
-  // The queried UTC month.
+  // The queried UTC month using the format `yyyymm`.
   string month = 2;
 
   // List of timestamps in RFC3339 format with the `T` separator.

@@ -2157,13 +2157,22 @@
     },
     "/v1/{vendor}/payers/{id}/importhistory": {
       "get": {
-        "summary": "Gets a payer account's import history, which is a list of timestamps our system tracks when the account's data are\nimported to our system, which in turn, triggers processing. At the moment, this only supports AWS (CUR files).",
+        "summary": "Gets a payer account's import history, which is a list of timestamps our system tracks when the account's data are\nimported to our system, which in turn, triggers processing. At the moment, this only supports AWS (CUR files).\nYou can also set {id} to `*` to return all payers' information under the organization.",
         "operationId": "Cost_GetPayerAccountImportHistory",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response.(streaming responses)",
             "schema": {
-              "$ref": "#/definitions/v1GetPayerAccountImportHistoryResponse"
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1GetPayerAccountImportHistoryResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1GetPayerAccountImportHistoryResponse"
             }
           },
           "default": {
@@ -3413,11 +3422,11 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "The queried account id."
+          "description": "The queried account id. Could be `*`, which implies all payers."
         },
         "month": {
           "type": "string",
-          "description": "The queried UTC month."
+          "description": "The queried UTC month using the format `yyyymm`."
         },
         "timestamps": {
           "type": "array",
