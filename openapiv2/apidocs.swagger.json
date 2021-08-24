@@ -31,6 +31,14 @@
       }
     },
     {
+      "name": "Admin",
+      "description": "(BETA) Admin API. Base URL: https://api.alphaus.cloud/m/blue/admin",
+      "externalDocs": {
+        "description": "Service definition",
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/admin/"
+      }
+    },
+    {
       "name": "Cost",
       "description": "(BETA) Cost API. Base URL: https://api.alphaus.cloud/m/blue/cost",
       "externalDocs": {
@@ -1059,6 +1067,38 @@
         },
         "tags": [
           "Preferences"
+        ]
+      }
+    },
+    "/v1/acctgroups": {
+      "get": {
+        "summary": "Lists all account groups.",
+        "operationId": "Admin_ListAccountGroups",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1ListAccountGroupsResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1ListAccountGroupsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Admin"
         ]
       }
     },
@@ -3495,6 +3535,10 @@
           "description": "The IP filter value. Should be in CIDR format."
         }
       }
+    },
+    "v1ListAccountGroupsResponse": {
+      "type": "object",
+      "description": "Response message for the Admin.ListAccountGroups rpc."
     },
     "v1ListCalculationsHistoryAwsResponse": {
       "type": "object",
