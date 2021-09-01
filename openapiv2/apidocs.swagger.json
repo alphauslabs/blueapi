@@ -32,7 +32,7 @@
     },
     {
       "name": "Admin",
-      "description": "(BETA) Admin API. Base URL: https://api.alphaus.cloud/m/blue/admin",
+      "description": "(BETA) Admin API. Base URL: https://api.alphaus.cloud/m/blue",
       "externalDocs": {
         "description": "Service definition",
         "url": "https://github.com/alphauslabs/blueapi/tree/main/admin/"
@@ -83,6 +83,38 @@
     "application/json"
   ],
   "paths": {
+    "/admin/v1/acctgroups": {
+      "get": {
+        "summary": "Lists all account groups.",
+        "operationId": "Admin_ListAccountGroups",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1ListAccountGroupsResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1ListAccountGroupsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
     "/iam/v1/apiclients": {
       "get": {
         "summary": "Lists all API clients belonging to the caller.",
@@ -1067,38 +1099,6 @@
         },
         "tags": [
           "Preferences"
-        ]
-      }
-    },
-    "/v1/acctgroups": {
-      "get": {
-        "summary": "Lists all account groups.",
-        "operationId": "Admin_ListAccountGroups",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1ListAccountGroupsResponse"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1ListAccountGroupsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Admin"
         ]
       }
     },
@@ -2321,6 +2321,26 @@
         }
       }
     },
+    "apiAccountGroup": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The AccountGroup id."
+        },
+        "name": {
+          "type": "string",
+          "description": "The AccountGroup name."
+        },
+        "metadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiKeyValue"
+          },
+          "description": "The attributes (key/value pair) of the AccountGroup."
+        }
+      }
+    },
     "apiApiClient": {
       "type": "object",
       "properties": {
@@ -3538,6 +3558,14 @@
     },
     "v1ListAccountGroupsResponse": {
       "type": "object",
+      "properties": {
+        "accountGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiAccountGroup"
+          }
+        }
+      },
       "description": "Response message for the Admin.ListAccountGroups rpc."
     },
     "v1ListCalculationsHistoryAwsResponse": {
