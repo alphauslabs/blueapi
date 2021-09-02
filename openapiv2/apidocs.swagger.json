@@ -83,6 +83,37 @@
     "application/json"
   ],
   "paths": {
+    "/admin/v1/acctgroup/{id}": {
+      "get": {
+        "summary": "Get Accout Group by Id",
+        "operationId": "Admin_GetAccountGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAccountGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
     "/admin/v1/acctgroups": {
       "get": {
         "summary": "Lists all account groups.",
@@ -1135,6 +1166,37 @@
         ]
       }
     },
+    "/v1/billinggroup/{billingInternalId}": {
+      "get": {
+        "summary": "Get Billing Group by ID",
+        "operationId": "Billing_GetBillingGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBillingGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "billingInternalId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups": {
       "get": {
         "summary": "Lists all billing groups.",
@@ -1364,13 +1426,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1AdjustmentItem"
+                  "$ref": "#/definitions/v1CostItem"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of v1AdjustmentItem"
+              "title": "Stream result of v1CostItem"
             }
           },
           "default": {
@@ -2338,6 +2400,12 @@
             "$ref": "#/definitions/apiKeyValue"
           },
           "description": "The attributes (key/value pair) of the AccountGroup."
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiAccount"
+          }
         }
       }
     },
@@ -2640,47 +2708,6 @@
         }
       }
     },
-    "awsAdjustment": {
-      "type": "object",
-      "properties": {
-        "account": {
-          "type": "string"
-        },
-        "groupId": {
-          "type": "string"
-        },
-        "date": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "productCode": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "cost": {
-          "type": "number",
-          "format": "double"
-        },
-        "baseCurrency": {
-          "type": "string"
-        },
-        "exchangeRate": {
-          "type": "number",
-          "format": "double"
-        },
-        "targetCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "targetCurrency": {
-          "type": "string"
-        }
-      }
-    },
     "awsAdjustmentsTypeList": {
       "type": "object",
       "properties": {
@@ -2720,6 +2747,10 @@
           "description": "The group id the account is associated with during the query."
         },
         "date": {
+          "type": "string",
+          "description": "For daily data, format is yyyy-mm-dd; for monthly, yyyy-mm."
+        },
+        "type": {
           "type": "string"
         },
         "productCode": {
@@ -2927,15 +2958,6 @@
       },
       "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors)."
     },
-    "v1AdjustmentItem": {
-      "type": "object",
-      "properties": {
-        "aws": {
-          "$ref": "#/definitions/awsAdjustment"
-        }
-      },
-      "description": "Response message wrapper for cloud cost adjustments."
-    },
     "v1BillingGroup": {
       "type": "object",
       "properties": {
@@ -2950,6 +2972,13 @@
         "billingGroupName": {
           "type": "string",
           "description": "The billing group name."
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiAccount"
+          },
+          "title": "List of all accounts"
         }
       }
     },
@@ -3419,6 +3448,24 @@
         }
       },
       "title": "Response message for GetAccountBudget"
+    },
+    "v1GetAccountGroupResponse": {
+      "type": "object",
+      "properties": {
+        "acctGroup": {
+          "$ref": "#/definitions/apiAccountGroup"
+        }
+      },
+      "description": "Response message for the Admin.GetAccountGroup rpc."
+    },
+    "v1GetBillingGroupResponse": {
+      "type": "object",
+      "properties": {
+        "billingGroup": {
+          "$ref": "#/definitions/v1BillingGroup"
+        }
+      },
+      "description": "Response message for the Billing.GetBillingGroup rpc."
     },
     "v1GetCalculatorConfigResponse": {
       "type": "object",

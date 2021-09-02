@@ -7,7 +7,6 @@ import "api/operation.proto";
 import "api/budget.proto";
 import "api/forecast.proto";
 import "api/aws/cost.proto";
-import "api/aws/adjustment.proto";
 import "api/aws/calculatorconfig.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -168,7 +167,7 @@ service Cost {
   // This API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax,
   // Upfront Fees, etc. At the moment, the supported {vendor} is 'aws'. If datetime
   // range parameters are not set, month-to-date (current month) will be returned.
-  rpc ReadAdjustments (ReadAdjustmentsRequest) returns (stream AdjustmentItem) {
+  rpc ReadAdjustments (ReadAdjustmentsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/adjustments:read"
       body: "*"
@@ -577,11 +576,6 @@ message ReadCostsRequest {
 
   // Optional. Valid only for the `aws` vendor. AWS-specific options.
   ReadCostsRequestAwsOptions awsOptions = 6;
-}
-
-// Response message wrapper for cloud cost adjustments.
-message AdjustmentItem {
-  api.aws.Adjustment aws = 1;
 }
 
 message ReadAdjustmentsRequestAwsOptions {
