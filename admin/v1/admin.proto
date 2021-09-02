@@ -26,6 +26,13 @@ service Admin {
       get: "/admin/v1/acctgroups"
     };
   }
+
+  // Get Accout Group by Id
+  rpc GetAccountGroup(GetAccountGroupRequest) returns (GetAccountGroupResponse) {
+    option (google.api.http) = {
+      get: "/admin/v1/acctgroup/{id}"
+    };
+  }
 }
 
 // Request message for the Admin.ListAccountGroups rpc.
@@ -34,5 +41,15 @@ message ListAccountGroupsRequest {}
 // Response message for the Admin.ListAccountGroups rpc.
 message ListAccountGroupsResponse {
   repeated api.AccountGroup accountGroups = 1;
+}
+
+// Request message for the Admin.GetAccountGroup rpc.
+message GetAccountGroupRequest {
+  string id = 1;
+}
+
+// Response message for the Admin.GetAccountGroup rpc.
+message GetAccountGroupResponse {
+  api.AccountGroup acctGroup = 1;
 }
 
