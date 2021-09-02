@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package blueapi.billing.v1;
 
+import "api/account.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -33,6 +34,13 @@ service Billing {
       body: "*"
     };
   }
+
+  // Get Billing Group by ID
+  rpc GetBillingGroup(GetBillingGroupRequest) returns (GetBillingGroupResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroup/{billingInternalId}"
+    };
+  }
 }
 
 message BillingGroup {
@@ -44,6 +52,9 @@ message BillingGroup {
 
   // The billing group name.
   string billingGroupName = 3;
+
+  // List of all accounts
+  repeated api.Account accounts = 4;
 }
 
 // Request message for the Billing.ListBillingGroups rpc.
@@ -125,4 +136,14 @@ message CreateBillingGroupRequestInvoiceVendor {
   string substitutionFeeCalcType = 15;
   string supportAmountTarget = 16;
   string supportFeeCalcTarget = 17;
+}
+
+// Request message for the Billing.GetBillingGroup rpc.
+message GetBillingGroupRequest {
+  string billingInternalId = 1; 
+}
+
+// Response message for the Billing.GetBillingGroup rpc.
+message GetBillingGroupResponse {
+  BillingGroup billingGroup = 1; 
 }
