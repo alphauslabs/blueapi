@@ -3,6 +3,7 @@ syntax = "proto3";
 package blueapi.admin.v1;
 
 import "api/accountgroup.proto";
+import "api/account.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -26,6 +27,13 @@ service Admin {
       get: "/admin/v1/acctgroups"
     };
   }
+
+  // Get all accounts under specified Accout Group Id
+  rpc GetAccountsByAcctGroupId(GetAccountsByAcctGroupIdRequest) returns (stream GetAccountsByAcctGroupIdResponse) {
+    option (google.api.http) = {
+      get: "/admin/v1/acctgroup/{id}"
+    };
+  }
 }
 
 // Request message for the Admin.ListAccountGroups rpc.
@@ -34,5 +42,14 @@ message ListAccountGroupsRequest {}
 // Response message for the Admin.ListAccountGroups rpc.
 message ListAccountGroupsResponse {
   repeated api.AccountGroup accountGroups = 1;
+}
+
+// Request message for the Admin.GetAccountsByAcctGroupId rpc.
+message GetAccountsByAcctGroupIdRequest {
+  string id = 1;
+}
+
+message GetAccountsByAcctGroupIdResponse {
+  repeated api.Account accounts = 1;
 }
 
