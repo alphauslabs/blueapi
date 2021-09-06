@@ -83,37 +83,6 @@
     "application/json"
   ],
   "paths": {
-    "/admin/v1/acctgroup/{id}": {
-      "get": {
-        "summary": "Get Accout Group by Id",
-        "operationId": "Admin_GetAccountGroup",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetAccountGroupResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Admin"
-        ]
-      }
-    },
     "/admin/v1/acctgroups": {
       "get": {
         "summary": "Lists all account groups.",
@@ -141,6 +110,37 @@
             }
           }
         },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/acctgroups/{id}": {
+      "get": {
+        "summary": "Gets an account group.",
+        "operationId": "Admin_GetAccountGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAccountGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "tags": [
           "Admin"
         ]
@@ -1166,37 +1166,6 @@
         ]
       }
     },
-    "/v1/billinggroup/{billingInternalId}": {
-      "get": {
-        "summary": "Get Billing Group by ID",
-        "operationId": "Billing_GetBillingGroup",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetBillingGroupResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "billingInternalId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
-      }
-    },
     "/v1/billinggroups": {
       "get": {
         "summary": "Lists all billing groups.",
@@ -1253,6 +1222,37 @@
             "schema": {
               "$ref": "#/definitions/v1CreateBillingGroupRequest"
             }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/billinggroups/{billingInternalId}": {
+      "get": {
+        "summary": "Gets a billing group.",
+        "operationId": "Billing_GetBillingGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBillingGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "billingInternalId",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
