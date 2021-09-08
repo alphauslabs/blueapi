@@ -6,7 +6,7 @@ python3 -m grpc_tools.protoc -I . --python_out=./generated/py --grpc_python_out=
         ./cost/v1/*.proto \
         ./billing/v1/*.proto \
         ./operations/v1/*.proto \
-        ./preferences/v1/*.proto
+        ./preferences/v1/*.proto \
         $(for v in $(find ./api -type d); do echo -n "$v/*.proto "; done)
 
 echo "Generating OpenAPI docs..."
