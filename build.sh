@@ -1,4 +1,4 @@
-# For golang.
+# For Go.
 echo "Compiling proto files..." && buf generate
 
 # For Python; with grpc.
