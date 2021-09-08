@@ -20,6 +20,8 @@ jobs:
         env:
           DEPLOYER_TOKEN: ${{secrets.GH_TOKEN}}
         run: |
+          pip3 install grpcio
+          pip3 install grpcio-tools
           PB_REL="https://github.com/protocolbuffers/protobuf/releases"
           curl -LO $PB_REL/download/v3.17.3/protoc-3.17.3-linux-x86_64.zip
           unzip protoc-3.17.3-linux-x86_64.zip -d $HOME/.local
@@ -32,7 +34,7 @@ jobs:
             github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.4.0 \
             github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@v2.4.0
           export PATH="$PATH:$HOME/.local/bin:$(go env GOPATH)/bin"
-          chmod +x ./build.sh && ./build.sh
+          mkdir -p generated/py && chmod +x ./build.sh && ./build.sh
           if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
             exit 0
           fi
