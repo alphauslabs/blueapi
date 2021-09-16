@@ -1,0 +1,3 @@
+All Alphaus clients have a free, limited access to our KvStore, a highly available, highly distributed key/value store that you can access using HTTP1.1, i.e. `curl`, or using any of the [gRPC-supported programming languages](https://grpc.io/docs/languages/).
+
+The free version is limited to regional store closest to you where data is replicated to three zones, and a size limit of around ~100Mb. If you want to have an access to an unlimited version of our KvStore, one that is multi-region, or even a globally available version (replicated across multiple regions across multiple continents), please contact our Sales/Support team. 
