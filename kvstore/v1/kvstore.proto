@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package blueapi.kvstore.v1;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/kvstore";
+option java_package = "cloud.alphaus.api.kvstore";
+option java_outer_classname = "KvStoreProto";
+
+// KvStore service definition.
+service KvStore {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "(BETA) KvStore API. Base URL: https://api.alphaus.cloud/m/blue/kv"
+    external_docs: {
+      url: "https://github.com/alphauslabs/blueapi/tree/main/kvstore/";
+      description: "Service definition";
+    }
+  };
+
+  // Work-in-progress.
+  rpc Scan(ScanRequest) returns (stream ScanResponse) {
+    option (google.api.http) = {
+      get: "/v1/keys"
+    };
+  }
+
+  // Work-in-progress.
+  rpc Read(ReadRequest) returns (KeyValue) {
+    option (google.api.http) = {
+      get: "/v1/keys/{key}"
+    };
+  }
+
+  // Work-in-progress.
+  rpc ReadString(ReadRequest) returns (KeyValueStr) {
+    option (google.api.http) = {
+      get: "/v1/keys/{key}/str"
+    };
+  }
+
+  // Work-in-progress.
+  rpc Write(KeyValue) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1"
+      body: "*"
+    };
+  }
+
+  // Work-in-progress.
+  rpc WriteString(KeyValueStr) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/str"
+      body: "*"
+    };
+  }
+
+  // Work-in-progress.
+  rpc Update(KeyValue) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1"
+      body: "*"
+    };
+  }
+
+  // Work-in-progress.
+  rpc UpdateString(KeyValueStr) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1"
+      body: "*"
+    };
+  }
+
+  // Work-in-progress.
+  rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/keys/{key}"
+    };
+  }
+}
+
+message KeyValue {
+  string key = 1;
+  bytes value = 2;
+}
+
+message KeyValueStr {
+  string key = 1;
+  string value = 2;
+}
+
+// Request message for the KvStore.Scan rpc.
+message ScanRequest {
+  // Optional. If non-empty, translates to SQL's `LIKE` operand.
+  // Return all keys by default.
+  string like = 1;
+}
+
+// Response message for the KvStore.Scan rpc.
+message ScanResponse {
+  string key = 1;
+}
+
+// Request message for the KvStore.Read rpc.
+message ReadRequest {
+  // Required. The key to read.
+  string key = 1;
+}
+
+// Request message for the KvStore.Delete rpc.
+message DeleteRequest {
+  // Required. The key to delete.
+  string key = 1;
+}

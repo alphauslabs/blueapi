@@ -23,6 +23,14 @@
       }
     },
     {
+      "name": "KvStore",
+      "description": "(BETA) KvStore API. Base URL: https://api.alphaus.cloud/m/blue/kv",
+      "externalDocs": {
+        "description": "Service definition",
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/kvstore/"
+      }
+    },
+    {
       "name": "Iam",
       "description": "(BETA) IAM API. Base URL: https://api.alphaus.cloud/m/blue",
       "externalDocs": {
@@ -1133,6 +1141,70 @@
         ]
       }
     },
+    "/v1": {
+      "post": {
+        "summary": "Work-in-progress.",
+        "operationId": "KvStore_Write",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/kvstorev1KeyValue"
+            }
+          }
+        ],
+        "tags": [
+          "KvStore"
+        ]
+      },
+      "put": {
+        "summary": "Work-in-progress.",
+        "operationId": "KvStore_UpdateString",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1KeyValueStr"
+            }
+          }
+        ],
+        "tags": [
+          "KvStore"
+        ]
+      }
+    },
     "/v1/aws/cur:import": {
       "post": {
         "summary": "Initiates an ondemand import of all registered CUR files. See\n[https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting]\nfor more information.",
@@ -1257,6 +1329,174 @@
         ],
         "tags": [
           "Billing"
+        ]
+      }
+    },
+    "/v1/keys": {
+      "get": {
+        "summary": "Work-in-progress.",
+        "operationId": "KvStore_Scan",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1ScanResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1ScanResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "like",
+            "description": "Optional. If non-empty, translates to SQL's `LIKE` operand.\nReturn all keys by default.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "KvStore"
+        ]
+      }
+    },
+    "/v1/keys/{key}": {
+      "get": {
+        "summary": "Work-in-progress.",
+        "operationId": "KvStore_Read",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/kvstorev1KeyValue"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "key",
+            "description": "Required. The key to read.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "KvStore"
+        ]
+      },
+      "delete": {
+        "summary": "Work-in-progress.",
+        "operationId": "KvStore_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "key",
+            "description": "Required. The key to delete.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "KvStore"
+        ]
+      }
+    },
+    "/v1/keys/{key}/str": {
+      "get": {
+        "summary": "Work-in-progress.",
+        "operationId": "KvStore_ReadString",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1KeyValueStr"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "key",
+            "description": "Required. The key to read.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "KvStore"
+        ]
+      }
+    },
+    "/v1/str": {
+      "post": {
+        "summary": "Work-in-progress.",
+        "operationId": "KvStore_WriteString",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1KeyValueStr"
+            }
+          }
+        ],
+        "tags": [
+          "KvStore"
         ]
       }
     },
@@ -2377,7 +2617,7 @@
         "metadata": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/apiKeyValue"
+            "$ref": "#/definitions/blueapiapiKeyValue"
           },
           "description": "The attributes (key/value pair) of the account."
         }
@@ -2397,7 +2637,7 @@
         "metadata": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/apiKeyValue"
+            "$ref": "#/definitions/blueapiapiKeyValue"
           },
           "description": "The attributes (key/value pair) of the AccountGroup."
         },
@@ -2502,17 +2742,6 @@
         "lowerBound": {
           "type": "number",
           "format": "double"
-        }
-      }
-    },
-    "apiKeyValue": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
         }
       }
     },
@@ -2874,6 +3103,17 @@
         }
       }
     },
+    "blueapiapiKeyValue": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
     "blueapiapiOperation": {
       "type": "object",
       "properties": {
@@ -2899,6 +3139,18 @@
         }
       },
       "description": "This resource represents a long-running operation that is the result of a\nnetwork API call."
+    },
+    "kvstorev1KeyValue": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
     },
     "protobufAny": {
       "type": "object",
@@ -3603,6 +3855,17 @@
         }
       }
     },
+    "v1KeyValueStr": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
     "v1ListAccountGroupsResponse": {
       "type": "object",
       "properties": {
@@ -3868,6 +4131,15 @@
           "description": "Optional. If set, only return data for this tagId."
         }
       }
+    },
+    "v1ScanResponse": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        }
+      },
+      "description": "Response message for the KvStore.Scan rpc."
     },
     "v1UpdateAccountBudgetRequest": {
       "type": "object",
