@@ -18,3 +18,33 @@ The free version is limited to a regional store closest to you where data is rep
 * Total data size (free tier) - around ~100MB
 * Maximum key size - 7KB
 * Maximum value size - 10MB
+
+## Examples
+
+Let's use `bluectl` to demonstrate how to use KvStore. To write a single key/value:
+```sh
+$ bluectl kv write hello world
+```
+
+To read the key/value:
+```sh
+$ bluectl kv read hello --bare
+world
+```
+
+You can also write file contents as value:
+```sh
+# Here's a file example:
+$ cat /tmp/test.json
+{
+  "title":"JP text",
+  "message":"日本へようこそ"
+}
+
+# Write the key/value from file:
+$ bluectl kv write json --from-file=/tmp/test.json
+
+# Let's try reading the message section using jq:
+$ bluectl kv read json --bare | jq -r .message
+日本へようこそ
+```
