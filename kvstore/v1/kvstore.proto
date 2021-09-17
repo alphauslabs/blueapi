@@ -34,18 +34,10 @@ service KvStore {
     };
   }
 
-  // WORK-IN-PROGRESS. Writes a key:value data to your store.
+  // WORK-IN-PROGRESS. Writes a new (or update an existing) key:value data in your store.
   rpc Write(KeyValue) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/v1"
-      body: "*"
-    };
-  }
-
-  // WORK-IN-PROGRESS. Updates, or inserts if non-existent, a key:value data in your store.
-  rpc Update(KeyValue) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      put: "/v1"
       body: "*"
     };
   }
