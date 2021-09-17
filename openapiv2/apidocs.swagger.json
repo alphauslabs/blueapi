@@ -1143,7 +1143,7 @@
     },
     "/v1": {
       "post": {
-        "summary": "Work-in-progress. Writes a key:value data (raw bytes) to your store.",
+        "summary": "WORK-IN-PROGRESS. Writes a key:value data to your store.",
         "operationId": "KvStore_Write",
         "responses": {
           "200": {
@@ -1174,7 +1174,7 @@
         ]
       },
       "put": {
-        "summary": "Work-in-progress. Updates an existing key:value data (bytes) in your store.",
+        "summary": "WORK-IN-PROGRESS. Updates an existing key:value data in your store.",
         "operationId": "KvStore_Update",
         "responses": {
           "200": {
@@ -1334,7 +1334,7 @@
     },
     "/v1/keys": {
       "get": {
-        "summary": "Work-in-progress. Scans all keys from your store.",
+        "summary": "WORK-IN-PROGRESS. Scans all keys from your store.",
         "operationId": "KvStore_Scan",
         "responses": {
           "200": {
@@ -1375,7 +1375,7 @@
     },
     "/v1/keys/{key}": {
       "get": {
-        "summary": "Work-in-progress. Reads a key from your store and returns the value in raw bytes.",
+        "summary": "WORK-IN-PROGRESS. Reads a key from your store.",
         "operationId": "KvStore_Read",
         "responses": {
           "200": {
@@ -1405,7 +1405,7 @@
         ]
       },
       "delete": {
-        "summary": "Work-in-progress. Deletes a key from your store. Using a `-` (hyphen) as {key} input\ntranslates to all keys to be deleted.",
+        "summary": "WORK-IN-PROGRESS. Deletes a key from your store. Using a `-` (hyphen) as {key} input\ntranslates to all keys to be deleted.",
         "operationId": "KvStore_Delete",
         "responses": {
           "200": {
@@ -1428,102 +1428,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          }
-        ],
-        "tags": [
-          "KvStore"
-        ]
-      }
-    },
-    "/v1/keys/{key}/str": {
-      "get": {
-        "summary": "Work-in-progress. Reads a key from your store and returns the value in string.",
-        "operationId": "KvStore_ReadString",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1KeyValueStr"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "key",
-            "description": "Required. The key to read.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "KvStore"
-        ]
-      }
-    },
-    "/v1/str": {
-      "post": {
-        "summary": "Work-in-progress. Writes a key:value data (string) to your store.",
-        "operationId": "KvStore_WriteString",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1KeyValueStr"
-            }
-          }
-        ],
-        "tags": [
-          "KvStore"
-        ]
-      },
-      "put": {
-        "summary": "Work-in-progress. Updates an existing key:value data (string) in your store.",
-        "operationId": "KvStore_UpdateString",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1KeyValueStr"
-            }
           }
         ],
         "tags": [
@@ -3178,8 +3082,7 @@
           "type": "string"
         },
         "value": {
-          "type": "string",
-          "format": "byte"
+          "type": "string"
         }
       }
     },
@@ -3883,17 +3786,6 @@
         "value": {
           "type": "string",
           "description": "The IP filter value. Should be in CIDR format."
-        }
-      }
-    },
-    "v1KeyValueStr": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
         }
       }
     },

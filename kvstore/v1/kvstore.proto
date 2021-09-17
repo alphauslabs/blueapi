@@ -27,21 +27,14 @@ service KvStore {
     };
   }
 
-  // WORK-IN-PROGRESS. Reads a key from your store and returns the value in raw bytes.
+  // WORK-IN-PROGRESS. Reads a key from your store.
   rpc Read(ReadRequest) returns (KeyValue) {
     option (google.api.http) = {
       get: "/v1/keys/{key}"
     };
   }
 
-  // WORK-IN-PROGRESS. Reads a key from your store and returns the value in string.
-  rpc ReadString(ReadRequest) returns (KeyValueStr) {
-    option (google.api.http) = {
-      get: "/v1/keys/{key}/str"
-    };
-  }
-
-  // WORK-IN-PROGRESS. Writes a key:value data (raw bytes) to your store.
+  // WORK-IN-PROGRESS. Writes a key:value data to your store.
   rpc Write(KeyValue) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/v1"
@@ -49,26 +42,10 @@ service KvStore {
     };
   }
 
-  // WORK-IN-PROGRESS. Writes a key:value data (string) to your store.
-  rpc WriteString(KeyValueStr) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      post: "/v1/str"
-      body: "*"
-    };
-  }
-
-  // WORK-IN-PROGRESS. Updates an existing key:value data (bytes) in your store.
+  // WORK-IN-PROGRESS. Updates an existing key:value data in your store.
   rpc Update(KeyValue) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/v1"
-      body: "*"
-    };
-  }
-
-  // WORK-IN-PROGRESS. Updates an existing key:value data (string) in your store.
-  rpc UpdateString(KeyValueStr) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      put: "/v1/str"
       body: "*"
     };
   }
@@ -83,11 +60,6 @@ service KvStore {
 }
 
 message KeyValue {
-  string key = 1;
-  bytes value = 2;
-}
-
-message KeyValueStr {
   string key = 1;
   string value = 2;
 }
