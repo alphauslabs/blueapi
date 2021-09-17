@@ -23,28 +23,43 @@ The free version is limited to a regional store closest to you where data is rep
 
 Let's use `bluectl` to demonstrate how to use KvStore. To write a single key/value:
 ```sh
+# key=hello, value=world
 $ bluectl kv write hello world
 ```
 
 To read the key/value:
 ```sh
+# Read key=hello
 $ bluectl kv read hello --bare
 world
 ```
 
 You can also write file contents as value:
 ```sh
-# Here's a file example:
+# Here's a sample file with JSON contents
 $ cat /tmp/test.json
 {
   "title":"JP text",
   "message":"日本へようこそ"
 }
 
-# Write the key/value from file:
+# Write the key/value from file, key=json
 $ bluectl kv write json --from-file=/tmp/test.json
 
-# Let's try reading the message section using jq:
+# Let's try reading the "message" section using jq
 $ bluectl kv read json --bare | jq -r .message
 日本へようこそ
+```
+
+You can also scan multiple keys:
+```sh
+# Read all keys
+$ bluectl kv scan --outfmt=json
+{"key":"hello","value":"world"}
+{"key":"json","value":"{\n  \"title\":\"JP text\",\n  \"message\":\"日本へようこそ\"\n}"}
+
+# Or just some keys using SQL's LIKE operator
+$ bluectl kv scan like scan '%ell%'
+KEY    VALUE 
+hello  world
 ```
