@@ -20,21 +20,21 @@ service KvStore {
     }
   };
 
-  // WORK-IN-PROGRESS. Scans keys from your store.
+  // Scans keys from your store.
   rpc Scan(ScanRequest) returns (stream ScanResponse) {
     option (google.api.http) = {
       get: "/v1/keys"
     };
   }
 
-  // WORK-IN-PROGRESS. Reads a key from your store.
+  // Reads a key from your store.
   rpc Read(ReadRequest) returns (KeyValue) {
     option (google.api.http) = {
       get: "/v1/keys/{key}"
     };
   }
 
-  // WORK-IN-PROGRESS. Writes a new (or update an existing) key:value data in your store.
+  // Writes a new (or update an existing) key:value data in your store.
   rpc Write(KeyValue) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/v1"
@@ -42,7 +42,7 @@ service KvStore {
     };
   }
 
-  // WORK-IN-PROGRESS. Deletes a key from your store. Using a `-` (hyphen) as {key} input
+  // Deletes a key from your store. Using a `-` (hyphen) as {key} input
   // translates to all keys to be deleted.
   rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
