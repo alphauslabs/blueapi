@@ -20,14 +20,14 @@ service KvStore {
     }
   };
 
-  // Scans keys from your store.
-  rpc Scan(ScanRequest) returns (stream ScanResponse) {
+  // Scans key:value data from your store.
+  rpc Scan(ScanRequest) returns (stream KeyValue) {
     option (google.api.http) = {
       get: "/v1/keys"
     };
   }
 
-  // Reads a key from your store.
+  // Reads a key:value data from your store.
   rpc Read(ReadRequest) returns (KeyValue) {
     option (google.api.http) = {
       get: "/v1/keys/{key}"
@@ -42,8 +42,7 @@ service KvStore {
     };
   }
 
-  // Deletes a key from your store. Using a `-` (hyphen) as {key} input
-  // translates to all keys to be deleted.
+  // Deletes a key:value data from your store.
   rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/keys/{key}"
@@ -63,11 +62,6 @@ message ScanRequest {
   string like = 1;
 }
 
-// Response message for the KvStore.Scan rpc.
-message ScanResponse {
-  string key = 1;
-}
-
 // Request message for the KvStore.Read rpc.
 message ReadRequest {
   // Required. The key to read.
@@ -76,6 +70,8 @@ message ReadRequest {
 
 // Request message for the KvStore.Delete rpc.
 message DeleteRequest {
-  // Required. The key to delete.
+  // Required. The key to delete. To delete all keys, set this to `-` (hyphen).
+  // You can also prefix this with `like:` which translates to SQL's LIKE operator.
+  // For example, `like:%pattern%`.
   string key = 1;
 }

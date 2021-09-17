@@ -1143,7 +1143,7 @@
     },
     "/v1": {
       "post": {
-        "summary": "WORK-IN-PROGRESS. Writes a new (or update an existing) key:value data in your store.",
+        "summary": "Writes a new (or update an existing) key:value data in your store.",
         "operationId": "KvStore_Write",
         "responses": {
           "200": {
@@ -1303,7 +1303,7 @@
     },
     "/v1/keys": {
       "get": {
-        "summary": "WORK-IN-PROGRESS. Scans keys from your store.",
+        "summary": "Scans key:value data from your store.",
         "operationId": "KvStore_Scan",
         "responses": {
           "200": {
@@ -1312,13 +1312,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1ScanResponse"
+                  "$ref": "#/definitions/kvstorev1KeyValue"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of v1ScanResponse"
+              "title": "Stream result of kvstorev1KeyValue"
             }
           },
           "default": {
@@ -1344,7 +1344,7 @@
     },
     "/v1/keys/{key}": {
       "get": {
-        "summary": "WORK-IN-PROGRESS. Reads a key from your store.",
+        "summary": "Reads a key:value data from your store.",
         "operationId": "KvStore_Read",
         "responses": {
           "200": {
@@ -1374,7 +1374,7 @@
         ]
       },
       "delete": {
-        "summary": "WORK-IN-PROGRESS. Deletes a key from your store. Using a `-` (hyphen) as {key} input\ntranslates to all keys to be deleted.",
+        "summary": "Deletes a key:value data from your store.",
         "operationId": "KvStore_Delete",
         "responses": {
           "200": {
@@ -1393,7 +1393,7 @@
         "parameters": [
           {
             "name": "key",
-            "description": "Required. The key to delete.",
+            "description": "Required. The key to delete. To delete all keys, set this to `-` (hyphen).\nYou can also prefix this with `like:` which translates to SQL's LIKE operator.\nFor example, `like:%pattern%`.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -4023,15 +4023,6 @@
           "description": "Optional. If set, only return data for this tagId."
         }
       }
-    },
-    "v1ScanResponse": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string"
-        }
-      },
-      "description": "Response message for the KvStore.Scan rpc."
     },
     "v1UpdateAccountBudgetRequest": {
       "type": "object",
