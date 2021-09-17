@@ -59,7 +59,7 @@ $ bluectl kv scan --outfmt=json
 {"key":"json","value":"{\n  \"title\":\"JP text\",\n  \"message\":\"日本へようこそ\"\n}"}
 
 # Or just some keys using SQL's LIKE operator
-$ bluectl kv scan like scan '%ell%'
+$ bluectl kv scan '%ell%'
 KEY    VALUE 
 hello  world
 ```
