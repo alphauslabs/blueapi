@@ -25,11 +25,14 @@ Let's use `bluectl` to demonstrate how to use KvStore. To write a single key/val
 ```sh
 # key=hello, value=world
 $ bluectl kv write hello world
+
+# If value has spaces, enclose with double-quotes (") or single-quotes (')
+$ bluectl kv write space "this value has spaces"
 ```
 
 To read the key/value:
 ```sh
-# Read key=hello
+# Read key=hello, '--bare' for clean output
 $ bluectl kv read hello --bare
 world
 ```
@@ -57,6 +60,7 @@ You can also scan multiple keys:
 $ bluectl kv scan --outfmt=json
 {"key":"hello","value":"world"}
 {"key":"json","value":"{\n  \"title\":\"JP text\",\n  \"message\":\"日本へようこそ\"\n}"}
+{"key":"space","value":"this value has spaces"}
 
 # Or just some keys using SQL's LIKE operator
 $ bluectl kv scan '%ell%'
