@@ -252,10 +252,10 @@ service Cost {
     };
   }
 
-  //
-  rpc GetRiSpRecommendations(GetRiSpRecommendationsRequest) returns (GetRiSpRecommendationsResponse) {
+  // Get cost opmtimization recommendations for Organization ID
+  rpc GetRecommendations(GetRecommendationsRequest) returns (GetRecommendationsResponse) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/recommendations/ri-sp/{orgId}"
+      post: "/v1/{vendor}/recommendations/{orgId}"
       body: "*"
     };
   }
@@ -844,8 +844,50 @@ message DeleteAccountBudgetRequest {
   string budgetId = 2; 
 }
 
-// Request message for GetRiSpRecommendations
-message GetRiSpRecommendationsRequest {
+message GetRecommendationsRequestAwsOptions {
+  // Required. Valid values: 'reservation', 'rightsizing', 'scheduling'
+  // Only 'reservation' is supported for now.
+  string recommendationType = 1;
+
+  // For recommendationType = 'reservation'
+  // Optional. Valid values: 'combined', 'individual'
+  // Default: 'combined'
+  string type = 2;
+
+  // For recommendationType = 'reservation'
+  // Optional. List of Services
+  // Default: All services with Reserved Instance or Savings Plan
+  repeated string services = 3;
+
+  // For recommendationType = 'reservation'
+  // Optional. Valid values: '1yr', '3yr'
+  // Default: '1yr'
+  string term = 4;
+
+  // For recommendationType = 'reservation'
+  // Optional. Valid values: 'standard', 'convertible'
+  // Default: 'standard'
+  string offeringClass = 5;
+
+  // For recommendationType = 'reservation'
+  // Optional. Valid values: 'allUpfront', 'partialUpfront', 'noUpfront'
+  // Default: 'allUpfront'
+  string paymentOption = 6;
+
+  // For recommendationType = 'reservation'
+  // Optional. Percentage of the usage (in NormalizedUnits) to be covered by Reserved Instance
+  // Default: 100
+  double riCoverage = 7;
+
+  // For recommendationType = 'reservation'
+  // Optional. Percentage of the usage (in NormalizedUnits) to be covered by Savings Plan
+  // Default: 100 - riCoverage
+  double spCoverage = 8;
+  
+}
+
+// Request message for GetRecommendations
+message GetRecommendationsRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
@@ -855,39 +897,12 @@ message GetRiSpRecommendationsRequest {
   // Required. List of Account Ids.
   repeated string accounts = 3;
 
-  // Optional. Valid values: 'combined', 'individual'
-  // Default: 'combined'
-  string type = 4;
-
-  // Optional. List of Services
-  // Default: All services with Reserved Instance or Savings Plan
-  repeated string services = 5;
-
-  // Optional. Valid values: '1yr', '3yr'
-  // Default: '1yr'
-  string term = 6;
-
-  // Optional. Valid values: 'standard', 'convertible'
-  // Default: 'standard'
-  string offeringClass = 7;
-
-  // Optional. Valid values: 'allUpfront', 'partialUpfront', 'noUpfront'
-  // Default: 'allUpfront'
-  string paymentOption = 8;
-
-  // Optional. Percentage of the usage (in NormalizedUnits) to be covered by Reserved Instance
-  // Default: 100
-  double riCoverage = 9;
-
-  // Optional. Percentage of the usage (in NormalizedUnits) to be covered by Savings Plan
-  // Default: 100 - riCoverage
-  double spCoverage = 10;
+  // Required if vendor = 'aws'
+  GetRecommendationsRequestAwsOptions awsOptions = 4;
 }
 
-// Request message for GetRiSpRecommendations
-message GetRiSpRecommendationsResponse {
+// Request message for GetRecommendations
+message GetRecommendationsResponse {
   string orgId = 1;
-  api.aws.RecommendationSummary summary = 2;
-  repeated api.aws.RiRecommendation riRecommendations = 3;
-  repeated api.aws.SpRecommendation spRecommendations = 4;
+  api.aws.AwsRecommendations awsRecommendations = 2;
 }

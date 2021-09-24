@@ -2589,14 +2589,15 @@
         ]
       }
     },
-    "/v1/{vendor}/recommendations/ri-sp/{orgId}": {
+    "/v1/{vendor}/recommendations/{orgId}": {
       "post": {
-        "operationId": "Cost_GetRiSpRecommendations",
+        "summary": "Get cost opmtimization recommendations for Organization ID",
+        "operationId": "Cost_GetRecommendations",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetRiSpRecommendationsResponse"
+              "$ref": "#/definitions/v1GetRecommendationsResponse"
             }
           },
           "default": {
@@ -2635,41 +2636,12 @@
                   },
                   "description": "Required. List of Account Ids."
                 },
-                "type": {
-                  "type": "string",
-                  "title": "Optional. Valid values: 'combined', 'individual'\nDefault: 'combined'"
-                },
-                "services": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "title": "Optional. List of Services\nDefault: All services with Reserved Instance or Savings Plan"
-                },
-                "term": {
-                  "type": "string",
-                  "title": "Optional. Valid values: '1yr', '3yr'\nDefault: '1yr'"
-                },
-                "offeringClass": {
-                  "type": "string",
-                  "title": "Optional. Valid values: 'standard', 'convertible'\nDefault: 'standard'"
-                },
-                "paymentOption": {
-                  "type": "string",
-                  "title": "Optional. Valid values: 'allUpfront', 'partialUpfront', 'noUpfront'\nDefault: 'allUpfront'"
-                },
-                "riCoverage": {
-                  "type": "number",
-                  "format": "double",
-                  "title": "Optional. Percentage of the usage (in NormalizedUnits) to be covered by Reserved Instance\nDefault: 100"
-                },
-                "spCoverage": {
-                  "type": "number",
-                  "format": "double",
-                  "title": "Optional. Percentage of the usage (in NormalizedUnits) to be covered by Savings Plan\nDefault: 100 - riCoverage"
+                "awsOptions": {
+                  "$ref": "#/definitions/v1GetRecommendationsRequestAwsOptions",
+                  "title": "Required if vendor = 'aws'"
                 }
               },
-              "title": "Request message for GetRiSpRecommendations"
+              "title": "Request message for GetRecommendations"
             }
           }
         ],
@@ -3097,6 +3069,26 @@
         }
       }
     },
+    "awsAwsRecommendations": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "$ref": "#/definitions/awsReservationRecommendationSummary"
+        },
+        "riRecommendations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/awsRiRecommendation"
+          }
+        },
+        "spRecommendations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/awsSpRecommendation"
+          }
+        }
+      }
+    },
     "awsCalculatorConfig": {
       "type": "object",
       "properties": {
@@ -3252,7 +3244,7 @@
         }
       }
     },
-    "awsRecommendationSummary": {
+    "awsReservationRecommendationSummary": {
       "type": "object",
       "properties": {
         "totalNormalizedUnit": {
@@ -3999,29 +3991,59 @@
       },
       "description": "Response message for the Cost.GetPayerAccountImportHistory rpc."
     },
-    "v1GetRiSpRecommendationsResponse": {
+    "v1GetRecommendationsRequestAwsOptions": {
+      "type": "object",
+      "properties": {
+        "recommendationType": {
+          "type": "string",
+          "description": "Required. Valid values: 'reservation', 'rightsizing', 'scheduling'\nOnly 'reservation' is supported for now."
+        },
+        "type": {
+          "type": "string",
+          "title": "For recommendationType = 'reservation'\nOptional. Valid values: 'combined', 'individual'\nDefault: 'combined'"
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "For recommendationType = 'reservation'\nOptional. List of Services\nDefault: All services with Reserved Instance or Savings Plan"
+        },
+        "term": {
+          "type": "string",
+          "title": "For recommendationType = 'reservation'\nOptional. Valid values: '1yr', '3yr'\nDefault: '1yr'"
+        },
+        "offeringClass": {
+          "type": "string",
+          "title": "For recommendationType = 'reservation'\nOptional. Valid values: 'standard', 'convertible'\nDefault: 'standard'"
+        },
+        "paymentOption": {
+          "type": "string",
+          "title": "For recommendationType = 'reservation'\nOptional. Valid values: 'allUpfront', 'partialUpfront', 'noUpfront'\nDefault: 'allUpfront'"
+        },
+        "riCoverage": {
+          "type": "number",
+          "format": "double",
+          "title": "For recommendationType = 'reservation'\nOptional. Percentage of the usage (in NormalizedUnits) to be covered by Reserved Instance\nDefault: 100"
+        },
+        "spCoverage": {
+          "type": "number",
+          "format": "double",
+          "title": "For recommendationType = 'reservation'\nOptional. Percentage of the usage (in NormalizedUnits) to be covered by Savings Plan\nDefault: 100 - riCoverage"
+        }
+      }
+    },
+    "v1GetRecommendationsResponse": {
       "type": "object",
       "properties": {
         "orgId": {
           "type": "string"
         },
-        "summary": {
-          "$ref": "#/definitions/awsRecommendationSummary"
-        },
-        "riRecommendations": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/awsRiRecommendation"
-          }
-        },
-        "spRecommendations": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/awsSpRecommendation"
-          }
+        "awsRecommendations": {
+          "$ref": "#/definitions/awsAwsRecommendations"
         }
       },
-      "title": "Request message for GetRiSpRecommendations"
+      "title": "Request message for GetRecommendations"
     },
     "v1ImportCurFilesRequest": {
       "type": "object",

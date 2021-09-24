@@ -6,6 +6,12 @@ option go_package = "github.com/alphauslabs/blue-sdk-go/api/aws";
 option java_package = "cloud.alphaus.blueapi.api.aws";
 option java_outer_classname = "ApiAwsRecommendationProto";
 
+message AwsRecommendations {
+    ReservationRecommendationSummary summary = 1;
+    repeated RiRecommendation riRecommendations = 2;
+    repeated api.aws.SpRecommendation spRecommendations = 3;
+}
+
 message RiRecommendation {
     string accountId = 1;
     string productCode = 2;
@@ -37,7 +43,7 @@ message SpRecommendation {
     double reductionRate = 11;
 }
 
-message RecommendationSummary {
+message ReservationRecommendationSummary {
     double totalNormalizedUnit = 1;
     double totalOnDemandCost = 2;
     double totalDiscountedCost = 3;
