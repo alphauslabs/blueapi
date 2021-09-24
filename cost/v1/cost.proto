@@ -8,6 +8,7 @@ import "api/budget.proto";
 import "api/forecast.proto";
 import "api/aws/cost.proto";
 import "api/aws/calculatorconfig.proto";
+import "api/aws/recommendation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -248,6 +249,14 @@ service Cost {
   rpc DeleteAccountBudget(DeleteAccountBudgetRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/{vendor}/budget/{budgetId}"
+    };
+  }
+
+  // Get cost opmtimization recommendations for Organization ID
+  rpc GetRecommendations(GetRecommendationsRequest) returns (GetRecommendationsResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/recommendations/{orgId}"
+      body: "*"
     };
   }
 }
@@ -833,4 +842,67 @@ message DeleteAccountBudgetRequest {
 
   // Required. Budget Id
   string budgetId = 2; 
+}
+
+message GetRecommendationsRequestAwsOptions {
+  // Required. Valid values: 'reservation', 'rightsizing', 'scheduling'
+  // Only 'reservation' is supported for now.
+  string recommendationType = 1;
+
+  // For recommendationType = 'reservation'
+  // Optional. Valid values: 'combined', 'individual'
+  // Default: 'combined'
+  string type = 2;
+
+  // For recommendationType = 'reservation'
+  // Optional. List of Services
+  // Default: All services with Reserved Instance or Savings Plan
+  repeated string services = 3;
+
+  // For recommendationType = 'reservation'
+  // Optional. Valid values: '1yr', '3yr'
+  // Default: '1yr'
+  string term = 4;
+
+  // For recommendationType = 'reservation'
+  // Optional. Valid values: 'standard', 'convertible'
+  // Default: 'standard'
+  string offeringClass = 5;
+
+  // For recommendationType = 'reservation'
+  // Optional. Valid values: 'allUpfront', 'partialUpfront', 'noUpfront'
+  // Default: 'allUpfront'
+  string paymentOption = 6;
+
+  // For recommendationType = 'reservation'
+  // Optional. Percentage of the usage (in NormalizedUnits) to be covered by Reserved Instance
+  // Default: 100
+  double riCoverage = 7;
+
+  // For recommendationType = 'reservation'
+  // Optional. Percentage of the usage (in NormalizedUnits) to be covered by Savings Plan
+  // Default: 100 - riCoverage
+  double spCoverage = 8;
+  
+}
+
+// Request message for GetRecommendations
+message GetRecommendationsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Organization Id.
+  string orgId = 2;
+
+  // Required. List of Account Ids.
+  repeated string accounts = 3;
+
+  // Required if vendor = 'aws'
+  GetRecommendationsRequestAwsOptions awsOptions = 4;
+}
+
+// Request message for GetRecommendations
+message GetRecommendationsResponse {
+  string orgId = 1;
+  api.aws.AwsRecommendations awsRecommendations = 2;
 }

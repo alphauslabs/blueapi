@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package blueapi.api.aws;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/aws";
+option java_package = "cloud.alphaus.blueapi.api.aws";
+option java_outer_classname = "ApiAwsRecommendationProto";
+
+message AwsRecommendations {
+    ReservationRecommendationSummary summary = 1;
+    repeated RiRecommendation riRecommendations = 2;
+    repeated api.aws.SpRecommendation spRecommendations = 3;
+}
+
+message RiRecommendation {
+    string accountId = 1;
+    string productCode = 2;
+    string location = 3;
+    string instanceType = 4;
+    int64 quantity = 5;
+    double normalizedUnit = 6;
+    string operatingSystem = 7;
+    string preInstalledSW = 8;
+    string tenancy = 9;
+    double ondemandCost = 10;
+    double discountedCost = 11;
+    double monthlyDiscountedCost = 12;
+    double yearlyDiscountedCost = 13;
+    double reductionRate = 14;
+}
+
+message SpRecommendation {
+    string accountId = 1;
+    string spProductFamily =2;
+    string location = 3;
+    string instanceFamily = 4;
+    double ondemandCost =5;
+    double commitment = 6;
+    double normalizedUnit = 7;
+    double discountedCost = 8;
+    double monthlyDiscountedCost = 9;
+    double yearlyDiscountedCost = 10;
+    double reductionRate = 11;
+}
+
+message ReservationRecommendationSummary {
+    double totalNormalizedUnit = 1;
+    double totalOnDemandCost = 2;
+    double totalDiscountedCost = 3;
+    double totalDiscountedMonthlyCost = 4;
+    double totalDiscountedYearlyCost = 5;
+    double reductionRate = 6;
+}
