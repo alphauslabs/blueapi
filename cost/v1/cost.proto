@@ -8,6 +8,7 @@ import "api/budget.proto";
 import "api/forecast.proto";
 import "api/aws/cost.proto";
 import "api/aws/calculatorconfig.proto";
+import "api/aws/recommendation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -248,6 +249,14 @@ service Cost {
   rpc DeleteAccountBudget(DeleteAccountBudgetRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/{vendor}/budget/{budgetId}"
+    };
+  }
+
+  //
+  rpc GetRiSpRecommendations(GetRiSpRecommendationsRequest) returns (GetRiSpRecommendationsResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/recommendations/ri-sp/{orgId}"
+      body: "*"
     };
   }
 }
@@ -833,4 +842,52 @@ message DeleteAccountBudgetRequest {
 
   // Required. Budget Id
   string budgetId = 2; 
+}
+
+// Request message for GetRiSpRecommendations
+message GetRiSpRecommendationsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Organization Id.
+  string orgId = 2;
+
+  // Required. List of Account Ids.
+  repeated string accounts = 3;
+
+  // Optional. Valid values: 'combined', 'individual'
+  // Default: 'combined'
+  string type = 4;
+
+  // Optional. List of Services
+  // Default: All services with Reserved Instance or Savings Plan
+  repeated string services = 5;
+
+  // Optional. Valid values: '1yr', '3yr'
+  // Default: '1yr'
+  string term = 6;
+
+  // Optional. Valid values: 'standard', 'convertible'
+  // Default: 'standard'
+  string offeringClass = 7;
+
+  // Optional. Valid values: 'allUpfront', 'partialUpfront', 'noUpfront'
+  // Default: 'allUpfront'
+  string paymentOption = 8;
+
+  // Optional. Percentage of the usage (in NormalizedUnits) to be covered by Reserved Instance
+  // Default: 100
+  double riCoverage = 9;
+
+  // Optional. Percentage of the usage (in NormalizedUnits) to be covered by Savings Plan
+  // Default: 100 - riCoverage
+  double spCoverage = 10;
+}
+
+// Request message for GetRiSpRecommendations
+message GetRiSpRecommendationsResponse {
+  string orgId = 1;
+  api.aws.RecommendationSummary summary = 2;
+  repeated api.aws.RiRecommendation riRecommendations = 3;
+  repeated api.aws.SpRecommendation spRecommendations = 4;
 }
