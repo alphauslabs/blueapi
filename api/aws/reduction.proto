@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package blueapi.api.aws;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/aws";
+option java_package = "cloud.alphaus.blueapi.api.aws";
+option java_outer_classname = "ApiAwsReductionProto";
+
+message AwsCostReductions {
+    CostReductionSummary summary = 1;
+    repeated RiCostReduction riCostReductions = 2;
+    repeated SpCostReduction spCostReductions = 3;
+}
+
+message RiCostReduction {
+    string accountId = 1;
+    string arn = 2;
+    string offeringClass = 3;
+    string productCode = 4;
+    double ondemandCost = 5;
+    double actualCost = 6;
+    double savings = 7;
+}
+
+message SpCostReduction {
+    string accountId = 1;
+    string arn = 2;
+    string offeringClass = 3;
+    string productCode = 4;
+    double ondemandCost = 5;
+    double actualCost = 6;
+    double savings = 7;
+}
+
+message CostReductionSummary {
+    double totalOnDemandCost = 1;
+    double totalActualCost = 2;
+    double totalSavings = 3;
+}
