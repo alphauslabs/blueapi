@@ -7,7 +7,7 @@ import "api/operation.proto";
 import "api/budget.proto";
 import "api/forecast.proto";
 import "api/aws/cost.proto";
-import "api/aws/calculatorconfig.proto";
+import "api/aws/calculator.proto";
 import "api/aws/recommendation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -119,10 +119,17 @@ service Cost {
     };
   }
 
-  // Gets the vendor cost calculator's current configuration.
+  // WORK-IN-PROGRESS: Gets the vendor cost calculator's current status.
+  rpc GetCalculatorStatus(GetCalculatorStatusRequest) returns (GetCalculatorStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/calculator/status"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Gets the vendor cost calculator's current configuration.
   rpc GetCalculatorConfig(GetCalculatorConfigRequest) returns (GetCalculatorConfigResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/calculator"
+      get: "/v1/{vendor}/calculator/config"
     };
   }
 
@@ -396,6 +403,17 @@ message DeleteAccountRequest {
 
   // Required. The account id to delete.
   string id = 2;
+}
+
+// Request message for the Cost.GetCalculatorStatus rpc.
+message GetCalculatorStatusRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+}
+
+// Response message for the Cost.GetCalculatorStatus rpc.
+message GetCalculatorStatusResponse {
+  api.aws.CalculatorStatus aws = 1;
 }
 
 // Request message for the Cost.GetCalculatorConfig rpc.
@@ -888,7 +906,6 @@ message GetRecommendationsRequestAwsOptions {
   // Optional. Percentage of the usage (in NormalizedUnits) to be covered by Savings Plan
   // Default: 100 - riCoverage
   double spCoverage = 9;
-  
 }
 
 // Request message for GetRecommendations

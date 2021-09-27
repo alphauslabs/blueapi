@@ -1843,15 +1843,47 @@
         ]
       }
     },
-    "/v1/{vendor}/calculator": {
+    "/v1/{vendor}/calculator/config": {
       "get": {
-        "summary": "Gets the vendor cost calculator's current configuration.",
+        "summary": "WORK-IN-PROGRESS: Gets the vendor cost calculator's current configuration.",
         "operationId": "Cost_GetCalculatorConfig",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/v1GetCalculatorConfigResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/calculator/status": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets the vendor cost calculator's current status.",
+        "operationId": "Cost_GetCalculatorStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCalculatorStatusResponse"
             }
           },
           "default": {
@@ -2936,6 +2968,25 @@
       },
       "description": "AWS's calculation engine configuration(s)."
     },
+    "awsCalculatorStatus": {
+      "type": "object",
+      "properties": {
+        "lastMonthlyRun": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Timestamp in UTC of the last completed calculation at org level for a given month.\nKey is month in `yyyy-mm` format, value is timestamp in RFC3339 format."
+        },
+        "isRunning": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "description": "Whether the calculator is still running for a given month.\nKey is month in `yyyy-mm` format, value is true or false."
+        }
+      }
+    },
     "awsCost": {
       "type": "object",
       "properties": {
@@ -3837,6 +3888,15 @@
         }
       },
       "description": "Response message for the Cost.GetCalculatorConfig rpc."
+    },
+    "v1GetCalculatorStatusResponse": {
+      "type": "object",
+      "properties": {
+        "aws": {
+          "$ref": "#/definitions/awsCalculatorStatus"
+        }
+      },
+      "description": "Response message for the Cost.GetCalculatorStatus rpc."
     },
     "v1GetForecastsResponse": {
       "type": "object",

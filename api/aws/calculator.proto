@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package blueapi.api.aws;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/aws";
+option java_package = "cloud.alphaus.blueapi.api.aws";
+option java_outer_classname = "ApiAwsCalculatorProto";
+
+message AdjustmentsTypeList {
+  repeated string types = 1;
+}
+
+message ExcludedServiceFromUsage {
+  // The management account (formerly master account) the `productCode` belongs to.
+  string managementAccount = 1;
+
+  // The excluded product code.
+  string productCode = 2;
+
+  // If the product code is converted to Adjustments or not.
+  bool convertedToAdjustments = 3;
+}
+
+// AWS's calculation engine configuration(s).
+message CalculatorConfig {
+  // CUR lineitem types included in Ripple's 'Adjusting Entries'.
+  AdjustmentsTypeList adjustmentsTypeList = 1;
+
+  // List of services that are of type 'Usage' in CUR that are excluded,
+  // optionally converted to Adjustments.
+  repeated ExcludedServiceFromUsage excludedServicesFromUsage = 2;
+}
+
+message CalculatorStatus {
+  // Timestamp in UTC of the last completed calculation at org level for a given month.
+  // Key is month in `yyyy-mm` format, value is timestamp in RFC3339 format.
+  map<string, string> lastMonthlyRun = 1;
+
+  // Whether the calculator is still running for a given month.
+  // Key is month in `yyyy-mm` format, value is true or false.
+  map<string, bool> isRunning = 2;
+}
