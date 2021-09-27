@@ -9,6 +9,7 @@ import "api/forecast.proto";
 import "api/aws/cost.proto";
 import "api/aws/calculator.proto";
 import "api/aws/recommendation.proto";
+import "api/aws/reduction.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -263,6 +264,14 @@ service Cost {
   rpc GetRecommendations(GetRecommendationsRequest) returns (GetRecommendationsResponse) {
     option (google.api.http) = {
       post: "/v1/{vendor}/recommendations/{orgId}"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get cost reduction details for an organization (or MSP).
+  rpc GetCostReduction(GetCostReductionRequest) returns (GetCostReductionResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/reduction/{orgId}"
       body: "*"
     };
   }
@@ -927,4 +936,38 @@ message GetRecommendationsRequest {
 message GetRecommendationsResponse {
   string orgId = 1;
   api.aws.AwsRecommendations awsRecommendations = 2;
+}
+
+// Request message for GetCostReduction
+message GetCostReductionRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Organization Id.
+  string orgId = 2;
+
+  // Required. Valid values: 'all', 'reservation', 'savingsplan'
+  string reductionDisplay = 3;
+
+  // Optional. The month to display the cost reduction details. If not set,
+  // month-to-date will be used. Format: yyyymm.
+  string period = 4;
+
+  // Optional. Payer Id.
+  string payerId = 5;
+
+  // Optional. Billing group Id.
+  string groupId = 6;
+
+  // Optional. List of Account Ids.
+  repeated string accounts = 7;
+
+  // Optional. List of services.
+  repeated string services = 8;
+}
+
+// Request message for GetCostReduction
+message GetCostReductionResponse {
+  string orgId = 1;
+  api.aws.AwsCostReductions awsCostReductions = 2;
 }
