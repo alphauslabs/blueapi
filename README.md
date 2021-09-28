@@ -26,4 +26,4 @@ Generated SDKs from updates to this repository:
 * [blue-sdk-go](https://github.com/alphauslabs/blue-sdk-go)
 * [blue-sdk-python](https://github.com/alphauslabs/blue-sdk-python)
 
-Generated OpenAPI documentation can be found [here](https://alphauslabs.github.io/blueapidocs/).
+The generated OpenAPI documentation can be found [here](https://alphauslabs.github.io/blueapidocs/).
