@@ -2,6 +2,7 @@
 echo "Compiling proto files..." && buf generate
 
 # Compile services for blue-sdk-python; with grpc.
+mkdir -p ./generated/py
 python3 -m grpc_tools.protoc -I . --python_out=./generated/py --grpc_python_out=./generated/py \
         ./org/v1/*.proto \
         ./kvstore/v1/*.proto \
