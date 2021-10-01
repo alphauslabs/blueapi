@@ -882,39 +882,44 @@ message GetRecommendationsRequestAwsOptions {
   string type = 2;
 
   // For recommendationType = 'reservation'
-  // Optional. List of Services
-  // Default: All services with Reserved Instance or Savings Plan
-  repeated string services = 3;
+  // Optional. List of Services ["AmazonEC2", "AmazonRDS", "AmazonElastiCache", "AmazonES"]
+  // Default: All services with Reserved Instance
+  repeated string riServices = 3;
+
+  // For recommendationType = 'reservation'
+  // Optional. List of Services ["AmazonECS", "AmazonEKS", "AWSLambda"]
+  // Default: All services with Savings Plans except AmazonEC2
+  repeated string spServices = 4;
+
+  // For recommendationType = 'reservation'
+  // Optional. If set to "true", recommends EC2 Instance Savings Plan that will cover usage not covered by RI
+  // Default: false
+  bool purchaseEC2SavingsPlan = 5;
 
   // For recommendationType = 'reservation'
   // Optional. Valid values: '1yr', '3yr'
   // Default: '1yr'
-  string term = 4;
+  string term = 6;
 
   // For recommendationType = 'reservation'
   // Optional. Valid values: 'standard', 'convertible'
   // Default: 'standard'
-  string offeringClass = 5;
+  string offeringClass = 7;
 
   // For recommendationType = 'reservation'
   // Optional. Valid values: 'allUpfront', 'partialUpfront', 'noUpfront'
   // Default: 'allUpfront'
-  string paymentOption = 6;
+  string paymentOption = 8;
 
   // For recommendationType = 'reservation'
   // Optional. Valid values: 'shared', 'dedicated'
   // Default: 'shared'
-  string tenancy = 7;
+  string tenancy = 9;
 
   // For recommendationType = 'reservation'
-  // Optional. Percentage of the usage (in NormalizedUnits) to be covered by Reserved Instance
+  // Optional. Percentage of the usage (in NormalizedUnits) to be covered by Reserved Instance or Savings Plan
   // Default: 100
-  double riCoverage = 8;
-
-  // For recommendationType = 'reservation'
-  // Optional. Percentage of the usage (in NormalizedUnits) to be covered by Savings Plan
-  // Default: 100 - riCoverage
-  double spCoverage = 9;
+  double coveragePercentage = 10;
 }
 
 // Request message for GetRecommendations
@@ -949,21 +954,28 @@ message GetCostReductionRequest {
   // Required. Valid values: 'all', 'reservation', 'savingsplan'
   string reductionDisplay = 3;
 
-  // Optional. The month to display the cost reduction details. If not set,
-  // month-to-date will be used. Format: yyyymm.
-  string period = 4;
+  // Optional. The start date of the displayed data. If not set, the first day of the
+  // current month will be used. Format: yyyy-mm-dd.
+  string fromDate = 4;
+
+  // Optional. The end date of the displayed data. If not set, current date will be
+  // used. Format: yyyy-mm-dd.
+  string toDate = 5;
 
   // Optional. Payer Id.
-  string payerId = 5;
+  string payerId = 6;
 
   // Optional. Billing group Id.
-  string groupId = 6;
+  string companyId = 7;
+
+  // Optional. Account group Id.
+  string groupId = 8;
 
   // Optional. List of Account Ids.
-  repeated string accounts = 7;
+  repeated string accounts = 9;
 
   // Optional. List of services.
-  repeated string services = 8;
+  repeated string services = 10;
 }
 
 // Request message for GetCostReduction
