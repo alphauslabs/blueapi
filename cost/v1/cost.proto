@@ -954,21 +954,28 @@ message GetCostReductionRequest {
   // Required. Valid values: 'all', 'reservation', 'savingsplan'
   string reductionDisplay = 3;
 
-  // Optional. The month to display the cost reduction details. If not set,
-  // month-to-date will be used. Format: yyyymm.
-  string period = 4;
+  // Optional. The start date of the displayed data. If not set, the first day of the
+  // current month will be used. Format: yyyy-mm-dd.
+  string fromDate = 4;
+
+  // Optional. The end date of the displayed data. If not set, current date will be
+  // used. Format: yyyy-mm-dd.
+  string toDate = 5;
 
   // Optional. Payer Id.
-  string payerId = 5;
+  string payerId = 6;
 
   // Optional. Billing group Id.
-  string groupId = 6;
+  string companyId = 7;
+
+  // Optional. Account group Id.
+  string groupId = 8;
 
   // Optional. List of Account Ids.
-  repeated string accounts = 7;
+  repeated string accounts = 9;
 
   // Optional. List of services.
-  repeated string services = 8;
+  repeated string services = 10;
 }
 
 // Request message for GetCostReduction
