@@ -25,6 +25,9 @@ for package in $(find generated/py/alphausblue -mindepth 1 -maxdepth 1 -type d -
         find generated/py/alphausblue/. -name '*.py' -exec sed -i -e "s/from ${package}/from alphausblue.${package}/g" {} \;
 done
 
+echo "Creating Python package files..."
+find generated/py/alphausblue/. -type d -exec touch {}/__init__.py \;
+
 echo "Generating OpenAPI docs..."
 protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true --openapiv2_opt allow_merge=true \
        ./org/v1/*.proto \
