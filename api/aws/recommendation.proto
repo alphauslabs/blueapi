@@ -9,7 +9,8 @@ option java_outer_classname = "ApiAwsRecommendationProto";
 message AwsRecommendations {
     ReservationRecommendationSummary summary = 1;
     repeated RiRecommendation riRecommendations = 2;
-    repeated api.aws.SpRecommendation spRecommendations = 3;
+    repeated SpRecommendation spRecommendations = 3;
+    repeated ReservationEstimatedCoverage estimatedCoverage = 4;
 }
 
 message RiRecommendation {
@@ -50,10 +51,18 @@ message SpRecommendation {
 }
 
 message ReservationRecommendationSummary {
-    double totalNormalizedUnit = 1;
-    double totalOnDemandCost = 2;
-    double totalDiscountedCost = 3;
-    double totalDiscountedMonthlyCost = 4;
-    double totalDiscountedYearlyCost = 5;
-    double reductionRate = 6;
+    double totalOnDemandCost = 1;
+    double totalDiscountedCost = 2;
+    double totalDiscountedMonthlyCost = 3;
+    double totalDiscountedYearlyCost = 4;
+    double reductionRate = 5;
+    double totalEstimatedMonthlySavings = 6;
+}
+
+message ReservationEstimatedCoverage {
+    string accountId = 1;
+    string productCode = 2;
+    double riCoverage = 3;
+    double ec2SpCoverage = 4;
+    double computeSpCoverage = 5;
 }
