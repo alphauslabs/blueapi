@@ -418,11 +418,26 @@ message DeleteAccountRequest {
 message GetCalculatorStatusRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
+
+  // Optional. The UTC month to query. Format is `yyyymm`.
+  // For example, June 2021 will be `202106`.
+  string month = 2;
 }
 
 // Response message for the Cost.GetCalculatorStatus rpc.
 message GetCalculatorStatusResponse {
-  api.aws.CalculatorStatus aws = 1;
+  message AwsStatus {
+    // The last timestamp in UTC of the completed calculation at org-level for the
+    // queried month. Format is RFC3339.
+    string lastCompleted = 1;
+
+    // Calculation completion state in percent, i.e. 70 means 70%. If the queried
+    // month doesn't have an ongoing calculation, this field is set to 100.
+    double currentProgress = 2;
+  }
+
+  // AWS-specific calculator status.
+  AwsStatus aws = 1;
 }
 
 // Request message for the Cost.GetCalculatorConfig rpc.
