@@ -431,8 +431,11 @@ message GetCalculatorStatusResponse {
     string month = 1;
 
     // The last timestamp in UTC of the completed calculation at org-level for the
-    // queried month. Format is RFC3339. An empty value means calculations hasn't
-    // started yet for the queried month.
+    // queried month. Format is RFC3339. Note that these calculations are not the same
+    // as the invoice calculations you manually request every month; these are the
+    // daily calculations in response to daily CUR updates, which provides data to
+    // your daily graphs, reports, and daily budget alerts. An empty value means
+    // calculations hasn't started yet for the queried month.
     string lastCompleted = 2;
 
     // Calculation completion state in percent, i.e. 70 means 70%. Any value other
