@@ -25,5 +25,6 @@ $ ./build.sh
 Generated SDKs from updates to this repository:
 * [blue-sdk-go](https://github.com/alphauslabs/blue-sdk-go)
 * [blue-sdk-python](https://github.com/alphauslabs/blue-sdk-python)
+    * When releasing updates, an associated release needs to be made from this repository as well to ensure that the Python SDK is created and updated in PyPI as well.
 
 The generated OpenAPI documentation can be found [here](https://alphauslabs.github.io/blueapidocs/).
