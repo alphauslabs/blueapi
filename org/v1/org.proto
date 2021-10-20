@@ -48,20 +48,19 @@ service Organization {
     };
   }
 
-  // Sends (or resends) the verification email. Only valid for unverified
+  // WORK-IN-PROGRESS: Sends (or resends) the verification email. Only valid for unverified
   // organizations. The verification key will be valid for a day.
-  rpc SendVerification(SendVerificationRequest) returns (api.ripple.Org) {
+  rpc SendVerification(SendVerificationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/org/v1:sendVerification"
     };
   }
 
-  // Verifies an organization using the key received from the verification email.
+  // WORK-IN-PROGRESS: Verifies an organization using the key received from the verification email.
   // The verification key is only valid for a day.
-  rpc VerifyOrg(VerifyOrgRequest) returns (api.ripple.Org) {
+  rpc VerifyOrg(VerifyOrgRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/org/v1:verify"
-      body: "*"
     };
   }
 
@@ -72,7 +71,7 @@ service Organization {
     };
   }
 
-  // Updates organization metadata. See [https://alphauslabs.github.io/blueapi/]
+  // WORK-IN-PROGRESS: Updates organization metadata. See [https://alphauslabs.github.io/blueapi/]
   // for the list of supported attributes.
   rpc UpdateMetadata(UpdateMetadataRequest) returns (api.ripple.Org) {
     option (google.api.http) = {
@@ -81,7 +80,7 @@ service Organization {
     };
   }
 
-  // Updates the organization password.
+  // WORK-IN-PROGRESS: Updates the organization password.
   rpc UpdatePassword(UpdatePasswordRequest) returns (api.ripple.Org) {
     option (google.api.http) = {
       put: "/org/v1/passwd"
@@ -89,7 +88,7 @@ service Organization {
     };
   }
 
-  // Deletes the organization.
+  // WORK-IN-PROGRESS: Deletes the organization.
   rpc DeleteOrg(DeleteOrgRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/org/v1"
