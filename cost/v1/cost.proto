@@ -10,6 +10,7 @@ import "api/aws/cost.proto";
 import "api/aws/calculator.proto";
 import "api/aws/recommendation.proto";
 import "api/aws/reduction.proto";
+import "api/ripple/payer.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -76,7 +77,7 @@ service Cost {
   }
 
   // Registers a vendor payer account.
-  rpc CreatePayerAccount(CreatePayerAccountRequest) returns (api.Account) {
+  rpc CreatePayerAccount(CreatePayerAccountRequest) returns (api.ripple.Payer) {
     option (google.api.http) = {
       post: "/v1/{vendor}/payers"
       body: "*"
