@@ -61,7 +61,7 @@ service Cost {
   // See https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
   // For AWS, this means a management account (formerly known as master or payer account);
   // for Azure, this means a subscription, for GCP, this means a project.
-  rpc GetPayerAccount(GetPayerAccountRequest) returns (api.Account) {
+  rpc GetPayerAccount(GetPayerAccountRequest) returns (api.ripple.Payer) {
     option (google.api.http) = {
       get: "/v1/{vendor}/payers/{id}"
     };
@@ -77,7 +77,7 @@ service Cost {
   }
 
   // Registers a vendor payer account.
-  rpc CreatePayerAccount(CreatePayerAccountRequest) returns (api.ripple.Payer) {
+  rpc CreatePayerAccount(CreatePayerAccountRequest) returns (api.Account) {
     option (google.api.http) = {
       post: "/v1/{vendor}/payers"
       body: "*"
