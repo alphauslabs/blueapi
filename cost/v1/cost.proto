@@ -10,6 +10,7 @@ import "api/aws/cost.proto";
 import "api/aws/calculator.proto";
 import "api/aws/recommendation.proto";
 import "api/aws/reduction.proto";
+import "api/ripple/payer.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -60,7 +61,7 @@ service Cost {
   // See https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
   // For AWS, this means a management account (formerly known as master or payer account);
   // for Azure, this means a subscription, for GCP, this means a project.
-  rpc GetPayerAccount(GetPayerAccountRequest) returns (api.Account) {
+  rpc GetPayerAccount(GetPayerAccountRequest) returns (api.ripple.Payer) {
     option (google.api.http) = {
       get: "/v1/{vendor}/payers/{id}"
     };
@@ -906,7 +907,7 @@ message GetRecommendationsRequestAwsOptions {
   string type = 2;
 
   // For recommendationType = 'reservation'
-  // Optional. List of Services ["AmazonEC2", "AmazonRDS", "AmazonElastiCache", "AmazonES"]
+  // Optional. List of Services ["AmazonEC2", "AmazonRDS", "AmazonElastiCache", "AmazonES", "AmazonRedshift"]
   // Default: Empty list
   repeated string riServices = 3;
 

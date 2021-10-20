@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package blueapi.api.ripple;
+
+import "api/account.proto";
+import "api/keyvalue.proto";
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/ripple";
+option java_package = "cloud.alphaus.blueapi.api.ripple";
+option java_outer_classname = "ApiRipplePayerProto";
+
+// Payer resource definition.
+message Payer {
+  // The payer account id.
+  string id = 1;
+
+  // The payer account name.
+  string name = 2;
+
+  // The attributes (key/value pair) of the account.
+  repeated KeyValue metadata = 3;
+
+  //List of all customers/accounts under payer id
+  repeated api.Account customers = 4;
+}
