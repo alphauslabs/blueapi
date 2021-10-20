@@ -8,58 +8,58 @@ jobs:
     if: "!contains(github.event.commits[0].message, 'ci skip')"
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Setup golang v1.x
-        uses: actions/setup-go@v2
-        with:
-          go-version: ^1.13
+    - name: Setup golang v1.x
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.13
 
-      - name: Build all
-        env:
-          DEPLOYER_TOKEN: ${{secrets.GH_TOKEN}}
-        run: |
-          pip3 install grpcio
-          pip3 install grpcio-tools
-          PB_REL="https://github.com/protocolbuffers/protobuf/releases"
-          curl -LO $PB_REL/download/v3.17.3/protoc-3.17.3-linux-x86_64.zip
-          unzip protoc-3.17.3-linux-x86_64.zip -d $HOME/.local
-          curl -LO https://github.com/bufbuild/buf/releases/download/v0.43.2/buf-Linux-x86_64.tar.gz
-          tar xvzf buf-Linux-x86_64.tar.gz
-          cp buf/bin/* $HOME/.local/bin/
-          export GO111MODULE=on
-          go get -v google.golang.org/protobuf/cmd/protoc-gen-go \
-            google.golang.org/grpc/cmd/protoc-gen-go-grpc \
-            github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.4.0 \
-            github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@v2.4.0
-          export PATH="$PATH:$HOME/.local/bin:$(go env GOPATH)/bin"
-          mkdir -p generated/py && chmod +x ./build.sh && ./build.sh
-          if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
-            exit 0
-          fi
-          # Update blue-sdk-go:
-          WORKSPACE_ROOT=$PWD
-          cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-go && cd blue-sdk-go
-          cp -rv $WORKSPACE_ROOT/generated/go/* . && git status
-          git config user.email "dev@mobingi.com"
-          git config user.name "mobingideployer"
-          git add . && git commit -am "$GITHUB_REF $GITHUB_SHA" || true
-          git remote add origin-tmp https://$DEPLOYER_TOKEN@github.com/alphauslabs/blue-sdk-go.git > /dev/null 2>&1
-          git push --set-upstream origin-tmp
-          # Update blue-sdk-python:
-          cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-python && cd blue-sdk-python
-          cp -rv $WORKSPACE_ROOT/generated/py/alphausblue* . && git status
-          git config user.email "dev@mobingi.com"
-          git config user.name "mobingideployer"
-          git add . && git commit -am "$GITHUB_REF $GITHUB_SHA" || true
-          git remote add origin-tmp https://$DEPLOYER_TOKEN@github.com/alphauslabs/blue-sdk-python.git > /dev/null 2>&1
-          git push --set-upstream origin-tmp
-          # Update OpenAPI docs repo:
-          cd /tmp/ && git clone https://github.com/alphauslabs/blueapidocs && cd blueapidocs
-          cp $WORKSPACE_ROOT/openapiv2/apidocs.swagger.json ./apidocs.json && git status
-          git config user.email "dev@mobingi.com"
-          git config user.name "mobingideployer"
-          git add . && git commit -am "$GITHUB_REF $GITHUB_SHA" || true
-          git remote add origin-tmp https://$DEPLOYER_TOKEN@github.com/alphauslabs/blueapidocs.git > /dev/null 2>&1
-          git push --set-upstream origin-tmp
+    - name: Build all
+      env:
+        DEPLOYER_TOKEN: ${{secrets.GH_TOKEN}}
+      run: |
+        pip3 install grpcio
+        pip3 install grpcio-tools
+        PB_REL="https://github.com/protocolbuffers/protobuf/releases"
+        curl -LO $PB_REL/download/v3.18.1/protoc-3.18.1-linux-x86_64.zip
+        unzip protoc-3.18.1-linux-x86_64.zip -d $HOME/.local
+        curl -LO https://github.com/bufbuild/buf/releases/download/v0.56.0/buf-Linux-x86_64.tar.gz
+        tar xvzf buf-Linux-x86_64.tar.gz
+        cp buf/bin/* $HOME/.local/bin/
+        export GO111MODULE=on
+        go get -v google.golang.org/protobuf/cmd/protoc-gen-go \
+          google.golang.org/grpc/cmd/protoc-gen-go-grpc \
+          github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.4.0 \
+          github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@v2.4.0
+        export PATH="$PATH:$HOME/.local/bin:$(go env GOPATH)/bin"
+        mkdir -p generated/py && chmod +x ./build.sh && ./build.sh
+        if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
+          exit 0
+        fi
+        # Update blue-sdk-go:
+        WORKSPACE_ROOT=$PWD
+        cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-go && cd blue-sdk-go
+        cp -rv $WORKSPACE_ROOT/generated/go/* . && git status
+        git config user.email "dev@mobingi.com"
+        git config user.name "mobingideployer"
+        git add . && git commit -am "$GITHUB_REF $GITHUB_SHA" || true
+        git remote add origin-tmp https://$DEPLOYER_TOKEN@github.com/alphauslabs/blue-sdk-go.git > /dev/null 2>&1
+        git push --set-upstream origin-tmp
+        # Update blue-sdk-python:
+        cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-python && cd blue-sdk-python
+        cp -rv $WORKSPACE_ROOT/generated/py/alphausblue* . && git status
+        git config user.email "dev@mobingi.com"
+        git config user.name "mobingideployer"
+        git add . && git commit -am "$GITHUB_REF $GITHUB_SHA" || true
+        git remote add origin-tmp https://$DEPLOYER_TOKEN@github.com/alphauslabs/blue-sdk-python.git > /dev/null 2>&1
+        git push --set-upstream origin-tmp
+        # Update OpenAPI docs repo:
+        cd /tmp/ && git clone https://github.com/alphauslabs/blueapidocs && cd blueapidocs
+        cp $WORKSPACE_ROOT/openapiv2/apidocs.swagger.json ./apidocs.json && git status
+        git config user.email "dev@mobingi.com"
+        git config user.name "mobingideployer"
+        git add . && git commit -am "$GITHUB_REF $GITHUB_SHA" || true
+        git remote add origin-tmp https://$DEPLOYER_TOKEN@github.com/alphauslabs/blueapidocs.git > /dev/null 2>&1
+        git push --set-upstream origin-tmp

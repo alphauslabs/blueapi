@@ -155,7 +155,7 @@ service Cost {
     };
   }
 
-  // Lists vendor costs calculations history and statuses.
+  // Lists vendor costs calculations history and statuses. Note that status information is sometimes unstable.
   rpc ListCalculationsHistory(ListCalculationsHistoryRequest) returns (ListCalculationsHistoryResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/calculations/history"
@@ -268,7 +268,7 @@ service Cost {
     };
   }
 
-  // WORK-IN-PROGRESS: Get cost reduction details for an organization (or MSP).
+  // Get cost reduction details for an organization (or MSP).
   rpc GetCostReduction(GetCostReductionRequest) returns (GetCostReductionResponse) {
     option (google.api.http) = {
       post: "/v1/{vendor}/reduction/{orgId}:read"
@@ -973,28 +973,32 @@ message GetCostReductionRequest {
   // Required. Valid values: 'all', 'reservation', 'savingsplan'
   string reductionDisplay = 3;
 
+  // Optional. If set to "true", details of the RI or SP list is returned.
+	// Default: false
+	bool includeDetails = 4;
+
   // Optional. The start date of the displayed data. If not set, the first day of the
   // current month will be used. Format: yyyy-mm-dd.
-  string fromDate = 4;
+  string fromDate = 5;
 
   // Optional. The end date of the displayed data. If not set, current date will be
   // used. Format: yyyy-mm-dd.
-  string toDate = 5;
+  string toDate = 6;
 
   // Optional. Payer Id.
-  string payerId = 6;
+  string payerId = 7;
 
   // Optional. Billing group Id.
-  string companyId = 7;
+  string companyId = 8;
 
   // Optional. Account group Id.
-  string groupId = 8;
+  string groupId = 9;
 
   // Optional. List of Account Ids.
-  repeated string accounts = 9;
+  repeated string accounts = 10;
 
   // Optional. List of services.
-  repeated string services = 10;
+  repeated string services = 11;
 }
 
 // Request message for GetCostReduction
