@@ -4,6 +4,7 @@ package blueapi.admin.v1;
 
 import "api/accountgroup.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/admin";
@@ -33,6 +34,16 @@ service Admin {
       get: "/admin/v1/acctgroups/{id}"
     };
   }
+
+  // Update the features available to a user on an Alphaus product. Currently,
+  // only values of "wave" and "aqua" are supported for {product}. For a list of
+  // valid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/admin.html.
+  rpc UpdateFeatureFlags(UpdateFeatureFlagsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/iam/v1/users/{id}/features/{product}"
+      body: "*"
+    };
+  }
 }
 
 // Request message for the Admin.ListAccountGroups rpc.
@@ -53,3 +64,9 @@ message GetAccountGroupResponse {
   api.AccountGroup acctGroup = 1;
 }
 
+// Request message for the Admin.UpdateFeatureFlags rpc
+message UpdateFeatureFlagsRequest {
+  string id = 1;
+  string product = 2;
+  map<string, bool> feature_flags = 3;
+}
