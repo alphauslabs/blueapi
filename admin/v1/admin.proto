@@ -42,7 +42,7 @@ service Admin {
   // Create a new Wave root account (also referred to as a reseller)
   rpc CreateResellerAccount(CreateResellerRequest) returns (api.ripple.Reseller) {
     option (google.api.http) = {
-      post: "/admin/v1/resller"
+      post: "/admin/v1/resllers"
       body: "*"
     };
   }
@@ -52,7 +52,7 @@ service Admin {
   // asscoiated with the organization
   rpc ListResellerAccounts(ListResellersRequest) returns (stream api.ripple.Reseller) {
     option (google.api.http) = {
-      get: "/admin/v1/reseller"
+      get: "/admin/v1/resellers"
     };
   }
 
@@ -60,7 +60,7 @@ service Admin {
   // Retrieve an existing Wave root account (also referred to as a reseller)
   rpc GetResellerAccount(GetResellerRequest) returns (api.ripple.Reseller) {
     option (google.api.http) = {
-      get: "/admin/v1/reseller/{id}"
+      get: "/admin/v1/resellers/{id}"
     };
   }
 
@@ -68,7 +68,7 @@ service Admin {
   // Delete an existing Wave root account (also referred to as a reseller)
   rpc DeleteResellerAccount(DeleteResellerRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/admin/v1/reseller/{id}"
+      delete: "/admin/v1/resellers/{id}"
     };
   }
 
@@ -78,7 +78,7 @@ service Admin {
   // valid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/admin.html.
   rpc GetFeatureFlags(GetFeatureFlagsRequest) returns (api.FeatureFlags) {
     option (google.api.http) = {
-      get: "/admin/v1/users/{id}/features/{product}"
+      get: "/admin/v1/resellers/{id}/features/{product}"
     };
   }
 
@@ -88,7 +88,7 @@ service Admin {
   // valid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/admin.html.
   rpc UpdateFeatureFlags(UpdateFeatureFlagsRequest) returns (api.FeatureFlags) {
     option (google.api.http) = {
-      put: "/admin/v1/users/{id}/features/{product}"
+      put: "/admin/v1/resellers/{id}/features/{product}"
       body: "*"
     };
   }

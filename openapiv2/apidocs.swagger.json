@@ -154,7 +154,7 @@
         ]
       }
     },
-    "/admin/v1/reseller": {
+    "/admin/v1/resellers": {
       "get": {
         "summary": "WORK IN PROGRESS\nRetrieve all the existing Wave root accounts (also referred to as resellers)\nasscoiated with the organization",
         "operationId": "Admin_ListResellerAccounts",
@@ -186,7 +186,7 @@
         ]
       }
     },
-    "/admin/v1/reseller/{id}": {
+    "/admin/v1/resellers/{id}": {
       "get": {
         "summary": "WORK IN PROGRESS:\nRetrieve an existing Wave root account (also referred to as a reseller)",
         "operationId": "Admin_GetResellerAccount",
@@ -246,40 +246,7 @@
         ]
       }
     },
-    "/admin/v1/resller": {
-      "post": {
-        "summary": "WORK IN PROGRESS:\nCreate a new Wave root account (also referred to as a reseller)",
-        "operationId": "Admin_CreateResellerAccount",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/rippleReseller"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateResellerRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Admin"
-        ]
-      }
-    },
-    "/admin/v1/users/{id}/features/{product}": {
+    "/admin/v1/resellers/{id}/features/{product}": {
       "get": {
         "summary": "WORK IN PROGRESS:\nRetrieve the features available to a user on an Alphaus product. Currently,\nonly values of \"wave\" and \"aqua\" are supported for {product}. For a list of\nvalid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/admin.html.",
         "operationId": "Admin_GetFeatureFlags",
@@ -360,6 +327,39 @@
                 }
               },
               "title": "Request message for the Admin.UpdateFeatureFlags rpc"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/resllers": {
+      "post": {
+        "summary": "WORK IN PROGRESS:\nCreate a new Wave root account (also referred to as a reseller)",
+        "operationId": "Admin_CreateResellerAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/rippleReseller"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateResellerRequest"
             }
           }
         ],
