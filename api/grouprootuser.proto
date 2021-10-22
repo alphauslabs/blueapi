@@ -29,50 +29,39 @@ message GroupRootUser {
   // This field will contain either a value of "billing_group" or "access_group".
   string groupType = 5;
 
-  // A collection of feature flags for Wave and whether or not they should be
-  // enabled. For a full list of such flags, see https://alphauslabs.github.io/blueapi/apis/groups.html.
-  FeatureFlags waveMeta = 6;
-
-  // A collection of feature flags for Aqua and whether or not they should be
-  // enabled. For a full list of such flags, see https://alphauslabs.github.io/blueapi/apis/groups.html.
-  FeatureFlags aquaMeta = 7;
+  // A collection of feature flags and whether or not they should be enabled. 
+  // For a full list of such flags, see https://alphauslabs.github.io/blueapi/apis/groups.html.
+  FeatureFlags meta = 6;
 
   // The time when the password was last updated. This value will be null if 
   // the password has never been updated.
-  string passwordUpdateTime = 8;
+  string passwordUpdateTime = 7;
 
   // The time when the user was last updated. This value will be null if the
   // user has never been updated.
-  string updateTime = 9;
+  string updateTime = 8;
 
   // An ID that uniquely identifies the user in the context of its access group.
   // If the user does not belong to an access group then this value field will
   // contain the same value as the user ID.
-  string userAccessId = 10;
+  string userAccessId = 9;
 
   // An ID that unqiuely identifies the user.
-  string userId = 11;
+  string userId = 10;
 
   // How many days of Wave use remain. This value is only used for trial accounts.
   // This field cannot be updated.
-  int32 waveAvailabilityDays = 12;
+  int32 waveAvailabilityDays = 11;
 
   // When the user registered on Wave.
-  string waveRegistered = 13;
+  string waveRegistered = 12;
 
   // The plan associated with the user. Possible values include "trial",
   // "limited3" and "limited4".
-  string waveStatus = 14;
+  string waveStatus = 13;
 }
 
-// This object describes the features enabled for a particular root user and product.
+// Describes the features and whether or not they are enabled for a particular user.
 message FeatureFlags {
-
-  // The product. Acceptable values include "wave" or "aqua".
-  string product = 1;
-
-  // A mapping between feature names and whether or not those features are enabled
-  // for the user. Omitted flags should be considered false. For a full list of
-  // flags, see https://alphauslabs.github.io/blueapi/apis/groups.html.
-  map<string, bool> meta = 2;
+  map<string, bool> meta = 1;
 }
