@@ -47,14 +47,6 @@
       }
     },
     {
-      "name": "Groups",
-      "description": "(BETA) Groups API. Base URL: https://api.alphaus.cloud/m/blue",
-      "externalDocs": {
-        "description": "Service definition",
-        "url": "https://github.com/alphauslabs/blueapi/tree/main/groups/"
-      }
-    },
-    {
       "name": "Cost",
       "description": "(BETA) Cost API. Base URL: https://api.alphaus.cloud/m/blue/cost",
       "externalDocs": {
@@ -162,218 +154,6 @@
         ]
       }
     },
-    "/groups/v1/superusers": {
-      "get": {
-        "summary": "WORK IN PROGRESS\r\nRetrieve all the existing super users asscoiated with the organization",
-        "operationId": "Groups_ListSuperUsers",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/apiSuperUser"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of apiSuperUser"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Groups"
-        ]
-      },
-      "post": {
-        "summary": "WORK IN PROGRESS:\r\nCreate a new super user",
-        "operationId": "Groups_CreateSuperUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apiSuperUser"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateSuperUserRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Groups"
-        ]
-      }
-    },
-    "/groups/v1/superusers/{id}": {
-      "get": {
-        "summary": "WORK IN PROGRESS:\r\nRetrieve an existing super user",
-        "operationId": "Groups_GetSuperUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apiSuperUser"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Groups"
-        ]
-      },
-      "delete": {
-        "summary": "WORK IN PROGRESS\r\nDelete an existing super user",
-        "operationId": "Groups_DeleteSuperUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Groups"
-        ]
-      }
-    },
-    "/groups/v1/superusers/{id}/features/{product}": {
-      "get": {
-        "summary": "WORK IN PROGRESS:\r\nRetrieve the features available to a user on an Alphaus product. Currently,\r\nonly values of \"wave\" and \"aqua\" are supported for {product}. For a list of\r\nvalid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/groups.html.",
-        "operationId": "Groups_GetFeatureFlags",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apiFeatureFlags"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "product",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Groups"
-        ]
-      },
-      "put": {
-        "summary": "WORK IN PROGRESS:\r\nUpdate the features available to a user on an Alphaus product. Currently,\r\nonly values of \"wave\" and \"aqua\" are supported for {product}. For a list of\r\nvalid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/groups.html.",
-        "operationId": "Groups_UpdateFeatureFlags",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apiFeatureFlags"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "product",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "featureFlags": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "boolean"
-                  }
-                }
-              },
-              "title": "Request message for the Groups.UpdateFeatureFlags rpc"
-            }
-          }
-        ],
-        "tags": [
-          "Groups"
-        ]
-      }
-    },
     "/iam/v1/apiclients": {
       "get": {
         "summary": "Lists all API clients belonging to the caller.",
@@ -462,6 +242,218 @@
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
+    "/iam/v1/grouprootusers": {
+      "get": {
+        "summary": "WORK IN PROGRESS\nRetrieve all the existing group root users asscoiated with the organization",
+        "operationId": "Iam_ListGroupRootUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/apiGroupRootUser"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of apiGroupRootUser"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Iam"
+        ]
+      },
+      "post": {
+        "summary": "WORK IN PROGRESS:\nCreate a new root user for a billing group or access group",
+        "operationId": "Iam_CreateGroupRootUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiGroupRootUser"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateGroupRootUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
+    "/iam/v1/grouprootusers/{id}": {
+      "get": {
+        "summary": "WORK IN PROGRESS:\nRetrieve an group root user",
+        "operationId": "Iam_GetGroupRootUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiGroupRootUser"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      },
+      "delete": {
+        "summary": "WORK IN PROGRESS\nDelete an existing group root user",
+        "operationId": "Iam_DeleteGroupRootUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
+    "/iam/v1/grouprootusers/{id}/features/{product}": {
+      "get": {
+        "summary": "WORK IN PROGRESS:\nRetrieve the features available to a user on an Alphaus product. Currently,\nonly values of \"wave\" and \"aqua\" are supported for {product}. For a list of\nvalid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/iam.html.",
+        "operationId": "Iam_GetFeatureFlags",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiFeatureFlags"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "product",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      },
+      "put": {
+        "summary": "WORK IN PROGRESS:\nUpdate the features available to a user on an Alphaus product. Currently,\nonly values of \"wave\" and \"aqua\" are supported for {product}. For a list of\nvalid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/iam.html.",
+        "operationId": "Iam_UpdateFeatureFlags",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiFeatureFlags"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "product",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "featureFlags": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "title": "Request message for the Iam.UpdateFeatureFlags rpc"
+            }
           }
         ],
         "tags": [
@@ -3204,7 +3196,7 @@
           "description": "A mapping between feature names and whether or not those features are enabled\r\nfor the user. Omitted flags should be considered false. For a full list of\r\nflags, see https://alphauslabs.github.io/blueapi/apis/groups.html."
         }
       },
-      "title": "This object describes the features enabled for a particular super user and product"
+      "title": "This object describes the features enabled for a particular root user and product"
     },
     "apiForecastData": {
       "type": "object",
@@ -3241,6 +3233,69 @@
           "format": "double"
         }
       }
+    },
+    "apiGroupRootUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "title": "The email address associated with the user. If there is no email\r\naddress provided then this field will contain \"Not Set\""
+        },
+        "password": {
+          "type": "string",
+          "title": "The password associated with the user. This field will only be\r\npopulated when the reseller is first created"
+        },
+        "groupId": {
+          "type": "string",
+          "title": "The ID of the group to which the user belongs. This will either\r\nbe a billing group ID or an access group ID"
+        },
+        "groupName": {
+          "type": "string",
+          "title": "The name of the group to which the user belongs. This will either\r\nbe the name of a billing group or an access group"
+        },
+        "groupType": {
+          "type": "string",
+          "title": "This field describes what type of group to which the user belongs.\r\nThis field will contain either a value of \"billing_group\" or \"access_group\""
+        },
+        "waveMeta": {
+          "$ref": "#/definitions/apiFeatureFlags",
+          "description": "A collection of feature flags for Wave and whether or not they should be\r\nenabled. For a full list of such flags, see https://alphauslabs.github.io/blueapi/apis/groups.html."
+        },
+        "aquaMeta": {
+          "$ref": "#/definitions/apiFeatureFlags",
+          "description": "A collection of feature flags for Aqua and whether or not they should be\r\nenabled. For a full list of such flags, see https://alphauslabs.github.io/blueapi/apis/groups.html."
+        },
+        "passwordUpdateTime": {
+          "type": "string",
+          "title": "The time when the password was last updated. This value will be null if \r\nthe password has never been updated"
+        },
+        "updateTime": {
+          "type": "string",
+          "title": "The time when the user was last updated. This value will be null if the\r\nuser has never been updated"
+        },
+        "userAccessId": {
+          "type": "string",
+          "title": "An ID that uniquely identifies the user in the context of its access group.\r\nIf the user does not belong to an access group then this value field will\r\ncontain the same value as the user ID"
+        },
+        "userId": {
+          "type": "string",
+          "title": "An ID that unqiuely identifies the user"
+        },
+        "waveAvailabilityDays": {
+          "type": "integer",
+          "format": "int32",
+          "description": "How many days of Wave use remain. This value is only used for trial accounts.\r\nThis field cannot be updated."
+        },
+        "waveRegistered": {
+          "type": "string",
+          "description": "When the user registered on Wave."
+        },
+        "waveStatus": {
+          "type": "string",
+          "title": "The plan associated with the user. Possible values include \"trial\",\r\n\"limited3\" and \"limited4\""
+        }
+      },
+      "title": "Describes the fields on an Alphaus root user for a billing group or access group"
     },
     "apiMonthOnMonthCostForecast": {
       "type": "object",
@@ -3393,69 +3448,6 @@
           }
         }
       }
-    },
-    "apiSuperUser": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string",
-          "title": "The email address associated with the account. If there is no email\r\naddress provided then this field will contain \"Not Set\""
-        },
-        "password": {
-          "type": "string",
-          "title": "The password associated with the account. This field will only be\r\npopulated when the reseller is first created"
-        },
-        "groupId": {
-          "type": "string",
-          "title": "The ID of the group to which the user belongs. This will either\r\nbe a billing group ID or an access group ID"
-        },
-        "groupName": {
-          "type": "string",
-          "title": "The name of the group to which the user belongs. This will either\r\nbe the name of a billing group or an access group"
-        },
-        "groupType": {
-          "type": "string",
-          "title": "This field describes what type of group to which the user belongs.\r\nThis field will contain either a value of \"billing_group\" or \"access_group\""
-        },
-        "waveMeta": {
-          "$ref": "#/definitions/apiFeatureFlags",
-          "description": "A collection of feature flags for Wave and whether or not they should be\r\nenabled. For a full list of such flags, see https://alphauslabs.github.io/blueapi/apis/groups.html."
-        },
-        "aquaMeta": {
-          "$ref": "#/definitions/apiFeatureFlags",
-          "description": "A collection of feature flags for Aqua and whether or not they should be\r\nenabled. For a full list of such flags, see https://alphauslabs.github.io/blueapi/apis/groups.html."
-        },
-        "passwordUpdateTime": {
-          "type": "string",
-          "title": "The time when the password was last updated. This value will be null if \r\nthe password has never been updated"
-        },
-        "updateTime": {
-          "type": "string",
-          "title": "The time when the user was last updated. This value will be null if the\r\nuser has never been updated"
-        },
-        "userAccessId": {
-          "type": "string",
-          "title": "An ID that uniquely identifies the user in the context of its access group.\r\nIf the user does not belong to an access group then this value field will\r\ncontain the same value as the user ID"
-        },
-        "userId": {
-          "type": "string",
-          "title": "An ID that unqiuely identifies the user"
-        },
-        "waveAvailabilityDays": {
-          "type": "integer",
-          "format": "int32",
-          "description": "How many days of Wave use remain. This value is only used for trial accounts.\r\nThis field cannot be updated."
-        },
-        "waveRegistered": {
-          "type": "string",
-          "description": "When the user registered on Wave."
-        },
-        "waveStatus": {
-          "type": "string",
-          "title": "The plan associated with the Wave user. Possible values include \"trial\",\r\n\"limited3\" and \"limited4\""
-        }
-      },
-      "title": "Describes the fields on an Alphaus super user"
     },
     "apiUser": {
       "type": "object",
@@ -4463,6 +4455,44 @@
       },
       "title": "Specific settings per vendor"
     },
+    "v1CreateGroupRootUserRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "title": "The email address of the user being created"
+        },
+        "groupId": {
+          "type": "string",
+          "title": "The ID of the group to which the user will be added. This must\neither be a billing group ID or an access group ID"
+        },
+        "groupType": {
+          "type": "string",
+          "title": "The type of group which is represented by the group ID. Valid values\ninclude \"billing_group\" or \"access_group\""
+        },
+        "inputType": {
+          "type": "string",
+          "title": "This value determines whether the password should be auto-generated\nor if the plaintext value received with the request should be used. A\nvalue of \"Auto\" will result in an auto-generated password whereas a\nvalue of \"Custom\" will result in the password included with the request\nbeing used"
+        },
+        "plan": {
+          "type": "string",
+          "title": "The plan associated with the root-user account. Valid values include\n\"trial\", \"limited3\" and \"limited4\""
+        },
+        "emailNotification": {
+          "type": "boolean",
+          "title": "Whether or not a notification should be sent to the provided email after\nthe user has been created"
+        },
+        "waveFeatureFlags": {
+          "$ref": "#/definitions/apiFeatureFlags",
+          "description": "A collection of feature flags for Wave and whether or not they should be enabled.\nAny omitted values will be treated as being disabled. For a full list of such\nflags, see https://alphauslabs.github.io/blueapi/apis/iam.html."
+        },
+        "aquaFeatureFlags": {
+          "$ref": "#/definitions/apiFeatureFlags",
+          "description": "A collection of feature flags for Aqua and whether or not they should be enabled.\nAny omitted values will be treated as being disabled. For a full list of such\nflags, see https://alphauslabs.github.io/blueapi/apis/iam.html."
+        }
+      },
+      "title": "Request message for the Iam.CreateGroupRootUser rpc"
+    },
     "v1CreateIpFilterRequest": {
       "type": "object",
       "properties": {
@@ -4565,44 +4595,6 @@
         }
       },
       "description": "Request message for the Iam.CreateRole rpc."
-    },
-    "v1CreateSuperUserRequest": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string",
-          "title": "The email address of the account being created"
-        },
-        "groupId": {
-          "type": "string",
-          "title": "The ID of the group to which the user will be added. This must\r\neither be a billing group ID or an access group ID"
-        },
-        "groupType": {
-          "type": "string",
-          "title": "The type of group which is represented by the group ID. Valid values\r\ninclude \"billing_group\" or \"access_group\""
-        },
-        "inputType": {
-          "type": "string",
-          "title": "This value determines whether the password should be auto-generated\r\nor if the plaintext value received with the request should be used. A\r\nvalue of \"Auto\" will result in an auto-generated password whereas a\r\nvalue of \"Custom\" will result in the password included with the request\r\nbeing used"
-        },
-        "plan": {
-          "type": "string",
-          "title": "The plan associated with the super-user account. Valid values include\r\n\"trial\", \"limited3\" and \"limited4\""
-        },
-        "emailNotification": {
-          "type": "boolean",
-          "title": "Whether or not a notification should be sent to the provided email after\r\nthe account has been created"
-        },
-        "waveFeatureFlags": {
-          "$ref": "#/definitions/apiFeatureFlags",
-          "description": "A collection of feature flags for Wave and whether or not they should be enabled.\r\nAny omitted values will be treated as being disabled. For a full list of such\r\nflags, see https://alphauslabs.github.io/blueapi/apis/groups.html."
-        },
-        "aquaFeatureFlags": {
-          "$ref": "#/definitions/apiFeatureFlags",
-          "description": "A collection of feature flags for Aqua and whether or not they should be enabled.\r\nAny omitted values will be treated as being disabled. For a full list of such\r\nflags, see https://alphauslabs.github.io/blueapi/apis/groups.html."
-        }
-      },
-      "title": "Request message for the Groups.CreateSuperUser rpc"
     },
     "v1CreateUserRequest": {
       "type": "object",

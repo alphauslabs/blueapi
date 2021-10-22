@@ -3,6 +3,7 @@ syntax = "proto3";
 package blueapi.iam.v1;
 
 import "api/user.proto";
+import "api/grouprootuser.proto";
 import "api/apiclient.proto";
 import "api/rbac.proto";
 import "google/api/annotations.proto";
@@ -60,6 +61,60 @@ service Iam {
   rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/iam/v1/users/{id}"
+    };
+  }
+  
+  // WORK IN PROGRESS:
+  // Create a new root user for a billing group or access group
+  rpc CreateGroupRootUser(CreateGroupRootUserRequest) returns (api.GroupRootUser) {
+    option (google.api.http) = {
+      post: "/iam/v1/grouprootusers"
+      body: "*"
+    };
+  }
+
+  // WORK IN PROGRESS
+  // Retrieve all the existing group root users asscoiated with the organization
+  rpc ListGroupRootUsers(ListGroupRootUsersRequest) returns (stream api.GroupRootUser) {
+    option (google.api.http) = {
+      get: "/iam/v1/grouprootusers"
+    };
+  }
+
+  // WORK IN PROGRESS:
+  // Retrieve an group root user
+  rpc GetGroupRootUser(GetGroupRootRequest) returns (api.GroupRootUser) {
+    option (google.api.http) = {
+      get: "/iam/v1/grouprootusers/{id}"
+    };
+  }
+
+  // WORK IN PROGRESS
+  // Delete an existing group root user
+  rpc DeleteGroupRootUser(DeleteGroupRootUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/iam/v1/grouprootusers/{id}"
+    };
+  }
+
+  // WORK IN PROGRESS:
+  // Retrieve the features available to a user on an Alphaus product. Currently,
+  // only values of "wave" and "aqua" are supported for {product}. For a list of
+  // valid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/iam.html.
+  rpc GetFeatureFlags(GetFeatureFlagsRequest) returns (api.FeatureFlags) {
+    option (google.api.http) = {
+      get: "/iam/v1/grouprootusers/{id}/features/{product}"
+    };
+  }
+
+  // WORK IN PROGRESS:
+  // Update the features available to a user on an Alphaus product. Currently,
+  // only values of "wave" and "aqua" are supported for {product}. For a list of
+  // valid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/iam.html.
+  rpc UpdateFeatureFlags(UpdateFeatureFlagsRequest) returns (api.FeatureFlags) {
+    option (google.api.http) = {
+      put: "/iam/v1/grouprootusers/{id}/features/{product}"
+      body: "*"
     };
   }
 
@@ -206,6 +261,72 @@ message CreateUserRequest {
 message DeleteUserRequest {
   // Required. The subuser name to delete.
   string id = 1;
+}
+
+// Request message for the Iam.CreateGroupRootUser rpc
+message CreateGroupRootUserRequest {
+
+  // The email address of the user being created
+  string email = 1;
+
+  // The ID of the group to which the user will be added. This must
+  // either be a billing group ID or an access group ID
+  string groupId = 2;
+
+  // The type of group which is represented by the group ID. Valid values
+  // include "billing_group" or "access_group"
+  string groupType = 3;
+
+  // This value determines whether the password should be auto-generated
+  // or if the plaintext value received with the request should be used. A
+  // value of "Auto" will result in an auto-generated password whereas a
+  // value of "Custom" will result in the password included with the request
+  // being used
+  string inputType = 4;
+
+  // The plan associated with the root-user account. Valid values include
+  // "trial", "limited3" and "limited4"
+  string plan = 5;
+
+  // Whether or not a notification should be sent to the provided email after
+  // the user has been created
+  bool emailNotification = 6;
+
+  // A collection of feature flags for Wave and whether or not they should be enabled.
+  // Any omitted values will be treated as being disabled. For a full list of such
+  // flags, see https://alphauslabs.github.io/blueapi/apis/iam.html.
+  api.FeatureFlags waveFeatureFlags = 7;
+
+  // A collection of feature flags for Aqua and whether or not they should be enabled.
+  // Any omitted values will be treated as being disabled. For a full list of such
+  // flags, see https://alphauslabs.github.io/blueapi/apis/iam.html.
+  api.FeatureFlags aquaFeatureFlags = 8;
+}
+
+// Request message for the Iam.ListGroupRootUsers rpc
+message ListGroupRootUsersRequest {}
+
+// Request message for the Iam.GetGroupRootUser rpc
+message GetGroupRootRequest {
+  string id = 1;
+}
+
+// Request message for the Iam.DeleteGroupRootUser rpc
+message DeleteGroupRootUserRequest {
+  string id = 1;
+}
+
+// Request message for the Iam.GetUpdateFeatureFlags rpc
+message GetFeatureFlagsRequest {
+  string id = 1;
+  string product = 2;
+}
+
+// Request message for the Iam.UpdateFeatureFlags rpc
+message UpdateFeatureFlagsRequest {
+  string id = 1;
+  string product = 2;
+  map<string, bool> featureFlags = 3;
 }
 
 // Request message for the Iam.ListApiClients rpc.
