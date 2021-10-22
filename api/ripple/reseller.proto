@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package blueapi.api.ripple;
 
+import "api/user.proto";
+
 option go_package = "github.com/alphauslabs/blue-sdk-go/api/ripple";
 option java_package = "cloud.alphaus.blueapi.api.ripple";
 option java_outer_classname = "ApiRippleResellerProto";
@@ -31,11 +33,11 @@ message Reseller {
 
     // A collection of feature flags for Wave and whether or not they should be
     // enabled. For a full list of such flags, see https://alphauslabs.github.io/blueapi/apis/admin.html.
-    map<string, bool> waveMeta = 6;
+    user.FeatureFlags waveMeta = 6;
 
     // A collection of feature flags for Aqua and whether or not they should be
     // enabled. For a full list of such flags, see https://alphauslabs.github.io/blueapi/apis/admin.html.
-    map<string, bool> aquaMeta = 7;
+    user.FeatureFlags aquaMeta = 7;
 
     // The time when the password was last updated. This value will be null if 
     // the password has never been updated

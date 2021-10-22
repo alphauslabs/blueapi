@@ -4,6 +4,8 @@ package blueapi.admin.v1;
 
 import "api/ripple/reseller.proto";
 import "api/accountgroup.proto";
+import "api/user.proto";
+
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -66,9 +68,20 @@ service Admin {
 
   // WORK IN PROGRESS
   // Delete an existing Wave root account (also referred to as a reseller)
-  rpc DeleteResellerAccount(DeleteResellerRequest) returns(google.protobuf.Empty) {
+  rpc DeleteResellerAccount(DeleteResellerRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/admin/v1/reseller/{id}"
+      body: "*"
+    };
+  }
+
+  // WORK IN PROGRESS:
+  // Retrieve the features available to a user on an Alphaus product. Currently,
+  // only values of "wave" and "aqua" are supported for {product}. For a list of
+  // valid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/admin.html.
+  rpc GetFeatureFlags(GetFeatureFlagsRequest) returns (user.FeatureFlags) {
+    option (google.api.http) = {
+      get: "/admin/v1/users/{id}/features/{product}"
       body: "*"
     };
   }
@@ -154,6 +167,12 @@ message ListResellersRequest {}
 // Request message for the Admin.DeleteResellerAccount rpc
 message DeleteResellerRequest {
   string id = 1;
+}
+
+// Request message for the Admin.GetUpdateFeatureFlags rpc
+message GetFeatureFlagsRequest {
+  string id = 1;
+  string product = 2;
 }
 
 // Request message for the Admin.UpdateFeatureFlags rpc
