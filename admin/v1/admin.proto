@@ -2,7 +2,10 @@ syntax = "proto3";
 
 package blueapi.admin.v1;
 
+import "api/ripple/reseller.proto";
 import "api/accountgroup.proto";
+import "api/user.proto";
+
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -35,12 +38,57 @@ service Admin {
     };
   }
 
+  // WORK IN PROGRESS:
+  // Create a new Wave root account (also referred to as a reseller)
+  rpc CreateResellerAccount(CreateResellerRequest) returns (api.ripple.Reseller) {
+    option (google.api.http) = {
+      post: "/admin/v1/resllers"
+      body: "*"
+    };
+  }
+
+  // WORK IN PROGRESS
+  // Retrieve all the existing Wave root accounts (also referred to as resellers)
+  // asscoiated with the organization
+  rpc ListResellerAccounts(ListResellersRequest) returns (stream api.ripple.Reseller) {
+    option (google.api.http) = {
+      get: "/admin/v1/resellers"
+    };
+  }
+
+  // WORK IN PROGRESS:
+  // Retrieve an existing Wave root account (also referred to as a reseller)
+  rpc GetResellerAccount(GetResellerRequest) returns (api.ripple.Reseller) {
+    option (google.api.http) = {
+      get: "/admin/v1/resellers/{id}"
+    };
+  }
+
+  // WORK IN PROGRESS
+  // Delete an existing Wave root account (also referred to as a reseller)
+  rpc DeleteResellerAccount(DeleteResellerRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/admin/v1/resellers/{id}"
+    };
+  }
+
+  // WORK IN PROGRESS:
+  // Retrieve the features available to a user on an Alphaus product. Currently,
+  // only values of "wave" and "aqua" are supported for {product}. For a list of
+  // valid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/admin.html.
+  rpc GetFeatureFlags(GetFeatureFlagsRequest) returns (api.FeatureFlags) {
+    option (google.api.http) = {
+      get: "/admin/v1/resellers/{id}/features/{product}"
+    };
+  }
+
+  // WORK IN PROGRESS:
   // Update the features available to a user on an Alphaus product. Currently,
   // only values of "wave" and "aqua" are supported for {product}. For a list of
   // valid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/admin.html.
-  rpc UpdateFeatureFlags(UpdateFeatureFlagsRequest) returns (google.protobuf.Empty) {
+  rpc UpdateFeatureFlags(UpdateFeatureFlagsRequest) returns (api.FeatureFlags) {
     option (google.api.http) = {
-      put: "/admin/v1/users/{id}/features/{product}"
+      put: "/admin/v1/resellers/{id}/features/{product}"
       body: "*"
     };
   }
@@ -64,9 +112,68 @@ message GetAccountGroupResponse {
   api.AccountGroup acctGroup = 1;
 }
 
+// Request message for the Admin.CreateResellerAccount rpc
+message CreateResellerRequest {
+
+  // The email address of the account being created
+  string email = 1;
+
+  // The ID of the group to which the user will be added. This must
+  // either be a billing group ID or an access group ID
+  string groupId = 2;
+
+  // The type of group which is represented by the group ID. Valid values
+  // include "billing_group" or "access_group"
+  string groupType = 3;
+
+  // This value determines whether the password should be auto-generated
+  // or if the plaintext value received with the request should be used. A
+  // value of "Auto" will result in an auto-generated password whereas a
+  // value of "Custom" will result in the password included with the request
+  // being used
+  string inputType = 4;
+
+  // The plan associated with the reseller account. Valid values include
+  // "trial", "limited3" and "limited4"
+  string plan = 5;
+
+  // Whether or not a notification should be sent to the provided email after
+  // the account has been created
+  bool emailNotification = 6;
+
+  // A collection of feature flags for Wave and whether or not they should be enabled.
+  // Any omitted values will be treated as being disabled. For a full list of such
+  // flags, see https://alphauslabs.github.io/blueapi/apis/admin.html.
+  api.FeatureFlags waveFeatureFlags = 7;
+
+  // A collection of feature flags for Aqua and whether or not they should be enabled.
+  // Any omitted values will be treated as being disabled. For a full list of such
+  // flags, see https://alphauslabs.github.io/blueapi/apis/admin.html.
+  api.FeatureFlags aquaFeatureFlags = 8;
+}
+
+// Request message for the Admin.GetResellerAccount rpc
+message GetResellerRequest {
+  string id = 1;
+}
+
+// Request message for the Admin.ListResellerAccounts rpc
+message ListResellersRequest {}
+
+// Request message for the Admin.DeleteResellerAccount rpc
+message DeleteResellerRequest {
+  string id = 1;
+}
+
+// Request message for the Admin.GetUpdateFeatureFlags rpc
+message GetFeatureFlagsRequest {
+  string id = 1;
+  string product = 2;
+}
+
 // Request message for the Admin.UpdateFeatureFlags rpc
 message UpdateFeatureFlagsRequest {
   string id = 1;
   string product = 2;
-  map<string, bool> feature_flags = 3;
+  map<string, bool> featureFlags = 3;
 }
