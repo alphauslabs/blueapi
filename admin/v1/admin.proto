@@ -52,8 +52,7 @@ service Admin {
   // asscoiated with the organization
   rpc ListResellerAccounts(ListResellersRequest) returns (stream api.ripple.Reseller) {
     option (google.api.http) = {
-      get: "admin/v1/reseller"
-      body: "*"
+      get: "/admin/v1/reseller"
     };
   }
 
@@ -61,8 +60,7 @@ service Admin {
   // Retrieve an existing Wave root account (also referred to as a reseller)
   rpc GetResellerAccount(GetResellerRequest) returns (api.ripple.Reseller) {
     option (google.api.http) = {
-      get: "admin/v1/reseller/{id}"
-      body: "*"
+      get: "/admin/v1/reseller/{id}"
     };
   }
 
@@ -71,7 +69,6 @@ service Admin {
   rpc DeleteResellerAccount(DeleteResellerRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/admin/v1/reseller/{id}"
-      body: "*"
     };
   }
 
@@ -82,7 +79,6 @@ service Admin {
   rpc GetFeatureFlags(GetFeatureFlagsRequest) returns (api.FeatureFlags) {
     option (google.api.http) = {
       get: "/admin/v1/users/{id}/features/{product}"
-      body: "*"
     };
   }
 
