@@ -251,7 +251,7 @@
     },
     "/iam/v1/grouprootusers": {
       "get": {
-        "summary": "WORK IN PROGRESS\nRetrieve all the existing group root users asscoiated with the organization",
+        "summary": "WORK IN PROGRESS\nRetrieves all the existing group root users asscoiated with the organization.",
         "operationId": "Iam_ListGroupRootUsers",
         "responses": {
           "200": {
@@ -281,7 +281,7 @@
         ]
       },
       "post": {
-        "summary": "WORK IN PROGRESS:\nCreate a new root user for a billing group or access group",
+        "summary": "WORK IN PROGRESS:\nCreates a new root user for a billing group or access group.",
         "operationId": "Iam_CreateGroupRootUser",
         "responses": {
           "200": {
@@ -314,7 +314,7 @@
     },
     "/iam/v1/grouprootusers/{id}": {
       "get": {
-        "summary": "WORK IN PROGRESS:\nRetrieve an group root user",
+        "summary": "WORK IN PROGRESS:\nRetrieves an group root user.",
         "operationId": "Iam_GetGroupRootUser",
         "responses": {
           "200": {
@@ -343,7 +343,7 @@
         ]
       },
       "delete": {
-        "summary": "WORK IN PROGRESS\nDelete an existing group root user",
+        "summary": "WORK IN PROGRESS\nDeletes an existing group root user.",
         "operationId": "Iam_DeleteGroupRootUser",
         "responses": {
           "200": {
@@ -372,9 +372,9 @@
         ]
       }
     },
-    "/iam/v1/grouprootusers/{id}/features/{product}": {
+    "/iam/v1/grouprootusers/{id}/features": {
       "get": {
-        "summary": "WORK IN PROGRESS:\nRetrieve the features available to a user on an Alphaus product. Currently,\nonly values of \"wave\" and \"aqua\" are supported for {product}. For a list of\nvalid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/iam.html.",
+        "summary": "WORK IN PROGRESS:\nRetrieves the features available to a user on an Alphaus product. Currently,\nonly values of \"wave\" and \"aqua\" are supported for {product}. For a list of\nvalid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/iam.html.",
         "operationId": "Iam_GetFeatureFlags",
         "responses": {
           "200": {
@@ -396,12 +396,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "product",
-            "in": "path",
-            "required": true,
-            "type": "string"
           }
         ],
         "tags": [
@@ -409,7 +403,7 @@
         ]
       },
       "put": {
-        "summary": "WORK IN PROGRESS:\nUpdate the features available to a user on an Alphaus product. Currently,\nonly values of \"wave\" and \"aqua\" are supported for {product}. For a list of\nvalid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/iam.html.",
+        "summary": "WORK IN PROGRESS:\nUpdates the features available to a user on an Alphaus product. Currently,\nonly values of \"wave\" and \"aqua\" are supported for {product}. For a list of\nvalid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/iam.html.",
         "operationId": "Iam_UpdateFeatureFlags",
         "responses": {
           "200": {
@@ -428,12 +422,6 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "product",
             "in": "path",
             "required": true,
             "type": "string"
@@ -3184,19 +3172,14 @@
     "apiFeatureFlags": {
       "type": "object",
       "properties": {
-        "product": {
-          "type": "string",
-          "title": "The product. Acceptable values include \"wave\" or \"aqua\""
-        },
         "meta": {
           "type": "object",
           "additionalProperties": {
             "type": "boolean"
-          },
-          "description": "A mapping between feature names and whether or not those features are enabled\r\nfor the user. Omitted flags should be considered false. For a full list of\r\nflags, see https://alphauslabs.github.io/blueapi/apis/groups.html."
+          }
         }
       },
-      "title": "This object describes the features enabled for a particular root user and product"
+      "description": "Describes the features and whether or not they are enabled for a particular user."
     },
     "apiForecastData": {
       "type": "object",
@@ -3239,47 +3222,43 @@
       "properties": {
         "email": {
           "type": "string",
-          "title": "The email address associated with the user. If there is no email\r\naddress provided then this field will contain \"Not Set\""
+          "description": "The email address associated with the user. If there is no email\r\naddress provided then this field will contain \"Not Set\"."
         },
         "password": {
           "type": "string",
-          "title": "The password associated with the user. This field will only be\r\npopulated when the reseller is first created"
+          "description": "The password associated with the user. This field will only be\r\npopulated when the reseller is first created."
         },
         "groupId": {
           "type": "string",
-          "title": "The ID of the group to which the user belongs. This will either\r\nbe a billing group ID or an access group ID"
+          "description": "The ID of the group to which the user belongs. This will either\r\nbe a billing group ID or an access group ID."
         },
         "groupName": {
           "type": "string",
-          "title": "The name of the group to which the user belongs. This will either\r\nbe the name of a billing group or an access group"
+          "description": "The name of the group to which the user belongs. This will either\r\nbe the name of a billing group or an access group."
         },
         "groupType": {
           "type": "string",
-          "title": "This field describes what type of group to which the user belongs.\r\nThis field will contain either a value of \"billing_group\" or \"access_group\""
+          "description": "This field describes what type of group to which the user belongs.\r\nThis field will contain either a value of \"billing_group\" or \"access_group\"."
         },
-        "waveMeta": {
+        "meta": {
           "$ref": "#/definitions/apiFeatureFlags",
-          "description": "A collection of feature flags for Wave and whether or not they should be\r\nenabled. For a full list of such flags, see https://alphauslabs.github.io/blueapi/apis/groups.html."
-        },
-        "aquaMeta": {
-          "$ref": "#/definitions/apiFeatureFlags",
-          "description": "A collection of feature flags for Aqua and whether or not they should be\r\nenabled. For a full list of such flags, see https://alphauslabs.github.io/blueapi/apis/groups.html."
+          "description": "A collection of feature flags and whether or not they should be enabled. \r\nFor a full list of such flags, see https://alphauslabs.github.io/blueapi/apis/groups.html."
         },
         "passwordUpdateTime": {
           "type": "string",
-          "title": "The time when the password was last updated. This value will be null if \r\nthe password has never been updated"
+          "description": "The time when the password was last updated. This value will be null if \r\nthe password has never been updated."
         },
         "updateTime": {
           "type": "string",
-          "title": "The time when the user was last updated. This value will be null if the\r\nuser has never been updated"
+          "description": "The time when the user was last updated. This value will be null if the\r\nuser has never been updated."
         },
         "userAccessId": {
           "type": "string",
-          "title": "An ID that uniquely identifies the user in the context of its access group.\r\nIf the user does not belong to an access group then this value field will\r\ncontain the same value as the user ID"
+          "description": "An ID that uniquely identifies the user in the context of its access group.\r\nIf the user does not belong to an access group then this value field will\r\ncontain the same value as the user ID."
         },
         "userId": {
           "type": "string",
-          "title": "An ID that unqiuely identifies the user"
+          "description": "An ID that unqiuely identifies the user."
         },
         "waveAvailabilityDays": {
           "type": "integer",
@@ -3292,10 +3271,10 @@
         },
         "waveStatus": {
           "type": "string",
-          "title": "The plan associated with the user. Possible values include \"trial\",\r\n\"limited3\" and \"limited4\""
+          "description": "The plan associated with the user. Possible values include \"trial\",\r\n\"limited3\" and \"limited4\"."
         }
       },
-      "title": "Describes the fields on an Alphaus root user for a billing group or access group"
+      "description": "Describes the fields on an Alphaus root user for a billing group or access group."
     },
     "apiMonthOnMonthCostForecast": {
       "type": "object",
@@ -4460,35 +4439,34 @@
       "properties": {
         "email": {
           "type": "string",
-          "title": "The email address of the user being created"
+          "description": "The email address of the user being created."
         },
         "groupId": {
           "type": "string",
-          "title": "The ID of the group to which the user will be added. This must\neither be a billing group ID or an access group ID"
+          "description": "The ID of the group to which the user will be added. This must\neither be a billing group ID or an access group ID."
         },
         "groupType": {
           "type": "string",
-          "title": "The type of group which is represented by the group ID. Valid values\ninclude \"billing_group\" or \"access_group\""
+          "description": "The type of group which is represented by the group ID. Valid values\ninclude \"billing_group\" or \"access_group\"."
         },
         "inputType": {
           "type": "string",
-          "title": "This value determines whether the password should be auto-generated\nor if the plaintext value received with the request should be used. A\nvalue of \"Auto\" will result in an auto-generated password whereas a\nvalue of \"Custom\" will result in the password included with the request\nbeing used"
+          "description": "This value determines whether the password should be auto-generated\nor if the plaintext value received with the request should be used. A\nvalue of \"Auto\" will result in an auto-generated password whereas a\nvalue of \"Custom\" will result in the password included with the request\nbeing used."
         },
         "plan": {
           "type": "string",
-          "title": "The plan associated with the root-user account. Valid values include\n\"trial\", \"limited3\" and \"limited4\""
+          "description": "The plan associated with the root-user account. Valid values include\n\"trial\", \"limited3\" and \"limited4\"."
         },
         "emailNotification": {
           "type": "boolean",
-          "title": "Whether or not a notification should be sent to the provided email after\nthe user has been created"
+          "description": "Whether or not a notification should be sent to the provided email after\nthe user has been created."
         },
-        "waveFeatureFlags": {
-          "$ref": "#/definitions/apiFeatureFlags",
-          "description": "A collection of feature flags for Wave and whether or not they should be enabled.\nAny omitted values will be treated as being disabled. For a full list of such\nflags, see https://alphauslabs.github.io/blueapi/apis/iam.html."
-        },
-        "aquaFeatureFlags": {
-          "$ref": "#/definitions/apiFeatureFlags",
-          "description": "A collection of feature flags for Aqua and whether or not they should be enabled.\nAny omitted values will be treated as being disabled. For a full list of such\nflags, see https://alphauslabs.github.io/blueapi/apis/iam.html."
+        "meta": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "description": "A collection of feature flags and whether or not they should be enabled. Andy\nomitted values will be treated as being disabled. For a full list of such\nflags, see https://alphauslabs.github.io/blueapi/apis/iam.html."
         }
       },
       "title": "Request message for the Iam.CreateGroupRootUser rpc"

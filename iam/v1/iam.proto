@@ -103,7 +103,7 @@ service Iam {
   // valid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/iam.html.
   rpc GetFeatureFlags(GetFeatureFlagsRequest) returns (api.FeatureFlags) {
     option (google.api.http) = {
-      get: "/iam/v1/grouprootusers/{id}/features/{product}"
+      get: "/iam/v1/grouprootusers/{id}/features"
     };
   }
 
@@ -113,7 +113,7 @@ service Iam {
   // valid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/iam.html.
   rpc UpdateFeatureFlags(UpdateFeatureFlagsRequest) returns (api.FeatureFlags) {
     option (google.api.http) = {
-      put: "/iam/v1/grouprootusers/{id}/features/{product}"
+      put: "/iam/v1/grouprootusers/{id}/features"
       body: "*"
     };
   }
@@ -292,15 +292,10 @@ message CreateGroupRootUserRequest {
   // the user has been created.
   bool emailNotification = 6;
 
-  // A collection of feature flags for Wave and whether or not they should be enabled.
-  // Any omitted values will be treated as being disabled. For a full list of such
+  // A collection of feature flags and whether or not they should be enabled. Andy
+  // omitted values will be treated as being disabled. For a full list of such
   // flags, see https://alphauslabs.github.io/blueapi/apis/iam.html.
-  api.FeatureFlags waveFeatureFlags = 7;
-
-  // A collection of feature flags for Aqua and whether or not they should be enabled.
-  // Any omitted values will be treated as being disabled. For a full list of such
-  // flags, see https://alphauslabs.github.io/blueapi/apis/iam.html.
-  api.FeatureFlags aquaFeatureFlags = 8;
+  map<string, bool> meta = 7;
 }
 
 // Request message for the Iam.ListGroupRootUsers rpc
@@ -319,14 +314,12 @@ message DeleteGroupRootUserRequest {
 // Request message for the Iam.GetUpdateFeatureFlags rpc
 message GetFeatureFlagsRequest {
   string id = 1;
-  string product = 2;
 }
 
 // Request message for the Iam.UpdateFeatureFlags rpc
 message UpdateFeatureFlagsRequest {
   string id = 1;
-  string product = 2;
-  map<string, bool> featureFlags = 3;
+  map<string, bool> featureFlags = 2;
 }
 
 // Request message for the Iam.ListApiClients rpc.
