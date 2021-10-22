@@ -154,6 +154,51 @@
         ]
       }
     },
+    "/admin/v1/users/{id}/features/{product}": {
+      "put": {
+        "summary": "Update the features available to a user on an Alphaus product. Currently,\nonly values of \"wave\" and \"aqua\" are supported for {product}. For a list of\nvalid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/admin.html.",
+        "operationId": "Admin_UpdateFeatureFlags",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "product",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateFeatureFlagsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
     "/iam/v1/apiclients": {
       "get": {
         "summary": "Lists all API clients belonging to the caller.",
@@ -1004,7 +1049,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/rippleOrg"
+              "properties": {}
             }
           },
           "default": {
@@ -1037,7 +1082,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/rippleOrg"
+              "properties": {}
             }
           },
           "default": {
@@ -4819,6 +4864,24 @@
         }
       },
       "title": "Request message for UpdateAccountBudget"
+    },
+    "v1UpdateFeatureFlagsRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "product": {
+          "type": "string"
+        },
+        "featureFlags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        }
+      },
+      "title": "Request message for the Admin.UpdateFeatureFlags rpc"
     },
     "v1UpdateMetadataRequest": {
       "type": "object",
