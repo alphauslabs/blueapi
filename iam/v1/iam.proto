@@ -269,33 +269,37 @@ message CreateGroupRootUserRequest {
   // The email address of the user being created.
   string email = 1;
 
+  // The password of the user being created. A value will be generated
+  // if not is provided for this field
+  string password = 2;
+
   // The ID of the group to which the user will be added. This must
   // either be a billing group ID or an access group ID.
-  string groupId = 2;
+  string groupId = 3;
 
   // The type of group which is represented by the group ID. Valid values
   // include "billing_group" or "access_group".
-  string groupType = 3;
+  string groupType = 4;
 
   // This value determines whether the password should be auto-generated
   // or if the plaintext value received with the request should be used. A
   // value of "Auto" will result in an auto-generated password whereas a
   // value of "Custom" will result in the password included with the request
   // being used.
-  string inputType = 4;
+  string inputType = 5;
 
   // The plan associated with the root-user account. Valid values include
   // "trial", "limited3" and "limited4".
-  string plan = 5;
+  string plan = 6;
 
   // Whether or not a notification should be sent to the provided email after
   // the user has been created.
-  bool emailNotification = 6;
+  bool emailNotification = 7;
 
   // A collection of feature flags and whether or not they should be enabled. Andy
   // omitted values will be treated as being disabled. For a full list of such
   // flags, see https://alphauslabs.github.io/blueapi/apis/iam.html.
-  map<string, bool> meta = 7;
+  map<string, bool> meta = 8;
 }
 
 // Request message for the Iam.ListGroupRootUsers rpc
