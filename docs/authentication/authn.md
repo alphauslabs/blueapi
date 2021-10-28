@@ -20,7 +20,7 @@ https://login.alphaus.cloud/access_token
 
 To obtain an access token, send a POST message to the access token endpoint using the format described below.
 
-```http
+```
 POST {access-token-url} HTTP1.1
 Content-Type: multipart/form-data
 
