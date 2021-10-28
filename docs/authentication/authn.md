@@ -20,7 +20,7 @@ https://login.alphaus.cloud/access_token
 
 To obtain an access token, send a POST message to the access token endpoint using the format described below.
 
-```https
+```http
 POST {access-token-url} HTTP1.1
 Content-Type: multipart/form-data
 
@@ -46,4 +46,18 @@ Content-Type: multipart/form-data
   "access_token": "eyJ0eXAiOiJKV1Q...",
   "refresh_token": "def50200..."
 }
+```
+
+### Example
+
+Create an access token entry under Tools > API Access Tokens in Ripple, or Settings > API Access Tokens in Wave(Pro).
+
+```sh
+# Example for Ripple access token:
+$ curl -X POST \
+  -F client_id={client-id} \
+  -F client_secret={client-secret} \
+  -F grant_type=client_credentials \
+  -F scope=openid \
+  https://login.alphaus.cloud/ripple/access_token
 ```
