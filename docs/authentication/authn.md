@@ -10,8 +10,8 @@ Use the following endpoints to acquire product-specific access tokens. Tokens ar
 
 ```sh
 # Ripple
-https://login.mobingi.com/ripple/access_token
+https://login.alphaus.cloud/ripple/access_token
 
 # Wave(Pro)
-https://login.mobingi.com/access_token
+https://login.alphaus.cloud/access_token
 ```
