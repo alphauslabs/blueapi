@@ -29,9 +29,21 @@ Content-Type: multipart/form-data
 
 | **Name** | **Value** |
 |---|---|
-| `grant_type` | Valid values: `password`, `client_credentials` |
+| `grant_type` | Valid value(s): `password`, `client_credentials` |
 | `client_id` | The client id you received from Alphaus or from API. |
 | `client_secret` | The client secret you received from Alphaus or from API. |
 | `username` | You account username. Required if `grant_type` is set to `password`. |
 | `password` | You account password. Required if `grant_type` is set to `password`. |
-| `scope` | Valid values: `openid` |
+| `scope` | Valid value(s): `openid` |
+
+### Response
+
+```json
+{
+  "id_token": "eyJ0eXAiOiJKV1Q...",
+  "token_type": "Bearer",
+  "expires_in": 86400,
+  "access_token": "eyJ0eXAiOiJKV1Q...",
+  "refresh_token": "def50200..."
+}
+```
