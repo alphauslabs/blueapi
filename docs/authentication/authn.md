@@ -15,3 +15,23 @@ https://login.alphaus.cloud/ripple/access_token
 # Wave(Pro)
 https://login.alphaus.cloud/access_token
 ```
+
+### Request
+
+To obtain an access token, send a POST message to the access token endpoint using the format described below.
+
+```https
+POST {access-token-url} HTTP1.1
+Content-Type: multipart/form-data
+
+{body formdata}
+```
+
+| **Name** | **Value** |
+|---|---|
+| `grant_type` | Valid values: `password`, `client_credentials` |
+| `client_id` | The client id you received from Alphaus or from API. |
+| `client_secret` | The client secret you received from Alphaus or from API. |
+| `username` | You account username. Required if `grant_type` is set to `password`. |
+| `password` | You account password. Required if `grant_type` is set to `password`. |
+| `scope` | Valid values: `openid` |
