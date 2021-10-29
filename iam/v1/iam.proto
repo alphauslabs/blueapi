@@ -462,15 +462,19 @@ message ListIdentityProvidersRequest {}
 
 // Response message for the Iam.ListIdentityProviders rpc.
 message ListIdentityProvidersResponse {
-  string id = 1;
-  string name = 2;
-  string type = 3;
+  message IdentityProvider {
+    string id = 1;
+    string name = 2;
+    string type = 3;
 
-  message samlInfo {
-    string metadata = 1;
+    message samlInfo {
+      string metadata = 1;
+    }
+
+    samlInfo saml = 4;
   }
 
-  samlInfo saml = 4;
+  repeated IdentityProvider idps = 1;
 }
 
 message IpFilter {

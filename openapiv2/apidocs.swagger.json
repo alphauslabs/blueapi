@@ -2943,11 +2943,28 @@
         }
       }
     },
-    "ListIdentityProvidersResponsesamlInfo": {
+    "IdentityProvidersamlInfo": {
       "type": "object",
       "properties": {
         "metadata": {
           "type": "string"
+        }
+      }
+    },
+    "ListIdentityProvidersResponseIdentityProvider": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "saml": {
+          "$ref": "#/definitions/IdentityProvidersamlInfo"
         }
       }
     },
@@ -5172,17 +5189,11 @@
     "v1ListIdentityProvidersResponse": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "saml": {
-          "$ref": "#/definitions/ListIdentityProvidersResponsesamlInfo"
+        "idps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ListIdentityProvidersResponseIdentityProvider"
+          }
         }
       },
       "description": "Response message for the Iam.ListIdentityProviders rpc."
