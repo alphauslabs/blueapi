@@ -3040,15 +3040,15 @@
         ]
       }
     },
-    "/v1/{vendor}/utilization/ri/{orgId}": {
+    "/v1/{vendor}/utilization/{orgId}": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Get the ri utilization details for an organization (or MSP).",
-        "operationId": "Cost_GetRiUtilization",
+        "summary": "WORK-IN-PROGRESS: Get the utilization details for an organization (or MSP).",
+        "operationId": "Cost_GetUtilization",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetRiUtilizationResponse"
+              "$ref": "#/definitions/v1GetUtilizationResponse"
             }
           },
           "default": {
@@ -3074,77 +3074,10 @@
             "type": "string"
           },
           {
-            "name": "fromDate",
-            "description": "Optional. The start date of the displayed data. If not set, the first day of the\ncurrent month will be used. Format: yyyy-mm-dd.",
+            "name": "type",
+            "description": "Required. For AWS, \"ri\" or \"sp\".",
             "in": "query",
             "required": false,
-            "type": "string"
-          },
-          {
-            "name": "toDate",
-            "description": "Optional. The end date of the displayed data. If not set, current date will be\nused. Format: yyyy-mm-dd.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "payerId",
-            "description": "Optional. Payer Id.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "companyId",
-            "description": "Optional. Billing group Id.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "groupId",
-            "description": "Optional. Account group Id.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
-    "/v1/{vendor}/utilization/sp/{orgId}": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Get the sp utilization details for an organization (or MSP).",
-        "operationId": "Cost_GetSpUtilization",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetSpUtilizationResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
             "type": "string"
           },
           {
@@ -3169,7 +3102,7 @@
             "type": "string"
           },
           {
-            "name": "companyId",
+            "name": "billingInternalId",
             "description": "Optional. Billing group Id.",
             "in": "query",
             "required": false,
@@ -3310,6 +3243,40 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/apiMonthlyBudget"
+          }
+        }
+      }
+    },
+    "apiChartData": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "cost": {
+          "type": "number",
+          "format": "double"
+        },
+        "profit": {
+          "type": "number",
+          "format": "double"
+        },
+        "utilization": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "apiData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "chartData": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiChartData"
           }
         }
       }
@@ -3739,6 +3706,17 @@
         }
       }
     },
+    "apiUtilizations": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiData"
+          }
+        }
+      }
+    },
     "awsAdjustmentsTypeList": {
       "type": "object",
       "properties": {
@@ -3796,28 +3774,6 @@
         }
       }
     },
-    "awsAwsRiUtilizations": {
-      "type": "object",
-      "properties": {
-        "utilization": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/awsUtilization"
-          }
-        }
-      }
-    },
-    "awsAwsSpUtilizations": {
-      "type": "object",
-      "properties": {
-        "utilization": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/awsUtilization"
-          }
-        }
-      }
-    },
     "awsCalculatorConfig": {
       "type": "object",
       "properties": {
@@ -3834,26 +3790,6 @@
         }
       },
       "description": "AWS's calculation engine configuration(s)."
-    },
-    "awsChartData": {
-      "type": "object",
-      "properties": {
-        "date": {
-          "type": "string"
-        },
-        "cost": {
-          "type": "number",
-          "format": "double"
-        },
-        "profit": {
-          "type": "number",
-          "format": "double"
-        },
-        "utilization": {
-          "type": "number",
-          "format": "double"
-        }
-      }
     },
     "awsCost": {
       "type": "object",
@@ -4391,20 +4327,6 @@
         "reductionRate": {
           "type": "number",
           "format": "double"
-        }
-      }
-    },
-    "awsUtilization": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "chartData": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/awsChartData"
-          }
         }
       }
     },
@@ -5175,29 +5097,17 @@
       },
       "title": "Request message for GetRecommendations"
     },
-    "v1GetRiUtilizationResponse": {
+    "v1GetUtilizationResponse": {
       "type": "object",
       "properties": {
         "orgId": {
           "type": "string"
         },
-        "awsRiUtilizations": {
-          "$ref": "#/definitions/awsAwsRiUtilizations"
+        "utilizations": {
+          "$ref": "#/definitions/apiUtilizations"
         }
       },
-      "title": "Response message for GetRiUtilization"
-    },
-    "v1GetSpUtilizationResponse": {
-      "type": "object",
-      "properties": {
-        "orgId": {
-          "type": "string"
-        },
-        "awsSpUtilizations": {
-          "$ref": "#/definitions/awsAwsSpUtilizations"
-        }
-      },
-      "title": "Response message for GetSpUtilization"
+      "title": "Response message for GetUtilization"
     },
     "v1ImportCurFilesRequest": {
       "type": "object",
