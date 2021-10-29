@@ -204,6 +204,13 @@ service Iam {
     };
   }
 
+  // WORK-IN-PROGRESS: Lists all SSO Identity Providers (IdP).
+  rpc ListIdentityProviders(ListIdentityProvidersRequest) returns (ListIdentityProvidersResponse) {
+    option (google.api.http) = {
+      get: "/iam/v1/idps"
+    };
+  }
+
   // Lists all IP filters. At the moment, this API is only available to root users.
   rpc ListIpFilters(ListIpFiltersRequest) returns (stream IpFilter) {
     option (google.api.http) = {
@@ -448,6 +455,22 @@ message UpdateUserRoleMappingResponse {
   repeated string success = 1;
   repeated string failed = 2;
   repeated string filters = 3;
+}
+
+// Request message for the Iam.ListIdentityProviders rpc.
+message ListIdentityProvidersRequest {}
+
+// Response message for the Iam.ListIdentityProviders rpc.
+message ListIdentityProvidersResponse {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+
+  message samlInfo {
+    string metadata = 1;
+  }
+
+  samlInfo saml = 4;
 }
 
 message IpFilter {
