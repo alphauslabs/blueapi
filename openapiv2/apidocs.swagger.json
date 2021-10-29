@@ -463,7 +463,7 @@
         ]
       },
       "post": {
-        "summary": "WORK-IN-PROGRESS: Register an SSO Identity Provider (IdP).",
+        "summary": "WORK-IN-PROGRESS: Registers an SSO Identity Provider (IdP).",
         "operationId": "Iam_CreateIdentityProvider",
         "responses": {
           "200": {
@@ -486,6 +486,76 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1CreateIdentityProviderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
+    "/iam/v1/idps/{id}": {
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Deletes an SSO Identity Provider (IdP).",
+        "operationId": "Iam_DeleteIdentityProvider",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. The IdP id to delete.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      },
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Updates an SSO Identity Provider (IdP).",
+        "operationId": "Iam_UpdateIdentityProvider",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. The IdP id to update.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateIdentityProviderRequest"
             }
           }
         ],
@@ -5504,6 +5574,28 @@
         }
       },
       "title": "Request message for the Iam.UpdateFeatureFlags rpc"
+    },
+    "v1UpdateIdentityProviderRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Required. The IdP id to update."
+        },
+        "name": {
+          "type": "string",
+          "description": "Required. The IdP name."
+        },
+        "type": {
+          "type": "string",
+          "description": "Required. Value is `saml`."
+        },
+        "metadata": {
+          "type": "string",
+          "description": "Required. The contents of the metadata file from your IdP."
+        }
+      },
+      "description": "Request message for the Iam.UpdateIdentityProvider rpc."
     },
     "v1UpdateMetadataRequest": {
       "type": "object",
