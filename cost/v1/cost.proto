@@ -10,6 +10,7 @@ import "api/aws/cost.proto";
 import "api/aws/calculator.proto";
 import "api/aws/recommendation.proto";
 import "api/aws/reduction.proto";
+import "api/utilization.proto";
 import "api/ripple/payer.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -276,6 +277,14 @@ service Cost {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Get the utilization details for an organization (or MSP).
+  rpc GetUtilization(GetUtilizationRequest) returns (GetUtilizationResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/utilization/{orgId}"
+    };
+  }
+
 }
 
 // Request message for the Cost.ListPayerAccounts rpc.
@@ -1004,8 +1013,43 @@ message GetCostReductionRequest {
   repeated string services = 11;
 }
 
-// Request message for GetCostReduction
+// Response message for GetCostReduction
 message GetCostReductionResponse {
   string orgId = 1;
   api.aws.AwsCostReductions awsCostReductions = 2;
+}
+
+// Request message for GetUtilization
+message GetUtilizationRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Organization Id.
+  string orgId = 2;
+
+  // Required. For AWS, "ri" or "sp".
+  string type = 3;
+
+  // Optional. The start date of the displayed data. If not set, the first day of the
+  // current month will be used. Format: yyyy-mm-dd.
+  string fromDate = 4;
+
+  // Optional. The end date of the displayed data. If not set, current date will be
+  // used. Format: yyyy-mm-dd.
+  string toDate = 5;
+
+  // Optional. Payer Id.
+  string payerId = 6;
+
+  // Optional. Billing group Id.
+  string billingInternalId = 7;
+
+  // Optional. Account group Id.
+  string groupId = 8;
+}
+
+// Response message for GetUtilization
+message GetUtilizationResponse {
+  string orgId = 1;
+  api.Utilizations utilizations = 2;
 }
