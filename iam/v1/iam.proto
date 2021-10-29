@@ -211,6 +211,14 @@ service Iam {
     };
   }
 
+  // WORK-IN-PROGRESS: Register an SSO Identity Provider (IdP).
+  rpc CreateIdentityProvider(CreateIdentityProviderRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/iam/v1/idps"
+      body: "*"
+    };
+  }
+
   // Lists all IP filters. At the moment, this API is only available to root users.
   rpc ListIpFilters(ListIpFiltersRequest) returns (stream IpFilter) {
     option (google.api.http) = {
@@ -475,6 +483,18 @@ message ListIdentityProvidersResponse {
   }
 
   repeated IdentityProvider data = 1;
+}
+
+// Request message for the Iam.CreateIdentityProvider rpc.
+message CreateIdentityProviderRequest {
+  // Required. The IdP name.
+  string name = 1;
+
+  // Required. Value is `saml`.
+  string type = 2;
+
+  // Required. The contents of the metadata file from your IdP.
+  string metadata = 3;
 }
 
 message IpFilter {
