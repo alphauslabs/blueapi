@@ -38,10 +38,10 @@ In order to enable or disable a feature in Aqua or Wave for a given user, the ap
 | usage_tag_graph | Usage Reports | Tags - View Graph | Wave / Wave Pro |
 | usage_crosstag | Usage Reports | Crosstag - Access | Wave / Wave Pro |
 | usage_crosstag_graph | Usage Reports | Crosstag - View Graph | Wave / Wave Pro |
-| ri_purchased | Reserved Instances | View Purchased RI | Wave / Wave Pro |
-| ri_utilization | Reserved Instances | View RI Utilization | Wave / Wave Pro |
-| ri_recommendation | Recommendations | Access | Wave / Wave Pro |
-| sp_purchased | Savings Plans | Access | Wave / Wave Pro |
+| ri_purchased | Reserved Instances | View Purchased RI | Wave |
+| ri_utilization | Reserved Instances | View RI Utilization | Wave |
+| ri_recommendation | Recommendations | Access | Wave |
+| sp_purchased | Savings Plans | Access | Wave |
 | invoice | Others | Invoice - Display Link | Wave / Wave Pro |
 | invoice_download_csv_discount | Others | Invoice - Download Discounted CSV | Wave / Wave Pro |
 | invoice_download_csv_merged | Others | Invoice - Download Merged CSV | Wave / Wave Pro |
@@ -54,5 +54,6 @@ In order to enable or disable a feature in Aqua or Wave for a given user, the ap
 | aq_ri_sp_instances | RI & SP Recommendations | Access | Aqua |
 | aq_right_sizing | Instance Right-Sizing | Access | Aqua |
 | aq_scheduling | Scheduling | Access | Aqua |
+| report_filters | Report Filters | Access | Wave Pro |
 
 When setting a feature flag, a value of true will enable the feature and a value of false will disable the feature.
