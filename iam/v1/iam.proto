@@ -204,14 +204,14 @@ service Iam {
     };
   }
 
-  // WORK-IN-PROGRESS: Lists all SSO Identity Providers (IdP).
+  // Lists all SSO Identity Providers (IdP).
   rpc ListIdentityProviders(ListIdentityProvidersRequest) returns (ListIdentityProvidersResponse) {
     option (google.api.http) = {
       get: "/iam/v1/idps"
     };
   }
 
-  // WORK-IN-PROGRESS: Registers an SSO Identity Provider (IdP).
+  // Registers an SSO Identity Provider (IdP).
   rpc CreateIdentityProvider(CreateIdentityProviderRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/iam/v1/idps"
@@ -219,15 +219,7 @@ service Iam {
     };
   }
 
-  // WORK-IN-PROGRESS: Updates an SSO Identity Provider (IdP).
-  rpc UpdateIdentityProvider(UpdateIdentityProviderRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      put: "/iam/v1/idps/{id}"
-      body: "*"
-    };
-  }
-
-  // WORK-IN-PROGRESS: Deletes an SSO Identity Provider (IdP).
+  // Deletes an SSO Identity Provider (IdP).
   rpc DeleteIdentityProvider(DeleteIdentityProviderRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/iam/v1/idps/{id}"
@@ -510,21 +502,6 @@ message CreateIdentityProviderRequest {
 
   // Required. The contents of the metadata file from your IdP.
   string metadata = 3;
-}
-
-// Request message for the Iam.UpdateIdentityProvider rpc.
-message UpdateIdentityProviderRequest {
-  // Required. The IdP id to update.
-  string id = 1;
-
-  // Required. The IdP name.
-  string name = 2;
-
-  // Required. Value is `saml`.
-  string type = 3;
-
-  // Required. The contents of the metadata file from your IdP.
-  string metadata = 4;
 }
 
 // Request message for the Iam.DeleteIdentityProvider rpc.
