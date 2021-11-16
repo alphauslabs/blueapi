@@ -3,14 +3,15 @@ syntax = "proto3";
 package blueapi.cost.v1;
 
 import "api/account.proto";
+import "api/coverage.proto";
 import "api/operation.proto";
 import "api/budget.proto";
 import "api/forecast.proto";
+import "api/utilization.proto";
 import "api/aws/cost.proto";
 import "api/aws/calculator.proto";
 import "api/aws/recommendation.proto";
 import "api/aws/reduction.proto";
-import "api/utilization.proto";
 import "api/ripple/payer.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -282,6 +283,22 @@ service Cost {
   rpc GetUtilization(GetUtilizationRequest) returns (GetUtilizationResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/utilization/{orgId}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get coverage options details for an organization (or MSP).
+  rpc GetCoverageOptions(GetCoverageOptionsRequest) returns (GetCoverageOptionsResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/coverage/options/{orgId}:read"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get ondemand cost details for an organization (or MSP).
+  rpc GetCoverageOndemand(GetCoverageOndemandRequest) returns (GetCoverageOndemandResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/coverage/ondemand/{orgId}:read"
+      body: "*"
     };
   }
 
@@ -1052,4 +1069,86 @@ message GetUtilizationRequest {
 message GetUtilizationResponse {
   string orgId = 1;
   repeated api.UtilizationData utilizationData = 2;
+}
+
+// Request message for GetCoverageOptions
+message GetCoverageOptionsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Organization Id.
+  string orgId = 2;
+
+  // Required. Available values: day, hour
+  string period = 3;
+
+  // Optional. The start date of the displayed data. If not set, the first day of the
+  // current month will be used. Format: yyyy-mm-dd.
+  string fromDate = 4;
+
+  // Optional. The end date of the displayed data. If not set, current date will be
+  // used. Format: yyyy-mm-dd.
+  string toDate = 5;
+
+  // Optional. Payer Id.
+  string payerId = 6;
+
+  // Optional. Billing group Id.
+  string billingInternalId = 7;
+
+  // Optional. Account group Id.
+  string groupId = 8;
+
+  // Optional. List of Account Ids.
+  repeated string accounts = 9;
+
+  // Optional. List of services.
+  repeated string services = 10;
+}
+
+// Response message for GetCoverageOptions
+message GetCoverageOptionsResponse {
+  string orgId = 1;
+  repeated api.OptionsData optionsData = 2;
+}
+
+// Request message for GetCoverageOndemand
+message GetCoverageOndemandRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Organization Id.
+  string orgId = 2;
+
+  // Required. Available values: day, hour
+  string period = 3;
+
+  // Optional. The start date of the displayed data. If not set, the first day of the
+  // current month will be used. Format: yyyy-mm-dd.
+  string fromDate = 4;
+
+  // Optional. The end date of the displayed data. If not set, current date will be
+  // used. Format: yyyy-mm-dd.
+  string toDate = 5;
+
+  // Optional. Payer Id.
+  string payerId = 6;
+
+  // Optional. Billing group Id.
+  string billingInternalId = 7;
+
+  // Optional. Account group Id.
+  string groupId = 8;
+
+  // Optional. List of Account Ids.
+  repeated string accounts = 9;
+
+  // Optional. List of services.
+  repeated string services = 10;
+}
+
+// Response message for GetCoverageOndemand
+message GetCoverageOndemandResponse {
+  string orgId = 1;
+  repeated api.OndemandData ondemandData = 2;
 }
