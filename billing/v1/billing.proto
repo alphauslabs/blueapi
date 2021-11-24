@@ -41,6 +41,13 @@ service Billing {
       get: "/v1/billinggroups/{billingInternalId}"
     };
   }
+
+  // Gets an access group.
+  rpc GetAccessGroup(GetAccessGroupRequest) returns (GetAccessGroupResponse) {
+    option (google.api.http) = {
+      get: "/v1/accessgroups/{accessGroupId}"
+    };
+  }
 }
 
 message BillingGroup {
@@ -146,4 +153,30 @@ message GetBillingGroupRequest {
 // Response message for the Billing.GetBillingGroup rpc.
 message GetBillingGroupResponse {
   BillingGroup billingGroup = 1; 
+}
+
+// Defines the fields associated with a Wave access group.
+message AccessGroup {
+
+  // The ID of the access group.
+  string accessGroupId = 1;
+
+  // The name of the access group.
+  string accessGroupName = 2;
+
+  // A description of the access group.
+  string accessGroupDescription = 3;
+
+  // A list of billing groups contained in the access group.
+  repeated BillingGroup billingGroups = 4;
+}
+
+// Request message for the Billing.GetAccessGroup rpc.
+message GetAccessGroupRequest {
+  string accessGroupId = 1;
+}
+
+// Response message for the Billing.GetAccessGroup rpc.
+message GetAccessGroupResponse {
+  AccessGroup accessGroup = 1;
 }
