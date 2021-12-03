@@ -186,7 +186,7 @@
         ]
       },
       "post": {
-        "summary": "WORK-IN-PROGRESS: Starts validation of a cross-account access stack deployment. If successful, the new IAM role will be\nadded/registered to the target account's records.",
+        "summary": "WORK-IN-PROGRESS: Starts validation of a cross-account access stack deployment. If successful,\nthe new IAM role will be registered to the target account.",
         "operationId": "Admin_CreateDefaultBillingInfoRole",
         "responses": {
           "200": {
@@ -210,6 +210,98 @@
             "schema": {
               "$ref": "#/definitions/v1CreateDefaultBillingInfoRoleRequest"
             }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/aws/crossacctaccess/default/{target}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets the current role attached to input account.",
+        "operationId": "Admin_GetDefaultBillingInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetDefaultBillingInfoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "target",
+            "description": "Required. The target AWS account to query.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Deletes the current role attached to this target account. This does not delete the\nCloudFormation deployment in your account.",
+        "operationId": "Admin_DeleteDefaultBillingInfoRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "target",
+            "description": "Required. The target AWS account to delete.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Starts an update to an existing CloudFormation for template changes, if any.",
+        "operationId": "Admin_UpdateDefaultBillingInfoRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/blueapiapiOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "target",
+            "description": "Required. The target AWS account to update.",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
@@ -5462,6 +5554,28 @@
         }
       },
       "title": "Response message for GetCoverageOptions"
+    },
+    "v1GetDefaultBillingInfoResponse": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "The queried target account."
+        },
+        "roleArn": {
+          "type": "string",
+          "description": "The role ARN that provides the cross-account access permissions."
+        },
+        "stackId": {
+          "type": "string",
+          "description": "The id of the CloudFormation stack deployed in the target account."
+        },
+        "templateUrl": {
+          "type": "string",
+          "description": "The latest template used to deploy the stack."
+        }
+      },
+      "description": "Response message for the Admin.GetDefaultBillingInfo rpc."
     },
     "v1GetDefaultBillingInfoTemplateUrlResponse": {
       "type": "object",

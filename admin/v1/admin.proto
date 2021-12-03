@@ -5,6 +5,7 @@ package blueapi.admin.v1;
 import "api/accountgroup.proto";
 import "api/operation.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/admin";
@@ -43,12 +44,34 @@ service Admin {
     };
   }
 
-  // WORK-IN-PROGRESS: Starts validation of a cross-account access stack deployment. If successful, the new IAM role will be
-  // added/registered to the target account's records.
+  // WORK-IN-PROGRESS: Gets the current role attached to input account.
+  rpc GetDefaultBillingInfo(GetDefaultBillingInfoRequest) returns (GetDefaultBillingInfoResponse) {
+    option (google.api.http) = {
+      get: "/admin/v1/aws/crossacctaccess/default/{target}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Starts validation of a cross-account access stack deployment. If successful,
+  // the new IAM role will be registered to the target account.
   rpc CreateDefaultBillingInfoRole(CreateDefaultBillingInfoRoleRequest) returns (api.Operation) {
     option (google.api.http) = {
       post: "/admin/v1/aws/crossacctaccess/default"
       body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Starts an update to an existing CloudFormation for template changes, if any.
+  rpc UpdateDefaultBillingInfoRole(UpdateDefaultBillingInfoRoleRequest) returns (api.Operation) {
+    option (google.api.http) = {
+      put: "/admin/v1/aws/crossacctaccess/default/{target}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Deletes the current role attached to this target account. This does not delete the
+  // CloudFormation deployment in your account.
+  rpc DeleteDefaultBillingInfoRole(DeleteDefaultBillingInfoRoleRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/admin/v1/aws/crossacctaccess/default/{target}"
     };
   }
 }
@@ -95,8 +118,41 @@ message GetDefaultBillingInfoTemplateUrlResponse {
   string principal = 4;
 }
 
+// Request message for the Admin.GetDefaultBillingInfo rpc.
+message GetDefaultBillingInfoRequest {
+  // Required. The target AWS account to query.
+  string target = 1;
+}
+
+// Response message for the Admin.GetDefaultBillingInfo rpc.
+message GetDefaultBillingInfoResponse {
+  // The queried target account.
+  string target = 1;
+
+  // The role ARN that provides the cross-account access permissions.
+  string roleArn = 2;
+
+  // The id of the CloudFormation stack deployed in the target account.
+  string stackId = 3;
+
+  // The latest template used to deploy the stack.
+  string templateUrl = 4;
+}
+
 // Request message for the Admin.CreateDefaultBillingInfoRole rpc.
 message CreateDefaultBillingInfoRoleRequest {
   // Required. The target AWS account to validate.
+  string target = 1;
+}
+
+// Request message for the Admin.UpdateDefaultBillingInfoRole rpc.
+message UpdateDefaultBillingInfoRoleRequest {
+  // Required. The target AWS account to update.
+  string target = 1;
+}
+
+// Request message for the Admin.DeleteDefaultBillingInfoRole rpc.
+message DeleteDefaultBillingInfoRoleRequest {
+  // Required. The target AWS account to delete.
   string target = 1;
 }
