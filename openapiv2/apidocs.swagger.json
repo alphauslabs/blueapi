@@ -154,9 +154,9 @@
         ]
       }
     },
-    "/admin/v1/aws/crossacctaccess/cfn": {
+    "/admin/v1/aws/crossacctaccess/default": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Gets a CloudFormation launch url for enabling cross account access to your account's billing information.",
+        "summary": "WORK-IN-PROGRESS: Gets a CloudFormation launch url for enabling cross-account access to your account's billing information.\nUpon successful deployment, you need to validate the access by calling 'POST /admin/v1/aws/crossacctaccess/default'.",
         "operationId": "Admin_GetDefaultBillingInfoTemplateUrl",
         "responses": {
           "200": {
@@ -179,6 +179,37 @@
             "in": "query",
             "required": false,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Starts validation of a cross-account access stack deployment. If successful, the new IAM role will be\nadded/registered to the target account's records.",
+        "operationId": "Admin_CreateDefaultBillingInfoRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/blueapiapiOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateDefaultBillingInfoRoleRequest"
+            }
           }
         ],
         "tags": [
@@ -4928,6 +4959,16 @@
         }
       },
       "title": "Specific settings per vendor"
+    },
+    "v1CreateDefaultBillingInfoRoleRequest": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "Required. The target AWS account to validate."
+        }
+      },
+      "description": "Request message for the Admin.CreateDefaultBillingInfoRole rpc."
     },
     "v1CreateGroupRootUserRequest": {
       "type": "object",
