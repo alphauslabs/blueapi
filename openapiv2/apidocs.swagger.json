@@ -192,7 +192,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/blueapiapiOperation"
+              "$ref": "#/definitions/v1DefaultBillingInfo"
             }
           },
           "default": {
@@ -225,7 +225,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetDefaultBillingInfoResponse"
+              "$ref": "#/definitions/v1DefaultBillingInfo"
             }
           },
           "default": {
@@ -5298,6 +5298,28 @@
       },
       "description": "Response message for the Iam.CreateUserRoleMapping rpc."
     },
+    "v1DefaultBillingInfo": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "The queried target account."
+        },
+        "roleArn": {
+          "type": "string",
+          "description": "The role ARN that provides the cross-account access permissions."
+        },
+        "stackId": {
+          "type": "string",
+          "description": "The id of the CloudFormation stack deployed in the target account."
+        },
+        "templateUrl": {
+          "type": "string",
+          "description": "The latest template used to deploy the stack."
+        }
+      },
+      "description": "Response message for the Admin.GetDefaultBillingInfo, Admin.CreateDefaultBillingInfoRole rpc."
+    },
     "v1GetAccessGroupResponse": {
       "type": "object",
       "properties": {
@@ -5554,28 +5576,6 @@
         }
       },
       "title": "Response message for GetCoverageOptions"
-    },
-    "v1GetDefaultBillingInfoResponse": {
-      "type": "object",
-      "properties": {
-        "target": {
-          "type": "string",
-          "description": "The queried target account."
-        },
-        "roleArn": {
-          "type": "string",
-          "description": "The role ARN that provides the cross-account access permissions."
-        },
-        "stackId": {
-          "type": "string",
-          "description": "The id of the CloudFormation stack deployed in the target account."
-        },
-        "templateUrl": {
-          "type": "string",
-          "description": "The latest template used to deploy the stack."
-        }
-      },
-      "description": "Response message for the Admin.GetDefaultBillingInfo rpc."
     },
     "v1GetDefaultBillingInfoTemplateUrlResponse": {
       "type": "object",

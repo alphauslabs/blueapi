@@ -45,7 +45,7 @@ service Admin {
   }
 
   // WORK-IN-PROGRESS: Gets the current role attached to input account.
-  rpc GetDefaultBillingInfo(GetDefaultBillingInfoRequest) returns (GetDefaultBillingInfoResponse) {
+  rpc GetDefaultBillingInfo(GetDefaultBillingInfoRequest) returns (DefaultBillingInfo) {
     option (google.api.http) = {
       get: "/admin/v1/aws/crossacctaccess/default/{target}"
     };
@@ -53,7 +53,7 @@ service Admin {
 
   // WORK-IN-PROGRESS: Starts validation of a cross-account access stack deployment. If successful,
   // the new IAM role will be registered to the target account.
-  rpc CreateDefaultBillingInfoRole(CreateDefaultBillingInfoRoleRequest) returns (api.Operation) {
+  rpc CreateDefaultBillingInfoRole(CreateDefaultBillingInfoRoleRequest) returns (DefaultBillingInfo) {
     option (google.api.http) = {
       post: "/admin/v1/aws/crossacctaccess/default"
       body: "*"
@@ -124,8 +124,8 @@ message GetDefaultBillingInfoRequest {
   string target = 1;
 }
 
-// Response message for the Admin.GetDefaultBillingInfo rpc.
-message GetDefaultBillingInfoResponse {
+// Response message for the Admin.GetDefaultBillingInfo, Admin.CreateDefaultBillingInfoRole rpc.
+message DefaultBillingInfo {
   // The queried target account.
   string target = 1;
 
