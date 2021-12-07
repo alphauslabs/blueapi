@@ -36,7 +36,7 @@ service Admin {
     };
   }
 
-  // WORK-IN-PROGRESS: Gets a CloudFormation launch url for enabling cross-account access to your account's billing information.
+  // Gets a CloudFormation launch url for enabling cross-account access to your account's billing information.
   // Upon successful deployment, you need to validate the access by calling 'POST /admin/v1/aws/crossacctaccess/default'.
   rpc GetDefaultBillingInfoTemplateUrl(GetDefaultBillingInfoTemplateUrlRequest) returns (GetDefaultBillingInfoTemplateUrlResponse) {
     option (google.api.http) = {
@@ -44,14 +44,14 @@ service Admin {
     };
   }
 
-  // WORK-IN-PROGRESS: Gets the current role attached to input account.
+  // Gets the current role attached to input account.
   rpc GetDefaultBillingInfo(GetDefaultBillingInfoRequest) returns (DefaultBillingInfo) {
     option (google.api.http) = {
       get: "/admin/v1/aws/crossacctaccess/default/{target}"
     };
   }
 
-  // WORK-IN-PROGRESS: Starts validation of a cross-account access stack deployment. If successful,
+  // Starts validation of a cross-account access stack deployment. If successful,
   // the new IAM role will be registered to the target account.
   rpc CreateDefaultBillingInfoRole(CreateDefaultBillingInfoRoleRequest) returns (DefaultBillingInfo) {
     option (google.api.http) = {
@@ -60,7 +60,7 @@ service Admin {
     };
   }
 
-  // WORK-IN-PROGRESS: Starts an update to an existing CloudFormation for template changes, if any.
+  // Starts an update to an existing CloudFormation for template changes, if any.
   rpc UpdateDefaultBillingInfoRole(UpdateDefaultBillingInfoRoleRequest) returns (api.Operation) {
     option (google.api.http) = {
       put: "/admin/v1/aws/crossacctaccess/default/{target}"
