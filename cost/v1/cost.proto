@@ -8,6 +8,7 @@ import "api/operation.proto";
 import "api/budget.proto";
 import "api/forecast.proto";
 import "api/utilization.proto";
+import "api/aws/breakeven.proto";
 import "api/aws/cost.proto";
 import "api/aws/calculator.proto";
 import "api/aws/recommendation.proto";
@@ -299,6 +300,13 @@ service Cost {
     option (google.api.http) = {
       post: "/v1/{vendor}/coverage/ondemand/{orgId}:read"
       body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get the breakeven point details for the RI or SP.
+  rpc GetBreakevenPoint(GetBreakevenPointRequest) returns (GetBreakevenPointResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/bep/{orgId}"
     };
   }
 
@@ -1151,4 +1159,25 @@ message GetCoverageOndemandRequest {
 message GetCoverageOndemandResponse {
   string orgId = 1;
   repeated api.OndemandData ondemandData = 2;
+}
+
+// Request message for GetBreakevenPoint
+message GetBreakevenPointRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Organization Id.
+  string orgId = 2;
+
+  // Required. For AWS, "ri" or "sp".
+  string type = 3;
+
+  // Required. RI/SP Arn.
+  string arn = 4;
+}
+
+// Response message for GetBreakevenPoint
+message GetBreakevenPointResponse {
+  string orgId = 1;
+  api.aws.AwsCostBreakeven awsCostBreakeven = 2;
 }
