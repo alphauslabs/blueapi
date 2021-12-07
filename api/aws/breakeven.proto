@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package blueapi.api.aws;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/aws";
+option java_package = "cloud.alphaus.blueapi.api.aws";
+option java_outer_classname = "ApiAwsBreakevenProto";
+
+message AwsCostBreakeven {
+    string arn = 1;
+    string startDate = 2;
+    string endDate = 3;
+    string breakEvenPoint = 4;
+    double riCost = 5;
+    repeated ChartData chartData = 6;
+}
+
+message ChartData {
+    double publicOndemand = 1;
+    double actualOndemand = 2;
+    double riUsage = 3;
+    double utilization = 4;
+    double upperRatio = 5;
+    double lowerRatio = 6;
+}
