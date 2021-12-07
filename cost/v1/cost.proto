@@ -303,10 +303,10 @@ service Cost {
     };
   }
 
-  // WORK-IN-PROGRESS: Get the break even details for the RI or SP.
-  rpc GetBreakEven(GetBreakEvenRequest) returns (GetBreakEvenResponse) {
+  // WORK-IN-PROGRESS: Get the breakeven point details for the RI or SP.
+  rpc GetBreakevenPoint(GetBreakevenPointRequest) returns (GetBreakevenPointResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/breakeven/{orgId}"
+      get: "/v1/{vendor}/bep/{orgId}"
     };
   }
 
@@ -1161,8 +1161,8 @@ message GetCoverageOndemandResponse {
   repeated api.OndemandData ondemandData = 2;
 }
 
-// Request message for GetBreakEven
-message GetBreakEvenRequest {
+// Request message for GetBreakevenPoint
+message GetBreakevenPointRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
@@ -1176,8 +1176,8 @@ message GetBreakEvenRequest {
   string arn = 4;
 }
 
-// Response message for GetBreakEven
-message GetBreakEvenResponse {
+// Response message for GetBreakevenPoint
+message GetBreakevenPointResponse {
   string orgId = 1;
   api.aws.AwsCostBreakeven awsCostBreakeven = 2;
 }
