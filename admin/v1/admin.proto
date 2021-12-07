@@ -40,14 +40,14 @@ service Admin {
   // Upon successful deployment, you need to validate the access by calling 'POST /admin/v1/aws/crossacctaccess/default'.
   rpc GetDefaultBillingInfoTemplateUrl(GetDefaultBillingInfoTemplateUrlRequest) returns (GetDefaultBillingInfoTemplateUrlResponse) {
     option (google.api.http) = {
-      get: "/admin/v1/aws/crossacctaccess/default"
+      get: "/admin/v1/aws/xacct/default"
     };
   }
 
   // Gets the current role attached to input account.
   rpc GetDefaultBillingInfo(GetDefaultBillingInfoRequest) returns (DefaultBillingInfo) {
     option (google.api.http) = {
-      get: "/admin/v1/aws/crossacctaccess/default/{target}"
+      get: "/admin/v1/aws/xacct/default/{target}"
     };
   }
 
@@ -55,7 +55,7 @@ service Admin {
   // the new IAM role will be registered to the target account.
   rpc CreateDefaultBillingInfoRole(CreateDefaultBillingInfoRoleRequest) returns (DefaultBillingInfo) {
     option (google.api.http) = {
-      post: "/admin/v1/aws/crossacctaccess/default"
+      post: "/admin/v1/aws/xacct/default"
       body: "*"
     };
   }
@@ -63,15 +63,15 @@ service Admin {
   // Starts an update to an existing CloudFormation for template changes, if any.
   rpc UpdateDefaultBillingInfoRole(UpdateDefaultBillingInfoRoleRequest) returns (api.Operation) {
     option (google.api.http) = {
-      put: "/admin/v1/aws/crossacctaccess/default/{target}"
+      put: "/admin/v1/aws/xacct/default/{target}"
     };
   }
 
-  // WORK-IN-PROGRESS: Deletes the current role attached to this target account. This does not delete the
+  // Deletes the current role attached to this target account. This does not delete the
   // CloudFormation deployment in your account.
   rpc DeleteDefaultBillingInfoRole(DeleteDefaultBillingInfoRoleRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/admin/v1/aws/crossacctaccess/default/{target}"
+      delete: "/admin/v1/aws/xacct/default/{target}"
     };
   }
 }
