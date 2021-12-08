@@ -44,6 +44,13 @@ service Admin {
     };
   }
 
+  // WORK-IN-PROGRESS: Lists the current role attached to accounts under caller.
+  rpc ListDefaultBillingInfo(ListDefaultBillingInfoRequest) returns (stream DefaultBillingInfo) {
+    option (google.api.http) = {
+      post: "/admin/v1/aws/xacct/default/all:read"
+    };
+  }
+
   // Gets the current role attached to input account.
   rpc GetDefaultBillingInfo(GetDefaultBillingInfoRequest) returns (DefaultBillingInfo) {
     option (google.api.http) = {
@@ -117,6 +124,9 @@ message GetDefaultBillingInfoTemplateUrlResponse {
   // The AWS account that will receive the access. Do not change.
   string principal = 4;
 }
+
+// Request message for the Admin.ListDefaultBillingInfo rpc.
+message ListDefaultBillingInfoRequest {}
 
 // Request message for the Admin.GetDefaultBillingInfo rpc.
 message GetDefaultBillingInfoRequest {

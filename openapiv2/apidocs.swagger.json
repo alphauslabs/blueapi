@@ -217,6 +217,38 @@
         ]
       }
     },
+    "/admin/v1/aws/xacct/default/all:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Lists the current role attached to accounts under caller.",
+        "operationId": "Admin_ListDefaultBillingInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1DefaultBillingInfo"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1DefaultBillingInfo"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
     "/admin/v1/aws/xacct/default/{target}": {
       "get": {
         "summary": "Gets the current role attached to input account.",
