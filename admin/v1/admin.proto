@@ -3,6 +3,7 @@ syntax = "proto3";
 package blueapi.admin.v1;
 
 import "api/accountgroup.proto";
+import "api/notification.proto";
 import "api/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -72,6 +73,57 @@ service Admin {
   rpc DeleteDefaultBillingInfoRole(DeleteDefaultBillingInfoRoleRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/admin/v1/aws/xacct/default/{target}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get notification settings for login user's organization or group
+  rpc GetNotificationSettings(GetNotificationSettingsRequest) returns (api.NotificationSettings) {
+    option (google.api.http) = {
+      get: "/admin/v1/notification/settings"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Create or update notification settings for login user's organization or group
+  rpc SaveNotificationSettings(SaveNotificationSettingsRequest) returns (api.NotificationSettings) {
+    option (google.api.http) = {
+      post: "/admin/v1/notification/settings"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: List all notification channels for login user's organization or group
+  rpc ListNotificationChannels(ListNotificationChannelsRequest) returns (ListNotificationChannelsResponse) {
+    option (google.api.http) = {
+      get: "/admin/v1/notification/channels"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get notification channel for login user's organization or group
+  rpc GetNotificationChannel(GetNotificationChannelRequest) returns (api.NotificationChannel) {
+    option (google.api.http) = {
+      get: "/admin/v1/notification/channels/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Create notification settings for login user's organization or group
+  rpc CreateNotificationChannel(CreateNotificationChannelRequest) returns (api.NotificationChannel) {
+    option (google.api.http) = {
+      post: "/admin/v1/notification/channels"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Update notification settings for login user's organization or group
+  rpc UpdateNotificationChannel(UpdateNotificationChannelRequest) returns (api.NotificationChannel) {
+    option (google.api.http) = {
+      put: "/admin/v1/notification/channels/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Delete notification settings for login user's organization or group
+  rpc DeleteNotificationChannel(DeleteNotificationChannelRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/admin/v1/notification/channels/{id}"
     };
   }
 }
@@ -164,4 +216,72 @@ message UpdateDefaultBillingInfoRoleRequest {
 message DeleteDefaultBillingInfoRoleRequest {
   // Required. The target AWS account to delete.
   string target = 1;
+}
+
+// Request message for Admin.GetNotificationSettings rpc
+message GetNotificationSettingsRequest {}
+
+// Request message for Admin.SaveNotificationSettings rpc
+message SaveNotificationSettingsRequest {
+  bool isEnabled = 1;
+}
+
+// Request message for Admin.ListNotificationChannels rpc
+message ListNotificationChannelsRequest {}
+
+// Response message for Admin.ListNotificationChannels rpc
+message ListNotificationChannelsResponse {
+  repeated api.NotificationChannel channels = 1;
+}
+
+// Request message for Admin.GetNotificationChannel rpc
+message GetNotificationChannelRequest {
+  string id = 1;
+}
+
+// Request message for Admin.CreateNotificationChannel rpc
+message CreateNotificationChannelRequest {
+  // Required. Name of Notification Channel
+  string name = 1;
+
+  // Required.
+  // Valid values: "email", "slack", "msteams"
+  string type = 2;
+
+  // Required if type="email"
+  api.EmailChannel email = 3;
+
+  // Required if type="slack"
+  api.SlackChannel slack = 4;
+  
+  // Required if type="msteams"
+  api.MSTeamsChannel msteams = 5;
+}
+
+// Request message for Admin.UpdateNotificationChannel rpc
+message UpdateNotificationChannelRequest {
+  //Required. ID of Notification Channel to update
+  string id = 1;
+
+  // Required. Name of Notification Channel
+  string name = 2;
+
+  // Required.
+  // Valid values: "email", "slack", "msteams"
+  string type = 3;
+
+  // Required if type="email"
+  api.EmailChannel email = 4;
+
+  // Required if type="slack"
+  api.SlackChannel slack = 5;
+  
+  // Required if type="msteams"
+  api.MSTeamsChannel msteams = 6;
+}
+
+// Request message for Admin.DeleteNotificationChannel rpc
+message DeleteNotificationChannelRequest {
+  //Required. ID of Notification Channel to delete
+  string id = 1;
 }
