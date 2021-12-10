@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package blueapi.api;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api";
+option java_package = "cloud.alphaus.blueapi.api";
+option java_outer_classname = "ApiUtilizationProto";
+
+message NotificationSettings {
+    bool isEnabled = 1;
+}
+
+message NotificationChannel {
+    string id = 1;
+    bool enabled = 2;
+    string name = 3;
+    string type = 4;
+    EmailChannel email = 5;
+    SlackChannel slack = 6;
+    MSTeamsChannel msteams = 7;
+}
+
+message EmailChannel {
+    string format = 1;
+    repeated string recipient = 2;
+}
+
+message SlackChannel {
+    string webhookUrl = 1;
+    string channelId = 2;
+    string channel = 3;
+    string configurationUrl = 4;
+}
+
+message MSTeamsChannel {
+    string webhookUrl = 1;
+}
