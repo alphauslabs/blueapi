@@ -341,6 +341,205 @@
         ]
       }
     },
+    "/admin/v1/notification/channels": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Lists all notification channels for login user's organization or group.",
+        "operationId": "Admin_ListNotificationChannels",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListNotificationChannelsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Creates notification settings for login user's organization or group.",
+        "operationId": "Admin_CreateNotificationChannel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotificationChannel"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateNotificationChannelRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/notification/channels/{id}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets notification channel for login user's organization or group.",
+        "operationId": "Admin_GetNotificationChannel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotificationChannel"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Deletes notification settings for login user's organization or group.",
+        "operationId": "Admin_DeleteNotificationChannel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. ID of Notification Channel to delete",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Updates notification settings for login user's organization or group.",
+        "operationId": "Admin_UpdateNotificationChannel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotificationChannel"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. ID of Notification Channel to update",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/notification/settings": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Get notification settings for login user's organization or group.",
+        "operationId": "Admin_GetNotificationSettings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotificationSettings"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Creates or updates notification settings for login user's organization or group.",
+        "operationId": "Admin_SaveNotificationSettings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotificationSettings"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SaveNotificationSettingsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
     "/iam/v1/apiclients": {
       "get": {
         "summary": "Lists all API clients belonging to the caller.",
@@ -3502,6 +3701,20 @@
         }
       }
     },
+    "apiEmailChannel": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string"
+        },
+        "recipient": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "apiFeatureFlags": {
       "type": "object",
       "properties": {
@@ -3735,6 +3948,14 @@
       },
       "description": "Describes the fields on an Alphaus root user for a billing group or access group."
     },
+    "apiMSTeamsChannel": {
+      "type": "object",
+      "properties": {
+        "webhookUrl": {
+          "type": "string"
+        }
+      }
+    },
     "apiMonthOnMonthCostForecast": {
       "type": "object",
       "properties": {
@@ -3821,6 +4042,40 @@
         "lowerBound": {
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "apiNotificationChannel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "email": {
+          "$ref": "#/definitions/apiEmailChannel"
+        },
+        "slack": {
+          "$ref": "#/definitions/apiSlackChannel"
+        },
+        "msteams": {
+          "$ref": "#/definitions/apiMSTeamsChannel"
+        }
+      }
+    },
+    "apiNotificationSettings": {
+      "type": "object",
+      "properties": {
+        "isEnabled": {
+          "type": "boolean"
         }
       }
     },
@@ -3951,6 +4206,23 @@
           "items": {
             "$ref": "#/definitions/apiPolicy"
           }
+        }
+      }
+    },
+    "apiSlackChannel": {
+      "type": "object",
+      "properties": {
+        "webhookUrl": {
+          "type": "string"
+        },
+        "channelId": {
+          "type": "string"
+        },
+        "channel": {
+          "type": "string"
+        },
+        "configurationUrl": {
+          "type": "string"
         }
       }
     },
@@ -5284,6 +5556,32 @@
       },
       "description": "Request message for the Iam.CreateIpFilter rpc."
     },
+    "v1CreateNotificationChannelRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Required. Name of Notification Channel"
+        },
+        "type": {
+          "type": "string",
+          "title": "Required.\nValid values: \"email\", \"slack\", \"msteams\""
+        },
+        "email": {
+          "$ref": "#/definitions/apiEmailChannel",
+          "title": "Required if type=\"email\""
+        },
+        "slack": {
+          "$ref": "#/definitions/apiSlackChannel",
+          "title": "Required if type=\"slack\""
+        },
+        "msteams": {
+          "$ref": "#/definitions/apiMSTeamsChannel",
+          "title": "Required if type=\"msteams\""
+        }
+      },
+      "title": "Request message for Admin.CreateNotificationChannel rpc"
+    },
     "v1CreateOrgRequest": {
       "type": "object",
       "properties": {
@@ -6039,6 +6337,18 @@
       },
       "description": "Response message for the Iam.ListIdentityProviders rpc."
     },
+    "v1ListNotificationChannelsResponse": {
+      "type": "object",
+      "properties": {
+        "channels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiNotificationChannel"
+          }
+        }
+      },
+      "title": "Response message for Admin.ListNotificationChannels rpc"
+    },
     "v1ListPermissionsResponse": {
       "type": "object",
       "properties": {
@@ -6271,6 +6581,15 @@
           "description": "Optional. If set, only return data for this tagId."
         }
       }
+    },
+    "v1SaveNotificationSettingsRequest": {
+      "type": "object",
+      "properties": {
+        "isEnabled": {
+          "type": "boolean"
+        }
+      },
+      "title": "Request message for Admin.SaveNotificationSettings rpc"
     },
     "v1UpdateAccountBudgetRequest": {
       "type": "object",
