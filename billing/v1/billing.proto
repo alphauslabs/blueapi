@@ -62,6 +62,43 @@ message BillingGroup {
 
   // List of all accounts
   repeated api.Account accounts = 4;
+
+  // The invoice settings for this billing group.
+  BillingGroupInvoiceSettings invoiceSettings = 5;
+}
+
+// Invoice settings for a billing group.
+message BillingGroupInvoiceSettings {
+  
+  // AWS invoice settings
+  BillingGroupVendoredInvoiceSetting aws = 1;
+
+  // Azure invoice settings
+  BillingGroupVendoredInvoiceSetting azure = 2;
+
+  // GCP invoice settings
+  BillingGroupVendoredInvoiceSetting gcp = 3;
+}
+
+// Invoice settings that are vendor-specific for each billing group.
+message BillingGroupVendoredInvoiceSetting {
+  string calcType = 1;
+  double discountRate = 2;
+  string substitutionFee = 3;
+  double substitutionFix = 4;
+  double substitutionRate = 5;
+  string supportFee = 6;
+  double supportRate = 7;
+  double supportFix = 8;
+  double taxRate = 9;
+  string currency = 10;
+  string discountTargetUsage = 11;
+  string substitutionFeeTargetUsage = 12;
+  string discountCalcLogic = 13;
+  string substitutionFeeCalcTarget = 14;
+  string substitutionFeeCalcType = 15;
+  string supportAmountTarget = 16;
+  string supportFeeCalcTarget = 17;
 }
 
 // Request message for the Billing.ListBillingGroups rpc.
