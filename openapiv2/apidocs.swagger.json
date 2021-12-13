@@ -154,6 +154,392 @@
         ]
       }
     },
+    "/admin/v1/aws/xacct/default": {
+      "get": {
+        "summary": "Gets a CloudFormation launch URL for enabling cross-account access to your account's billing information.\nUpon successful deployment, you need to validate the access by calling 'POST /admin/v1/aws/xacct/default'.",
+        "operationId": "Admin_GetDefaultBillingInfoTemplateUrl",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetDefaultBillingInfoTemplateUrlResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "region",
+            "description": "Optional. Set to the desired target region code. Defaults to 'ap-northeast-1' (Tokyo).\nYou can still change the final target region in the CloudFormation console before\nthe stack creation. You can check https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions\nfor the region list.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
+      "post": {
+        "summary": "Starts validation of a cross-account access stack deployment. If successful,\nthe new IAM role will be registered to the target account.",
+        "operationId": "Admin_CreateDefaultBillingInfoRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DefaultBillingInfo"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateDefaultBillingInfoRoleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/aws/xacct/default/all:read": {
+      "post": {
+        "summary": "Lists the default cross-account role(s) attached to accounts under caller.",
+        "operationId": "Admin_ListDefaultBillingInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1DefaultBillingInfo"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1DefaultBillingInfo"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/aws/xacct/default/{target}": {
+      "get": {
+        "summary": "Gets the current role attached to input account.",
+        "operationId": "Admin_GetDefaultBillingInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DefaultBillingInfo"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "target",
+            "description": "Required. The target AWS account to query.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes the current role attached to this target account. This does not delete the\nCloudFormation deployment in your account.",
+        "operationId": "Admin_DeleteDefaultBillingInfoRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "target",
+            "description": "Required. The target AWS account to delete.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
+      "put": {
+        "summary": "Starts an update to an existing CloudFormation for template changes, if any.",
+        "operationId": "Admin_UpdateDefaultBillingInfoRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/blueapiapiOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "target",
+            "description": "Required. The target AWS account to update.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/notification/channels": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Lists all notification channels for login user's organization or group.",
+        "operationId": "Admin_ListNotificationChannels",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListNotificationChannelsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Creates notification settings for login user's organization or group.",
+        "operationId": "Admin_CreateNotificationChannel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotificationChannel"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateNotificationChannelRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/notification/channels/{id}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets notification channel for login user's organization or group.",
+        "operationId": "Admin_GetNotificationChannel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotificationChannel"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Deletes notification settings for login user's organization or group.",
+        "operationId": "Admin_DeleteNotificationChannel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. ID of Notification Channel to delete",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Updates notification settings for login user's organization or group.",
+        "operationId": "Admin_UpdateNotificationChannel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotificationChannel"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. ID of Notification Channel to update",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/notification/settings": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Get notification settings for login user's organization or group.",
+        "operationId": "Admin_GetNotificationSettings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotificationSettings"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Creates or updates notification settings for login user's organization or group.",
+        "operationId": "Admin_SaveNotificationSettings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotificationSettings"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SaveNotificationSettingsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
     "/iam/v1/apiclients": {
       "get": {
         "summary": "Lists all API clients belonging to the caller.",
@@ -1464,7 +1850,7 @@
     },
     "/v1/accessgroups/{accessGroupId}": {
       "get": {
-        "summary": "Gets an access group.",
+        "summary": "WORK-IN-PROGRESS: Gets an access group.",
         "operationId": "Billing_GetAccessGroup",
         "responses": {
           "200": {
@@ -1486,6 +1872,48 @@
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/aws/calchistory:read": {
+      "post": {
+        "summary": "Reads the calculation history of all accounts in your billing groups. Only available in Ripple.",
+        "operationId": "Billing_ListAwsCalculationHistory",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1AwsCalculationHistory"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1AwsCalculationHistory"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListAwsCalculationHistoryRequest"
+            }
           }
         ],
         "tags": [
@@ -1734,13 +2162,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/apiAccount"
+                  "$ref": "#/definitions/blueapiapiAccount"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of apiAccount"
+              "title": "Stream result of blueapiapiAccount"
             }
           },
           "default": {
@@ -1770,7 +2198,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiAccount"
+              "$ref": "#/definitions/blueapiapiAccount"
             }
           },
           "default": {
@@ -1829,7 +2257,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiAccount"
+              "$ref": "#/definitions/blueapiapiAccount"
             }
           },
           "default": {
@@ -1962,6 +2390,59 @@
               },
               "description": "Request message for the Cost.ReadAdjustments rpc."
             }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/bep/{orgId}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Get the breakeven point details for the RI or SP.",
+        "operationId": "Cost_GetBreakevenPoint",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBreakevenPointResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "orgId",
+            "description": "Required. Organization Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "description": "Required. For AWS, \"ri\" or \"sp\".",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "arn",
+            "description": "Required. RI/SP Arn.",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -2394,7 +2875,7 @@
                 },
                 "startTime": {
                   "type": "string",
-                  "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: yyyymmdd."
+                  "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: yyyymmdd. The oldest supported date is 2020-01-01."
                 },
                 "endTime": {
                   "type": "string",
@@ -2617,7 +3098,7 @@
             "type": "string"
           },
           {
-            "name": "companyId",
+            "name": "billingInternalId",
             "description": "Optional. Company Id of Billing Group to retrieve.\nDefault value is user's Company Id.",
             "in": "query",
             "required": false,
@@ -2902,13 +3383,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/apiAccount"
+                  "$ref": "#/definitions/blueapiapiAccount"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of apiAccount"
+              "title": "Stream result of blueapiapiAccount"
             }
           },
           "default": {
@@ -2938,7 +3419,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiAccount"
+              "$ref": "#/definitions/blueapiapiAccount"
             }
           },
           "default": {
@@ -3229,7 +3710,7 @@
                   "type": "string",
                   "description": "Optional. Payer Id."
                 },
-                "companyId": {
+                "billingInternalId": {
                   "type": "string",
                   "description": "Optional. Billing group Id."
                 },
@@ -3416,6 +3897,19 @@
     }
   },
   "definitions": {
+    "AccountHistory": {
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "description": "Calculation timestamp in UTC, RFC3339."
+        },
+        "trigger": {
+          "type": "string",
+          "description": "Calculation trigger. Either `invoice` or `cur`."
+        }
+      }
+    },
     "GetCalculatorStatusResponseAwsStatus": {
       "type": "object",
       "properties": {
@@ -3459,26 +3953,6 @@
         }
       }
     },
-    "apiAccount": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The account id."
-        },
-        "name": {
-          "type": "string",
-          "description": "The account name."
-        },
-        "metadata": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/blueapiapiKeyValue"
-          },
-          "description": "The attributes (key/value pair) of the account."
-        }
-      }
-    },
     "apiAccountGroup": {
       "type": "object",
       "properties": {
@@ -3500,7 +3974,7 @@
         "accounts": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/apiAccount"
+            "$ref": "#/definitions/blueapiapiAccount"
           }
         }
       }
@@ -3536,7 +4010,7 @@
     "apiBillingGroupForecast": {
       "type": "object",
       "properties": {
-        "companyId": {
+        "billingInternalId": {
           "type": "string"
         },
         "data": {
@@ -3565,30 +4039,17 @@
         }
       }
     },
-    "apiChartData": {
+    "apiEmailChannel": {
       "type": "object",
       "properties": {
-        "date": {
+        "format": {
           "type": "string"
         },
-        "service": {
-          "type": "string"
-        },
-        "cost": {
-          "type": "number",
-          "format": "double"
-        },
-        "profit": {
-          "type": "number",
-          "format": "double"
-        },
-        "utilization": {
-          "type": "number",
-          "format": "double"
-        },
-        "commitment": {
-          "type": "number",
-          "format": "double"
+        "recipient": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -3825,6 +4286,14 @@
       },
       "description": "Describes the fields on an Alphaus root user for a billing group or access group."
     },
+    "apiMSTeamsChannel": {
+      "type": "object",
+      "properties": {
+        "webhookUrl": {
+          "type": "string"
+        }
+      }
+    },
     "apiMonthOnMonthCostForecast": {
       "type": "object",
       "properties": {
@@ -3911,6 +4380,40 @@
         "lowerBound": {
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "apiNotificationChannel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "email": {
+          "$ref": "#/definitions/apiEmailChannel"
+        },
+        "slack": {
+          "$ref": "#/definitions/apiSlackChannel"
+        },
+        "msteams": {
+          "$ref": "#/definitions/apiMSTeamsChannel"
+        }
+      }
+    },
+    "apiNotificationSettings": {
+      "type": "object",
+      "properties": {
+        "isEnabled": {
+          "type": "boolean"
         }
       }
     },
@@ -4044,6 +4547,23 @@
         }
       }
     },
+    "apiSlackChannel": {
+      "type": "object",
+      "properties": {
+        "webhookUrl": {
+          "type": "string"
+        },
+        "channelId": {
+          "type": "string"
+        },
+        "channel": {
+          "type": "string"
+        },
+        "configurationUrl": {
+          "type": "string"
+        }
+      }
+    },
     "apiUser": {
       "type": "object",
       "properties": {
@@ -4093,8 +4613,32 @@
         "chartData": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/apiChartData"
+            "$ref": "#/definitions/blueapiapiChartData"
           }
+        }
+      }
+    },
+    "apiawsChartData": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "publicOndemand": {
+          "type": "number",
+          "format": "double"
+        },
+        "actualOndemand": {
+          "type": "number",
+          "format": "double"
+        },
+        "riUsage": {
+          "type": "number",
+          "format": "double"
+        },
+        "utilization": {
+          "type": "number",
+          "format": "double"
         }
       }
     },
@@ -4105,6 +4649,41 @@
           "type": "array",
           "items": {
             "type": "string"
+          }
+        }
+      }
+    },
+    "awsAwsCostBreakeven": {
+      "type": "object",
+      "properties": {
+        "arn": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "string"
+        },
+        "endDate": {
+          "type": "string"
+        },
+        "breakEvenPoint": {
+          "type": "string"
+        },
+        "riCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "upperRatio": {
+          "type": "number",
+          "format": "double"
+        },
+        "lowerRatio": {
+          "type": "number",
+          "format": "double"
+        },
+        "chartData": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiawsChartData"
           }
         }
       }
@@ -4425,7 +5004,7 @@
         "customerName": {
           "type": "string"
         },
-        "companyId": {
+        "billingInternalId": {
           "type": "string"
         },
         "billingGroupId": {
@@ -4518,6 +5097,10 @@
         "savings": {
           "type": "number",
           "format": "double"
+        },
+        "breakEven": {
+          "type": "string",
+          "title": "for break even point date"
         }
       }
     },
@@ -4675,6 +5258,10 @@
         "savings": {
           "type": "number",
           "format": "double"
+        },
+        "breakEven": {
+          "type": "string",
+          "title": "for break even point date"
         }
       }
     },
@@ -4726,6 +5313,53 @@
           "format": "double"
         },
         "daysBeforeBreakEven": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "blueapiapiAccount": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The account id."
+        },
+        "name": {
+          "type": "string",
+          "description": "The account name."
+        },
+        "metadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/blueapiapiKeyValue"
+          },
+          "description": "The attributes (key/value pair) of the account."
+        }
+      }
+    },
+    "blueapiapiChartData": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "cost": {
+          "type": "number",
+          "format": "double"
+        },
+        "profit": {
+          "type": "number",
+          "format": "double"
+        },
+        "utilization": {
+          "type": "number",
+          "format": "double"
+        },
+        "commitment": {
           "type": "number",
           "format": "double"
         }
@@ -4832,7 +5466,7 @@
         "members": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/apiAccount"
+            "$ref": "#/definitions/blueapiapiAccount"
           },
           "description": "List of all members under this payer."
         }
@@ -4886,6 +5520,41 @@
       },
       "description": "Defines the fields associated with a Wave access group."
     },
+    "v1AwsCalculationHistory": {
+      "type": "object",
+      "properties": {
+        "billingInternalId": {
+          "type": "string"
+        },
+        "billingGroupId": {
+          "type": "string"
+        },
+        "month": {
+          "type": "string"
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1AwsCalculationHistoryAccount"
+          }
+        }
+      },
+      "description": "Streaming response message for the Billing.ListAwsCalculationHistory rpc."
+    },
+    "v1AwsCalculationHistoryAccount": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AccountHistory"
+          }
+        }
+      }
+    },
     "v1BillingGroup": {
       "type": "object",
       "properties": {
@@ -4904,7 +5573,7 @@
         "accounts": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/apiAccount"
+            "$ref": "#/definitions/blueapiapiAccount"
           },
           "title": "List of all accounts"
         },
@@ -5194,6 +5863,16 @@
       },
       "title": "Specific settings per vendor"
     },
+    "v1CreateDefaultBillingInfoRoleRequest": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "Required. The target AWS account to validate."
+        }
+      },
+      "description": "Request message for the Admin.CreateDefaultBillingInfoRole rpc."
+    },
     "v1CreateGroupRootUserRequest": {
       "type": "object",
       "properties": {
@@ -5271,6 +5950,32 @@
         }
       },
       "description": "Request message for the Iam.CreateIpFilter rpc."
+    },
+    "v1CreateNotificationChannelRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Required. Name of Notification Channel"
+        },
+        "type": {
+          "type": "string",
+          "title": "Required.\nValid values: \"email\", \"slack\", \"msteams\""
+        },
+        "email": {
+          "$ref": "#/definitions/apiEmailChannel",
+          "title": "Required if type=\"email\""
+        },
+        "slack": {
+          "$ref": "#/definitions/apiSlackChannel",
+          "title": "Required if type=\"slack\""
+        },
+        "msteams": {
+          "$ref": "#/definitions/apiMSTeamsChannel",
+          "title": "Required if type=\"msteams\""
+        }
+      },
+      "title": "Request message for Admin.CreateNotificationChannel rpc"
     },
     "v1CreateOrgRequest": {
       "type": "object",
@@ -5416,6 +6121,40 @@
       },
       "description": "Response message for the Iam.CreateUserRoleMapping rpc."
     },
+    "v1DefaultBillingInfo": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "The queried target account."
+        },
+        "roleArn": {
+          "type": "string",
+          "description": "The role ARN that provides the cross-account access permissions."
+        },
+        "stackId": {
+          "type": "string",
+          "description": "The id of the CloudFormation stack deployed in the target account."
+        },
+        "stackRegion": {
+          "type": "string",
+          "description": "The region where the stack is deployed."
+        },
+        "templateUrl": {
+          "type": "string",
+          "description": "The latest template used to deploy the stack."
+        },
+        "status": {
+          "type": "string",
+          "description": "This can be 'latest', 'outdated', or 'invalid'."
+        },
+        "lastUpdated": {
+          "type": "string",
+          "description": "The last updated timestamp, RFC3339 UTC."
+        }
+      },
+      "description": "Response message for the Admin.GetDefaultBillingInfo, Admin.CreateDefaultBillingInfoRole rpc."
+    },
     "v1GetAccessGroupResponse": {
       "type": "object",
       "properties": {
@@ -5451,6 +6190,18 @@
         }
       },
       "description": "Response message for the Billing.GetBillingGroup rpc."
+    },
+    "v1GetBreakevenPointResponse": {
+      "type": "object",
+      "properties": {
+        "orgId": {
+          "type": "string"
+        },
+        "awsCostBreakeven": {
+          "$ref": "#/definitions/awsAwsCostBreakeven"
+        }
+      },
+      "title": "Response message for GetBreakevenPoint"
     },
     "v1GetCalculatorConfigResponse": {
       "type": "object",
@@ -5512,6 +6263,28 @@
         }
       },
       "title": "Response message for GetCoverageOptions"
+    },
+    "v1GetDefaultBillingInfoTemplateUrlResponse": {
+      "type": "object",
+      "properties": {
+        "launchUrl": {
+          "type": "string",
+          "description": "The CloudFormation launch url. Open it in your browser."
+        },
+        "templateUrl": {
+          "type": "string",
+          "description": "The latest CloudFormation template. The version is included in the filename."
+        },
+        "stackName": {
+          "type": "string",
+          "description": "The default stack name used. Can be modified."
+        },
+        "principal": {
+          "type": "string",
+          "description": "The AWS account that will receive the access. Do not change."
+        }
+      },
+      "description": "Response message for the Admin.GetDefaultBillingInfoTemplateUrl rpc."
     },
     "v1GetForecastsResponse": {
       "type": "object",
@@ -5727,6 +6500,16 @@
       },
       "description": "Response message for the Admin.ListAccountGroups rpc."
     },
+    "v1ListAwsCalculationHistoryRequest": {
+      "type": "object",
+      "properties": {
+        "month": {
+          "type": "string",
+          "description": "Optional. If empty, defaults to current UTC month. Format: yyyymm."
+        }
+      },
+      "description": "Request message for the Billing.ListAwsCalculationHistory rpc."
+    },
     "v1ListCalculationsHistoryAwsResponse": {
       "type": "object",
       "properties": {
@@ -5759,6 +6542,18 @@
         }
       },
       "description": "Response message for the Iam.ListIdentityProviders rpc."
+    },
+    "v1ListNotificationChannelsResponse": {
+      "type": "object",
+      "properties": {
+        "channels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiNotificationChannel"
+          }
+        }
+      },
+      "title": "Response message for Admin.ListNotificationChannels rpc"
     },
     "v1ListPermissionsResponse": {
       "type": "object",
@@ -5828,7 +6623,7 @@
         },
         "groupByMonth": {
           "type": "boolean",
-          "description": "Optional. If set to true, return data grouped by month. If you want data that is grouped\nper account per month, set this to `true`, then set `groupByColumns` to `none`.\n\nYou can also use `groupByColumns` while setting this to true. If `groupByColumns` is empty,\nthe default grouping is `productCode`. However, at the moment, this is only limited to\nthe current and previous months. If your date range includes out-of-range months, those\nwill only return data grouped by `productCode`."
+          "description": "Optional. If set to true, return data grouped by month within the date range. If you want data\nthat is grouped per account per month, set this to `true`, then set `groupByColumns` to `none`.\n\nYou can also use `groupByColumns` while setting this to true. If `groupByColumns` is empty,\nthe default grouping is `productCode`."
         },
         "filters": {
           "type": "array",
@@ -5876,6 +6671,15 @@
           "description": "Optional. If set, only return data for this tagId."
         }
       }
+    },
+    "v1SaveNotificationSettingsRequest": {
+      "type": "object",
+      "properties": {
+        "isEnabled": {
+          "type": "boolean"
+        }
+      },
+      "title": "Request message for Admin.SaveNotificationSettings rpc"
     },
     "v1UpdateMetadataRequest": {
       "type": "object",

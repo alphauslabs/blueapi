@@ -3,8 +3,10 @@ syntax = "proto3";
 package blueapi.admin.v1;
 
 import "api/accountgroup.proto";
-
+import "api/notification.proto";
+import "api/operation.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/admin";
@@ -34,6 +36,103 @@ service Admin {
       get: "/admin/v1/acctgroups/{id}"
     };
   }
+
+  // Gets a CloudFormation launch URL for enabling cross-account access to your account's billing information.
+  // Upon successful deployment, you need to validate the access by calling 'POST /admin/v1/aws/xacct/default'.
+  rpc GetDefaultBillingInfoTemplateUrl(GetDefaultBillingInfoTemplateUrlRequest) returns (GetDefaultBillingInfoTemplateUrlResponse) {
+    option (google.api.http) = {
+      get: "/admin/v1/aws/xacct/default"
+    };
+  }
+
+  // Lists the default cross-account role(s) attached to accounts under caller.
+  rpc ListDefaultBillingInfo(ListDefaultBillingInfoRequest) returns (stream DefaultBillingInfo) {
+    option (google.api.http) = {
+      post: "/admin/v1/aws/xacct/default/all:read"
+    };
+  }
+
+  // Gets the current role attached to input account.
+  rpc GetDefaultBillingInfo(GetDefaultBillingInfoRequest) returns (DefaultBillingInfo) {
+    option (google.api.http) = {
+      get: "/admin/v1/aws/xacct/default/{target}"
+    };
+  }
+
+  // Starts validation of a cross-account access stack deployment. If successful,
+  // the new IAM role will be registered to the target account.
+  rpc CreateDefaultBillingInfoRole(CreateDefaultBillingInfoRoleRequest) returns (DefaultBillingInfo) {
+    option (google.api.http) = {
+      post: "/admin/v1/aws/xacct/default"
+      body: "*"
+    };
+  }
+
+  // Starts an update to an existing CloudFormation for template changes, if any.
+  rpc UpdateDefaultBillingInfoRole(UpdateDefaultBillingInfoRoleRequest) returns (api.Operation) {
+    option (google.api.http) = {
+      put: "/admin/v1/aws/xacct/default/{target}"
+    };
+  }
+
+  // Deletes the current role attached to this target account. This does not delete the
+  // CloudFormation deployment in your account.
+  rpc DeleteDefaultBillingInfoRole(DeleteDefaultBillingInfoRoleRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/admin/v1/aws/xacct/default/{target}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get notification settings for login user's organization or group.
+  rpc GetNotificationSettings(GetNotificationSettingsRequest) returns (api.NotificationSettings) {
+    option (google.api.http) = {
+      get: "/admin/v1/notification/settings"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Creates or updates notification settings for login user's organization or group.
+  rpc SaveNotificationSettings(SaveNotificationSettingsRequest) returns (api.NotificationSettings) {
+    option (google.api.http) = {
+      post: "/admin/v1/notification/settings"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Lists all notification channels for login user's organization or group.
+  rpc ListNotificationChannels(ListNotificationChannelsRequest) returns (ListNotificationChannelsResponse) {
+    option (google.api.http) = {
+      get: "/admin/v1/notification/channels"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Gets notification channel for login user's organization or group.
+  rpc GetNotificationChannel(GetNotificationChannelRequest) returns (api.NotificationChannel) {
+    option (google.api.http) = {
+      get: "/admin/v1/notification/channels/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Creates notification settings for login user's organization or group.
+  rpc CreateNotificationChannel(CreateNotificationChannelRequest) returns (api.NotificationChannel) {
+    option (google.api.http) = {
+      post: "/admin/v1/notification/channels"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Updates notification settings for login user's organization or group.
+  rpc UpdateNotificationChannel(UpdateNotificationChannelRequest) returns (api.NotificationChannel) {
+    option (google.api.http) = {
+      put: "/admin/v1/notification/channels/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Deletes notification settings for login user's organization or group.
+  rpc DeleteNotificationChannel(DeleteNotificationChannelRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/admin/v1/notification/channels/{id}"
+    };
+  }
 }
 
 // Request message for the Admin.ListAccountGroups rpc.
@@ -52,4 +151,147 @@ message GetAccountGroupRequest {
 // Response message for the Admin.GetAccountGroup rpc.
 message GetAccountGroupResponse {
   api.AccountGroup acctGroup = 1;
+}
+
+// Request message for the Admin.GetDefaultBillingInfoTemplateUrl rpc.
+message GetDefaultBillingInfoTemplateUrlRequest {
+  // Optional. Set to the desired target region code. Defaults to 'ap-northeast-1' (Tokyo).
+  // You can still change the final target region in the CloudFormation console before
+  // the stack creation. You can check https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions
+  // for the region list.
+  string region = 1;
+}
+
+// Response message for the Admin.GetDefaultBillingInfoTemplateUrl rpc.
+message GetDefaultBillingInfoTemplateUrlResponse {
+  // The CloudFormation launch url. Open it in your browser.
+  string launchUrl = 1;
+
+  // The latest CloudFormation template. The version is included in the filename.
+  string templateUrl = 2;
+
+  // The default stack name used. Can be modified.
+  string stackName = 3;
+
+  // The AWS account that will receive the access. Do not change.
+  string principal = 4;
+}
+
+// Request message for the Admin.ListDefaultBillingInfo rpc.
+message ListDefaultBillingInfoRequest {}
+
+// Request message for the Admin.GetDefaultBillingInfo rpc.
+message GetDefaultBillingInfoRequest {
+  // Required. The target AWS account to query.
+  string target = 1;
+}
+
+// Response message for the Admin.GetDefaultBillingInfo, Admin.CreateDefaultBillingInfoRole rpc.
+message DefaultBillingInfo {
+  // The queried target account.
+  string target = 1;
+
+  // The role ARN that provides the cross-account access permissions.
+  string roleArn = 2;
+
+  // The id of the CloudFormation stack deployed in the target account.
+  string stackId = 3;
+
+  // The region where the stack is deployed.
+  string stackRegion = 4;
+
+  // The latest template used to deploy the stack.
+  string templateUrl = 5;
+
+  // This can be 'latest', 'outdated', or 'invalid'.
+  string status = 6;
+
+  // The last updated timestamp, RFC3339 UTC.
+  string lastUpdated = 7;
+}
+
+// Request message for the Admin.CreateDefaultBillingInfoRole rpc.
+message CreateDefaultBillingInfoRoleRequest {
+  // Required. The target AWS account to validate.
+  string target = 1;
+}
+
+// Request message for the Admin.UpdateDefaultBillingInfoRole rpc.
+message UpdateDefaultBillingInfoRoleRequest {
+  // Required. The target AWS account to update.
+  string target = 1;
+}
+
+// Request message for the Admin.DeleteDefaultBillingInfoRole rpc.
+message DeleteDefaultBillingInfoRoleRequest {
+  // Required. The target AWS account to delete.
+  string target = 1;
+}
+
+// Request message for Admin.GetNotificationSettings rpc
+message GetNotificationSettingsRequest {}
+
+// Request message for Admin.SaveNotificationSettings rpc
+message SaveNotificationSettingsRequest {
+  bool isEnabled = 1;
+}
+
+// Request message for Admin.ListNotificationChannels rpc
+message ListNotificationChannelsRequest {}
+
+// Response message for Admin.ListNotificationChannels rpc
+message ListNotificationChannelsResponse {
+  repeated api.NotificationChannel channels = 1;
+}
+
+// Request message for Admin.GetNotificationChannel rpc
+message GetNotificationChannelRequest {
+  string id = 1;
+}
+
+// Request message for Admin.CreateNotificationChannel rpc
+message CreateNotificationChannelRequest {
+  // Required. Name of Notification Channel
+  string name = 1;
+
+  // Required.
+  // Valid values: "email", "slack", "msteams"
+  string type = 2;
+
+  // Required if type="email"
+  api.EmailChannel email = 3;
+
+  // Required if type="slack"
+  api.SlackChannel slack = 4;
+  
+  // Required if type="msteams"
+  api.MSTeamsChannel msteams = 5;
+}
+
+// Request message for Admin.UpdateNotificationChannel rpc
+message UpdateNotificationChannelRequest {
+  //Required. ID of Notification Channel to update
+  string id = 1;
+
+  // Required. Name of Notification Channel
+  string name = 2;
+
+  // Required.
+  // Valid values: "email", "slack", "msteams"
+  string type = 3;
+
+  // Required if type="email"
+  api.EmailChannel email = 4;
+
+  // Required if type="slack"
+  api.SlackChannel slack = 5;
+  
+  // Required if type="msteams"
+  api.MSTeamsChannel msteams = 6;
+}
+
+// Request message for Admin.DeleteNotificationChannel rpc
+message DeleteNotificationChannelRequest {
+  //Required. ID of Notification Channel to delete
+  string id = 1;
 }

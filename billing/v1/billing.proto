@@ -42,10 +42,18 @@ service Billing {
     };
   }
 
-  // Gets an access group.
+  // WORK-IN-PROGRESS: Gets an access group.
   rpc GetAccessGroup(GetAccessGroupRequest) returns (GetAccessGroupResponse) {
     option (google.api.http) = {
       get: "/v1/accessgroups/{accessGroupId}"
+    };
+  }
+
+  // Reads the calculation history of all accounts in your billing groups. Only available in Ripple.
+  rpc ListAwsCalculationHistory(ListAwsCalculationHistoryRequest) returns (stream AwsCalculationHistory) {
+    option (google.api.http) = {
+      post: "/v1/aws/calchistory:read"
+      body: "*"
     };
   }
 }
@@ -216,4 +224,33 @@ message GetAccessGroupRequest {
 // Response message for the Billing.GetAccessGroup rpc.
 message GetAccessGroupResponse {
   AccessGroup accessGroup = 1;
+}
+
+// Streaming response message for the Billing.ListAwsCalculationHistory rpc.
+message AwsCalculationHistory {
+  string billingInternalId = 1;
+  string billingGroupId = 2;
+  string month = 3;
+
+  message Account {
+    string accountId = 1;
+
+    message History {
+      // Calculation timestamp in UTC, RFC3339.
+      string timestamp = 1;
+
+      // Calculation trigger. Either `invoice` or `cur`.
+      string trigger = 2;
+    }
+
+    repeated History history = 2;
+  }
+
+  repeated Account accounts = 4;
+}
+
+// Request message for the Billing.ListAwsCalculationHistory rpc.
+message ListAwsCalculationHistoryRequest {
+  // Optional. If empty, defaults to current UTC month. Format: yyyymm.
+  string month = 1;
 }

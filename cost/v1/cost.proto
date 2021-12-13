@@ -8,6 +8,7 @@ import "api/operation.proto";
 import "api/budget.proto";
 import "api/forecast.proto";
 import "api/utilization.proto";
+import "api/aws/breakeven.proto";
 import "api/aws/cost.proto";
 import "api/aws/calculator.proto";
 import "api/aws/recommendation.proto";
@@ -299,6 +300,13 @@ service Cost {
     option (google.api.http) = {
       post: "/v1/{vendor}/coverage/ondemand/{orgId}:read"
       body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get the breakeven point details for the RI or SP.
+  rpc GetBreakevenPoint(GetBreakevenPointRequest) returns (GetBreakevenPointResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/bep/{orgId}"
     };
   }
 
@@ -596,13 +604,11 @@ message ReadCostsRequestAwsOptions {
   // columns will be empty.
   string groupByColumns = 1;
 
-  // Optional. If set to true, return data grouped by month. If you want data that is grouped
-  // per account per month, set this to `true`, then set `groupByColumns` to `none`.
+  // Optional. If set to true, return data grouped by month within the date range. If you want data
+  // that is grouped per account per month, set this to `true`, then set `groupByColumns` to `none`.
   //
   // You can also use `groupByColumns` while setting this to true. If `groupByColumns` is empty,
-  // the default grouping is `productCode`. However, at the moment, this is only limited to
-  // the current and previous months. If your date range includes out-of-range months, those
-  // will only return data grouped by `productCode`.
+  // the default grouping is `productCode`.
   bool groupByMonth = 2;
 
   // Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more
@@ -656,7 +662,7 @@ message ReadCostsRequest {
   string accountId = 3;
 
   // Optional. The UTC date to start streaming data from. If not set, the first day of the
-  // current month will be used. Format: yyyymmdd.
+  // current month will be used. Format: yyyymmdd. The oldest supported date is 2020-01-01.
   string startTime = 4;
 
   // Optional. The UTC date to end the streaming data. If not set, current date will be
@@ -762,7 +768,7 @@ message GetForecastsRequest {
   
   // Optional. Company Id of Billing Group to retrieve.
   // Default value is user's Company Id
-  string companyId = 2;
+  string billingInternalId = 2;
   
   // Optional. Forecast frequency. Valid values are `daily` and `monthly`. 
   // Default value is `daily`.
@@ -1018,7 +1024,7 @@ message GetCostReductionRequest {
   string payerId = 7;
 
   // Optional. Billing group Id.
-  string companyId = 8;
+  string billingInternalId = 8;
 
   // Optional. Account group Id.
   string groupId = 9;
@@ -1151,4 +1157,25 @@ message GetCoverageOndemandRequest {
 message GetCoverageOndemandResponse {
   string orgId = 1;
   repeated api.OndemandData ondemandData = 2;
+}
+
+// Request message for GetBreakevenPoint
+message GetBreakevenPointRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Organization Id.
+  string orgId = 2;
+
+  // Required. For AWS, "ri" or "sp".
+  string type = 3;
+
+  // Required. RI/SP Arn.
+  string arn = 4;
+}
+
+// Response message for GetBreakevenPoint
+message GetBreakevenPointResponse {
+  string orgId = 1;
+  api.aws.AwsCostBreakeven awsCostBreakeven = 2;
 }
