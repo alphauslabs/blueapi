@@ -155,11 +155,20 @@ message GetAccountGroupResponse {
 
 // Request message for the Admin.GetDefaultBillingInfoTemplateUrl rpc.
 message GetDefaultBillingInfoTemplateUrlRequest {
-  // Optional. Set to the desired target region code. Defaults to 'ap-northeast-1' (Tokyo).
+  // Optional. Valid values are `default`, `s3only`, and `apionly`. Set to `default` if empty.
+  //
+  // `default` - Template for setting up both CUR export and read-only access to cost information.
+  //
+  // `apionly` - Template for setting up ready-only access to cost information. Use if you already
+  // exported your CUR to Alphaus through other means (i.e. manual setup).
+  //
+  // `s3only` - A helper template for creating an S3 bucket to be used for CUR export.
+  string type = 1;
+
+  // Optional. Set to the desired target region code. Defaults to 'us-east-1' (N. Virginia).
   // You can still change the final target region in the CloudFormation console before
-  // the stack creation. You can check https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions
-  // for the region list.
-  string region = 1;
+  // the stack creation.
+  string region = 2;
 }
 
 // Response message for the Admin.GetDefaultBillingInfoTemplateUrl rpc.
