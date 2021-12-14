@@ -37,49 +37,49 @@ service Admin {
     };
   }
 
-  // Gets a CloudFormation launch URL for enabling cross-account access to your account's billing information.
-  // Upon successful deployment, you need to validate the access by calling 'POST /admin/v1/aws/xacct/default'.
-  rpc GetDefaultBillingInfoTemplateUrl(GetDefaultBillingInfoTemplateUrlRequest) returns (GetDefaultBillingInfoTemplateUrlResponse) {
+  // WORK-IN-PROGRESS: Gets a CloudFormation launch URL for enabling various cross-account access to your
+  // account's cost information based on type.
+  rpc GetDefaultCostAccessTemplateUrl(GetDefaultCostAccessTemplateUrlRequest) returns (GetDefaultCostAccessTemplateUrlResponse) {
     option (google.api.http) = {
-      get: "/admin/v1/aws/xacct/default"
+      get: "/admin/v1/aws/xacct/dca"
     };
   }
 
-  // Lists the default cross-account role(s) attached to accounts under caller.
-  rpc ListDefaultBillingInfo(ListDefaultBillingInfoRequest) returns (stream DefaultBillingInfo) {
+  // WORK-IN-PROGRESS: Lists the default cross-account role(s) attached to accounts under caller.
+  rpc ListDefaultCostAccess(ListDefaultCostAccessRequest) returns (stream DefaultCostAccess) {
     option (google.api.http) = {
-      post: "/admin/v1/aws/xacct/default/all:read"
+      post: "/admin/v1/aws/xacct/dca/all:read"
     };
   }
 
-  // Gets the current role attached to input account.
-  rpc GetDefaultBillingInfo(GetDefaultBillingInfoRequest) returns (DefaultBillingInfo) {
+  // WORK-IN-PROGRESS: Gets the current role attached to input account.
+  rpc GetDefaultCostAccess(GetDefaultCostAccessRequest) returns (DefaultCostAccess) {
     option (google.api.http) = {
-      get: "/admin/v1/aws/xacct/default/{target}"
+      get: "/admin/v1/aws/xacct/dca/{target}"
     };
   }
 
-  // Starts validation of a cross-account access stack deployment. If successful,
+  // WORK-IN-PROGRESS: Starts validation of a cross-account access stack deployment. If successful,
   // the new IAM role will be registered to the target account.
-  rpc CreateDefaultBillingInfoRole(CreateDefaultBillingInfoRoleRequest) returns (DefaultBillingInfo) {
+  rpc CreateDefaultCostAccess(CreateDefaultCostAccessRequest) returns (DefaultCostAccess) {
     option (google.api.http) = {
-      post: "/admin/v1/aws/xacct/default"
+      post: "/admin/v1/aws/xacct/dca"
       body: "*"
     };
   }
 
-  // Starts an update to an existing CloudFormation for template changes, if any.
-  rpc UpdateDefaultBillingInfoRole(UpdateDefaultBillingInfoRoleRequest) returns (api.Operation) {
+  // WORK-IN-PROGRESS: Starts an update to an existing CloudFormation for template changes, if any.
+  rpc UpdateDefaultCostAccess(UpdateDefaultCostAccessRequest) returns (api.Operation) {
     option (google.api.http) = {
-      put: "/admin/v1/aws/xacct/default/{target}"
+      put: "/admin/v1/aws/xacct/dca/{target}"
     };
   }
 
-  // Deletes the current role attached to this target account. This does not delete the
+  // WORK-IN-PROGRESS: Deletes the current role attached to this target account. This does not delete the
   // CloudFormation deployment in your account.
-  rpc DeleteDefaultBillingInfoRole(DeleteDefaultBillingInfoRoleRequest) returns (google.protobuf.Empty) {
+  rpc DeleteDefaultCostAccess(DeleteDefaultCostAccessRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/admin/v1/aws/xacct/default/{target}"
+      delete: "/admin/v1/aws/xacct/dca/{target}"
     };
   }
 
@@ -153,8 +153,8 @@ message GetAccountGroupResponse {
   api.AccountGroup acctGroup = 1;
 }
 
-// Request message for the Admin.GetDefaultBillingInfoTemplateUrl rpc.
-message GetDefaultBillingInfoTemplateUrlRequest {
+// Request message for the Admin.GetDefaultCostAccessTemplateUrl rpc.
+message GetDefaultCostAccessTemplateUrlRequest {
   // Optional. Valid values are `default`, `s3only`, and `apionly`. Set to `default` if empty.
   //
   // `default` - Template for setting up both CUR export and read-only access to cost information.
@@ -171,8 +171,8 @@ message GetDefaultBillingInfoTemplateUrlRequest {
   string region = 2;
 }
 
-// Response message for the Admin.GetDefaultBillingInfoTemplateUrl rpc.
-message GetDefaultBillingInfoTemplateUrlResponse {
+// Response message for the Admin.GetDefaultCostAccessTemplateUrl rpc.
+message GetDefaultCostAccessTemplateUrlResponse {
   // The CloudFormation launch url. Open it in your browser.
   string launchUrl = 1;
 
@@ -186,17 +186,17 @@ message GetDefaultBillingInfoTemplateUrlResponse {
   string principal = 4;
 }
 
-// Request message for the Admin.ListDefaultBillingInfo rpc.
-message ListDefaultBillingInfoRequest {}
+// Request message for the Admin.ListDefaultCostAccess rpc.
+message ListDefaultCostAccessRequest {}
 
-// Request message for the Admin.GetDefaultBillingInfo rpc.
-message GetDefaultBillingInfoRequest {
+// Request message for the Admin.GetDefaultCostAccess rpc.
+message GetDefaultCostAccessRequest {
   // Required. The target AWS account to query.
   string target = 1;
 }
 
-// Response message for the Admin.GetDefaultBillingInfo, Admin.CreateDefaultBillingInfoRole rpc.
-message DefaultBillingInfo {
+// Response message for the Admin.GetDefaultCostAccess, Admin.CreateDefaultCostAccess rpc.
+message DefaultCostAccess {
   // The queried target account.
   string target = 1;
 
@@ -219,20 +219,20 @@ message DefaultBillingInfo {
   string lastUpdated = 7;
 }
 
-// Request message for the Admin.CreateDefaultBillingInfoRole rpc.
-message CreateDefaultBillingInfoRoleRequest {
+// Request message for the Admin.CreateDefaultCostAccess rpc.
+message CreateDefaultCostAccessRequest {
   // Required. The target AWS account to validate.
   string target = 1;
 }
 
-// Request message for the Admin.UpdateDefaultBillingInfoRole rpc.
-message UpdateDefaultBillingInfoRoleRequest {
+// Request message for the Admin.UpdateDefaultCostAccess rpc.
+message UpdateDefaultCostAccessRequest {
   // Required. The target AWS account to update.
   string target = 1;
 }
 
-// Request message for the Admin.DeleteDefaultBillingInfoRole rpc.
-message DeleteDefaultBillingInfoRoleRequest {
+// Request message for the Admin.DeleteDefaultCostAccess rpc.
+message DeleteDefaultCostAccessRequest {
   // Required. The target AWS account to delete.
   string target = 1;
 }

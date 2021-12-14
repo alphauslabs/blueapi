@@ -154,15 +154,15 @@
         ]
       }
     },
-    "/admin/v1/aws/xacct/default": {
+    "/admin/v1/aws/xacct/dca": {
       "get": {
-        "summary": "Gets a CloudFormation launch URL for enabling cross-account access to your account's billing information.\nUpon successful deployment, you need to validate the access by calling 'POST /admin/v1/aws/xacct/default'.",
-        "operationId": "Admin_GetDefaultBillingInfoTemplateUrl",
+        "summary": "WORK-IN-PROGRESS: Gets a CloudFormation launch URL for enabling various cross-account access to your\naccount's cost information based on type.",
+        "operationId": "Admin_GetDefaultCostAccessTemplateUrl",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetDefaultBillingInfoTemplateUrlResponse"
+              "$ref": "#/definitions/v1GetDefaultCostAccessTemplateUrlResponse"
             }
           },
           "default": {
@@ -193,13 +193,13 @@
         ]
       },
       "post": {
-        "summary": "Starts validation of a cross-account access stack deployment. If successful,\nthe new IAM role will be registered to the target account.",
-        "operationId": "Admin_CreateDefaultBillingInfoRole",
+        "summary": "WORK-IN-PROGRESS: Starts validation of a cross-account access stack deployment. If successful,\nthe new IAM role will be registered to the target account.",
+        "operationId": "Admin_CreateDefaultCostAccess",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1DefaultBillingInfo"
+              "$ref": "#/definitions/v1DefaultCostAccess"
             }
           },
           "default": {
@@ -215,7 +215,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1CreateDefaultBillingInfoRoleRequest"
+              "$ref": "#/definitions/v1CreateDefaultCostAccessRequest"
             }
           }
         ],
@@ -224,10 +224,10 @@
         ]
       }
     },
-    "/admin/v1/aws/xacct/default/all:read": {
+    "/admin/v1/aws/xacct/dca/all:read": {
       "post": {
-        "summary": "Lists the default cross-account role(s) attached to accounts under caller.",
-        "operationId": "Admin_ListDefaultBillingInfo",
+        "summary": "WORK-IN-PROGRESS: Lists the default cross-account role(s) attached to accounts under caller.",
+        "operationId": "Admin_ListDefaultCostAccess",
         "responses": {
           "200": {
             "description": "A successful response.(streaming responses)",
@@ -235,13 +235,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1DefaultBillingInfo"
+                  "$ref": "#/definitions/v1DefaultCostAccess"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of v1DefaultBillingInfo"
+              "title": "Stream result of v1DefaultCostAccess"
             }
           },
           "default": {
@@ -256,15 +256,15 @@
         ]
       }
     },
-    "/admin/v1/aws/xacct/default/{target}": {
+    "/admin/v1/aws/xacct/dca/{target}": {
       "get": {
-        "summary": "Gets the current role attached to input account.",
-        "operationId": "Admin_GetDefaultBillingInfo",
+        "summary": "WORK-IN-PROGRESS: Gets the current role attached to input account.",
+        "operationId": "Admin_GetDefaultCostAccess",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1DefaultBillingInfo"
+              "$ref": "#/definitions/v1DefaultCostAccess"
             }
           },
           "default": {
@@ -288,8 +288,8 @@
         ]
       },
       "delete": {
-        "summary": "Deletes the current role attached to this target account. This does not delete the\nCloudFormation deployment in your account.",
-        "operationId": "Admin_DeleteDefaultBillingInfoRole",
+        "summary": "WORK-IN-PROGRESS: Deletes the current role attached to this target account. This does not delete the\nCloudFormation deployment in your account.",
+        "operationId": "Admin_DeleteDefaultCostAccess",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -318,8 +318,8 @@
         ]
       },
       "put": {
-        "summary": "Starts an update to an existing CloudFormation for template changes, if any.",
-        "operationId": "Admin_UpdateDefaultBillingInfoRole",
+        "summary": "WORK-IN-PROGRESS: Starts an update to an existing CloudFormation for template changes, if any.",
+        "operationId": "Admin_UpdateDefaultCostAccess",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -5650,7 +5650,7 @@
       },
       "title": "Specific settings per vendor"
     },
-    "v1CreateDefaultBillingInfoRoleRequest": {
+    "v1CreateDefaultCostAccessRequest": {
       "type": "object",
       "properties": {
         "target": {
@@ -5658,7 +5658,7 @@
           "description": "Required. The target AWS account to validate."
         }
       },
-      "description": "Request message for the Admin.CreateDefaultBillingInfoRole rpc."
+      "description": "Request message for the Admin.CreateDefaultCostAccess rpc."
     },
     "v1CreateGroupRootUserRequest": {
       "type": "object",
@@ -5922,7 +5922,7 @@
       },
       "description": "Response message for the Iam.CreateUserRoleMapping rpc."
     },
-    "v1DefaultBillingInfo": {
+    "v1DefaultCostAccess": {
       "type": "object",
       "properties": {
         "target": {
@@ -5954,7 +5954,7 @@
           "description": "The last updated timestamp, RFC3339 UTC."
         }
       },
-      "description": "Response message for the Admin.GetDefaultBillingInfo, Admin.CreateDefaultBillingInfoRole rpc."
+      "description": "Response message for the Admin.GetDefaultCostAccess, Admin.CreateDefaultCostAccess rpc."
     },
     "v1GetAccessGroupResponse": {
       "type": "object",
@@ -6225,7 +6225,7 @@
       },
       "title": "Response message for GetCoverageOptions"
     },
-    "v1GetDefaultBillingInfoTemplateUrlResponse": {
+    "v1GetDefaultCostAccessTemplateUrlResponse": {
       "type": "object",
       "properties": {
         "launchUrl": {
@@ -6245,7 +6245,7 @@
           "description": "The AWS account that will receive the access. Do not change."
         }
       },
-      "description": "Response message for the Admin.GetDefaultBillingInfoTemplateUrl rpc."
+      "description": "Response message for the Admin.GetDefaultCostAccessTemplateUrl rpc."
     },
     "v1GetForecastsResponse": {
       "type": "object",
