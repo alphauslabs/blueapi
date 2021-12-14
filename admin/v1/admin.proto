@@ -37,30 +37,29 @@ service Admin {
     };
   }
 
-  // WORK-IN-PROGRESS: Gets a CloudFormation launch URL for enabling various cross-account access to your
-  // account's cost information based on type.
+  // WORK-IN-PROGRESS: Gets a CloudFormation launch URL for enabling the default cross-account access to your account's cost information based on type.
   rpc GetDefaultCostAccessTemplateUrl(GetDefaultCostAccessTemplateUrlRequest) returns (GetDefaultCostAccessTemplateUrlResponse) {
     option (google.api.http) = {
       get: "/admin/v1/aws/xacct/dca"
     };
   }
 
-  // WORK-IN-PROGRESS: Lists the default cross-account role(s) attached to accounts under caller.
+  // WORK-IN-PROGRESS: Lists the default cross-account access role(s) attached to accounts under caller.
   rpc ListDefaultCostAccess(ListDefaultCostAccessRequest) returns (stream DefaultCostAccess) {
     option (google.api.http) = {
       post: "/admin/v1/aws/xacct/dca/all:read"
     };
   }
 
-  // WORK-IN-PROGRESS: Gets the current role attached to input account.
+  // WORK-IN-PROGRESS: Gets the current default cross-account role attached to input account.
   rpc GetDefaultCostAccess(GetDefaultCostAccessRequest) returns (DefaultCostAccess) {
     option (google.api.http) = {
       get: "/admin/v1/aws/xacct/dca/{target}"
     };
   }
 
-  // WORK-IN-PROGRESS: Starts validation of a cross-account access stack deployment. If successful,
-  // the new IAM role will be registered to the target account.
+  // WORK-IN-PROGRESS: Starts validation of a default cross-account access stack deployment.
+  // If successful, the new IAM role will be registered to the target account.
   rpc CreateDefaultCostAccess(CreateDefaultCostAccessRequest) returns (DefaultCostAccess) {
     option (google.api.http) = {
       post: "/admin/v1/aws/xacct/dca"
@@ -68,15 +67,15 @@ service Admin {
     };
   }
 
-  // WORK-IN-PROGRESS: Starts an update to an existing CloudFormation for template changes, if any.
+  // WORK-IN-PROGRESS: Starts an update to an existing default cross-account access CloudFormation for template changes, if any.
   rpc UpdateDefaultCostAccess(UpdateDefaultCostAccessRequest) returns (api.Operation) {
     option (google.api.http) = {
       put: "/admin/v1/aws/xacct/dca/{target}"
     };
   }
 
-  // WORK-IN-PROGRESS: Deletes the current role attached to this target account. This does not delete the
-  // CloudFormation deployment in your account.
+  // WORK-IN-PROGRESS: Deletes the current default cross-account access role attached to this target account.
+  // This does not delete the CloudFormation deployment in your account.
   rpc DeleteDefaultCostAccess(DeleteDefaultCostAccessRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/admin/v1/aws/xacct/dca/{target}"
