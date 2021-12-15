@@ -37,29 +37,30 @@ service Admin {
     };
   }
 
-  // WORK-IN-PROGRESS: Gets a CloudFormation launch URL for enabling the default cross-account access to your account's cost information based on type.
+  // Gets a CloudFormation launch URL for enabling the default cross-account access to your account's cost information based on type.
+  // See comments on the type for more information on what each template does.
   rpc GetDefaultCostAccessTemplateUrl(GetDefaultCostAccessTemplateUrlRequest) returns (GetDefaultCostAccessTemplateUrlResponse) {
     option (google.api.http) = {
       get: "/admin/v1/aws/xacct/dca"
     };
   }
 
-  // WORK-IN-PROGRESS: Lists the default cross-account access role(s) attached to accounts under caller.
+  // Lists the default cross-account access role(s) attached to accounts under caller.
   rpc ListDefaultCostAccess(ListDefaultCostAccessRequest) returns (stream DefaultCostAccess) {
     option (google.api.http) = {
       post: "/admin/v1/aws/xacct/dca/all:read"
     };
   }
 
-  // WORK-IN-PROGRESS: Gets the current default cross-account role attached to input account.
+  // Gets the current default cross-account role attached to the input target.
   rpc GetDefaultCostAccess(GetDefaultCostAccessRequest) returns (DefaultCostAccess) {
     option (google.api.http) = {
       get: "/admin/v1/aws/xacct/dca/{target}"
     };
   }
 
-  // WORK-IN-PROGRESS: Starts validation of a default cross-account access stack deployment.
-  // If successful, the new IAM role will be registered to the target account.
+  // Starts validation of a default cross-account access stack deployment. If successful, the
+  // IAM role created from the CloudFormation stack will be registered to the target.
   rpc CreateDefaultCostAccess(CreateDefaultCostAccessRequest) returns (DefaultCostAccess) {
     option (google.api.http) = {
       post: "/admin/v1/aws/xacct/dca"
@@ -67,14 +68,15 @@ service Admin {
     };
   }
 
-  // WORK-IN-PROGRESS: Starts an update to an existing default cross-account access CloudFormation for template changes, if any.
+  // Starts an update to an existing default cross-account access CloudFormation stack for template changes, if any.
+  // Only call this API if the status of your default cross-account access is 'outdated'.
   rpc UpdateDefaultCostAccess(UpdateDefaultCostAccessRequest) returns (api.Operation) {
     option (google.api.http) = {
       put: "/admin/v1/aws/xacct/dca/{target}"
     };
   }
 
-  // WORK-IN-PROGRESS: Deletes the current default cross-account access role attached to this target account.
+  // Deletes the current default cross-account access role attached to this target account.
   // This does not delete the CloudFormation deployment in your account.
   rpc DeleteDefaultCostAccess(DeleteDefaultCostAccessRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -156,17 +158,27 @@ message GetAccountGroupResponse {
 message GetDefaultCostAccessTemplateUrlRequest {
   // Optional. Valid values are `default`, `s3only`, and `apionly`. Defaults to `default` if empty.
   //
-  // `default` - Template for setting up both CUR export and read-only access to cost information.
+  // `default` - Template for setting up both CUR export and read-only access to cost information. If selected, you need to
+  // deploy this template to `us-east-1` region as CloudFormation only supports the `AWS::CUR::ReportDefinition` in that
+  // region at the moment. The target S3 bucket will also be created in that region. If you prefer your S3 bucket to be located
+  // in a different region, you can use the template from this API by setting the type to `s3only`. After your S3 bucket is
+  // ready, call this API again (type is `default`) and set the `CurS3BucketOption` parameter to `USE_EXISTING`, then set your
+  // bucket name and region accordingly.
   //
-  // `apionly` - Template for setting up ready-only access to cost information. Use if you already
-  // have exported your CUR to Alphaus through other means (i.e. manual setup).
+  // `apionly` - Template for setting up ready-only access to cost information. Handy if you already have exported your CUR to
+  // Alphaus through other means (i.e. manual setup). This template is the same as the `default` type but without the CUR
+  // export definitions. Although not required, we recommend you to deploy this template to allow us to query your cost-related
+  // information such as Reserved Instances, Saving Plans, etc. through the AWS API. At the moment, we only rely on CUR data
+  // which is a best-effort basis and sometimes not accurate.
   //
   // `s3only` - A helper template for creating an S3 bucket to be used for CUR export.
+  //
+  // All templates are publicly available from the reponse link (`templateUrl`) if you want to audit the included permissions.
   string type = 1;
 
-  // Optional. Set to the desired target region code. Defaults to `us-east-1` (N. Virginia).
-  // You can still change the final target region in the CloudFormation console before
-  // the stack creation.
+  // Optional. Set to the desired target region code. Defaults to `us-east-1` (N. Virginia). You can still change the final
+  // target region in the CloudFormation console before the stack creation. This parameter will only affect the resulting
+  // `launchUrl` in the response.
   string region = 2;
 }
 
