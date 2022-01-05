@@ -56,6 +56,15 @@ service Billing {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Returns the difference, if any, between the usage costs in your invoice and the latest
+  // calculated usage costs. Only available in Ripple.
+  rpc ListUsageCostsDrift(ListUsageCostsDriftRequest) returns (stream UsageCostsDrift) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/billinggroups/usagecostsdrift:read"
+      body: "*"
+    };
+  }
 }
 
 message BillingGroup {
@@ -253,4 +262,28 @@ message AwsCalculationHistory {
 message ListAwsCalculationHistoryRequest {
   // Optional. If empty, defaults to current UTC month. Format: yyyymm.
   string month = 1;
+}
+
+// Request message for the Billing.ListUsageCostsDrift rpc.
+message ListUsageCostsDriftRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Optional. If empty, returns all billing groups.
+  string billingInternalId = 2;
+
+  // Optional. If empty, defaults to current UTC month. Format: yyyymm.
+  string month = 3;
+}
+
+// Streaming response message for the Billing.ListUsageCostsDrift rpc.
+message UsageCostsDrift {
+  string billingInternalId = 1;
+  string billingGroupId = 2;
+
+  // The total costs saved in your invoice.
+  double snapshot = 3;
+
+  // The current total costs.
+  double current = 4;
 }

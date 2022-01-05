@@ -2387,6 +2387,55 @@
         ]
       }
     },
+    "/v1/{vendor}/billinggroups/usagecostsdrift:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Returns the difference, if any, between the usage costs in your invoice and the latest\ncalculated usage costs. Only available in Ripple.",
+        "operationId": "Billing_ListUsageCostsDrift",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1UsageCostsDrift"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1UsageCostsDrift"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListUsageCostsDriftRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/{vendor}/budget/{budgetId}": {
       "delete": {
         "summary": "Removes monthly budget for the account/acctgroup id from database.",
@@ -6589,6 +6638,24 @@
       },
       "description": "Response message for the Iam.ListRoles rpc."
     },
+    "v1ListUsageCostsDriftRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "billingInternalId": {
+          "type": "string",
+          "description": "Optional. If empty, returns all billing groups."
+        },
+        "month": {
+          "type": "string",
+          "description": "Optional. If empty, defaults to current UTC month. Format: yyyymm."
+        }
+      },
+      "description": "Request message for the Billing.ListUsageCostsDrift rpc."
+    },
     "v1ListUserRoleMappingsResponse": {
       "type": "object",
       "properties": {
@@ -6925,6 +6992,28 @@
         }
       },
       "description": "Response message for the Iam.UpdateUserRoleMapping rpc."
+    },
+    "v1UsageCostsDrift": {
+      "type": "object",
+      "properties": {
+        "billingInternalId": {
+          "type": "string"
+        },
+        "billingGroupId": {
+          "type": "string"
+        },
+        "snapshot": {
+          "type": "number",
+          "format": "double",
+          "description": "The total costs saved in your invoice."
+        },
+        "current": {
+          "type": "number",
+          "format": "double",
+          "description": "The current total costs."
+        }
+      },
+      "description": "Streaming response message for the Billing.ListUsageCostsDrift rpc."
     }
   }
 }
