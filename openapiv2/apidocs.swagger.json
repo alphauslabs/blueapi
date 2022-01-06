@@ -2387,55 +2387,6 @@
         ]
       }
     },
-    "/v1/{vendor}/billinggroups/usagecostsdrift:read": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Returns the difference, if any, between the usage costs in your invoice and the latest\ncalculated usage costs. Only available in Ripple.",
-        "operationId": "Billing_ListUsageCostsDrift",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1UsageCostsDrift"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1UsageCostsDrift"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ListUsageCostsDriftRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
-      }
-    },
     "/v1/{vendor}/budget/{budgetId}": {
       "delete": {
         "summary": "Removes monthly budget for the account/acctgroup id from database.",
@@ -3557,6 +3508,55 @@
         ],
         "tags": [
           "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/usagecostsdrift:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Returns the difference, if any, between the usage costs in your invoice and the latest\ncalculated usage costs. Only available in Ripple.",
+        "operationId": "Billing_ListUsageCostsDrift",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1UsageCostsDrift"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1UsageCostsDrift"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListUsageCostsDriftRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
         ]
       }
     },
