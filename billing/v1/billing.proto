@@ -57,8 +57,8 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Returns the difference, if any, between the usage costs in your invoice and the latest
-  // calculated usage costs. Only available in Ripple.
+  // WORK-IN-PROGRESS: Returns a list of accounts that have been updated after invoice along
+  // with the differences in costs, if any. Only available in Ripple.
   rpc ListUsageCostsDrift(ListUsageCostsDriftRequest) returns (stream UsageCostsDrift) {
     option (google.api.http) = {
       post: "/v1/{vendor}/usagecostsdrift:read"
@@ -280,13 +280,13 @@ message ListUsageCostsDriftRequest {
 message UsageCostsDrift {
   string billingInternalId = 1;
   string billingGroupId = 2;
+  string account = 3;
 
   // The total costs saved in your invoice.
-  double snapshot = 3;
+  double snapshot = 4;
 
   // The current total costs.
-  double current = 4;
+  double current = 5;
 
-  double diff = 5;
-  bool drift = 6;
+  double diff = 6;
 }
