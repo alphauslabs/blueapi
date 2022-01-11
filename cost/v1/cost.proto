@@ -124,10 +124,11 @@ service Cost {
     };
   }
 
-  // WORK-IN-PROGRESS: Gets the vendor cost calculator's current calculation status.
-  rpc GetCalculatorRunStatus(GetCalculatorRunStatusRequest) returns (GetCalculatorRunStatusResponse) {
+  // WORK-IN-PROGRESS: Lists the vendor cost calculator's queued accounts for calculation.
+  rpc ListCalculatorRunningAccounts(ListCalculatorRunningAccountsRequest) returns (stream ListCalculatorRunningAccountsResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/calculator/runstatus"
+      post: "/v1/{vendor}/calculator/running:read"
+      body: "*"
     };
   }
 
@@ -449,8 +450,8 @@ message DeleteAccountRequest {
   string id = 2;
 }
 
-// Request message for the Cost.GetCalculatorRunStatus rpc.
-message GetCalculatorRunStatusRequest {
+// Request message for the Cost.ListCalculatorRunningAccounts rpc.
+message ListCalculatorRunningAccountsRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
@@ -459,26 +460,24 @@ message GetCalculatorRunStatusRequest {
   string month = 2;
 }
 
-// Response message for the Cost.GetCalculatorRunStatus rpc.
-message GetCalculatorRunStatusResponse {
-  message AwsRunStatus {
+// Response message for the Cost.ListCalculatorRunningAccounts rpc.
+message ListCalculatorRunningAccountsResponse {
+  message AwsRunningAccount {
     // The queried month. Format is yyyy-mm.
     string month = 1;
 
-    message Running {
-      // The AWS account that is actively processing.
-      string account = 1;
+    // The AWS account that is actively processing.
+    string account = 2;
 
-      // The dates the account is processing for.
-      repeated string dates = 2;
-    }
+    // The target date the account is processing for.
+    string date = 3;
 
-    // List of accounts that are still actively processing.
-    repeated Running active = 2;
+    // The timestamp when the calculation has started.
+    string started = 4;
   }
 
-  // AWS-specific calculator run status.
-  AwsRunStatus aws = 1;
+  // AWS-specific entry.
+  AwsRunningAccount aws = 1;
 }
 
 // Request message for the Cost.GetCalculatorConfig rpc.

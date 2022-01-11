@@ -2654,15 +2654,24 @@
         ]
       }
     },
-    "/v1/{vendor}/calculator/runstatus": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Gets the vendor cost calculator's current calculation status.",
-        "operationId": "Cost_GetCalculatorRunStatus",
+    "/v1/{vendor}/calculator/running:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Lists the vendor cost calculator's queued accounts for calculation.",
+        "operationId": "Cost_ListCalculatorRunningAccounts",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response.(streaming responses)",
             "schema": {
-              "$ref": "#/definitions/v1GetCalculatorRunStatusResponse"
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1ListCalculatorRunningAccountsResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1ListCalculatorRunningAccountsResponse"
             }
           },
           "default": {
@@ -2681,11 +2690,12 @@
             "type": "string"
           },
           {
-            "name": "month",
-            "description": "Optional. The UTC month to query. Defaults to current month if empty.\nFormat is `yyyymm`. For example, June 2021 will be `202106`.",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListCalculatorRunningAccountsRequest"
+            }
           }
         ],
         "tags": [
@@ -3656,43 +3666,32 @@
         }
       }
     },
-    "AwsRunStatusRunning": {
+    "IdentityProvidersamlInfo": {
       "type": "object",
       "properties": {
-        "account": {
-          "type": "string",
-          "description": "The AWS account that is actively processing."
-        },
-        "dates": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "The dates the account is processing for."
+        "metadata": {
+          "type": "string"
         }
       }
     },
-    "GetCalculatorRunStatusResponseAwsRunStatus": {
+    "ListCalculatorRunningAccountsResponseAwsRunningAccount": {
       "type": "object",
       "properties": {
         "month": {
           "type": "string",
           "description": "The queried month. Format is yyyy-mm."
         },
-        "active": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AwsRunStatusRunning"
-          },
-          "description": "List of accounts that are still actively processing."
-        }
-      }
-    },
-    "IdentityProvidersamlInfo": {
-      "type": "object",
-      "properties": {
-        "metadata": {
-          "type": "string"
+        "account": {
+          "type": "string",
+          "description": "The AWS account that is actively processing."
+        },
+        "date": {
+          "type": "string",
+          "description": "The target date the account is processing for."
+        },
+        "started": {
+          "type": "string",
+          "description": "The timestamp when the calculation has started."
         }
       }
     },
@@ -6100,16 +6099,6 @@
       },
       "description": "Response message for the Cost.GetCalculatorConfig rpc."
     },
-    "v1GetCalculatorRunStatusResponse": {
-      "type": "object",
-      "properties": {
-        "aws": {
-          "$ref": "#/definitions/GetCalculatorRunStatusResponseAwsRunStatus",
-          "description": "AWS-specific calculator run status."
-        }
-      },
-      "description": "Response message for the Cost.GetCalculatorRunStatus rpc."
-    },
     "v1GetCostReductionRequest": {
       "type": "object",
       "properties": {
@@ -6603,6 +6592,30 @@
         }
       },
       "description": "Response message for the Cost.ListCalculationsHistory rpc."
+    },
+    "v1ListCalculatorRunningAccountsRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "month": {
+          "type": "string",
+          "description": "Optional. The UTC month to query. Defaults to current month if empty.\nFormat is `yyyymm`. For example, June 2021 will be `202106`."
+        }
+      },
+      "description": "Request message for the Cost.ListCalculatorRunningAccounts rpc."
+    },
+    "v1ListCalculatorRunningAccountsResponse": {
+      "type": "object",
+      "properties": {
+        "aws": {
+          "$ref": "#/definitions/ListCalculatorRunningAccountsResponseAwsRunningAccount",
+          "description": "AWS-specific entry."
+        }
+      },
+      "description": "Response message for the Cost.ListCalculatorRunningAccounts rpc."
     },
     "v1ListIdentityProvidersResponse": {
       "type": "object",
