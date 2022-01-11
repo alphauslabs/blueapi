@@ -3656,6 +3656,19 @@
         }
       }
     },
+    "AwsStatusRunning": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string",
+          "description": "The AWS account that is actively processing."
+        },
+        "date": {
+          "type": "string",
+          "description": "The date the account is processing for."
+        }
+      }
+    },
     "GetCalculatorStatusResponseAwsStatus": {
       "type": "object",
       "properties": {
@@ -3663,14 +3676,12 @@
           "type": "string",
           "description": "The queried month. Format is yyyy-mm."
         },
-        "lastCompleted": {
-          "type": "string",
-          "description": "The last timestamp in UTC of the completed calculation at org-level for the\nqueried month. Format is RFC3339. Note that these calculations are not the same\nas the invoice calculations you manually request every month; these are the\ndaily calculations in response to daily CUR updates, which provides data to\nyour daily graphs, reports, and daily budget alerts. An empty value means\ncalculations hasn't started yet for the queried month."
-        },
-        "currentProgress": {
-          "type": "number",
-          "format": "double",
-          "description": "Calculation completion state in percent, i.e. 70 means 70%. Any value other\nthan 100 means there is still an ongoing calculation, otherwise, this field\nis set to 100. The percentage value means the number of AWS accounts completed\nover the total accounts under the organization for the given month."
+        "active": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AwsStatusRunning"
+          },
+          "description": "List of accounts that are still actively processing."
         }
       }
     },
