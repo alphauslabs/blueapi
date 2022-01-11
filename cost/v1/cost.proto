@@ -124,7 +124,8 @@ service Cost {
     };
   }
 
-  // Lists the vendor cost calculator's queued accounts for calculation.
+  // Lists the vendor calculator's queued accounts for calculation. If result is non-empty, it means calculation is still in progress
+  // for the returned accounts. Only available in Ripple.
   rpc ListCalculatorRunningAccounts(ListCalculatorRunningAccountsRequest) returns (stream ListCalculatorRunningAccountsResponse) {
     option (google.api.http) = {
       post: "/v1/{vendor}/calculator/running:read"
