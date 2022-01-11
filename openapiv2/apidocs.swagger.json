@@ -2654,15 +2654,15 @@
         ]
       }
     },
-    "/v1/{vendor}/calculator/status": {
+    "/v1/{vendor}/calculator/runstatus": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Gets the vendor cost calculator's current status.",
-        "operationId": "Cost_GetCalculatorStatus",
+        "summary": "WORK-IN-PROGRESS: Gets the vendor cost calculator's current calculation status.",
+        "operationId": "Cost_GetCalculatorRunStatus",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetCalculatorStatusResponse"
+              "$ref": "#/definitions/v1GetCalculatorRunStatusResponse"
             }
           },
           "default": {
@@ -3656,14 +3656,14 @@
         }
       }
     },
-    "AwsStatusRunning": {
+    "AwsRunStatusRunning": {
       "type": "object",
       "properties": {
         "account": {
           "type": "string",
           "description": "The AWS account that is actively processing."
         },
-        "date": {
+        "dates": {
           "type": "array",
           "items": {
             "type": "string"
@@ -3672,7 +3672,7 @@
         }
       }
     },
-    "GetCalculatorStatusResponseAwsStatus": {
+    "GetCalculatorRunStatusResponseAwsRunStatus": {
       "type": "object",
       "properties": {
         "month": {
@@ -3682,7 +3682,7 @@
         "active": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/AwsStatusRunning"
+            "$ref": "#/definitions/AwsRunStatusRunning"
           },
           "description": "List of accounts that are still actively processing."
         }
@@ -6100,15 +6100,15 @@
       },
       "description": "Response message for the Cost.GetCalculatorConfig rpc."
     },
-    "v1GetCalculatorStatusResponse": {
+    "v1GetCalculatorRunStatusResponse": {
       "type": "object",
       "properties": {
         "aws": {
-          "$ref": "#/definitions/GetCalculatorStatusResponseAwsStatus",
-          "description": "AWS-specific calculator status."
+          "$ref": "#/definitions/GetCalculatorRunStatusResponseAwsRunStatus",
+          "description": "AWS-specific calculator run status."
         }
       },
-      "description": "Response message for the Cost.GetCalculatorStatus rpc."
+      "description": "Response message for the Cost.GetCalculatorRunStatus rpc."
     },
     "v1GetCostReductionRequest": {
       "type": "object",

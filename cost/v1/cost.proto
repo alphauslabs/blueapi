@@ -124,10 +124,10 @@ service Cost {
     };
   }
 
-  // WORK-IN-PROGRESS: Gets the vendor cost calculator's current status.
-  rpc GetCalculatorStatus(GetCalculatorStatusRequest) returns (GetCalculatorStatusResponse) {
+  // WORK-IN-PROGRESS: Gets the vendor cost calculator's current calculation status.
+  rpc GetCalculatorRunStatus(GetCalculatorRunStatusRequest) returns (GetCalculatorRunStatusResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/calculator/status"
+      get: "/v1/{vendor}/calculator/runstatus"
     };
   }
 
@@ -449,8 +449,8 @@ message DeleteAccountRequest {
   string id = 2;
 }
 
-// Request message for the Cost.GetCalculatorStatus rpc.
-message GetCalculatorStatusRequest {
+// Request message for the Cost.GetCalculatorRunStatus rpc.
+message GetCalculatorRunStatusRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
@@ -459,9 +459,9 @@ message GetCalculatorStatusRequest {
   string month = 2;
 }
 
-// Response message for the Cost.GetCalculatorStatus rpc.
-message GetCalculatorStatusResponse {
-  message AwsStatus {
+// Response message for the Cost.GetCalculatorRunStatus rpc.
+message GetCalculatorRunStatusResponse {
+  message AwsRunStatus {
     // The queried month. Format is yyyy-mm.
     string month = 1;
 
@@ -470,15 +470,15 @@ message GetCalculatorStatusResponse {
       string account = 1;
 
       // The dates the account is processing for.
-      repeated string date = 2;
+      repeated string dates = 2;
     }
 
     // List of accounts that are still actively processing.
     repeated Running active = 2;
   }
 
-  // AWS-specific calculator status.
-  AwsStatus aws = 1;
+  // AWS-specific calculator run status.
+  AwsRunStatus aws = 1;
 }
 
 // Request message for the Cost.GetCalculatorConfig rpc.
