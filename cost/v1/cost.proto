@@ -171,7 +171,7 @@ service Cost {
   // Reads the usage-based cost details of an organization (Ripple) or billing group (Wave).
   // At the moment, the supported {vendor} is 'aws'. If datetime range parameters are
   // not set, month-to-date (current month) will be returned.
-  rpc ReadCosts (ReadCostsRequest) returns (stream CostItem) {
+  rpc ReadCosts(ReadCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costs:read"
       body: "*"
@@ -182,7 +182,7 @@ service Cost {
   // This API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax,
   // Upfront Fees, etc. At the moment, the supported {vendor} is 'aws'. If datetime
   // range parameters are not set, month-to-date (current month) will be returned.
-  rpc ReadAdjustments (ReadAdjustmentsRequest) returns (stream CostItem) {
+  rpc ReadAdjustments(ReadAdjustmentsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/adjustments:read"
       body: "*"
@@ -191,7 +191,7 @@ service Cost {
 
   // Reads the usage-based tag costs of a billing group. At the moment, the supported {vendor} is 
   // 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
-  rpc ReadTagCosts (ReadTagCostsRequest) returns (stream CostItem) {
+  rpc ReadTagCosts(ReadTagCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/tagcosts:read"
       body: "*"
@@ -200,7 +200,7 @@ service Cost {
 
   // Reads the usage-based non tag costs of a billing group. At the moment, the supported {vendor} is 
   // 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
-  rpc ReadNonTagCosts (ReadNonTagCostsRequest) returns (stream CostItem) {
+  rpc ReadNonTagCosts(ReadNonTagCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/nontagcosts:read"
       body: "*"
@@ -607,6 +607,10 @@ message ReadCostsRequestAwsOptions {
   // You can also use `groupByColumns` while setting this to true. If `groupByColumns` is empty,
   // the default grouping is `productCode`.
   bool groupByMonth = 2;
+
+  // WORK-IN-PROGRESS: Optional. If set to true, group all input accounts into one. Valid only if
+  // `groupByMonth` is true.
+  bool groupAccounts = 8;
 
   // Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more
   // information on each filter item. Multiple filter items will use the logical 'or' operator,
