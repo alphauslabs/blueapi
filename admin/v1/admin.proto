@@ -190,6 +190,9 @@ message GetDefaultCostAccessTemplateUrlResponse {
 
   // The AWS account that will receive the access. Do not change.
   string principal = 4;
+
+  // The external id for this role. Do not change.
+  string externalId = 5;
 }
 
 // Request message for the Admin.ListDefaultCostAccess rpc.
@@ -209,20 +212,23 @@ message DefaultCostAccess {
   // The role ARN that provides the cross-account access permissions.
   string roleArn = 2;
 
+  // The external id for this role.
+  string externalId = 3;
+
   // The id of the CloudFormation stack deployed in the target account.
-  string stackId = 3;
+  string stackId = 4;
 
   // The region where the stack is deployed.
-  string stackRegion = 4;
+  string stackRegion = 5;
 
   // The latest template used to deploy the stack.
-  string templateUrl = 5;
+  string templateUrl = 6;
 
   // This can be `latest`, `outdated`, or some error information.
-  string status = 6;
+  string status = 7;
 
   // The last updated timestamp, RFC3339 UTC.
-  string lastUpdated = 7;
+  string lastUpdated = 8;
 }
 
 // Request message for the Admin.CreateDefaultCostAccess rpc.
