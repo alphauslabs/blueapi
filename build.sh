@@ -28,6 +28,17 @@ done
 echo "Creating Python package files..."
 find generated/py/alphausblue/. -type d -exec touch {}/__init__.py \;
 
+echo "Generating grpc web files..."
+mkdir -p generated/web/grpc
+protoc -I . \
+  --js_out=import_style=commonjs,binary:./generated/web/grpc \
+  --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./generated/web/grpc \
+  ./cost/v1/*.proto \
+  ./api/*/*.proto \
+  ./api/*.proto \
+  ./google/*/*.proto \
+  ./protoc-gen-openapiv2/options/*.proto
+
 echo "Generating OpenAPI docs..."
 protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true --openapiv2_opt allow_merge=true \
        ./org/v1/*.proto \

@@ -15,6 +15,7 @@ $ go get -u -v google.golang.org/protobuf/cmd/protoc-gen-go \
     github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
     github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
 ```
+* The [protoc-gen-grpc-web](https://github.com/grpc/grpc-web/releases) tool
 * The [buf](https://docs.buf.build/installation) tool
 
 Then run:
