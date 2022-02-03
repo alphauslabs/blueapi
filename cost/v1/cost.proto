@@ -168,6 +168,17 @@ service Cost {
     };
   }
 
+  // WORK-IN-PROGRESS: Reads the available cost attributes of an organization (Ripple) or billing group (Wave).
+  // Similar to the `ReadCosts` API but without the aggregated usages and costs.
+  // At the moment, the supported {vendor} is 'aws'. If datetime range parameters are
+  // not set, month-to-date (current month) will be returned.
+  rpc ReadCostAttributes(ReadCostAttributesRequest) returns (stream CostAttributeItem) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/costattrs:read"
+      body: "*"
+    };
+  }
+
   // Reads the usage-based cost details of an organization (Ripple) or billing group (Wave).
   // At the moment, the supported {vendor} is 'aws'. If datetime range parameters are
   // not set, month-to-date (current month) will be returned.
@@ -569,6 +580,50 @@ message ListCalculationsHistoryAwsResponse {
 // Response message for the Cost.ListCalculationsHistory rpc.
 message ListCalculationsHistoryResponse {
   ListCalculationsHistoryAwsResponse aws = 1;
+}
+
+// Request message for the Cost.ReadCostAttributes rpc.
+message ReadCostAttributesRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Optional. If set, reads the cost attributes of this group. Only valid for Ripple
+  // users. Implied as the parent billing group for Wave(Pro) users.
+  //
+  // For AWS Ripple, only billing internal ids are supported at the moment. Overriden when
+  // `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read
+  // the cost attributes of the whole organization. Optional for AWS Wave(Pro).
+  string groupId = 2;
+
+  // Optional. If set, reads the cost attributes of this account.
+  //
+  // For AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the
+  // cost attributes of the whole organization.
+  string accountId = 3;
+
+  // Optional. The UTC date to start streaming data from. If not set, the first day of the
+  // current month will be used. Format: yyyymmdd. The oldest supported date is 2020-01-01.
+  string startTime = 4;
+
+  // Optional. The UTC date to end the streaming data. If not set, current date will be
+  // used. Format: `yyyymmd`.
+  string endTime = 5;
+
+  message AwsOptions {
+    // Optional. A comma-separated list of dimensions to query. Valid values
+    // are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`,
+    // `operation`, `invoiceId`, `description`, `resourceId`, `tags`, and `costCategories`.
+    // Sequence doesn't matter. An empty value implies all attributes will be returned.
+    string dimensions = 1;
+  }
+
+  // Optional. Valid only for the `aws` vendor. AWS-specific options.
+  AwsOptions awsOptions = 6;
+}
+
+// Response message for the Cost.ReadCostAttributes rpc.
+message CostAttributeItem {
+  api.aws.CostAttribute aws = 1;
 }
 
 // A map of "key:value" column filters. Dependent on `groupByColumns` and/or `groupByMonth`.
