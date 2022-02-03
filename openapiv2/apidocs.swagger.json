@@ -3758,7 +3758,7 @@
       "properties": {
         "dimensions": {
           "type": "string",
-          "description": "Optional. A comma-separated list of dimensions to query. Valid values\nare `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`,\n`operation`, `invoiceId`, `description`, `resourceId`, `tags`, and `costCategories`.\nSequence doesn't matter. An empty value implies all attributes will be returned."
+          "description": "Optional. A comma-separated list of dimensions to query. Valid values are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `invoiceId`, `description`, `resourceId`, `tags`, and `costCategories`. Sequence doesn't matter. An empty value implies all attributes will be returned."
         }
       }
     },
@@ -6889,19 +6889,19 @@
         },
         "groupId": {
           "type": "string",
-          "description": "Optional. If set, reads the cost attributes of this group. Only valid for Ripple\nusers. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when\n`accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read\nthe cost attributes of the whole organization. Optional for AWS Wave(Pro)."
+          "description": "Optional. If set, reads the cost attributes of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the cost attributes of the whole organization. Optional for AWS Wave(Pro)."
         },
         "accountId": {
           "type": "string",
-          "description": "Optional. If set, reads the cost attributes of this account.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the\ncost attributes of the whole organization."
+          "description": "Optional. If set, reads the cost attributes of this account.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the cost attributes of the whole organization."
         },
         "startTime": {
           "type": "string",
-          "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the\ncurrent month will be used. Format: `yyyymmdd`. The oldest supported date is `2020-01-01`."
+          "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `2020-01-01`."
         },
         "endTime": {
           "type": "string",
-          "description": "Optional. The UTC date to end the streaming data. If not set, current date will be\nused. Format: `yyyymmdd`."
+          "description": "Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`."
         },
         "awsOptions": {
           "$ref": "#/definitions/ReadCostAttributesRequestAwsOptions",
@@ -6945,11 +6945,11 @@
       "properties": {
         "groupByColumns": {
           "type": "string",
-          "description": "Optional. A comma-separated list of columns to aggregate the data into. Valid values\nare `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`,\n`operation`, `invoiceId`, `description`, and `resourceId`. A special value of `none`\nis also supported, which means query by date or month per account only.\n\nFor example, if you only want the services and region data, you can set this field to\n`productCode,region`. Your input sequence doesn't matter (although the sequence above\nis recommended) as the actual sequence is already fixed in the return data (see the\ndefinition in https://github.com/alphauslabs/blueapi/blob/main/api/aws/cost.proto),\nwhich is generic to specific, top to bottom. Invalid values are discarded. Excluded\ncolumns will be empty."
+          "description": "Optional. A comma-separated list of columns to aggregate the data into. Valid values are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `invoiceId`, `description`, and `resourceId`. A special value of `none` is also supported, which means query by date or month per account only.\n\nFor example, if you only want the services and region data, you can set this field to `productCode,region`. Your input sequence doesn't matter (although the sequence above is recommended) as the actual sequence is already fixed in the return data (see the definition in https://github.com/alphauslabs/blueapi/blob/main/api/aws/cost.proto), which is generic to specific, top to bottom. Invalid values are discarded. Excluded columns will be empty."
         },
         "groupByMonth": {
           "type": "boolean",
-          "description": "Optional. If set to true, return data grouped by month within the date range. If you want data\nthat is grouped per account per month, set this to `true`, then set `groupByColumns` to `none`.\n\nYou can also use `groupByColumns` while setting this to true. If `groupByColumns` is empty,\nthe default grouping is `productCode`."
+          "description": "Optional. If set to true, return data grouped by month within the date range. If you want data that is grouped per account per month, set this to `true`, then set `groupByColumns` to `none`.\n\nYou can also use `groupByColumns` while setting this to true. If `groupByColumns` is empty, the default grouping is `productCode`."
         },
         "groupAccounts": {
           "type": "boolean",
@@ -6960,14 +6960,14 @@
           "items": {
             "$ref": "#/definitions/v1ReadCostsRequestAwsOptionsFilters"
           },
-          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more\ninformation on each filter item. Multiple filter items will use the logical 'or' operator,\ne.g. filter1 || filter2 || filter3, etc."
+          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
         },
         "tagFilters": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/ReadCostsRequestAwsOptionsTagFilters"
           },
-          "description": "Optional. A list of filtering options specific for tags. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
+          "description": "Optional. A list of filtering options specific for tags. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc. `includeTags` is implied true if this is non-empty. Discarded when `groupByColumns` field is set or if `groupByMonth` is true."
         },
         "includeTags": {
           "type": "boolean",
@@ -6979,11 +6979,11 @@
         },
         "toCurrency": {
           "type": "string",
-          "description": "Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can\nset it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which\ncase, it will use the latest exchange rates provided by https://fixer.io. If you\nprefer a custom exchange rate, you can append the rate to the currency's three-letter\nsymbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate\nshould be against the US dollar (USD)."
+          "description": "Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which case, it will use the latest exchange rates provided by https://fixer.io. If you prefer a custom exchange rate, you can append the rate to the currency's three-letter symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate should be against the US dollar (USD)."
         },
         "forceLatest": {
           "type": "boolean",
-          "description": "Optional. If set to true, always get the up-to-date calculation results. This data\nisn't necessarily in-sync with your invoice data as AWS could still have updated your\nCUR files even after you created your invoices. By default, returned data are those\nthat are always in-sync with your invoices.\n\nThis field is discarded for Wave(Pro) users. You will always get the latest data that\nis in-sync with your invoices."
+          "description": "Optional. If set to true, always get the up-to-date calculation results. This data isn't necessarily in-sync with your invoice data as AWS could still have updated your CUR files even after you created your invoices. By default, returned data are those that are always in-sync with your invoices.\n\nThis field is discarded for Wave(Pro) users. You will always get the latest data that is in-sync with your invoices."
         }
       },
       "description": "AWS-specific options for ReadCostsRequest."
@@ -6998,7 +6998,7 @@
           }
         }
       },
-      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`.\nThe key indicates the column name while the value is the filter value prefixed by either\n\"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or\n\"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the\nlogical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to\n`{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular\nexpression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2\nor AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which\nmeans return all items except `AmazonEC2`."
+      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
     },
     "v1ReadNonTagCostsRequest": {
       "type": "object",
