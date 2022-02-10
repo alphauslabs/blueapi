@@ -4246,9 +4246,6 @@
         "enabled": {
           "type": "boolean"
         },
-        "default": {
-          "type": "boolean"
-        },
         "name": {
           "type": "string"
         },
@@ -4270,7 +4267,12 @@
       "type": "object",
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Indicates whether notification is enabled for this account globally."
+        },
+        "defaultChannel": {
+          "type": "string",
+          "description": "The id of the default notification channel."
         }
       }
     },
@@ -7108,8 +7110,13 @@
     "v1SaveNotificationSettingsRequest": {
       "type": "object",
       "properties": {
-        "isEnabled": {
-          "type": "boolean"
+        "enabled": {
+          "type": "boolean",
+          "description": "Required. Enable or disable notifications globally."
+        },
+        "defaultChannel": {
+          "type": "string",
+          "description": "Optional. If non-empty, set this notification channel id as the default channel."
         }
       },
       "description": "Request message for the Admin.SaveNotificationSettings rpc."
