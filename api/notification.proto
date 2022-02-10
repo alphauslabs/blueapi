@@ -7,31 +7,32 @@ option java_package = "cloud.alphaus.blueapi.api";
 option java_outer_classname = "ApiNotificationProto";
 
 message NotificationSettings {
-    bool isEnabled = 1;
+  bool enabled = 1;
 }
 
 message NotificationChannel {
-    string id = 1;
-    bool enabled = 2;
-    string name = 3;
-    string type = 4;
-    EmailChannel email = 5;
-    SlackChannel slack = 6;
-    MSTeamsChannel msteams = 7;
+  string id = 1;
+  bool enabled = 2;
+  bool default = 3;
+  string name = 4;
+  string type = 5;
+  EmailChannel email = 6;
+  SlackChannel slack = 7;
+  MSTeamsChannel msteams = 8;
 }
 
 message EmailChannel {
-    string format = 1;
-    repeated string recipient = 2;
+  string format = 1;
+  repeated string recipients = 2;
 }
 
 message SlackChannel {
-    string webhookUrl = 1;
-    string channelId = 2;
-    string channel = 3;
-    string configurationUrl = 4;
+  string webhookUrl = 1;
+  string channelId = 2;
+  string channel = 3;
+  string configurationUrl = 4;
 }
 
 message MSTeamsChannel {
-    string webhookUrl = 1;
+  string webhookUrl = 1;
 }

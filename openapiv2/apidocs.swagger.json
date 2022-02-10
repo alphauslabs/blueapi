@@ -148,7 +148,7 @@
     },
     "/admin/v1/aws/xacct/dca": {
       "get": {
-        "summary": "Gets a CloudFormation launch URL for enabling the default cross-account access to your account's cost information based on type.\nSee comments on the type for more information on what each template does.",
+        "summary": "Gets a CloudFormation launch URL for enabling the default cross-account access to your account's cost information based on type. See comments on the type for more information on what each template does.",
         "operationId": "Admin_GetDefaultCostAccessTemplateUrl",
         "responses": {
           "200": {
@@ -167,7 +167,7 @@
         "parameters": [
           {
             "name": "type",
-            "description": "Optional. Valid values are `default`, `s3only`, and `apionly`. Defaults to `default` if empty.\n\n`default` - Template for setting up both CUR export and read-only access to cost information. If selected, you need to\ndeploy this template to `us-east-1` region as CloudFormation only supports the `AWS::CUR::ReportDefinition` in that\nregion at the moment. The target S3 bucket will also be created in that region. If you prefer your S3 bucket to be located\nin a different region, you can use the template from this API by setting the type to `s3only`. After your S3 bucket is\nready, call this API again (type is `default`) and set the `CurS3BucketOption` parameter to `USE_EXISTING`, then set your\nbucket name and region accordingly. This is the default for Ripple, unless specified otherwise.\n\n`apionly` - Template for setting up ready-only access to cost information. Handy if you already have exported your CUR to\nAlphaus through other means (i.e. manual setup). This template is the same as the `default` type but without the CUR\nexport definitions. Although not required, we recommend you to deploy this template to allow us to query your cost-related\ninformation such as Reserved Instances, Saving Plans, etc. through the AWS API. At the moment, we only rely on CUR data\nwhich is a best-effort basis and sometimes not accurate. This is the default for Wave(Pro), unless specified otherwise.\n\n`s3only` - A helper template for creating an S3 bucket to be used for CUR export.\n\nAll templates are publicly available from the reponse link (`templateUrl`) if you want to audit the included permissions.",
+            "description": "Optional. Valid values are `default`, `s3only`, and `apionly`. Defaults to `default` if empty.\n\n`default` - Template for setting up both CUR export and read-only access to cost information. If selected, you need to deploy this template to `us-east-1` region as CloudFormation only supports the `AWS::CUR::ReportDefinition` in that region at the moment. The target S3 bucket will also be created in that region. If you prefer your S3 bucket to be located in a different region, you can use the template from this API by setting the type to `s3only`. After your S3 bucket is ready, call this API again (type is `default`) and set the `CurS3BucketOption` parameter to `USE_EXISTING`, then set your bucket name and region accordingly. This is the default for Ripple, unless specified otherwise.\n\n`apionly` - Template for setting up ready-only access to cost information. Handy if you already have exported your CUR to Alphaus through other means (i.e. manual setup). This template is the same as the `default` type but without the CUR export definitions. Although not required, we recommend you to deploy this template to allow us to query your cost-related information such as Reserved Instances, Saving Plans, etc. through the AWS API. At the moment, we only rely on CUR data which is a best-effort basis and sometimes not accurate. This is the default for Wave(Pro), unless specified otherwise.\n\n`s3only` - A helper template for creating an S3 bucket to be used for CUR export.\n\nAll templates are publicly available from the reponse link (`templateUrl`) if you want to audit the included permissions.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -178,7 +178,7 @@
         ]
       },
       "post": {
-        "summary": "Starts validation of a default cross-account access stack deployment. If successful, the\nIAM role created from the CloudFormation stack will be registered to the target.",
+        "summary": "Starts validation of a default cross-account access stack deployment. If successful, the IAM role created from the CloudFormation stack will be registered to the target.",
         "operationId": "Admin_CreateDefaultCostAccess",
         "responses": {
           "200": {
@@ -273,7 +273,7 @@
         ]
       },
       "delete": {
-        "summary": "Deletes the current default cross-account access role attached to this target account.\nThis does not delete the CloudFormation deployment in your account.",
+        "summary": "Deletes the current default cross-account access role attached to this target account. This does not delete the CloudFormation deployment in your account.",
         "operationId": "Admin_DeleteDefaultCostAccess",
         "responses": {
           "200": {
@@ -303,7 +303,7 @@
         ]
       },
       "put": {
-        "summary": "Starts an update to an existing default cross-account access CloudFormation stack for template changes, if any.\nOnly call this API if the status of your default cross-account access is 'outdated'.",
+        "summary": "Starts an update to an existing default cross-account access CloudFormation stack for template changes, if any. Only call this API if the status of your default cross-account access is 'outdated'.",
         "operationId": "Admin_UpdateDefaultCostAccess",
         "responses": {
           "200": {
@@ -437,7 +437,7 @@
         "parameters": [
           {
             "name": "id",
-            "description": "Required. ID of Notification Channel to delete",
+            "description": "Required. ID of the notification channel to delete.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -467,10 +467,43 @@
         "parameters": [
           {
             "name": "id",
-            "description": "Required. ID of Notification Channel to update",
+            "description": "Required. ID of the notification channel to update.",
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/notification/default": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Creates a default notification channel of type email based on the caller's primary email address.",
+        "operationId": "Admin_CreateDefaultNotificationChannel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotificationChannel"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateDefaultNotificationChannelRequest"
+            }
           }
         ],
         "tags": [
@@ -3866,7 +3899,7 @@
         "format": {
           "type": "string"
         },
-        "recipient": {
+        "recipients": {
           "type": "array",
           "items": {
             "type": "string"
@@ -4213,6 +4246,9 @@
         "enabled": {
           "type": "boolean"
         },
+        "default": {
+          "type": "boolean"
+        },
         "name": {
           "type": "string"
         },
@@ -4233,7 +4269,7 @@
     "apiNotificationSettings": {
       "type": "object",
       "properties": {
-        "isEnabled": {
+        "enabled": {
           "type": "boolean"
         }
       }
@@ -5870,6 +5906,10 @@
       },
       "description": "Request message for the Admin.CreateDefaultCostAccess rpc."
     },
+    "v1CreateDefaultNotificationChannelRequest": {
+      "type": "object",
+      "description": "Request message for the Admin.CreateDefaultNotificationChannel rpc."
+    },
     "v1CreateGroupRootUserRequest": {
       "type": "object",
       "properties": {
@@ -5953,26 +5993,26 @@
       "properties": {
         "name": {
           "type": "string",
-          "title": "Required. Name of Notification Channel"
+          "description": "Required. Name of the notification channel."
         },
         "type": {
           "type": "string",
-          "title": "Required.\nValid values: \"email\", \"slack\", \"msteams\""
+          "description": "Required. Valid values: `email`, `slack`, `msteams`."
         },
         "email": {
           "$ref": "#/definitions/apiEmailChannel",
-          "title": "Required if type=\"email\""
+          "description": "Required if type = `email`."
         },
         "slack": {
           "$ref": "#/definitions/apiSlackChannel",
-          "title": "Required if type=\"slack\""
+          "description": "Required if type = `slack`."
         },
         "msteams": {
           "$ref": "#/definitions/apiMSTeamsChannel",
-          "title": "Required if type=\"msteams\""
+          "description": "Required if type = `msteams`."
         }
       },
-      "title": "Request message for Admin.CreateNotificationChannel rpc"
+      "description": "Request message for the Admin.CreateNotificationChannel rpc."
     },
     "v1CreateOrgRequest": {
       "type": "object",
@@ -6771,7 +6811,7 @@
           }
         }
       },
-      "title": "Response message for Admin.ListNotificationChannels rpc"
+      "description": "Response message for the Admin.ListNotificationChannels rpc."
     },
     "v1ListPermissionsResponse": {
       "type": "object",
@@ -7072,7 +7112,7 @@
           "type": "boolean"
         }
       },
-      "title": "Request message for Admin.SaveNotificationSettings rpc"
+      "description": "Request message for the Admin.SaveNotificationSettings rpc."
     },
     "v1UpdateAccountBudgetRequest": {
       "type": "object",
