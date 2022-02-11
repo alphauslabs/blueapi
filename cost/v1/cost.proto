@@ -154,8 +154,8 @@ service Cost {
     };
   }
 
-  // WORK-IN-PROGRESS: Gets the schedule of your monthly calculations. Only available in Ripple.
-  rpc GetCalculationsSchedule(GetCalculationsScheduleRequest) returns (CalculationsSchedule) {
+  // WORK-IN-PROGRESS: Lists the schedules of your monthly calculations. At the moment, only one schedule is allowed per account. Only available in Ripple.
+  rpc ListCalculationsSchedule(ListCalculationsScheduleRequest) returns (ListCalculationsScheduleResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/calculations/schedule"
     };
@@ -571,10 +571,15 @@ message CalculationsSchedule {
   bool dryRun = 5;
 }
 
-// Request message for the Cost.GetCalculationsSchedule rpc.
-message GetCalculationsScheduleRequest {
+// Request message for the Cost.ListCalculationsSchedule rpc.
+message ListCalculationsScheduleRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
+}
+
+// Response message for the Cost.ListCalculationsSchedule rpc.
+message ListCalculationsScheduleResponse {
+  repeated CalculationsSchedule schedules = 1;
 }
 
 // Request message for the Cost.CreateCalculationsSchedule rpc.
