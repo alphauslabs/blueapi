@@ -155,16 +155,16 @@ service Cost {
   }
 
   // WORK-IN-PROGRESS: Lists the schedules of your monthly calculations. At the moment, only one schedule is allowed per account. Only available in Ripple.
-  rpc ListCalculationsSchedule(ListCalculationsScheduleRequest) returns (ListCalculationsScheduleResponse) {
+  rpc ListCalculationsSchedules(ListCalculationsSchedulesRequest) returns (ListCalculationsSchedulesResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/calculations/schedule"
+      get: "/v1/{vendor}/calculations/schedules"
     };
   }
 
-  // WORK-IN-PROGRESS: Creates a schedule of your monthly calculations.  Only available in Ripple.
+  // WORK-IN-PROGRESS: Creates a schedule to trigger your monthly calculations.  Only available in Ripple.
   rpc CreateCalculationsSchedule(CreateCalculationsScheduleRequest) returns (CalculationsSchedule) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/calculations/schedule"
+      post: "/v1/{vendor}/calculations/schedules"
       body: "*"
     };
   }
@@ -172,7 +172,7 @@ service Cost {
   // WORK-IN-PROGRESS: Deletes the schedule of your monthly calculations. Only available in Ripple.
   rpc DeleteCalculationsSchedule(DeleteCalculationsScheduleRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1/{vendor}/calculations/schedule"
+      delete: "/v1/{vendor}/calculations/schedules/{id}"
     };
   }
 
@@ -555,30 +555,33 @@ message ListCalculationsHistoryResponse {
 }
 
 message CalculationsSchedule {
+  // The schedule id.
+  string id = 1;
+
   // The desired schedule in UTC, using the [cron](https://man7.org/linux/man-pages/man5/crontab.5.html) format.
-  string schedule = 1;
+  string schedule = 2;
 
   // The schedule for the next run in UTC.
-  string nextRun = 2;
+  string nextRun = 3;
 
   // The channel id to use for notifications.
-  string notificationChannel = 3;
+  string notificationChannel = 4;
 
   // If set to true, force calculations to proceed regardless of run status.
-  bool force = 4;
+  bool force = 5;
 
   // If set to true, skips the actual calculations.
-  bool dryRun = 5;
+  bool dryRun = 6;
 }
 
-// Request message for the Cost.ListCalculationsSchedule rpc.
-message ListCalculationsScheduleRequest {
+// Request message for the Cost.ListCalculationsSchedules rpc.
+message ListCalculationsSchedulesRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 }
 
-// Response message for the Cost.ListCalculationsSchedule rpc.
-message ListCalculationsScheduleResponse {
+// Response message for the Cost.ListCalculationsSchedules rpc.
+message ListCalculationsSchedulesResponse {
   repeated CalculationsSchedule schedules = 1;
 }
 
@@ -604,6 +607,9 @@ message CreateCalculationsScheduleRequest {
 message DeleteCalculationsScheduleRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
+
+  // Required. The id to delete. Can be set to either `-` or `*`, which means all.
+  string id = 2;
 }
 
 // Request message for the Cost.ReadCostAttributes rpc.
