@@ -154,6 +154,28 @@ service Cost {
     };
   }
 
+  // WORK-IN-PROGRESS: Gets the schedule of your monthly calculations. Only available in Ripple.
+  rpc GetCalculationsSchedule(GetCalculationsScheduleRequest) returns (CalculationsSchedule) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/calculations/schedule"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Creates a schedule of your monthly calculations.  Only available in Ripple.
+  rpc CreateCalculationsSchedule(CreateCalculationsScheduleRequest) returns (CalculationsSchedule) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/calculations/schedule"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Deletes the schedule of your monthly calculations. Only available in Ripple.
+  rpc DeleteCalculationsSchedule(DeleteCalculationsScheduleRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/{vendor}/calculations/schedule"
+    };
+  }
+
   // Reads the available cost attributes of an organization (Ripple) or billing group (Wave). Similar to the `ReadCosts` API but without the aggregated usages and costs. At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
   rpc ReadCostAttributes(ReadCostAttributesRequest) returns (stream CostAttributeItem) {
     option (google.api.http) = {
@@ -530,6 +552,53 @@ message ListCalculationsHistoryAwsResponse {
 // Response message for the Cost.ListCalculationsHistory rpc.
 message ListCalculationsHistoryResponse {
   ListCalculationsHistoryAwsResponse aws = 1;
+}
+
+message CalculationsSchedule {
+  // The desired schedule in UTC, using the [cron](https://man7.org/linux/man-pages/man5/crontab.5.html) format.
+  string schedule = 1;
+
+  // The schedule for the next run in UTC.
+  string nextRun = 2;
+
+  // The channel id to use for notifications.
+  string notificationChannel = 3;
+
+  // If set to true, force calculations to proceed regardless of run status.
+  bool force = 4;
+
+  // If set to true, skips the actual calculations.
+  bool dryRun = 5;
+}
+
+// Request message for the Cost.GetCalculationsSchedule rpc.
+message GetCalculationsScheduleRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+}
+
+// Request message for the Cost.DeleteCalculationsSchedule rpc.
+message DeleteCalculationsScheduleRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+}
+
+// Request message for the Cost.CreateCalculationsSchedule rpc.
+message CreateCalculationsScheduleRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. The desired schedule in UTC, using the [cron](https://man7.org/linux/man-pages/man5/crontab.5.html) format.
+  string schedule = 2;
+
+  // Optional. The channel id to use for notifications. If not set, your default channel will be used. And if non-existent, an email-type notification channel will be created using your primary email address.
+  string notificationChannel = 3;
+
+  // Optional. If set to true, force calculations to proceed regardless of run status.
+  bool force = 4;
+
+  // Optional. If set to true, skips the actual calculations. Useful as test, or reminder.
+  bool dryRun = 5;
 }
 
 // Request message for the Cost.ReadCostAttributes rpc.
