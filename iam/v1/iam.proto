@@ -64,8 +64,7 @@ service Iam {
     };
   }
   
-  // WORK IN PROGRESS:
-  // Creates a new root user for a billing group or access group.
+  // WORK-IN-PROGRESS: Creates a new root user for a billing group or access group.
   rpc CreateGroupRootUser(CreateGroupRootUserRequest) returns (api.GroupRootUser) {
     option (google.api.http) = {
       post: "/iam/v1/grouprootusers"
@@ -73,42 +72,35 @@ service Iam {
     };
   }
 
-  // WORK IN PROGRESS
-  // Retrieves all the existing group root users asscoiated with the organization.
+  // WORK-IN-PROGRESS: Retrieves all the existing group root users asscoiated with the organization.
   rpc ListGroupRootUsers(ListGroupRootUsersRequest) returns (stream api.GroupRootUser) {
     option (google.api.http) = {
       get: "/iam/v1/grouprootusers"
     };
   }
 
-  // WORK IN PROGRESS:
-  // Retrieves an group root user.
+  // WORK-IN-PROGRESS: Retrieves a group root user.
   rpc GetGroupRootUser(GetGroupRootRequest) returns (api.GroupRootUser) {
     option (google.api.http) = {
       get: "/iam/v1/grouprootusers/{id}"
     };
   }
 
-  // WORK IN PROGRESS
-  // Deletes an existing group root user.
+  // WORK-IN-PROGRESS: Deletes an existing group root user.
   rpc DeleteGroupRootUser(DeleteGroupRootUserRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/iam/v1/grouprootusers/{id}"
     };
   }
 
-  // WORK IN PROGRESS:
-  // Retrieves the features available to a user on an Alphaus product. For a list of
-  // valid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/iam.html.
+  // WORK-IN-PROGRESS: Retrieves the features available to a user on an Alphaus product. For a list of valid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/iam.html.
   rpc GetFeatureFlags(GetFeatureFlagsRequest) returns (api.FeatureFlags) {
     option (google.api.http) = {
       get: "/iam/v1/grouprootusers/{id}/features"
     };
   }
 
-  // WORK IN PROGRESS:
-  // Updates the features available to a user on an Alphaus product. For a list of
-  // valid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/iam.html.
+  // WORK-IN-PROGRESS: Updates the features available to a user on an Alphaus product. For a list of valid feature flags, see our documentation at https://alphauslabs.github.io/blueapi/apis/iam.html.
   rpc UpdateFeatureFlags(UpdateFeatureFlagsRequest) returns (api.FeatureFlags) {
     option (google.api.http) = {
       put: "/iam/v1/grouprootusers/{id}/features"
@@ -138,8 +130,7 @@ service Iam {
     };
   }
 
-  // Lists all permissions based on the input's scope. For reference, supported
-  // permissions can be found on [https://github.com/mobingi/rbac-permissions].
+  // Lists all permissions based on the input's scope. For reference, supported permissions can be found on [https://github.com/mobingi/rbac-permissions].
   rpc ListPermissions(ListPermissionsRequest) returns (ListPermissionsResponse) {
     option (google.api.http) = {
       get: "/iam/v1/permissions"
@@ -153,10 +144,7 @@ service Iam {
     };
   }
 
-  // Creates a role. If your `permissions` list contains an `Admin` entry, all other
-  // entries will be discarded except `Admin`. Roles are root user-level. That means
-  // all roles created by the root user, or any subuser that has permissions to
-  // create roles, are available to all subusers.
+  // Creates a role. If your `permissions` list contains an `Admin` entry, all other entries will be discarded except `Admin`. Roles are root user-level. That means all roles created by the root user, or any subuser that has permissions to create roles, are available to all subusers.
   rpc CreateRole(CreateRoleRequest) returns (api.Role) {
     option (google.api.http) = {
       post: "/iam/v1/roles"
@@ -186,8 +174,7 @@ service Iam {
     };
   }
 
-  // Maps roles to a subuser. You can only map (or attach) up to 5 roles to a user per namespace.
-  // There is no limit for filtering rules per user.
+  // Maps roles to a subuser. You can only map (or attach) up to 5 roles to a user per namespace. There is no limit for filtering rules per user.
   rpc CreateUserRoleMapping(CreateUserRoleMappingRequest) returns (CreateUserRoleMappingResponse) {
     option (google.api.http) = {
       post: "/iam/v1/userroles"
@@ -195,8 +182,7 @@ service Iam {
     };
   }
 
-  // Updates user-to-role mappings. You can only map (or attach) up to 5 roles to a user per namespace.
-  // There is no limit for filtering rules per user.
+  // Updates user-to-role mappings. You can only map (or attach) up to 5 roles to a user per namespace. There is no limit for filtering rules per user.
   rpc UpdateUserRoleMapping(UpdateUserRoleMappingRequest) returns (UpdateUserRoleMappingResponse) {
     option (google.api.http) = {
       put: "/iam/v1/userroles"
@@ -233,8 +219,7 @@ service Iam {
     };
   }
 
-  // Creates an IP filter item for IP blacklisting or whitelisting. At the moment,
-  // this API is only available to root users.
+  // Creates an IP filter item for IP blacklisting or whitelisting. At the moment, this API is only available to root users.
   rpc CreateIpFilter(CreateIpFilterRequest) returns (IpFilter) {
     option (google.api.http) = {
       post: "/iam/v1/ipfilters"
@@ -263,8 +248,7 @@ message GetUserRequest {
 
 // Request message for the Iam.CreateUser rpc.
 message CreateUserRequest {
-  // Required. Min: 4, max: 18, allowed characters: letters, numbers, `_` (underscore),
-  // `.` (period) and `-` (hyphen) characters.
+  // Required. Min: 4, max: 18, allowed characters: letters, numbers, `_` (underscore), `.` (period) and `-` (hyphen) characters.
   string name = 1;
 
   // Required. Minimum of 8 characters.
@@ -285,61 +269,50 @@ message DeleteUserRequest {
 
 // Request message for the Iam.CreateGroupRootUser rpc
 message CreateGroupRootUserRequest {
-
   // The email address of the user being created.
   string email = 1;
 
-  // The password of the user being created. A value will be generated
-  // if not is provided for this field
+  // The password of the user being created. A value will be generated if not is provided for this field
   string password = 2;
 
-  // The ID of the group to which the user will be added. This must
-  // either be a billing group ID or an access group ID.
+  // The ID of the group to which the user will be added. This must either be a billing group ID or an access group ID.
   string groupId = 3;
 
-  // The type of group which is represented by the group ID. Valid values
-  // include "billing_group" or "access_group".
+  // The type of group which is represented by the group ID. Valid values include "billing_group" or "access_group".
   string groupType = 4;
 
-  // This value determines whether the password should be auto-generated
-  // or if the plaintext value received with the request should be used. A
-  // value of "Auto" will result in an auto-generated password whereas a
-  // value of "Custom" will result in the password included with the request
-  // being used.
+  // This value determines whether the password should be auto-generated or if the plaintext value received with the request should be used. A value of "Auto" will result in an auto-generated password whereas a value of "Custom" will result in the password included with the request being used.
   string inputType = 5;
 
-  // The plan associated with the root-user account. Valid values include
-  // "trial", "limited3" and "limited4".
+  // The plan associated with the root-user account. Valid values include "trial", "limited3" and "limited4".
   string plan = 6;
 
-  // Whether or not a notification should be sent to the provided email after
-  // the user has been created.
+  // Whether or not a notification should be sent to the provided email after the user has been created.
   bool emailNotification = 7;
 
-  // A collection of feature flags and whether or not they should be enabled. For
-  // a full list of such flags, see https://alphauslabs.github.io/blueapi/apis/iam.html.
+  // A collection of feature flags and whether or not they should be enabled. For a full list of such flags, see https://alphauslabs.github.io/blueapi/apis/iam.html.
   api.FeatureFlags meta = 8;
 }
 
-// Request message for the Iam.ListGroupRootUsers rpc
+// Request message for the Iam.ListGroupRootUsers rpc.
 message ListGroupRootUsersRequest {}
 
-// Request message for the Iam.GetGroupRootUser rpc
+// Request message for the Iam.GetGroupRootUser rpc.
 message GetGroupRootRequest {
   string id = 1;
 }
 
-// Request message for the Iam.DeleteGroupRootUser rpc
+// Request message for the Iam.DeleteGroupRootUser rpc.
 message DeleteGroupRootUserRequest {
   string id = 1;
 }
 
-// Request message for the Iam.GetUpdateFeatureFlags rpc
+// Request message for the Iam.GetUpdateFeatureFlags rpc.
 message GetFeatureFlagsRequest {
   string id = 1;
 }
 
-// Request message for the Iam.UpdateFeatureFlags rpc
+// Request message for the Iam.UpdateFeatureFlags rpc.
 message UpdateFeatureFlagsRequest {
   string id = 1;
   api.FeatureFlags featureFlags = 2;
@@ -362,9 +335,7 @@ message DeleteApiClientRequest {
 
 // Request message for the Iam.ListPermissions rpc.
 message ListPermissionsRequest {
-  // Optional. The subuser to query. If empty (default), query all available permissions.
-  // If set to a valid subuser, query that subuser's permissions, if allowed. You can
-  // also set this field to `me` to query your own permissions.
+  // Optional. The subuser to query. If empty (default), query all available permissions. If set to a valid subuser, query that subuser's permissions, if allowed. You can also set this field to `me` to query your own permissions.
   string subUser = 1;
 }
 
@@ -386,10 +357,7 @@ message ListRolesResponse {
 
 // Request message for the Iam.CreateRole rpc.
 message CreateRoleRequest {
-  // Required. The name of the role to create. Role names should have at least 6
-  // characters in length and 32 characters maximum. It should also be alphanumeric.
-  // Hyphens and underscores are allowed in between. The regular expression used
-  // for validation is `^[A-Za-z0-9][A-Za-z0-9_-]*[A-Za-z0-9]$`.
+  // Required. The name of the role to create. Role names should have at least 6 characters in length and 32 characters maximum. It should also be alphanumeric. Hyphens and underscores are allowed in between. The regular expression used for validation is `^[A-Za-z0-9][A-Za-z0-9_-]*[A-Za-z0-9]$`.
   string name = 1;
 
   // Required. The namespace where this role will belong.
@@ -460,8 +428,7 @@ message UpdateUserRoleMappingRequest {
   // Optional. The subuser to map the roles. Defaults to caller if not set.
   string subUser = 1;
 
-  // Required. The roles to map to the user. Limited to 5 items. Setting `role` to
-  // empty will remove the mapping.
+  // Required. The roles to map to the user. Limited to 5 items. Setting `role` to empty will remove the mapping.
   repeated MapRole roles = 2;
 }
 
@@ -511,17 +478,13 @@ message DeleteIdentityProviderRequest {
 }
 
 message IpFilter {
-  // IP filter item id. Note that this name is transcient and is not fixed. However,
-  // you can use any of its permutations to endpoints that accept it, such as
-  // the `DELETE:/iam/v?/ipfilters/{id}` endpoint, without issues.
+  // IP filter item id. Note that this name is transcient and is not fixed. However, you can use any of its permutations to endpoints that accept it, such as the `DELETE:/iam/v?/ipfilters/{id}` endpoint, without issues.
   string id = 1;
 
   // Can be `global`, `rootuser`, or `subuser`.
   string scope = 2;
 
-  // The target of the filter. If global scope, this is usually empty.
-  // Rootuser name for rootuser scope, and subuser name for subuser scope.
-  // For subuser targets, format is `rootuser/subuser`.
+  // The target of the filter. If global scope, this is usually empty. Rootuser name for rootuser scope, and subuser name for subuser scope. For subuser targets, format is `rootuser/subuser`.
   string target = 3;
 
   // The type of IP filter. It could be `whitelist` or `blacklist`.
@@ -536,19 +499,16 @@ message ListIpFiltersRequest {}
 
 // Request message for the Iam.CreateIpFilter rpc.
 message CreateIpFilterRequest {
-  // Required. The IP input to filter, either blacklist or whitelist. Should be in
-  // CIDR format (i.e. 1.2.3.4/32).
+  // Required. The IP input to filter, either blacklist or whitelist. Should be in CIDR format (i.e. `1.2.3.4/32`).
   string value = 1;
 
   // Optional. Can be `whitelist` or `blacklist`. Defaults to `blacklist` if empty.
   string type = 2;
 
-  // Optional. If `rootUser` is valid and `subUser` is empty, filter is for this rootuser.
-  // If both `rootUser` and `subUser` inputs are empty, filter is at global scope.
+  // Optional. If `rootUser` is valid and `subUser` is empty, filter is for this rootuser. If both `rootUser` and `subUser` inputs are empty, filter is at global scope.
   string rootUser = 3;
 
-  // Optional. If `subuser` is valid, filter is for this subuser; `rootUser` value is discarded.
-  // If both `rootUser` and `subUser` inputs are empty, filter is at global scope.
+  // Optional. If `subuser` is valid, filter is for this subuser; `rootUser` value is discarded. If both `rootUser` and `subUser` inputs are empty, filter is at global scope.
   string subUser = 4;
 }
 
