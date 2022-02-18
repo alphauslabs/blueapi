@@ -130,21 +130,21 @@ service Iam {
     };
   }
 
-  // Lists all permissions based on the input's scope. For reference, supported permissions can be found on [https://github.com/mobingi/rbac-permissions].
+  // WORK-IN-PROGRESS: Lists all permissions based on the input's scope. For reference, supported permissions can be found on [https://github.com/mobingi/rbac-permissions].
   rpc ListPermissions(ListPermissionsRequest) returns (ListPermissionsResponse) {
     option (google.api.http) = {
       get: "/iam/v1/permissions"
     };
   }
 
-  // Lists all available roles.
+  // WORK-IN-PROGRESS: Lists all available roles.
   rpc ListRoles(ListRolesRequest) returns (ListRolesResponse) {
     option (google.api.http) = {
       get: "/iam/v1/roles"
     };
   }
 
-  // Creates a role. If your `permissions` list contains an `Admin` entry, all other entries will be discarded except `Admin`. Roles are root user-level. That means all roles created by the root user, or any subuser that has permissions to create roles, are available to all subusers.
+  // WORK-IN-PROGRESS: Creates a role. If your `permissions` list contains an `Admin` entry, all other entries will be discarded except `Admin`. Roles are root user-level. That means all roles created by the root user, or any subuser that has permissions to create roles, are available to all subusers.
   rpc CreateRole(CreateRoleRequest) returns (api.Role) {
     option (google.api.http) = {
       post: "/iam/v1/roles"
@@ -152,7 +152,7 @@ service Iam {
     };
   }
 
-  // Updates a role. If role name is different, rename mapped role name.
+  // WORK-IN-PROGRESS: Updates a role. If role name is different, rename mapped role name.
   rpc UpdateRole(UpdateRoleRequest) returns (api.Role) {
     option (google.api.http) = {
       put: "/iam/v1/roles/{namespace}/{name}"
@@ -160,21 +160,21 @@ service Iam {
     };
   }
 
-  // Deletes a role. Deleting a role will also remove all mappings.
+  // WORK-IN-PROGRESS: Deletes a role. Deleting a role will also remove all mappings.
   rpc DeleteRole(DeleteRoleRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/iam/v1/roles/{namespace}/{name}"
     };
   }
 
-  // Lists roles attached to the caller or the input.
+  // WORK-IN-PROGRESS: Lists roles attached to the caller or the input.
   rpc ListUserRoleMappings(ListUserRoleMappingsRequest) returns (ListUserRoleMappingsResponse) {
     option (google.api.http) = {
       get: "/iam/v1/userroles"
     };
   }
 
-  // Maps roles to a subuser. You can only map (or attach) up to 5 roles to a user per namespace. There is no limit for filtering rules per user.
+  // WORK-IN-PROGRESS: Maps roles to a subuser. You can only map (or attach) up to 5 roles to a user per namespace. There is no limit for filtering rules per user.
   rpc CreateUserRoleMapping(CreateUserRoleMappingRequest) returns (CreateUserRoleMappingResponse) {
     option (google.api.http) = {
       post: "/iam/v1/userroles"
@@ -182,7 +182,7 @@ service Iam {
     };
   }
 
-  // Updates user-to-role mappings. You can only map (or attach) up to 5 roles to a user per namespace. There is no limit for filtering rules per user.
+  // WORK-IN-PROGRESS: Updates user-to-role mappings. You can only map (or attach) up to 5 roles to a user per namespace. There is no limit for filtering rules per user.
   rpc UpdateUserRoleMapping(UpdateUserRoleMappingRequest) returns (UpdateUserRoleMappingResponse) {
     option (google.api.http) = {
       put: "/iam/v1/userroles"
