@@ -1883,48 +1883,6 @@
         ]
       }
     },
-    "/v1/aws/calchistory:read": {
-      "post": {
-        "summary": "Reads the calculation history of all accounts in your billing groups. Only available in Ripple.",
-        "operationId": "Billing_ListAwsCalculationHistory",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1AwsCalculationHistory"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1AwsCalculationHistory"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ListAwsCalculationHistoryRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
-      }
-    },
     "/v1/aws/cur:import": {
       "post": {
         "summary": "Initiates an ondemand import of all registered CUR files. See [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting] for more information.",
@@ -1955,6 +1913,48 @@
         ],
         "tags": [
           "Cost"
+        ]
+      }
+    },
+    "/v1/aws/dailyrunhistory:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Reads the calculation history of all accounts in your billing groups. Only available in Ripple.",
+        "operationId": "Billing_ListAwsDailyRunHistory",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1AwsDailyRunHistory"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1AwsDailyRunHistory"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListAwsDailyRunHistoryRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
         ]
       }
     },
@@ -5580,7 +5580,7 @@
       },
       "description": "Defines the fields associated with a Wave access group."
     },
-    "v1AwsCalculationHistory": {
+    "v1AwsDailyRunHistory": {
       "type": "object",
       "properties": {
         "billingInternalId": {
@@ -5595,13 +5595,13 @@
         "accounts": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1AwsCalculationHistoryAccount"
+            "$ref": "#/definitions/v1AwsDailyRunHistoryAccount"
           }
         }
       },
-      "description": "Streaming response message for the Billing.ListAwsCalculationHistory rpc."
+      "description": "Streaming response message for the Billing.ListAwsDailyRunHistory rpc."
     },
-    "v1AwsCalculationHistoryAccount": {
+    "v1AwsDailyRunHistoryAccount": {
       "type": "object",
       "properties": {
         "accountId": {
@@ -6908,12 +6908,20 @@
       },
       "description": "Response message for the Admin.ListAccountGroups rpc."
     },
-    "v1ListAwsCalculationHistoryRequest": {
+    "v1ListAwsDailyRunHistoryRequest": {
       "type": "object",
       "properties": {
         "month": {
           "type": "string",
           "description": "Optional. If empty, defaults to current UTC month. Format: yyyymm."
+        },
+        "groupId": {
+          "type": "string",
+          "description": "Optional. If set, query for this group id. At the moment, only `billingInternalId`s are supported."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Optional. If set, query for this account id. Overrides `groupId`."
         }
       },
       "description": "Request message for the Billing.ListAwsCalculationHistory rpc."

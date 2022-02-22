@@ -49,10 +49,10 @@ service Billing {
     };
   }
 
-  // Reads the calculation history of all accounts in your billing groups. Only available in Ripple.
-  rpc ListAwsCalculationHistory(ListAwsCalculationHistoryRequest) returns (stream AwsCalculationHistory) {
+  // WORK-IN-PROGRESS: Reads the calculation history of all accounts in your billing groups. Only available in Ripple.
+  rpc ListAwsDailyRunHistory(ListAwsDailyRunHistoryRequest) returns (stream AwsDailyRunHistory) {
     option (google.api.http) = {
-      post: "/v1/aws/calchistory:read"
+      post: "/v1/aws/dailyrunhistory:read"
       body: "*"
     };
   }
@@ -234,8 +234,8 @@ message GetAccessGroupResponse {
   AccessGroup accessGroup = 1;
 }
 
-// Streaming response message for the Billing.ListAwsCalculationHistory rpc.
-message AwsCalculationHistory {
+// Streaming response message for the Billing.ListAwsDailyRunHistory rpc.
+message AwsDailyRunHistory {
   string billingInternalId = 1;
   string billingGroupId = 2;
   string month = 3;
@@ -258,9 +258,15 @@ message AwsCalculationHistory {
 }
 
 // Request message for the Billing.ListAwsCalculationHistory rpc.
-message ListAwsCalculationHistoryRequest {
+message ListAwsDailyRunHistoryRequest {
   // Optional. If empty, defaults to current UTC month. Format: yyyymm.
   string month = 1;
+
+  // Optional. If set, query for this group id. At the moment, only `billingInternalId`s are supported.
+  string groupId = 2;
+
+  // Optional. If set, query for this account id. Overrides `groupId`.
+  string accountId = 3;
 }
 
 // Request message for the Billing.ListUsageCostsDrift rpc.
