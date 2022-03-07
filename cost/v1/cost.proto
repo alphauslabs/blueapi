@@ -177,14 +177,14 @@ service Cost {
   }
 
   // WORK-IN-PROGRESS: Lists the usage-based cost filter condition.
-  rpc ListCostsFilter(ListCostsFilterConditionRequest) returns (ListCostsFilterConditionResponse) {
+  rpc ListCostsFilter(ListCostsFilterRequest) returns (ListCostsFilterResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/costsfilter"
     };
   }
 
   // WORK-IN-PROGRESS: Creates the usage-based cost filter condition.
-  rpc CreateCostsFilter(CreateCostsFilterConditionRequest) returns (CreateCostsFilterConditionResponse) {
+  rpc CreateCostsFilter(CreateCostsFilterRequest) returns (CreateCostsFilterResponse) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costsfilter"
       body: "*"
@@ -192,7 +192,7 @@ service Cost {
   }
 
   // WORK-IN-PROGRESS: Deletes the usage-based cost filter condition.
-  rpc DeleteCostsFilter(DeleteCostsFilterConditionRequest) returns (google.protobuf.Empty) {
+  rpc DeleteCostsFilter(DeleteCostsFilterRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/{vendor}/costsfilter/{filterId}"
     };
@@ -1200,14 +1200,14 @@ message GetBreakevenPointResponse {
 }
 
 
-// Request message for the ListcostsFilterCondition rpc.
-message ListCostsFilterConditionRequest {
+// Request message for the ListcostsFilter rpc.
+message ListCostsFilterRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 }
 
-// Response message for the ListcostsFilterCondition rpc.
-message ListCostsFilterConditionResponse {
+// Response message for the ListcostsFilter rpc.
+message ListCostsFilterResponse {
   string filterId = 1;
   string vendor = 2;
   repeated string accounts = 3;
@@ -1217,8 +1217,8 @@ message ListCostsFilterConditionResponse {
   repeated string resources = 7;
 }
 
-// Request message for the CreateCostsFilterCondition rpc.
-message CreateCostsFilterConditionRequest {
+// Request message for the CreateCostsFilter rpc.
+message CreateCostsFilterRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
@@ -1238,14 +1238,14 @@ message CreateCostsFilterConditionRequest {
   repeated string resources = 6;
 }
 
-// Response message for the CreateCostsFilterCondition rpc.
-message CreateCostsFilterConditionResponse {
+// Response message for the CreateCostsFilter rpc.
+message CreateCostsFilterResponse {
   // Required. 
   string filterId = 1;
 }
 
-// Request message for the DeleteCostsFilterCondition rpc.
-message DeleteCostsFilterConditionRequest {
+// Request message for the DeleteCostsFilter rpc.
+message DeleteCostsFilterRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
