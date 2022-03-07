@@ -176,6 +176,29 @@ service Cost {
     };
   }
 
+  // WORK-IN-PROGRESS: Lists the usage-based cost filter condition.
+  rpc ListCostsFilter(ListCostsFilterConditionRequest) returns (ListCostsFilterConditionResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/costsfilter"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Creates the usage-based cost filter condition.
+  rpc CreateCostsFilter(CreateCostsFilterConditionRequest) returns (CreateCostsFilterConditionResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/costsfilter"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Deletes the usage-based cost filter condition.
+  rpc DeleteCostsFilter(DeleteCostsFilterConditionRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/{vendor}/costsfilter/{filterId}"
+      body: "*"
+    };
+  }
+
   // Reads the available cost attributes of an organization (Ripple) or billing group (Wave). Similar to the `ReadCosts` API but without the aggregated usages and costs. At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
   rpc ReadCostAttributes(ReadCostAttributesRequest) returns (stream CostAttributeItem) {
     option (google.api.http) = {
@@ -1175,4 +1198,58 @@ message GetBreakevenPointRequest {
 message GetBreakevenPointResponse {
   string orgId = 1;
   api.aws.AwsCostBreakeven awsCostBreakeven = 2;
+}
+
+
+// Request message for the ListcostsFilterCondition rpc.
+message ListCostsFilterConditionRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+}
+
+// Response message for the ListcostsFilterCondition rpc.
+message ListCostsFilterConditionResponse {
+  string filterId = 1;
+  string vendor = 2;
+  repeated string accounts = 3;
+  repeated string services = 4;
+  repeated string crosstags = 5;
+  repeated string costtags = 6;
+  repeated string resources = 7;
+}
+
+// Request message for the CreateCostsFilterCondition rpc.
+message CreateCostsFilterConditionRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Optional. 
+  repeated string accounts = 2;
+
+  // Optional.
+  repeated string services = 3;
+
+  // Optional.
+  repeated string crosstags = 4;
+
+  // Optional.
+  repeated string costtags = 5;
+
+  // Optional.
+  repeated string resources = 6;
+}
+
+// Response message for the CreateCostsFilterCondition rpc.
+message CreateCostsFilterConditionResponse {
+  // Required. 
+  string filterId = 1;
+}
+
+// Request message for the DeleteCostsFilterCondition rpc.
+message DeleteCostsFilterConditionRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. The filterId to delete.
+  string filterId = 2;
 }
