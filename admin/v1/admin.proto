@@ -80,6 +80,21 @@ service Admin {
     };
   }
 
+  // WORK-IN-PROGRESS: Gets a CloudFormation launch URL for enabling CloudWatch metrics streaming on a target account.
+  rpc GetCloudWatchMetricsStreamTemplateUrl(GetCloudWatchMetricsStreamTemplateUrlRequest) returns (GetCloudWatchMetricsStreamTemplateUrlResponse) {
+    option (google.api.http) = {
+      get: "/admin/v1/aws/xacct/cwms"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Starts validation of a CloudWatch Metrics streaming stack deployment.
+  rpc CreateCloudWatchMetricsStream(CreateCloudWatchMetricsStreamRequest) returns (CloudWatchMetricsStream) {
+    option (google.api.http) = {
+      post: "/admin/v1/aws/xacct/cwms"
+      body: "*"
+    };
+  }
+
   // Get notification settings for login user's organization or group.
   rpc GetNotificationSettings(GetNotificationSettingsRequest) returns (api.NotificationSettings) {
     option (google.api.http) = {
@@ -244,7 +259,55 @@ message DeleteDefaultCostAccessRequest {
   string target = 1;
 }
 
-// Request message for then Admin.GetNotificationSettings rpc.
+// Request message for the Admin.GetCloudWatchMetricsStreamTemplateUrl rpc.
+message GetCloudWatchMetricsStreamTemplateUrlRequest {}
+
+// Response message for the Admin.GetCloudWatchMetricsStreamTemplateUrl rpc.
+message GetCloudWatchMetricsStreamTemplateUrlResponse {
+  // The CloudFormation launch url. Open it in your browser.
+  string launchUrl = 1;
+
+  // The latest CloudFormation template. The version is included in the filename.
+  string templateUrl = 2;
+
+  // The default stack name used. Can be modified.
+  string stackName = 3;
+
+  // The external id for this role. Do not change.
+  string externalId = 4;
+}
+
+// Request message for the Admin.CreateCloudWatchMetricsStream rpc.
+message CreateCloudWatchMetricsStreamRequest {
+  // Required. The target AWS account to validate.
+  string target = 1;
+}
+
+// Response message for the Admin.CreateCloudWatchMetricsStream rpc.
+message CloudWatchMetricsStream {
+  // The queried target account.
+  string target = 1;
+
+  // The external id for this role.
+  string externalId = 2;
+
+  // The id of the CloudFormation stack deployed in the target account.
+  string stackId = 3;
+
+  // The region where the stack is deployed.
+  string stackRegion = 4;
+
+  // The latest template used to deploy the stack.
+  string templateUrl = 5;
+
+  // This can be `latest`, `outdated`, or some error information.
+  string status = 6;
+
+  // The last updated timestamp, RFC3339 UTC.
+  string lastUpdated = 7;
+}
+
+// Request message for the Admin.GetNotificationSettings rpc.
 message GetNotificationSettingsRequest {}
 
 // Request message for the Admin.SaveNotificationSettings rpc.
@@ -282,7 +345,7 @@ message CreateNotificationChannelRequest {
 
   // Required if type = `slack`.
   api.SlackChannel slack = 4;
-  
+
   // Required if type = `msteams`.
   api.MSTeamsChannel msteams = 5;
 }
@@ -306,7 +369,7 @@ message UpdateNotificationChannelRequest {
 
   // Required if type = `slack`.
   api.SlackChannel slack = 5;
-  
+
   // Required if type = `msteams`.
   api.MSTeamsChannel msteams = 6;
 }

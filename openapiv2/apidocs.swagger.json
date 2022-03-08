@@ -146,6 +146,60 @@
         ]
       }
     },
+    "/admin/v1/aws/xacct/cwms": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets a CloudFormation launch URL for enabling CloudWatch metrics streaming on a target account.",
+        "operationId": "Admin_GetCloudWatchMetricsStreamTemplateUrl",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCloudWatchMetricsStreamTemplateUrlResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Starts validation of a CloudWatch Metrics streaming stack deployment.",
+        "operationId": "Admin_CreateCloudWatchMetricsStream",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CloudWatchMetricsStream"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateCloudWatchMetricsStreamRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
     "/admin/v1/aws/xacct/dca": {
       "get": {
         "summary": "Gets a CloudFormation launch URL for enabling the default cross-account access to your account's cost information based on type. See comments on the type for more information on what each template does.",
@@ -2968,6 +3022,115 @@
             "schema": {
               "$ref": "#/definitions/v1ReadCostsRequest"
             }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/costsfilter": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Lists the usage-based cost filter condition.",
+        "operationId": "Cost_ListCostsFilter",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListCostsFilterResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Creates the usage-based cost filter condition.",
+        "operationId": "Cost_CreateCostsFilter",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateCostsFilterResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateCostsFilterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/costsfilter/{filterId}": {
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Deletes the usage-based cost filter condition.",
+        "operationId": "Cost_DeleteCostsFilter",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "filterId",
+            "description": "Required. The filterId to delete.",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
@@ -5806,6 +5969,40 @@
       },
       "description": "Request message for the Operations.CancelOperation rpc."
     },
+    "v1CloudWatchMetricsStream": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "The queried target account."
+        },
+        "externalId": {
+          "type": "string",
+          "description": "The external id for this role."
+        },
+        "stackId": {
+          "type": "string",
+          "description": "The id of the CloudFormation stack deployed in the target account."
+        },
+        "stackRegion": {
+          "type": "string",
+          "description": "The region where the stack is deployed."
+        },
+        "templateUrl": {
+          "type": "string",
+          "description": "The latest template used to deploy the stack."
+        },
+        "status": {
+          "type": "string",
+          "description": "This can be `latest`, `outdated`, or some error information."
+        },
+        "lastUpdated": {
+          "type": "string",
+          "description": "The last updated timestamp, RFC3339 UTC."
+        }
+      },
+      "description": "Response message for the Admin.CreateCloudWatchMetricsStream rpc."
+    },
     "v1CostAttributeItem": {
       "type": "object",
       "properties": {
@@ -6069,6 +6266,71 @@
         }
       },
       "description": "Request message for the Cost.CreateCalculationsSchedule rpc."
+    },
+    "v1CreateCloudWatchMetricsStreamRequest": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "Required. The target AWS account to validate."
+        }
+      },
+      "description": "Request message for the Admin.CreateCloudWatchMetricsStream rpc."
+    },
+    "v1CreateCostsFilterRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional."
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional."
+        },
+        "crosstags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional."
+        },
+        "costtags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional."
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional."
+        }
+      },
+      "description": "Request message for the CreateCostsFilter rpc."
+    },
+    "v1CreateCostsFilterResponse": {
+      "type": "object",
+      "properties": {
+        "filterId": {
+          "type": "string",
+          "description": "Required."
+        }
+      },
+      "description": "Response message for the CreateCostsFilter rpc."
     },
     "v1CreateDefaultCostAccessRequest": {
       "type": "object",
@@ -6440,6 +6702,28 @@
         }
       },
       "description": "Response message for the Cost.GetCalculatorConfig rpc."
+    },
+    "v1GetCloudWatchMetricsStreamTemplateUrlResponse": {
+      "type": "object",
+      "properties": {
+        "launchUrl": {
+          "type": "string",
+          "description": "The CloudFormation launch url. Open it in your browser."
+        },
+        "templateUrl": {
+          "type": "string",
+          "description": "The latest CloudFormation template. The version is included in the filename."
+        },
+        "stackName": {
+          "type": "string",
+          "description": "The default stack name used. Can be modified."
+        },
+        "externalId": {
+          "type": "string",
+          "description": "The external id for this role. Do not change."
+        }
+      },
+      "description": "Response message for the Admin.GetCloudWatchMetricsStreamTemplateUrl rpc."
     },
     "v1GetCostReductionRequest": {
       "type": "object",
@@ -6979,6 +7263,48 @@
       },
       "description": "Response message for the Cost.ListCalculatorRunningAccounts rpc."
     },
+    "v1ListCostsFilterResponse": {
+      "type": "object",
+      "properties": {
+        "filterId": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string"
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "crosstags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "costtags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Response message for the ListcostsFilter rpc."
+    },
     "v1ListIdentityProvidersResponse": {
       "type": "object",
       "properties": {
@@ -7214,6 +7540,10 @@
         "forceLatest": {
           "type": "boolean",
           "description": "Optional. If set to true, always get the up-to-date calculation results. This data isn't necessarily in-sync with your invoice data as AWS could still have updated your CUR files even after you created your invoices. By default, returned data are those that are always in-sync with your invoices.\n\nThis field is discarded for Wave(Pro) users. You will always get the latest data that is in-sync with your invoices."
+        },
+        "noCache": {
+          "type": "boolean",
+          "description": "If true, force API to not use cached data."
         }
       },
       "description": "AWS-specific options for ReadCostsRequest."
