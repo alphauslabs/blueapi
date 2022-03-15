@@ -7263,7 +7263,7 @@
       },
       "description": "Response message for the Cost.ListCalculatorRunningAccounts rpc."
     },
-    "v1ListCostsFilterResponse": {
+    "v1ListCostsFilter": {
       "type": "object",
       "properties": {
         "filterId": {
@@ -7303,7 +7303,19 @@
           }
         }
       },
-      "description": "Response message for the ListcostsFilter rpc."
+      "description": "Response message for the ListCostsFilter rpc."
+    },
+    "v1ListCostsFilterResponse": {
+      "type": "object",
+      "properties": {
+        "costsFilter": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ListCostsFilter"
+          }
+        }
+      },
+      "description": "Response message for the ListCostsFilter rpc."
     },
     "v1ListIdentityProvidersResponse": {
       "type": "object",
@@ -7479,7 +7491,7 @@
         },
         "accountId": {
           "type": "string",
-          "description": "Optional. If set, reads the usage-based cost details of this account.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization."
+          "description": "Optional. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization."
         },
         "startTime": {
           "type": "string",
