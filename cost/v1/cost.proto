@@ -1216,13 +1216,20 @@ message ListCostsFilterResponse {
 
 // Response message for the ListCostsFilter rpc.
 message ListCostsFilter {
+  // Required. Filter Id.
   string filterId = 1;
+  // Required. Vendor.
   string vendor = 2;
+  // Required. List of Account Ids.
   repeated string accounts = 3;
+  // Required. List of Service Codes.
   repeated string services = 4;
-  repeated string crosstags = 5;
-  repeated string costtags = 6;
-  repeated string resources = 7;
+  // Required. Not supported
+  map<string, string> crosstags = 5;
+  // Required. Cost Tags
+  map<string, string> costtags = 6;
+  // Required. Resources
+  string resources = 7;
 }
 
 // Request message for the CreateCostsFilter rpc.
@@ -1230,25 +1237,25 @@ message CreateCostsFilterRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
-  // Optional. 
+  // Optional. List of Account Ids.
   repeated string accounts = 2;
 
-  // Optional.
+  // Optional. List of Service Codes.
   repeated string services = 3;
 
-  // Optional.
-  repeated string crosstags = 4;
+  // Optional. Not supported
+  map<string, string> crosstags = 4;
 
-  // Optional.
-  repeated string costtags = 5;
+  // Optional. For example, Set `tag key` and `tag name`, set to `{"tag key":"tag name"}`. To set multiple `{"tag key1":"tag name1", "tag key2":"tag name2"}`
+  map<string, string>  costtags = 5;
 
-  // Optional.
-  repeated string resources = 6;
+  // Optional. For example, to specify a resrouceId, set to "resrouceId1".To specify multiple resourceId, set to  "resourceId1:resourceId2:resourceId3".
+  string resources = 6;
 }
 
 // Response message for the CreateCostsFilter rpc.
 message CreateCostsFilterResponse {
-  // Required. 
+  // Required. Filter Id.
   string filterId = 1;
 }
 
@@ -1257,6 +1264,6 @@ message DeleteCostsFilterRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
-  // Required. The filterId to delete.
+  // Required. Filter Id to delete.
   string filterId = 2;
 }
