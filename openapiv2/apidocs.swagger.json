@@ -3031,7 +3031,7 @@
     },
     "/v1/{vendor}/costsfilter": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Lists the usage-based cost filter condition.",
+        "summary": "Lists the usage-based cost filter condition. Only available in Wave.",
         "operationId": "Cost_ListCostsFilter",
         "responses": {
           "200": {
@@ -3061,7 +3061,7 @@
         ]
       },
       "post": {
-        "summary": "WORK-IN-PROGRESS: Creates the usage-based cost filter condition.",
+        "summary": "Creates the usage-based cost filter condition. Only available in Wave.",
         "operationId": "Cost_CreateCostsFilter",
         "responses": {
           "200": {
@@ -3101,7 +3101,7 @@
     },
     "/v1/{vendor}/costsfilter/{filterId}": {
       "delete": {
-        "summary": "WORK-IN-PROGRESS: Deletes the usage-based cost filter condition.",
+        "summary": "Deletes the usage-based cost filter condition. Only available in Wave.",
         "operationId": "Cost_DeleteCostsFilter",
         "responses": {
           "200": {
@@ -3127,7 +3127,7 @@
           },
           {
             "name": "filterId",
-            "description": "Required. The filterId to delete.",
+            "description": "Required. Filter Id to delete.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -6284,40 +6284,17 @@
           "type": "string",
           "description": "Required. At the moment, only `aws` is supported."
         },
-        "accounts": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Optional."
+        "groupId": {
+          "type": "string",
+          "description": "Optional. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro)."
         },
-        "services": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Optional."
+        "accountId": {
+          "type": "string",
+          "description": "Optional. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization."
         },
-        "crosstags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Optional."
-        },
-        "costtags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Optional."
-        },
-        "resources": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Optional."
+        "awsOptions": {
+          "$ref": "#/definitions/v1ReadCostsRequestAwsOptions",
+          "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
         }
       },
       "description": "Request message for the CreateCostsFilter rpc."
@@ -6327,7 +6304,7 @@
       "properties": {
         "filterId": {
           "type": "string",
-          "description": "Required."
+          "description": "Required. Filter Id."
         }
       },
       "description": "Response message for the CreateCostsFilter rpc."
@@ -7267,40 +7244,24 @@
       "type": "object",
       "properties": {
         "filterId": {
-          "type": "string"
+          "type": "string",
+          "description": "Required. Filter Id."
         },
         "vendor": {
-          "type": "string"
+          "type": "string",
+          "description": "Required. Vendor."
         },
-        "accounts": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "groupId": {
+          "type": "string",
+          "description": "Optional. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro)."
         },
-        "services": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "accountId": {
+          "type": "string",
+          "description": "Optional. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization."
         },
-        "crosstags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "costtags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "resources": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "awsOptions": {
+          "$ref": "#/definitions/v1ReadCostsRequestAwsOptions",
+          "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
         }
       },
       "description": "Response message for the ListCostsFilter rpc."
@@ -7461,11 +7422,11 @@
         },
         "accountId": {
           "type": "string",
-          "description": "Optional. If set, reads the cost attributes of this account.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the cost attributes of the whole organization."
+          "description": "Optional. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the cost attributes of the whole organization."
         },
         "startTime": {
           "type": "string",
-          "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `2020-01-01`."
+          "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20200101`."
         },
         "endTime": {
           "type": "string",
