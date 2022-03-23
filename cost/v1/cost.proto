@@ -176,25 +176,41 @@ service Cost {
     };
   }
 
-  // Lists the usage-based cost filter condition. Only available in Wave.
-  rpc ListCostsFilter(ListCostsFilterRequest) returns (ListCostsFilterResponse) {
+  // Lists the usage-based cost filter condition. Only available in Wave(Pro).
+  rpc ListCostFilters(ListCostFiltersRequest) returns (ListCostFiltersResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/costsfilter"
+      get: "/v1/{vendor}/costfilters"
     };
   }
 
-  // Creates the usage-based cost filter condition. Only available in Wave.
-  rpc CreateCostsFilter(CreateCostsFilterRequest) returns (CreateCostsFilterResponse) {
+  // Creates the usage-based cost filter condition. Only available in Wave(Pro).
+  rpc CreateCostFilters(CreateCostFiltersRequest) returns (CreateCostFiltersResponse) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/costsfilter"
+      post: "/v1/{vendor}/costfilters"
       body: "*"
     };
   }
 
-  // Deletes the usage-based cost filter condition. Only available in Wave.
-  rpc DeleteCostsFilter(DeleteCostsFilterRequest) returns (google.protobuf.Empty) {
+  // Updates the usage-based cost filter condition. Only available in Wave(Pro).
+  rpc UpdateCostFilters(UpdateCostFiltersRequest) returns (UpdateCostFiltersResponse) {
     option (google.api.http) = {
-      delete: "/v1/{vendor}/costsfilter/{filterId}"
+      put: "/v1/{vendor}/costfilters/{filterId}"
+      body: "*"
+    };
+  }
+
+  // Deletes the usage-based cost filter condition. Only available in Wave(Pro).
+  rpc DeleteCostFilters(DeleteCostFiltersRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/{vendor}/costfilters/{filterId}"
+    };
+  }
+
+  // Exports the usage-based cost filter condition. Only available in Wave(Pro).
+  rpc ExportCostFiltersFile(ExportCostFiltersFileRequest) returns (ExportCostFiltersFileResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/costfilters/export/{filterId}"
+      body: "*"
     };
   }
 
@@ -1203,19 +1219,19 @@ message GetBreakevenPointResponse {
 }
 
 
-// Request message for the ListCostsFilter rpc.
-message ListCostsFilterRequest {
+// Request message for the ListCostFilters rpc.
+message ListCostFiltersRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 }
 
-// Response message for the ListCostsFilter rpc.
-message ListCostsFilterResponse {
-  repeated ListCostsFilter costsFilter = 1;
+// Response message for the ListCostFilters rpc.
+message ListCostFiltersResponse {
+  repeated ListCostFilters costFilters = 1;
 }
 
-// Response message for the ListCostsFilter rpc.
-message ListCostsFilter {
+// Response message for the ListCostFilters rpc.
+message ListCostFilters {
   // Required. Filter Id.
   string filterId = 1;
 
@@ -1236,8 +1252,8 @@ message ListCostsFilter {
   ReadCostsRequestAwsOptions awsOptions = 5;
 }
 
-// Request message for the CreateCostsFilter rpc.
-message CreateCostsFilterRequest {
+// Request message for the CreateCostFilters rpc.
+message CreateCostFiltersRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
@@ -1255,17 +1271,69 @@ message CreateCostsFilterRequest {
   ReadCostsRequestAwsOptions awsOptions = 4;
 }
 
-// Response message for the CreateCostsFilter rpc.
-message CreateCostsFilterResponse {
+// Response message for the CreateCostFilters rpc.
+message CreateCostFiltersResponse {
   // Required. Filter Id.
   string filterId = 1;
 }
 
-// Request message for the DeleteCostsFilter rpc.
-message DeleteCostsFilterRequest {
+// Request message for the UpdateCostFilters rpc.
+message UpdateCostFiltersRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Filter Id.
+  string filterId = 2;
+
+  // Optional. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.
+  //
+  // For AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro).
+  string groupId = 3;
+
+  // Optional. You can set it to a single account or a comma-separated list of accounts.
+  //
+  // For AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization.
+  string accountId = 4;
+
+  // Optional. Valid only for the `aws` vendor. AWS-specific options.
+  ReadCostsRequestAwsOptions awsOptions = 5;
+}
+
+// Response message for the UpdateCostFilters rpc.
+message UpdateCostFiltersResponse {
+  // Required. Filter Id.
+  string filterId = 1;
+}
+
+// Request message for the DeleteCostFilters rpc.
+message DeleteCostFiltersRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
   // Required. Filter Id to delete.
   string filterId = 2;
+}
+
+// Request message for the ExportCostFiltersFile rpc.
+message ExportCostFiltersFileRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Filter Id.
+  string filterId = 2;
+
+  // Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20200101`.
+  string startTime = 3;
+
+  // Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmd`.
+  string endTime = 4;
+
+  // Optional. If set to true, return data grouped by month within the date range. If you want data that is grouped per account per month, set this to `true`, then set `groupByColumns` to `none`.
+  bool groupByMonth = 5;
+}
+
+// Response message for the ExportCostFiltersFile rpc.
+message ExportCostFiltersFileResponse {
+  // Required. URL of exported file.
+  string url = 1;
 }
