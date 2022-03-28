@@ -1235,21 +1235,24 @@ message ListCostFilters {
   // Required. Filter Id.
   string filterId = 1;
 
+  // Required. Filter Name.
+  string filterName = 2;
+
   // Required. Vendor.
-  string vendor = 2;
+  string vendor = 3;
 
   // Optional. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.
   //
   // For AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro).
-  string groupId = 3;
+  string groupId = 4;
 
   // Optional. You can set it to a single account or a comma-separated list of accounts.
   //
   // For AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization.
-  string accountId = 4;
+  string accountId = 5;
 
   // Optional. Valid only for the `aws` vendor. AWS-specific options.
-  ReadCostsRequestAwsOptions awsOptions = 5;
+  ReadCostsRequestAwsOptions awsOptions = 6;
 }
 
 // Request message for the CreateCostFilters rpc.
@@ -1257,18 +1260,21 @@ message CreateCostFiltersRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
+  // Required. Filter Name.
+  string filterName = 2;
+
   // Required. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.
   //
   // For AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro).
-  string groupId = 2;
+  string groupId = 3;
 
   // Required. You can set it to a single account or a comma-separated list of accounts.
   //
   // For AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization.
-  string accountId = 3;
+  string accountId = 4;
 
   // Required. Valid only for the `aws` vendor. AWS-specific options.
-  ReadCostsRequestAwsOptions awsOptions = 4;
+  ReadCostsRequestAwsOptions awsOptions = 5;
 }
 
 // Response message for the CreateCostFilters rpc.
@@ -1285,18 +1291,21 @@ message UpdateCostFiltersRequest {
   // Required. Filter Id.
   string filterId = 2;
 
+  // Required. Filter Name.
+  string filterName = 3;
+
   // Required. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.
   //
   // For AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro).
-  string groupId = 3;
+  string groupId = 4;
 
   // Required. You can set it to a single account or a comma-separated list of accounts.
   //
   // For AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization.
-  string accountId = 4;
+  string accountId = 5;
 
   // Required. Valid only for the `aws` vendor. AWS-specific options.
-  ReadCostsRequestAwsOptions awsOptions = 5;
+  ReadCostsRequestAwsOptions awsOptions = 6;
 }
 
 // Response message for the UpdateCostFilters rpc.
