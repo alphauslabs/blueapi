@@ -1,0 +1,280 @@
+syntax = "proto3";
+
+package blueapi.cover.v1;
+
+import "api/cover/user.proto";
+import "api/cover/view.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/cover";
+option java_package = "cloud.alphaus.api.cover";
+option java_outer_classname = "CoverProto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Alphaus Blue: Cover Service";
+    version: "1.0";
+    contact: {
+      name: "Alphaus Blue: Cover Service";
+      url: "https://alphauslabs.github.io/blueapi/apis/cover.html";
+    };
+    license: {
+      name: "License: Apache License 2.0";
+      url: "https://github.com/alphauslabs/blueapi/blob/main/LICENSE";
+    };
+  };
+  external_docs: {
+    url: "https://alphauslabs.github.io/blueapi/apis/cover.html";
+    description: "More about Alphaus Blue: Cover Service";
+  }
+};
+
+// Cover service definition.
+service Cover {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "(ALPHA) Cover API. Base URL: https://api.alphaus.cloud/m/blue/cover"
+    external_docs: {
+      url: "https://github.com/alphauslabs/blueapi/tree/main/cover/";
+      description: "Service definition";
+    }
+  };
+
+  // Invite members to the system
+  rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {
+    option (google.api.http) = {
+      get: "/v1/member/{orgId}/invite"
+    };
+  }
+
+  // Create a member
+  rpc CreateMember(CreateMemberRequest) returns (CreateMemberResponse) {
+    option (google.api.http) = {
+      post: "/v1/member/{orgId}"
+      body: "*"
+    };
+  }
+
+  // Get all the members/subusers of the company
+  rpc GetMembers(GetMembersRequest) returns (GetMembersResponse) {
+    option (google.api.http) = {
+      get: "/v1/member/{orgId}"
+    };
+  }
+
+  // Get the details of the cover user
+  rpc GetMemberDetails(GetMemberDetailsRequest) returns (GetMemberDetailsResponse) {
+    option (google.api.http) = {
+      get: "/v1/member/{orgId}/{userId}"
+    };
+  }
+
+  // Deletes a cover user
+  rpc DeleteMember(DeleteMemberRequest) returns (DeleteMemberResponse) {
+    option (google.api.http) = {
+      delete: "/v1/member/{orgId}/{userId}"
+    };
+  }
+
+  // Trigger reset password from Admin
+  rpc AdminResetPassword(AdminResetPasswordRequest) returns (AdminResetPasswordResponse) {
+    option (google.api.http) = {
+      get: "/v1/member/{orgId}/reset_password/{userId}"
+    };
+  }
+
+  // Reset member's password
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {
+    option (google.api.http) = {
+      post: "/v1/member/{orgId}/reset_password/{userId}"
+      body: "*"
+    };
+  }
+
+  // Get all the views
+  rpc GetViews(GetViewsRequest) returns (GetViewsResponse) {
+    option (google.api.http) = {
+      get: "/v1/view/{orgId}"
+    };
+  }
+
+  // Get the details of the current view
+  rpc GetCurrentView(GetCurrentViewRequest) returns (GetCurrentViewResponse) {
+    option (google.api.http) = {
+      get: "/v1/view/{orgId}/{viewId}"
+    };
+  }
+
+  // Updates the view details
+  rpc UpdateView(UpdateViewRequest) returns (UpdateViewResponse) {
+    option (google.api.http) = {
+      put: "/v1/view/{orgId}/{viewId}"
+      body: "*"
+    };
+  }
+
+  // Deletes a view
+  rpc DeleteView(DeleteViewRequest) returns (DeleteViewResponse) {
+    option (google.api.http) = {
+      delete: "/v1/view/{orgId}/{viewId}"
+    };
+  }
+}
+
+// Request message for InviteMember
+message InviteMemberRequest {
+  string orgId = 1;
+  string email = 2;
+}
+
+// Response message for InviteMember
+message InviteMemberResponse {
+  string orgId = 1;
+  string email = 2;
+}
+
+// Request message for CreateMember
+message CreateMemberRequest {
+  string orgId = 1;
+  string email = 2;
+  string password = 3;
+  string username = 4;
+}
+
+// Response message for CreateMember
+message CreateMemberResponse {
+  string orgId = 1;
+  string userId = 2;
+  string email = 3;
+}
+
+// Request message for GetMembers
+message GetMembersRequest {
+  // Required. Organization Id.
+  string orgId = 1;
+}
+
+// Response message for GetMembers
+message GetMembersResponse {
+  string orgId = 1;
+  repeated api.cover.CoverUser coverUser = 2;
+}
+
+// Request message for GetMemberDetails
+message GetMemberDetailsRequest {
+  // Required. Organization Id.
+  string orgId = 1;
+  // Required. User Id.
+  string userId = 2;
+}
+
+// Response message for GetMemberDetails
+message GetMemberDetailsResponse {
+  string orgId = 1;
+  api.cover.CoverUser coverUser = 2;
+}
+
+// Request message for DeleteMember
+message DeleteMemberRequest {
+  // Required. Organization Id.
+  string orgId = 1;
+  // Required. User Id.
+  string userId = 2;
+}
+
+// Response message for DeleteMember
+message DeleteMemberResponse {
+  string orgId = 1;
+  string userId = 2;
+  string username = 3;
+}
+
+// Request message for AdminResetPassword
+message AdminResetPasswordRequest {
+  // Required. Organization Id.
+  string orgId = 1;
+  // Required. User Id.
+  string userId = 2;
+}
+
+// Response message for AdminResetPassword
+message AdminResetPasswordResponse {
+  string orgId = 1;
+  string userId = 2;
+}
+
+// Request message for ResetPassword
+message ResetPasswordRequest {
+  // Required. Organization Id.
+  string orgId = 1;
+  // Required. User Id.
+  string userId = 2;
+  string password = 3;
+}
+
+// Response message for ResetPassword
+message ResetPasswordResponse {
+  string orgId = 1;
+  string userId = 2;
+  string username = 3;
+}
+
+// Request message for GetViews
+message GetViewsRequest {
+  // Required. Organization Id.
+  string orgId = 1;
+}
+
+// Response message for GetViews
+message GetViewsResponse {
+  string orgId = 1;
+  repeated api.cover.CoverViewMin viewList = 2;
+}
+
+// Request message for GetCurrentView
+message GetCurrentViewRequest {
+  // Required. Organization Id.
+  string orgId = 1;
+  // Required. View Id.
+  string viewId = 2;
+}
+
+// Response message for GetCurrentView
+message GetCurrentViewResponse {
+  string orgId = 1;
+  api.cover.CoverView coverView = 2;
+}
+
+// Request message for UpdateView
+message UpdateViewRequest {
+  // Required. Organization Id.
+  string orgId = 1;
+  // Required. View Id.
+  string viewId = 2;
+  string name = 3;
+  string description = 4;
+  string icon = 5;
+  bool isPrivate = 6;
+  bool isEditable = 7;
+}
+
+// Response message for UpdateView
+message UpdateViewResponse {
+  string orgId = 1;
+  string viewId = 2;
+}
+
+// Request message for DeleteView
+message DeleteViewRequest {
+  // Required. Organization Id.
+  string orgId = 1;
+  // Required. User Id.
+  string viewId = 2;
+}
+
+// Response message for DeleteView
+message DeleteViewResponse {
+  string orgId = 1;
+  string viewId = 2;
+  string name = 3;
+}

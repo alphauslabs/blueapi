@@ -10,6 +10,7 @@ python3 -m grpc_tools.protoc -I . --python_out=./generated/py/alphausblue --grpc
         ./iam/v1/*.proto \
         ./admin/v1/*.proto \
         ./cost/v1/*.proto \
+        ./cover/v1/*.proto \
         ./billing/v1/*.proto \
         ./operations/v1/*.proto \
         ./preferences/v1/*.proto
@@ -35,6 +36,7 @@ protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true --opena
        ./iam/v1/*.proto \
        ./admin/v1/*.proto \
        ./cost/v1/*.proto \
+       ./cover/v1/*.proto \
        ./billing/v1/*.proto \
        ./operations/v1/*.proto \
        ./preferences/v1/*.proto
