@@ -183,7 +183,7 @@ service Cost {
     };
   }
 
-  // Creates the usage-based cost filter condition. Only available in Wave(Pro).
+  // Creates the usage-based cost filter condition. You can consider cost filters as predefined/prefiltered queries using the 'v1/{vendor}/costs:read' or 'ReadCosts' API. Only available in Wave(Pro).
   rpc CreateCostFilters(CreateCostFiltersRequest) returns (CreateCostFiltersResponse) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costfilters"
@@ -214,7 +214,7 @@ service Cost {
     };
   }
 
-  // Reads the available cost attributes of an organization (Ripple) or billing group (Wave). Similar to the `ReadCosts` API but without the aggregated usages and costs. At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
+  // Reads the available cost attributes of an organization (Ripple) or billing group (Wave). Similar to the 'ReadCosts' API but without the aggregated usages and costs. At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
   rpc ReadCostAttributes(ReadCostAttributesRequest) returns (stream CostAttributeItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costattrs:read"
