@@ -533,66 +533,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "name",
-            "description": "Required. Name of the notification channel.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "type",
-            "description": "Required. Valid values: `email`, `slack`, `msteams`.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "email.format",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "email.recipients",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "slack.webhookUrl",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "slack.channelId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "slack.channel",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "slack.configurationUrl",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "msteams.webhookUrl",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "tags": [
@@ -964,13 +904,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "featureFlags": {
-                  "$ref": "#/definitions/apiFeatureFlags"
-                }
-              },
-              "description": "Request message for the Iam.UpdateFeatureFlags rpc."
+              "$ref": "#/definitions/v1UpdateFeatureFlagsRequest"
             }
           }
         ],
@@ -1330,21 +1264,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "newName": {
-                  "type": "string",
-                  "description": "Optional. If set, update the current name to this."
-                },
-                "permissions": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Required. The list of permissions to attach to this role."
-                }
-              },
-              "description": "Request message for the Iam.UpdateRole rpc."
+              "$ref": "#/definitions/v1UpdateRoleRequest"
             }
           }
         ],
@@ -1742,8 +1662,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "description": "Request message for the Operations.CancelOperation rpc."
+              "$ref": "#/definitions/v1CancelOperationRequest"
             }
           }
         ],
@@ -1934,14 +1853,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "key",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
         "tags": [
           "Organization"
         ]
@@ -2366,19 +2277,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "username": {
-                  "type": "string"
-                }
-              },
-              "title": "Request message for CreateMember"
+              "$ref": "#/definitions/v1CreateMemberRequest"
             }
           }
         ],
@@ -2499,13 +2398,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "password": {
-                  "type": "string"
-                }
-              },
-              "title": "Request message for ResetPassword"
+              "$ref": "#/definitions/v1ResetPasswordRequest"
             }
           }
         ],
@@ -2734,25 +2627,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "icon": {
-                  "type": "string"
-                },
-                "isPrivate": {
-                  "type": "boolean"
-                },
-                "isEditable": {
-                  "type": "boolean"
-                }
-              },
-              "title": "Request message for UpdateView"
+              "$ref": "#/definitions/v1UpdateViewRequest"
             }
           }
         ],
@@ -2831,26 +2706,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string",
-                  "description": "Required. The account id to register."
-                },
-                "name": {
-                  "type": "string",
-                  "description": "Optional. If empty, set to the value of `id`."
-                },
-                "parent": {
-                  "type": "string",
-                  "description": "Optional. The parent `billingInternalId` of the billing group to which this account will belong to."
-                },
-                "awsOptions": {
-                  "$ref": "#/definitions/v1CreateAccountRequestAwsOptions",
-                  "description": "Required for the `aws` vendor. AWS-specific options."
-                }
-              },
-              "description": "Request message for the Cost.CreateAccount rpc."
+              "$ref": "#/definitions/v1CreateAccountRequest"
             }
           }
         ],
@@ -2975,30 +2831,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "groupId": {
-                  "type": "string",
-                  "description": "Optional. At the moment, only billing internal ids are supported. If set, reads the non-usage-based adjustment details of this group. Valid only if `accountId` is not set. If both `groupId` and `accountId` are not set, reads the adjustment details of the whole organization. Only valid for Ripple users. Implied (or discarded) for Wave(Pro) users."
-                },
-                "accountId": {
-                  "type": "string",
-                  "description": "Optional. If set, reads the non-usaged-based adjustment details of this account. Also invalidates the `billingInternalId` value even if set. If both `billingInternalId` and `accountId` are not set, reads the adjustment details of the whole organization."
-                },
-                "startTime": {
-                  "type": "string",
-                  "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`."
-                },
-                "endTime": {
-                  "type": "string",
-                  "description": "Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`."
-                },
-                "awsOptions": {
-                  "$ref": "#/definitions/v1ReadAdjustmentsRequestAwsOptions",
-                  "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
-                }
-              },
-              "description": "Request message for the Cost.ReadAdjustments rpc."
+              "$ref": "#/definitions/v1ReadAdjustmentsRequest"
             }
           }
         ],
@@ -3135,13 +2968,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "$ref": "#/definitions/apiBudget"
-                }
-              },
-              "title": "Request message for UpdateAccountBudget"
+              "$ref": "#/definitions/v1UpdateAccountBudgetRequest"
             }
           }
         ],
@@ -3246,13 +3073,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "$ref": "#/definitions/apiBudget"
-                }
-              },
-              "title": "Request message for CreateAccountBudget"
+              "$ref": "#/definitions/v1CreateAccountBudgetRequest"
             }
           }
         ],
@@ -3368,26 +3189,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "schedule": {
-                  "type": "string",
-                  "description": "Required. The desired schedule in UTC, using the [cron](https://man7.org/linux/man-pages/man5/crontab.5.html) format, and applies to the previous month upon trigger."
-                },
-                "notificationChannel": {
-                  "type": "string",
-                  "description": "Optional. The channel id to use for notifications. At the moment, only email-type notification channels are supported. If not set, your default channel will be used. And if non-existent, an email-type notification channel will be created using your primary email address."
-                },
-                "force": {
-                  "type": "boolean",
-                  "description": "Optional. Not used at the moment."
-                },
-                "dryRun": {
-                  "type": "boolean",
-                  "description": "Optional. If set to true, skips the actual calculations. Useful as test, or reminder."
-                }
-              },
-              "description": "Request message for the Cost.CreateCalculationsSchedule rpc."
+              "$ref": "#/definitions/v1CreateCalculationsScheduleRequest"
             }
           }
         ],
@@ -3507,14 +3309,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "month": {
-                  "type": "string",
-                  "description": "Optional. The UTC month to query. Defaults to current month if empty. Format is `yyyymm`. For example, June 2021 will be `202106`."
-                }
-              },
-              "description": "Request message for the Cost.ListCalculatorRunningAccounts rpc."
+              "$ref": "#/definitions/v1ListCalculatorRunningAccountsRequest"
             }
           }
         ],
@@ -3563,30 +3358,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "groupId": {
-                  "type": "string",
-                  "description": "Optional. If set, reads the cost attributes of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the cost attributes of the whole organization. Optional for AWS Wave(Pro)."
-                },
-                "accountId": {
-                  "type": "string",
-                  "description": "Optional. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the cost attributes of the whole organization."
-                },
-                "startTime": {
-                  "type": "string",
-                  "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20200101`."
-                },
-                "endTime": {
-                  "type": "string",
-                  "description": "Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`."
-                },
-                "awsOptions": {
-                  "$ref": "#/definitions/ReadCostAttributesRequestAwsOptions",
-                  "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
-                }
-              },
-              "description": "Request message for the Cost.ReadCostAttributes rpc."
+              "$ref": "#/definitions/v1ReadCostAttributesRequest"
             }
           }
         ],
@@ -3656,26 +3428,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "filterName": {
-                  "type": "string",
-                  "title": "Required. Filter Name. Specify characters between 1 ~ 100"
-                },
-                "groupId": {
-                  "type": "string",
-                  "description": "Required. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro)."
-                },
-                "accountId": {
-                  "type": "string",
-                  "description": "Required. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization."
-                },
-                "awsOptions": {
-                  "$ref": "#/definitions/v1ReadCostsRequestAwsOptions",
-                  "description": "Required. Valid only for the `aws` vendor. AWS-specific options."
-                }
-              },
-              "description": "Request message for the CreateCostFilters rpc."
+              "$ref": "#/definitions/v1CreateCostFiltersRequest"
             }
           }
         ],
@@ -3759,26 +3512,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "filterName": {
-                  "type": "string",
-                  "title": "Required. Filter Name. Specify characters between 1 ~ 100"
-                },
-                "groupId": {
-                  "type": "string",
-                  "description": "Required. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro)."
-                },
-                "accountId": {
-                  "type": "string",
-                  "description": "Required. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization."
-                },
-                "awsOptions": {
-                  "$ref": "#/definitions/v1ReadCostsRequestAwsOptions",
-                  "description": "Required. Valid only for the `aws` vendor. AWS-specific options."
-                }
-              },
-              "description": "Request message for the UpdateCostFilters rpc."
+              "$ref": "#/definitions/v1UpdateCostFiltersRequest"
             }
           }
         ],
@@ -3825,30 +3559,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "startTime": {
-                  "type": "string",
-                  "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20200101`."
-                },
-                "endTime": {
-                  "type": "string",
-                  "description": "Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmd`."
-                },
-                "groupByMonth": {
-                  "type": "boolean",
-                  "description": "Optional. If set to true, return data grouped by month within the date range. If you want data that is grouped per account per month, set this to `true`, then set `groupByColumns` to `none`."
-                },
-                "groupByColumns": {
-                  "type": "string",
-                  "description": "Optional. A comma-separated list of columns to aggregate the data into. Valid values are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `invoiceId`, `description`, and `resourceId`. A special value of `none` is also supported, which means query by date or month per account only.\n\nFor example, if you only want the services and region data, you can set this field to `productCode,region`. Your input sequence doesn't matter (although the sequence above is recommended) as the actual sequence is already fixed in the return data (see the definition in https://github.com/alphauslabs/blueapi/blob/main/api/aws/cost.proto), which is generic to specific, top to bottom. Invalid values are discarded. Excluded columns will be empty."
-                },
-                "includeTags": {
-                  "type": "boolean",
-                  "description": "Optional. If set to true, stream will include resource tags."
-                }
-              },
-              "description": "Request message for the ExportCostFiltersFile rpc."
+              "$ref": "#/definitions/v1ExportCostFiltersFileRequest"
             }
           }
         ],
@@ -3888,22 +3599,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "groupId": {
-                  "type": "string",
-                  "description": "Optional. If set to a particular billing group, calculate for that billing group. If empty, calculate for all billing groups.\n\nAt the moment, for AWS, this is only valid for account type billing groups, not tag billing groups. If a tag billing group is provided, it is discarded and the calculation is done for the whole organization."
-                },
-                "month": {
-                  "type": "string",
-                  "description": "Optional. The UTC month to calculate. If empty, it defaults to the previous month. Format is `yyyymm`. For example, June 2021 will be `202106`."
-                },
-                "awsOptions": {
-                  "$ref": "#/definitions/v1CalculateCostsRequestAwsOptions",
-                  "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
-                }
-              },
-              "description": "Request message for the Cost.CalculateCosts rpc."
+              "$ref": "#/definitions/v1CalculateCostsRequest"
             }
           }
         ],
@@ -3952,30 +3648,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "groupId": {
-                  "type": "string",
-                  "description": "Optional. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro)."
-                },
-                "accountId": {
-                  "type": "string",
-                  "description": "Optional. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization."
-                },
-                "startTime": {
-                  "type": "string",
-                  "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20200101`."
-                },
-                "endTime": {
-                  "type": "string",
-                  "description": "Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmd`."
-                },
-                "awsOptions": {
-                  "$ref": "#/definitions/v1ReadCostsRequestAwsOptions",
-                  "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
-                }
-              },
-              "description": "Request message for the Cost.ReadCosts rpc."
+              "$ref": "#/definitions/v1ReadCostsRequest"
             }
           }
         ],
@@ -4022,48 +3695,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "period": {
-                  "type": "string",
-                  "title": "Required. Available values: day, hour"
-                },
-                "fromDate": {
-                  "type": "string",
-                  "description": "Optional. The start date of the displayed data. If not set, the first day of the current month will be used. Format: yyyy-mm-dd."
-                },
-                "toDate": {
-                  "type": "string",
-                  "description": "Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd."
-                },
-                "payerId": {
-                  "type": "string",
-                  "description": "Optional. Payer Id."
-                },
-                "billingInternalId": {
-                  "type": "string",
-                  "description": "Optional. Billing group Id."
-                },
-                "groupId": {
-                  "type": "string",
-                  "description": "Optional. Account group Id."
-                },
-                "accounts": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Optional. List of Account Ids."
-                },
-                "services": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Optional. List of services."
-                }
-              },
-              "title": "Request message for GetCoverageOndemand"
+              "$ref": "#/definitions/v1GetCoverageOndemandRequest"
             }
           }
         ],
@@ -4110,48 +3742,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "period": {
-                  "type": "string",
-                  "description": "Required. Available values: day, hour."
-                },
-                "fromDate": {
-                  "type": "string",
-                  "description": "Optional. The start date of the displayed data. If not set, the first day of the current month will be used. Format: yyyy-mm-dd."
-                },
-                "toDate": {
-                  "type": "string",
-                  "description": "Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd."
-                },
-                "payerId": {
-                  "type": "string",
-                  "description": "Optional. Payer Id."
-                },
-                "billingInternalId": {
-                  "type": "string",
-                  "description": "Optional. Billing group Id."
-                },
-                "groupId": {
-                  "type": "string",
-                  "description": "Optional. Account group Id."
-                },
-                "accounts": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Optional. List of Account Ids."
-                },
-                "services": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Optional. List of services."
-                }
-              },
-              "title": "Request message for GetCoverageOptions"
+              "$ref": "#/definitions/v1GetCoverageOptionsRequest"
             }
           }
         ],
@@ -4188,7 +3779,7 @@
           },
           {
             "name": "billingInternalId",
-            "description": "Optional. Company Id of Billing Group to retrieve. Default value is user's Company Id",
+            "description": "Optional. Company Id of Billing Group to retrieve. Default value is user's Company Id.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -4433,26 +4024,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "billingInternalId": {
-                  "type": "string",
-                  "description": "Required. The billing internal id to stream."
-                },
-                "startTime": {
-                  "type": "string",
-                  "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`."
-                },
-                "endTime": {
-                  "type": "string",
-                  "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`."
-                },
-                "groupByMonths": {
-                  "type": "boolean",
-                  "description": "Optional. Group services and costs by months in the range of `startTime` and `endTime`. If not set, daily data will be returned."
-                }
-              },
-              "description": "Request message for the Cost.ReadNonTagCosts rpc."
+              "$ref": "#/definitions/v1ReadNonTagCostsRequest"
             }
           }
         ],
@@ -4531,14 +4103,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "awsOptions": {
-                  "$ref": "#/definitions/v1CreatePayerAccountRequestAwsOptions",
-                  "description": "Required for the `aws` vendor. AWS-specific options."
-                }
-              },
-              "description": "Request message for the Cost.CreatePayerAccount rpc."
+              "$ref": "#/definitions/v1CreatePayerAccountRequest"
             }
           }
         ],
@@ -4716,21 +4281,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "accounts": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Required. List of Account Ids."
-                },
-                "awsOptions": {
-                  "$ref": "#/definitions/v1GetRecommendationsRequestAwsOptions",
-                  "title": "Required if vendor = 'aws'"
-                }
-              },
-              "title": "Request message for GetRecommendations"
+              "$ref": "#/definitions/v1GetRecommendationsRequest"
             }
           }
         ],
@@ -4777,52 +4328,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "reductionDisplay": {
-                  "type": "string",
-                  "title": "Required. Valid values: 'all', 'reservation', 'savingsplan'"
-                },
-                "includeDetails": {
-                  "type": "boolean",
-                  "description": "Optional. If set to \"true\", details of the RI or SP list is returned. Default: false."
-                },
-                "fromDate": {
-                  "type": "string",
-                  "description": "Optional. The start date of the displayed data. If not set, the first day of the current month will be used. Format: yyyy-mm-dd."
-                },
-                "toDate": {
-                  "type": "string",
-                  "description": "Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd."
-                },
-                "payerId": {
-                  "type": "string",
-                  "description": "Optional. Payer Id."
-                },
-                "billingInternalId": {
-                  "type": "string",
-                  "description": "Optional. Billing group Id."
-                },
-                "groupId": {
-                  "type": "string",
-                  "description": "Optional. Account group Id."
-                },
-                "accounts": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Optional. List of Account Ids."
-                },
-                "services": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Optional. List of services."
-                }
-              },
-              "title": "Request message for GetCostReduction"
+              "$ref": "#/definitions/v1GetCostReductionRequest"
             }
           }
         ],
@@ -4871,30 +4377,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "billingInternalId": {
-                  "type": "string",
-                  "description": "Required. The billing internal id to stream."
-                },
-                "startTime": {
-                  "type": "string",
-                  "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`."
-                },
-                "endTime": {
-                  "type": "string",
-                  "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`."
-                },
-                "groupByMonths": {
-                  "type": "boolean",
-                  "description": "Optional. Group services and costs by months in the range of `startTime` and `endTime`. If not set, daily data will be returned."
-                },
-                "awsOptions": {
-                  "$ref": "#/definitions/v1ReadTagCostsRequestAwsOptions",
-                  "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
-                }
-              },
-              "description": "Request message for the Cost.ReadTagCosts rpc."
+              "$ref": "#/definitions/v1ReadTagCostsRequest"
             }
           }
         ],
@@ -4943,18 +4426,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "billingInternalId": {
-                  "type": "string",
-                  "description": "Optional. If empty, returns all billing groups."
-                },
-                "month": {
-                  "type": "string",
-                  "description": "Optional. If empty, defaults to current UTC month. Format: yyyymm."
-                }
-              },
-              "description": "Request message for the Billing.ListUsageCostsDrift rpc."
+              "$ref": "#/definitions/v1ListUsageCostsDriftRequest"
             }
           }
         ],
@@ -6893,13 +6365,17 @@
     "protobufAny": {
       "type": "object",
       "properties": {
-        "@type": {
+        "typeUrl": {
           "type": "string",
           "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+        },
+        "value": {
+          "type": "string",
+          "format": "byte",
+          "description": "Must be a valid serialized protocol buffer of the above specified type."
         }
       },
-      "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "rippleOrg": {
       "type": "object",
@@ -7153,6 +6629,28 @@
       },
       "description": "Invoice settings that are vendor-specific for each billing group."
     },
+    "v1CalculateCostsRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "groupId": {
+          "type": "string",
+          "description": "Optional. If set to a particular billing group, calculate for that billing group. If empty, calculate for all billing groups.\n\nAt the moment, for AWS, this is only valid for account type billing groups, not tag billing groups. If a tag billing group is provided, it is discarded and the calculation is done for the whole organization."
+        },
+        "month": {
+          "type": "string",
+          "description": "Optional. The UTC month to calculate. If empty, it defaults to the previous month. Format is `yyyymm`. For example, June 2021 will be `202106`."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1CalculateCostsRequestAwsOptions",
+          "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
+        }
+      },
+      "description": "Request message for the Cost.CalculateCosts rpc."
+    },
     "v1CalculateCostsRequestAwsOptions": {
       "type": "object",
       "properties": {
@@ -7202,6 +6700,16 @@
           "description": "The current state of this schedule. Normally set to \"OK\", or empty if no issues. Otherwise, will contain an error string."
         }
       }
+    },
+    "v1CancelOperationRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the operation resource to be cancelled."
+        }
+      },
+      "description": "Request message for the Operations.CancelOperation rpc."
     },
     "v1CloudWatchMetricsStream": {
       "type": "object",
@@ -7255,6 +6763,27 @@
       },
       "description": "Response message wrapper for cloud costs."
     },
+    "v1CreateAccountBudgetRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "level": {
+          "type": "string",
+          "title": "Required. 'account' or 'acctgroup'"
+        },
+        "id": {
+          "type": "string",
+          "title": "Required. Account or AccountGroup Id"
+        },
+        "data": {
+          "$ref": "#/definitions/apiBudget"
+        }
+      },
+      "title": "Request message for CreateAccountBudget"
+    },
     "v1CreateAccountBudgetResponse": {
       "type": "object",
       "properties": {
@@ -7264,6 +6793,32 @@
         }
       },
       "title": "Response message for CreateAccountBudget"
+    },
+    "v1CreateAccountRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "id": {
+          "type": "string",
+          "description": "Required. The account id to register."
+        },
+        "name": {
+          "type": "string",
+          "description": "Optional. If empty, set to the value of `id`."
+        },
+        "parent": {
+          "type": "string",
+          "description": "Optional. The parent `billingInternalId` of the billing group to which this account will belong to."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1CreateAccountRequestAwsOptions",
+          "description": "Required for the `aws` vendor. AWS-specific options."
+        }
+      },
+      "description": "Request message for the Cost.CreateAccount rpc."
     },
     "v1CreateAccountRequestAwsOptions": {
       "type": "object",
@@ -7428,6 +6983,32 @@
       },
       "title": "Specific settings per vendor"
     },
+    "v1CreateCalculationsScheduleRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "schedule": {
+          "type": "string",
+          "description": "Required. The desired schedule in UTC, using the [cron](https://man7.org/linux/man-pages/man5/crontab.5.html) format, and applies to the previous month upon trigger."
+        },
+        "notificationChannel": {
+          "type": "string",
+          "description": "Optional. The channel id to use for notifications. At the moment, only email-type notification channels are supported. If not set, your default channel will be used. And if non-existent, an email-type notification channel will be created using your primary email address."
+        },
+        "force": {
+          "type": "boolean",
+          "description": "Optional. Not used at the moment."
+        },
+        "dryRun": {
+          "type": "boolean",
+          "description": "Optional. If set to true, skips the actual calculations. Useful as test, or reminder."
+        }
+      },
+      "description": "Request message for the Cost.CreateCalculationsSchedule rpc."
+    },
     "v1CreateCloudWatchMetricsStreamRequest": {
       "type": "object",
       "properties": {
@@ -7437,6 +7018,32 @@
         }
       },
       "description": "Request message for the Admin.CreateCloudWatchMetricsStream rpc."
+    },
+    "v1CreateCostFiltersRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "filterName": {
+          "type": "string",
+          "title": "Required. Filter Name. Specify characters between 1 ~ 100"
+        },
+        "groupId": {
+          "type": "string",
+          "description": "Required. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro)."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Required. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1ReadCostsRequestAwsOptions",
+          "description": "Required. Valid only for the `aws` vendor. AWS-specific options."
+        }
+      },
+      "description": "Request message for the CreateCostFilters rpc."
     },
     "v1CreateCostFiltersResponse": {
       "type": "object",
@@ -7540,6 +7147,24 @@
       },
       "description": "Request message for the Iam.CreateIpFilter rpc."
     },
+    "v1CreateMemberRequest": {
+      "type": "object",
+      "properties": {
+        "orgId": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for CreateMember"
+    },
     "v1CreateMemberResponse": {
       "type": "object",
       "properties": {
@@ -7610,6 +7235,20 @@
         }
       },
       "description": "Response message for the Organization.CreateOrg rpc."
+    },
+    "v1CreatePayerAccountRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1CreatePayerAccountRequestAwsOptions",
+          "description": "Required for the `aws` vendor. AWS-specific options."
+        }
+      },
+      "description": "Request message for the Cost.CreatePayerAccount rpc."
     },
     "v1CreatePayerAccountRequestAwsOptions": {
       "type": "object",
@@ -7793,6 +7432,40 @@
       },
       "title": "Response message for DeleteView"
     },
+    "v1ExportCostFiltersFileRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "filterId": {
+          "type": "string",
+          "description": "Required. Filter Id."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20200101`."
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmd`."
+        },
+        "groupByMonth": {
+          "type": "boolean",
+          "description": "Optional. If set to true, return data grouped by month within the date range. If you want data that is grouped per account per month, set this to `true`, then set `groupByColumns` to `none`."
+        },
+        "groupByColumns": {
+          "type": "string",
+          "description": "Optional. A comma-separated list of columns to aggregate the data into. Valid values are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `invoiceId`, `description`, and `resourceId`. A special value of `none` is also supported, which means query by date or month per account only.\n\nFor example, if you only want the services and region data, you can set this field to `productCode,region`. Your input sequence doesn't matter (although the sequence above is recommended) as the actual sequence is already fixed in the return data (see the definition in https://github.com/alphauslabs/blueapi/blob/main/api/aws/cost.proto), which is generic to specific, top to bottom. Invalid values are discarded. Excluded columns will be empty."
+        },
+        "includeTags": {
+          "type": "boolean",
+          "description": "Optional. If set to true, stream will include resource tags."
+        }
+      },
+      "description": "Request message for the ExportCostFiltersFile rpc."
+    },
     "v1ExportCostFiltersFileResponse": {
       "type": "object",
       "properties": {
@@ -7882,6 +7555,62 @@
       },
       "description": "Response message for the Admin.GetCloudWatchMetricsStreamTemplateUrl rpc."
     },
+    "v1GetCostReductionRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "orgId": {
+          "type": "string",
+          "description": "Required. Organization Id."
+        },
+        "reductionDisplay": {
+          "type": "string",
+          "title": "Required. Valid values: 'all', 'reservation', 'savingsplan'"
+        },
+        "includeDetails": {
+          "type": "boolean",
+          "description": "Optional. If set to \"true\", details of the RI or SP list is returned. Default: false."
+        },
+        "fromDate": {
+          "type": "string",
+          "description": "Optional. The start date of the displayed data. If not set, the first day of the current month will be used. Format: yyyy-mm-dd."
+        },
+        "toDate": {
+          "type": "string",
+          "description": "Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd."
+        },
+        "payerId": {
+          "type": "string",
+          "description": "Optional. Payer Id."
+        },
+        "billingInternalId": {
+          "type": "string",
+          "description": "Optional. Billing group Id."
+        },
+        "groupId": {
+          "type": "string",
+          "description": "Optional. Account group Id."
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. List of Account Ids."
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. List of services."
+        }
+      },
+      "title": "Request message for GetCostReduction"
+    },
     "v1GetCostReductionResponse": {
       "type": "object",
       "properties": {
@@ -7893,6 +7622,58 @@
         }
       },
       "title": "Response message for GetCostReduction"
+    },
+    "v1GetCoverageOndemandRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "orgId": {
+          "type": "string",
+          "description": "Required. Organization Id."
+        },
+        "period": {
+          "type": "string",
+          "title": "Required. Available values: day, hour"
+        },
+        "fromDate": {
+          "type": "string",
+          "description": "Optional. The start date of the displayed data. If not set, the first day of the current month will be used. Format: yyyy-mm-dd."
+        },
+        "toDate": {
+          "type": "string",
+          "description": "Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd."
+        },
+        "payerId": {
+          "type": "string",
+          "description": "Optional. Payer Id."
+        },
+        "billingInternalId": {
+          "type": "string",
+          "description": "Optional. Billing group Id."
+        },
+        "groupId": {
+          "type": "string",
+          "description": "Optional. Account group Id."
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. List of Account Ids."
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. List of services."
+        }
+      },
+      "title": "Request message for GetCoverageOndemand"
     },
     "v1GetCoverageOndemandResponse": {
       "type": "object",
@@ -7908,6 +7689,58 @@
         }
       },
       "title": "Response message for GetCoverageOndemand"
+    },
+    "v1GetCoverageOptionsRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "orgId": {
+          "type": "string",
+          "description": "Required. Organization Id."
+        },
+        "period": {
+          "type": "string",
+          "description": "Required. Available values: day, hour."
+        },
+        "fromDate": {
+          "type": "string",
+          "description": "Optional. The start date of the displayed data. If not set, the first day of the current month will be used. Format: yyyy-mm-dd."
+        },
+        "toDate": {
+          "type": "string",
+          "description": "Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd."
+        },
+        "payerId": {
+          "type": "string",
+          "description": "Optional. Payer Id."
+        },
+        "billingInternalId": {
+          "type": "string",
+          "description": "Optional. Billing group Id."
+        },
+        "groupId": {
+          "type": "string",
+          "description": "Optional. Account group Id."
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. List of Account Ids."
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. List of services."
+        }
+      },
+      "title": "Request message for GetCoverageOptions"
     },
     "v1GetCoverageOptionsResponse": {
       "type": "object",
@@ -8076,6 +7909,31 @@
         }
       },
       "description": "Response message for the Cost.GetPayerAccountImportHistory rpc."
+    },
+    "v1GetRecommendationsRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "orgId": {
+          "type": "string",
+          "description": "Required. Organization Id."
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required. List of Account Ids."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1GetRecommendationsRequestAwsOptions",
+          "title": "Required if vendor = 'aws'"
+        }
+      },
+      "title": "Request message for GetRecommendations"
     },
     "v1GetRecommendationsRequestAwsOptions": {
       "type": "object",
@@ -8277,6 +8135,20 @@
       },
       "description": "Response message for the Cost.ListCalculationsSchedules rpc."
     },
+    "v1ListCalculatorRunningAccountsRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "month": {
+          "type": "string",
+          "description": "Optional. The UTC month to query. Defaults to current month if empty. Format is `yyyymm`. For example, June 2021 will be `202106`."
+        }
+      },
+      "description": "Request message for the Cost.ListCalculatorRunningAccounts rpc."
+    },
     "v1ListCalculatorRunningAccountsResponse": {
       "type": "object",
       "properties": {
@@ -8377,6 +8249,24 @@
       },
       "description": "Response message for the Iam.ListRoles rpc."
     },
+    "v1ListUsageCostsDriftRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "billingInternalId": {
+          "type": "string",
+          "description": "Optional. If empty, returns all billing groups."
+        },
+        "month": {
+          "type": "string",
+          "description": "Optional. If empty, defaults to current UTC month. Format: yyyymm."
+        }
+      },
+      "description": "Request message for the Billing.ListUsageCostsDrift rpc."
+    },
     "v1ListUserRoleMappingsResponse": {
       "type": "object",
       "properties": {
@@ -8403,6 +8293,36 @@
     "v1Preference": {
       "type": "object"
     },
+    "v1ReadAdjustmentsRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "groupId": {
+          "type": "string",
+          "description": "Optional. At the moment, only billing internal ids are supported. If set, reads the non-usage-based adjustment details of this group. Valid only if `accountId` is not set. If both `groupId` and `accountId` are not set, reads the adjustment details of the whole organization. Only valid for Ripple users. Implied (or discarded) for Wave(Pro) users."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Optional. If set, reads the non-usaged-based adjustment details of this account. Also invalidates the `billingInternalId` value even if set. If both `billingInternalId` and `accountId` are not set, reads the adjustment details of the whole organization."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`."
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1ReadAdjustmentsRequestAwsOptions",
+          "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
+        }
+      },
+      "description": "Request message for the Cost.ReadAdjustments rpc."
+    },
     "v1ReadAdjustmentsRequestAwsOptions": {
       "type": "object",
       "properties": {
@@ -8411,6 +8331,66 @@
           "description": "Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which case, it will use the latest exchange rates provided by https://fixer.io. If you prefer a custom exchange rate, you can append the rate to the currency's three-letter symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate should be against the US dollar (USD)."
         }
       }
+    },
+    "v1ReadCostAttributesRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "groupId": {
+          "type": "string",
+          "description": "Optional. If set, reads the cost attributes of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the cost attributes of the whole organization. Optional for AWS Wave(Pro)."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Optional. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the cost attributes of the whole organization."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20200101`."
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/ReadCostAttributesRequestAwsOptions",
+          "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
+        }
+      },
+      "description": "Request message for the Cost.ReadCostAttributes rpc."
+    },
+    "v1ReadCostsRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "groupId": {
+          "type": "string",
+          "description": "Optional. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro)."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Optional. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20200101`."
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmd`."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1ReadCostsRequestAwsOptions",
+          "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
+        }
+      },
+      "description": "Request message for the Cost.ReadCosts rpc."
     },
     "v1ReadCostsRequestAwsOptions": {
       "type": "object",
@@ -8476,6 +8456,62 @@
       },
       "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
     },
+    "v1ReadNonTagCostsRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "billingInternalId": {
+          "type": "string",
+          "description": "Required. The billing internal id to stream."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`."
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`."
+        },
+        "groupByMonths": {
+          "type": "boolean",
+          "description": "Optional. Group services and costs by months in the range of `startTime` and `endTime`. If not set, daily data will be returned."
+        }
+      },
+      "description": "Request message for the Cost.ReadNonTagCosts rpc."
+    },
+    "v1ReadTagCostsRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "billingInternalId": {
+          "type": "string",
+          "description": "Required. The billing internal id to stream."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Optional. Timestamp to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`."
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Optional. Timestamp to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`."
+        },
+        "groupByMonths": {
+          "type": "boolean",
+          "description": "Optional. Group services and costs by months in the range of `startTime` and `endTime`. If not set, daily data will be returned."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1ReadTagCostsRequestAwsOptions",
+          "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
+        }
+      },
+      "description": "Request message for the Cost.ReadTagCosts rpc."
+    },
     "v1ReadTagCostsRequestAwsOptions": {
       "type": "object",
       "properties": {
@@ -8484,6 +8520,23 @@
           "description": "Optional. If set, only return data for this tagId."
         }
       }
+    },
+    "v1ResetPasswordRequest": {
+      "type": "object",
+      "properties": {
+        "orgId": {
+          "type": "string",
+          "description": "Required. Organization Id."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Required. User Id."
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for ResetPassword"
     },
     "v1ResetPasswordResponse": {
       "type": "object",
@@ -8514,6 +8567,53 @@
       },
       "description": "Request message for the Admin.SaveNotificationSettings rpc."
     },
+    "v1UpdateAccountBudgetRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "budgetId": {
+          "type": "string",
+          "title": "Required. Budget Id"
+        },
+        "data": {
+          "$ref": "#/definitions/apiBudget"
+        }
+      },
+      "title": "Request message for UpdateAccountBudget"
+    },
+    "v1UpdateCostFiltersRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "filterId": {
+          "type": "string",
+          "description": "Required. Filter Id."
+        },
+        "filterName": {
+          "type": "string",
+          "title": "Required. Filter Name. Specify characters between 1 ~ 100"
+        },
+        "groupId": {
+          "type": "string",
+          "description": "Required. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro)."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Required. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1ReadCostsRequestAwsOptions",
+          "description": "Required. Valid only for the `aws` vendor. AWS-specific options."
+        }
+      },
+      "description": "Request message for the UpdateCostFilters rpc."
+    },
     "v1UpdateCostFiltersResponse": {
       "type": "object",
       "properties": {
@@ -8523,6 +8623,18 @@
         }
       },
       "description": "Response message for the UpdateCostFilters rpc."
+    },
+    "v1UpdateFeatureFlagsRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "featureFlags": {
+          "$ref": "#/definitions/apiFeatureFlags"
+        }
+      },
+      "description": "Request message for the Iam.UpdateFeatureFlags rpc."
     },
     "v1UpdateMetadataRequest": {
       "type": "object",
@@ -8547,6 +8659,31 @@
         }
       },
       "description": "Request message for the Organization.UpdatePassword rpc."
+    },
+    "v1UpdateRoleRequest": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string",
+          "description": "Required. The new namespace."
+        },
+        "name": {
+          "type": "string",
+          "description": "Required. The role name to update."
+        },
+        "newName": {
+          "type": "string",
+          "description": "Optional. If set, update the current name to this."
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required. The list of permissions to attach to this role."
+        }
+      },
+      "description": "Request message for the Iam.UpdateRole rpc."
     },
     "v1UpdateUserRoleMappingRequest": {
       "type": "object",
@@ -8588,6 +8725,35 @@
         }
       },
       "description": "Response message for the Iam.UpdateUserRoleMapping rpc."
+    },
+    "v1UpdateViewRequest": {
+      "type": "object",
+      "properties": {
+        "orgId": {
+          "type": "string",
+          "description": "Required. Organization Id."
+        },
+        "viewId": {
+          "type": "string",
+          "description": "Required. View Id."
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "isPrivate": {
+          "type": "boolean"
+        },
+        "isEditable": {
+          "type": "boolean"
+        }
+      },
+      "title": "Request message for UpdateView"
     },
     "v1UpdateViewResponse": {
       "type": "object",
