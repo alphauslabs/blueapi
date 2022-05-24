@@ -24,6 +24,7 @@ message CostAttribute {
 }
 
 message Cost {
+  // The account being queried.
   string account = 1;
 
   // The group id the account is associated with during the query.
@@ -34,17 +35,34 @@ message Cost {
   // For daily data, format is yyyy-mm-dd; for monthly, yyyy-mm.
   string date = 3;
 
+  // The CUR product code for an AWS service, such as AmazonEC2, AmazonRDS, etc.
   string productCode = 4;
+
+  // The CUR service code as provided in the CUR. Sometimes, this is the same as 'productCode', or a subset of 'productCode', or empty.
   string serviceCode = 5;
+
+  // The region of the lineitem, if applicable.
   string region = 6;
+
+  // The zone of the lineitem, if applicable.
   string zone = 7;
+
+  // The CUR usage type of the lineitem, if applicable.
   string usageType = 8;
+
+  // The CUR instance type of the lineitem, if applicable.
   string instanceType = 9;
+
+  // The CUR operation of the lineitem, if applicable.
   string operation = 10;
+
+  // The AWS invoice ID of the lineitem, if applicable.
   string invoiceId = 11;
+
+  // The description of the lineitem, if applicable.
   string description = 12;
 
-  // At the moment, this is not yet supported, always empty.
+  // The resource id of the lineitem, if applicable. At the moment, this is not yet fully supported.
   string resourceId = 13;
 
   map<string, string> tags = 14;
