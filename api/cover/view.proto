@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package blueapi.api.cover;
+
+import "api/cover/user.proto";
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/cover";
+option java_package = "cloud.alphaus.blueapi.api.cover";
+option java_outer_classname = "ApiCoverViewProto";
+
+message CoverView {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    bool isPrivate = 4;
+    bool isEditable = 5;
+    string icon = 6;
+    api.cover.CoverUser createdBy = 7;
+    string createdAt = 8;
+    api.cover.CoverUser updatedBy = 9;
+    string updatedAt = 10;
+    repeated ViewLayout layout = 11;
+    SideMenu sideMenu = 12;
+    string reportType = 13;
+}
+
+message CoverViewMin {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    bool isPrivate = 4;
+    bool isEditable = 5;
+    string icon = 6;
+    string created = 7;
+    string updated = 8;
+}
+
+message ViewLayout {
+    string i = 1;
+    double x = 2;
+    double y = 3;
+    string componentId = 4;
+    LayoutOptions options = 5;
+    LayoutRequests requests = 6;
+}
+
+message SideMenu {
+    string favorite = 1;
+    bool isOpenedAdmin = 2;
+    bool isOpenedFeatures = 3;
+    bool isOpenedCostGroups = 4;
+}
+
+message LayoutOptions {
+    string title = 1;
+    string description = 2;
+}
+
+message LayoutRequests {
+    string id = 1;
+    string name = 2;
+    string url = 3;
+    string params = 4;
+    string hash = 5;
+}
