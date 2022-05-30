@@ -24,7 +24,8 @@ service Cover {
   // Invite members to the system
   rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {
     option (google.api.http) = {
-      get: "/v1/member/{orgId}/invite"
+      post: "/v1/member/{orgId}/invite"
+      body: "*"
     };
   }
 
@@ -43,31 +44,79 @@ service Cover {
     };
   }
 
-  // Get the details of the cover user
+  // Get the details of the user
   rpc GetMemberDetails(GetMemberDetailsRequest) returns (GetMemberDetailsResponse) {
     option (google.api.http) = {
-      get: "/v1/member/{orgId}/{userId}"
+      get: "/v1/member/{orgId}/{username}"
     };
   }
 
-  // Deletes a cover user
+  // Modify user's avatar
+  rpc UpdateMemberAvatar(UpdateMemberAvatarRequest) returns (UpdateMemberAvatarResponse) {
+    option (google.api.http) = {
+      put: "/v1/member/{orgId}/avatar/{username}"
+      body: "*"
+    };
+  }
+
+  // Modify user's icon
+  rpc UpdateMemberIcon(UpdateMemberIconRequest) returns (UpdateMemberIconResponse) {
+    option (google.api.http) = {
+      put: "/v1/member/{orgId}/icon/{username}"
+      body: "*"
+    };
+  }
+
+  // Modify user's color theme
+  rpc UpdateMemberColorTheme(UpdateMemberColorThemeRequest) returns (UpdateMemberColorThemeResponse) {
+    option (google.api.http) = {
+      put: "/v1/member/{orgId}/colortheme/{username}"
+      body: "*"
+    };
+  }
+
+  // Modify username
+  rpc UpdateMemberUsername(UpdateMemberUsernameRequest) returns (UpdateMemberUsernameResponse) {
+    option (google.api.http) = {
+      put: "/v1/member/{orgId}/username/{username}"
+      body: "*"
+    };
+  }
+
+  // Modify user's email
+  rpc UpdateMemberEmail(UpdateMemberEmailRequest) returns (UpdateMemberEmailResponse) {
+    option (google.api.http) = {
+      put: "/v1/member/{orgId}/email/{username}"
+      body: "*"
+    };
+  }
+
+  // Deletes a user
   rpc DeleteMember(DeleteMemberRequest) returns (DeleteMemberResponse) {
     option (google.api.http) = {
-      delete: "/v1/member/{orgId}/{userId}"
+      delete: "/v1/member/{orgId}/{username}"
     };
   }
 
   // Trigger reset password from Admin
   rpc AdminResetPassword(AdminResetPasswordRequest) returns (AdminResetPasswordResponse) {
     option (google.api.http) = {
-      get: "/v1/member/{orgId}/reset_password/{userId}"
+      get: "/v1/member/{orgId}/resetpassword/{username}"
     };
   }
 
   // Reset member's password
   rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {
     option (google.api.http) = {
-      post: "/v1/member/{orgId}/reset_password/{userId}"
+      post: "/v1/member/{orgId}/resetpassword/{username}"
+      body: "*"
+    };
+  }
+
+  // Create a view
+  rpc CreateView(CreateViewRequest) returns (CreateViewResponse) {
+    option (google.api.http) = {
+      post: "/v1/view/{orgId}"
       body: "*"
     };
   }
@@ -125,7 +174,7 @@ message CreateMemberRequest {
 // Response message for CreateMember
 message CreateMemberResponse {
   string orgId = 1;
-  string userId = 2;
+  string username = 2;
   string email = 3;
 }
 
@@ -138,66 +187,158 @@ message GetMembersRequest {
 // Response message for GetMembers
 message GetMembersResponse {
   string orgId = 1;
-  repeated api.cover.CoverUser coverUser = 2;
+  repeated api.cover.UserData userData = 2;
 }
 
 // Request message for GetMemberDetails
 message GetMemberDetailsRequest {
   // Required. Organization Id.
   string orgId = 1;
-  // Required. User Id.
-  string userId = 2;
+  // Required. Username.
+  string username = 2;
 }
 
 // Response message for GetMemberDetails
 message GetMemberDetailsResponse {
   string orgId = 1;
-  api.cover.CoverUser coverUser = 2;
+  api.cover.UserData userData = 2;
+}
+
+// Request message for UpdateMemberAvatar
+message UpdateMemberAvatarRequest {
+  // Required. Organization Id.
+  string orgId = 1;
+  // Required. Username.
+  string username = 2;
+  string avatar = 3;
+}
+
+// Response message for UpdateMemberAvatar
+message UpdateMemberAvatarResponse {
+  string orgId = 1;
+  string avatar = 2;
+}
+
+// Request message for UpdateMemberIcon
+message UpdateMemberIconRequest {
+  // Required. Organization Id.
+  string orgId = 1;
+  // Required. Username.
+  string username = 2;
+  string icon = 3;
+}
+
+// Response message for UpdateMemberIcon
+message UpdateMemberIconResponse {
+  string orgId = 1;
+  string icon = 2;
+}
+
+// Request message for UpdateMemberColorTheme
+message UpdateMemberColorThemeRequest {
+  // Required. Organization Id.
+  string orgId = 1;
+  // Required. Username.
+  string username = 2;
+  string colorTheme = 3;
+}
+
+// Response message for UpdateMemberColorTheme
+message UpdateMemberColorThemeResponse {
+  string orgId = 1;
+  string colorTheme = 2;
+}
+
+// Request message for UpdateMemberUsername
+message UpdateMemberUsernameRequest {
+  // Required. Organization Id.
+  string orgId = 1;
+  // Required. Username.
+  string username = 2;
+  string newUsername = 3;
+}
+
+// Response message for UpdateMemberUsername
+message UpdateMemberUsernameResponse {
+  string orgId = 1;
+  string username = 2;
+}
+
+// Request message for UpdateMemberEmail
+message UpdateMemberEmailRequest {
+  // Required. Organization Id.
+  string orgId = 1;
+  // Required. Username.
+  string username = 2;
+  string email = 3;
+}
+
+// Response message for UpdateMemberEmail
+message UpdateMemberEmailResponse {
+  string orgId = 1;
+  string email = 2;
 }
 
 // Request message for DeleteMember
 message DeleteMemberRequest {
   // Required. Organization Id.
   string orgId = 1;
-  // Required. User Id.
-  string userId = 2;
+  // Required. Username.
+  string username = 2;
 }
 
 // Response message for DeleteMember
 message DeleteMemberResponse {
   string orgId = 1;
-  string userId = 2;
-  string username = 3;
+  string username = 2;
 }
 
 // Request message for AdminResetPassword
 message AdminResetPasswordRequest {
   // Required. Organization Id.
   string orgId = 1;
-  // Required. User Id.
-  string userId = 2;
+  // Required. Username.
+  string username = 2;
 }
 
 // Response message for AdminResetPassword
 message AdminResetPasswordResponse {
   string orgId = 1;
-  string userId = 2;
+  string username = 2;
 }
 
 // Request message for ResetPassword
 message ResetPasswordRequest {
   // Required. Organization Id.
   string orgId = 1;
-  // Required. User Id.
-  string userId = 2;
+  // Required. Username.
+  string username = 2;
   string password = 3;
+  string newPassword = 4;
 }
 
 // Response message for ResetPassword
 message ResetPasswordResponse {
   string orgId = 1;
-  string userId = 2;
-  string username = 3;
+  string username = 2;
+}
+
+// Request message for CreateView
+message CreateViewRequest {
+  string orgId = 1;
+  string name = 2;
+  string description = 3;
+  bool isPrivate = 4;
+  bool isEditable = 5;
+  string icon = 6;
+  string username = 7;
+  string reportType = 8;
+}
+
+// Response message for CreateView
+message CreateViewResponse {
+  string orgId = 1;
+  api.cover.ViewData viewData = 2;
 }
 
 // Request message for GetViews
@@ -209,7 +350,7 @@ message GetViewsRequest {
 // Response message for GetViews
 message GetViewsResponse {
   string orgId = 1;
-  repeated api.cover.CoverViewMin viewList = 2;
+  repeated api.cover.ViewList viewList = 2;
 }
 
 // Request message for GetCurrentView
@@ -223,7 +364,7 @@ message GetCurrentViewRequest {
 // Response message for GetCurrentView
 message GetCurrentViewResponse {
   string orgId = 1;
-  api.cover.CoverView coverView = 2;
+  api.cover.ViewData viewData = 2;
 }
 
 // Request message for UpdateView
@@ -249,7 +390,7 @@ message UpdateViewResponse {
 message DeleteViewRequest {
   // Required. Organization Id.
   string orgId = 1;
-  // Required. User Id.
+  // Required. Username.
   string viewId = 2;
 }
 
