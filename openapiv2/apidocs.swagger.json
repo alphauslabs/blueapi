@@ -2306,6 +2306,194 @@
         ]
       }
     },
+    "/v1/me": {
+      "get": {
+        "summary": "Get the details of the logged-in user",
+        "operationId": "Cover_GetUserDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetUserDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/me/avatar": {
+      "put": {
+        "summary": "Modify user's avatar",
+        "operationId": "Cover_UpdateUserAvatar",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserAvatarResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserAvatarRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/me/colortheme": {
+      "put": {
+        "summary": "Modify user's color theme",
+        "operationId": "Cover_UpdateUserColorTheme",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserColorThemeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserColorThemeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/me/email": {
+      "put": {
+        "summary": "Modify user's email",
+        "operationId": "Cover_UpdateUserEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserEmailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserEmailRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/me/icon": {
+      "put": {
+        "summary": "Modify user's icon",
+        "operationId": "Cover_UpdateUserIcon",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserIconResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserIconRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/me/password": {
+      "post": {
+        "summary": "Reset user's password",
+        "operationId": "Cover_ResetUserPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ResetUserPasswordResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ResetUserPasswordRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/member/{orgId}": {
       "get": {
         "summary": "Get all the members/subusers of the company",
@@ -2379,218 +2567,6 @@
                 }
               },
               "title": "Request message for CreateMember"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/member/{orgId}/avatar/{username}": {
-      "put": {
-        "summary": "Modify user's avatar",
-        "operationId": "Cover_UpdateMemberAvatar",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateMemberAvatarResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "username",
-            "description": "Required. Username.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "avatar": {
-                  "type": "string"
-                }
-              },
-              "title": "Request message for UpdateMemberAvatar"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/member/{orgId}/colortheme/{username}": {
-      "put": {
-        "summary": "Modify user's color theme",
-        "operationId": "Cover_UpdateMemberColorTheme",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateMemberColorThemeResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "username",
-            "description": "Required. Username.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "colorTheme": {
-                  "type": "string"
-                }
-              },
-              "title": "Request message for UpdateMemberColorTheme"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/member/{orgId}/email/{username}": {
-      "put": {
-        "summary": "Modify user's email",
-        "operationId": "Cover_UpdateMemberEmail",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateMemberEmailResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "username",
-            "description": "Required. Username.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "type": "string"
-                }
-              },
-              "title": "Request message for UpdateMemberEmail"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/member/{orgId}/icon/{username}": {
-      "put": {
-        "summary": "Modify user's icon",
-        "operationId": "Cover_UpdateMemberIcon",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateMemberIconResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "username",
-            "description": "Required. Username.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "icon": {
-                  "type": "string"
-                }
-              },
-              "title": "Request message for UpdateMemberIcon"
             }
           }
         ],
@@ -2729,59 +2705,6 @@
                 }
               },
               "title": "Request message for ResetPassword"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/member/{orgId}/username/{username}": {
-      "put": {
-        "summary": "Modify username",
-        "operationId": "Cover_UpdateMemberUsername",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateMemberUsernameResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "username",
-            "description": "Required. Username.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "newUsername": {
-                  "type": "string"
-                }
-              },
-              "title": "Request message for UpdateMemberUsername"
             }
           }
         ],
@@ -8490,6 +8413,18 @@
       },
       "title": "Request message for GetRecommendations"
     },
+    "v1GetUserDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "orgId": {
+          "type": "string"
+        },
+        "userData": {
+          "$ref": "#/definitions/coverUserData"
+        }
+      },
+      "title": "Response message for GetUserDetails"
+    },
     "v1GetUtilizationResponse": {
       "type": "object",
       "properties": {
@@ -8850,6 +8785,30 @@
       },
       "title": "Response message for ResetPassword"
     },
+    "v1ResetUserPasswordRequest": {
+      "type": "object",
+      "properties": {
+        "previousPassword": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for ResetUserPassword"
+    },
+    "v1ResetUserPasswordResponse": {
+      "type": "object",
+      "properties": {
+        "orgId": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for ResetUserPassword"
+    },
     "v1SaveNotificationSettingsRequest": {
       "type": "object",
       "properties": {
@@ -8874,66 +8833,6 @@
       },
       "description": "Response message for the UpdateCostFilters rpc."
     },
-    "v1UpdateMemberAvatarResponse": {
-      "type": "object",
-      "properties": {
-        "orgId": {
-          "type": "string"
-        },
-        "avatar": {
-          "type": "string"
-        }
-      },
-      "title": "Response message for UpdateMemberAvatar"
-    },
-    "v1UpdateMemberColorThemeResponse": {
-      "type": "object",
-      "properties": {
-        "orgId": {
-          "type": "string"
-        },
-        "colorTheme": {
-          "type": "string"
-        }
-      },
-      "title": "Response message for UpdateMemberColorTheme"
-    },
-    "v1UpdateMemberEmailResponse": {
-      "type": "object",
-      "properties": {
-        "orgId": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        }
-      },
-      "title": "Response message for UpdateMemberEmail"
-    },
-    "v1UpdateMemberIconResponse": {
-      "type": "object",
-      "properties": {
-        "orgId": {
-          "type": "string"
-        },
-        "icon": {
-          "type": "string"
-        }
-      },
-      "title": "Response message for UpdateMemberIcon"
-    },
-    "v1UpdateMemberUsernameResponse": {
-      "type": "object",
-      "properties": {
-        "orgId": {
-          "type": "string"
-        },
-        "username": {
-          "type": "string"
-        }
-      },
-      "title": "Response message for UpdateMemberUsername"
-    },
     "v1UpdateMetadataRequest": {
       "type": "object",
       "properties": {
@@ -8957,6 +8856,90 @@
         }
       },
       "description": "Request message for the Organization.UpdatePassword rpc."
+    },
+    "v1UpdateUserAvatarRequest": {
+      "type": "object",
+      "properties": {
+        "avatar": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for UpdateUserAvatar"
+    },
+    "v1UpdateUserAvatarResponse": {
+      "type": "object",
+      "properties": {
+        "orgId": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateUserAvatar"
+    },
+    "v1UpdateUserColorThemeRequest": {
+      "type": "object",
+      "properties": {
+        "colorTheme": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for UpdateUserColorTheme"
+    },
+    "v1UpdateUserColorThemeResponse": {
+      "type": "object",
+      "properties": {
+        "orgId": {
+          "type": "string"
+        },
+        "colorTheme": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateUserColorTheme"
+    },
+    "v1UpdateUserEmailRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for UpdateUserEmail"
+    },
+    "v1UpdateUserEmailResponse": {
+      "type": "object",
+      "properties": {
+        "orgId": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateUserEmail"
+    },
+    "v1UpdateUserIconRequest": {
+      "type": "object",
+      "properties": {
+        "icon": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for UpdateUserIcon"
+    },
+    "v1UpdateUserIconResponse": {
+      "type": "object",
+      "properties": {
+        "orgId": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateUserIcon"
     },
     "v1UpdateUserRoleMappingRequest": {
       "type": "object",
