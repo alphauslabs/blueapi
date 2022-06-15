@@ -2203,6 +2203,500 @@
         ]
       }
     },
+    "/v1/costgroup": {
+      "get": {
+        "summary": "Get all the cost groups",
+        "operationId": "Cover_GetCostGroups",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCostGroupsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      },
+      "post": {
+        "summary": "Create a cost group",
+        "operationId": "Cover_CreateCostGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateCostGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateCostGroupRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/costgroup/{costGroupId}": {
+      "get": {
+        "summary": "Get the details of the cost group",
+        "operationId": "Cover_GetCostGroupDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCostGroupDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes a cost group",
+        "operationId": "Cover_DeleteCostGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteCostGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/costgroup/{costGroupId}/colortheme": {
+      "put": {
+        "summary": "Update cost group's color theme",
+        "operationId": "Cover_UpdateCostGroupColorTheme",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateCostGroupColorThemeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "colorTheme": {
+                  "type": "string",
+                  "description": "Required. Color Theme."
+                }
+              },
+              "title": "Request message for UpdateCostGroupColorTheme"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/costgroup/{costGroupId}/combinations": {
+      "put": {
+        "summary": "Update cost group's combinations",
+        "operationId": "Cover_UpdateCostGroupCombinations",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateCostGroupCombinationsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "combinations": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/coverCombinations"
+                  }
+                }
+              },
+              "title": "Request message for UpdateCostGroupCombinations"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/costgroup/{costGroupId}/description": {
+      "put": {
+        "summary": "Update cost group's description",
+        "operationId": "Cover_UpdateCostGroupDescription",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateCostGroupDescriptionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "description": "Required. Description."
+                }
+              },
+              "title": "Request message for UpdateCostGroupDescription"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/costgroup/{costGroupId}/icon": {
+      "put": {
+        "summary": "Update cost group's icon",
+        "operationId": "Cover_UpdateCostGroupIcon",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateCostGroupIconResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "icon": {
+                  "type": "string",
+                  "description": "Required. Icon."
+                }
+              },
+              "title": "Request message for UpdateCostGroupIcon"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/costgroup/{costGroupId}/image": {
+      "put": {
+        "summary": "Update cost group's image",
+        "operationId": "Cover_UpdateCostGroupImage",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateCostGroupImageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "image": {
+                  "type": "string",
+                  "description": "Required. Image."
+                }
+              },
+              "title": "Request message for UpdateCostGroupImage"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/costgroup/{costGroupId}/member/add": {
+      "post": {
+        "summary": "Assign a member to a cost group",
+        "operationId": "Cover_AssignCostGroupMember",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AssignCostGroupMemberResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "description": "Required. User Id."
+                }
+              },
+              "title": "Request message for AssignCostGroupMember"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/costgroup/{costGroupId}/member/remove": {
+      "post": {
+        "summary": "Remove a member from a cost group",
+        "operationId": "Cover_RemoveCostGroupMember",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RemoveCostGroupMemberResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "description": "Required. User Id."
+                }
+              },
+              "title": "Request message for RemoveCostGroupMember"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/costgroup/{costGroupId}/name": {
+      "put": {
+        "summary": "Update cost group's name",
+        "operationId": "Cover_UpdateCostGroupName",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateCostGroupNameResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Required. Name."
+                }
+              },
+              "title": "Request message for UpdateCostGroupName"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/keys": {
       "get": {
         "summary": "Scans key:value data from your store.",
@@ -2461,6 +2955,39 @@
         ]
       }
     },
+    "/v1/me/name": {
+      "put": {
+        "summary": "Modify user's name",
+        "operationId": "Cover_UpdateUserName",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserNameResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserNameRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/me/password": {
       "post": {
         "summary": "Reset user's password",
@@ -2494,7 +3021,7 @@
         ]
       }
     },
-    "/v1/member/{orgId}": {
+    "/v1/member": {
       "get": {
         "summary": "Get all the members/subusers of the company",
         "operationId": "Cover_GetMembers",
@@ -2512,15 +3039,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
         "tags": [
           "Cover"
         ]
@@ -2544,29 +3062,11 @@
         },
         "parameters": [
           {
-            "name": "orgId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "username": {
-                  "type": "string"
-                }
-              },
-              "title": "Request message for CreateMember"
+              "$ref": "#/definitions/v1CreateMemberRequest"
             }
           }
         ],
@@ -2575,7 +3075,7 @@
         ]
       }
     },
-    "/v1/member/{orgId}/invite": {
+    "/v1/member/invite": {
       "post": {
         "summary": "Invite members to the system",
         "operationId": "Cover_InviteMember",
@@ -2595,23 +3095,11 @@
         },
         "parameters": [
           {
-            "name": "orgId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "type": "string"
-                }
-              },
-              "title": "Request message for InviteMember"
+              "$ref": "#/definitions/v1InviteMemberRequest"
             }
           }
         ],
@@ -2620,100 +3108,7 @@
         ]
       }
     },
-    "/v1/member/{orgId}/resetpassword/{username}": {
-      "get": {
-        "summary": "Trigger reset password from Admin",
-        "operationId": "Cover_AdminResetPassword",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1AdminResetPasswordResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "username",
-            "description": "Required. Username.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      },
-      "post": {
-        "summary": "Reset member's password",
-        "operationId": "Cover_ResetPassword",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ResetPasswordResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "username",
-            "description": "Required. Username.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "password": {
-                  "type": "string"
-                },
-                "newPassword": {
-                  "type": "string"
-                }
-              },
-              "title": "Request message for ResetPassword"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/member/{orgId}/{username}": {
+    "/v1/member/{userId}": {
       "get": {
         "summary": "Get the details of the user",
         "operationId": "Cover_GetMemberDetails",
@@ -2733,15 +3128,8 @@
         },
         "parameters": [
           {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "username",
-            "description": "Required. Username.",
+            "name": "userId",
+            "description": "Required. UserId.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -2770,15 +3158,8 @@
         },
         "parameters": [
           {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "username",
-            "description": "Required. Username.",
+            "name": "userId",
+            "description": "Required. UserId.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -2789,7 +3170,119 @@
         ]
       }
     },
-    "/v1/view/{orgId}": {
+    "/v1/member/{userId}/resetpassword": {
+      "get": {
+        "summary": "Trigger reset password from Admin",
+        "operationId": "Cover_AdminResetPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AdminResetPasswordResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "description": "Required. UserId.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "post": {
+        "summary": "Reset member's password",
+        "operationId": "Cover_ResetPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ResetPasswordResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "description": "Required. UserId.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string"
+                },
+                "newPassword": {
+                  "type": "string"
+                }
+              },
+              "title": "Request message for ResetPassword"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/user/mainview": {
+      "put": {
+        "summary": "Modify user's main view",
+        "operationId": "Cover_UpdateUserMainView",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserMainViewResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserMainViewRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/view": {
       "get": {
         "summary": "Get all the views",
         "operationId": "Cover_GetViews",
@@ -2807,15 +3300,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
         "tags": [
           "Cover"
         ]
@@ -2839,41 +3323,11 @@
         },
         "parameters": [
           {
-            "name": "orgId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "isPrivate": {
-                  "type": "boolean"
-                },
-                "isEditable": {
-                  "type": "boolean"
-                },
-                "icon": {
-                  "type": "string"
-                },
-                "username": {
-                  "type": "string"
-                },
-                "reportType": {
-                  "type": "string"
-                }
-              },
-              "title": "Request message for CreateView"
+              "$ref": "#/definitions/v1CreateViewRequest"
             }
           }
         ],
@@ -2882,7 +3336,138 @@
         ]
       }
     },
-    "/v1/view/{orgId}/{viewId}": {
+    "/v1/view/favorite": {
+      "put": {
+        "summary": "Add to favorites",
+        "operationId": "Cover_AddFavorite",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddFavoriteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddFavoriteRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/view/favorites/{userId}": {
+      "get": {
+        "summary": "Get favorite views",
+        "operationId": "Cover_GetFavoriteViews",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetFavoriteViewsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "description": "Required. UserId.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/view/publish": {
+      "post": {
+        "summary": "Publish current view",
+        "operationId": "Cover_PublishView",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PublishViewResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1PublishViewRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/view/unfavorite": {
+      "put": {
+        "summary": "Remove from favorites",
+        "operationId": "Cover_RemoveFavorite",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RemoveFavoriteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RemoveFavoriteRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/view/{viewId}": {
       "get": {
         "summary": "Get the details of the current view",
         "operationId": "Cover_GetCurrentView",
@@ -2901,13 +3486,6 @@
           }
         },
         "parameters": [
-          {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "viewId",
             "description": "Required. View Id.",
@@ -2939,15 +3517,8 @@
         },
         "parameters": [
           {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "viewId",
-            "description": "Required. Username.",
+            "description": "Required. View Id.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -2975,13 +3546,6 @@
           }
         },
         "parameters": [
-          {
-            "name": "orgId",
-            "description": "Required. Organization Id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "viewId",
             "description": "Required. View Id.",
@@ -6941,6 +7505,96 @@
       },
       "description": "This resource represents a long-running operation that is the result of a\nnetwork API call."
     },
+    "coverCombinations": {
+      "type": "object",
+      "properties": {
+        "criteria": {
+          "type": "string"
+        },
+        "comparator": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "tagKey": {
+          "type": "string"
+        },
+        "tagValue": {
+          "type": "string"
+        }
+      }
+    },
+    "coverCostGroupData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "colorTheme": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverUserData"
+          }
+        },
+        "combinations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverCombinations"
+          }
+        },
+        "createdBy": {
+          "$ref": "#/definitions/coverUserData"
+        }
+      }
+    },
+    "coverFavorites": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "isPrivate": {
+          "type": "boolean"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "created": {
+          "type": "string"
+        },
+        "updated": {
+          "type": "string"
+        }
+      }
+    },
     "coverLayoutOptions": {
       "type": "object",
       "properties": {
@@ -6992,7 +7646,10 @@
     "coverUserData": {
       "type": "object",
       "properties": {
-        "username": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
           "type": "string"
         },
         "email": {
@@ -7264,17 +7921,45 @@
       },
       "description": "Defines the fields associated with a Wave access group."
     },
+    "v1AddFavoriteRequest": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string",
+          "description": "Required. View Id."
+        }
+      },
+      "title": "Request message for AddFavorite"
+    },
+    "v1AddFavoriteResponse": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for AddFavorite"
+    },
     "v1AdminResetPasswordResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
-        "username": {
+        "userId": {
           "type": "string"
         }
       },
       "title": "Response message for AdminResetPassword"
+    },
+    "v1AssignCostGroupMemberResponse": {
+      "type": "object",
+      "properties": {
+        "costGroupId": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for AssignCostGroupMember"
     },
     "v1AwsDailyRunHistory": {
       "type": "object",
@@ -7715,6 +8400,42 @@
       },
       "description": "Response message for the CreateCostFilters rpc."
     },
+    "v1CreateCostGroupRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "colorTheme": {
+          "type": "string"
+        },
+        "combinations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverCombinations"
+          }
+        }
+      },
+      "title": "Request message for CreateCostGroup"
+    },
+    "v1CreateCostGroupResponse": {
+      "type": "object",
+      "properties": {
+        "costGroupData": {
+          "$ref": "#/definitions/coverCostGroupData"
+        }
+      },
+      "title": "Response message for CreateCostGroup"
+    },
     "v1CreateDefaultCostAccessRequest": {
       "type": "object",
       "properties": {
@@ -7807,17 +8528,26 @@
       },
       "description": "Request message for the Iam.CreateIpFilter rpc."
     },
+    "v1CreateMemberRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for CreateMember"
+    },
     "v1CreateMemberResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
-        "username": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
+        "userData": {
+          "$ref": "#/definitions/coverUserData"
         }
       },
       "title": "Response message for CreateMember"
@@ -7992,12 +8722,36 @@
       },
       "description": "Response message for the Iam.CreateUserRoleMapping rpc."
     },
+    "v1CreateViewRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "isPrivate": {
+          "type": "boolean"
+        },
+        "isEditable": {
+          "type": "boolean"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "reportType": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for CreateView"
+    },
     "v1CreateViewResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
         "viewData": {
           "$ref": "#/definitions/coverViewData"
         }
@@ -8042,13 +8796,19 @@
       },
       "description": "Response message for the Admin.GetDefaultCostAccess, Admin.CreateDefaultCostAccess rpc."
     },
+    "v1DeleteCostGroupResponse": {
+      "type": "object",
+      "properties": {
+        "costGroupId": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for DeleteCostGroup"
+    },
     "v1DeleteMemberResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
-        "username": {
+        "userId": {
           "type": "string"
         }
       },
@@ -8057,13 +8817,7 @@
     "v1DeleteViewResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
         "viewId": {
-          "type": "string"
-        },
-        "name": {
           "type": "string"
         }
       },
@@ -8158,6 +8912,27 @@
       },
       "description": "Response message for the Admin.GetCloudWatchMetricsStreamTemplateUrl rpc."
     },
+    "v1GetCostGroupDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "costGroupData": {
+          "$ref": "#/definitions/coverCostGroupData"
+        }
+      },
+      "title": "Response message for GetCostGroupDetails"
+    },
+    "v1GetCostGroupsResponse": {
+      "type": "object",
+      "properties": {
+        "costGroupData": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverCostGroupData"
+          }
+        }
+      },
+      "title": "Response message for GetCostGroups"
+    },
     "v1GetCostReductionResponse": {
       "type": "object",
       "properties": {
@@ -8203,9 +8978,6 @@
     "v1GetCurrentViewResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
         "viewData": {
           "$ref": "#/definitions/coverViewData"
         }
@@ -8238,6 +9010,15 @@
       },
       "description": "Response message for the Admin.GetDefaultCostAccessTemplateUrl rpc."
     },
+    "v1GetFavoriteViewsResponse": {
+      "type": "object",
+      "properties": {
+        "favorites": {
+          "$ref": "#/definitions/coverFavorites"
+        }
+      },
+      "title": "Response message for GetFavoriteViews"
+    },
     "v1GetForecastsResponse": {
       "type": "object",
       "properties": {
@@ -8250,9 +9031,6 @@
     "v1GetMemberDetailsResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
         "userData": {
           "$ref": "#/definitions/coverUserData"
         }
@@ -8262,9 +9040,6 @@
     "v1GetMembersResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
         "userData": {
           "type": "array",
           "items": {
@@ -8416,9 +9191,6 @@
     "v1GetUserDetailsResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
         "userData": {
           "$ref": "#/definitions/coverUserData"
         }
@@ -8443,9 +9215,6 @@
     "v1GetViewsResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
         "viewList": {
           "type": "array",
           "items": {
@@ -8469,12 +9238,18 @@
       },
       "description": "Request message for the Cost.ImportCurFiles rpc."
     },
+    "v1InviteMemberRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for InviteMember"
+    },
     "v1InviteMemberResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
         "email": {
           "type": "string"
         }
@@ -8691,6 +9466,25 @@
     "v1Preference": {
       "type": "object"
     },
+    "v1PublishViewRequest": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string",
+          "description": "Required. View Id."
+        }
+      },
+      "title": "Request message for PublishView"
+    },
+    "v1PublishViewResponse": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for PublishView"
+    },
     "v1ReadAdjustmentsRequestAwsOptions": {
       "type": "object",
       "properties": {
@@ -8773,13 +9567,41 @@
         }
       }
     },
+    "v1RemoveCostGroupMemberResponse": {
+      "type": "object",
+      "properties": {
+        "costGroupId": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for RemoveCostGroupMember"
+    },
+    "v1RemoveFavoriteRequest": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string",
+          "description": "Required. View Id."
+        }
+      },
+      "title": "Request message for RemoveFavorite"
+    },
+    "v1RemoveFavoriteResponse": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for RemoveFavorite"
+    },
     "v1ResetPasswordResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
-        "username": {
+        "userId": {
           "type": "string"
         }
       },
@@ -8800,10 +9622,7 @@
     "v1ResetUserPasswordResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
-        "username": {
+        "userId": {
           "type": "string"
         }
       },
@@ -8832,6 +9651,63 @@
         }
       },
       "description": "Response message for the UpdateCostFilters rpc."
+    },
+    "v1UpdateCostGroupColorThemeResponse": {
+      "type": "object",
+      "properties": {
+        "colorTheme": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateCostGroupColorTheme"
+    },
+    "v1UpdateCostGroupCombinationsResponse": {
+      "type": "object",
+      "properties": {
+        "combinations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverCombinations"
+          }
+        }
+      },
+      "title": "Response message for UpdateCostGroupCombinations"
+    },
+    "v1UpdateCostGroupDescriptionResponse": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateCostGroupDescription"
+    },
+    "v1UpdateCostGroupIconResponse": {
+      "type": "object",
+      "properties": {
+        "icon": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateCostGroupIcon"
+    },
+    "v1UpdateCostGroupImageResponse": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateCostGroupImage"
+    },
+    "v1UpdateCostGroupNameResponse": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateCostGroupName"
     },
     "v1UpdateMetadataRequest": {
       "type": "object",
@@ -8869,9 +9745,6 @@
     "v1UpdateUserAvatarResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
         "avatar": {
           "type": "string"
         }
@@ -8890,9 +9763,6 @@
     "v1UpdateUserColorThemeResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
         "colorTheme": {
           "type": "string"
         }
@@ -8911,9 +9781,6 @@
     "v1UpdateUserEmailResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
         "email": {
           "type": "string"
         }
@@ -8932,14 +9799,47 @@
     "v1UpdateUserIconResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
         "icon": {
           "type": "string"
         }
       },
       "title": "Response message for UpdateUserIcon"
+    },
+    "v1UpdateUserMainViewRequest": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for UpdateUserMainView"
+    },
+    "v1UpdateUserMainViewResponse": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateUserMainView"
+    },
+    "v1UpdateUserNameRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for UpdateUserName"
+    },
+    "v1UpdateUserNameResponse": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateUserName"
     },
     "v1UpdateUserRoleMappingRequest": {
       "type": "object",
@@ -8985,9 +9885,6 @@
     "v1UpdateViewResponse": {
       "type": "object",
       "properties": {
-        "orgId": {
-          "type": "string"
-        },
         "viewId": {
           "type": "string"
         }
