@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package blueapi.api.cover;
+
+import "api/cover/user.proto";
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/cover";
+option java_package = "cloud.alphaus.blueapi.api.cover";
+option java_outer_classname = "ApiCoverCostGroupProto";
+
+message CostGroupData {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string image = 4;
+    string icon = 5;
+    string colorTheme = 6;
+    string createdAt = 7;
+    string updatedAt = 8;
+    repeated api.cover.UserData members = 9;
+    repeated Combinations combinations = 10;
+    api.cover.UserData createdBy = 11;
+}
+
+message Combinations {
+    string criteria = 1;
+    string comparator = 2;
+    string value = 3;
+    string tagKey = 4;
+    string tagValue = 5;
+}

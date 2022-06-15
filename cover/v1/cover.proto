@@ -4,6 +4,7 @@ package blueapi.cover.v1;
 
 import "api/cover/user.proto";
 import "api/cover/view.proto";
+import "api/cover/costgroup.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -24,7 +25,7 @@ service Cover {
   // Invite members to the system
   rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {
     option (google.api.http) = {
-      post: "/v1/member/{orgId}/invite"
+      post: "/v1/member/invite"
       body: "*"
     };
   }
@@ -32,7 +33,7 @@ service Cover {
   // Create a member
   rpc CreateMember(CreateMemberRequest) returns (CreateMemberResponse) {
     option (google.api.http) = {
-      post: "/v1/member/{orgId}"
+      post: "/v1/member"
       body: "*"
     };
   }
@@ -40,14 +41,14 @@ service Cover {
   // Get all the members/subusers of the company
   rpc GetMembers(GetMembersRequest) returns (GetMembersResponse) {
     option (google.api.http) = {
-      get: "/v1/member/{orgId}"
+      get: "/v1/member"
     };
   }
 
   // Get the details of the user
   rpc GetMemberDetails(GetMemberDetailsRequest) returns (GetMemberDetailsResponse) {
     option (google.api.http) = {
-      get: "/v1/member/{orgId}/{username}"
+      get: "/v1/member/{userId}"
     };
   }
 
@@ -82,10 +83,26 @@ service Cover {
     };
   }
 
+  // Modify user's name
+  rpc UpdateUserName(UpdateUserNameRequest) returns (UpdateUserNameResponse) {
+    option (google.api.http) = {
+      put: "/v1/me/name"
+      body: "*"
+    };
+  }
+
   // Modify user's email
   rpc UpdateUserEmail(UpdateUserEmailRequest) returns (UpdateUserEmailResponse) {
     option (google.api.http) = {
       put: "/v1/me/email"
+      body: "*"
+    };
+  }
+
+  // Modify user's main view
+  rpc UpdateUserMainView(UpdateUserMainViewRequest) returns (UpdateUserMainViewResponse) {
+    option (google.api.http) = {
+      put: "/v1/user/mainview"
       body: "*"
     };
   }
@@ -101,21 +118,21 @@ service Cover {
   // Deletes a user
   rpc DeleteMember(DeleteMemberRequest) returns (DeleteMemberResponse) {
     option (google.api.http) = {
-      delete: "/v1/member/{orgId}/{username}"
+      delete: "/v1/member/{userId}"
     };
   }
 
   // Trigger reset password from Admin
   rpc AdminResetPassword(AdminResetPasswordRequest) returns (AdminResetPasswordResponse) {
     option (google.api.http) = {
-      get: "/v1/member/{orgId}/resetpassword/{username}"
+      get: "/v1/member/{userId}/resetpassword"
     };
   }
 
   // Reset member's password
   rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {
     option (google.api.http) = {
-      post: "/v1/member/{orgId}/resetpassword/{username}"
+      post: "/v1/member/{userId}/resetpassword"
       body: "*"
     };
   }
@@ -123,7 +140,7 @@ service Cover {
   // Create a view
   rpc CreateView(CreateViewRequest) returns (CreateViewResponse) {
     option (google.api.http) = {
-      post: "/v1/view/{orgId}"
+      post: "/v1/view"
       body: "*"
     };
   }
@@ -131,21 +148,52 @@ service Cover {
   // Get all the views
   rpc GetViews(GetViewsRequest) returns (GetViewsResponse) {
     option (google.api.http) = {
-      get: "/v1/view/{orgId}"
+      get: "/v1/view"
     };
   }
 
   // Get the details of the current view
   rpc GetCurrentView(GetCurrentViewRequest) returns (GetCurrentViewResponse) {
     option (google.api.http) = {
-      get: "/v1/view/{orgId}/{viewId}"
+      get: "/v1/view/{viewId}"
+    };
+  }
+
+  // Get favorite views
+  rpc GetFavoriteViews(GetFavoriteViewsRequest) returns (GetFavoriteViewsResponse) {
+    option (google.api.http) = {
+      get: "/v1/view/favorites/{userId}"
+    };
+  }
+
+  // Publish current view
+  rpc PublishView(PublishViewRequest) returns (PublishViewResponse) {
+    option (google.api.http) = {
+      post: "/v1/view/publish"
+      body: "*"
+    };
+  }
+
+  // Add to favorites
+  rpc AddFavorite(AddFavoriteRequest) returns (AddFavoriteResponse) {
+    option (google.api.http) = {
+      put: "/v1/view/favorite"
+      body: "*"
+    };
+  }
+
+  // Remove from favorites
+  rpc RemoveFavorite(RemoveFavoriteRequest) returns (RemoveFavoriteResponse) {
+    option (google.api.http) = {
+      put: "/v1/view/unfavorite"
+      body: "*"
     };
   }
 
   // Updates the view details
   rpc UpdateView(UpdateViewRequest) returns (UpdateViewResponse) {
     option (google.api.http) = {
-      put: "/v1/view/{orgId}/{viewId}"
+      put: "/v1/view/{viewId}"
       body: "*"
     };
   }
@@ -153,62 +201,143 @@ service Cover {
   // Deletes a view
   rpc DeleteView(DeleteViewRequest) returns (DeleteViewResponse) {
     option (google.api.http) = {
-      delete: "/v1/view/{orgId}/{viewId}"
+      delete: "/v1/view/{viewId}"
+    };
+  }
+
+  // Create a cost group
+  rpc CreateCostGroup(CreateCostGroupRequest) returns (CreateCostGroupResponse) {
+    option (google.api.http) = {
+      post: "/v1/costgroup"
+      body: "*"
+    };
+  }
+
+  // Get all the cost groups
+  rpc GetCostGroups(GetCostGroupsRequest) returns (GetCostGroupsResponse) {
+    option (google.api.http) = {
+      get: "/v1/costgroup"
+    };
+  }
+
+  // Get the details of the cost group
+  rpc GetCostGroupDetails(GetCostGroupDetailsRequest) returns (GetCostGroupDetailsResponse) {
+    option (google.api.http) = {
+      get: "/v1/costgroup/{costGroupId}"
+    };
+  }
+
+  // Update cost group's name
+  rpc UpdateCostGroupName(UpdateCostGroupNameRequest) returns (UpdateCostGroupNameResponse) {
+    option (google.api.http) = {
+      put: "/v1/costgroup/{costGroupId}/name"
+      body: "*"
+    };
+  }
+
+  // Update cost group's description
+  rpc UpdateCostGroupDescription(UpdateCostGroupDescriptionRequest) returns (UpdateCostGroupDescriptionResponse) {
+    option (google.api.http) = {
+      put: "/v1/costgroup/{costGroupId}/description"
+      body: "*"
+    };
+  }
+
+  // Update cost group's image
+  rpc UpdateCostGroupImage(UpdateCostGroupImageRequest) returns (UpdateCostGroupImageResponse) {
+    option (google.api.http) = {
+      put: "/v1/costgroup/{costGroupId}/image"
+      body: "*"
+    };
+  }
+
+  // Update cost group's icon
+  rpc UpdateCostGroupIcon(UpdateCostGroupIconRequest) returns (UpdateCostGroupIconResponse) {
+    option (google.api.http) = {
+      put: "/v1/costgroup/{costGroupId}/icon"
+      body: "*"
+    };
+  }
+
+  // Update cost group's color theme
+  rpc UpdateCostGroupColorTheme(UpdateCostGroupColorThemeRequest) returns (UpdateCostGroupColorThemeResponse) {
+    option (google.api.http) = {
+      put: "/v1/costgroup/{costGroupId}/colortheme"
+      body: "*"
+    };
+  }
+
+  // Update cost group's combinations
+  rpc UpdateCostGroupCombinations(UpdateCostGroupCombinationsRequest) returns (UpdateCostGroupCombinationsResponse) {
+    option (google.api.http) = {
+      put: "/v1/costgroup/{costGroupId}/combinations"
+      body: "*"
+    };
+  }
+
+  // Assign a member to a cost group
+  rpc AssignCostGroupMember(AssignCostGroupMemberRequest) returns (AssignCostGroupMemberResponse) {
+    option (google.api.http) = {
+      post: "/v1/costgroup/{costGroupId}/member/add"
+      body: "*"
+    };
+  }
+
+  // Remove a member from a cost group
+  rpc RemoveCostGroupMember(RemoveCostGroupMemberRequest) returns (RemoveCostGroupMemberResponse) {
+    option (google.api.http) = {
+      post: "/v1/costgroup/{costGroupId}/member/remove"
+      body: "*"
+    };
+  }
+
+  // Deletes a cost group
+  rpc DeleteCostGroup(DeleteCostGroupRequest) returns (DeleteCostGroupResponse) {
+    option (google.api.http) = {
+      delete: "/v1/costgroup/{costGroupId}"
     };
   }
 }
 
 // Request message for InviteMember
 message InviteMemberRequest {
-  string orgId = 1;
-  string email = 2;
+  string email = 1;
 }
 
 // Response message for InviteMember
 message InviteMemberResponse {
-  string orgId = 1;
-  string email = 2;
+  string email = 1;
 }
 
 // Request message for CreateMember
 message CreateMemberRequest {
-  string orgId = 1;
-  string email = 2;
-  string password = 3;
-  string username = 4;
+  string email = 1;
+  string password = 2;
+  string name = 3;
 }
 
 // Response message for CreateMember
 message CreateMemberResponse {
-  string orgId = 1;
-  string username = 2;
-  string email = 3;
+  api.cover.UserData userData = 1;
 }
 
 // Request message for GetMembers
-message GetMembersRequest {
-  // Required. Organization Id.
-  string orgId = 1;
-}
+message GetMembersRequest {}
 
 // Response message for GetMembers
 message GetMembersResponse {
-  string orgId = 1;
-  repeated api.cover.UserData userData = 2;
+  repeated api.cover.UserData userData = 1;
 }
 
 // Request message for GetMemberDetails
 message GetMemberDetailsRequest {
-  // Required. Organization Id.
-  string orgId = 1;
-  // Required. Username.
-  string username = 2;
+  // Required. UserId.
+  string userId = 1;
 }
 
 // Response message for GetMemberDetails
 message GetMemberDetailsResponse {
-  string orgId = 1;
-  api.cover.UserData userData = 2;
+  api.cover.UserData userData = 1;
 }
 
 // Request message for GetUserDetails
@@ -216,8 +345,7 @@ message GetUserDetailsRequest {}
 
 // Response message for GetUserDetails
 message GetUserDetailsResponse {
-  string orgId = 1;
-  api.cover.UserData userData = 2;
+  api.cover.UserData userData = 1;
 }
 
 // Request message for UpdateUserAvatar
@@ -227,8 +355,7 @@ message UpdateUserAvatarRequest {
 
 // Response message for UpdateUserAvatar
 message UpdateUserAvatarResponse {
-  string orgId = 1;
-  string avatar = 2;
+  string avatar = 1;
 }
 
 // Request message for UpdateUserIcon
@@ -238,8 +365,7 @@ message UpdateUserIconRequest {
 
 // Response message for UpdateUserIcon
 message UpdateUserIconResponse {
-  string orgId = 1;
-  string icon = 2;
+  string icon = 1;
 }
 
 // Request message for UpdateUserColorTheme
@@ -249,8 +375,17 @@ message UpdateUserColorThemeRequest {
 
 // Response message for UpdateUserColorTheme
 message UpdateUserColorThemeResponse {
-  string orgId = 1;
-  string colorTheme = 2;
+  string colorTheme = 1;
+}
+
+// Request message for UpdateUserName
+message UpdateUserNameRequest {
+  string name = 1;
+}
+
+// Response message for UpdateUserName
+message UpdateUserNameResponse {
+  string name = 1;
 }
 
 // Request message for UpdateUserEmail
@@ -260,8 +395,17 @@ message UpdateUserEmailRequest {
 
 // Response message for UpdateUserEmail
 message UpdateUserEmailResponse {
-  string orgId = 1;
-  string email = 2;
+  string email = 1;
+}
+
+// Request message for UpdateUserMainView
+message UpdateUserMainViewRequest {
+  string viewId = 1;
+}
+
+// Response message for UpdateUserMainView
+message UpdateUserMainViewResponse {
+  string viewId = 1;
 }
 
 // Request message for ResetUserPassword
@@ -272,128 +416,296 @@ message ResetUserPasswordRequest {
 
 // Response message for ResetUserPassword
 message ResetUserPasswordResponse {
-  string orgId = 1;
-  string username = 2;
+  string userId = 1;
 }
 
 // Request message for DeleteMember
 message DeleteMemberRequest {
-  // Required. Organization Id.
-  string orgId = 1;
-  // Required. Username.
-  string username = 2;
+  // Required. UserId.
+  string userId = 1;
 }
 
 // Response message for DeleteMember
 message DeleteMemberResponse {
-  string orgId = 1;
-  string username = 2;
+  string userId = 1;
 }
 
 // Request message for AdminResetPassword
 message AdminResetPasswordRequest {
-  // Required. Organization Id.
-  string orgId = 1;
-  // Required. Username.
-  string username = 2;
+  // Required. UserId.
+  string userId = 1;
 }
 
 // Response message for AdminResetPassword
 message AdminResetPasswordResponse {
-  string orgId = 1;
-  string username = 2;
+  string userId = 1;
 }
 
 // Request message for ResetPassword
 message ResetPasswordRequest {
-  // Required. Organization Id.
-  string orgId = 1;
-  // Required. Username.
-  string username = 2;
-  string password = 3;
-  string newPassword = 4;
+  // Required. UserId.
+  string userId = 1;
+  string password = 2;
+  string newPassword = 3;
 }
 
 // Response message for ResetPassword
 message ResetPasswordResponse {
-  string orgId = 1;
-  string username = 2;
+  string userId = 1;
 }
 
 // Request message for CreateView
 message CreateViewRequest {
-  string orgId = 1;
-  string name = 2;
-  string description = 3;
-  bool isPrivate = 4;
-  bool isEditable = 5;
-  string icon = 6;
-  string username = 7;
-  string reportType = 8;
+  string name = 1;
+  string description = 2;
+  bool isPrivate = 3;
+  bool isEditable = 4;
+  string icon = 5;
+  string userId = 6;
+  string reportType = 7;
 }
 
 // Response message for CreateView
 message CreateViewResponse {
-  string orgId = 1;
-  api.cover.ViewData viewData = 2;
+  api.cover.ViewData viewData = 1;
 }
 
 // Request message for GetViews
-message GetViewsRequest {
-  // Required. Organization Id.
-  string orgId = 1;
-}
+message GetViewsRequest {}
 
 // Response message for GetViews
 message GetViewsResponse {
-  string orgId = 1;
-  repeated api.cover.ViewList viewList = 2;
+  repeated api.cover.ViewList viewList = 1;
 }
 
 // Request message for GetCurrentView
 message GetCurrentViewRequest {
-  // Required. Organization Id.
-  string orgId = 1;
   // Required. View Id.
-  string viewId = 2;
+  string viewId = 1;
 }
 
 // Response message for GetCurrentView
 message GetCurrentViewResponse {
-  string orgId = 1;
-  api.cover.ViewData viewData = 2;
+  api.cover.ViewData viewData = 1;
+}
+
+// Request message for GetFavoriteViews
+message GetFavoriteViewsRequest {
+  // Required. UserId.
+  string userId = 1;
+}
+
+// Response message for GetFavoriteViews
+message GetFavoriteViewsResponse {
+  api.cover.Favorites favorites = 1;
+}
+
+// Request message for PublishView
+message PublishViewRequest {
+  // Required. View Id.
+  string viewId = 1;
+}
+
+// Response message for PublishView
+message PublishViewResponse {
+  string url = 1;
+}
+
+// Request message for AddFavorite
+message AddFavoriteRequest {
+  // Required. View Id.
+  string viewId = 1;
+}
+
+// Response message for AddFavorite
+message AddFavoriteResponse {
+  string viewId = 1;
+}
+
+// Request message for RemoveFavorite
+message RemoveFavoriteRequest {
+  // Required. View Id.
+  string viewId = 1;
+}
+
+// Response message for RemoveFavorite
+message RemoveFavoriteResponse {
+  string viewId = 1;
 }
 
 // Request message for UpdateView
 message UpdateViewRequest {
-  // Required. Organization Id.
-  string orgId = 1;
   // Required. View Id.
-  string viewId = 2;
-  string name = 3;
-  string description = 4;
-  string icon = 5;
-  bool isPrivate = 6;
-  bool isEditable = 7;
+  string viewId = 1;
+  string name = 2;
+  string description = 3;
+  string icon = 4;
+  bool isPrivate = 5;
+  bool isEditable = 6;
 }
 
 // Response message for UpdateView
 message UpdateViewResponse {
-  string orgId = 1;
-  string viewId = 2;
+  string viewId = 1;
 }
 
 // Request message for DeleteView
 message DeleteViewRequest {
-  // Required. Organization Id.
-  string orgId = 1;
-  // Required. Username.
-  string viewId = 2;
+  // Required. View Id.
+  string viewId = 1;
 }
 
 // Response message for DeleteView
 message DeleteViewResponse {
-  string orgId = 1;
-  string viewId = 2;
-  string name = 3;
+  string viewId = 1;
+}
+
+// Request message for CreateCostGroup
+message CreateCostGroupRequest {
+  string name = 1;
+  string description = 2;
+  string image = 3;
+  string icon = 4;
+  string colorTheme = 5;
+  repeated api.cover.Combinations combinations = 6;
+}
+
+// Response message for CreateCostGroup
+message CreateCostGroupResponse {
+  api.cover.CostGroupData costGroupData = 1;
+}
+
+// Request message for GetCostGroups
+message GetCostGroupsRequest {}
+
+// Response message for GetCostGroups
+message GetCostGroupsResponse {
+  repeated api.cover.CostGroupData costGroupData = 1;
+}
+
+// Request message for GetCostGroupDetails
+message GetCostGroupDetailsRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+}
+
+// Response message for GetCostGroupDetails
+message GetCostGroupDetailsResponse {
+  api.cover.CostGroupData costGroupData = 1;
+}
+
+// Request message for UpdateCostGroupName
+message UpdateCostGroupNameRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+  // Required. Name.
+  string name = 2;
+}
+
+// Response message for UpdateCostGroupName
+message UpdateCostGroupNameResponse {
+  string name = 1;
+}
+
+// Request message for UpdateCostGroupDescription
+message UpdateCostGroupDescriptionRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+  // Required. Description.
+  string description = 2;
+}
+
+// Response message for UpdateCostGroupDescription
+message UpdateCostGroupDescriptionResponse {
+    string description = 1;
+}
+
+// Request message for UpdateCostGroupImage
+message UpdateCostGroupImageRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+  // Required. Image.
+  string image = 2;
+}
+
+// Response message for UpdateCostGroupImage
+message UpdateCostGroupImageResponse {
+  string image = 1;
+}
+
+// Request message for UpdateCostGroupIcon
+message UpdateCostGroupIconRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+  // Required. Icon.
+  string icon = 2;
+}
+
+// Response message for UpdateCostGroupIcon
+message UpdateCostGroupIconResponse {
+    string icon = 1;
+}
+
+// Request message for UpdateCostGroupColorTheme
+message UpdateCostGroupColorThemeRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+  // Required. Color Theme.
+  string colorTheme = 2;
+}
+
+// Response message for UpdateCostGroupColorTheme
+message UpdateCostGroupColorThemeResponse {
+    string colorTheme = 1;
+}
+
+// Request message for UpdateCostGroupCombinations
+message UpdateCostGroupCombinationsRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+  repeated api.cover.Combinations combinations = 2;
+}
+
+// Response message for UpdateCostGroupCombinations
+message UpdateCostGroupCombinationsResponse {
+  repeated api.cover.Combinations combinations = 1;
+}
+
+// Request message for AssignCostGroupMember
+message AssignCostGroupMemberRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+  // Required. User Id.
+  string userId = 2;
+}
+
+// Response message for AssignCostGroupMember
+message AssignCostGroupMemberResponse {
+  string costGroupId = 1;
+  string userId = 2;
+}
+
+// Request message for RemoveCostGroupMember
+message RemoveCostGroupMemberRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+  // Required. User Id.
+  string userId = 2;
+}
+
+// Response message for RemoveCostGroupMember
+message RemoveCostGroupMemberResponse {
+  string costGroupId = 1;
+  string userId = 2;
+}
+
+// Request message for DeleteCostGroup
+message DeleteCostGroupRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+}
+
+// Response message for DeleteCostGroup
+message DeleteCostGroupResponse {
+  string costGroupId = 1;
 }
