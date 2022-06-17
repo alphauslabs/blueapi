@@ -2823,6 +2823,72 @@
         ]
       }
     },
+    "/v1/me/apptheme": {
+      "put": {
+        "summary": "Modify user's app theme",
+        "operationId": "Cover_UpdateUserAppTheme",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserAppThemeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserAppThemeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/me/attributes": {
+      "put": {
+        "summary": "Modify attributes",
+        "operationId": "Cover_UpdateUserAttributes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserAttributesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserAttributesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/me/avatar": {
       "put": {
         "summary": "Modify user's avatar",
@@ -2955,6 +3021,72 @@
         ]
       }
     },
+    "/v1/me/locale": {
+      "put": {
+        "summary": "Modify user's locale",
+        "operationId": "Cover_UpdateUserLocale",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserLocaleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserLocaleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/me/mainview": {
+      "put": {
+        "summary": "Modify user's main view",
+        "operationId": "Cover_UpdateUserMainView",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserMainViewResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserMainViewRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/me/name": {
       "put": {
         "summary": "Modify user's name",
@@ -3013,6 +3145,39 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1ResetUserPasswordRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/me/timezone": {
+      "put": {
+        "summary": "Modify user's timezone",
+        "operationId": "Cover_UpdateUserTimezone",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserTimezoneResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserTimezoneRequest"
             }
           }
         ],
@@ -3241,39 +3406,6 @@
                 }
               },
               "title": "Request message for ResetPassword"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/user/mainview": {
-      "put": {
-        "summary": "Modify user's main view",
-        "operationId": "Cover_UpdateUserMainView",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateUserMainViewResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1UpdateUserMainViewRequest"
             }
           }
         ],
@@ -7555,7 +7687,7 @@
         "members": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/coverUserData"
+            "$ref": "#/definitions/coverMemberUserData"
           }
         },
         "combinations": {
@@ -7565,7 +7697,7 @@
           }
         },
         "createdBy": {
-          "$ref": "#/definitions/coverUserData"
+          "$ref": "#/definitions/coverMemberUserData"
         }
       }
     },
@@ -7626,6 +7758,62 @@
         }
       }
     },
+    "coverMemberUserData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "colorTheme": {
+          "type": "string"
+        },
+        "initial": {
+          "type": "string"
+        },
+        "activated": {
+          "type": "boolean"
+        },
+        "isAdmin": {
+          "type": "boolean"
+        },
+        "attributes": {
+          "type": "string"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "registered": {
+          "type": "string"
+        },
+        "ssoEnabled": {
+          "type": "boolean"
+        },
+        "mfaEnabled": {
+          "type": "boolean"
+        },
+        "appTheme": {
+          "type": "string"
+        },
+        "mainView": {
+          "type": "string"
+        }
+      }
+    },
     "coverSideMenu": {
       "type": "object",
       "properties": {
@@ -7673,7 +7861,7 @@
         "isAdmin": {
           "type": "boolean"
         },
-        "userAttributes": {
+        "attributes": {
           "type": "string"
         },
         "locale": {
@@ -7698,7 +7886,7 @@
           "type": "string"
         },
         "createdBy": {
-          "type": "string"
+          "$ref": "#/definitions/coverMemberUserData"
         }
       }
     },
@@ -7724,13 +7912,13 @@
           "type": "string"
         },
         "createdBy": {
-          "$ref": "#/definitions/coverUserData"
+          "$ref": "#/definitions/coverMemberUserData"
         },
         "createdAt": {
           "type": "string"
         },
         "updatedBy": {
-          "$ref": "#/definitions/coverUserData"
+          "$ref": "#/definitions/coverMemberUserData"
         },
         "updatedAt": {
           "type": "string"
@@ -9733,6 +9921,48 @@
       },
       "description": "Request message for the Organization.UpdatePassword rpc."
     },
+    "v1UpdateUserAppThemeRequest": {
+      "type": "object",
+      "properties": {
+        "appTheme": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for UpdateUserAppTheme"
+    },
+    "v1UpdateUserAppThemeResponse": {
+      "type": "object",
+      "properties": {
+        "appTheme": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateUserAppTheme"
+    },
+    "v1UpdateUserAttributesRequest": {
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "Request message for UpdateUserAttributes"
+    },
+    "v1UpdateUserAttributesResponse": {
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "Response message for UpdateUserAttributes"
+    },
     "v1UpdateUserAvatarRequest": {
       "type": "object",
       "properties": {
@@ -9804,6 +10034,24 @@
         }
       },
       "title": "Response message for UpdateUserIcon"
+    },
+    "v1UpdateUserLocaleRequest": {
+      "type": "object",
+      "properties": {
+        "locale": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for UpdateUserLocale"
+    },
+    "v1UpdateUserLocaleResponse": {
+      "type": "object",
+      "properties": {
+        "locale": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateUserLocale"
     },
     "v1UpdateUserMainViewRequest": {
       "type": "object",
@@ -9881,6 +10129,24 @@
         }
       },
       "description": "Response message for the Iam.UpdateUserRoleMapping rpc."
+    },
+    "v1UpdateUserTimezoneRequest": {
+      "type": "object",
+      "properties": {
+        "timezone": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for UpdateUserTimezone"
+    },
+    "v1UpdateUserTimezoneResponse": {
+      "type": "object",
+      "properties": {
+        "timezone": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateUserTimezone"
     },
     "v1UpdateViewResponse": {
       "type": "object",
