@@ -3273,6 +3273,39 @@
         ]
       }
     },
+    "/v1/member/resetpassword": {
+      "post": {
+        "summary": "Reset member's password",
+        "operationId": "Cover_ResetPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ResetPasswordResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ResetPasswordRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/member/{userId}": {
       "get": {
         "summary": "Get the details of the user",
@@ -3335,15 +3368,15 @@
         ]
       }
     },
-    "/v1/member/{userId}/resetpassword": {
+    "/v1/member/{userId}/costgroup": {
       "get": {
-        "summary": "Trigger reset password from Admin",
-        "operationId": "Cover_AdminResetPassword",
+        "summary": "Get the cost group to which the member is attached",
+        "operationId": "Cover_GetMemberCostGroup",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1AdminResetPasswordResponse"
+              "$ref": "#/definitions/v1GetMemberCostGroupResponse"
             }
           },
           "default": {
@@ -3360,53 +3393,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      },
-      "post": {
-        "summary": "Reset member's password",
-        "operationId": "Cover_ResetPassword",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ResetPasswordResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "userId",
-            "description": "Required. UserId.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "password": {
-                  "type": "string"
-                },
-                "newPassword": {
-                  "type": "string"
-                }
-              },
-              "title": "Request message for ResetPassword"
-            }
           }
         ],
         "tags": [
@@ -3501,7 +3487,7 @@
         ]
       }
     },
-    "/v1/view/favorites/{userId}": {
+    "/v1/view/favorites": {
       "get": {
         "summary": "Get favorite views",
         "operationId": "Cover_GetFavoriteViews",
@@ -3519,15 +3505,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "userId",
-            "description": "Required. UserId.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
         "tags": [
           "Cover"
         ]
@@ -7751,9 +7728,38 @@
           "type": "string"
         },
         "params": {
-          "type": "string"
+          "$ref": "#/definitions/coverRequestParams"
         },
         "hash": {
+          "type": "string"
+        }
+      }
+    },
+    "coverMemberCostGroup": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "colorTheme": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
           "type": "string"
         }
       }
@@ -7789,7 +7795,10 @@
           "type": "boolean"
         },
         "attributes": {
-          "type": "string"
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "locale": {
           "type": "string"
@@ -7811,6 +7820,20 @@
         },
         "mainView": {
           "type": "string"
+        },
+        "costGroups": {
+          "$ref": "#/definitions/coverMemberCostGroup"
+        }
+      }
+    },
+    "coverRequestParams": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "string"
+        },
+        "end": {
+          "type": "string"
         }
       }
     },
@@ -7818,7 +7841,10 @@
       "type": "object",
       "properties": {
         "favorite": {
-          "type": "string"
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "isOpenedAdmin": {
           "type": "boolean"
@@ -7862,7 +7888,10 @@
           "type": "boolean"
         },
         "attributes": {
-          "type": "string"
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "locale": {
           "type": "string"
@@ -7884,6 +7913,9 @@
         },
         "mainView": {
           "type": "string"
+        },
+        "costGroups": {
+          "$ref": "#/definitions/coverMemberCostGroup"
         },
         "createdBy": {
           "$ref": "#/definitions/coverMemberUserData"
@@ -7958,7 +7990,10 @@
           "$ref": "#/definitions/coverLayoutOptions"
         },
         "requests": {
-          "$ref": "#/definitions/coverLayoutRequests"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverLayoutRequests"
+          }
         }
       }
     },
@@ -8127,15 +8162,6 @@
         }
       },
       "title": "Response message for AddFavorite"
-    },
-    "v1AdminResetPasswordResponse": {
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string"
-        }
-      },
-      "title": "Response message for AdminResetPassword"
     },
     "v1AssignCostGroupMemberResponse": {
       "type": "object",
@@ -8928,9 +8954,6 @@
         "icon": {
           "type": "string"
         },
-        "userId": {
-          "type": "string"
-        },
         "reportType": {
           "type": "string"
         }
@@ -9202,7 +9225,10 @@
       "type": "object",
       "properties": {
         "favorites": {
-          "$ref": "#/definitions/coverFavorites"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverFavorites"
+          }
         }
       },
       "title": "Response message for GetFavoriteViews"
@@ -9215,6 +9241,18 @@
         }
       },
       "description": "Response message for GetForecasts per billing group."
+    },
+    "v1GetMemberCostGroupResponse": {
+      "type": "object",
+      "properties": {
+        "costGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverCostGroupData"
+          }
+        }
+      },
+      "title": "Response message for GetMemberCostGroup"
     },
     "v1GetMemberDetailsResponse": {
       "type": "object",
@@ -9785,6 +9823,16 @@
         }
       },
       "title": "Response message for RemoveFavorite"
+    },
+    "v1ResetPasswordRequest": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Required. UserId."
+        }
+      },
+      "title": "Request message for ResetPassword"
     },
     "v1ResetPasswordResponse": {
       "type": "object",

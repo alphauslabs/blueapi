@@ -52,6 +52,13 @@ service Cover {
     };
   }
 
+  // Get the cost group to which the member is attached
+  rpc GetMemberCostGroup(GetMemberCostGroupRequest) returns (GetMemberCostGroupResponse) {
+    option (google.api.http) = {
+      get: "/v1/member/{userId}/costgroup"
+    };
+  }  
+
   // Get the details of the logged-in user
   rpc GetUserDetails(GetUserDetailsRequest) returns (GetUserDetailsResponse) {
     option (google.api.http) = {
@@ -154,17 +161,10 @@ service Cover {
     };
   }
 
-  // Trigger reset password from Admin
-  rpc AdminResetPassword(AdminResetPasswordRequest) returns (AdminResetPasswordResponse) {
-    option (google.api.http) = {
-      get: "/v1/member/{userId}/resetpassword"
-    };
-  }
-
   // Reset member's password
   rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {
     option (google.api.http) = {
-      post: "/v1/member/{userId}/resetpassword"
+      post: "/v1/member/resetpassword"
       body: "*"
     };
   }
@@ -194,7 +194,7 @@ service Cover {
   // Get favorite views
   rpc GetFavoriteViews(GetFavoriteViewsRequest) returns (GetFavoriteViewsResponse) {
     option (google.api.http) = {
-      get: "/v1/view/favorites/{userId}"
+      get: "/v1/view/favorites"
     };
   }
 
@@ -372,6 +372,17 @@ message GetMemberDetailsResponse {
   api.cover.UserData userData = 1;
 }
 
+// Request message for GetMemberCostGroup
+message GetMemberCostGroupRequest {
+  // Required. UserId.
+  string userId = 1;
+}
+
+// Response message for GetMemberCostGroup
+message GetMemberCostGroupResponse {
+  repeated api.cover.CostGroupData costGroups = 1;
+}
+
 // Request message for GetUserDetails
 message GetUserDetailsRequest {}
 
@@ -502,23 +513,10 @@ message DeleteMemberResponse {
   string userId = 1;
 }
 
-// Request message for AdminResetPassword
-message AdminResetPasswordRequest {
-  // Required. UserId.
-  string userId = 1;
-}
-
-// Response message for AdminResetPassword
-message AdminResetPasswordResponse {
-  string userId = 1;
-}
-
 // Request message for ResetPassword
 message ResetPasswordRequest {
   // Required. UserId.
   string userId = 1;
-  string password = 2;
-  string newPassword = 3;
 }
 
 // Response message for ResetPassword
@@ -561,14 +559,11 @@ message GetCurrentViewResponse {
 }
 
 // Request message for GetFavoriteViews
-message GetFavoriteViewsRequest {
-  // Required. UserId.
-  string userId = 1;
-}
+message GetFavoriteViewsRequest {}
 
 // Response message for GetFavoriteViews
 message GetFavoriteViewsResponse {
-  api.cover.Favorites favorites = 1;
+  repeated api.cover.Favorites favorites = 1;
 }
 
 // Request message for PublishView
