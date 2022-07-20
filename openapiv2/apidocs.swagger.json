@@ -3694,6 +3694,147 @@
         ]
       }
     },
+    "/v1/view/{viewId}/sidemenufavorite": {
+      "post": {
+        "summary": "Add as side menu favorite",
+        "operationId": "Cover_AddSideMenuFavorite",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddSideMenuFavoriteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "viewId",
+            "description": "Required. View Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "menuItemId": {
+                  "type": "string"
+                }
+              },
+              "title": "Request message for AddSideMenuFavorite"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/view/{viewId}/sidemenustate": {
+      "put": {
+        "summary": "Updates the side menu state",
+        "operationId": "Cover_UpdateSideMenuState",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateSideMenuStateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "viewId",
+            "description": "Required. View Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sidemenustate": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/coverSideMenuState"
+                  }
+                }
+              },
+              "title": "Request message for UpdateSideMenuState"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/view/{viewId}/sidemenuunfavorite": {
+      "post": {
+        "summary": "Remove from side menu favorite",
+        "operationId": "Cover_RemoveSideMenuFavorite",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RemoveSideMenuFavoriteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "viewId",
+            "description": "Required. View Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "menuItemId": {
+                  "type": "string"
+                }
+              },
+              "title": "Request message for RemoveSideMenuFavorite"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/{vendor}/accounts": {
       "get": {
         "summary": "Lists all vendor accounts.",
@@ -7696,10 +7837,10 @@
         "icon": {
           "type": "string"
         },
-        "created": {
+        "createdAt": {
           "type": "string"
         },
-        "updated": {
+        "updatedAt": {
           "type": "string"
         }
       }
@@ -7856,6 +7997,17 @@
           "type": "boolean"
         },
         "isOpenedCostGroups": {
+          "type": "boolean"
+        }
+      }
+    },
+    "coverSideMenuState": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
           "type": "boolean"
         }
       }
@@ -8024,10 +8176,10 @@
         "icon": {
           "type": "string"
         },
-        "created": {
+        "createdAt": {
           "type": "string"
         },
-        "updated": {
+        "updatedAt": {
           "type": "string"
         }
       }
@@ -8168,6 +8320,15 @@
         }
       },
       "title": "Response message for AddFavorite"
+    },
+    "v1AddSideMenuFavoriteResponse": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for AddSideMenuFavorite"
     },
     "v1AssignCostGroupMemberResponse": {
       "type": "object",
@@ -9830,6 +9991,15 @@
       },
       "title": "Response message for RemoveFavorite"
     },
+    "v1RemoveSideMenuFavoriteResponse": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for RemoveSideMenuFavorite"
+    },
     "v1ResetPasswordRequest": {
       "type": "object",
       "properties": {
@@ -9974,6 +10144,15 @@
         }
       },
       "description": "Request message for the Organization.UpdatePassword rpc."
+    },
+    "v1UpdateSideMenuStateResponse": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for UpdateSideMenuState"
     },
     "v1UpdateUserAppThemeRequest": {
       "type": "object",
