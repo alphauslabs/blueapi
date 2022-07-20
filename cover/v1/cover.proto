@@ -237,6 +237,30 @@ service Cover {
     };
   }
 
+  // Updates the side menu state
+  rpc UpdateSideMenuState(UpdateSideMenuStateRequest) returns (UpdateSideMenuStateResponse) {
+    option (google.api.http) = {
+      put: "/v1/view/{viewId}/sidemenustate"
+      body: "*"
+    };
+  }
+
+  // Add as side menu favorite
+  rpc AddSideMenuFavorite(AddSideMenuFavoriteRequest) returns (AddSideMenuFavoriteResponse) {
+    option (google.api.http) = {
+      post: "/v1/view/{viewId}/sidemenufavorite"
+      body: "*"
+    };
+  }
+
+  // Remove from side menu favorite
+  rpc RemoveSideMenuFavorite(RemoveSideMenuFavoriteRequest) returns (RemoveSideMenuFavoriteResponse) {
+    option (google.api.http) = {
+      post: "/v1/view/{viewId}/sidemenuunfavorite"
+      body: "*"
+    };
+  }
+
   // Create a cost group
   rpc CreateCostGroup(CreateCostGroupRequest) returns (CreateCostGroupResponse) {
     option (google.api.http) = {
@@ -623,6 +647,42 @@ message DeleteViewRequest {
 
 // Response message for DeleteView
 message DeleteViewResponse {
+  string viewId = 1;
+}
+
+// Request message for UpdateSideMenuState
+message UpdateSideMenuStateRequest {
+  // Required. View Id.
+  string viewId = 1;
+  repeated api.cover.SideMenuState sidemenustate = 2;
+}
+
+// Response message for UpdateSideMenuState
+message UpdateSideMenuStateResponse {
+  string viewId = 1;
+}
+
+// Request message for AddSideMenuFavorite
+message AddSideMenuFavoriteRequest {
+  // Required. View Id.
+  string viewId = 1;
+  string menuItemId = 2;
+}
+
+// Response message for AddSideMenuFavorite
+message AddSideMenuFavoriteResponse {
+  string viewId = 1;
+}
+
+// Request message for RemoveSideMenuFavorite
+message RemoveSideMenuFavoriteRequest {
+  // Required. View Id.
+  string viewId = 1;
+  string menuItemId = 2;
+}
+
+// Response message for RemoveSideMenuFavorite
+message RemoveSideMenuFavoriteResponse {
   string viewId = 1;
 }
 
