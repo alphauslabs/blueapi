@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package blueapi.invoice.v1;
+
+import "api/invoice.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/invoice";
+option java_package = "cloud.alphaus.api.invoice";
+option java_outer_classname = "InvoiceProto";
+
+// Invoice service definition.
+service Invoice {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "(BETA) Invoice API. Base URL: https://api.alphaus.cloud/m/blue/invoice"
+    external_docs: {
+      url: "https://github.com/alphauslabs/blueapi/tree/main/invoice/";
+      description: "Service definition";
+    }
+  };
+
+  // Gets a invoice.
+  rpc GetInvoice(GetInvoiceRequest) returns (stream api.Invoice) {
+    option (google.api.http) = {
+      post: "/v1/invoice/{yearMonth}:read"
+      body: "*"
+    };
+  }
+
+  // Exports a invoice.
+  rpc ExportInvoiceFile(ExportInvoiceFileRequest) returns (ExportInvoiceFileResponse) {
+    option (google.api.http) = {
+      post: "/v1/invoice/{yearMonth}:export"
+      body: "*"
+    };
+  }
+
+}
+
+// Request message for the Cost.GetInvoiceRequest rpc.
+message GetInvoiceRequest {
+  // Required.
+  string yearMonth = 1;
+
+  // Required.
+  string groupId = 2;
+}
+
+// Response message for the ExportCostFiltersFile rpc.
+message ExportInvoiceFileRequest {
+  // Required.
+  string yearMonth = 1;
+
+  // Required.
+  string groupId = 2;
+
+  // Required. Account or Tag
+  string level = 4;
+}
+
+// Response message for the ExportCostFiltersFile rpc.
+message ExportInvoiceFileResponse {
+  // Required. URL of exported file.
+  string url = 1;
+}
