@@ -21,9 +21,9 @@ service Invoice {
   };
 
   // Gets a invoice.
-  rpc GetInvoice(GetInvoiceRequest) returns (stream api.Invoice) {
+  rpc GetInvoice(GetInvoiceRequest) returns (api.Invoice) {
     option (google.api.http) = {
-      post: "/v1/invoice/{yearMonth}:read"
+      post: "/v1/invoice/{date}:read"
       body: "*"
     };
   }
@@ -31,7 +31,7 @@ service Invoice {
   // Exports a invoice.
   rpc ExportInvoiceFile(ExportInvoiceFileRequest) returns (ExportInvoiceFileResponse) {
     option (google.api.http) = {
-      post: "/v1/invoice/{yearMonth}:export"
+      post: "/v1/invoice/{date}:export"
       body: "*"
     };
   }
@@ -40,8 +40,8 @@ service Invoice {
 
 // Request message for the Cost.GetInvoiceRequest rpc.
 message GetInvoiceRequest {
-  // Required.
-  string yearMonth = 1;
+  // Required. Month to get invoice. Format: `yyyymm`.
+  string date = 1;
 
   // Required.
   string groupId = 2;
@@ -49,8 +49,8 @@ message GetInvoiceRequest {
 
 // Response message for the ExportCostFiltersFile rpc.
 message ExportInvoiceFileRequest {
-  // Required.
-  string yearMonth = 1;
+  // Required. Month to get invoice. Format: `yyyymm`.
+  string date = 1;
 
   // Required.
   string groupId = 2;
