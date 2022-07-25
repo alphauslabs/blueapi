@@ -10,8 +10,10 @@ option java_outer_classname = "InvoiceProto";
 message Invoice {
   // Invoice vendor detail by 'aws'
   VendorDetail aws = 1;
+
   // Invoice vendor detail by 'gcp'
   VendorDetail gcp = 2;
+
   // Invoice vendor detail by 'azure'
   VendorDetail azure = 3;
 }
@@ -24,7 +26,17 @@ message VendorDetail {
 }
 
 message AccountDetails {
+  // Resource Id. 
+  //
+  // if account, customer id.
+  //
+  // if tag, tag resource id.
   string id = 1;
+  // Resource Name. 
+  //
+  // if account, customer name.
+  //
+  // if tag, tag resources.
   string name = 2;
   repeated UsageDetails details = 3;
   repeated CustomDetails customDetails = 4;
