@@ -52,14 +52,13 @@ message ExportInvoiceFileRequest {
   // Required. Month to get invoice. Format: `yyyymm`.
   string date = 1;
 
-  // Required.
+  // Optional.
+  // For Ripple, only billing internal ids are supported at the moment. You can set it to a single group or a comma-separated list of groups. ex) `group1,group2`. if want to set all group, set `*`. 
+  // Implied as the parent billing group for Wave(Pro) users.
   string groupId = 2;
-
-  // Required. Account or Tag
-  string level = 4;
 }
 
-// Response message for the ExportCostFiltersFile rpc.
+// Response message for the ExportInvoiceFile rpc.
 message ExportInvoiceFileResponse {
   // Required. URL of exported file.
   string url = 1;
