@@ -19,9 +19,16 @@ message Invoice {
 }
 
 message VendorDetail {
+  // details: Includes account-by-account details
   repeated AccountDetails details = 1;
+
+  // groupDetails: Includes account-by-account details(custom service and additional item data). 
   repeated GroupDetails groupDetails = 2;
+
+  // total: Includes data on billing totals
   repeated InvoiceTotal total = 3;
+  
+  // settings: Includes settings related to billing
   InvoiceSettings settings = 4;
 }
 
@@ -32,15 +39,29 @@ message AccountDetails {
   //
   // if tag, tag resource id.
   string id = 1;
+  
   // Resource Name. 
   //
   // if account, customer name.
   //
   // if tag, tag resources.
   string name = 2;
+
+  // details: Vendor service fees included
   repeated UsageDetails details = 3;
+
+  // customDetails: Includes details of custom service and additional item data
   repeated CustomDetails customDetails = 4;
+
+  // feeDetails: Includes details of re-caluclated fee data
   repeated FeeDetails feeDetails = 5;
+
+  // The keys included in the account total column have the following values
+  //
+  // substitution
+  // supportFee 
+  // usageOnlyTotal
+  // usageTotal
   repeated AccountTotal total = 6;
 }
 
