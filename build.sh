@@ -13,8 +13,7 @@ python3 -m grpc_tools.protoc -I . --python_out=./generated/py/alphausblue --grpc
         ./cover/v1/*.proto \
         ./billing/v1/*.proto \
         ./operations/v1/*.proto \
-        ./preferences/v1/*.proto \
-        ./invoice/v1/*.proto
+        ./preferences/v1/*.proto
 
 # Compile ./api/* for blue-sdk-python; without grpc.
 echo "Compiling Python SDK data..."
@@ -40,5 +39,4 @@ protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true --opena
        ./cover/v1/*.proto \
        ./billing/v1/*.proto \
        ./operations/v1/*.proto \
-       ./preferences/v1/*.proto \
-       ./invoice/v1/*.proto
+       ./preferences/v1/*.proto
