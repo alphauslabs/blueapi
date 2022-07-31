@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package blueapi.api.gcp;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/gcp";
+option java_package = "cloud.alphaus.blueapi.api.gcp";
+option java_outer_classname = "ApiGcpCostProto";
+
+// WORK-IN-PROGRESS: Cost
+//
+// see gcp billing data schema details:[https://cloud.google.com/billing/docs/how-to/export-data-bigquery-tables]
+message Cost {
+  // account data
+  string account = 1;
+
+  // The group id the account is associated with during the query.
+  string groupId = 2;
+
+  // For daily data, format is `yyyy-mm-dd`; for monthly, `yyyy-mm`.
+  string date = 3;
+
+  // The service.Description of the lineitem, if applicable.
+  string service = 4;
+
+  // The sku.Description of the lineitem, if applicable.
+  string sku = 5;
+
+  // The location.region of the lineitem, if applicable.
+  string region = 6;
+
+  // The location.zone of the lineitem, if applicable.
+  string zone = 7;
+
+  // The usage.unit of the lineitem, if applicable.
+  string usageUnit = 8;
+
+  // The usage.amount of the lineitem, if applicable.
+  double usageAmount = 9;
+
+  // The currency of the lineitem, if applicable.
+  string baseCurrency = 10;
+
+  // The cost of the lineitem, if applicable.
+  double cost = 11;
+}
