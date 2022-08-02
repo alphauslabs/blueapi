@@ -223,7 +223,7 @@ service Cost {
     };
   }
 
-  // Reads the usage-based cost details of an organization (Ripple) or billing group (Wave). At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
+  // Reads the usage-based cost details of an organization (Ripple) or billing group (Wave). At the moment, the supported {vendor} are 'aws' and 'gcp'. If datetime range parameters are not set, month-to-date (current month) will be returned.
   rpc ReadCosts(ReadCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costs:read"
@@ -745,7 +745,7 @@ message ReadCostsRequestAwsOptions {
 
 // Request message for the Cost.ReadCosts rpc.
 message ReadCostsRequest {
-  // Required. At the moment, only `aws` is supported.
+  // Required. At the moment, `aws` and `gcp` are supported.
   string vendor = 1;
 
   // Optional. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.
