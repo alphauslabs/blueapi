@@ -5,7 +5,9 @@ package blueapi.cover.v1;
 import "api/cover/user.proto";
 import "api/cover/view.proto";
 import "api/cover/costgroup.proto";
+import "api/operation.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/cover";
@@ -351,6 +353,49 @@ service Cover {
   rpc DeleteCostGroup(DeleteCostGroupRequest) returns (DeleteCostGroupResponse) {
     option (google.api.http) = {
       delete: "/v1/costgroup/{costGroupId}"
+    };
+  }
+
+  // Gets a CloudFormation launch URL for enabling the account access.
+  rpc GetAccountAccessTemplateUrl(GetAccountAccessTemplateUrlRequest) returns (GetAccountAccessTemplateUrlResponse) {
+    option (google.api.http) = {
+      get: "/v1/aws/acctaccess"
+    };
+  }
+
+  // Lists the account access role(s) attached to accounts under caller.
+  rpc ListAccountAccess(ListAccountAccessRequest) returns (stream AccountAccess) {
+    option (google.api.http) = {
+      post: "/v1/aws/acctaccess:read"
+    };
+  }
+
+  // Gets the current account role attached to the input target.
+  rpc GetAccountAccess(GetAccountAccessRequest) returns (AccountAccess) {
+    option (google.api.http) = {
+      get: "/v1/aws/acctaccess/{target}"
+    };
+  }
+
+  // Starts validation of the account access stack deployment. If successful, the IAM role created from the CloudFormation stack will be registered to the target.
+  rpc CreateAccountAccess(CreateAccountAccessRequest) returns (AccountAccess) {
+    option (google.api.http) = {
+      post: "/v1/aws/acctaccess"
+      body: "*"
+    };
+  }
+
+  // Starts an update to an existing account access CloudFormation stack for template changes, if any. Only call this API if the status of your account access is 'outdated'.
+  rpc UpdateAccountAccess(UpdateAccountAccessRequest) returns (api.Operation) {
+    option (google.api.http) = {
+      put: "/v1/aws/acctaccess/{target}"
+    };
+  }
+
+  // Deletes the current account access role attached to this target account. This does not delete the CloudFormation deployment in your account.
+  rpc DeleteAccountAccess(DeleteAccountAccessRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/aws/acctaccess/{target}"
     };
   }
 }
@@ -834,4 +879,82 @@ message DeleteCostGroupRequest {
 // Response message for DeleteCostGroup
 message DeleteCostGroupResponse {
   string costGroupId = 1;
+}
+
+// Request message for the GetAccountAccessTemplateUrlRequest rpc.
+message GetAccountAccessTemplateUrlRequest {
+  // All templates are publicly available from the reponse link (`templateUrl`) if you want to audit the included permissions.
+  string type = 1;
+}
+
+// Response message for the GetAccountAccessTemplateUrlResponse rpc.
+message GetAccountAccessTemplateUrlResponse {
+  // The CloudFormation launch url. Open it in your browser.
+  string launchUrl = 1;
+
+  // The latest CloudFormation template. The version is included in the filename.
+  string templateUrl = 2;
+
+  // The default stack name used. Can be modified.
+  string stackName = 3;
+
+  // The AWS account that will receive the access. Do not change.
+  string principal = 4;
+
+  // The external id for this role. Do not change.
+  string externalId = 5;
+}
+
+// Request message for the ListAccountAccess rpc.
+message ListAccountAccessRequest {}
+
+// Request message for the GetAccountAccess rpc.
+message GetAccountAccessRequest {
+  // Required. The target AWS account to query.
+  string target = 1;
+}
+
+// Response message for GetAccountAccess, CreateAccountAccess rpc.
+message AccountAccess {
+  // The queried target account.
+  string target = 1;
+
+  // The role ARN that provides the cross-account access permissions.
+  string roleArn = 2;
+
+  // The external id for this role.
+  string externalId = 3;
+
+  // The id of the CloudFormation stack deployed in the target account.
+  string stackId = 4;
+
+  // The region where the stack is deployed.
+  string stackRegion = 5;
+
+  // The latest template used to deploy the stack.
+  string templateUrl = 6;
+
+  // This can be `latest`, `outdated`, or some error information.
+  string status = 7;
+
+  // The last updated timestamp, RFC3339 UTC.
+  string lastUpdated = 8;
+}
+
+// Request message for the CreateAccountAccess rpc.
+message CreateAccountAccessRequest {
+  // Required. The target AWS account to validate.
+  string target = 1;
+}
+
+// Request message for the UpdateAccountAccess rpc.
+message UpdateAccountAccessRequest {
+  // Required. The target AWS account to update.
+  string target = 1;
+}
+
+// Request message for the DeleteAccountAccess rpc.
+message DeleteAccountAccessRequest {
+  // Required. The target AWS account to delete.
+  string target = 1;
 }
