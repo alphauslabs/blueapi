@@ -1,0 +1,191 @@
+syntax = "proto3";
+
+package blueapi.api;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api";
+option java_package = "cloud.alphaus.blueapi.api";
+option java_outer_classname = "InvoiceProto";
+
+
+message Invoice {
+  // Invoice vendor detail by 'aws'
+  VendorDetail aws = 1;
+
+  // Invoice vendor detail by 'gcp'
+  VendorDetail gcp = 2;
+
+  // Invoice vendor detail by 'azure'
+  VendorDetail azure = 3;
+}
+
+message VendorDetail {
+  // details: Includes account-by-account details
+  repeated AccountDetails details = 1;
+
+  // groupDetails: Includes account-by-account details(custom service and additional item data). 
+  repeated GroupDetails groupDetails = 2;
+
+  // total: Includes data on billing totals
+  repeated InvoiceTotal total = 3;
+  
+  // settings: Includes settings related to billing
+  InvoiceSettings settings = 4;
+}
+
+message AccountDetails {
+  // Resource Id. 
+  //
+  // if account, customer id.
+  //
+  // if tag, tag resource id.
+  string id = 1;
+  
+  // Resource Name. 
+  //
+  // if account, customer name.
+  //
+  // if tag, tag resources.
+  string name = 2;
+
+  // details: Vendor service fees included
+  repeated UsageDetails details = 3;
+
+  // customDetails: Includes details of custom service and additional item data
+  repeated CustomDetails customDetails = 4;
+
+  // feeDetails: Includes details of re-caluclated fee data
+  repeated FeeDetails feeDetails = 5;
+
+  // The keys included in the account total column have the following values
+  //
+  // substitution
+  // supportFee 
+  // usageOnlyTotal
+  // usageTotal
+  repeated AccountTotal total = 6;
+}
+
+message UsageDetails {
+  string name = 1;
+  string currency = 2;
+  double amount = 3;
+}
+
+message CustomDetails {
+  string name = 1;
+  string currency = 2;
+  double amount = 3;
+}
+
+message FeeDetails {
+  string name = 1;
+  string currency = 2;
+  double amount = 3;
+}
+
+message AccountTotal {
+  string name = 1;
+  string currency = 2;
+  double amount = 3;
+}
+
+message InvoiceTotal {
+  string name = 1;
+  string currency = 2;
+  double amount = 3;
+}
+
+message GroupDetails {
+  string name = 1;
+  string currency = 2;
+  double amount = 3;
+}
+
+message GroupUsageDetails {
+  string name = 1;
+  string currency = 2;
+  double amount = 3;
+}
+
+message InvoiceSettings {
+  string address = 1;
+  string groupId = 2;
+  string groupName = 3;
+  string contact = 4;
+  string currency = 5;
+  string dueDate = 6;
+  double dueDateCustomDay = 7;
+  string dueDateDay = 8;
+  string dueDateMonth = 9;
+  double exchangeRate = 10;
+  string invoiceNo = 11;
+  string language = 12;
+  string phone = 13;
+  string postal = 14;
+  string title = 15;
+}
+
+message InvoiceSettingsAll {
+  AccountSupportPlan accountSupportPlan = 1;
+  repeated AdditionalItems additionalItems = 2;
+  string address = 3;
+  AccountSupportPlanSettings asps = 4;
+  string groupId = 5;
+  string groupName = 6;
+  string calculationType = 7;
+  string contact = 8;
+  string currency = 9;
+  string discountCalcLogic = 10;
+  double discountRate = 11;
+  string discountTargetUsage = 12;
+  string displayCost = 13;
+  string dueDate = 14;
+  double dueDateCustomDay = 15;
+  string dueDateDay = 16;
+  string dueDateMonth = 17;
+  double exchangeRate = 18;
+  string exchangeRateType = 19;
+  string imageUrl = 20;
+  string invoiceNo = 21;
+  string language = 22;
+  string memo = 23;
+  string name = 24;
+  string phone = 25;
+  string postal = 26;
+  string projectCode = 27;
+  string projectCurrency = 28;
+  string projectId = 29;
+  string projectLabel = 30;
+  string remarks = 31;
+  string substitutionFee = 32;
+  string substitutionFeeCalcTarget = 33;
+  string substitutionFeeCalcType = 34;
+  string substitutionFeeTargetUsage = 35;
+  double substitutionFix = 36;
+  double substitutionRate = 37;
+  string supportFee = 38;
+  string supportFeeCalcTarget = 39;
+  double supportFix = 40;
+  double supportRate = 41;
+  double taxRate = 42;
+  string title = 43;
+}
+
+message AccountSupportPlan {
+  bool awsEnterpriseOnRamp = 1;
+  bool awsBusiness = 2;
+  bool noSupport = 3;
+  bool awsDeveloper = 4;
+}
+
+message AdditionalItems {
+  string label = 1;
+  double unitCost = 2;
+  double total = 3;
+  double quantity = 4;
+}
+
+message AccountSupportPlanSettings {
+  bool enabled = 1;
+  map<string, string> accounts = 2;
+}

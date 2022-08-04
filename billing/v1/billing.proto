@@ -3,6 +3,7 @@ syntax = "proto3";
 package blueapi.billing.v1;
 
 import "api/account.proto";
+import "api/invoice.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -57,10 +58,26 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Returns a list of accounts that have been updated after invoice along with the differences in costs, if any. Only available in Ripple.
+  // Returns a list of accounts that have been updated after invoice along with the differences in costs, if any. Only available in Ripple.
   rpc ListUsageCostsDrift(ListUsageCostsDriftRequest) returns (stream UsageCostsDrift) {
     option (google.api.http) = {
       post: "/v1/{vendor}/usagecostsdrift:read"
+      body: "*"
+    };
+  }
+  
+  // Gets an invoice.
+  rpc GetInvoice(GetInvoiceRequest) returns (api.Invoice) {
+    option (google.api.http) = {
+      post: "/v1/invoice/{date}:read"
+      body: "*"
+    };
+  }
+
+  // Exports an invoice.
+  rpc ExportInvoiceFile(ExportInvoiceFileRequest) returns (ExportInvoiceFileResponse) {
+    option (google.api.http) = {
+      post: "/v1/invoice/{date}:export"
       body: "*"
     };
   }
@@ -291,4 +308,38 @@ message UsageCostsDrift {
   double current = 5;
 
   double diff = 6;
+}
+
+// Request message for the Cost.GetInvoiceRequest rpc.
+message GetInvoiceRequest {
+  // Required. Month to get invoice. Format: `yyyymm`.
+  string date = 1;
+
+  // Required.
+  //
+  // For Ripple, only billing internal ids are supported at the moment. You can set it to a single group
+  //
+  // Implied as the parent billing group for Wave(Pro) users.
+  string groupId = 2;
+}
+
+// Response message for the ExportCostFiltersFile rpc.
+message ExportInvoiceFileRequest {
+  // Required. Month to get invoice. Format: `yyyymm`.
+  string date = 1;
+
+  // Optional.
+  //
+  // For Ripple, only billing internal ids are supported at the moment. You can set it to a single group or a comma-separated list of groups. ex) `group1,group2`. if want to set all group, set `*`. 
+  //
+  // Implied as the parent billing group for Wave(Pro) users.
+  string groupId = 2;
+}
+
+// Response message for the ExportInvoiceFile rpc.
+message ExportInvoiceFileResponse {
+  // Required. URL of exported file.
+  //
+  // csv columns set `group vendor resourceId resourceName type serviceName currency cost`
+  string url = 1;
 }
