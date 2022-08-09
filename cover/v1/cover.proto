@@ -5,6 +5,7 @@ package blueapi.cover.v1;
 import "api/cover/user.proto";
 import "api/cover/view.proto";
 import "api/cover/costgroup.proto";
+import "api/cover/aws/asset.proto";
 import "api/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -398,6 +399,13 @@ service Cover {
       delete: "/v1/aws/acctaccess/{target}"
     };
   }
+
+  // WORK-IN-PROGRESS: Lists all assets per service. 
+  rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/assets/{service}"
+    };
+}
 }
 
 // Request message for InviteMember
@@ -957,4 +965,19 @@ message UpdateAccountAccessRequest {
 message DeleteAccountAccessRequest {
   // Required. The target AWS account to delete.
   string target = 1;
+}
+
+// Request message for the Asset.ListResources rpc.
+message ListAssetsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. The service to query for resources.
+  string service = 2;
+}
+
+message ListAssetsResponse {
+  string type = 1;
+  string name = 2;
+  repeated api.cover.aws.Asset assets = 3;
 }
