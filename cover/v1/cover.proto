@@ -27,7 +27,7 @@ service Cover {
   // Invite members to the system
   rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {
     option (google.api.http) = {
-      post: "/v1/member/invite"
+      post: "/v1/members/invite"
       body: "*"
     };
   }
@@ -35,7 +35,7 @@ service Cover {
   // Create a member
   rpc CreateMember(CreateMemberRequest) returns (CreateMemberResponse) {
     option (google.api.http) = {
-      post: "/v1/member"
+      post: "/v1/members"
       body: "*"
     };
   }
@@ -43,21 +43,21 @@ service Cover {
   // Get all the members/subusers of the company
   rpc GetMembers(GetMembersRequest) returns (GetMembersResponse) {
     option (google.api.http) = {
-      get: "/v1/member"
+      get: "/v1/members"
     };
   }
 
   // Get the details of the user
   rpc GetMemberDetails(GetMemberDetailsRequest) returns (GetMemberDetailsResponse) {
     option (google.api.http) = {
-      get: "/v1/member/{userId}"
+      get: "/v1/members/{userId}"
     };
   }
 
   // Get the cost group to which the member is attached
   rpc GetMemberCostGroup(GetMemberCostGroupRequest) returns (GetMemberCostGroupResponse) {
     option (google.api.http) = {
-      get: "/v1/member/{userId}/costgroup"
+      get: "/v1/members/{userId}/costgroup"
     };
   }  
 
@@ -159,14 +159,14 @@ service Cover {
   // Deletes a user
   rpc DeleteMember(DeleteMemberRequest) returns (DeleteMemberResponse) {
     option (google.api.http) = {
-      delete: "/v1/member/{userId}"
+      delete: "/v1/members/{userId}"
     };
   }
 
   // Reset member's password
   rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {
     option (google.api.http) = {
-      post: "/v1/member/resetpassword"
+      post: "/v1/members/resetpassword"
       body: "*"
     };
   }
@@ -174,7 +174,7 @@ service Cover {
   // Create a view
   rpc CreateView(CreateViewRequest) returns (CreateViewResponse) {
     option (google.api.http) = {
-      post: "/v1/view"
+      post: "/v1/views"
       body: "*"
     };
   }
@@ -182,28 +182,28 @@ service Cover {
   // Get all the views
   rpc GetViews(GetViewsRequest) returns (GetViewsResponse) {
     option (google.api.http) = {
-      get: "/v1/view"
+      get: "/v1/views"
     };
   }
 
   // Get the details of the current view
   rpc GetCurrentView(GetCurrentViewRequest) returns (GetCurrentViewResponse) {
     option (google.api.http) = {
-      get: "/v1/view/{viewId}"
+      get: "/v1/views/{viewId}"
     };
   }
 
   // Get favorite views
   rpc GetFavoriteViews(GetFavoriteViewsRequest) returns (GetFavoriteViewsResponse) {
     option (google.api.http) = {
-      get: "/v1/view/favorites"
+      get: "/v1/views/favorites"
     };
   }
 
   // Publish current view
   rpc PublishView(PublishViewRequest) returns (PublishViewResponse) {
     option (google.api.http) = {
-      post: "/v1/view/publish"
+      post: "/v1/views/publish"
       body: "*"
     };
   }
@@ -211,7 +211,7 @@ service Cover {
   // Add to favorites
   rpc AddFavorite(AddFavoriteRequest) returns (AddFavoriteResponse) {
     option (google.api.http) = {
-      put: "/v1/view/favorite"
+      put: "/v1/views/favorite"
       body: "*"
     };
   }
@@ -219,7 +219,7 @@ service Cover {
   // Remove from favorites
   rpc RemoveFavorite(RemoveFavoriteRequest) returns (RemoveFavoriteResponse) {
     option (google.api.http) = {
-      put: "/v1/view/unfavorite"
+      put: "/v1/views/unfavorite"
       body: "*"
     };
   }
@@ -227,7 +227,7 @@ service Cover {
   // Updates the view details
   rpc UpdateView(UpdateViewRequest) returns (UpdateViewResponse) {
     option (google.api.http) = {
-      put: "/v1/view/{viewId}"
+      put: "/v1/views/{viewId}"
       body: "*"
     };
   }
@@ -235,14 +235,14 @@ service Cover {
   // Deletes a view
   rpc DeleteView(DeleteViewRequest) returns (DeleteViewResponse) {
     option (google.api.http) = {
-      delete: "/v1/view/{viewId}"
+      delete: "/v1/views/{viewId}"
     };
   }
 
   // Updates the side menu state
   rpc UpdateSideMenuState(UpdateSideMenuStateRequest) returns (UpdateSideMenuStateResponse) {
     option (google.api.http) = {
-      put: "/v1/view/{viewId}/sidemenustate"
+      put: "/v1/views/{viewId}/sidemenustate"
       body: "*"
     };
   }
@@ -250,7 +250,7 @@ service Cover {
   // Add as side menu favorite
   rpc AddSideMenuFavorite(AddSideMenuFavoriteRequest) returns (AddSideMenuFavoriteResponse) {
     option (google.api.http) = {
-      post: "/v1/view/{viewId}/sidemenufavorite"
+      post: "/v1/views/{viewId}/sidemenufavorite"
       body: "*"
     };
   }
@@ -258,7 +258,7 @@ service Cover {
   // Remove from side menu favorite
   rpc RemoveSideMenuFavorite(RemoveSideMenuFavoriteRequest) returns (RemoveSideMenuFavoriteResponse) {
     option (google.api.http) = {
-      post: "/v1/view/{viewId}/sidemenuunfavorite"
+      post: "/v1/views/{viewId}/sidemenuunfavorite"
       body: "*"
     };
   }
@@ -266,7 +266,7 @@ service Cover {
   // Create a cost group
   rpc CreateCostGroup(CreateCostGroupRequest) returns (CreateCostGroupResponse) {
     option (google.api.http) = {
-      post: "/v1/costgroup"
+      post: "/v1/costgroups"
       body: "*"
     };
   }
@@ -274,21 +274,21 @@ service Cover {
   // Get all the cost groups
   rpc GetCostGroups(GetCostGroupsRequest) returns (GetCostGroupsResponse) {
     option (google.api.http) = {
-      get: "/v1/costgroup"
+      get: "/v1/costgroups"
     };
   }
 
   // Get the details of the cost group
   rpc GetCostGroupDetails(GetCostGroupDetailsRequest) returns (GetCostGroupDetailsResponse) {
     option (google.api.http) = {
-      get: "/v1/costgroup/{costGroupId}"
+      get: "/v1/costgroups/{costGroupId}"
     };
   }
 
   // Update cost group's name
   rpc UpdateCostGroupName(UpdateCostGroupNameRequest) returns (UpdateCostGroupNameResponse) {
     option (google.api.http) = {
-      put: "/v1/costgroup/{costGroupId}/name"
+      put: "/v1/costgroups/{costGroupId}/name"
       body: "*"
     };
   }
@@ -296,7 +296,7 @@ service Cover {
   // Update cost group's description
   rpc UpdateCostGroupDescription(UpdateCostGroupDescriptionRequest) returns (UpdateCostGroupDescriptionResponse) {
     option (google.api.http) = {
-      put: "/v1/costgroup/{costGroupId}/description"
+      put: "/v1/costgroups/{costGroupId}/description"
       body: "*"
     };
   }
@@ -304,7 +304,7 @@ service Cover {
   // Update cost group's image
   rpc UpdateCostGroupImage(UpdateCostGroupImageRequest) returns (UpdateCostGroupImageResponse) {
     option (google.api.http) = {
-      put: "/v1/costgroup/{costGroupId}/image"
+      put: "/v1/costgroups/{costGroupId}/image"
       body: "*"
     };
   }
@@ -312,7 +312,7 @@ service Cover {
   // Update cost group's icon
   rpc UpdateCostGroupIcon(UpdateCostGroupIconRequest) returns (UpdateCostGroupIconResponse) {
     option (google.api.http) = {
-      put: "/v1/costgroup/{costGroupId}/icon"
+      put: "/v1/costgroups/{costGroupId}/icon"
       body: "*"
     };
   }
@@ -320,7 +320,7 @@ service Cover {
   // Update cost group's color theme
   rpc UpdateCostGroupColorTheme(UpdateCostGroupColorThemeRequest) returns (UpdateCostGroupColorThemeResponse) {
     option (google.api.http) = {
-      put: "/v1/costgroup/{costGroupId}/colortheme"
+      put: "/v1/costgroups/{costGroupId}/colortheme"
       body: "*"
     };
   }
@@ -328,7 +328,7 @@ service Cover {
   // Update cost group's combinations
   rpc UpdateCostGroupCombinations(UpdateCostGroupCombinationsRequest) returns (UpdateCostGroupCombinationsResponse) {
     option (google.api.http) = {
-      put: "/v1/costgroup/{costGroupId}/combinations"
+      put: "/v1/costgroups/{costGroupId}/combinations"
       body: "*"
     };
   }
@@ -336,7 +336,7 @@ service Cover {
   // Assign a member to a cost group
   rpc AssignCostGroupMember(AssignCostGroupMemberRequest) returns (AssignCostGroupMemberResponse) {
     option (google.api.http) = {
-      post: "/v1/costgroup/{costGroupId}/member/add"
+      post: "/v1/costgroups/{costGroupId}/member/add"
       body: "*"
     };
   }
@@ -344,7 +344,7 @@ service Cover {
   // Remove a member from a cost group
   rpc RemoveCostGroupMember(RemoveCostGroupMemberRequest) returns (RemoveCostGroupMemberResponse) {
     option (google.api.http) = {
-      post: "/v1/costgroup/{costGroupId}/member/remove"
+      post: "/v1/costgroups/{costGroupId}/member/remove"
       body: "*"
     };
   }
@@ -352,7 +352,7 @@ service Cover {
   // Deletes a cost group
   rpc DeleteCostGroup(DeleteCostGroupRequest) returns (DeleteCostGroupResponse) {
     option (google.api.http) = {
-      delete: "/v1/costgroup/{costGroupId}"
+      delete: "/v1/costgroups/{costGroupId}"
     };
   }
 
