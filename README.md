@@ -11,16 +11,6 @@ You need to install the following tools to build locally:
 * The following compiler plugins:
 
 ```bash
-go get -u -v google.golang.org/protobuf/cmd/protoc-gen-go \
-    google.golang.org/grpc/cmd/protoc-gen-go-grpc \
-    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
-    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
-    github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
-```
-
-* Updated
-
-```bash
 go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
@@ -39,7 +29,6 @@ Then run:
 Generated SDKs from updates to this repository:
 
 * [blue-sdk-go](https://github.com/alphauslabs/blue-sdk-go)
-
 * [blue-sdk-python](https://github.com/alphauslabs/blue-sdk-python)
 
 The generated OpenAPI documentation can be found [here](https://alphauslabs.github.io/blueapidocs/).
