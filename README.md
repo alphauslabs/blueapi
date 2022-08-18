@@ -1,5 +1,4 @@
-[![main](https://github.com/alphauslabs/blueapi/actions/workflows/main.yml/badge.svg)]
-(https://github.com/alphauslabs/blueapi/actions/workflows/main.yml)
+[![main](https://github.com/alphauslabs/blueapi/actions/workflows/main.yml/badge.svg)](https://github.com/alphauslabs/blueapi/actions/workflows/main.yml)
 
 `blueapi` is the [protobuf](https://developers.google.com/protocol-buffers) definition of [Alphaus](https://alphaus.cloud/) [Blue API](https://alphauslabs.github.io/docs/blueapi/overview/).
 
