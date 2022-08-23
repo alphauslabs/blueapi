@@ -5,7 +5,7 @@ package blueapi.cover.v1;
 import "api/cover/user.proto";
 import "api/cover/view.proto";
 import "api/cover/costgroup.proto";
-import "api/cover/aws/asset.proto";
+import "api/cover/asset.proto";
 import "api/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -401,11 +401,25 @@ service Cover {
   }
 
   // WORK-IN-PROGRESS: Lists all assets per service. 
-  rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse) {
+  rpc ListAssets(ListAssetsRequest) returns (stream api.cover.Asset) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/assets/{service}"
+      post: "/v1/{vendor}/assets:read"
+      body: "*"
     };
-}
+  }
+  // WORK-IN-PROGRESS: Send request to discover resources in cloud. 
+  rpc DiscoverResources(DiscoverResourcesRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/assets/discover"
+      body: "*"
+    };
+  }
+  // WORK-IN-PROGRESS: List all discovery requests and their status requested by the login user. 
+  rpc ListDiscoveryRequests(ListDiscoveryRequestsRequest) returns (ListDiscoveryRequestsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/assets/discover/requests"
+    };
+  }
 }
 
 // Request message for InviteMember
@@ -972,12 +986,41 @@ message ListAssetsRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
-  // Required. The service to query for resources.
-  string service = 2;
+  // Required. Valid only for the `aws` vendor. AWS-specific filter options.
+  ListAssetsAwsFilterOptions awsOptions = 2;
 }
 
-message ListAssetsResponse {
-  string type = 1;
-  string name = 2;
-  repeated api.cover.aws.Asset assets = 3;
+message ListAssetsAwsFilterOptions {
+  // Required. The service to query for resources.
+  string service = 1;
+
+  // Required. Comma-separated list of accounts.
+  string accounts = 2;
+}
+
+// Request message for the Assets.DiscoverResources rpc.
+message DiscoverResourcesRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Valid only for the `aws` vendor. AWS-specific options.
+  DiscoverResourcesAwsOptions awsOptions = 2;
+}
+
+message DiscoverResourcesAwsOptions {
+  //Required. Comma-separated list of accounts 
+  string accounts = 1;
+
+  //Required. Comma-separated list of services
+  string services = 2;
+}
+
+// Request message for the Assets.ListDiscoveryRequests rpc.
+message ListDiscoveryRequestsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+}
+
+message ListDiscoveryRequestsResponse {
+  repeated api.cover.DiscoverRequest requests = 1;
 }
