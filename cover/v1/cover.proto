@@ -405,7 +405,20 @@ service Cover {
     option (google.api.http) = {
       get: "/v1/{vendor}/assets/{service}"
     };
-}
+  }
+  // WORK-IN-PROGRESS: Send request to discover resources in cloud. 
+  rpc DiscoverResources(DiscoverResourcesRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/assets/discover"
+      body: "*"
+    };
+  }
+  // WORK-IN-PROGRESS: List all discovery requests and their status requested by the login user. 
+  rpc ListDiscoveryRequests(ListDiscoveryRequestsRequest) returns (ListDiscoveryRequestsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/assets/discover/requests"
+    };
+  }
 }
 
 // Request message for InviteMember
@@ -977,7 +990,27 @@ message ListAssetsRequest {
 }
 
 message ListAssetsResponse {
-  string type = 1;
-  string name = 2;
-  repeated api.cover.aws.Asset assets = 3;
+  repeated api.cover.aws.Asset assets = 1;
+}
+
+// Request message for the Assets.DiscoverResources rpc.
+message DiscoverResourcesRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  //Required. Comma-separated list of accounts 
+  string accounts = 2;
+
+  //Required. Comma-separated list of services
+  string services = 3;
+}
+
+// Request message for the Assets.ListDiscoveryRequests rpc.
+message ListDiscoveryRequestsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+}
+
+message ListDiscoveryRequestsResponse {
+  repeated api.cover.aws.DiscoverRequest requests = 1;
 }
