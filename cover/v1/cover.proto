@@ -5,7 +5,7 @@ package blueapi.cover.v1;
 import "api/cover/user.proto";
 import "api/cover/view.proto";
 import "api/cover/costgroup.proto";
-import "api/cover/aws/asset.proto";
+import "api/cover/asset.proto";
 import "api/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -401,9 +401,10 @@ service Cover {
   }
 
   // WORK-IN-PROGRESS: Lists all assets per service. 
-  rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse) {
+  rpc ListAssets(ListAssetsRequest) returns (stream api.cover.Asset) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/assets/{service}"
+      post: "/v1/{vendor}/assets:read"
+      body: "*"
     };
   }
   // WORK-IN-PROGRESS: Send request to discover resources in cloud. 
@@ -985,12 +986,16 @@ message ListAssetsRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
-  // Required. The service to query for resources.
-  string service = 2;
+  // Required. Valid only for the `aws` vendor. AWS-specific filter options.
+  ListAssetsAwsFilterOptions awsOptions = 2;
 }
 
-message ListAssetsResponse {
-  repeated api.cover.aws.Asset assets = 1;
+message ListAssetsAwsFilterOptions {
+  // Required. The service to query for resources.
+  string service = 1;
+
+  // Required. Comma-separated list of accounts.
+  string accounts = 2;
 }
 
 // Request message for the Assets.DiscoverResources rpc.
@@ -998,11 +1003,16 @@ message DiscoverResourcesRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
+  // Required. Valid only for the `aws` vendor. AWS-specific options.
+  DiscoverResourcesAwsOptions awsOptions = 2;
+}
+
+message DiscoverResourcesAwsOptions {
   //Required. Comma-separated list of accounts 
-  string accounts = 2;
+  string accounts = 1;
 
   //Required. Comma-separated list of services
-  string services = 3;
+  string services = 2;
 }
 
 // Request message for the Assets.ListDiscoveryRequests rpc.
@@ -1012,5 +1022,5 @@ message ListDiscoveryRequestsRequest {
 }
 
 message ListDiscoveryRequestsResponse {
-  repeated api.cover.aws.DiscoverRequest requests = 1;
+  repeated api.cover.DiscoverRequest requests = 1;
 }
