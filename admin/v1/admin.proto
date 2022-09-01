@@ -153,6 +153,29 @@ service Admin {
       delete: "/admin/v1/notification/channels/{id}"
     };
   }
+
+  // Gets channels by notification type for login user's organization or group.
+  rpc GetNotificationTypeChannels(GetNotificationTypeChannelsRequest) returns (api.NotificationTypeChannels) {
+    option (google.api.http) = {
+      get: "/admin/v1/notification/types/{notificationType}"
+    };
+  }
+
+  // Creates notification type with channels for login user's organization or group.
+  rpc CreateNotificationTypeChannels(CreateNotificationTypeChannelsRequest) returns (api.NotificationTypeChannels) {
+    option (google.api.http) = {
+      post: "/admin/v1/notification/types"
+      body: "*"
+    };
+  }
+
+  // Updates notification type with channels for login user's organization or group.
+  rpc UpdateNotificationTypeChannels(UpdateNotificationTypeChannelsRequest) returns (api.NotificationTypeChannels) {
+    option (google.api.http) = {
+      put: "/admin/v1/notification/types/{notificationType}"
+    };
+  }
+
 }
 
 // Request message for the Admin.ListAccountGroups rpc.
@@ -378,4 +401,41 @@ message UpdateNotificationChannelRequest {
 message DeleteNotificationChannelRequest {
   //Required. ID of the notification channel to delete.
   string id = 1;
+}
+
+// Request message for the Admin.GetNotificationTypeChannels rpc.
+message GetNotificationTypeChannelsRequest {
+  string notificationType = 1;
+}
+
+// Request message for the Admin.CreateNotificationTypeChannels rpc.
+message CreateNotificationTypeChannelsRequest {
+  // Required
+  // Valid values: 
+  // `invoice_calculation_start`, 
+  // `invoice_calculation_end`, 
+  // `cur_changed_after_invoicing`.
+  string notificationType = 1;
+
+  // Required
+  repeated string channels = 2;
+
+  // Required
+  bool enabled = 3;
+}
+
+// Request message for the Admin.UpdateNotificationTypeChannels rpc.
+message UpdateNotificationTypeChannelsRequest {
+  // Required 
+  // Valid values: 
+  // `invoice_calculation_start`, 
+  // `invoice_calculation_end`, 
+  // `cur_changed_after_invoicing`.
+  string notificationType = 1;
+
+  // Required
+  repeated string channels = 2;
+
+  // Required
+  bool enabled = 3;
 }
