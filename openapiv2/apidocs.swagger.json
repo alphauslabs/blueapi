@@ -751,7 +751,7 @@
     },
     "/admin/v1/notifications/{notificationType}": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Get notifications for login user's organization or group.",
+        "summary": "WORK-IN-PROGRESS: Get notifications by notification type for login user's organization or group.",
         "operationId": "Admin_GetNotification",
         "responses": {
           "200": {
@@ -779,8 +779,39 @@
           "Admin"
         ]
       },
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Deletes notification (only set status to disabled and set list channels to empty) by notificaiton type for login user's organization or group.",
+        "operationId": "Admin_DeleteNotification",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "notificationType",
+            "description": "Required \nValid values: \n`invoice_calculation_start`, \n`invoice_calculation_end`, \n`cur_changed_after_invoicing`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
       "put": {
-        "summary": "WORK-IN-PROGRESS: Updates notification for login user's organization or group.",
+        "summary": "WORK-IN-PROGRESS: Updates notification by notification type for login user's organization or group.",
         "operationId": "Admin_UpdateNotification",
         "responses": {
           "200": {
