@@ -161,10 +161,10 @@ service Admin {
     };
   }
 
-  // WORK-IN-PROGRESS: Get notifications by notification type for login user's organization or group.
+  // WORK-IN-PROGRESS: Get notifications for login user's organization or group.
   rpc GetNotification(GetNotificationRequest) returns (api.Notification) {
     option (google.api.http) = {
-      get: "/admin/v1/notifications/{notificationType}"
+      get: "/admin/v1/notifications/{id}"
     };
   }
 
@@ -176,17 +176,17 @@ service Admin {
     };
   }
 
-  // WORK-IN-PROGRESS: Updates notification by notification type for login user's organization or group.
+  // WORK-IN-PROGRESS: Updates notification for login user's organization or group.
   rpc UpdateNotification(UpdateNotificationRequest) returns (api.Notification) {
     option (google.api.http) = {
-      put: "/admin/v1/notifications/{notificationType}"
+      put: "/admin/v1/notifications/{id}"
     };
   }
 
-  // WORK-IN-PROGRESS: Deletes notification (only set status to disabled and set list channels to empty) by notificaiton type for login user's organization or group.
+  // WORK-IN-PROGRESS: Deletes notification for login user's organization or group.
   rpc DeleteNotification(DeleteNotificationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/admin/v1/notifications/{notificationType}"
+      delete: "/admin/v1/notifications/{id}"
     };
   }
 
@@ -427,7 +427,7 @@ message ListNotificationsResponse {
 
 // Request message for the Admin.GetNotificationTypeChannels rpc.
 message GetNotificationRequest {
-  string notificationType = 1;
+  string id = 1;
 }
 
 // Request message for the Admin.CreateNotificationTypeChannels rpc.
@@ -449,11 +449,7 @@ message CreateNotificationRequest {
 // Request message for the Admin.UpdateNotificationTypeChannels rpc.
 message UpdateNotificationRequest {
   // Required 
-  // Valid values: 
-  // `invoice_calculation_start`, 
-  // `invoice_calculation_end`, 
-  // `cur_changed_after_invoicing`.
-  string notificationType = 1;
+  string id = 1;
 
   // Required
   repeated string channels = 2;
@@ -465,9 +461,5 @@ message UpdateNotificationRequest {
 // Request message for the Admin.DeleteNotification rpc.
 message DeleteNotificationRequest {
   // Required 
-  // Valid values: 
-  // `invoice_calculation_start`, 
-  // `invoice_calculation_end`, 
-  // `cur_changed_after_invoicing`.
-  string notificationType = 1;
+  string id = 1;
 }

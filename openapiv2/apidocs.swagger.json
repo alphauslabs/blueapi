@@ -749,9 +749,9 @@
         ]
       }
     },
-    "/admin/v1/notifications/{notificationType}": {
+    "/admin/v1/notifications/{id}": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Get notifications by notification type for login user's organization or group.",
+        "summary": "WORK-IN-PROGRESS: Get notifications for login user's organization or group.",
         "operationId": "Admin_GetNotification",
         "responses": {
           "200": {
@@ -769,7 +769,7 @@
         },
         "parameters": [
           {
-            "name": "notificationType",
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -780,7 +780,7 @@
         ]
       },
       "delete": {
-        "summary": "WORK-IN-PROGRESS: Deletes notification (only set status to disabled and set list channels to empty) by notificaiton type for login user's organization or group.",
+        "summary": "WORK-IN-PROGRESS: Deletes notification for login user's organization or group.",
         "operationId": "Admin_DeleteNotification",
         "responses": {
           "200": {
@@ -799,8 +799,8 @@
         },
         "parameters": [
           {
-            "name": "notificationType",
-            "description": "Required \nValid values: \n`invoice_calculation_start`, \n`invoice_calculation_end`, \n`cur_changed_after_invoicing`.",
+            "name": "id",
+            "description": "Required",
             "in": "path",
             "required": true,
             "type": "string"
@@ -811,7 +811,7 @@
         ]
       },
       "put": {
-        "summary": "WORK-IN-PROGRESS: Updates notification by notification type for login user's organization or group.",
+        "summary": "WORK-IN-PROGRESS: Updates notification for login user's organization or group.",
         "operationId": "Admin_UpdateNotification",
         "responses": {
           "200": {
@@ -829,8 +829,8 @@
         },
         "parameters": [
           {
-            "name": "notificationType",
-            "description": "Required \nValid values: \n`invoice_calculation_start`, \n`invoice_calculation_end`, \n`cur_changed_after_invoicing`.",
+            "name": "id",
+            "description": "Required",
             "in": "path",
             "required": true,
             "type": "string"
@@ -7455,6 +7455,9 @@
     "apiNotification": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "notificationType": {
           "type": "string"
         },
