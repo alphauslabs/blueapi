@@ -398,40 +398,6 @@
         ]
       }
     },
-    "/admin/v1/notification": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Creates notification for login user's organization or group.",
-        "operationId": "Admin_CreateNotification",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apiNotification"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the Admin.CreateNotificationTypeChannels rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateNotificationRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Admin"
-        ]
-      }
-    },
     "/admin/v1/notification/channels": {
       "get": {
         "summary": "Lists all notification channels for login user's organization or group.",
@@ -728,7 +694,62 @@
         ]
       }
     },
-    "/admin/v1/notification/{notificationType}": {
+    "/admin/v1/notifications": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: List all notification for login user's organization or group.",
+        "operationId": "Admin_ListNotifications",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListNotificationsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Creates notification for login user's organization or group.",
+        "operationId": "Admin_CreateNotification",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotification"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the Admin.CreateNotificationTypeChannels rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateNotificationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/notifications/{notificationType}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Get notifications for login user's organization or group.",
         "operationId": "Admin_GetNotification",
@@ -10874,6 +10895,18 @@
         }
       },
       "description": "Response message for the Admin.ListNotificationChannels rpc."
+    },
+    "v1ListNotificationsResponse": {
+      "type": "object",
+      "properties": {
+        "notifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiNotification"
+          }
+        }
+      },
+      "description": "Response message for the Admin.ListNotifications rpc."
     },
     "v1ListPermissionsResponse": {
       "type": "object",

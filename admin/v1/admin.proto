@@ -154,17 +154,24 @@ service Admin {
     };
   }
 
+   // WORK-IN-PROGRESS: List all notification for login user's organization or group.
+  rpc ListNotifications(ListNotificationsRequest) returns (ListNotificationsResponse) {
+    option (google.api.http) = {
+      get: "/admin/v1/notifications"
+    };
+  }
+
   // WORK-IN-PROGRESS: Get notifications for login user's organization or group.
   rpc GetNotification(GetNotificationRequest) returns (api.Notification) {
     option (google.api.http) = {
-      get: "/admin/v1/notification/{notificationType}"
+      get: "/admin/v1/notifications/{notificationType}"
     };
   }
 
   // WORK-IN-PROGRESS: Creates notification for login user's organization or group.
   rpc CreateNotification(CreateNotificationRequest) returns (api.Notification) {
     option (google.api.http) = {
-      post: "/admin/v1/notification"
+      post: "/admin/v1/notifications"
       body: "*"
     };
   }
@@ -172,7 +179,7 @@ service Admin {
   // WORK-IN-PROGRESS: Updates notification for login user's organization or group.
   rpc UpdateNotification(UpdateNotificationRequest) returns (api.Notification) {
     option (google.api.http) = {
-      put: "/admin/v1/notification/{notificationType}"
+      put: "/admin/v1/notifications/{notificationType}"
     };
   }
 
@@ -401,6 +408,14 @@ message UpdateNotificationChannelRequest {
 message DeleteNotificationChannelRequest {
   //Required. ID of the notification channel to delete.
   string id = 1;
+}
+
+// Request message for the Admin.ListNotifications rpc.
+message ListNotificationsRequest {}
+
+// Response message for the Admin.ListNotifications rpc.
+message ListNotificationsResponse {
+  repeated api.Notification notifications = 1;
 }
 
 // Request message for the Admin.GetNotificationTypeChannels rpc.
