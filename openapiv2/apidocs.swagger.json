@@ -398,6 +398,40 @@
         ]
       }
     },
+    "/admin/v1/notification": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Creates notification for login user's organization or group.",
+        "operationId": "Admin_CreateNotification",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotification"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the Admin.CreateNotificationTypeChannels rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateNotificationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
     "/admin/v1/notification/channels": {
       "get": {
         "summary": "Lists all notification channels for login user's organization or group.",
@@ -694,49 +728,15 @@
         ]
       }
     },
-    "/admin/v1/notification/types": {
-      "post": {
-        "summary": "Creates notification type with channels for login user's organization or group.",
-        "operationId": "Admin_CreateNotificationTypeChannels",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apiNotificationTypeChannels"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the Admin.CreateNotificationTypeChannels rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateNotificationTypeChannelsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Admin"
-        ]
-      }
-    },
-    "/admin/v1/notification/types/{notificationType}": {
+    "/admin/v1/notification/{notificationType}": {
       "get": {
-        "summary": "Gets channels by notification type for login user's organization or group.",
-        "operationId": "Admin_GetNotificationTypeChannels",
+        "summary": "WORK-IN-PROGRESS: Get notifications for login user's organization or group.",
+        "operationId": "Admin_GetNotification",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiNotificationTypeChannels"
+              "$ref": "#/definitions/apiNotification"
             }
           },
           "default": {
@@ -759,13 +759,13 @@
         ]
       },
       "put": {
-        "summary": "Updates notification type with channels for login user's organization or group.",
-        "operationId": "Admin_UpdateNotificationTypeChannels",
+        "summary": "WORK-IN-PROGRESS: Updates notification for login user's organization or group.",
+        "operationId": "Admin_UpdateNotification",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiNotificationTypeChannels"
+              "$ref": "#/definitions/apiNotification"
             }
           },
           "default": {
@@ -7400,6 +7400,23 @@
         }
       }
     },
+    "apiNotification": {
+      "type": "object",
+      "properties": {
+        "notificationType": {
+          "type": "string"
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
     "apiNotificationChannel": {
       "type": "object",
       "properties": {
@@ -7436,23 +7453,6 @@
         "defaultChannel": {
           "type": "string",
           "description": "The id of the default notification channel."
-        }
-      }
-    },
-    "apiNotificationTypeChannels": {
-      "type": "object",
-      "properties": {
-        "notificationType": {
-          "type": "string"
-        },
-        "channels": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "enabled": {
-          "type": "boolean"
         }
       }
     },
@@ -9931,7 +9931,7 @@
       },
       "description": "Request message for the Admin.CreateNotificationChannel rpc."
     },
-    "v1CreateNotificationTypeChannelsRequest": {
+    "v1CreateNotificationRequest": {
       "type": "object",
       "properties": {
         "notificationType": {

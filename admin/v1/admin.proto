@@ -154,25 +154,25 @@ service Admin {
     };
   }
 
-  // Gets channels by notification type for login user's organization or group.
-  rpc GetNotificationTypeChannels(GetNotificationTypeChannelsRequest) returns (api.NotificationTypeChannels) {
+  // WORK-IN-PROGRESS: Get notifications for login user's organization or group.
+  rpc GetNotification(GetNotificationRequest) returns (api.Notification) {
     option (google.api.http) = {
-      get: "/admin/v1/notification/types/{notificationType}"
+      get: "/admin/v1/notification/{notificationType}"
     };
   }
 
-  // Creates notification type with channels for login user's organization or group.
-  rpc CreateNotificationTypeChannels(CreateNotificationTypeChannelsRequest) returns (api.NotificationTypeChannels) {
+  // WORK-IN-PROGRESS: Creates notification for login user's organization or group.
+  rpc CreateNotification(CreateNotificationRequest) returns (api.Notification) {
     option (google.api.http) = {
-      post: "/admin/v1/notification/types"
+      post: "/admin/v1/notification"
       body: "*"
     };
   }
 
-  // Updates notification type with channels for login user's organization or group.
-  rpc UpdateNotificationTypeChannels(UpdateNotificationTypeChannelsRequest) returns (api.NotificationTypeChannels) {
+  // WORK-IN-PROGRESS: Updates notification for login user's organization or group.
+  rpc UpdateNotification(UpdateNotificationRequest) returns (api.Notification) {
     option (google.api.http) = {
-      put: "/admin/v1/notification/types/{notificationType}"
+      put: "/admin/v1/notification/{notificationType}"
     };
   }
 
@@ -404,12 +404,12 @@ message DeleteNotificationChannelRequest {
 }
 
 // Request message for the Admin.GetNotificationTypeChannels rpc.
-message GetNotificationTypeChannelsRequest {
+message GetNotificationRequest {
   string notificationType = 1;
 }
 
 // Request message for the Admin.CreateNotificationTypeChannels rpc.
-message CreateNotificationTypeChannelsRequest {
+message CreateNotificationRequest {
   // Required
   // Valid values: 
   // `invoice_calculation_start`, 
@@ -425,7 +425,7 @@ message CreateNotificationTypeChannelsRequest {
 }
 
 // Request message for the Admin.UpdateNotificationTypeChannels rpc.
-message UpdateNotificationTypeChannelsRequest {
+message UpdateNotificationRequest {
   // Required 
   // Valid values: 
   // `invoice_calculation_start`, 
