@@ -153,6 +153,43 @@ service Admin {
       delete: "/admin/v1/notification/channels/{id}"
     };
   }
+
+   // WORK-IN-PROGRESS: List all notification for login user's organization.
+  rpc ListNotifications(ListNotificationsRequest) returns (ListNotificationsResponse) {
+    option (google.api.http) = {
+      get: "/admin/v1/notifications"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get notifications for login user's organization.
+  rpc GetNotification(GetNotificationRequest) returns (api.Notification) {
+    option (google.api.http) = {
+      get: "/admin/v1/notifications/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Creates notification for login user's organization.
+  rpc CreateNotification(CreateNotificationRequest) returns (api.Notification) {
+    option (google.api.http) = {
+      post: "/admin/v1/notifications"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Updates notification for login user's organization.
+  rpc UpdateNotification(UpdateNotificationRequest) returns (api.Notification) {
+    option (google.api.http) = {
+      put: "/admin/v1/notifications/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Deletes notification for login user's organization.
+  rpc DeleteNotification(DeleteNotificationRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/admin/v1/notifications/{id}"
+    };
+  }
+
 }
 
 // Request message for the Admin.ListAccountGroups rpc.
@@ -377,5 +414,52 @@ message UpdateNotificationChannelRequest {
 // Request message for the Admin.DeleteNotificationChannel rpc.
 message DeleteNotificationChannelRequest {
   //Required. ID of the notification channel to delete.
+  string id = 1;
+}
+
+// Request message for the Admin.ListNotifications rpc.
+message ListNotificationsRequest {}
+
+// Response message for the Admin.ListNotifications rpc.
+message ListNotificationsResponse {
+  repeated api.Notification notifications = 1;
+}
+
+// Request message for the Admin.GetNotificationTypeChannels rpc.
+message GetNotificationRequest {
+  string id = 1;
+}
+
+// Request message for the Admin.CreateNotificationTypeChannels rpc.
+message CreateNotificationRequest {
+  // Required
+  // Valid values: 
+  // `invoice_calculation_start`, 
+  // `invoice_calculation_end`, 
+  // `cur_changed_after_invoicing`.
+  string notificationType = 1;
+
+  // Required
+  repeated string channels = 2;
+
+  // Required
+  bool enabled = 3;
+}
+
+// Request message for the Admin.UpdateNotificationTypeChannels rpc.
+message UpdateNotificationRequest {
+  // Required 
+  string id = 1;
+
+  // Required
+  repeated string channels = 2;
+
+  // Required
+  bool enabled = 3;
+}
+
+// Request message for the Admin.DeleteNotification rpc.
+message DeleteNotificationRequest {
+  // Required 
   string id = 1;
 }

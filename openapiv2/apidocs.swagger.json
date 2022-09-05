@@ -196,6 +196,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Admin.CreateCloudWatchMetricsStream rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -259,6 +260,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Admin.CreateDefaultCostAccess rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -341,6 +343,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -437,6 +440,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Admin.CreateNotificationChannel rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -486,6 +490,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -621,6 +626,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Admin.CreateDefaultNotificationChannel rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -675,11 +681,177 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Admin.SaveNotificationSettings rpc.",
             "in": "body",
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1SaveNotificationSettingsRequest"
             }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/notifications": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: List all notification for login user's organization or group.",
+        "operationId": "Admin_ListNotifications",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListNotificationsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Creates notification for login user's organization or group.",
+        "operationId": "Admin_CreateNotification",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotification"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the Admin.CreateNotificationTypeChannels rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateNotificationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/notifications/{id}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Get notifications for login user's organization or group.",
+        "operationId": "Admin_GetNotification",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotification"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Deletes notification for login user's organization or group.",
+        "operationId": "Admin_DeleteNotification",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      },
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Updates notification for login user's organization or group.",
+        "operationId": "Admin_UpdateNotification",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiNotification"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "channels",
+            "description": "Required",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "enabled",
+            "description": "Required",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "tags": [
@@ -738,6 +910,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Iam.CreateApiClient rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -758,6 +931,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -882,6 +1056,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -1008,6 +1183,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -1021,6 +1197,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Iam.CreateIdentityProvider rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -1041,6 +1218,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -1116,6 +1294,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Iam.CreateIpFilter rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -1136,6 +1315,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -1243,6 +1423,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Iam.CreateRole rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -1263,6 +1444,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -1404,6 +1586,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Iam.CreateUserRoleMapping rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -1435,6 +1618,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Iam.UpdateUserRoleMapping rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -1498,6 +1682,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Iam.CreateUser rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -1547,6 +1732,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -1687,6 +1873,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -1719,6 +1906,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -1781,6 +1969,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -1815,6 +2004,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Organization.CreateOrg rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -1835,6 +2025,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -1848,6 +2039,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Organization.UpdateMetadata rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -1868,6 +2060,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -1881,6 +2074,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Organization.UpdatePassword rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -1901,6 +2095,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -1924,6 +2119,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -1978,6 +2174,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -2085,6 +2282,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the CreateAccountAccess rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -2135,6 +2333,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -2242,6 +2441,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Cost.ImportCurFiles rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -2284,6 +2484,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Billing.ListAwsCalculationHistory rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -2347,6 +2548,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request message for the Billing.CreateBillingGroup rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -3057,6 +3259,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -4259,6 +4462,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -4362,6 +4566,142 @@
         ]
       }
     },
+    "/v1/{vendor}/assets/discover": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Send request to discover resources in cloud.",
+        "operationId": "Cover_DiscoverResources",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "awsOptions": {
+                  "$ref": "#/definitions/v1DiscoverResourcesAwsOptions",
+                  "description": "Required. Valid only for the `aws` vendor. AWS-specific options."
+                }
+              },
+              "description": "Request message for the Assets.DiscoverResources rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/{vendor}/assets/discover/requests": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: List all discovery requests and their status requested by the login user.",
+        "operationId": "Cover_ListDiscoveryRequests",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListDiscoveryRequestsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/{vendor}/assets:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Lists all assets per service.",
+        "operationId": "Cover_ListAssets",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/coverAsset"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of coverAsset"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "awsOptions": {
+                  "$ref": "#/definitions/v1ListAssetsAwsFilterOptions",
+                  "description": "Required. Valid only for the `aws` vendor. AWS-specific filter options."
+                }
+              },
+              "description": "Request message for the Asset.ListResources rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/{vendor}/bep/{orgId}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Get the breakeven point details for the RI or SP.",
@@ -4423,6 +4763,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -4460,6 +4801,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -4759,6 +5101,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -5047,6 +5390,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -5951,6 +6295,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
+              "type": "object",
               "properties": {}
             }
           },
@@ -6997,7 +7342,9 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": "supportFee: \n   Total amount of Support Fee costs\n\nsubstitution: \n   Total amount of agency fee costs\n\ncharge: \n   Total amount of vendor usage fee costs\n\ndiscount: \n   Total amount after discounts. Inculuded Support fee costs\n\ndiscountWithSubstitution: \n   Total Discounts plus agency fee costs\n\nchargeTaxFree: \n   Amounts not included in consumption tax\n\nadditionalItem: \n   Total amount of additional item costs \n\ncustomService: \n   Total amount of custom service item costs \n\nsumOfBeforeTax: \n   Total amount before consumption tax\n\ntax: \n   Consumption tax amount on the total amount\n\ntotal: \n   Total billing amount including tax",
+          "title": "Key names related to the total. Each key is described in the following detail"
         },
         "currency": {
           "type": "string"
@@ -7102,6 +7449,26 @@
         "lowerBound": {
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "apiNotification": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "notificationType": {
+          "type": "string"
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "enabled": {
+          "type": "boolean"
         }
       }
     },
@@ -8324,6 +8691,20 @@
       },
       "description": "This resource represents a long-running operation that is the result of a\nnetwork API call."
     },
+    "coverAsset": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "coverCombinations": {
       "type": "object",
       "properties": {
@@ -8385,6 +8766,32 @@
         },
         "createdBy": {
           "$ref": "#/definitions/coverMemberUserData"
+        }
+      }
+    },
+    "coverDiscoverRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "datetimeRequested": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "lastUpdate": {
+          "type": "string"
+        },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       }
     },
@@ -8773,7 +9180,7 @@
         }
       },
       "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\nExample 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\nExample 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "rippleOrg": {
       "type": "object",
@@ -9579,6 +9986,27 @@
       },
       "description": "Request message for the Admin.CreateNotificationChannel rpc."
     },
+    "v1CreateNotificationRequest": {
+      "type": "object",
+      "properties": {
+        "notificationType": {
+          "type": "string",
+          "description": "Required\nValid values: \n`invoice_calculation_start`, \n`invoice_calculation_end`, \n`cur_changed_after_invoicing`."
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Required"
+        },
+        "enabled": {
+          "type": "boolean",
+          "title": "Required"
+        }
+      },
+      "description": "Request message for the Admin.CreateNotificationTypeChannels rpc."
+    },
     "v1CreateOrgRequest": {
       "type": "object",
       "properties": {
@@ -9820,6 +10248,19 @@
         }
       },
       "title": "Response message for DeleteView"
+    },
+    "v1DiscoverResourcesAwsOptions": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "type": "string",
+          "title": "Required. Comma-separated list of accounts"
+        },
+        "services": {
+          "type": "string",
+          "title": "Required. Comma-separated list of services"
+        }
+      }
     },
     "v1ExportCostFiltersFileResponse": {
       "type": "object",
@@ -10342,6 +10783,19 @@
       },
       "description": "Response message for the Admin.ListAccountGroups rpc."
     },
+    "v1ListAssetsAwsFilterOptions": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "type": "string",
+          "description": "Required. The service to query for resources."
+        },
+        "accounts": {
+          "type": "string",
+          "description": "Required. Comma-separated list of accounts."
+        }
+      }
+    },
     "v1ListAwsDailyRunHistoryRequest": {
       "type": "object",
       "properties": {
@@ -10441,6 +10895,17 @@
       },
       "description": "Response message for the ListCostFilters rpc."
     },
+    "v1ListDiscoveryRequestsResponse": {
+      "type": "object",
+      "properties": {
+        "requests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverDiscoverRequest"
+          }
+        }
+      }
+    },
     "v1ListIdentityProvidersResponse": {
       "type": "object",
       "properties": {
@@ -10464,6 +10929,18 @@
         }
       },
       "description": "Response message for the Admin.ListNotificationChannels rpc."
+    },
+    "v1ListNotificationsResponse": {
+      "type": "object",
+      "properties": {
+        "notifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiNotification"
+          }
+        }
+      },
+      "description": "Response message for the Admin.ListNotifications rpc."
     },
     "v1ListPermissionsResponse": {
       "type": "object",
@@ -10552,11 +11029,11 @@
         },
         "groupByMonth": {
           "type": "boolean",
-          "description": "Optional. If set to true, return data grouped by month within the date range. If you want data that is grouped per account per month, set this to `true`, then set `groupByColumns` to `none`.\n\nYou can also use `groupByColumns` while setting this to true. If `groupByColumns` is empty, the default grouping is `productCode`."
+          "description": "Optional. If set to true, return data grouped by month within the date range. If you want data that is grouped per account per month, set this to `true`, then set `groupByColumns` to `none`. You can also use `groupByColumns` while setting this to true."
         },
         "groupAccounts": {
           "type": "boolean",
-          "description": "Optional. If set to true, group all input accounts into one. Valid only if `groupByMonth` is true."
+          "description": "Optional. If set to true, group all input accounts into one."
         },
         "filters": {
           "type": "array",
@@ -10574,11 +11051,11 @@
         },
         "includeTags": {
           "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource tags. Discarded when `groupByColumns` field is set or if `groupByMonth` is true."
+          "description": "Optional. If set to true, stream will include resource tags. Discarded when `groupByColumns` field is set to `none`."
         },
         "includeCostCategories": {
           "type": "boolean",
-          "description": "Optional. If set to true, stream will include resource cost category information. Discarded when `groupByColumns` field is set or if `groupByMonth` is true."
+          "description": "Optional. If set to true, stream will include resource cost category information. Discarded when `groupByColumns` field is set to `none`."
         },
         "toCurrency": {
           "type": "string",
