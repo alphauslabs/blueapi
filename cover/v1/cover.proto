@@ -941,32 +941,50 @@ message AccountAccess {
   // The queried target account.
   string target = 1;
 
+  // The account name
+  string accountName = 2;
+
   // The role ARN that provides the cross-account access permissions.
-  string roleArn = 2;
+  string roleArn = 3;
 
   // The external id for this role.
-  string externalId = 3;
+  string externalId = 4;
 
   // The id of the CloudFormation stack deployed in the target account.
-  string stackId = 4;
+  string stackId = 5;
 
   // The region where the stack is deployed.
-  string stackRegion = 5;
+  string stackRegion = 6;
 
   // The latest template used to deploy the stack.
-  string templateUrl = 6;
+  string templateUrl = 7;
+
+  // The s3 bucket name
+  string bucketName = 8;
+
+  // Report path prefix
+  string prefix = 9;
+
+  // The report name
+  string reportName = 10;
+
+  // The status of registration for CUR export, API access and Cloudwatch streaming
+  string registrationStatus = 11;
 
   // This can be `latest`, `outdated`, or some error information.
-  string status = 7;
+  string status = 12;
 
   // The last updated timestamp, RFC3339 UTC.
-  string lastUpdated = 8;
+  string lastUpdated = 13;
 }
 
 // Request message for the CreateAccountAccess rpc.
 message CreateAccountAccessRequest {
   // Required. The target AWS account to validate.
   string target = 1;
+
+  // Required. The account name
+  string accountName = 2;
 }
 
 // Request message for the UpdateAccountAccess rpc.
