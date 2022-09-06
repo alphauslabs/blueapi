@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package blueapi.api.azure;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/azure";
+option java_package = "cloud.alphaus.blueapi.api.azure";
+option java_outer_classname = "ApiAzureCostProto";
+
+message Cost {
+    // The account being queried.
+    string account = 1;
+  
+    // The group id the account is associated with during the query.
+    string groupId = 2;
+  
+    // For daily data, format is `yyyy-mm-dd`; for monthly, `yyyy-mm`.
+    string date = 3;
+  
+    // The service name, such as `Software License`, `Cognosys`, `SendGrid`, `New-Commerce ERP Software License`, etc.
+    string serviceName = 4;
+
+    // The product code for an Azure service, such as `Dsv4 Series Windows VM`, `CentOS 7.6`, etc.
+    string productName = 5;
+  
+    // The region of lineitem, if applicable.
+    string region = 6;
+  
+    // The charge type of lineitem, if applicable. Such as `New`, `CycleCharge`, `Prorate fees when cancel`, etc.
+    string chargeType = 7;
+  
+    // The description of lineitem, if applicable.
+    string description = 8;
+  
+    // The billable quantity of lineitem, if applicable.
+    double billableQuantity = 9;
+
+    // The effective unit price of lineitem, if applicable.
+    double effectiveUnitPrice = 10;
+  
+    // The true cost (calculated) for this lineitem.
+    double cost = 11;
+
+    // The base currency for `cost`.
+    string baseCurrency = 12;
+  
+    // The exchange rate used to convert `baseCurrency` to `targetCurrency`.
+    double exchangeRate = 13;
+  
+    // Converted `cost`.
+    double targetCost = 14;
+
+    // The currency set by `toCurrency`.
+    string targetCurrency = 15;
+  
+    // The time interval of lineitem, if applicable. Format is `yyyy-MM-ddThh:MM:ssZ/yyyy-mm-ddTHH:mm:ssZ` (for example 2020-09-16T00:00:00Z/2021-09-24T00:00:00Z).
+    string timeInterval = 16;
+
+    // The billing type of lineitem, if applicable. Such as `MARKETPLACE`, `UPFRONT`, `Refund`, `Credit` and `OTHERS`.
+    string billingType = 17;
+
+    // The alternate ID of lineitem, if applicable.
+    string alternateId = 18;
+}

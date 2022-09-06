@@ -14,6 +14,7 @@ import "api/aws/calculator.proto";
 import "api/aws/recommendation.proto";
 import "api/aws/reduction.proto";
 import "api/gcp/cost.proto";
+import "api/azure/cost.proto";
 import "api/ripple/payer.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -231,7 +232,7 @@ service Cost {
     };
   }
 
-  // Reads the non-usage-based details of an organization (Ripple) or billing group (Wave). This API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
+  // Reads the non-usage-based details of an organization (Ripple) or billing group (Wave). This API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment, the supported {vendor} is 'aws' or 'azure'. If datetime range parameters are not set, month-to-date (current month) will be returned.
   rpc ReadAdjustments(ReadAdjustmentsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/adjustments:read"
@@ -542,6 +543,7 @@ message ImportCurFilesRequest {
 message CostItem {
   api.aws.Cost aws = 1;
   api.gcp.Cost gcp = 2;
+  api.azure.Cost azure = 3;
 }
 
 message CalculateCostsRequestAwsOptions {
@@ -788,7 +790,7 @@ message ReadAdjustmentsRequestAwsOptions {
 
 // Request message for the Cost.ReadAdjustments rpc.
 message ReadAdjustmentsRequest {
-  // Required. At the moment, only `aws` is supported.
+  // Required. At the moment, only `aws` or `azure` is supported.
   string vendor = 1;
 
   // Optional. At the moment, only billing internal ids are supported. If set, reads the non-usage-based adjustment details of this group. Valid only if `accountId` is not set. If both `groupId` and `accountId` are not set, reads the adjustment details of the whole organization. Only valid for Ripple users. Implied (or discarded) for Wave(Pro) users.
