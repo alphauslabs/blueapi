@@ -18,16 +18,44 @@ message CostGroupData {
     string createdAt = 7;
     string updatedAt = 8;
     repeated api.cover.MemberUserData members = 9;
-    repeated Combinations combinations = 10;
+    Combinations combinations = 10;
     api.cover.MemberUserData createdBy = 11;
 }
 
 message Combinations {
-    string criteria = 1;
-    string comparator = 2;
-    string value = 3;
-    string tagKey = 4;
-    string tagValue = 5;
+  // Optional. Valid only for the `aws` vendor. AWS-specific options.
+  api.cover.CostGroupAwsOptions awsOptions = 1;
+
+  // Optional. Valid only for the `azure` vendor. Azure-specific options.
+  api.cover.CostGroupAzureOptions azureOptions = 2;
+
+  // Optional. Valid only for the `gcp` vendor. GCP-specific options.
+  api.cover.CostGroupGcpOptions gcpOptions = 3;
+}
+
+// AWS-specific options for CreateCostGroupRequest.
+message CostGroupAwsOptions {
+  // Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.
+  repeated CostGroupOptionsFilters filters = 1;
+}
+
+// Azure-specific options for CreateCostGroupRequest.
+message CostGroupAzureOptions {
+  // Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.
+  repeated CostGroupOptionsFilters filters = 1;
+}
+
+// GCP-specific options for CreateCostGroupRequest.
+message CostGroupGcpOptions {
+  // Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.
+  repeated CostGroupOptionsFilters filters = 1;
+}
+
+// A map of "key:value" column filters. The key indicates the column name while the value is the filter value prefixed by either "eq:" (equal), "re:" (regular expressions based on https://github.com/google/re2), or "!re:" (reverse "re:"). No prefix is the same as "eq:". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.
+//
+// For example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{"productCode":"eq:AmazonEC2"}` or `{"productCode":"AmazonEC2"}`. You can also use a regular expression like `{"productCode":"re:AmazonEC2|AmazonRDS"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{"productCode":"!re:^AmazonEC2$"}`, which means return all items except `AmazonEC2`.
+message CostGroupOptionsFilters {
+  map<string, string> andFilters = 1;
 }
 
 message Account {
