@@ -2607,6 +2607,37 @@
         ]
       }
     },
+    "/v1/costgroups/resolve/{costGroupId}": {
+      "get": {
+        "operationId": "Cover_ResolveCostGroupCombinations",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ResolveCostGroupCombinationsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/costgroups/{costGroupId}": {
       "get": {
         "summary": "Get the details of the cost group",
@@ -2750,10 +2781,7 @@
               "type": "object",
               "properties": {
                 "combinations": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/coverCombinations"
-                  }
+                  "$ref": "#/definitions/coverCombinations"
                 }
               },
               "title": "Request message for UpdateCostGroupCombinations"
@@ -7865,6 +7893,20 @@
         }
       }
     },
+    "apicoverAccount": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
     "apigcpCost": {
       "type": "object",
       "properties": {
@@ -8661,22 +8703,45 @@
     "coverCombinations": {
       "type": "object",
       "properties": {
-        "criteria": {
-          "type": "string"
+        "awsOptions": {
+          "$ref": "#/definitions/coverCostGroupAwsOptions",
+          "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
         },
-        "comparator": {
-          "type": "string"
+        "azureOptions": {
+          "$ref": "#/definitions/coverCostGroupAzureOptions",
+          "description": "Optional. Valid only for the `azure` vendor. Azure-specific options."
         },
-        "value": {
-          "type": "string"
-        },
-        "tagKey": {
-          "type": "string"
-        },
-        "tagValue": {
-          "type": "string"
+        "gcpOptions": {
+          "$ref": "#/definitions/coverCostGroupGcpOptions",
+          "description": "Optional. Valid only for the `gcp` vendor. GCP-specific options."
         }
       }
+    },
+    "coverCostGroupAwsOptions": {
+      "type": "object",
+      "properties": {
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverCostGroupOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
+        }
+      },
+      "description": "AWS-specific options for CreateCostGroupRequest."
+    },
+    "coverCostGroupAzureOptions": {
+      "type": "object",
+      "properties": {
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverCostGroupOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
+        }
+      },
+      "description": "Azure-specific options for CreateCostGroupRequest."
     },
     "coverCostGroupData": {
       "type": "object",
@@ -8712,15 +8777,37 @@
           }
         },
         "combinations": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/coverCombinations"
-          }
+          "$ref": "#/definitions/coverCombinations"
         },
         "createdBy": {
           "$ref": "#/definitions/coverMemberUserData"
         }
       }
+    },
+    "coverCostGroupGcpOptions": {
+      "type": "object",
+      "properties": {
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverCostGroupOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
+        }
+      },
+      "description": "GCP-specific options for CreateCostGroupRequest."
+    },
+    "coverCostGroupOptionsFilters": {
+      "type": "object",
+      "properties": {
+        "andFilters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "A map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
     },
     "coverFavorites": {
       "type": "object",
@@ -9778,10 +9865,7 @@
           "type": "string"
         },
         "combinations": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/coverCombinations"
-          }
+          "$ref": "#/definitions/coverCombinations"
         }
       },
       "title": "Request message for CreateCostGroup"
@@ -11165,6 +11249,20 @@
       },
       "title": "Response message for ResetUserPassword"
     },
+    "v1ResolveCostGroupCombinationsResponse": {
+      "type": "object",
+      "properties": {
+        "costgroupId": {
+          "type": "string"
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apicoverAccount"
+          }
+        }
+      }
+    },
     "v1SaveNotificationSettingsRequest": {
       "type": "object",
       "properties": {
@@ -11202,10 +11300,7 @@
       "type": "object",
       "properties": {
         "combinations": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/coverCombinations"
-          }
+          "$ref": "#/definitions/coverCombinations"
         }
       },
       "title": "Response message for UpdateCostGroupCombinations"
