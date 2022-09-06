@@ -334,6 +334,12 @@ service Cover {
     };
   }
 
+  rpc ResolveCostGroupCombinations(ResolveCostGroupCombinationsRequest) returns (ResolveCostGroupCombinationsResponse) {
+    option (google.api.http) = {
+      get: "/v1/costgroups/resolve/{costGroupId}"
+    };
+  } 
+
   // Assign a member to a cost group
   rpc AssignCostGroupMember(AssignCostGroupMemberRequest) returns (AssignCostGroupMemberResponse) {
     option (google.api.http) = {
@@ -1041,4 +1047,14 @@ message ListDiscoveryRequestsRequest {
 
 message ListDiscoveryRequestsResponse {
   repeated api.Operation requests = 1;
+}
+
+message ResolveCostGroupCombinationsRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+}
+
+message ResolveCostGroupCombinationsResponse {
+  string costgroupId = 1;
+  repeated api.cover.Account accounts = 2;
 }
