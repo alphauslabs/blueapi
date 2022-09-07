@@ -828,7 +828,7 @@
           },
           {
             "name": "channels",
-            "description": "Required",
+            "description": "Required.",
             "in": "query",
             "required": false,
             "type": "array",
@@ -839,7 +839,7 @@
           },
           {
             "name": "enabled",
-            "description": "Required",
+            "description": "Required.",
             "in": "query",
             "required": false,
             "type": "boolean"
@@ -4483,7 +4483,7 @@
     },
     "/v1/{vendor}/adjustments:read": {
       "post": {
-        "summary": "Reads the non-usage-based details of an organization (Ripple) or billing group (Wave). This API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
+        "summary": "Reads the non-usage-based details of an organization (Ripple) or billing group (Wave). This API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment, the supported {vendor} is 'aws' or 'azure'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
         "operationId": "Cost_ReadAdjustments",
         "responses": {
           "200": {
@@ -4511,7 +4511,7 @@
         "parameters": [
           {
             "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
+            "description": "Required. At the moment, only `aws` or `azure` is supported.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -5873,7 +5873,7 @@
           },
           {
             "name": "billingInternalId",
-            "description": "Optional. Company Id of Billing Group to retrieve. Default value is user's Company Id",
+            "description": "Optional. Company Id of Billing Group to retrieve. Default value is user's Company Id.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -7893,6 +7893,88 @@
         }
       }
     },
+    "apiazureCost": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string",
+          "description": "The account being queried."
+        },
+        "groupId": {
+          "type": "string",
+          "description": "The group id the account is associated with during the query."
+        },
+        "date": {
+          "type": "string",
+          "description": "For daily data, format is `yyyy-mm-dd`; for monthly, `yyyy-mm`."
+        },
+        "serviceName": {
+          "type": "string",
+          "description": "The service name, such as `Software License`, `Cognosys`, `SendGrid`, `New-Commerce ERP Software License`, etc."
+        },
+        "productName": {
+          "type": "string",
+          "description": "The product code for an Azure service, such as `Dsv4 Series Windows VM`, `CentOS 7.6`, etc."
+        },
+        "region": {
+          "type": "string",
+          "description": "The region of lineitem, if applicable."
+        },
+        "chargeType": {
+          "type": "string",
+          "description": "The charge type of lineitem, if applicable. Such as `New`, `CycleCharge`, `Prorate fees when cancel`, etc."
+        },
+        "description": {
+          "type": "string",
+          "description": "The description of lineitem, if applicable."
+        },
+        "billableQuantity": {
+          "type": "number",
+          "format": "double",
+          "description": "The billable quantity of lineitem, if applicable."
+        },
+        "effectiveUnitPrice": {
+          "type": "number",
+          "format": "double",
+          "description": "The effective unit price of lineitem, if applicable."
+        },
+        "cost": {
+          "type": "number",
+          "format": "double",
+          "description": "The true cost (calculated) for this lineitem."
+        },
+        "baseCurrency": {
+          "type": "string",
+          "description": "The base currency for `cost`."
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double",
+          "description": "The exchange rate used to convert `baseCurrency` to `targetCurrency`."
+        },
+        "targetCost": {
+          "type": "number",
+          "format": "double",
+          "description": "Converted `cost`."
+        },
+        "targetCurrency": {
+          "type": "string",
+          "description": "The currency set by `toCurrency`."
+        },
+        "timeInterval": {
+          "type": "string",
+          "description": "The time interval of lineitem, if applicable. Format is `yyyy-MM-ddThh:MM:ssZ/yyyy-mm-ddTHH:mm:ssZ` (for example 2020-09-16T00:00:00Z/2021-09-24T00:00:00Z)."
+        },
+        "billingType": {
+          "type": "string",
+          "description": "The billing type of lineitem, if applicable. Such as `MARKETPLACE`, `UPFRONT`, `Refund`, `Credit` and `OTHERS`."
+        },
+        "alternateId": {
+          "type": "string",
+          "description": "The alternate ID of lineitem, if applicable."
+        }
+      }
+    },
     "apicoverAccount": {
       "type": "object",
       "properties": {
@@ -9194,7 +9276,7 @@
         }
       },
       "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "rippleOrg": {
       "type": "object",
@@ -9635,6 +9717,9 @@
         },
         "gcp": {
           "$ref": "#/definitions/apigcpCost"
+        },
+        "azure": {
+          "$ref": "#/definitions/apiazureCost"
         }
       },
       "description": "Response message wrapper for cloud costs."
