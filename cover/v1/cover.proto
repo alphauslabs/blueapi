@@ -6,6 +6,7 @@ import "api/cover/user.proto";
 import "api/cover/view.proto";
 import "api/cover/costgroup.proto";
 import "api/cover/asset.proto";
+import "api/cover/accountaccess.proto";
 import "api/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -411,13 +412,6 @@ service Cover {
     option (google.api.http) = {
       post: "/v1/{vendor}/account"
       body: "*"
-    };
-  }
-
-  // Gets the account type of the target account.
-  rpc GetAccountType(GetAccountTypeRequest) returns (GetAccountTypeResponse) {
-    option (google.api.http) = {
-      get: "/v1/aws/accttype/{target}"
     };
   }
 
@@ -993,7 +987,7 @@ message AccountAccess {
   string reportName = 11;
 
   // The status of registration for CUR export, API access and Cloudwatch streaming
-  string registrationStatus = 12;
+  api.cover.RegistrationStatus registrationStatus = 12;
 
   // This can be `latest`, `outdated`, or some error information.
   string status = 13;
@@ -1030,33 +1024,6 @@ message RegisterAccountRequest {
 
   // The account name
   string accountName = 3;
-}
-
-// Request message for the GetAccountType rpc.
-message GetAccountTypeRequest {
-  // Required. The target AWS account to query.
-  string target = 1;
-}
-
-// Response message for the GetAccountType rpc.
-message GetAccountTypeResponse {
-  // The account type. Payer or Linked account.
-  string accountType = 1;
-
-  // The CloudFormation launch url. Open it in your browser.
-  string launchUrl = 2;
-
-  // The latest CloudFormation template. The version is included in the filename.
-  string templateUrl = 3;
-
-  // The default stack name used. Can be modified.
-  string stackName = 4;
-
-  // The AWS account that will receive the access. Do not change.
-  string principal = 5;
-
-  // The external id for this role. Do not change.
-  string externalId = 6;
 }
 
 // Request message for the Asset.ListResources rpc.

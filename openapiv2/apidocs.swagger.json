@@ -2384,38 +2384,6 @@
         ]
       }
     },
-    "/v1/aws/accttype/{target}": {
-      "get": {
-        "summary": "Gets the account type of the target account.",
-        "operationId": "Cover_GetAccountType",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetAccountTypeResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "target",
-            "description": "Required. The target AWS account to query.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
     "/v1/aws/cur:import": {
       "post": {
         "summary": "Initiates an ondemand import of all registered CUR files. See [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting] for more information.",
@@ -9125,6 +9093,20 @@
         }
       }
     },
+    "coverRegistrationStatus": {
+      "type": "object",
+      "properties": {
+        "apiAccess": {
+          "type": "boolean"
+        },
+        "cloudwatchStreaming": {
+          "type": "boolean"
+        },
+        "curExport": {
+          "type": "boolean"
+        }
+      }
+    },
     "coverRequestParams": {
       "type": "object",
       "properties": {
@@ -9505,7 +9487,7 @@
           "title": "The report name"
         },
         "registrationStatus": {
-          "type": "string",
+          "$ref": "#/definitions/coverRegistrationStatus",
           "title": "The status of registration for CUR export, API access and Cloudwatch streaming"
         },
         "status": {
@@ -10537,36 +10519,6 @@
         }
       },
       "description": "Response message for the Admin.GetAccountGroup rpc."
-    },
-    "v1GetAccountTypeResponse": {
-      "type": "object",
-      "properties": {
-        "accountType": {
-          "type": "string",
-          "description": "The account type. Payer or Linked account."
-        },
-        "launchUrl": {
-          "type": "string",
-          "description": "The CloudFormation launch url. Open it in your browser."
-        },
-        "templateUrl": {
-          "type": "string",
-          "description": "The latest CloudFormation template. The version is included in the filename."
-        },
-        "stackName": {
-          "type": "string",
-          "description": "The default stack name used. Can be modified."
-        },
-        "principal": {
-          "type": "string",
-          "description": "The AWS account that will receive the access. Do not change."
-        },
-        "externalId": {
-          "type": "string",
-          "description": "The external id for this role. Do not change."
-        }
-      },
-      "description": "Response message for the GetAccountType rpc."
     },
     "v1GetBillingGroupResponse": {
       "type": "object",
