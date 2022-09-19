@@ -427,7 +427,15 @@ message ListNotificationsResponse {
 
 // Request message for the Admin.GetNotificationTypeChannels rpc.
 message GetNotificationRequest {
+  // Required
   string id = 1;
+
+  // Required
+  // Valid values: 
+  // `invoice_calculation_start`, 
+  // `invoice_calculation_end`, 
+  // `cur_changed_after_invoicing`.
+  string notificationType = 2;
 }
 
 // Request message for the Admin.CreateNotificationTypeChannels rpc.
@@ -456,10 +464,24 @@ message UpdateNotificationRequest {
 
   // Required
   bool enabled = 3;
+
+  // Required
+  // Valid values: 
+  // `invoice_calculation_start`, 
+  // `invoice_calculation_end`, 
+  // `cur_changed_after_invoicing`.
+  string notificationType = 4;
 }
 
 // Request message for the Admin.DeleteNotification rpc.
 message DeleteNotificationRequest {
   // Required 
   string id = 1;
+
+  // Required
+  // Valid values: 
+  // `invoice_calculation_start`, 
+  // `invoice_calculation_end`, 
+  // `cur_changed_after_invoicing`.
+  string notificationType = 2;
 }
