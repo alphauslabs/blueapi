@@ -2,6 +2,9 @@ syntax = "proto3";
 
 package blueapi.cover.v1;
 
+import "api/aws/cost.proto";
+import "api/gcp/cost.proto";
+import "api/azure/cost.proto";
 import "api/cover/user.proto";
 import "api/cover/view.proto";
 import "api/cover/costgroup.proto";
@@ -433,6 +436,13 @@ service Cover {
   rpc ListDiscoveryRequests(ListDiscoveryRequestsRequest) returns (ListDiscoveryRequestsResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/assets/discover/requests"
+    };
+  }
+  // WORK-IN-PROGRESS: Get usage and usage-based costs for the specified costgroup
+  rpc GetCostUsage(GetCostUsageRequest) returns (stream CostItem) {
+    option (google.api.http) = {
+      post: "/v1/costusage:read"
+      body: "*"
     };
   }
 }
@@ -1078,4 +1088,37 @@ message ResolveCostGroupCombinationsRequest {
 message ResolveCostGroupCombinationsResponse {
   string costgroupId = 1;
   repeated api.cover.Account accounts = 2;
+}
+
+message GetCostUsageRequest {
+  // Required. Cost Group Id.
+  string costgroupId = 1;
+
+  // Required. Valid values are `cost` and `usage`. 
+  string type = 2;
+
+  // Optional. If not set, the first day of the current month will be used. Format: `yyyymmdd`.
+  string startTime = 3;
+
+  // Optional. If not set, current date will be used. Format: `yyyymmdd`.
+  string endTime = 4;
+
+  // Optional. Valid values are `daily` and `monthly`. 
+  // Default value is `daily`.
+  string period = 5;
+
+  // Optional. Valid values are `service` and `account`. Only `service` is supported for now 
+  // Default value is `service`
+  string groupBy = 6;
+
+  // Optional. If set, returns only the services or accounts with the highest cost or usage
+  // Default value is 0.
+  int64 limit = 7;
+}
+
+// Response message wrapper for cloud costs.
+message CostItem {
+  api.aws.Cost aws = 1;
+  api.gcp.Cost gcp = 2;
+  api.azure.Cost azure = 3;
 }
