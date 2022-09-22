@@ -777,7 +777,7 @@
           },
           {
             "name": "notificationType",
-            "description": "Required\nValid values: \n`invoice_calculation_start`, \n`invoice_calculation_end`, \n`cur_changed_after_invoicing`.",
+            "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -815,7 +815,7 @@
           },
           {
             "name": "notificationType",
-            "description": "Required\nValid values: \n`invoice_calculation_start`, \n`invoice_calculation_end`, \n`cur_changed_after_invoicing`.",
+            "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -870,7 +870,7 @@
           },
           {
             "name": "notificationType",
-            "description": "Required\nValid values: \n`invoice_calculation_start`, \n`invoice_calculation_end`, \n`cur_changed_after_invoicing`.",
+            "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -3136,6 +3136,48 @@
         ]
       }
     },
+    "/v1/costusage:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Get usage and usage-based costs for the specified costgroup",
+        "operationId": "Cover_GetCostUsage",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/blueapicoverv1CostItem"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of blueapicoverv1CostItem"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetCostUsageRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/invoice/{date}:export": {
       "post": {
         "summary": "Exports an invoice.",
@@ -4607,13 +4649,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1CostItem"
+                  "$ref": "#/definitions/blueapicostv1CostItem"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of v1CostItem"
+              "title": "Stream result of blueapicostv1CostItem"
             }
           },
           "default": {
@@ -5724,13 +5766,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1CostItem"
+                  "$ref": "#/definitions/blueapicostv1CostItem"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of v1CostItem"
+              "title": "Stream result of blueapicostv1CostItem"
             }
           },
           "default": {
@@ -6209,13 +6251,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1CostItem"
+                  "$ref": "#/definitions/blueapicostv1CostItem"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of v1CostItem"
+              "title": "Stream result of blueapicostv1CostItem"
             }
           },
           "default": {
@@ -6648,13 +6690,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1CostItem"
+                  "$ref": "#/definitions/blueapicostv1CostItem"
                 },
                 "error": {
                   "$ref": "#/definitions/rpcStatus"
                 }
               },
-              "title": "Stream result of v1CostItem"
+              "title": "Stream result of blueapicostv1CostItem"
             }
           },
           "default": {
@@ -8889,6 +8931,36 @@
       },
       "description": "This resource represents a long-running operation that is the result of a\nnetwork API call."
     },
+    "blueapicostv1CostItem": {
+      "type": "object",
+      "properties": {
+        "aws": {
+          "$ref": "#/definitions/apiawsCost"
+        },
+        "gcp": {
+          "$ref": "#/definitions/apigcpCost"
+        },
+        "azure": {
+          "$ref": "#/definitions/apiazureCost"
+        }
+      },
+      "description": "Response message wrapper for cloud costs."
+    },
+    "blueapicoverv1CostItem": {
+      "type": "object",
+      "properties": {
+        "aws": {
+          "$ref": "#/definitions/apiawsCost"
+        },
+        "gcp": {
+          "$ref": "#/definitions/apigcpCost"
+        },
+        "azure": {
+          "$ref": "#/definitions/apiazureCost"
+        }
+      },
+      "description": "Response message wrapper for cloud costs."
+    },
     "coverAsset": {
       "type": "object",
       "properties": {
@@ -9848,21 +9920,6 @@
       },
       "description": "Response message for the Cost.ReadCostAttributes rpc."
     },
-    "v1CostItem": {
-      "type": "object",
-      "properties": {
-        "aws": {
-          "$ref": "#/definitions/apiawsCost"
-        },
-        "gcp": {
-          "$ref": "#/definitions/apigcpCost"
-        },
-        "azure": {
-          "$ref": "#/definitions/apiazureCost"
-        }
-      },
-      "description": "Response message wrapper for cloud costs."
-    },
     "v1CreateAccountAccessRequest": {
       "type": "object",
       "properties": {
@@ -10246,7 +10303,7 @@
       "properties": {
         "notificationType": {
           "type": "string",
-          "description": "Required\nValid values: \n`invoice_calculation_start`, \n`invoice_calculation_end`, \n`cur_changed_after_invoicing`."
+          "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`."
         },
         "channels": {
           "type": "array",
@@ -10674,6 +10731,40 @@
         }
       },
       "title": "Response message for GetCostReduction"
+    },
+    "v1GetCostUsageRequest": {
+      "type": "object",
+      "properties": {
+        "costgroupId": {
+          "type": "string",
+          "description": "Required. Cost Group Id."
+        },
+        "type": {
+          "type": "string",
+          "description": "Required. Valid values are `cost` and `usage`."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Optional. If not set, the first day of the current month will be used. Format: `yyyymmdd`."
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Optional. If not set, current date will be used. Format: `yyyymmdd`."
+        },
+        "period": {
+          "type": "string",
+          "description": "Optional. Valid values are `daily` and `monthly`. \nDefault value is `daily`."
+        },
+        "groupBy": {
+          "type": "string",
+          "title": "Optional. Valid values are `service` and `account`. Only `service` is supported for now \nDefault value is `service`"
+        },
+        "limit": {
+          "type": "string",
+          "format": "int64",
+          "description": "Optional. If set, returns only the services or accounts with the highest cost or usage\nDefault value is 0."
+        }
+      }
     },
     "v1GetCoverageOndemandResponse": {
       "type": "object",
