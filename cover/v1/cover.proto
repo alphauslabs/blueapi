@@ -419,25 +419,13 @@ service Cover {
   }
 
   // WORK-IN-PROGRESS: Lists all assets per service. 
-  rpc ListAssets(ListAssetsRequest) returns (stream api.cover.Asset) {
+  rpc ListAssets(ListAssetsRequest) returns (stream Asset) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/assets:read"
+      post: "/v1/assets:read"
       body: "*"
     };
   }
-  // WORK-IN-PROGRESS: Send request to discover resources in cloud. 
-  rpc DiscoverResources(DiscoverResourcesRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      post: "/v1/{vendor}/assets/discover"
-      body: "*"
-    };
-  }
-  // WORK-IN-PROGRESS: List all discovery requests and their status requested by the login user. 
-  rpc ListDiscoveryRequests(ListDiscoveryRequestsRequest) returns (ListDiscoveryRequestsResponse) {
-    option (google.api.http) = {
-      get: "/v1/{vendor}/assets/discover/requests"
-    };
-  }
+
   // WORK-IN-PROGRESS: Get usage and usage-based costs for the specified costgroup
   rpc GetCostUsage(GetCostUsageRequest) returns (stream CostItem) {
     option (google.api.http) = {
@@ -1046,8 +1034,14 @@ message ListAssetsRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
+  // Optional. If not set, the first day of the current month will be used. Format: `yyyymmdd`.
+  string startTime = 2;
+
+  // Optional. If not set, current date will be used. Format: `yyyymmdd`.
+  string endTime = 3;
+
   // Required. Valid only for the `aws` vendor. AWS-specific filter options.
-  ListAssetsAwsFilterOptions awsOptions = 2;
+  ListAssetsAwsFilterOptions awsOptions = 4;
 }
 
 message ListAssetsAwsFilterOptions {
@@ -1058,31 +1052,10 @@ message ListAssetsAwsFilterOptions {
   string accounts = 2;
 }
 
-// Request message for the Assets.DiscoverResources rpc.
-message DiscoverResourcesRequest {
-  // Required. At the moment, only `aws` is supported.
-  string vendor = 1;
-
-  // Required. Valid only for the `aws` vendor. AWS-specific options.
-  DiscoverResourcesAwsOptions awsOptions = 2;
-}
-
-message DiscoverResourcesAwsOptions {
-  //Required. Comma-separated list of accounts 
-  string accounts = 1;
-
-  //Required. Comma-separated list of services
-  string services = 2;
-}
-
-// Request message for the Assets.ListDiscoveryRequests rpc.
-message ListDiscoveryRequestsRequest {
-  // Required. At the moment, only `aws` is supported.
-  string vendor = 1;
-}
-
-message ListDiscoveryRequestsResponse {
-  repeated api.Operation requests = 1;
+message Asset {
+  // Format is `yyyy-mm-dd`; for monthly, `yyyy-mm`
+  string date = 1;
+  api.cover.Asset asset = 2;
 }
 
 message ResolveCostGroupCombinationsRequest {
