@@ -5,6 +5,7 @@ package blueapi.billing.v1;
 import "api/account.proto";
 import "api/invoice.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/billing";
@@ -89,6 +90,38 @@ service Billing {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Reads the account invoice service discounts. Only available in Ripple.
+  rpc ListAccountInvoiceServiceDiscounts(ListAccountInvoiceServiceDiscountsRequest) returns (stream AccountInvoiceServiceDiscounts) {
+    option (google.api.http) = {
+      post: "/v1/servicediscounts/{groupId}/account:read"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Registers the account invoice service discounts. Only available in Ripple.
+  rpc CreateAccountInvoiceServiceDiscounts(CreateAccountInvoiceServiceDiscountsRequest) returns (CreateAccountInvoiceServiceDiscountsResponse) {
+    option (google.api.http) = {
+      post: "/v1/servicediscounts/{groupId}/account"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Updates the account invoice service discounts. Only available in Ripple.
+  rpc UpdateAccountInvoiceServiceDiscounts(UpdateAccountInvoiceServiceDiscountsRequest) returns (UpdateAccountInvoiceServiceDiscountsResponse) {
+    option (google.api.http) = {
+      put: "/v1/servicediscounts/{groupId}/account"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Deletes the account invoice service discounts. Only available in Ripple.
+  rpc DeleteAccountInvoiceServiceDiscounts(DeleteAccountInvoiceServiceDiscountsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/servicediscounts/{groupId}/account"
+    };
+  }
+  
 }
 
 message BillingGroup {
@@ -372,4 +405,77 @@ message InvoiceServiceDiscounts {
 
   // update timestamp.
   string updated = 5;
+}
+
+// Request message for the ListAccountInvoiceServiceDiscounts rpc.
+message ListAccountInvoiceServiceDiscountsRequest {
+  // Required.
+  //
+  // For Ripple, only billing internal ids are supported at the moment. You can set it to a single group
+  //
+  // Implied as the parent billing group for Wave(Pro) users.
+  string groupId = 1;
+}
+
+// Streaming response message for the AccountInvoiceServiceDiscounts rpc.
+message AccountInvoiceServiceDiscounts {
+  // Service discount id.
+  string id = 1;
+
+  // Account id.
+  string account = 2;
+}
+
+
+message AccountServiceDiscounts {
+  // Service discount id.
+  string id = 1;
+  // Account id.
+  string accountId = 2;
+}
+
+// Request message for the CreateAccountInvoiceServiceDiscounts rpc.
+message CreateAccountInvoiceServiceDiscountsRequest {
+  // Required.
+  //
+  // For Ripple, only billing internal ids are supported at the moment. You can set it to a single group
+  //
+  // Implied as the parent billing group for Wave(Pro) users.
+  string groupId = 1;
+
+  // Required.
+  repeated AccountServiceDiscounts accounts = 4;
+}
+
+// Response message for the CreateAccountInvoiceServiceDiscounts rpc.
+message CreateAccountInvoiceServiceDiscountsResponse {
+  repeated AccountServiceDiscounts accounts = 4;
+}
+
+// Request message for the UpdateAccountInvoiceServiceDiscounts rpc.
+message UpdateAccountInvoiceServiceDiscountsRequest {
+  // Required.
+  //
+  // For Ripple, only billing internal ids are supported at the moment. You can set it to a single group
+  //
+  // Implied as the parent billing group for Wave(Pro) users.
+  string groupId = 1;
+
+  // Required.
+  repeated AccountServiceDiscounts accounts = 4;
+}
+
+// Response message for the UpdateAccountInvoiceServiceDiscounts rpc.
+message UpdateAccountInvoiceServiceDiscountsResponse {
+  repeated AccountServiceDiscounts accounts = 4;
+}
+
+// Request message for the DeleteAccountInvoiceServiceDiscounts rpc.
+message DeleteAccountInvoiceServiceDiscountsRequest {
+  // Required.
+  //
+  // For Ripple, only billing internal ids are supported at the moment. You can set it to a single group
+  //
+  // Implied as the parent billing group for Wave(Pro) users.
+  string groupId = 1;
 }
