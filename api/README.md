@@ -1,0 +1,1 @@
+If there is a common response/value, create a proto file in this folder and create a rpc message.
