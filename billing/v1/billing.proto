@@ -81,6 +81,14 @@ service Billing {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Reads the invoice service discounts. Only available in Ripple.
+  rpc ListInvoiceServiceDiscounts(ListInvoiceServiceDiscountsRequest) returns (stream InvoiceServiceDiscounts) {
+    option (google.api.http) = {
+      post: "/v1/servicediscounts:read"
+      body: "*"
+    };
+  }
 }
 
 message BillingGroup {
@@ -342,4 +350,26 @@ message ExportInvoiceFileResponse {
   //
   // csv columns set `group vendor resourceId resourceName type serviceName currency cost`
   string url = 1;
+}
+
+
+// Request message for the ListInvoiceServiceDiscounts rpc.
+message ListInvoiceServiceDiscountsRequest {}
+
+// Streaming response message for the InvoiceServiceDiscounts rpc.
+message InvoiceServiceDiscounts {
+  // Service discount id.
+  string id = 1;
+
+  // Service discount name.
+  string name = 2;
+
+  // Service discount description.
+  string description = 3;
+
+  // create timestamp.
+  string created = 4;
+
+  // update timestamp.
+  string updated = 5;
 }
