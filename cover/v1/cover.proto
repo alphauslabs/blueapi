@@ -1031,8 +1031,8 @@ message RegisterAccountRequest {
 
 // Request message for the Asset.ListResources rpc.
 message ListAssetsRequest {
-  // Required. At the moment, only `aws` is supported.
-  string vendor = 1;
+  // Required. Cost Group Id.
+  string costgroupId = 1;
 
   // Optional. If not set, the first day of the current month will be used. Format: `yyyymmdd`.
   string startTime = 2;
@@ -1040,16 +1040,13 @@ message ListAssetsRequest {
   // Optional. If not set, current date will be used. Format: `yyyymmdd`.
   string endTime = 3;
 
-  // Required. Valid only for the `aws` vendor. AWS-specific filter options.
+  // Optional. For AWS-specific filter options.
   ListAssetsAwsFilterOptions awsOptions = 4;
 }
 
 message ListAssetsAwsFilterOptions {
-  // Required. The service to query for resources.
-  string service = 1;
-
-  // Required. Comma-separated list of accounts.
-  string accounts = 2;
+  // Optional. Comma-separated list of services. If not set, all services are included.
+  string services = 1;
 }
 
 message Asset {
