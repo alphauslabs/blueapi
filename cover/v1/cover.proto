@@ -1069,26 +1069,56 @@ message GetCostUsageRequest {
   // Required. Cost Group Id.
   string costGroupId = 1;
 
-  // Required. Valid values are `cost` and `usage`. 
-  string type = 2;
-
   // Optional. If not set, the first day of the current month will be used. Format: `yyyymmdd`.
-  string startTime = 3;
+  string startTime = 2;
 
   // Optional. If not set, current date will be used. Format: `yyyymmdd`.
-  string endTime = 4;
+  string endTime = 3;
 
-  // Optional. Valid values are `daily` and `monthly`. 
-  // Default value is `daily`.
-  string period = 5;
-
-  // Optional. Valid values are `service` and `account`. Only `service` is supported for now 
-  // Default value is `service`
-  string groupBy = 6;
+  // Optional. If set to true, return data grouped by month within the date range. 
+  // If you want data that is grouped per account per month, set this to `true`, then set `groupByColumns` to `none`. 
+  // You can also use `groupByColumns` while setting this to true.
+  string groupByMonth = 4;
 
   // Optional. If set, returns only the services or accounts with the highest cost or usage
   // Default value is 0.
-  int64 limit = 7;
+  int64 limit = 5;
+
+  // Optional. Valid values are `cost` and `usage`. 
+  // Default value is `cost`. Used only when limit is not 0.
+  string category = 6;
+
+  // Optional. Valid values are `service` and `account`. Only `service` is supported for now 
+  // Default value is `service`. Used only when limit is not 0.
+  string groupBy = 7;
+
+  // Optional. Valid only for the `aws` vendor. AWS-specific options.
+  GetCostUsageRequestAwsOptions awsOptions = 8;
+}
+
+message GetCostUsageRequestAwsOptions {
+  // Optional. A comma-separated list of columns to aggregate the data into. 
+  // Valid values are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `invoiceId`, `description`, and `resourceId`. 
+  // A special value of `none` is also supported, which means query by date or month per account only.
+  //
+  // For example, if you only want the services and region data, you can set this field to `productCode,region`. 
+  // Your input sequence doesn't matter (although the sequence above is recommended) as the actual sequence is already fixed in the return data (see the definition in https://github.com/alphauslabs/blueapi/blob/main/api/aws/cost.proto), which is generic to specific, top to bottom. Invalid values are discarded. Excluded columns will be empty.
+  string groupByColumns = 1;
+
+  // Optional. If set to true, group all input accounts into one.
+  // Defaul is `true`
+  bool groupAccounts = 2;
+
+  // Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. 
+  // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.
+  repeated ReadCostsRequestAwsOptionsFilters filters = 3;
+}
+
+// A map of "key:value" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either "eq:" (equal), "re:" (regular expressions based on https://github.com/google/re2), or "!re:" (reverse "re:"). No prefix is the same as "eq:". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.
+//
+// For example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{"productCode":"eq:AmazonEC2"}` or `{"productCode":"AmazonEC2"}`. You can also use a regular expression like `{"productCode":"re:AmazonEC2|AmazonRDS"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{"productCode":"!re:^AmazonEC2$"}`, which means return all items except `AmazonEC2`.
+message ReadCostsRequestAwsOptionsFilters {
+  map<string, string> andFilters = 1;
 }
 
 // Response message wrapper for cloud costs.
