@@ -2219,6 +2219,48 @@
         ]
       }
     },
+    "/v1/assets:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Lists all assets per service.",
+        "operationId": "Cover_ListAssets",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/coverv1Asset"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of coverv1Asset"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListAssetsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/aws/acctaccess": {
       "get": {
         "summary": "Gets a CloudFormation launch URL for enabling the account access.",
@@ -3177,7 +3219,7 @@
                   "description": "Optional.\n\nFor Ripple, only billing internal ids are supported at the moment. You can set it to a single group or a comma-separated list of groups. ex) `group1,group2`. if want to set all group, set `*`. \n\nImplied as the parent billing group for Wave(Pro) users."
                 }
               },
-              "description": "Response message for the ExportCostFiltersFile rpc."
+              "description": "Request message for the ExportCostFiltersFile rpc."
             }
           }
         ],
@@ -3936,6 +3978,226 @@
         ]
       }
     },
+    "/v1/servicediscounts/{groupId}/account": {
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Deletes the account invoice service discounts. Only available in Ripple.",
+        "operationId": "Billing_DeleteAccountInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "groupId",
+            "description": "Required.\n\nFor Ripple, only billing internal ids are supported at the moment. You can set it to a single group\n\nImplied as the parent billing group for Wave(Pro) users.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Registers the account invoice service discounts. Only available in Ripple.",
+        "operationId": "Billing_CreateAccountInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateAccountInvoiceServiceDiscountsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "groupId",
+            "description": "Required.\n\nFor Ripple, only billing internal ids are supported at the moment. You can set it to a single group\n\nImplied as the parent billing group for Wave(Pro) users.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accounts": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/v1AccountServiceDiscounts"
+                  },
+                  "description": "Required."
+                }
+              },
+              "description": "Request message for the CreateAccountInvoiceServiceDiscounts rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Updates the account invoice service discounts. Only available in Ripple.",
+        "operationId": "Billing_UpdateAccountInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateAccountInvoiceServiceDiscountsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "groupId",
+            "description": "Required.\n\nFor Ripple, only billing internal ids are supported at the moment. You can set it to a single group\n\nImplied as the parent billing group for Wave(Pro) users.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accounts": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/v1AccountServiceDiscounts"
+                  },
+                  "description": "Required."
+                }
+              },
+              "description": "Request message for the UpdateAccountInvoiceServiceDiscounts rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/servicediscounts/{groupId}/account:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Reads the account invoice service discounts. Only available in Ripple.",
+        "operationId": "Billing_ListAccountInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1AccountInvoiceServiceDiscounts"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1AccountInvoiceServiceDiscounts"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "groupId",
+            "description": "Required.\n\nFor Ripple, only billing internal ids are supported at the moment. You can set it to a single group\n\nImplied as the parent billing group for Wave(Pro) users.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "description": "Request message for the ListAccountInvoiceServiceDiscounts rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/servicediscounts:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Reads the invoice service discounts. Only available in Ripple.",
+        "operationId": "Billing_ListInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1InvoiceServiceDiscounts"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1InvoiceServiceDiscounts"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListInvoiceServiceDiscountsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/views": {
       "get": {
         "summary": "Get all the views",
@@ -4041,6 +4303,114 @@
             }
           }
         },
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/views/layout/{viewId}": {
+      "put": {
+        "summary": "Updates the view's layout",
+        "operationId": "Cover_UpdateViewLayout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateViewLayoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "viewId",
+            "description": "Required. View Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "layout": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/coverWidgetData"
+                  }
+                }
+              },
+              "title": "Request message for UpdateViewLayout"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/views/layout/{viewId}/{widgetId}": {
+      "put": {
+        "summary": "Updates the view's widget",
+        "operationId": "Cover_UpdateViewWidget",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateViewWidgetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "viewId",
+            "description": "Required. View Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "widgetId",
+            "description": "Required. Widget Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "options": {
+                  "$ref": "#/definitions/coverLayoutOptions"
+                },
+                "requests": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/coverLayoutRequests"
+                  }
+                }
+              },
+              "title": "Request message for UpdateViewWidget"
+            }
+          }
+        ],
         "tags": [
           "Cover"
         ]
@@ -4452,7 +4822,7 @@
         "parameters": [
           {
             "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
+            "description": "Required. At the moment, `aws` and `gcp` is supported.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -4541,7 +4911,7 @@
         "parameters": [
           {
             "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
+            "description": "Required. At the moment, `aws` and `gcp` is supported.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -4665,141 +5035,6 @@
         ],
         "tags": [
           "Cost"
-        ]
-      }
-    },
-    "/v1/{vendor}/assets/discover": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Send request to discover resources in cloud.",
-        "operationId": "Cover_DiscoverResources",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "awsOptions": {
-                  "$ref": "#/definitions/v1DiscoverResourcesAwsOptions",
-                  "description": "Required. Valid only for the `aws` vendor. AWS-specific options."
-                }
-              },
-              "description": "Request message for the Assets.DiscoverResources rpc."
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/{vendor}/assets/discover/requests": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: List all discovery requests and their status requested by the login user.",
-        "operationId": "Cover_ListDiscoveryRequests",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListDiscoveryRequestsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/{vendor}/assets:read": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Lists all assets per service.",
-        "operationId": "Cover_ListAssets",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/coverAsset"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of coverAsset"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "awsOptions": {
-                  "$ref": "#/definitions/v1ListAssetsAwsFilterOptions",
-                  "description": "Required. Valid only for the `aws` vendor. AWS-specific filter options."
-                }
-              },
-              "description": "Request message for the Asset.ListResources rpc."
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
         ]
       }
     },
@@ -8108,6 +8343,21 @@
         }
       }
     },
+    "apicoverAsset": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "title": "Possible values: `account`, `subscription` or `project`"
+        },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "apigcpCost": {
       "type": "object",
       "properties": {
@@ -8902,6 +9152,18 @@
       },
       "description": "Response message wrapper for cloud costs."
     },
+    "blueapicostv1ReadCostsRequestAwsOptionsFilters": {
+      "type": "object",
+      "properties": {
+        "andFilters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
+    },
     "blueapicoverv1CostItem": {
       "type": "object",
       "properties": {
@@ -8917,19 +9179,17 @@
       },
       "description": "Response message wrapper for cloud costs."
     },
-    "coverAsset": {
+    "blueapicoverv1ReadCostsRequestAwsOptionsFilters": {
       "type": "object",
       "properties": {
-        "key": {
-          "type": "string"
-        },
-        "attributes": {
+        "andFilters": {
           "type": "object",
           "additionalProperties": {
             "type": "string"
           }
         }
-      }
+      },
+      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
     },
     "coverCombinations": {
       "type": "object",
@@ -9188,6 +9448,9 @@
           "items": {
             "$ref": "#/definitions/coverMemberCostGroup"
           }
+        },
+        "updatedAt": {
+          "type": "string"
         }
       }
     },
@@ -9312,6 +9575,9 @@
         },
         "createdBy": {
           "$ref": "#/definitions/coverMemberUserData"
+        },
+        "updatedAt": {
+          "type": "string"
         }
       }
     },
@@ -9365,28 +9631,11 @@
     "coverViewLayout": {
       "type": "object",
       "properties": {
-        "i": {
+        "widgetId": {
           "type": "string"
         },
-        "x": {
-          "type": "number",
-          "format": "double"
-        },
-        "y": {
-          "type": "number",
-          "format": "double"
-        },
-        "componentId": {
-          "type": "string"
-        },
-        "options": {
-          "$ref": "#/definitions/coverLayoutOptions"
-        },
-        "requests": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/coverLayoutRequests"
-          }
+        "widgetData": {
+          "$ref": "#/definitions/coverWidgetData"
         }
       }
     },
@@ -9416,6 +9665,46 @@
         },
         "updatedAt": {
           "type": "string"
+        }
+      }
+    },
+    "coverWidgetData": {
+      "type": "object",
+      "properties": {
+        "i": {
+          "type": "string"
+        },
+        "x": {
+          "type": "number",
+          "format": "double"
+        },
+        "y": {
+          "type": "number",
+          "format": "double"
+        },
+        "componentId": {
+          "type": "string"
+        },
+        "options": {
+          "$ref": "#/definitions/coverLayoutOptions"
+        },
+        "requests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverLayoutRequests"
+          }
+        }
+      }
+    },
+    "coverv1Asset": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "title": "Format is `yyyy-mm-dd`; for monthly, `yyyy-mm`"
+        },
+        "asset": {
+          "$ref": "#/definitions/apicoverAsset"
         }
       }
     },
@@ -9598,6 +9887,33 @@
         }
       },
       "description": "Response message for GetAccountAccess, CreateAccountAccess rpc."
+    },
+    "v1AccountInvoiceServiceDiscounts": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Service discount id."
+        },
+        "account": {
+          "type": "string",
+          "description": "Account id."
+        }
+      },
+      "description": "Streaming response message for the AccountInvoiceServiceDiscounts rpc."
+    },
+    "v1AccountServiceDiscounts": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Service discount id."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Account id."
+        }
+      }
     },
     "v1AddFavoriteRequest": {
       "type": "object",
@@ -9895,6 +10211,18 @@
         }
       },
       "title": "Response message for CreateAccountBudget"
+    },
+    "v1CreateAccountInvoiceServiceDiscountsResponse": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1AccountServiceDiscounts"
+          }
+        }
+      },
+      "description": "Response message for the CreateAccountInvoiceServiceDiscounts rpc."
     },
     "v1CreateAccountRequestAwsOptions": {
       "type": "object",
@@ -10526,19 +10854,6 @@
       },
       "title": "Response message for DeleteView"
     },
-    "v1DiscoverResourcesAwsOptions": {
-      "type": "object",
-      "properties": {
-        "accounts": {
-          "type": "string",
-          "title": "Required. Comma-separated list of accounts"
-        },
-        "services": {
-          "type": "string",
-          "title": "Required. Comma-separated list of services"
-        }
-      }
-    },
     "v1ExportCostFiltersFileResponse": {
       "type": "object",
       "properties": {
@@ -10700,13 +11015,9 @@
     "v1GetCostUsageRequest": {
       "type": "object",
       "properties": {
-        "costgroupId": {
+        "costGroupId": {
           "type": "string",
           "description": "Required. Cost Group Id."
-        },
-        "type": {
-          "type": "string",
-          "description": "Required. Valid values are `cost` and `usage`."
         },
         "startTime": {
           "type": "string",
@@ -10716,18 +11027,46 @@
           "type": "string",
           "description": "Optional. If not set, current date will be used. Format: `yyyymmdd`."
         },
-        "period": {
-          "type": "string",
-          "description": "Optional. Valid values are `daily` and `monthly`. \nDefault value is `daily`."
-        },
-        "groupBy": {
-          "type": "string",
-          "title": "Optional. Valid values are `service` and `account`. Only `service` is supported for now \nDefault value is `service`"
+        "groupByMonth": {
+          "type": "boolean",
+          "description": "Optional. If set to true, return data grouped by month within the date range. \nIf you want data that is grouped per account per month, set this to `true`, then set `groupByColumns` to `none`. \nYou can also use `groupByColumns` while setting this to true."
         },
         "limit": {
           "type": "string",
           "format": "int64",
           "description": "Optional. If set, returns only the services or accounts with the highest cost or usage\nDefault value is 0."
+        },
+        "category": {
+          "type": "string",
+          "description": "Optional. Valid values are `cost` and `usage`. \nDefault value is `cost`. Used only when limit is not 0."
+        },
+        "groupBy": {
+          "type": "string",
+          "description": "Optional. Valid values are `service` and `account`. Only `service` is supported for now \nDefault value is `service`. Used only when limit is not 0."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1GetCostUsageRequestAwsOptions",
+          "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
+        }
+      }
+    },
+    "v1GetCostUsageRequestAwsOptions": {
+      "type": "object",
+      "properties": {
+        "groupByColumns": {
+          "type": "string",
+          "description": "Optional. A comma-separated list of columns to aggregate the data into. \nValid values are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `invoiceId`, `description`, and `resourceId`. \nA special value of `none` is also supported, which means query by date or month per account only.\n\nFor example, if you only want the services and region data, you can set this field to `productCode,region`. \nYour input sequence doesn't matter (although the sequence above is recommended) as the actual sequence is already fixed in the return data (see the definition in https://github.com/alphauslabs/blueapi/blob/main/api/aws/cost.proto), which is generic to specific, top to bottom. Invalid values are discarded. Excluded columns will be empty."
+        },
+        "groupAccounts": {
+          "type": "boolean",
+          "title": "Optional. If set to true, group all input accounts into one.\nDefaul is `true`"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/blueapicoverv1ReadCostsRequestAwsOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
         }
       }
     },
@@ -11057,6 +11396,32 @@
       },
       "title": "Response message for InviteMember"
     },
+    "v1InvoiceServiceDiscounts": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Service discount id."
+        },
+        "name": {
+          "type": "string",
+          "description": "Service discount name."
+        },
+        "description": {
+          "type": "string",
+          "description": "Service discount description."
+        },
+        "created": {
+          "type": "string",
+          "description": "create timestamp."
+        },
+        "updated": {
+          "type": "string",
+          "description": "update timestamp."
+        }
+      },
+      "description": "Streaming response message for the InvoiceServiceDiscounts rpc."
+    },
     "v1IpFilter": {
       "type": "object",
       "properties": {
@@ -11097,15 +11462,33 @@
     "v1ListAssetsAwsFilterOptions": {
       "type": "object",
       "properties": {
-        "service": {
+        "services": {
           "type": "string",
-          "description": "Required. The service to query for resources."
-        },
-        "accounts": {
-          "type": "string",
-          "description": "Required. Comma-separated list of accounts."
+          "description": "Optional. Comma-separated list of services. If not set, all services are included."
         }
       }
+    },
+    "v1ListAssetsRequest": {
+      "type": "object",
+      "properties": {
+        "costGroupId": {
+          "type": "string",
+          "description": "Required. Cost Group Id."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Optional. If not set, the first day of the current month will be used. Format: `yyyymmdd`."
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Optional. If not set, current date will be used. Format: `yyyymmdd`."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/v1ListAssetsAwsFilterOptions",
+          "description": "Optional. For AWS-specific filter options."
+        }
+      },
+      "description": "Request message for the Asset.ListResources rpc."
     },
     "v1ListAwsDailyRunHistoryRequest": {
       "type": "object",
@@ -11206,17 +11589,6 @@
       },
       "description": "Response message for the ListCostFilters rpc."
     },
-    "v1ListDiscoveryRequestsResponse": {
-      "type": "object",
-      "properties": {
-        "requests": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/blueapiapiOperation"
-          }
-        }
-      }
-    },
     "v1ListIdentityProvidersResponse": {
       "type": "object",
       "properties": {
@@ -11228,6 +11600,10 @@
         }
       },
       "description": "Response message for the Iam.ListIdentityProviders rpc."
+    },
+    "v1ListInvoiceServiceDiscountsRequest": {
+      "type": "object",
+      "description": "Request message for the ListInvoiceServiceDiscounts rpc."
     },
     "v1ListNotificationChannelsResponse": {
       "type": "object",
@@ -11349,7 +11725,7 @@
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1ReadCostsRequestAwsOptionsFilters"
+            "$ref": "#/definitions/blueapicostv1ReadCostsRequestAwsOptionsFilters"
           },
           "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
         },
@@ -11382,18 +11758,6 @@
         }
       },
       "description": "AWS-specific options for ReadCostsRequest."
-    },
-    "v1ReadCostsRequestAwsOptionsFilters": {
-      "type": "object",
-      "properties": {
-        "andFilters": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      },
-      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
     },
     "v1ReadCostsRequestGcpOptions": {
       "type": "object",
@@ -11528,7 +11892,7 @@
     "v1ResolveCostGroupCombinationsResponse": {
       "type": "object",
       "properties": {
-        "costgroupId": {
+        "costGroupId": {
           "type": "string"
         },
         "accounts": {
@@ -11552,6 +11916,18 @@
         }
       },
       "description": "Request message for the Admin.SaveNotificationSettings rpc."
+    },
+    "v1UpdateAccountInvoiceServiceDiscountsResponse": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1AccountServiceDiscounts"
+          }
+        }
+      },
+      "description": "Response message for the UpdateAccountInvoiceServiceDiscounts rpc."
     },
     "v1UpdateCostFiltersResponse": {
       "type": "object",
@@ -11877,6 +12253,18 @@
       },
       "title": "Response message for UpdateUserTimezone"
     },
+    "v1UpdateViewLayoutResponse": {
+      "type": "object",
+      "properties": {
+        "layout": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverViewLayout"
+          }
+        }
+      },
+      "title": "Response message for UpdateViewLayout"
+    },
     "v1UpdateViewResponse": {
       "type": "object",
       "properties": {
@@ -11885,6 +12273,18 @@
         }
       },
       "title": "Response message for UpdateView"
+    },
+    "v1UpdateViewWidgetResponse": {
+      "type": "object",
+      "properties": {
+        "widgetId": {
+          "type": "string"
+        },
+        "widgetData": {
+          "$ref": "#/definitions/coverWidgetData"
+        }
+      },
+      "title": "Response message for UpdateViewWidget"
     },
     "v1UsageCostsDrift": {
       "type": "object",
