@@ -237,6 +237,22 @@ service Cover {
     };
   }
 
+  // Updates the view's layout
+  rpc UpdateViewLayout(UpdateViewLayoutRequest) returns (UpdateViewLayoutResponse) {
+    option (google.api.http) = {
+      put: "/v1/views/layout/{viewId}"
+      body: "*"
+    };
+  }
+
+  // Updates the view's widget
+  rpc UpdateViewWidget(UpdateViewWidgetRequest) returns (UpdateViewWidgetResponse) {
+    option (google.api.http) = {
+      put: "/v1/views/layout/{viewId}/{widgetId}"
+      body: "*"
+    };
+  }
+
   // Deletes a view
   rpc DeleteView(DeleteViewRequest) returns (DeleteViewResponse) {
     option (google.api.http) = {
@@ -717,6 +733,34 @@ message UpdateViewRequest {
 // Response message for UpdateView
 message UpdateViewResponse {
   string viewId = 1;
+}
+
+// Request message for UpdateViewLayout
+message UpdateViewLayoutRequest {
+  // Required. View Id.
+  string viewId = 1;
+  repeated api.cover.WidgetData layout = 2;
+}
+
+// Response message for UpdateViewLayout
+message UpdateViewLayoutResponse {
+  repeated api.cover.ViewLayout layout = 1;
+}
+
+// Request message for UpdateViewWidget
+message UpdateViewWidgetRequest {
+  // Required. View Id.
+  string viewId = 1;
+  // Required. Widget Id.
+  string widgetId = 2;
+  api.cover.LayoutOptions options = 3;
+  repeated api.cover.LayoutRequests requests = 4;
+}
+
+// Response message for UpdateViewWidget
+message UpdateViewWidgetResponse {
+  string widgetId = 1;
+  api.cover.WidgetData widgetData = 2;
 }
 
 // Request message for DeleteView
