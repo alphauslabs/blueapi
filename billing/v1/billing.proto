@@ -115,6 +115,14 @@ service Billing {
     };
   }
 
+  // WORK-IN-PROGRESS: Removes the account invoice service discounts. Only available in Ripple.
+  rpc RemoveAccountInvoiceServiceDiscounts(RemoveAccountInvoiceServiceDiscountsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/servicediscounts/{groupId}/account:remove"
+      body: "*"
+    };
+  }
+
   // WORK-IN-PROGRESS: Deletes the account invoice service discounts. Only available in Ripple.
   rpc DeleteAccountInvoiceServiceDiscounts(DeleteAccountInvoiceServiceDiscountsRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -478,4 +486,16 @@ message DeleteAccountInvoiceServiceDiscountsRequest {
   //
   // Implied as the parent billing group for Wave(Pro) users.
   string groupId = 1;
+}
+
+message RemoveAccountInvoiceServiceDiscountsRequest {
+  // Required.
+  //
+  // For Ripple, only billing internal ids are supported at the moment. You can set it to a single group
+  //
+  // Implied as the parent billing group for Wave(Pro) users.
+  string groupId = 1;
+
+  // Required.
+  repeated AccountServiceDiscounts accounts = 4;
 }
