@@ -4156,6 +4156,55 @@
         ]
       }
     },
+    "/v1/servicediscounts/{groupId}/account:remove": {
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Removes the account invoice service discounts. Only available in Ripple.",
+        "operationId": "Billing_RemoveAccountInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "groupId",
+            "description": "Required.\n\nFor Ripple, only billing internal ids are supported at the moment. You can set it to a single group\n\nImplied as the parent billing group for Wave(Pro) users.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accounts": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/v1AccountServiceDiscounts"
+                  },
+                  "description": "Required."
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/servicediscounts:read": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Reads the invoice service discounts. Only available in Ripple.",
@@ -9617,7 +9666,7 @@
         "layout": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/coverViewLayout"
+            "$ref": "#/definitions/coverWidgetData"
           }
         },
         "sideMenu": {
@@ -9671,7 +9720,7 @@
     "coverWidgetData": {
       "type": "object",
       "properties": {
-        "i": {
+        "id": {
           "type": "string"
         },
         "x": {
