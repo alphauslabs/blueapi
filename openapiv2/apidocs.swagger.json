@@ -4301,7 +4301,7 @@
         ]
       }
     },
-    "/v1/views/favorite": {
+    "/v1/views/favorite/add": {
       "put": {
         "summary": "Add to favorites",
         "operationId": "Cover_AddFavorite",
@@ -4326,6 +4326,39 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1AddFavoriteRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/views/favorite/remove": {
+      "put": {
+        "summary": "Remove from favorites",
+        "operationId": "Cover_RemoveFavorite",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RemoveFavoriteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RemoveFavoriteRequest"
             }
           }
         ],
@@ -4490,39 +4523,6 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1PublishViewRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/views/unfavorite": {
-      "put": {
-        "summary": "Remove from favorites",
-        "operationId": "Cover_RemoveFavorite",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1RemoveFavoriteResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1RemoveFavoriteRequest"
             }
           }
         ],
