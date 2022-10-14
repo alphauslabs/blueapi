@@ -96,6 +96,14 @@ service Cost {
     };
   }
 
+  // WORK-IN-PROGRESS: Lists all account resource for vendor.
+  rpc ListAccountResources(ListAccountResourcesRequest) returns (stream api.AccountResource) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/accounts:read"
+      body: "*"
+    };
+  }
+
   // Gets a vendor account. This API includes all of the account's metadata. See https://alphauslabs.github.io/blueapi/ for the list of supported attributes.
   rpc GetAccount(GetAccountRequest) returns (api.Account) {
     option (google.api.http) = {
@@ -445,6 +453,12 @@ message DeletePayerAccountRequest {
 // Request message for the Cost.ListAccounts rpc.
 message ListAccountsRequest {
   // Required. At the moment, `aws` and `gcp` is supported.
+  string vendor = 1;
+}
+
+// Request message for the Cost.ListAccountResources rpc.
+message ListAccountResourcesRequest {
+  // Required. At the moment, `aws`,`gcp` and `azure` is supported.
   string vendor = 1;
 
   // Optional. The billing group internal id. Only valid for Ripple users.
