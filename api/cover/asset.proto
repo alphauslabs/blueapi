@@ -11,3 +11,123 @@ message Asset {
     string key = 1;
     map<string, string> attributes = 2;
 }
+
+message EC2Instance {
+
+	// The ID of the Capacity Reservation.
+	string capacityReservationId = 1;
+
+	// Indicates whether the instance is optimized for Amazon EBS I/O. This optimization
+	// provides dedicated throughput to Amazon EBS and an optimized configuration
+	// stack to provide optimal I/O performance. This optimization isn't available
+	// with all instance types. Additional usage charges apply when using an EBS
+	// Optimized instance.
+	bool ebsOptimized = 2;
+
+	// The ID of the AMI used to launch the instance.
+	string imageId = 3;
+
+	// The ID of the instance.
+	string instanceId = 4;
+
+	// Indicates whether this is a Spot Instance or a Scheduled Instance.
+	string instanceLifecycle = 5;
+
+	// The instance type.
+	string instanceType =6;
+
+	// The IPv6 address assigned to the instance.
+	string ipv6Address = 7;
+
+	// The kernel associated with this instance, if applicable.
+	string kernelId = 8;
+
+	// The name of the key pair, if this instance was launched with an associated key pair.
+	string keyName =9;
+
+	// The time the instance was launched.
+	string launchTime = 10;
+
+	// The Amazon Resource Name (ARN) of the Outpost.
+	string outpostArn = 11;
+
+	// The value is Windows for Windows instances; otherwise blank.
+	string platform = 12;
+
+	// The platform details value for the instance. For more information, see AMI
+	// billing information fields (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/billing-info-fields.html)
+	// in the Amazon EC2 User Guide.
+	string platformDetails = 13;
+
+	// (IPv4 only) The private DNS hostname name assigned to the instance. This
+	// DNS hostname can only be used inside the Amazon EC2 network. This name is
+	// not available until the instance enters the running state.
+	//
+	// [EC2-VPC] The Amazon-provided DNS server resolves Amazon-provided private
+	// DNS hostnames if you've enabled DNS resolution and DNS hostnames in your
+	// VPC. If you are not using the Amazon-provided DNS server in your VPC, your
+	// custom domain name servers must resolve the hostname as appropriate.
+	string privateDnsName = 14;
+
+	// The private IPv4 address assigned to the instance.
+	string privateIpAddress = 15;
+
+	// (IPv4 only) The public DNS name assigned to the instance. This name is not
+	// available until the instance enters the running state. For EC2-VPC, this
+	// name is only available if you've enabled DNS hostnames for your VPC.
+	string publicDnsName = 16;
+
+	// The public IPv4 address, or the Carrier IP address assigned to the instance,
+	// if applicable.
+	//
+	// A Carrier IP address only applies to an instance launched in a subnet associated
+	// with a Wavelength Zone.
+	string publicIpAddress = 17;
+
+	// The RAM disk associated with this instance, if applicable.
+	string ramdiskId = 18;
+
+	// The device name of the root device volume (for example, /dev/sda1).
+	string rootDeviceName =19;
+
+	// The root device type used by the AMI. The AMI can use an EBS volume or an
+	// instance store volume.
+	string rootDeviceType = 20;
+
+	// Indicates whether source/destination checking is enabled.
+	bool sourceDestCheck = 21;
+
+	// If the request is a Spot Instance request, the ID of the request.
+	string spotInstanceRequestId = 22;
+
+	// Specifies whether enhanced networking with the Intel 82599 Virtual Function
+	// interface is enabled.
+	string sriovNetSupport = 23;
+
+	// The current state of the instance.
+	string state = 24;
+
+	// [EC2-VPC] The ID of the subnet in which the instance is running.
+	string subnetId = 25;
+
+	// Any tags assigned to the instance.
+	repeated Tag tags = 26;
+
+	// The usage operation value for the instance. For more information, see AMI
+	// billing information fields (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/billing-info-fields.html)
+	// in the Amazon EC2 User Guide.
+	string usageOperation = 27;
+
+	// The virtualization type of the instance.
+	string virtualizationType = 28;
+
+	// [EC2-VPC] The ID of the VPC in which the instance is running.
+	string vpcId = 29;
+}
+
+message Tag {
+
+	string key = 1;
+
+	string value = 2;
+}
