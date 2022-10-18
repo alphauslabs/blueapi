@@ -457,6 +457,13 @@ service Cover {
       get: "/v1/rightsizingrecommendation/{costGroupId}"
     };
   }
+
+  // Gets the EC2 instances of all accounts in Cost Group
+  rpc GetEC2Instances(GetEC2InstancesRequest) returns (GetEC2InstancesResponse) {
+    option (google.api.http) = {
+      post: "/v1/ec2/instances:read"
+    };
+  }
 }
 
 // Request message for InviteMember
@@ -1086,10 +1093,10 @@ message ListAssetsRequest {
   // Required. Cost Group Id.
   string costGroupId = 1;
 
-  // Optional. If not set, the first day of the current month will be used. Format: `yyyymmdd`.
+  // Optional. If not set, current month will be used. Format: `yyyymm`.
   string startTime = 2;
 
-  // Optional. If not set, current date will be used. Format: `yyyymmdd`.
+  // Optional. If not set, current month will be used. Format: `yyyymm`.
   string endTime = 3;
 
   // Optional. For AWS-specific filter options.
@@ -1099,6 +1106,9 @@ message ListAssetsRequest {
 message ListAssetsAwsFilterOptions {
   // Optional. Comma-separated list of services. If not set, all services are included.
   string services = 1;
+
+  // Optional. Comma-separated list of regions. If not set, all regions are included.
+  string regions = 2;
 }
 
 message Asset {
@@ -1189,4 +1199,24 @@ message GetRightSizingRecommendationRequest {
 // Response message for GetRightSizingRecommendation
 message GetRightSizingRecommendationResponse {
   repeated api.cover.AccountData account = 1;
+}
+
+// Request message for GetEC2Instances
+message GetEC2InstancesRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+
+  // Optional. If not set, current month will be used. Format: `yyyymm`.
+  string startTime = 2;
+
+  // Optional. If not set, current month will be used. Format: `yyyymm`.
+  string endTime = 3;
+
+  // Optional. A map of "key:value" column filters.
+  map<string, string> filters = 4;
+
+}
+
+message GetEC2InstancesResponse {
+  repeated api.cover.EC2Instance instances = 1;
 }
