@@ -3978,9 +3978,41 @@
         ]
       }
     },
+    "/v1/rightsizingrecommendation/{costGroupId}": {
+      "get": {
+        "summary": "Gets the right sizing recommendation of all the accounts in the costgroup",
+        "operationId": "Cover_GetRightSizingRecommendation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetRightSizingRecommendationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/servicediscounts/{groupId}/account": {
       "delete": {
-        "summary": "WORK-IN-PROGRESS: Deletes the account invoice service discounts. Only available in Ripple.",
+        "summary": "Deletes the account invoice service discounts. Only available in Ripple.",
         "operationId": "Billing_DeleteAccountInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -4010,7 +4042,7 @@
         ]
       },
       "post": {
-        "summary": "WORK-IN-PROGRESS: Registers the account invoice service discounts. Only available in Ripple.",
+        "summary": "Registers the account invoice service discounts. Only available in Ripple.",
         "operationId": "Billing_CreateAccountInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -4058,7 +4090,7 @@
         ]
       },
       "put": {
-        "summary": "WORK-IN-PROGRESS: Updates the account invoice service discounts. Only available in Ripple.",
+        "summary": "Updates the account invoice service discounts. Only available in Ripple.",
         "operationId": "Billing_UpdateAccountInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -4108,7 +4140,7 @@
     },
     "/v1/servicediscounts/{groupId}/account:read": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Reads the account invoice service discounts. Only available in Ripple.",
+        "summary": "Reads the account invoice service discounts. Only available in Ripple.",
         "operationId": "Billing_ListAccountInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -4158,7 +4190,7 @@
     },
     "/v1/servicediscounts/{groupId}/account:remove": {
       "put": {
-        "summary": "WORK-IN-PROGRESS: Removes the account invoice service discounts. Only available in Ripple.",
+        "summary": "Removes the account invoice service discounts. Only available in Ripple.",
         "operationId": "Billing_RemoveAccountInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -4207,7 +4239,7 @@
     },
     "/v1/servicediscounts:read": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Reads the invoice service discounts. Only available in Ripple.",
+        "summary": "Reads the invoice service discounts. Only available in Ripple.",
         "operationId": "Billing_ListInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -4875,6 +4907,13 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "groupId",
+            "description": "Optional. The billing group internal id. Only valid for Ripple users.\n\nNot available for GET method, only use POST method.",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -5008,6 +5047,62 @@
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/accounts:read": {
+      "post": {
+        "summary": "Lists all vendor accounts.",
+        "operationId": "Cost_ListAccounts2",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/blueapiapiAccount"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of blueapiapiAccount"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, `aws` and `gcp` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "groupId": {
+                  "type": "string",
+                  "description": "Optional. The billing group internal id. Only valid for Ripple users.\n\nNot available for GET method, only use POST method."
+                }
+              },
+              "description": "Request message for the Cost.ListAccounts rpc."
+            }
           }
         ],
         "tags": [
@@ -9097,6 +9192,10 @@
     "blueapiapiAccount": {
       "type": "object",
       "properties": {
+        "vendor": {
+          "type": "string",
+          "title": "The vendor"
+        },
         "id": {
           "type": "string",
           "description": "The account id."
@@ -9239,6 +9338,20 @@
         }
       },
       "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
+    },
+    "coverAccountData": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverResourceData"
+          }
+        }
+      }
     },
     "coverCombinations": {
       "type": "object",
@@ -9524,6 +9637,59 @@
           "type": "string"
         },
         "end": {
+          "type": "string"
+        }
+      }
+    },
+    "coverResourceData": {
+      "type": "object",
+      "properties": {
+        "resourceId": {
+          "type": "string"
+        },
+        "resourceName": {
+          "type": "string"
+        },
+        "resourceType": {
+          "type": "string"
+        },
+        "consumedService": {
+          "type": "string"
+        },
+        "currentPrice": {
+          "type": "number",
+          "format": "double"
+        },
+        "recommendation": {
+          "type": "string"
+        },
+        "recommendedResourceType": {
+          "type": "string"
+        },
+        "recommendedPrice": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "region": {
+          "type": "string"
+        },
+        "maxCpuUtilization": {
+          "type": "number",
+          "format": "double"
+        },
+        "maxStorageUtilization": {
+          "type": "number",
+          "format": "double"
+        },
+        "maxMemoryUtilization": {
+          "type": "number",
+          "format": "double"
+        },
+        "networkCapacity": {
           "type": "string"
         }
       }
@@ -11376,6 +11542,18 @@
         }
       },
       "title": "Request message for GetRecommendations"
+    },
+    "v1GetRightSizingRecommendationResponse": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverAccountData"
+          }
+        }
+      },
+      "title": "Response message for GetRightSizingRecommendation"
     },
     "v1GetUserDetailsResponse": {
       "type": "object",
