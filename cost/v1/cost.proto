@@ -94,8 +94,7 @@ service Cost {
     option (google.api.http) = {
       get: "/v1/{vendor}/accounts"
       additional_bindings {
-        post: "/v1/{vendor}/accounts:read"
-        body: "*"  
+        get: "/v1/{vendor}/accounts/groups/{groupId}"
       }
     };
   }
@@ -452,8 +451,6 @@ message ListAccountsRequest {
   string vendor = 1;
 
   // Optional. The billing group internal id. Only valid for Ripple users.
-  //
-  // Not available for GET method, only use POST method.
   string groupId = 2;
 }
 
