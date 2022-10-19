@@ -3181,6 +3181,52 @@
         ]
       }
     },
+    "/v1/ec2/instances:read": {
+      "post": {
+        "summary": "Gets the EC2 instances of all accounts in Cost Group",
+        "operationId": "Cover_GetEC2Instances",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetEC2InstancesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "startTime",
+            "description": "Optional. If not set, current month will be used. Format: `yyyymm`.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "endTime",
+            "description": "Optional. If not set, current month will be used. Format: `yyyymm`.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/invoice/{date}:export": {
       "post": {
         "summary": "Exports an invoice.",
@@ -4910,7 +4956,7 @@
           },
           {
             "name": "groupId",
-            "description": "Optional. The billing group internal id. Only valid for Ripple users.\n\nNot available for GET method, only use POST method.",
+            "description": "Optional. The billing group internal id. Only valid for Ripple users.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -4971,6 +5017,54 @@
               },
               "description": "Request message for the Cost.CreateAccount rpc."
             }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/accounts/groups/{groupId}": {
+      "get": {
+        "summary": "Lists all vendor accounts.",
+        "operationId": "Cost_ListAccounts2",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/blueapiapiAccount"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of blueapiapiAccount"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, `aws` and `gcp` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "groupId",
+            "description": "Optional. The billing group internal id. Only valid for Ripple users.",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
@@ -5047,62 +5141,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
-    "/v1/{vendor}/accounts:read": {
-      "post": {
-        "summary": "Lists all vendor accounts.",
-        "operationId": "Cost_ListAccounts2",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/blueapiapiAccount"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of blueapiapiAccount"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, `aws` and `gcp` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "groupId": {
-                  "type": "string",
-                  "description": "Optional. The billing group internal id. Only valid for Ripple users.\n\nNot available for GET method, only use POST method."
-                }
-              },
-              "description": "Request message for the Cost.ListAccounts rpc."
-            }
           }
         ],
         "tags": [
@@ -8502,6 +8540,17 @@
         }
       }
     },
+    "apicoverTag": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
     "apigcpCost": {
       "type": "object",
       "properties": {
@@ -9462,6 +9511,130 @@
       },
       "description": "A map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
     },
+    "coverEC2Instance": {
+      "type": "object",
+      "properties": {
+        "capacityReservationId": {
+          "type": "string",
+          "description": "The ID of the Capacity Reservation."
+        },
+        "ebsOptimized": {
+          "type": "boolean",
+          "description": "Indicates whether the instance is optimized for Amazon EBS I/O. This optimization\nprovides dedicated throughput to Amazon EBS and an optimized configuration\nstack to provide optimal I/O performance. This optimization isn't available\nwith all instance types. Additional usage charges apply when using an EBS\nOptimized instance."
+        },
+        "imageId": {
+          "type": "string",
+          "description": "The ID of the AMI used to launch the instance."
+        },
+        "instanceId": {
+          "type": "string",
+          "description": "The ID of the instance."
+        },
+        "instanceLifecycle": {
+          "type": "string",
+          "description": "Indicates whether this is a Spot Instance or a Scheduled Instance."
+        },
+        "instanceType": {
+          "type": "string",
+          "description": "The instance type."
+        },
+        "ipv6Address": {
+          "type": "string",
+          "description": "The IPv6 address assigned to the instance."
+        },
+        "kernelId": {
+          "type": "string",
+          "description": "The kernel associated with this instance, if applicable."
+        },
+        "keyName": {
+          "type": "string",
+          "description": "The name of the key pair, if this instance was launched with an associated key pair."
+        },
+        "launchTime": {
+          "type": "string",
+          "description": "The time the instance was launched."
+        },
+        "outpostArn": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the Outpost."
+        },
+        "platform": {
+          "type": "string",
+          "description": "The value is Windows for Windows instances; otherwise blank."
+        },
+        "platformDetails": {
+          "type": "string",
+          "description": "The platform details value for the instance. For more information, see AMI\nbilling information fields (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/billing-info-fields.html)\nin the Amazon EC2 User Guide."
+        },
+        "privateDnsName": {
+          "type": "string",
+          "description": "(IPv4 only) The private DNS hostname name assigned to the instance. This\nDNS hostname can only be used inside the Amazon EC2 network. This name is\nnot available until the instance enters the running state.\n\n[EC2-VPC] The Amazon-provided DNS server resolves Amazon-provided private\nDNS hostnames if you've enabled DNS resolution and DNS hostnames in your\nVPC. If you are not using the Amazon-provided DNS server in your VPC, your\ncustom domain name servers must resolve the hostname as appropriate."
+        },
+        "privateIpAddress": {
+          "type": "string",
+          "description": "The private IPv4 address assigned to the instance."
+        },
+        "publicDnsName": {
+          "type": "string",
+          "description": "(IPv4 only) The public DNS name assigned to the instance. This name is not\navailable until the instance enters the running state. For EC2-VPC, this\nname is only available if you've enabled DNS hostnames for your VPC."
+        },
+        "publicIpAddress": {
+          "type": "string",
+          "description": "The public IPv4 address, or the Carrier IP address assigned to the instance,\nif applicable.\n\nA Carrier IP address only applies to an instance launched in a subnet associated\nwith a Wavelength Zone."
+        },
+        "ramdiskId": {
+          "type": "string",
+          "description": "The RAM disk associated with this instance, if applicable."
+        },
+        "rootDeviceName": {
+          "type": "string",
+          "description": "The device name of the root device volume (for example, /dev/sda1)."
+        },
+        "rootDeviceType": {
+          "type": "string",
+          "description": "The root device type used by the AMI. The AMI can use an EBS volume or an\ninstance store volume."
+        },
+        "sourceDestCheck": {
+          "type": "boolean",
+          "description": "Indicates whether source/destination checking is enabled."
+        },
+        "spotInstanceRequestId": {
+          "type": "string",
+          "description": "If the request is a Spot Instance request, the ID of the request."
+        },
+        "sriovNetSupport": {
+          "type": "string",
+          "description": "Specifies whether enhanced networking with the Intel 82599 Virtual Function\ninterface is enabled."
+        },
+        "state": {
+          "type": "string",
+          "description": "The current state of the instance."
+        },
+        "subnetId": {
+          "type": "string",
+          "description": "[EC2-VPC] The ID of the subnet in which the instance is running."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apicoverTag"
+          },
+          "description": "Any tags assigned to the instance."
+        },
+        "usageOperation": {
+          "type": "string",
+          "description": "The usage operation value for the instance. For more information, see AMI\nbilling information fields (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/billing-info-fields.html)\nin the Amazon EC2 User Guide."
+        },
+        "virtualizationType": {
+          "type": "string",
+          "description": "The virtualization type of the instance."
+        },
+        "vpcId": {
+          "type": "string",
+          "description": "[EC2-VPC] The ID of the VPC in which the instance is running."
+        }
+      }
+    },
     "coverFavorites": {
       "type": "object",
       "properties": {
@@ -9616,6 +9789,25 @@
         }
       }
     },
+    "coverRecommendationDetail": {
+      "type": "object",
+      "properties": {
+        "recommendedResourceType": {
+          "type": "string"
+        },
+        "estimatedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "region": {
+          "type": "string"
+        }
+      }
+    },
     "coverRegistrationStatus": {
       "type": "object",
       "properties": {
@@ -9660,20 +9852,6 @@
           "type": "number",
           "format": "double"
         },
-        "recommendation": {
-          "type": "string"
-        },
-        "recommendedResourceType": {
-          "type": "string"
-        },
-        "recommendedPrice": {
-          "type": "number",
-          "format": "double"
-        },
-        "estimatedSavings": {
-          "type": "number",
-          "format": "double"
-        },
         "region": {
           "type": "string"
         },
@@ -9691,6 +9869,15 @@
         },
         "networkCapacity": {
           "type": "string"
+        },
+        "rightSizingType": {
+          "type": "string"
+        },
+        "recommendationDetail": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverRecommendationDetail"
+          }
         }
       }
     },
@@ -11350,6 +11537,17 @@
       },
       "description": "Response message for the Admin.GetDefaultCostAccessTemplateUrl rpc."
     },
+    "v1GetEC2InstancesResponse": {
+      "type": "object",
+      "properties": {
+        "instances": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverEC2Instance"
+          }
+        }
+      }
+    },
     "v1GetFavoriteViewsResponse": {
       "type": "object",
       "properties": {
@@ -11692,6 +11890,10 @@
         "services": {
           "type": "string",
           "description": "Optional. Comma-separated list of services. If not set, all services are included."
+        },
+        "regions": {
+          "type": "string",
+          "description": "Optional. Comma-separated list of regions. If not set, all regions are included."
         }
       }
     },
@@ -11704,11 +11906,11 @@
         },
         "startTime": {
           "type": "string",
-          "description": "Optional. If not set, the first day of the current month will be used. Format: `yyyymmdd`."
+          "description": "Optional. If not set, current month will be used. Format: `yyyymm`."
         },
         "endTime": {
           "type": "string",
-          "description": "Optional. If not set, current date will be used. Format: `yyyymmdd`."
+          "description": "Optional. If not set, current month will be used. Format: `yyyymm`."
         },
         "awsOptions": {
           "$ref": "#/definitions/v1ListAssetsAwsFilterOptions",
