@@ -67,6 +67,14 @@ service Billing {
     };
   }
   
+  // WORK-IN-PROGRESS: Creates an invoice. Only available in Ripple.
+  rpc CreateInvoice(CreateInvoiceRequest) returns (api.InvoiceMessage) {
+    option (google.api.http) = {
+      post: "/v1/invoice/{date}:create"
+      body: "*"
+    };
+  }
+
   // Gets an invoice.
   rpc GetInvoice(GetInvoiceRequest) returns (api.Invoice) {
     option (google.api.http) = {
@@ -498,4 +506,18 @@ message RemoveAccountInvoiceServiceDiscountsRequest {
 
   // Required.
   repeated AccountServiceDiscounts accounts = 4;
+}
+
+// Request message for the CreateInvoice rpc.
+message CreateInvoiceRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Optional. You can set all billing groups.
+  //
+  // If this parameter is not set, The list set to `groups` is used.
+  bool allGroups = 2;
+
+  // Optional. You can set it to a list of billing internal group id
+  repeated string groups = 3;
 }
