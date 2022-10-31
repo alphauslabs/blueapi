@@ -458,6 +458,14 @@ service Cover {
     };
   }
 
+  // Applies the right sizing recommendation of a resource
+  rpc ApplyRightSizingRecommendation(ApplyRightSizingRecommendationRequest) returns (ApplyRightSizingRecommendationResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/rightsizingrecommendation/{resourceId}"
+      body: "*"
+    };
+  }
+
   // Gets the EC2 instances of all accounts in Cost Group
   rpc GetEC2Instances(GetEC2InstancesRequest) returns (GetEC2InstancesResponse) {
     option (google.api.http) = {
@@ -1200,6 +1208,27 @@ message GetRightSizingRecommendationRequest {
 // Response message for GetRightSizingRecommendation
 message GetRightSizingRecommendationResponse {
   repeated api.cover.AccountData account = 1;
+}
+
+// Request message for ApplyRightSizingRecommendation
+message ApplyRightSizingRecommendationRequest {
+  // Required. Cloud vendor.
+  string vendor = 1;
+
+  // Required. The resource Id.
+  string resourceId = 2;
+
+  // Required. The recommended resource type.
+  string resourceType = 3;
+
+  string region = 4;
+}
+
+// Response message for ApplyRightSizingRecommendation
+message ApplyRightSizingRecommendationResponse {
+  string resourceId = 1;
+  string resourceType = 2;
+  string region = 3;
 }
 
 // Request message for GetEC2Instances
