@@ -3201,29 +3201,74 @@
         },
         "parameters": [
           {
-            "name": "costGroupId",
-            "description": "Required. Cost Group Id.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "startTime",
-            "description": "Optional. If not set, current month will be used. Format: `yyyymm`.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "endTime",
-            "description": "Optional. If not set, current month will be used. Format: `yyyymm`.",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetEC2InstancesRequest"
+            }
           }
         ],
         "tags": [
           "Cover"
+        ]
+      }
+    },
+    "/v1/invoice/{date}:create": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Creates an invoice. Only available in Ripple.",
+        "operationId": "Billing_CreateInvoice",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiInvoiceMessage"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "date",
+            "description": "Required. Month to get invoice. Format: `yyyymm`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "vendor": {
+                  "type": "string",
+                  "description": "Required. At the moment, only `aws` is supported."
+                },
+                "allGroups": {
+                  "type": "boolean",
+                  "description": "Optional. You can set all billing groups.\n\nIf this parameter is not set, The list set to `groups` is used."
+                },
+                "groups": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Optional. You can set it to a list of billing internal group id"
+                }
+              },
+              "description": "Request message for the CreateInvoice rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
         ]
       }
     },
@@ -7048,6 +7093,63 @@
         ]
       }
     },
+    "/v1/{vendor}/rightsizingrecommendation/{resourceId}": {
+      "post": {
+        "summary": "Applies the right sizing recommendation of an instance",
+        "operationId": "Cover_ApplyRightSizingRecommendation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ApplyRightSizingRecommendationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Cloud vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resourceId",
+            "description": "Required. The resource Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "resourceType": {
+                  "type": "string",
+                  "description": "Required. The recommended resource type."
+                },
+                "region": {
+                  "type": "string"
+                }
+              },
+              "title": "Request message for ApplyRightSizingRecommendation"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/{vendor}/tagcosts:read": {
       "post": {
         "summary": "Reads the usage-based tag costs of a billing group. At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
@@ -7796,6 +7898,19 @@
         "azure": {
           "$ref": "#/definitions/apiVendorDetail",
           "title": "Invoice vendor detail by 'azure'"
+        }
+      }
+    },
+    "apiInvoiceMessage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "invoice generate request id"
+        },
+        "status": {
+          "type": "string",
+          "title": "invoice generate request status"
         }
       }
     },
@@ -9632,6 +9747,10 @@
         "vpcId": {
           "type": "string",
           "description": "[EC2-VPC] The ID of the VPC in which the instance is running."
+        },
+        "date": {
+          "type": "string",
+          "title": "Format: `yyyy-mm`"
         }
       }
     },
@@ -9685,7 +9804,10 @@
           "type": "string"
         },
         "params": {
-          "$ref": "#/definitions/coverRequestParams"
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         },
         "hash": {
           "type": "string"
@@ -9819,17 +9941,6 @@
         },
         "curExport": {
           "type": "boolean"
-        }
-      }
-    },
-    "coverRequestParams": {
-      "type": "object",
-      "properties": {
-        "start": {
-          "type": "string"
-        },
-        "end": {
-          "type": "string"
         }
       }
     },
@@ -10344,6 +10455,21 @@
         }
       },
       "title": "Response message for AddSideMenuFavorite"
+    },
+    "v1ApplyRightSizingRecommendationResponse": {
+      "type": "object",
+      "properties": {
+        "resourceId": {
+          "type": "string"
+        },
+        "resourceType": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for ApplyRightSizingRecommendation"
     },
     "v1AssignCostGroupMemberResponse": {
       "type": "object",
@@ -11536,6 +11662,31 @@
         }
       },
       "description": "Response message for the Admin.GetDefaultCostAccessTemplateUrl rpc."
+    },
+    "v1GetEC2InstancesRequest": {
+      "type": "object",
+      "properties": {
+        "costGroupId": {
+          "type": "string",
+          "description": "Required. Cost Group Id."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Optional. If not set, current month will be used. Format: `yyyymm`."
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Optional. If not set, current month will be used. Format: `yyyymm`."
+        },
+        "filters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional. A map of \"key:value\" column filters."
+        }
+      },
+      "title": "Request message for GetEC2Instances"
     },
     "v1GetEC2InstancesResponse": {
       "type": "object",
