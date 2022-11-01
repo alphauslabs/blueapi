@@ -7,6 +7,7 @@ import "api/invoice.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/field_mask.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/billing";
 option java_package = "cloud.alphaus.api.billing";
@@ -192,7 +193,9 @@ message BillingGroupVendoredInvoiceSetting {
 }
 
 // Request message for the Billing.ListBillingGroups rpc.
-message ListBillingGroupsRequest {}
+message ListBillingGroupsRequest {
+  google.protobuf.FieldMask field_mask = 1;
+}
 
 // Request message for the Billing.CreateBillingGroup rpc.
 message CreateBillingGroupRequest {
