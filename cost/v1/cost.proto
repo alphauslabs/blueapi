@@ -818,6 +818,11 @@ message ReadAdjustmentsRequest {
 message ReadTagCostsRequestAwsOptions {
   // Optional. If set, only return data for this tagId.
   string tagId = 1;
+
+  // Optional. A comma-separated list of columns to aggregate the data into. Valid values are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `invoiceId`, `description`, and `resourceId`. A special value of `none` is also supported, which means query by date or month per account only.
+  //
+  // For example, if you only want the services and region data, you can set this field to `productCode,region`. Your input sequence doesn't matter (although the sequence above is recommended) as the actual sequence is already fixed in the return data (see the definition in https://github.com/alphauslabs/blueapi/blob/main/api/aws/cost.proto), which is generic to specific, top to bottom. Invalid values are discarded. Excluded columns will be empty.
+  string groupByColumns = 2;
 }
 
 // Request message for the Cost.ReadTagCosts rpc.
