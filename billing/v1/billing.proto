@@ -76,6 +76,13 @@ service Billing {
     };
   }
 
+  // WORK-IN-PROGRESS: Gets an invoice. Only available in Ripple.
+  rpc GetInvoiceStatus(GetInvoiceStatusRequest) returns (api.InvoiceMessage) {
+    option (google.api.http) = {
+      get: "/v1/invoice/status/{id}"
+    };
+  }
+
   // Gets an invoice.
   rpc GetInvoice(GetInvoiceRequest) returns (api.Invoice) {
     option (google.api.http) = {
@@ -526,4 +533,10 @@ message CreateInvoiceRequest {
 
   // Optional. You can set it to a list of billing internal group id
   repeated string groups = 3;
+}
+
+// Request message for the GetInvoiceStatus rpc.
+message GetInvoiceStatusRequest {
+  // Required. invoice generate request id.
+  string id = 1;
 }
