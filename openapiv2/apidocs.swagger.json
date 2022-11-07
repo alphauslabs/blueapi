@@ -3222,6 +3222,38 @@
         ]
       }
     },
+    "/v1/invoice/status/{id}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets an invoice. Only available in Ripple.",
+        "operationId": "Billing_GetInvoiceStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiInvoiceMessage"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. invoice generate request id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/invoice/{date}:create": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Creates an invoice. Only available in Ripple.",
@@ -12463,6 +12495,10 @@
         "tagId": {
           "type": "string",
           "description": "Optional. If set, only return data for this tagId."
+        },
+        "groupByColumns": {
+          "type": "string",
+          "description": "Optional. A comma-separated list of columns to aggregate the data into. Valid values are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `invoiceId`, `description`, and `resourceId`. A special value of `none` is also supported, which means query by date or month per account only.\n\nFor example, if you only want the services and region data, you can set this field to `productCode,region`. Your input sequence doesn't matter (although the sequence above is recommended) as the actual sequence is already fixed in the return data (see the definition in https://github.com/alphauslabs/blueapi/blob/main/api/aws/cost.proto), which is generic to specific, top to bottom. Invalid values are discarded. Excluded columns will be empty."
         }
       }
     },
