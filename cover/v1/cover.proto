@@ -458,10 +458,18 @@ service Cover {
     };
   }
 
-  // Applies the right sizing recommendation of a resource
-  rpc ApplyRightSizingRecommendation(ApplyRightSizingRecommendationRequest) returns (ApplyRightSizingRecommendationResponse) {
+  // Modify resource type from right sizing recommendation
+  rpc ModifyResourceType(ModifyResourceTypeRequest) returns (ModifyResourceTypeResponse) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/rightsizingrecommendation/{resourceId}"
+      post: "/v1/{vendor}/resource/modify"
+      body: "*"
+    };
+  }
+
+  // Terminate a resource from right sizing recommendation
+  rpc TerminateResource(TerminateResourceRequest) returns (TerminateResourceResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/resource/terminate"
       body: "*"
     };
   }
@@ -1210,25 +1218,56 @@ message GetRightSizingRecommendationResponse {
   repeated api.cover.AccountData account = 1;
 }
 
-// Request message for ApplyRightSizingRecommendation
-message ApplyRightSizingRecommendationRequest {
+// Request message for ModifyResourceType
+message ModifyResourceTypeRequest {
   // Required. Cloud vendor.
   string vendor = 1;
 
+  // Required. Account Id.
+  string accountId = 2;
+
   // Required. The resource Id.
-  string resourceId = 2;
+  string resourceId = 3;
 
   // Required. The recommended resource type.
-  string resourceType = 3;
+  string resourceType = 4;
 
+  // Required. Resource region.
+  string region = 5;
+}
+
+// Response message for ModifyResourceType
+message ModifyResourceTypeResponse {
+  string accountId = 1;
+  string resourceId = 2;
+  string resourceType = 3;
   string region = 4;
 }
 
-// Response message for ApplyRightSizingRecommendation
-message ApplyRightSizingRecommendationResponse {
-  string resourceId = 1;
-  string resourceType = 2;
-  string region = 3;
+// Request message for TerminateResource
+message TerminateResourceRequest {
+  // Required. Cloud vendor.
+  string vendor = 1;
+
+  // Required. Account Id.
+  string accountId = 2;
+
+  // Required. The resource Id.
+  string resourceId = 3;
+
+  // Required. The recommended resource type.
+  string resourceType = 4;
+
+  // Required. Resource region.
+  string region = 5;
+}
+
+// Response message for TerminateResource
+message TerminateResourceResponse {
+  string accountId = 1;
+  string resourceId = 2;
+  string resourceType = 3;
+  string region = 4;
 }
 
 // Request message for GetEC2Instances
