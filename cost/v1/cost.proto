@@ -19,6 +19,7 @@ import "api/ripple/payer.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/field_mask.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/cost";
 option java_package = "cloud.alphaus.api.cost";
@@ -452,6 +453,9 @@ message ListAccountsRequest {
 
   // Optional. The billing group internal id. Only valid for Ripple users.
   string groupId = 2;
+
+  // Optional.
+  google.protobuf.FieldMask field_mask = 3;
 }
 
 // Request message for the Cost.GetAccount rpc.
