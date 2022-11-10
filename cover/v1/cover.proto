@@ -10,6 +10,7 @@ import "api/cover/view.proto";
 import "api/cover/costgroup.proto";
 import "api/cover/asset.proto";
 import "api/cover/accountaccess.proto";
+import "api/cover/costforecast.proto";
 import "api/cover/rightsizingrecommendation.proto";
 import "api/operation.proto";
 import "google/api/annotations.proto";
@@ -1173,6 +1174,9 @@ message GetCostUsageRequest {
 
   // Optional. Valid only for the `aws` vendor. AWS-specific options.
   GetCostUsageRequestAwsOptions awsOptions = 8;
+
+  // Optional. If set to true, include cost forecast for current month 
+  bool includeCostForecast = 9;
 }
 
 message GetCostUsageRequestAwsOptions {
@@ -1203,6 +1207,7 @@ message ReadCostsRequestAwsOptionsFilters {
 // Response message wrapper for cloud costs.
 message CostItem {
   api.aws.Cost aws = 1;
+  api.cover.AwsCostForecast awsForecast = 4;
   api.gcp.Cost gcp = 2;
   api.azure.Cost azure = 3;
 }

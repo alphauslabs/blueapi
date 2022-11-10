@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package blueapi.api.cover;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/cover";
+option java_package = "cloud.alphaus.blueapi.api.cover";
+option java_outer_classname = "ApiCoverCostForecastProto";
+
+message AwsCostForecast {
+    // For daily data, format is `yyyy-mm-dd`; for monthly, `yyyy-mm`.
+    string date = 1;
+
+    // The account being queried.
+    string account = 2;
+    
+    // The product code for an AWS service
+    string productCode = 3;
+
+    // Forcasted cost based on true cost (calculated)
+    float cost = 4;
+    float lowerBound = 5;
+    float upperBound = 6;
+
+    // Forcasted cost based on unblended cost
+    float unblendedCost = 7;
+    float unblendedLowerBound = 8;
+    float unblendedUpperBound = 9;
+}
