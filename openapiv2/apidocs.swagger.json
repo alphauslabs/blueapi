@@ -2553,6 +2553,7 @@
         "parameters": [
           {
             "name": "fieldMask",
+            "description": "Optional. Get only the value that set fieldMask.\n\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto",
             "in": "query",
             "required": false,
             "type": "string"
@@ -4643,7 +4644,7 @@
               "type": "object",
               "properties": {
                 "options": {
-                  "$ref": "#/definitions/coverLayoutOptions"
+                  "type": "object"
                 },
                 "requests": {
                   "type": "array",
@@ -5045,6 +5046,13 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "fieldMask",
+            "description": "Optional.",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -5149,6 +5157,13 @@
             "description": "Optional. The billing group internal id. Only valid for Ripple users.",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "fieldMask",
+            "description": "Optional.",
+            "in": "query",
+            "required": false,
             "type": "string"
           }
         ],
@@ -8011,6 +8026,7 @@
         },
         "status": {
           "type": "string",
+          "description": "done: Invoicing is complete.\nrunning: Invoicing in progress.\nfaild: Invoicing is failure.",
           "title": "invoice generate request status"
         }
       }
@@ -9583,6 +9599,9 @@
         "aws": {
           "$ref": "#/definitions/apiawsCost"
         },
+        "awsForecast": {
+          "$ref": "#/definitions/coverAwsCostForecast"
+        },
         "gcp": {
           "$ref": "#/definitions/apigcpCost"
         },
@@ -9615,6 +9634,49 @@
           "items": {
             "$ref": "#/definitions/coverResourceData"
           }
+        }
+      }
+    },
+    "coverAwsCostForecast": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "For daily data, format is `yyyy-mm-dd`; for monthly, `yyyy-mm`."
+        },
+        "account": {
+          "type": "string",
+          "description": "The account being queried."
+        },
+        "productCode": {
+          "type": "string",
+          "title": "The product code for an AWS service"
+        },
+        "cost": {
+          "type": "number",
+          "format": "float",
+          "title": "Forcasted cost based on true cost (calculated)"
+        },
+        "lowerBound": {
+          "type": "number",
+          "format": "float"
+        },
+        "upperBound": {
+          "type": "number",
+          "format": "float"
+        },
+        "unblendedCost": {
+          "type": "number",
+          "format": "float",
+          "title": "Forcasted cost based on unblended cost"
+        },
+        "unblendedLowerBound": {
+          "type": "number",
+          "format": "float"
+        },
+        "unblendedUpperBound": {
+          "type": "number",
+          "format": "float"
         }
       }
     },
@@ -9877,17 +9939,6 @@
           "type": "string"
         },
         "updatedAt": {
-          "type": "string"
-        }
-      }
-    },
-    "coverLayoutOptions": {
-      "type": "object",
-      "properties": {
-        "title": {
-          "type": "string"
-        },
-        "description": {
           "type": "string"
         }
       }
@@ -10297,7 +10348,7 @@
           "type": "string"
         },
         "options": {
-          "$ref": "#/definitions/coverLayoutOptions"
+          "type": "object"
         },
         "requests": {
           "type": "array",
@@ -11666,6 +11717,10 @@
         "awsOptions": {
           "$ref": "#/definitions/v1GetCostUsageRequestAwsOptions",
           "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
+        },
+        "includeCostForecast": {
+          "type": "boolean",
+          "title": "Optional. If set to true, include cost forecast for current month"
         }
       }
     },
