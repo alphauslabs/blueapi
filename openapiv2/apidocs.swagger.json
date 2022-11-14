@@ -9623,20 +9623,6 @@
       },
       "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
     },
-    "coverAccountData": {
-      "type": "object",
-      "properties": {
-        "accountId": {
-          "type": "string"
-        },
-        "resource": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/coverResourceData"
-          }
-        }
-      }
-    },
     "coverAwsCostForecast": {
       "type": "object",
       "properties": {
@@ -9654,29 +9640,29 @@
         },
         "cost": {
           "type": "number",
-          "format": "float",
+          "format": "double",
           "title": "Forcasted cost based on true cost (calculated)"
         },
         "lowerBound": {
           "type": "number",
-          "format": "float"
+          "format": "double"
         },
         "upperBound": {
           "type": "number",
-          "format": "float"
+          "format": "double"
         },
         "unblendedCost": {
           "type": "number",
-          "format": "float",
+          "format": "double",
           "title": "Forcasted cost based on unblended cost"
         },
         "unblendedLowerBound": {
           "type": "number",
-          "format": "float"
+          "format": "double"
         },
         "unblendedUpperBound": {
           "type": "number",
-          "format": "float"
+          "format": "double"
         }
       }
     },
@@ -10096,6 +10082,12 @@
     "coverResourceData": {
       "type": "object",
       "properties": {
+        "vendor": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
+        },
         "resourceId": {
           "type": "string"
         },
@@ -10138,6 +10130,9 @@
           "items": {
             "$ref": "#/definitions/coverRecommendationDetail"
           }
+        },
+        "status": {
+          "type": "string"
         }
       }
     },
@@ -12041,10 +12036,10 @@
     "v1GetRightSizingRecommendationResponse": {
       "type": "object",
       "properties": {
-        "account": {
+        "resource": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/coverAccountData"
+            "$ref": "#/definitions/coverResourceData"
           }
         }
       },
