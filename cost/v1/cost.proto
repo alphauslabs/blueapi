@@ -1402,6 +1402,9 @@ message ReadCostsRequestGcpOptions {
   repeated ReadCostsRequestGcpOptionsFilters filters = 4;
 
   // Optional. If set to true, stream will include invoice month. Discarded when `groupByColumns` field is set to `none`.
+  //
+  // The last usage occurrence of invoice month based on endTime is set to endTime.
+  // For example, (Assumption: Last usage start time 2022-02-01 01:00:00 UTC) If you set to "endTime:20210131", automatically set to "endTime:20220101". Ignored if the batch calculation for invoice month has not been completed.
   bool includeInvoiceMonth = 6;
 
   // If true, force API to not use cached data.
