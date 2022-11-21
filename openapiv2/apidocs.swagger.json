@@ -7248,10 +7248,6 @@
                   "type": "string",
                   "description": "Required. The resource Id."
                 },
-                "resourceType": {
-                  "type": "string",
-                  "description": "Required. The recommended resource type."
-                },
                 "region": {
                   "type": "string",
                   "description": "Required. Resource region."
@@ -8026,7 +8022,7 @@
         },
         "status": {
           "type": "string",
-          "description": "done: Invoicing is complete.\nrunning: Invoicing in progress.\nfaild: Invoicing is failure.",
+          "description": "done: Invoicing is complete.\nrunning: Invoicing in progress.\nfailed: Invoicing is failure.",
           "title": "invoice generate request status"
         }
       }
@@ -8798,6 +8794,10 @@
           "type": "string",
           "description": "For daily data, format is `yyyy-mm-dd`; for monthly, `yyyy-mm`."
         },
+        "invoiceMonth": {
+          "type": "string",
+          "description": "The invoice.month of the lineitem, if applicable."
+        },
         "service": {
           "type": "string",
           "description": "The service.Description of the lineitem, if applicable."
@@ -8816,12 +8816,12 @@
         },
         "usageUnit": {
           "type": "string",
-          "description": "The usage.unit of the lineitem, if applicable."
+          "description": "The usage.pricing_unit of the lineitem, if applicable."
         },
         "usageAmount": {
           "type": "number",
           "format": "double",
-          "description": "The usage.amount of the lineitem, if applicable."
+          "description": "The usage.amount_in_pricing_units of the lineitem, if applicable."
         },
         "baseCurrency": {
           "type": "string",
@@ -10046,25 +10046,6 @@
         }
       }
     },
-    "coverRecommendationDetail": {
-      "type": "object",
-      "properties": {
-        "recommendedResourceType": {
-          "type": "string"
-        },
-        "estimatedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "estimatedSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "region": {
-          "type": "string"
-        }
-      }
-    },
     "coverRegistrationStatus": {
       "type": "object",
       "properties": {
@@ -10091,20 +10072,34 @@
         "resourceId": {
           "type": "string"
         },
-        "resourceName": {
+        "region": {
+          "type": "string"
+        },
+        "recommendation": {
           "type": "string"
         },
         "resourceType": {
           "type": "string"
         },
-        "consumedService": {
+        "recommendedResourceType": {
           "type": "string"
         },
-        "currentPrice": {
+        "currentCost": {
           "type": "number",
           "format": "double"
         },
-        "region": {
+        "estimatedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "resourceName": {
+          "type": "string"
+        },
+        "consumedService": {
           "type": "string"
         },
         "maxCpuUtilization": {
@@ -10121,15 +10116,6 @@
         },
         "networkCapacity": {
           "type": "string"
-        },
-        "rightSizingType": {
-          "type": "string"
-        },
-        "recommendationDetail": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/coverRecommendationDetail"
-          }
         },
         "status": {
           "type": "string"
@@ -12520,6 +12506,14 @@
           },
           "description": "Optional. A list of filtering options. See [ReadCostsRequestGcpOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
         },
+        "includeInvoiceMonth": {
+          "type": "boolean",
+          "description": "Optional. If set to true, stream will include invoice month. Discarded when `groupByColumns` field is set to `none`.\n\nThe last usage occurrence of invoice month based on endTime is set to endTime.\nFor example, (Assumption: Last usage start time 2022-02-01 01:00:00 UTC) If you set to \"endTime:20210131\", automatically set to \"endTime:20220101\". Ignored if the batch calculation for invoice month has not been completed."
+        },
+        "includeCredits": {
+          "type": "boolean",
+          "description": "Optional. If set to true, stream will include credits. Discarded when `groupByColumns` field is set to `none`."
+        },
         "noCache": {
           "type": "boolean",
           "description": "If true, force API to not use cached data."
@@ -12667,9 +12661,6 @@
           "type": "string"
         },
         "resourceId": {
-          "type": "string"
-        },
-        "resourceType": {
           "type": "string"
         },
         "region": {
