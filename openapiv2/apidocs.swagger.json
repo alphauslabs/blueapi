@@ -2324,6 +2324,48 @@
         ]
       }
     },
+    "/v1/aws/acctaccess/all:read": {
+      "post": {
+        "summary": "Lists the account access role(s) attached to accounts under caller.",
+        "operationId": "Cover_ListAccountAccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1AccountAccess"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1AccountAccess"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListAccountAccessRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/aws/acctaccess/{target}": {
       "get": {
         "summary": "Gets the current account role attached to the input target.",
@@ -2411,38 +2453,6 @@
             "type": "string"
           }
         ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/aws/acctaccess:read": {
-      "post": {
-        "summary": "Lists the account access role(s) attached to accounts under caller.",
-        "operationId": "Cover_ListAccountAccess",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1AccountAccess"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1AccountAccess"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
         "tags": [
           "Cover"
         ]
@@ -12171,6 +12181,10 @@
           "description": "The IP filter value. Should be in CIDR format."
         }
       }
+    },
+    "v1ListAccountAccessRequest": {
+      "type": "object",
+      "description": "Request message for the ListAccountAccess rpc."
     },
     "v1ListAccountGroupsResponse": {
       "type": "object",
