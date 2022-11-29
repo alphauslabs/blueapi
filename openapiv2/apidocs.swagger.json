@@ -8814,6 +8814,14 @@
           "type": "string",
           "description": "The location.zone of the lineitem, if applicable."
         },
+        "creditsType": {
+          "type": "string",
+          "description": "The credits.type of the lineitem, if applicable."
+        },
+        "creditsName": {
+          "type": "string",
+          "description": "The credits.name of the lineitem, if applicable."
+        },
         "usageUnit": {
           "type": "string",
           "description": "The usage.pricing_unit of the lineitem, if applicable."
@@ -10046,6 +10054,28 @@
         }
       }
     },
+    "coverRecommendationDetail": {
+      "type": "object",
+      "properties": {
+        "recommendation": {
+          "type": "string"
+        },
+        "recommendedResourceType": {
+          "type": "string"
+        },
+        "estimatedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "region": {
+          "type": "string"
+        }
+      }
+    },
     "coverRegistrationStatus": {
       "type": "object",
       "properties": {
@@ -10075,24 +10105,16 @@
         "region": {
           "type": "string"
         },
-        "recommendation": {
-          "type": "string"
-        },
         "resourceType": {
           "type": "string"
         },
-        "recommendedResourceType": {
-          "type": "string"
+        "recommendationDetail": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coverRecommendationDetail"
+          }
         },
         "currentCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "estimatedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "estimatedSavings": {
           "type": "number",
           "format": "double"
         },
@@ -12512,7 +12534,7 @@
         },
         "includeCredits": {
           "type": "boolean",
-          "description": "Optional. If set to true, stream will include credits. Discarded when `groupByColumns` field is set to `none`."
+          "description": "Optional. If set to true, stream will include credits{\"creditsType\",\"creditsName\"}. Discarded when `groupByColumns` field is set to `none`."
         },
         "noCache": {
           "type": "boolean",
