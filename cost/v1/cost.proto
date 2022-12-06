@@ -16,6 +16,7 @@ import "api/aws/reduction.proto";
 import "api/gcp/cost.proto";
 import "api/azure/cost.proto";
 import "api/ripple/payer.proto";
+import "api/costtag.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -119,6 +120,16 @@ service Cost {
   rpc DeleteAccount(DeleteAccountRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/{vendor}/accounts/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Lists all vendor tags.
+  rpc ListTags(ListTagsRequest) returns (stream api.CostTag) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/tags"
+      additional_bindings {
+        get: "/v1/{vendor}/tags/groups/{groupId}"
+      }
     };
   }
 
@@ -498,6 +509,18 @@ message DeleteAccountRequest {
 
   // Required. The account id to delete.
   string id = 2;
+}
+
+// WORK-IN-PROGRESS: Request message for the Cost.ListTags rpc.
+message ListTagsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Optional. The billing group internal id. Only valid for Ripple users.
+  string groupId = 2;
+
+  // Optional.
+  google.protobuf.FieldMask field_mask = 3;
 }
 
 // Request message for the Cost.ListCalculatorRunningAccounts rpc.
