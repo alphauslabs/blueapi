@@ -67,7 +67,15 @@ service Cover {
     option (google.api.http) = {
       get: "/v1/members/{userId}/costgroup"
     };
-  }  
+  }
+
+  // Modify member's permission
+  rpc UpdateMemberPermission(UpdateMemberPermissionRequest) returns (UpdateMemberPermissionResponse) {
+    option (google.api.http) = {
+      put: "/v1/members/{userId}/isadmin"
+      body: "*"
+    };
+  }
 
   // Get the details of the logged-in user
   rpc GetUserDetails(GetUserDetailsRequest) returns (GetUserDetailsResponse) {
@@ -537,6 +545,19 @@ message GetMemberCostGroupRequest {
 // Response message for GetMemberCostGroup
 message GetMemberCostGroupResponse {
   repeated api.cover.MemberCostGroup costGroups = 1;
+}
+
+// Request message for UpdateMemberPermission
+message UpdateMemberPermissionRequest {
+  // Required. UserId.
+  string userId = 1;
+  // Required. IsAdmin.
+  bool isAdmin = 2;
+}
+
+// Response message for UpdateMemberPermission
+message UpdateMemberPermissionResponse {
+  api.cover.UserData userData = 1;
 }
 
 // Request message for GetUserDetails

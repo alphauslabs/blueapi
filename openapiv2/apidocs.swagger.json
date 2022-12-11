@@ -4120,6 +4120,53 @@
         ]
       }
     },
+    "/v1/members/{userId}/isadmin": {
+      "put": {
+        "summary": "Modify member's permission",
+        "operationId": "Cover_UpdateMemberPermission",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateMemberPermissionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "description": "Required. UserId.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "isAdmin": {
+                  "type": "boolean",
+                  "description": "Required. IsAdmin."
+                }
+              },
+              "title": "Request message for UpdateMemberPermission"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/rightsizingrecommendation/{costGroupId}": {
       "get": {
         "summary": "Gets the right sizing recommendation of all the accounts in the costgroup",
@@ -12939,6 +12986,15 @@
         }
       },
       "title": "Response message for UpdateCostGroupName"
+    },
+    "v1UpdateMemberPermissionResponse": {
+      "type": "object",
+      "properties": {
+        "userData": {
+          "$ref": "#/definitions/coverUserData"
+        }
+      },
+      "title": "Response message for UpdateMemberPermission"
     },
     "v1UpdateMetadataRequest": {
       "type": "object",
