@@ -3960,6 +3960,39 @@
         ]
       }
     },
+    "/v1/members/activate": {
+      "post": {
+        "summary": "Activate the added user",
+        "operationId": "Cover_ActivateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ActivateUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ActivateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/members/invite": {
       "post": {
         "summary": "Invite members to the system",
@@ -3985,6 +4018,39 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1InviteMemberRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/members/onboard": {
+      "post": {
+        "summary": "Onboard an organization with an admin account and default cost group",
+        "operationId": "Cover_OnboardOrg",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1OnboardOrgResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1OnboardOrgRequest"
             }
           }
         ],
@@ -4078,6 +4144,37 @@
           {
             "name": "userId",
             "description": "Required. UserId.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/members/{userId}/activation": {
+      "get": {
+        "summary": "Check user activation status",
+        "operationId": "Cover_CheckUserActivation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CheckUserActivationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -10791,6 +10888,30 @@
         }
       }
     },
+    "v1ActivateUserRequest": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for ActivateUser"
+    },
+    "v1ActivateUserResponse": {
+      "type": "object",
+      "properties": {
+        "userData": {
+          "$ref": "#/definitions/coverUserData"
+        }
+      },
+      "title": "Response message for ActivateUser"
+    },
     "v1AddFavoriteRequest": {
       "type": "object",
       "properties": {
@@ -11031,6 +11152,18 @@
           "description": "The current state of this schedule. Normally set to \"OK\", or empty if no issues. Otherwise, will contain an error string."
         }
       }
+    },
+    "v1CheckUserActivationResponse": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "activated": {
+          "type": "boolean"
+        }
+      },
+      "title": "Response message for CheckUserActivation"
     },
     "v1CloudWatchMetricsStream": {
       "type": "object",
@@ -12642,6 +12775,33 @@
         }
       },
       "title": "Response message for ModifyResourceType"
+    },
+    "v1OnboardOrgRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for OnboardOrg"
+    },
+    "v1OnboardOrgResponse": {
+      "type": "object",
+      "properties": {
+        "userData": {
+          "$ref": "#/definitions/coverUserData"
+        }
+      },
+      "title": "Response message for OnboardOrg"
     },
     "v1Preference": {
       "type": "object"

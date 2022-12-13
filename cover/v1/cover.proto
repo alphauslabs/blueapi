@@ -32,11 +32,34 @@ service Cover {
     }
   };
 
+  // Onboard an organization with an admin account and default cost group
+  rpc OnboardOrg(OnboardOrgRequest) returns (OnboardOrgResponse) {
+    option (google.api.http) = {
+      post: "/v1/members/onboard"
+      body: "*"
+    };
+  }
+
   // Invite members to the system
   rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {
     option (google.api.http) = {
       post: "/v1/members/invite"
       body: "*"
+    };
+  }
+
+  // Activate the added user
+  rpc ActivateUser(ActivateUserRequest) returns (ActivateUserResponse) {
+    option (google.api.http) = {
+      post: "/v1/members/activate"
+      body: "*"
+    };
+  }
+
+  // Check user activation status
+  rpc CheckUserActivation(CheckUserActivationRequest) returns (CheckUserActivationResponse) {
+    option (google.api.http) = {
+      get: "/v1/members/{userId}/activation"
     };
   }
 
@@ -494,6 +517,19 @@ service Cover {
   }
 }
 
+// Request message for OnboardOrg
+message OnboardOrgRequest {
+  string email = 1;
+  string password = 2;
+  string name = 3;
+  string orgId = 4;
+}
+
+// Response message for OnboardOrg
+message OnboardOrgResponse {
+  api.cover.UserData userData = 1;
+}
+
 // Request message for InviteMember
 message InviteMemberRequest {
   string email = 1;
@@ -502,6 +538,29 @@ message InviteMemberRequest {
 // Response message for InviteMember
 message InviteMemberResponse {
   string email = 1;
+}
+
+// Request message for ActivateUser
+message ActivateUserRequest {
+  string userId = 1;
+  string password = 2;
+  string name = 3;
+}
+
+// Response message for ActivateUser
+message ActivateUserResponse {
+  api.cover.UserData userData = 1;
+}
+
+// Request message for CheckUserActivation
+message CheckUserActivationRequest {
+  string userId = 1;
+}
+
+// Response message for CheckUserActivation
+message CheckUserActivationResponse {
+  string userId = 1;
+  bool activated = 2;
 }
 
 // Request message for CreateMember
