@@ -515,6 +515,14 @@ service Cover {
       body: "*"
     };
   }
+
+  // Upload charge code
+  rpc UploadChargeCode(stream UploadChargeCodeRequest) returns (UploadChargeCodeResponse) {
+    option (google.api.http) = {
+      post: "/v1/chargecode/upload"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -1372,4 +1380,30 @@ message GetEC2InstancesRequest {
 
 message GetEC2InstancesResponse {
   repeated api.cover.EC2Instance instances = 1;
+}
+
+// Status of upload file
+enum Status {
+  PENDING = 0;
+  IN_PROGRESS = 1;
+  SUCCESS = 2;
+  FAILED = 3;
+}
+
+// (WIP): Request message for Upload Charge Code
+message UploadChargeCodeRequest {
+  // Required. File name
+  string name = 1; // file name
+  // Required. File type
+  string type = 2; // file type
+  // Required. Convert file into bytes to transfer file
+  bytes file = 3; // file in bytes
+}
+
+// (WIP): Response message for Upload Charge Code
+message UploadChargeCodeResponse {
+  // File name
+  string name = 1;
+  // Status
+  Status status = 2;
 }
