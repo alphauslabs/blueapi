@@ -523,6 +523,35 @@ service Cover {
       body: "*"
     };
   }
+
+  // Assign payer to a linked account
+  rpc AssignPayer(AssignPayerRequest) returns (AssignPayerResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/payers"
+      body: "*"
+    };
+  }
+
+  // Get list of all payers
+  rpc GetPayers(GetPayersRequest) returns (GetPayersResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/payers"
+    };
+  }
+
+  // Get list of registered accounts
+  rpc GetAccounts(GetAccountsRequest) returns (GetAccountsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/accounts"
+    };
+  }
+
+  // Get list of supported services
+  rpc GetServices(GetServicesRequest) returns (GetServicesResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/services"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -1406,4 +1435,55 @@ message UploadChargeCodeResponse {
   string name = 1;
   // Status
   Status status = 2;
+}
+
+// Request message for AssignPayer
+message AssignPayerRequest {
+  // Required. Cloud vendor.
+  string vendor = 1;
+
+  // Required. Account Id.
+  string accountId = 2;
+
+  // Required. The Payer Id.
+  string payerId = 3;
+}
+
+// Response message for AssignPayer
+message AssignPayerResponse {
+  string accountId = 1;
+  string payerId = 2;
+}
+
+// Request message for GetPayers
+message GetPayersRequest {
+  // Required. Cloud vendor.
+  string vendor = 1;
+}
+
+// Response message for GetPayers
+message GetPayersResponse {
+  repeated string payerId = 1;
+}
+
+// Request message for GetAccounts
+message GetAccountsRequest {
+  // Required. Cloud vendor.
+  string vendor = 1;
+}
+
+// Response message for GetAccounts
+message GetAccountsResponse {
+  repeated string accountId = 1;
+}
+
+// Request message for GetServices
+message GetServicesRequest {
+  // Required. Cloud vendor.
+  string vendor = 1;
+}
+
+// Response message for GetServices
+message GetServicesResponse {
+  repeated string services = 1;
 }
