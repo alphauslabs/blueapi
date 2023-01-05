@@ -92,6 +92,14 @@ service Billing {
     };
   }
 
+  // Updates an invoice preview. Only available in Ripple.
+  rpc UpdateInvoicePreviews(UpdateInvoicePreviewsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/invoice/{date}:preview"
+      body: "*"
+    };
+  }
+
   // Exports an invoice.
   rpc ExportInvoiceFile(ExportInvoiceFileRequest) returns (ExportInvoiceFileResponse) {
     option (google.api.http) = {
@@ -546,4 +554,18 @@ message CreateInvoiceRequest {
 message GetInvoiceStatusRequest {
   // Required. invoice generate request id.
   string id = 1;
+}
+
+// Request message for the UpdateInvoicePreviews rpc.
+message UpdateInvoicePreviewsRequest {
+  // Required. Month to get invoice. Format: `yyyymm`.
+  string date = 1;
+
+  // Optional. You can set all billing groups.
+  //
+  // If this parameter is not set, The list set to `groups` is used.
+  bool allGroups = 2;
+
+  // Optional. You can set it to a list of billing internal group id
+  repeated string groups = 3;
 }
