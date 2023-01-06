@@ -56,13 +56,6 @@ service Cover {
     };
   }
 
-  // Check user activation status
-  rpc CheckUserActivation(CheckUserActivationRequest) returns (CheckUserActivationResponse) {
-    option (google.api.http) = {
-      get: "/v1/members/{userId}/activation"
-    };
-  }
-
   // Create a member
   rpc CreateMember(CreateMemberRequest) returns (CreateMemberResponse) {
     option (google.api.http) = {
@@ -580,24 +573,14 @@ message InviteMemberResponse {
 // Request message for ActivateUser
 message ActivateUserRequest {
   string userId = 1;
-  string password = 2;
-  string name = 3;
+  string previousPassword = 2;
+  string password = 3;
+  string name = 4;
 }
 
 // Response message for ActivateUser
 message ActivateUserResponse {
   api.cover.UserData userData = 1;
-}
-
-// Request message for CheckUserActivation
-message CheckUserActivationRequest {
-  string userId = 1;
-}
-
-// Response message for CheckUserActivation
-message CheckUserActivationResponse {
-  string userId = 1;
-  bool activated = 2;
 }
 
 // Request message for CreateMember
@@ -1463,7 +1446,7 @@ message GetPayersRequest {
 
 // Response message for GetPayers
 message GetPayersResponse {
-  repeated string payerId = 1;
+  repeated string payers = 1;
 }
 
 // Request message for GetAccounts
@@ -1474,7 +1457,7 @@ message GetAccountsRequest {
 
 // Response message for GetAccounts
 message GetAccountsResponse {
-  repeated string accountId = 1;
+  repeated string accounts = 1;
 }
 
 // Request message for GetServices

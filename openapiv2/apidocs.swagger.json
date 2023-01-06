@@ -3404,6 +3404,64 @@
         ]
       }
     },
+    "/v1/invoice/{date}:preview": {
+      "put": {
+        "summary": "Updates an invoice preview. Only available in Ripple.",
+        "operationId": "Billing_UpdateInvoicePreviews",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "date",
+            "description": "Required. Month to get invoice. Format: `yyyymm`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "allGroups": {
+                  "type": "boolean",
+                  "description": "Optional. You can set all billing groups.\n\nIf this parameter is not set, The list set to `groups` is used."
+                },
+                "groups": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Optional. You can set it to a list of billing internal group id"
+                },
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Required. You can set display or hiding.\n\nIf true, Hiding Invoice. If false, Display Invoice."
+                }
+              },
+              "description": "Request message for the UpdateInvoicePreviews rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/invoice/{date}:read": {
       "post": {
         "summary": "Gets an invoice.",
@@ -4178,37 +4236,6 @@
           {
             "name": "userId",
             "description": "Required. UserId.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/members/{userId}/activation": {
-      "get": {
-        "summary": "Check user activation status",
-        "operationId": "Cover_CheckUserActivation",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CheckUserActivationResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "userId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -11084,6 +11111,9 @@
         "userId": {
           "type": "string"
         },
+        "previousPassword": {
+          "type": "string"
+        },
         "password": {
           "type": "string"
         },
@@ -11354,18 +11384,6 @@
           "description": "The current state of this schedule. Normally set to \"OK\", or empty if no issues. Otherwise, will contain an error string."
         }
       }
-    },
-    "v1CheckUserActivationResponse": {
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string"
-        },
-        "activated": {
-          "type": "boolean"
-        }
-      },
-      "title": "Response message for CheckUserActivation"
     },
     "v1CloudWatchMetricsStream": {
       "type": "object",
@@ -12154,7 +12172,7 @@
     "v1GetAccountsResponse": {
       "type": "object",
       "properties": {
-        "accountId": {
+        "accounts": {
           "type": "array",
           "items": {
             "type": "string"
@@ -12547,7 +12565,7 @@
     "v1GetPayersResponse": {
       "type": "object",
       "properties": {
-        "payerId": {
+        "payers": {
           "type": "array",
           "items": {
             "type": "string"
