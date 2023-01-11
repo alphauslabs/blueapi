@@ -148,6 +148,28 @@ service Cost {
     };
   }
 
+  // WORK-IN-PROGRESS: Lists the cost calculator's cost modifiers. At the moment, the supported {vendor} is 'aws'. Only available in Ripple.
+  rpc ListCalculatorCostModifiers(ListCalculatorCostModifiersRequest) returns (ListCalculatorCostModifiersResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/calculator/config/costmods"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Creates a cost modifier. A cost modifier allows you to manipulate the cost per lineitem. At the moment, the supported {vendor} is 'aws'. Only available in Ripple.
+  rpc CreateCalculatorCostModifier(CreateCalculatorCostModifierRequest) returns (CreateCalculatorCostModifierResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/calculator/config/costmods"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Deletes a cost modifier. At the moment, the supported {vendor} is 'aws'. Only available in Ripple.
+  rpc DeleteCalculatorCostModifier(DeleteCalculatorCostModifierRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/{vendor}/calculator/config/costmods/{id}"
+    };
+  }
+
   // Initiates an ondemand import of all registered CUR files. See [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting] for more information.
   rpc ImportCurFiles(ImportCurFilesRequest) returns (api.Operation) {
     option (google.api.http) = {
@@ -374,7 +396,6 @@ service Cost {
       get: "/v1/{vendor}/bep/{orgId}"
     };
   }
-
 }
 
 // Request message for the Cost.ListPayerAccounts rpc.
@@ -561,6 +582,63 @@ message GetCalculatorConfigRequest {
 // Response message for the Cost.GetCalculatorConfig rpc.
 message GetCalculatorConfigResponse {
   api.aws.CalculatorConfig aws = 1;
+}
+
+message CalculatorCostModifier {
+  string id = 1;
+}
+
+// Request message for the Cost.ListCalculatorCostModifiers rpc.
+message ListCalculatorCostModifiersRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+}
+
+// Response message for the Cost.ListCalculatorCostModifiers rpc.
+message ListCalculatorCostModifiersResponse {
+  repeated CalculatorCostModifier aws = 1;
+}
+
+// Request message for the Cost.CreateCalculatorCostModifier rpc.
+message CreateCalculatorCostModifierRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  message AwsOptions {
+    string accountId = 1;
+    string groupId = 2;
+    string payerId = 3;
+
+    message Qualifier {
+      map<string, string> and = 1;
+    }
+
+    repeated Qualifier qualifiers = 4;
+
+    message Single {
+      string modifier = 1;
+      string descriptionModifier = 2;
+    }
+
+    Single single = 5;
+  }
+
+  // Required if `{vendor}` is `aws`. AWS-specific options.
+  AwsOptions awsOptions = 2;
+}
+
+// Response message for the Cost.CreateCalculatorCostModifier rpc.
+message CreateCalculatorCostModifierResponse {
+  string id = 1;
+}
+
+// Request message for the Cost.DeleteCalculatorCostModifier rpc.
+message DeleteCalculatorCostModifierRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. The id of the modifier to delete.
+  string id = 2;
 }
 
 // Request message for the Cost.ImportCurFiles rpc.
