@@ -586,6 +586,7 @@ message GetCalculatorConfigResponse {
 
 message CalculatorCostModifier {
   string id = 1;
+  string createTime = 2;
 }
 
 // Request message for the Cost.ListCalculatorCostModifiers rpc.
@@ -604,15 +605,22 @@ message CreateCalculatorCostModifierRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
+  // AWS-specific options definition.
   message AwsOptions {
+    // Optional. The account to which the modifier is applied. A comma-separated list of accounts is also valid.
     string accountId = 1;
+
+    // Optional. The group to which the modifier is applied. Accepts billing internal ids. A comma-separated list of billing internal ids is also valid.
     string groupId = 2;
+
+    // Optional. The payer id to which the modifier is applied. A comma-separated list of payer ids is also valid.
     string payerId = 3;
 
     message Qualifier {
       map<string, string> and = 1;
     }
 
+    // Optional. Conditional qualifiers to further filter the modifier targets.
     repeated Qualifier qualifiers = 4;
 
     message Single {
