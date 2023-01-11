@@ -605,7 +605,7 @@ message CreateCalculatorCostModifierRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
-  // AWS-specific options definition.
+  // AWS-specific options definition. For overlapping cost modifier targets, the latest modifier will be applied. For example, you created a modifier for a specific account. Then you created another modifier for a billing group that includes that same account. In that case, the modifier for the billing group will be applied to the first account.
   message AwsOptions {
     // Optional. The account to which the modifier is applied. A comma-separated list of accounts is also valid.
     string accountId = 1;
@@ -616,19 +616,52 @@ message CreateCalculatorCostModifierRequest {
     // Optional. The payer id to which the modifier is applied. A comma-separated list of payer ids is also valid.
     string payerId = 3;
 
+    // A map of "key:value" attribute filters. The key indicates the column name while the value is the filter value prefixed by either "eq:" (equal), "re:" (regular expressions based on https://github.com/google/re2), or "!re:" (reverse "re:"). No prefix is the same as "eq:". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.
+    //
+    // For example, if you like apply your modifiers to `productCode:AmazonEC2`, set to `{"productCode":"eq:AmazonEC2"}` or `{"productCode":"AmazonEC2"}`. You can also use a regular expression like `{"productCode":"re:AmazonEC2|AmazonRDS"}`, which means apply to all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{"productCode":"!re:^AmazonEC2$"}`, which means apply to all items except `AmazonEC2`. Valid keys are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `invoiceId`, `description`, and `resourceId`.
     message Qualifier {
       map<string, string> and = 1;
     }
 
-    // Optional. Conditional qualifiers to further filter the modifier targets.
+    // Optional. Conditional qualifiers to further filter the modifier targets. Multiple qualifiers use the the logical `or` operator; `qualifiers[0] || qualifiers[1] || qualifiers[n]`.
     repeated Qualifier qualifiers = 4;
 
-    message Single {
+    // A simple modifier.
+    message Simple {
+      // Required. A simple arithmetic-based modifier. Supported operators are `+`, `-`, `*`, and `/`. Operator precedence follows the [C/C++](https://en.cppreference.com/w/cpp/language/operator_precedence) rules. You can also use parenthesis `()` to control precedence.
+      // Examples:
+      //  `1 + 2 * 3`
+      //  `(1 + 2) * 3`
+      //
+      // Modulo `%` is also supported. If both sides are integers, the resulting value is also an integer. Otherwise, the result will be a floating point number.
+      // Examples:
+      //  `3 % 2` -> 1
+      //  `7.8 % 5` -> 2.8
+      //
+      // Negation negates the number on the right.
+      // Examples:
+      //  `3 + -2` -> 1
+      //  `-(1 + 2) -> -3`
+      //
+      // You can use the `{{cost}}` variable to reference the original lineitem cost. For example, if you want to add $10 to the cost, you can use the formula: `{{cost}} + 10`. For trueunblended-type billing groups, `{{cost}}` refers to the calculated trueunblended cost.
+      //
+      // The `{{usage}}` variable can also refer to the usage amount of a lineitem. For example, if you want to use a different rate of $1.5, you can use the formula: `{{usage}} * 1.5`.
       string modifier = 1;
-      string descriptionModifier = 2;
+
+      // Optional. Add a prefix to the original description.
+      string descriptionPrefix = 2;
+
+      // Optional. Add a suffix to the original description.
+      string descriptionSuffix = 3;
+
+      // Optional. Replace the original description with the input.
+      string descriptionReplace = 4;
+
+      // Optional. Replace matching occurences with the input. The key part is the regular expression matcher based on https://github.com/google/re2, while the value is the replacement.
+      map<string, string> descriptionReplaceMatch = 5;
     }
 
-    Single single = 5;
+    Simple simple = 5;
   }
 
   // Required if `{vendor}` is `aws`. AWS-specific options.
