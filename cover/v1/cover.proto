@@ -545,6 +545,13 @@ service Cover {
       get: "/v1/{vendor}/services"
     };
   }
+
+  // Get list of available tags
+  rpc GetTags(GetTagsRequest) returns (GetTagsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/tags"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -1140,38 +1147,41 @@ message AccountAccess {
   // The account type. Payer or linked account.
   string accountType = 3;
 
+  // The payer account of the account.
+  string payerId = 4;
+
   // The role ARN that provides the cross-account access permissions.
-  string roleArn = 4;
+  string roleArn = 5;
 
   // The external id for this role.
-  string externalId = 5;
+  string externalId = 6;
 
   // The id of the CloudFormation stack deployed in the target account.
-  string stackId = 6;
+  string stackId = 7;
 
   // The region where the stack is deployed.
-  string stackRegion = 7;
+  string stackRegion = 8;
 
   // The latest template used to deploy the stack.
-  string templateUrl = 8;
+  string templateUrl = 9;
 
   // The s3 bucket name
-  string bucketName = 9;
+  string bucketName = 10;
 
   // Report path prefix
-  string prefix = 10;
+  string prefix = 11;
 
   // The report name
-  string reportName = 11;
+  string reportName = 12;
 
   // The status of registration for CUR export, API access and Cloudwatch streaming
-  api.cover.RegistrationStatus registrationStatus = 12;
+  api.cover.RegistrationStatus registrationStatus = 13;
 
   // This can be `latest`, `outdated`, or some error information.
-  string status = 13;
+  string status = 14;
 
   // The last updated timestamp, RFC3339 UTC.
-  string lastUpdated = 14;
+  string lastUpdated = 15;
 }
 
 // Request message for the CreateAccountAccess rpc.
@@ -1469,4 +1479,15 @@ message GetServicesRequest {
 // Response message for GetServices
 message GetServicesResponse {
   repeated string services = 1;
+}
+
+// Request message for GetTags
+message GetTagsRequest {
+  // Required. Cloud vendor.
+  string vendor = 1;
+}
+
+// Response message for GetTags
+message GetTagsResponse {
+  map<string, string> tags = 1;
 }
