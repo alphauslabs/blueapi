@@ -650,17 +650,22 @@ message CreateCalculatorCostModifierRequest {
       // The `{{usage}}` variable can also refer to the usage amount of a lineitem. For example, if you want to use a different rate of $1.5, you can use the formula: `{{usage}} * 1.5`.
       string modifier = 1;
 
-      // Optional. Add a prefix to the original description.
-      string descriptionPrefix = 2;
+      message DescriptionModifier {
+        // Optional. Add a prefix to the original description.
+        string prefix = 1;
 
-      // Optional. Add a suffix to the original description.
-      string descriptionSuffix = 3;
+        // Optional. Add a suffix to the original description.
+        string suffix = 2;
 
-      // Optional. Replace the original description with the input.
-      string descriptionReplace = 4;
+        // Optional. Replace the original description with the input.
+        string replace = 3;
 
-      // Optional. Replace matching occurences with the input. The key part is the regular expression matcher based on https://github.com/google/re2, while the value is the replacement.
-      map<string, string> descriptionReplaceMatch = 5;
+        // Optional. Replace matching occurences with the input. The key part is the regular expression matcher based on https://github.com/google/re2, while the value is the replacement. Multiple entries are applied in sequence.
+        map<string, string> descriptionReplaceMatch = 4;
+      }
+
+      // Optional. A simple description modifier.
+      DescriptionModifier descriptionModifier = 2;
     }
 
     Simple simple = 5;
