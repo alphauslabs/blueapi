@@ -624,9 +624,9 @@ message CalculatorCostModifierAwsOptions {
     //  `3 + -2` -> 1
     //  `-(1 + 2) -> -3`
     //
-    // You can use the `{{cost}}` variable to reference the original lineitem cost. For example, if you want to add $10 to the cost, you can use the formula: `{{cost}} + 10`. For trueunblended-type billing groups, `{{cost}}` refers to the calculated trueunblended cost.
+    // You can use the `cost` variable to reference the original lineitem cost. For example, if you want to add $10 to the cost, you can use the formula: `cost + 10`. For trueunblended-type billing groups, `cost` refers to the calculated trueunblended cost.
     //
-    // The `{{usage}}` variable refers to the usage amount of a lineitem. For example, if you want to use a different rate of $1.5, you can use the formula: `{{usage}} * 1.5`.
+    // The `usage` variable refers to the usage amount of a lineitem. For example, if you want to use a different rate of $1.5, you can use the formula: `usage * 1.5`.
     string modifier = 1;
 
     message DescriptionModifier {
@@ -653,7 +653,8 @@ message CalculatorCostModifierAwsOptions {
 message CalculatorCostModifier {
   string id = 1;
   string createTime = 2;
-  CalculatorCostModifierAwsOptions modifier = 3;
+  string updateTime = 3;
+  CalculatorCostModifierAwsOptions modifier = 4;
 }
 
 // Request message for the Cost.ListCalculatorCostModifiers rpc.
@@ -678,7 +679,7 @@ message CreateCalculatorCostModifierRequest {
 
 // Response message for the Cost.CreateCalculatorCostModifier rpc.
 message CreateCalculatorCostModifierResponse {
-  string id = 1;
+  repeated CalculatorCostModifier aws = 1;
 }
 
 // Request message for the Cost.DeleteCalculatorCostModifier rpc.
