@@ -149,7 +149,7 @@ service Cost {
   }
 
   // Lists the cost calculator's cost modifiers. At the moment, the supported {vendor} is 'aws'. Only available in Ripple.
-  rpc ListCalculatorCostModifiers(ListCalculatorCostModifiersRequest) returns (ListCalculatorCostModifiersResponse) {
+  rpc ListCalculatorCostModifiers(ListCalculatorCostModifiersRequest) returns (stream CalculatorCostModifier) {
     option (google.api.http) = {
       get: "/v1/{vendor}/calculator/config/costmods"
     };
@@ -661,11 +661,6 @@ message CalculatorCostModifier {
 message ListCalculatorCostModifiersRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
-}
-
-// Response message for the Cost.ListCalculatorCostModifiers rpc.
-message ListCalculatorCostModifiersResponse {
-  repeated CalculatorCostModifier aws = 1;
 }
 
 // Request message for the Cost.CreateCalculatorCostModifier rpc.
