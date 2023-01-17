@@ -605,29 +605,21 @@ message CalculatorCostModifierAwsOptions {
   // Optional. Conditional qualifiers to further filter the modifier targets. Multiple qualifiers use the logical `or` operator; `qualifiers[0] || qualifiers[1] || qualifiers[n]`.
   repeated Qualifier qualifiers = 4;
 
-  // A simple modifier.
-  message Simple {
-    // Required. A simple arithmetic-based modifier.
+  message Modifier {
+    // Required. Our modifier formula.
     //
-    // Supported operators are `+`, `-`, `*`, and `/`. Operator precedence follows the C/C++ rules described in https://en.cppreference.com/w/cpp/language/operator_precedence. You can also use parenthesis `()` to control precedence.
+    // Supported operators are `*`, `/`, `+`, `-`, and `%`. You can use parenthesis `()` to control precedence. Additional supported operators include `==`, `!=`, `!`, `>`, `<`, `>=`, `<=`, and the ternary operator `? :`, or `cond ? expr1 : expr2`.
     // Examples:
     //  `1 + 2 * 3` = 7
     //  `(1 + 2) * 3` = 9
-    //
-    // Modulo `%` is also supported. If both sides are integers, the resulting value is also an integer. Otherwise, the result will be a floating point number.
-    // Examples:
-    //  `3 % 2` = 1
     //  `7.8 % 5` = 2.8
-    //
-    // Negation negates the number on the right.
-    // Examples:
-    //  `3 + -2` = 1
-    //  `-(1 + 2) = -3`
+    //  `true ? 1.1 : 2.2` = 1.1
+    //  `1 > 2 ? 1.1 : 2.2` = 2.2
     //
     // You can use the `cost` variable to reference the original lineitem cost. For example, if you want to add $10 to the cost, you can use the formula: `cost + 10`. For trueunblended-type billing groups, `cost` refers to the calculated trueunblended cost.
     //
     // The `usage` variable refers to the usage amount of a lineitem. For example, if you want to use a different rate of $1.5, you can use the formula: `usage * 1.5`.
-    string modifier = 1;
+    string formula = 1;
 
     message DescriptionModifier {
       // Optional. Add a prefix to the description.
@@ -647,7 +639,7 @@ message CalculatorCostModifierAwsOptions {
     DescriptionModifier descriptionModifier = 2;
   }
 
-  Simple simple = 5;
+  Modifier modifier = 5;
 }
 
 message CalculatorCostModifier {
