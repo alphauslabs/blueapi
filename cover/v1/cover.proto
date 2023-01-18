@@ -535,28 +535,28 @@ service Cover {
   // Get list of registered accounts
   rpc GetAccounts(GetAccountsRequest) returns (GetAccountsResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/accounts"
+      get: "/v1/{vendor}/accounts/{costGroupId}"
     };
   }
 
   // Get list of supported services
   rpc GetServices(GetServicesRequest) returns (GetServicesResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/services"
+      get: "/v1/{vendor}/services/{costGroupId}"
     };
   }
 
   // Get list of available regions
   rpc GetRegions(GetRegionsRequest) returns (GetRegionsResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/regions"
+      get: "/v1/{vendor}/regions/{costGroupId}"
     };
   }
 
   // Get list of available tags
   rpc GetTags(GetTagsRequest) returns (GetTagsResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/tags"
+      get: "/v1/{vendor}/tags/{costGroupId}"
     };
   }
 }
@@ -1470,6 +1470,7 @@ message GetPayersResponse {
 message GetAccountsRequest {
   // Required. Cloud vendor.
   string vendor = 1;
+  string costGroupId = 2;
 }
 
 // Response message for GetAccounts
@@ -1481,6 +1482,7 @@ message GetAccountsResponse {
 message GetServicesRequest {
   // Required. Cloud vendor.
   string vendor = 1;
+  string costGroupId = 2;
 }
 
 // Response message for GetServices
@@ -1492,6 +1494,7 @@ message GetServicesResponse {
 message GetRegionsRequest {
   // Required. Cloud vendor.
   string vendor = 1;
+  string costGroupId = 2;
 }
 
 // Response message for GetRegions
@@ -1503,9 +1506,10 @@ message GetRegionsResponse {
 message GetTagsRequest {
   // Required. Cloud vendor.
   string vendor = 1;
+  string costGroupId = 2;
 }
 
 // Response message for GetTags
 message GetTagsResponse {
-  repeated api.cover.TagData tagKey = 1;
+  repeated api.cover.TagData tagData = 1;
 }

@@ -5169,38 +5169,6 @@
         ]
       }
     },
-    "/v1/{vendor_1}/accounts": {
-      "get": {
-        "summary": "Get list of registered accounts",
-        "operationId": "Cover_GetAccounts",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetAccountsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor_1",
-            "description": "Required. Cloud vendor.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
     "/v1/{vendor_1}/payers": {
       "get": {
         "summary": "Get list of all payers",
@@ -5275,38 +5243,6 @@
               },
               "title": "Request message for AssignPayer"
             }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/{vendor_1}/tags": {
-      "get": {
-        "summary": "Get list of available tags",
-        "operationId": "Cover_GetTags",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetTagsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor_1",
-            "description": "Required. Cloud vendor.",
-            "in": "path",
-            "required": true,
-            "type": "string"
           }
         ],
         "tags": [
@@ -5529,6 +5465,44 @@
         ],
         "tags": [
           "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/accounts/{costGroupId}": {
+      "get": {
+        "summary": "Get list of registered accounts",
+        "operationId": "Cover_GetAccounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAccountsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Cloud vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "costGroupId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
         ]
       }
     },
@@ -7633,7 +7607,7 @@
         ]
       }
     },
-    "/v1/{vendor}/regions": {
+    "/v1/{vendor}/regions/{costGroupId}": {
       "get": {
         "summary": "Get list of available regions",
         "operationId": "Cover_GetRegions",
@@ -7655,6 +7629,12 @@
           {
             "name": "vendor",
             "description": "Required. Cloud vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "costGroupId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -7779,7 +7759,7 @@
         ]
       }
     },
-    "/v1/{vendor}/services": {
+    "/v1/{vendor}/services/{costGroupId}": {
       "get": {
         "summary": "Get list of supported services",
         "operationId": "Cover_GetServices",
@@ -7801,6 +7781,12 @@
           {
             "name": "vendor",
             "description": "Required. Cloud vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "costGroupId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -7990,6 +7976,44 @@
         ],
         "tags": [
           "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/tags/{costGroupId}": {
+      "get": {
+        "summary": "Get list of available tags",
+        "operationId": "Cover_GetTags",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetTagsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Cloud vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "costGroupId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
         ]
       }
     },
@@ -10922,6 +10946,9 @@
     "coverTagData": {
       "type": "object",
       "properties": {
+        "tagKey": {
+          "type": "string"
+        },
         "tagValue": {
           "type": "array",
           "items": {
@@ -12983,7 +13010,7 @@
     "v1GetTagsResponse": {
       "type": "object",
       "properties": {
-        "tagKey": {
+        "tagData": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/coverTagData"
