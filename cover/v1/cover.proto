@@ -546,6 +546,13 @@ service Cover {
     };
   }
 
+  // Get list of available regions
+  rpc GetRegions(GetRegionsRequest) returns (GetRegionsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/regions"
+    };
+  }
+
   // Get list of available tags
   rpc GetTags(GetTagsRequest) returns (GetTagsResponse) {
     option (google.api.http) = {
@@ -1481,6 +1488,17 @@ message GetServicesResponse {
   repeated string services = 1;
 }
 
+// Request message for GetRegions
+message GetRegionsRequest {
+  // Required. Cloud vendor.
+  string vendor = 1;
+}
+
+// Response message for GetRegions
+message GetRegionsResponse {
+  repeated string regions = 1;
+}
+
 // Request message for GetTags
 message GetTagsRequest {
   // Required. Cloud vendor.
@@ -1489,5 +1507,5 @@ message GetTagsRequest {
 
 // Response message for GetTags
 message GetTagsResponse {
-  map<string, string> tags = 1;
+  repeated api.cover.TagData tagKey = 1;
 }
