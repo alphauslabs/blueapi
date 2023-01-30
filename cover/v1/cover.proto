@@ -1315,6 +1315,10 @@ message GetCostUsageRequestAwsOptions {
   // Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. 
   // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.
   repeated ReadCostsRequestAwsOptionsFilters filters = 3;
+
+  // Optional. A list of filtering options specific for tags. 
+  // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc. Discarded when `groupByColumns` field is set or if `groupByMonth` is true.
+  repeated ReadCostsRequestAwsOptionsFilters tagFilters = 4;
 }
 
 // A map of "key:value" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either "eq:" (equal), "re:" (regular expressions based on https://github.com/google/re2), or "!re:" (reverse "re:"). No prefix is the same as "eq:". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.
