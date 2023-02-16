@@ -2,9 +2,6 @@ syntax = "proto3";
 
 package blueapi.cover.v1;
 
-import "api/aws/cost.proto";
-import "api/gcp/cost.proto";
-import "api/azure/cost.proto";
 import "api/cover/user.proto";
 import "api/cover/view.proto";
 import "api/cover/costgroup.proto";
@@ -1330,10 +1327,17 @@ message ReadCostsRequestAwsOptionsFilters {
 
 // Response message wrapper for cloud costs.
 message CostItem {
-  api.aws.Cost aws = 1;
-  api.cover.AwsCostForecast awsForecast = 4;
-  api.gcp.Cost gcp = 2;
-  api.azure.Cost azure = 3;
+  //`aws`, `azure`, `azureea` or `gcp`
+  string vendor = 1;
+  string date = 2;
+  string product = 3;
+  // AWS linked account or Azure subscription or GCP project
+  string account = 4;
+  float cost = 5;
+  // JSON string
+  string details = 6;
+  //Only for AWS for now
+  api.cover.AwsCostForecast forecast = 7; 
 }
 
 // Request message for GetRightSizingRecommendation
