@@ -1292,6 +1292,9 @@ message GetCostUsageRequest {
   // Optional. Valid only for the `aws` vendor. AWS-specific options.
   GetCostUsageRequestAwsOptions awsOptions = 8;
 
+  // Optional. Valid only for the `azure` vendor. Azure-specific options.
+  GetCostUsageRequestAzureOptions azureOptions = 10;
+
   // Optional. If set to true, include cost forecast for current month 
   bool includeCostForecast = 9;
 }
@@ -1306,22 +1309,42 @@ message GetCostUsageRequestAwsOptions {
   string groupByColumns = 1;
 
   // Optional. If set to true, group all input accounts into one.
-  // Defaul is `true`
   bool groupAccounts = 2;
 
-  // Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. 
+  // Optional. A list of filtering options. See [ReadCostsRequestOptionsFilters] for more information on each filter item. 
   // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.
-  repeated ReadCostsRequestAwsOptionsFilters filters = 3;
+  repeated ReadCostsRequestOptionsFilters filters = 3;
 
   // Optional. A list of filtering options specific for tags. 
   // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc. Discarded when `groupByColumns` field is set or if `groupByMonth` is true.
-  repeated ReadCostsRequestAwsOptionsFilters tagFilters = 4;
+  repeated ReadCostsRequestOptionsFilters tagFilters = 4;
+}
+
+message GetCostUsageRequestAzureOptions {
+  // Optional. A comma-separated list of columns to aggregate the data into. 
+  // Valid values are 
+  // A special value of `none` is also supported, which means query by date or month per account only.
+  //
+  // For example, if you only want the services and region data, you can set this field to `productCode,region`. 
+  // Your input sequence doesn't matter (although the sequence above is recommended) as the actual sequence is already fixed in the return data (see the definition in https://github.com/alphauslabs/blueapi/blob/main/api/aws/cost.proto), which is generic to specific, top to bottom. Invalid values are discarded. Excluded columns will be empty.
+  string groupByColumns = 1;
+
+  // Optional. If set to true, group all input accounts into one.
+  bool groupAccounts = 2;
+
+  // Optional. A list of filtering options. See [ReadCostsRequestOptionsFilters] for more information on each filter item. 
+  // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.
+  repeated ReadCostsRequestOptionsFilters filters = 3;
+
+  // Optional. A list of filtering options specific for tags. 
+  // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc. 
+  repeated ReadCostsRequestOptionsFilters tagFilters = 4;
 }
 
 // A map of "key:value" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either "eq:" (equal), "re:" (regular expressions based on https://github.com/google/re2), or "!re:" (reverse "re:"). No prefix is the same as "eq:". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.
 //
 // For example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{"productCode":"eq:AmazonEC2"}` or `{"productCode":"AmazonEC2"}`. You can also use a regular expression like `{"productCode":"re:AmazonEC2|AmazonRDS"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{"productCode":"!re:^AmazonEC2$"}`, which means return all items except `AmazonEC2`.
-message ReadCostsRequestAwsOptionsFilters {
+message ReadCostsRequestOptionsFilters {
   map<string, string> andFilters = 1;
 }
 
