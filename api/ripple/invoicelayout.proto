@@ -1,0 +1,181 @@
+syntax = "proto3";
+
+package blueapi.api.ripple;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/ripple";
+option java_package = "cloud.alphaus.blueapi.api.ripple";
+option java_outer_classname = "ApiRippleInvoiceLayoutProto";
+
+// WORK-IN-PROGRESS: InvoiceLayout resource definition.
+// Definitions related to invoice display.
+message InvoiceLayout {
+  // The accountUsage is name of account usage.
+  // ex)ACCT_AWS_USAGE: "利用料合計"
+  string accountUsage = 1;
+
+  // total layout
+  totalInvoiceLayout total = 2;
+
+  // body layout
+  bodyInvoiceLayout body = 3;
+
+  // footer layout
+  footerInvoiceLayout footer = 4;
+
+  // header layout
+  footerInvoiceLayout header = 5;
+
+  // report layout
+  reportInvoiceLayout report = 6;
+}
+
+// WORK-IN-PROGRESS: totalInvoiceLayout resource definition.
+message totalInvoiceLayout {
+  // The vendorTotalUsage is name of vendor total usage.
+  // ex)ALL_AWS_USAGE: "AWS利用料"
+  string vendorTotalUsage = 1;
+
+  // The customTotalUsage is name of custom total usage.
+  // ex)ALL_CUSTOM_USAGE: "追加費用合計"
+  string customTotalUsage = 2;
+
+  // The discountTotalDiff is name of discount total diff.
+  // ex)ALL_DISCOUNT_DIFF: "値引後"
+  string discountTotalDiff = 3;
+
+  // The substitutionTotalFee is name of substitution total fee.
+  // ex)ALL_SUBSTITUTION: "請求代行手数料"
+  string substitutionTotalFee = 4;
+
+  // The supportTotalFee is name of support total fee.
+  // ex)ALL_SUPPORT_BUSINESS: "サポートビジネス費用"
+  string supportTotalFee = 5;
+
+  // The tax is name of tax.
+  // ex)ALL_TAX: "消費税"
+  string tax = 6;
+
+  // The taxDiff is name of tax diff.
+  // ex)ALL_TAX_DIFF: null
+  string taxDiff = 7;
+
+  // The totalExchangeRate is name of total exchange rate.
+  // ex)ALL_TOTAL_EXCHANGE: "日本円換算後（$1=JPY）"
+  string totalExchangeRate = 8;
+
+  // The totalUsage is name of total usage.
+  // ex)ALL_USAGE_TOTAL: "小計"
+  string totalUsage = 9;
+}
+
+// WORK-IN-PROGRESS: bodyInvoiceLayout resource definition.
+message bodyInvoiceLayout {
+  // The hideSpecificTotalLines is name of hide specific total lines.
+  // ex)BODY_HIDE_SPECIFIC_TOTAL_LINES: ["removeThisTextToApply _AWS_SUPPORT_BUSINESS"]
+  repeated string hideSpecificTotalLines = 1;
+
+  // The serviceDiscountDetail is setting for service discount detail.
+  // ex)BODY_SERVICE_DISCOUNT_DETAIL: true
+  bool serviceDiscountDetail = 2;
+
+  // The usageDiscount is setting for usage discount.
+  // ex)BODY_USAGE_DISCOUNT: true
+  bool usageDiscount = 3;
+}
+
+// WORK-IN-PROGRESS: footerInvoiceLayout resource definition.
+message footerInvoiceLayout {
+  // The attention is name of attention.
+  // ex)FT_ATTENTION: null
+  string attention = 1;
+
+  // The invoiceBank is setting for invoice bank.
+  // ex)FT_INVOICE_BANK: true
+  bool invoiceBank = 2;
+
+  // The invoiceBankContent is information of invoice bank content.
+  // ex)FT_INVOICE_BANK_CONTENT: "振込手数料はご負担ください。"
+  string invoiceBankContent = 3;
+
+  // The invoiceMemo is setting for invoice memo.
+  // ex)FT_INVOICE_MEMO: true
+  bool invoiceMemo = 4;
+
+  // The invoiceRemarks is setting for invoice remarks.
+  // ex)FT_INVOICE_REMARKS: true
+  bool invoiceRemarks = 5;
+}
+
+// WORK-IN-PROGRESS: headerInvoiceLayout resource definition.
+message headerInvoiceLayout {
+  // The billingAddress is information of billing address.
+  // ex)HEAD_BILLINGADDRESS: billing"
+  string billingAddress = 1;
+
+  // The billingGroupName is setting for billing group name.
+  // ex)HEAD_BILLINGGROUPNAME: true
+  bool billingGroupName = 2;
+
+  // The billingGroupStaff is setting for billing froup staff.
+  // ex)HEAD_BILLINGGROUPSTAFF: true
+  bool billingGroupStaff = 3;
+
+  // The companyAddress is setting for company address.
+  // ex)HEAD_COMPANY_ADDRESS: true
+  bool companyAddress = 4;
+
+  // The companyName is setting for company name.
+  // ex)HEAD_COMPANY_NAME: true
+  bool companyName = 5;
+
+  // The invoiceDate is setting for invoice date.
+  // ex)HEAD_INVOICE_DATE: true
+  bool invoiceDate = 6;
+
+  // The invoiceDue is setting for invoice due.
+  // ex)HEAD_INVOICE_DUE: true
+  bool invoiceDue = 7;
+
+  // The invoiceNo is setting for invoice No.
+  // ex)HEAD_INVOICE_NO: true
+  bool invoiceNo = 8;
+
+  // The invoiceQuantity is information of invoice quantity.
+  // ex)HEAD_INVOICE_QUANTITY: "１ヶ月分"
+  string invoiceQuantity = 9;
+
+  // The invoiceSummary is setting for invoice summary.
+  // ex)HEAD_INVOICE_SUMMARY: true
+  bool invoiceSummary = 10;
+
+  // The invoiceTitle is information of invoice title.
+  // ex)HEAD_INVOICE_TITLE: "AWSご利用金額"
+  string invoiceTitle = 11;
+
+  // The issueDateText is information of issue date text.
+  // ex)HEAD_ISSUE_DATE_TEXT: "tested message"
+  string issueDateText = 12;
+
+  // The mspInfo is setting for msp information.
+  // ex)HEAD_MSPINFO: true
+  bool mspInfo = 13;
+
+  // The mspLogo is setting for msp logo.
+  // ex)HEAD_MSPLOGO: true
+  bool mspLogo = 14;
+
+  // The mspStamp is setting for msp stamp.
+  // ex)HEAD_MSPSTAMP: true
+  bool mspStamp = 15;
+
+  // The paidText is information of paid text.
+  // ex)HEAD_PAID_TEXT: "paid message"
+  string paidText = 17;
+}
+
+// WORK-IN-PROGRESS: headerInvoiceLayout resource definition.
+message reportInvoiceLayout {
+  // The sectionEnable is setting for section.
+  // ex)REPORT_SECTION_ENABLE: "{ \"ja\": true, \"en\": true }"
+  string sectionEnable = 1;
+}
