@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package blueapi.api.ripple;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/ripple";
+option java_package = "cloud.alphaus.blueapi.api.ripple";
+option java_outer_classname = "ApiRippleDueDateProto";
+
+// DueDate resource definition.
+message DueDate {
+  // Due date set on the invoice
+  // Refer to the following for available values
+  // beginning_of_month: The beginning date of the month is automatically set.
+  // end_of_month: The end date of the month is automatically set.
+  // custom: Date can be specified.
+  string dueDateDay = 1;
+
+  // Due month set on the invoice
+  // Refer to the following for available values
+  // this_month: This month is automatically set.
+  // next_month: Next month is automatically set.
+  // month_after_next: Month after next is automatically set.
+  string dueDateMonth = 2;
+
+  // Customized due date set on the invoice
+  // Range 1 ~ 31
+  int32 dueDateCustomDay = 3;
+}
+
