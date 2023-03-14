@@ -9,9 +9,8 @@ option java_outer_classname = "ApiRippleInvoiceLayoutProto";
 // WORK-IN-PROGRESS: InvoiceLayout resource definition.
 // Definitions related to invoice display.
 message InvoiceLayout {
-  // The accountUsage is name of account usage.
-  // ex)ACCT_AWS_USAGE: "利用料合計"
-  string accountUsage = 1;
+  // total layout
+  accountInvoiceLayout account = 1;
 
   // total layout
   totalInvoiceLayout total = 2;
@@ -27,6 +26,29 @@ message InvoiceLayout {
 
   // report layout
   reportInvoiceLayout report = 6;
+}
+
+// WORK-IN-PROGRESS: accountInvoiceLayout resource definition.
+message accountInvoiceLayout {
+  // The marketplace is name of marketplace usage.
+  // ex)ACCT_AWS_MARKETPLACE: "Marketplace利用料金"
+  string marketplace = 1;
+
+  // The marketplace is name of marketplace fee usage.
+  // ex)ACCT_AWS_MARKETPLACE_FEES: "Marketplace 一時金 ご利用金額"
+  string marketplaceFee = 2;
+
+  // The supportFee is name of support fee usage.
+  // ex)ACCT_AWS_SUPPORT_BUSINESS: "AWS保守サービス利用料金"
+  string supportFee = 3;
+
+  // The accountUsage is name of account total usage.
+  // ex)ACCT_AWS_USAGE: "利用料合計"
+  string accountUsage = 4;
+
+  // The accountUsageOnly is name of account usage(Only related to vendor).
+  // ex)ACCT_AWS_USAGEONLY: "AWS利用料(MarketPlace利用料除く)"
+  string accountUsageOnly = 5;
 }
 
 // WORK-IN-PROGRESS: totalInvoiceLayout resource definition.
