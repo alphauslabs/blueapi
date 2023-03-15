@@ -5,7 +5,6 @@ package blueapi.cover.v1;
 import "api/cover/user.proto";
 import "api/cover/view.proto";
 import "api/cover/costgroup.proto";
-import "api/cover/asset.proto";
 import "api/cover/accountaccess.proto";
 import "api/cover/costforecast.proto";
 import "api/cover/rightsizingrecommendation.proto";
@@ -459,11 +458,18 @@ service Cover {
     };
   }
 
-  // WORK-IN-PROGRESS: Lists all assets per service. 
-  rpc ListAssets(ListAssetsRequest) returns (stream Asset) {
+  // WORK-IN-PROGRESS: Lists assets for costgroup 
+  rpc ListAssets(ListAssetsRequest) returns (stream Resource) {
     option (google.api.http) = {
       post: "/v1/assets:read"
       body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Assets summary for costgroup 
+  rpc GetAssetsSummary(GetAssetsSummaryRequest) returns (GetAssetsSummaryResponse) {
+    option (google.api.http) = {
+      get: "/v1/assets/summary/{costGroupId}"
     };
   }
 
@@ -494,14 +500,6 @@ service Cover {
   rpc TerminateResource(TerminateResourceRequest) returns (TerminateResourceResponse) {
     option (google.api.http) = {
       post: "/v1/{vendor}/resource/terminate"
-      body: "*"
-    };
-  }
-
-  // Gets the EC2 instances of all accounts in Cost Group
-  rpc GetEC2Instances(GetEC2InstancesRequest) returns (GetEC2InstancesResponse) {
-    option (google.api.http) = {
-      post: "/v1/ec2/instances:read"
       body: "*"
     };
   }
@@ -1229,27 +1227,92 @@ message ListAssetsRequest {
   string costGroupId = 1;
 
   // Optional. If not set, current month will be used. Format: `yyyymm`.
-  string startTime = 2;
+  string startMonth = 2;
 
   // Optional. If not set, current month will be used. Format: `yyyymm`.
-  string endTime = 3;
+  string endMonth = 3;
+
+  // Optional. If true, returns only all assets with recommendation
+  bool withRecommendation = 4;
 
   // Optional. For AWS-specific filter options.
-  ListAssetsAwsFilterOptions awsOptions = 4;
+  repeated ListAssetsFilters awsOptions = 5;
+
+  // Optional. For AWS-specific properties filter options.
+  repeated ListAssetsFilters awsPropertiesOptions = 6;
 }
 
-message ListAssetsAwsFilterOptions {
-  // Optional. Comma-separated list of services. If not set, all services are included.
-  string services = 1;
-
-  // Optional. Comma-separated list of regions. If not set, all regions are included.
-  string regions = 2;
+message ListAssetsFilters {
+  map<string, string> andFilters = 1;
 }
 
-message Asset {
-  // Format is `yyyy-mm-dd`; for monthly, `yyyy-mm`
-  string date = 1;
-  api.cover.Asset asset = 2;
+message Resource {
+	// Format is `yyyy-mm`
+	string date = 1;
+
+	// Organization ID
+	string orgId = 2;
+
+	// Only `aws` is supported for now.
+	string vendor = 3;
+
+	// Resource owner account
+	string account = 4;
+
+	// Only `AmazonEC2` is supported for now.
+	string service = 5;
+
+	// Resource unique identifier
+	string resourceId = 6;
+
+	// Only `AWS::EC2::Instance` is supported for now
+	string resourceType = 7;
+
+	// Cost incurred for the resource on specified month.
+	double cost = 8;
+
+	// Format: JSON String
+	string properties = 9;
+	
+	// Format: JSON String
+	string recommendation = 10;
+}
+
+message GetAssetsSummaryRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+
+  // Optional. If not set, current month will be used. Format: `yyyymm`.
+  string startMonth = 2;
+
+  // Optional. If not set, current month will be used. Format: `yyyymm`.
+  string endMonth = 3;
+
+  // Optional. For AWS-specific filter options.
+  repeated ListAssetsFilters awsOptions = 4;
+
+  // Optional. For AWS-specific properties filter options.
+  repeated ListAssetsFilters awsPropertiesOptions = 5;
+}
+
+message GetAssetsSummaryResponse {
+  // Format is `yyyy-mm`
+	string date = 1;
+
+	// Organization ID
+	string orgId = 2;
+
+  // Only `aws` is supported for now.
+	string vendor = 3;
+
+  // Total number of resources
+  int64 totalResources = 4;
+
+  // Total Cost incurred for the resources on specified month.
+  double totalCost = 5;
+
+  // Format: JSON String
+  string recommendationSummary = 6;
 }
 
 message ResolveCostGroupCombinationsRequest {
@@ -1419,26 +1482,6 @@ message TerminateResourceResponse {
   string accountId = 1;
   string resourceId = 2;
   string region = 3;
-}
-
-// Request message for GetEC2Instances
-message GetEC2InstancesRequest {
-  // Required. Cost Group Id.
-  string costGroupId = 1;
-
-  // Optional. If not set, current month will be used. Format: `yyyymm`.
-  string startTime = 2;
-
-  // Optional. If not set, current month will be used. Format: `yyyymm`.
-  string endTime = 3;
-
-  // Optional. A map of "key:value" column filters.
-  map<string, string> filters = 4;
-
-}
-
-message GetEC2InstancesResponse {
-  repeated api.cover.EC2Instance instances = 1;
 }
 
 // Status of upload file
