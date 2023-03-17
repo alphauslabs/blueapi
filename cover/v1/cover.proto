@@ -1288,31 +1288,34 @@ message GetAssetsSummaryRequest {
   // Optional. If not set, current month will be used. Format: `yyyymm`.
   string endMonth = 3;
 
+  // Optional. If true, return the assets summary for the requested period. Else, summary per month is returned.
+  bool combineDates = 4;
+
   // Optional. For AWS-specific filter options.
-  repeated ListAssetsFilters awsOptions = 4;
+  repeated ListAssetsFilters awsOptions = 5;
 
   // Optional. For AWS-specific properties filter options.
-  repeated ListAssetsFilters awsPropertiesOptions = 5;
+  repeated ListAssetsFilters awsPropertiesOptions = 6;
 }
 
 message GetAssetsSummaryResponse {
+  repeated AssetsSummary summary = 1;
+  // Format: JSON String
+  string recommendationSummary = 2;
+}
+
+message AssetsSummary {
   // Format is `yyyy-mm`
 	string date = 1;
 
-	// Organization ID
-	string orgId = 2;
-
   // Only `aws` is supported for now.
-	string vendor = 3;
+	string vendor = 2;
 
   // Total number of resources
-  int64 totalResources = 4;
+  int64 totalResources = 3;
 
   // Total Cost incurred for the resources on specified month.
-  double totalCost = 5;
-
-  // Format: JSON String
-  string recommendationSummary = 6;
+  double totalCost = 4;
 }
 
 message ResolveCostGroupCombinationsRequest {
