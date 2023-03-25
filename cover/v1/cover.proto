@@ -554,6 +554,43 @@ service Cover {
       get: "/v1/{vendor}/tags/{costGroupId}"
     };
   }
+
+  // Lists the fees
+  rpc ListFees(ListFeesRequest) returns (stream FeeDetails) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/fees/all:read"
+      body: "*"
+    };
+  }
+
+  // Gets the fee details
+  rpc GetFeeDetails(GetFeeDetailsRequest) returns (FeeDetails) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/fees/{feeId}"
+    };
+  }
+
+  // Create assignments for fee reallocation
+  rpc CreateFeeReallocation(CreateFeeReallocationRequest) returns (stream FeeDetails) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/fees"
+      body: "*"
+    };
+  }
+
+  // Update fee details
+  rpc UpdateFeeDetails(UpdateFeeDetailsRequest) returns (api.Operation) {
+    option (google.api.http) = {
+      put: "/v1/{vendor}/fees/{feeId}"
+    };
+  }
+
+  // Deletes fee details
+  rpc DeleteFeeDetails(DeleteFeeDetailsRequest) returns (DeleteFeeDetailsResponse) {
+    option (google.api.http) = {
+      delete: "/v1/{vendor}/fees/{feeId}"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -1588,4 +1625,71 @@ message GetTagsRequest {
 // Response message for GetTags
 message GetTagsResponse {
   repeated api.cover.TagData tagData = 1;
+}
+
+// Request message for the ListFees rpc.
+message ListFeesRequest {
+  string vendor = 1;
+  string month = 2;
+}
+
+// Request message for the GetFeeDetails rpc.
+message GetFeeDetailsRequest {
+  // Required. Cloud vendor.
+  string vendor = 1;
+  // Required. The fee id to query.
+  string feeId = 2;
+}
+
+// Response message for GetFeeDetails, CreateFeeReallocation rpc.
+message FeeDetails {
+  string feeId = 1;
+  string orgId = 2;
+  string entity = 3;
+  string month = 4;
+  string account = 5;
+  string lineType = 6;
+  string feeType = 7;
+  string productCode = 8;
+  string description = 9;
+  string started = 10;
+  string timeInterval = 11;
+  string productName = 12;
+  string currency = 13;
+  string splitStatus = 14;
+  bool isAllocated = 15;
+  bool isApplied = 16;
+  double unblendedCost = 17;
+  string lastUpdate = 18;
+}
+
+// Request message for the CreateFeeReallocation rpc.
+message CreateFeeReallocationRequest {
+  // Required. Cloud vendor.
+  string vendor = 1;
+  // Required. The fee to reallocate.
+  string feeId = 2;
+}
+
+// Request message for the UpdateFeeDetails rpc.
+message UpdateFeeDetailsRequest {
+  // Required. Cloud vendor.
+  string vendor = 1;
+  // Required. The fee to update.
+  string feeId = 2;
+}
+
+// Request message for the DeleteFeeDetails rpc.
+message DeleteFeeDetailsRequest {
+  // Required. Cloud vendor.
+  string vendor = 1;
+  // Required. The fee to delete.
+  string feeId = 2;
+}
+
+// Response message for the DeleteFeeDetails rpc.
+message DeleteFeeDetailsResponse {
+  // Required. Cloud vendor.
+  string vendor = 1;
+  string feeId = 2;
 }

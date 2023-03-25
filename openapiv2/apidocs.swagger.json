@@ -2219,9 +2219,62 @@
         ]
       }
     },
+    "/v1/assets/summary/{costGroupId}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Assets summary for costgroup",
+        "operationId": "Cover_GetAssetsSummary",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAssetsSummaryResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "startMonth",
+            "description": "Optional. If not set, current month will be used. Format: `yyyymm`.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "endMonth",
+            "description": "Optional. If not set, current month will be used. Format: `yyyymm`.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "combineDates",
+            "description": "Optional. If true, return the assets summary for the requested period. Else, summary per month is returned.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/assets:read": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Lists all assets per service.",
+        "summary": "WORK-IN-PROGRESS: Lists assets for costgroup",
         "operationId": "Cover_ListAssets",
         "responses": {
           "200": {
@@ -2230,13 +2283,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/coverv1Asset"
+                  "$ref": "#/definitions/v1Resource"
                 },
                 "error": {
                   "$ref": "#/definitions/googlerpcStatus"
                 }
               },
-              "title": "Stream result of coverv1Asset"
+              "title": "Stream result of v1Resource"
             }
           },
           "default": {
@@ -3226,39 +3279,6 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1GetCostUsageRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/ec2/instances:read": {
-      "post": {
-        "summary": "Gets the EC2 instances of all accounts in Cost Group",
-        "operationId": "Cover_GetEC2Instances",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetEC2InstancesResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetEC2InstancesRequest"
             }
           }
         ],
@@ -4325,6 +4345,200 @@
         ]
       }
     },
+    "/v1/resellers": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Lists all the reseller accounts. Only available in Ripple.",
+        "operationId": "Billing_ListResellers",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/rippleReseller"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of rippleReseller"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "fieldMask",
+            "description": "Optional. Get only the value that set fieldMask.\n\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Registers the reseller account. Only available in Ripple.",
+        "operationId": "Billing_CreateReseller",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/rippleReseller"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateResellerRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/resellers/{id}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets the reseller account. Only available in Ripple.",
+        "operationId": "Billing_GetReseller",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/rippleReseller"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. reseller id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "fieldMask",
+            "description": "Optional. Get only the value that set fieldMask.\n\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Deletes the reseller account. Only available in Ripple.",
+        "operationId": "Billing_DeleteReseller",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. reseller id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Updates the reseller account. Only available in Ripple.",
+        "operationId": "Billing_UpdateReseller",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/rippleReseller"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. reseller id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "groupId": {
+                  "type": "string",
+                  "description": "Optional. You can set billing internal id or access group id."
+                },
+                "email": {
+                  "type": "string",
+                  "description": "Optional."
+                },
+                "password": {
+                  "type": "string",
+                  "description": "Optional.\n\nWe recommend a password length of 8~32 characters. If you send 0 characters, a password will be generated automatically."
+                }
+              },
+              "description": "Request message for the UpdateReseller rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/rightsizingrecommendation/{costGroupId}": {
       "get": {
         "summary": "Gets the right sizing recommendation of all the accounts in the costgroup",
@@ -4619,6 +4833,38 @@
             "schema": {
               "$ref": "#/definitions/v1ListInvoiceServiceDiscountsRequest"
             }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/settings": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets all billing settings.",
+        "operationId": "Billing_GetBillingSetting",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBillingSettingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "fieldMask",
+            "description": "Optional. Get only the value that set fieldMask.\n\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -5630,7 +5876,7 @@
                 },
                 "accountId": {
                   "type": "string",
-                  "description": "Optional. If set, reads the non-usaged-based adjustment details of this account. Also invalidates the `billingInternalId` value even if set. If both `billingInternalId` and `accountId` are not set, reads the adjustment details of the whole organization."
+                  "description": "Optional. If set, reads the non-usaged-based adjustment details of this account. Also invalidates the `groupId` value even if set. If both `groupId` and `accountId` are not set, reads the adjustment details of the whole organization."
                 },
                 "startTime": {
                   "type": "string",
@@ -6933,6 +7179,229 @@
         ],
         "tags": [
           "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/fees": {
+      "post": {
+        "summary": "Create assignments for fee reallocation",
+        "operationId": "Cover_CreateFeeReallocation",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/coverv1FeeDetails"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of coverv1FeeDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Cloud vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "feeId": {
+                  "type": "string",
+                  "description": "Required. The fee to reallocate."
+                }
+              },
+              "description": "Request message for the CreateFeeReallocation rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/{vendor}/fees/all:read": {
+      "post": {
+        "summary": "Lists the fees",
+        "operationId": "Cover_ListFees",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/coverv1FeeDetails"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of coverv1FeeDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "month": {
+                  "type": "string"
+                }
+              },
+              "description": "Request message for the ListFees rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/{vendor}/fees/{feeId}": {
+      "get": {
+        "summary": "Gets the fee details",
+        "operationId": "Cover_GetFeeDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/coverv1FeeDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Cloud vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "feeId",
+            "description": "Required. The fee id to query.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes fee details",
+        "operationId": "Cover_DeleteFeeDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteFeeDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Cloud vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "feeId",
+            "description": "Required. The fee to delete.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "put": {
+        "summary": "Update fee details",
+        "operationId": "Cover_UpdateFeeDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/blueapiapiOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Cloud vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "feeId",
+            "description": "Required. The fee to update.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
         ]
       }
     },
@@ -8289,6 +8758,17 @@
       },
       "description": "A map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
     },
+    "RoundingRoundingMethod": {
+      "type": "string",
+      "enum": [
+        "ROUND",
+        "ROUNDUP",
+        "ROUNDDOWN"
+      ],
+      "default": "ROUND",
+      "description": "- ROUND: round\n - ROUNDUP: round up\n - ROUNDDOWN: round down",
+      "title": "RoundingMethod"
+    },
     "apiAccountDetails": {
       "type": "object",
       "properties": {
@@ -8317,7 +8797,7 @@
         "feeDetails": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/apiFeeDetails"
+            "$ref": "#/definitions/blueapiapiFeeDetails"
           },
           "title": "feeDetails: Includes details of re-caluclated fee data"
         },
@@ -8638,21 +9118,6 @@
         }
       },
       "description": "Describes the features and whether or not they are enabled for a particular user."
-    },
-    "apiFeeDetails": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "currency": {
-          "type": "string"
-        },
-        "amount": {
-          "type": "number",
-          "format": "double"
-        }
-      }
     },
     "apiForecastData": {
       "type": "object",
@@ -9521,32 +9986,6 @@
         }
       }
     },
-    "apicoverAsset": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string",
-          "title": "Possible values: `account`, `subscription` or `project`"
-        },
-        "attributes": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "apicoverTag": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
-        }
-      }
-    },
     "apigcpCost": {
       "type": "object",
       "properties": {
@@ -10305,6 +10744,21 @@
         }
       }
     },
+    "blueapiapiFeeDetails": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
     "blueapiapiKeyValue": {
       "type": "object",
       "properties": {
@@ -10357,47 +10811,37 @@
       },
       "description": "Response message wrapper for cloud costs."
     },
-    "blueapicostv1ReadCostsRequestAwsOptionsFilters": {
-      "type": "object",
-      "properties": {
-        "andFilters": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      },
-      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
-    },
     "blueapicoverv1CostItem": {
       "type": "object",
       "properties": {
-        "aws": {
-          "$ref": "#/definitions/apiawsCost"
+        "vendor": {
+          "type": "string",
+          "title": "`aws`, `azure`, `azureea` or `gcp`"
         },
-        "awsForecast": {
-          "$ref": "#/definitions/coverAwsCostForecast"
+        "date": {
+          "type": "string"
         },
-        "gcp": {
-          "$ref": "#/definitions/apigcpCost"
+        "product": {
+          "type": "string"
         },
-        "azure": {
-          "$ref": "#/definitions/apiazureCost"
+        "account": {
+          "type": "string",
+          "title": "AWS linked account or Azure subscription or GCP project"
+        },
+        "cost": {
+          "type": "number",
+          "format": "double"
+        },
+        "details": {
+          "type": "string",
+          "title": "Could be AWS, Azure or GCP Cost"
+        },
+        "forecast": {
+          "$ref": "#/definitions/coverAwsCostForecast",
+          "title": "Only for AWS for now"
         }
       },
       "description": "Response message wrapper for cloud costs."
-    },
-    "blueapicoverv1ReadCostsRequestAwsOptionsFilters": {
-      "type": "object",
-      "properties": {
-        "andFilters": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      },
-      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
     },
     "coverAwsCostForecast": {
       "type": "object",
@@ -10568,134 +11012,6 @@
           "additionalProperties": {
             "type": "string"
           }
-        }
-      }
-    },
-    "coverEC2Instance": {
-      "type": "object",
-      "properties": {
-        "capacityReservationId": {
-          "type": "string",
-          "description": "The ID of the Capacity Reservation."
-        },
-        "ebsOptimized": {
-          "type": "boolean",
-          "description": "Indicates whether the instance is optimized for Amazon EBS I/O. This optimization\nprovides dedicated throughput to Amazon EBS and an optimized configuration\nstack to provide optimal I/O performance. This optimization isn't available\nwith all instance types. Additional usage charges apply when using an EBS\nOptimized instance."
-        },
-        "imageId": {
-          "type": "string",
-          "description": "The ID of the AMI used to launch the instance."
-        },
-        "instanceId": {
-          "type": "string",
-          "description": "The ID of the instance."
-        },
-        "instanceLifecycle": {
-          "type": "string",
-          "description": "Indicates whether this is a Spot Instance or a Scheduled Instance."
-        },
-        "instanceType": {
-          "type": "string",
-          "description": "The instance type."
-        },
-        "ipv6Address": {
-          "type": "string",
-          "description": "The IPv6 address assigned to the instance."
-        },
-        "kernelId": {
-          "type": "string",
-          "description": "The kernel associated with this instance, if applicable."
-        },
-        "keyName": {
-          "type": "string",
-          "description": "The name of the key pair, if this instance was launched with an associated key pair."
-        },
-        "launchTime": {
-          "type": "string",
-          "description": "The time the instance was launched."
-        },
-        "outpostArn": {
-          "type": "string",
-          "description": "The Amazon Resource Name (ARN) of the Outpost."
-        },
-        "platform": {
-          "type": "string",
-          "description": "The value is Windows for Windows instances; otherwise blank."
-        },
-        "platformDetails": {
-          "type": "string",
-          "description": "The platform details value for the instance. For more information, see AMI\nbilling information fields (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/billing-info-fields.html)\nin the Amazon EC2 User Guide."
-        },
-        "privateDnsName": {
-          "type": "string",
-          "description": "(IPv4 only) The private DNS hostname name assigned to the instance. This\nDNS hostname can only be used inside the Amazon EC2 network. This name is\nnot available until the instance enters the running state.\n\n[EC2-VPC] The Amazon-provided DNS server resolves Amazon-provided private\nDNS hostnames if you've enabled DNS resolution and DNS hostnames in your\nVPC. If you are not using the Amazon-provided DNS server in your VPC, your\ncustom domain name servers must resolve the hostname as appropriate."
-        },
-        "privateIpAddress": {
-          "type": "string",
-          "description": "The private IPv4 address assigned to the instance."
-        },
-        "publicDnsName": {
-          "type": "string",
-          "description": "(IPv4 only) The public DNS name assigned to the instance. This name is not\navailable until the instance enters the running state. For EC2-VPC, this\nname is only available if you've enabled DNS hostnames for your VPC."
-        },
-        "publicIpAddress": {
-          "type": "string",
-          "description": "The public IPv4 address, or the Carrier IP address assigned to the instance,\nif applicable.\n\nA Carrier IP address only applies to an instance launched in a subnet associated\nwith a Wavelength Zone."
-        },
-        "ramdiskId": {
-          "type": "string",
-          "description": "The RAM disk associated with this instance, if applicable."
-        },
-        "rootDeviceName": {
-          "type": "string",
-          "description": "The device name of the root device volume (for example, /dev/sda1)."
-        },
-        "rootDeviceType": {
-          "type": "string",
-          "description": "The root device type used by the AMI. The AMI can use an EBS volume or an\ninstance store volume."
-        },
-        "sourceDestCheck": {
-          "type": "boolean",
-          "description": "Indicates whether source/destination checking is enabled."
-        },
-        "spotInstanceRequestId": {
-          "type": "string",
-          "description": "If the request is a Spot Instance request, the ID of the request."
-        },
-        "sriovNetSupport": {
-          "type": "string",
-          "description": "Specifies whether enhanced networking with the Intel 82599 Virtual Function\ninterface is enabled."
-        },
-        "state": {
-          "type": "string",
-          "description": "The current state of the instance."
-        },
-        "subnetId": {
-          "type": "string",
-          "description": "[EC2-VPC] The ID of the subnet in which the instance is running."
-        },
-        "tags": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/apicoverTag"
-          },
-          "description": "Any tags assigned to the instance."
-        },
-        "usageOperation": {
-          "type": "string",
-          "description": "The usage operation value for the instance. For more information, see AMI\nbilling information fields (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/billing-info-fields.html)\nin the Amazon EC2 User Guide."
-        },
-        "virtualizationType": {
-          "type": "string",
-          "description": "The virtualization type of the instance."
-        },
-        "vpcId": {
-          "type": "string",
-          "description": "[EC2-VPC] The ID of the VPC in which the instance is running."
-        },
-        "date": {
-          "type": "string",
-          "title": "Format: `yyyy-mm`"
         }
       }
     },
@@ -11163,17 +11479,66 @@
         }
       }
     },
-    "coverv1Asset": {
+    "coverv1FeeDetails": {
       "type": "object",
       "properties": {
-        "date": {
-          "type": "string",
-          "title": "Format is `yyyy-mm-dd`; for monthly, `yyyy-mm`"
+        "feeId": {
+          "type": "string"
         },
-        "asset": {
-          "$ref": "#/definitions/apicoverAsset"
+        "orgId": {
+          "type": "string"
+        },
+        "entity": {
+          "type": "string"
+        },
+        "month": {
+          "type": "string"
+        },
+        "account": {
+          "type": "string"
+        },
+        "lineType": {
+          "type": "string"
+        },
+        "feeType": {
+          "type": "string"
+        },
+        "productCode": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "started": {
+          "type": "string"
+        },
+        "timeInterval": {
+          "type": "string"
+        },
+        "productName": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "splitStatus": {
+          "type": "string"
+        },
+        "isAllocated": {
+          "type": "boolean"
+        },
+        "isApplied": {
+          "type": "boolean"
+        },
+        "unblendedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "lastUpdate": {
+          "type": "string"
         }
-      }
+      },
+      "description": "Response message for GetFeeDetails, CreateFeeReallocation rpc."
     },
     "coverv1Status": {
       "type": "string",
@@ -11238,6 +11603,55 @@
       "default": "NULL_VALUE",
       "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
     },
+    "rippleDueDate": {
+      "type": "object",
+      "properties": {
+        "dueDateDay": {
+          "type": "string",
+          "description": "Due date set on the invoice\nRefer to the following for available values\nbeginning_of_month: The beginning date of the month is automatically set.\nend_of_month: The end date of the month is automatically set.\ncustom: Date can be specified."
+        },
+        "dueDateMonth": {
+          "type": "string",
+          "description": "Due month set on the invoice\nRefer to the following for available values\nthis_month: This month is automatically set.\nnext_month: Next month is automatically set.\nmonth_after_next: Month after next is automatically set."
+        },
+        "dueDateCustomDay": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Customized due date set on the invoice\nRange 1 ~ 31"
+        }
+      },
+      "description": "DueDate resource definition."
+    },
+    "rippleInvoiceLayout": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "$ref": "#/definitions/rippleaccountInvoiceLayout",
+          "title": "total layout"
+        },
+        "total": {
+          "$ref": "#/definitions/rippletotalInvoiceLayout",
+          "title": "total layout"
+        },
+        "body": {
+          "$ref": "#/definitions/ripplebodyInvoiceLayout",
+          "title": "body layout"
+        },
+        "footer": {
+          "$ref": "#/definitions/ripplefooterInvoiceLayout",
+          "title": "footer layout"
+        },
+        "header": {
+          "$ref": "#/definitions/rippleheaderInvoiceLayout",
+          "title": "header layout"
+        },
+        "report": {
+          "$ref": "#/definitions/ripplereportInvoiceLayout",
+          "title": "report layout"
+        }
+      },
+      "description": "WORK-IN-PROGRESS: InvoiceLayout resource definition.\nDefinitions related to invoice display."
+    },
     "rippleOrg": {
       "type": "object",
       "properties": {
@@ -11286,6 +11700,328 @@
         }
       },
       "description": "Payer resource definition."
+    },
+    "rippleReseller": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "reseller id. Generated automatically."
+        },
+        "email": {
+          "type": "string",
+          "title": "email"
+        },
+        "billingInternalId": {
+          "type": "string",
+          "title": "billing internal id"
+        },
+        "billingGroupId": {
+          "type": "string",
+          "title": "billing group id"
+        },
+        "billingGroupName": {
+          "type": "string",
+          "title": "billing group name"
+        },
+        "groupType": {
+          "type": "string",
+          "description": "group type\nRefer to the following for available values\nbilling_group: Billing Group.\naccess_group: Access Group."
+        },
+        "waveStatus": {
+          "type": "string",
+          "title": "wave status"
+        },
+        "waveConfig": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/rippleResellerConfig"
+          },
+          "title": "wave feature config"
+        },
+        "waveProConfig": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/rippleResellerConfig"
+          },
+          "title": "wave pro feature config"
+        },
+        "aquaConfig": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/rippleResellerConfig"
+          },
+          "title": "aqua feature config"
+        }
+      }
+    },
+    "rippleResellerConfig": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "title": "key"
+        },
+        "value": {
+          "type": "boolean",
+          "title": "value"
+        }
+      }
+    },
+    "rippleRounding": {
+      "type": "object",
+      "properties": {
+        "rounding": {
+          "$ref": "#/definitions/RoundingRoundingMethod",
+          "description": "The rounding method."
+        }
+      },
+      "description": "Rounding resource definition."
+    },
+    "rippleYearMonth": {
+      "type": "object",
+      "properties": {
+        "yearMonth": {
+          "type": "string",
+          "description": "List of the yearmonth."
+        }
+      },
+      "description": "YearMonth resource definition."
+    },
+    "rippleaccountInvoiceLayout": {
+      "type": "object",
+      "properties": {
+        "marketplace": {
+          "type": "string",
+          "title": "The marketplace is name of marketplace usage.\nex)ACCT_AWS_MARKETPLACE: \"Marketplace利用料金\""
+        },
+        "marketplaceFee": {
+          "type": "string",
+          "title": "The marketplace is name of marketplace fee usage.\nex)ACCT_AWS_MARKETPLACE_FEES: \"Marketplace 一時金 ご利用金額\""
+        },
+        "supportFee": {
+          "type": "string",
+          "title": "The supportFee is name of support fee usage.\nex)ACCT_AWS_SUPPORT_BUSINESS: \"AWS保守サービス利用料金\""
+        },
+        "accountUsage": {
+          "type": "string",
+          "title": "The accountUsage is name of account total usage.\nex)ACCT_AWS_USAGE: \"利用料合計\""
+        },
+        "accountUsageOnly": {
+          "type": "string",
+          "title": "The accountUsageOnly is name of account usage(Only related to vendor).\nex)ACCT_AWS_USAGEONLY: \"AWS利用料(MarketPlace利用料除く)\""
+        }
+      },
+      "description": "WORK-IN-PROGRESS: accountInvoiceLayout resource definition."
+    },
+    "ripplebodyInvoiceLayout": {
+      "type": "object",
+      "properties": {
+        "hideSpecificTotalLines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "The hideSpecificTotalLines is name of hide specific total lines.\nex)BODY_HIDE_SPECIFIC_TOTAL_LINES: [\"removeThisTextToApply _AWS_SUPPORT_BUSINESS\"]"
+        },
+        "serviceDiscountDetail": {
+          "type": "boolean",
+          "title": "The serviceDiscountDetail is setting for service discount detail.\nex)BODY_SERVICE_DISCOUNT_DETAIL: true"
+        },
+        "usageDiscount": {
+          "type": "boolean",
+          "title": "The usageDiscount is setting for usage discount.\nex)BODY_USAGE_DISCOUNT: true"
+        },
+        "hideMarketplace": {
+          "type": "boolean",
+          "title": "The hideMarketplace is setting for hide marketplace.\nex)BODY_HIDE_MARKETPLACE: true"
+        }
+      },
+      "description": "WORK-IN-PROGRESS: bodyInvoiceLayout resource definition."
+    },
+    "ripplefooterInvoiceLayout": {
+      "type": "object",
+      "properties": {
+        "attention": {
+          "type": "string",
+          "title": "The attention is name of attention.\nex)FT_ATTENTION: null"
+        },
+        "invoiceBank": {
+          "type": "boolean",
+          "title": "The invoiceBank is setting for invoice bank.\nex)FT_INVOICE_BANK: true"
+        },
+        "invoiceBankContent": {
+          "type": "string",
+          "title": "The invoiceBankContent is information of invoice bank content.\nex)FT_INVOICE_BANK_CONTENT: \"振込手数料はご負担ください。\""
+        },
+        "invoiceMemo": {
+          "type": "boolean",
+          "title": "The invoiceMemo is setting for invoice memo.\nex)FT_INVOICE_MEMO: true"
+        },
+        "invoiceRemarks": {
+          "type": "boolean",
+          "title": "The invoiceRemarks is setting for invoice remarks.\nex)FT_INVOICE_REMARKS: true"
+        },
+        "invoiceDiscountZero": {
+          "type": "boolean",
+          "title": "The invoiceDiscountZero is setting for invoice discount.\nex)FT_INVOICE_DISCOUNT_ZERO: true"
+        }
+      },
+      "description": "WORK-IN-PROGRESS: footerInvoiceLayout resource definition."
+    },
+    "rippleheaderInvoiceLayout": {
+      "type": "object",
+      "properties": {
+        "billingAddress": {
+          "type": "string",
+          "title": "The billingAddress is information of billing address.\nex)HEAD_BILLINGADDRESS: billing\""
+        },
+        "billingGroupName": {
+          "type": "boolean",
+          "title": "The billingGroupName is setting for billing group name.\nex)HEAD_BILLINGGROUPNAME: true"
+        },
+        "billingGroupStaff": {
+          "type": "boolean",
+          "title": "The billingGroupStaff is setting for billing froup staff.\nex)HEAD_BILLINGGROUPSTAFF: true"
+        },
+        "companyAddress": {
+          "type": "boolean",
+          "title": "The companyAddress is setting for company address.\nex)HEAD_COMPANY_ADDRESS: true"
+        },
+        "companyName": {
+          "type": "boolean",
+          "title": "The companyName is setting for company name.\nex)HEAD_COMPANY_NAME: true"
+        },
+        "invoiceDate": {
+          "type": "boolean",
+          "title": "The invoiceDate is setting for invoice date.\nex)HEAD_INVOICE_DATE: true"
+        },
+        "invoiceDue": {
+          "type": "boolean",
+          "title": "The invoiceDue is setting for invoice due.\nex)HEAD_INVOICE_DUE: true"
+        },
+        "invoiceNo": {
+          "type": "boolean",
+          "title": "The invoiceNo is setting for invoice No.\nex)HEAD_INVOICE_NO: true"
+        },
+        "invoiceQuantity": {
+          "type": "string",
+          "title": "The invoiceQuantity is information of invoice quantity.\nex)HEAD_INVOICE_QUANTITY: \"１ヶ月分\""
+        },
+        "invoiceSummary": {
+          "type": "boolean",
+          "title": "The invoiceSummary is setting for invoice summary.\nex)HEAD_INVOICE_SUMMARY: true"
+        },
+        "invoiceTitle": {
+          "type": "string",
+          "title": "The invoiceTitle is information of invoice title.\nex)HEAD_INVOICE_TITLE: \"AWSご利用金額\""
+        },
+        "issueDateText": {
+          "type": "string",
+          "title": "The issueDateText is information of issue date text.\nex)HEAD_ISSUE_DATE_TEXT: \"tested message\""
+        },
+        "mspInfo": {
+          "type": "boolean",
+          "title": "The mspInfo is setting for msp information.\nex)HEAD_MSPINFO: true"
+        },
+        "mspLogo": {
+          "type": "boolean",
+          "title": "The mspLogo is setting for msp logo.\nex)HEAD_MSPLOGO: true"
+        },
+        "mspStamp": {
+          "type": "boolean",
+          "title": "The mspStamp is setting for msp stamp.\nex)HEAD_MSPSTAMP: true"
+        },
+        "paidText": {
+          "type": "string",
+          "title": "The paidText is information of paid text.\nex)HEAD_PAID_TEXT: \"paid message\""
+        }
+      },
+      "description": "WORK-IN-PROGRESS: headerInvoiceLayout resource definition."
+    },
+    "ripplereportInvoiceLayout": {
+      "type": "object",
+      "properties": {
+        "sectionEnable": {
+          "type": "string",
+          "title": "The sectionEnable is setting for section.\nex)REPORT_SECTION_ENABLE: \"{ \\\"ja\\\": true, \\\"en\\\": true }\""
+        }
+      },
+      "description": "WORK-IN-PROGRESS: headerInvoiceLayout resource definition."
+    },
+    "rippletotalInvoiceLayout": {
+      "type": "object",
+      "properties": {
+        "marketplace": {
+          "type": "string",
+          "title": "The totalMarketplace is name of marketplace total usage.\nex)ALL_AWS_MARKETPLACE: \"\""
+        },
+        "marketplaceFee": {
+          "type": "string",
+          "title": "The totalMarketplaceFee is name of marketplace total fee usage.\nex)ALL_AWS_MARKETPLACE_FEES: \"\""
+        },
+        "vendorTotal": {
+          "type": "string",
+          "title": "The vendorTotal is name of vendor total usage.\nex)ALL_AWS_TOTAL: \"\""
+        },
+        "vendorUsageOnly": {
+          "type": "string",
+          "title": "The vendorUsageOnly is name of vendor usage only.\nex)ALL_AWS_USAGEONLY: \"\""
+        },
+        "vendorlUsage": {
+          "type": "string",
+          "title": "The vendorTotalUsage is name of vendor total usage.\nex)ALL_AWS_USAGE: \"AWS利用料\""
+        },
+        "customUsage": {
+          "type": "string",
+          "title": "The customTotalUsage is name of custom total usage.\nex)ALL_CUSTOM_USAGE: \"追加費用合計\""
+        },
+        "discount": {
+          "type": "string",
+          "title": "The discount is name of discount.\nex)ALL_DISCOUNT: \"\""
+        },
+        "discountDiff": {
+          "type": "string",
+          "title": "The discountTotalDiff is name of discount total diff.\nex)ALL_DISCOUNT_DIFF: \"値引後\""
+        },
+        "subTotal": {
+          "type": "string",
+          "title": "The subTotal is name of sub total.\nex)ALL_SUB_TOTAL: \"\""
+        },
+        "substitutionFee": {
+          "type": "string",
+          "title": "The substitutionTotalFee is name of substitution total fee.\nex)ALL_SUBSTITUTION: \"請求代行手数料\""
+        },
+        "supportFee": {
+          "type": "string",
+          "title": "The supportTotalFee is name of support total fee.\nex)ALL_SUPPORT_BUSINESS: \"サポートビジネス費用\""
+        },
+        "tax": {
+          "type": "string",
+          "title": "The tax is name of tax.\nex)ALL_TAX: \"消費税\""
+        },
+        "taxDiff": {
+          "type": "string",
+          "title": "The taxDiff is name of tax diff.\nex)ALL_TAX_DIFF: null"
+        },
+        "taxFree": {
+          "type": "string",
+          "title": "The taxFree is name of tax free.\nex)ALL_TAX_FREE: \"\""
+        },
+        "totalExchangeRate": {
+          "type": "string",
+          "title": "The totalExchangeRate is name of total exchange rate.\nex)ALL_TOTAL_EXCHANGE: \"日本円換算後（$1=JPY）\""
+        },
+        "totalUsage": {
+          "type": "string",
+          "title": "The totalUsage is name of total usage.\nex)ALL_USAGE_TOTAL: \"小計\""
+        },
+        "total": {
+          "type": "string",
+          "title": "The total is name of total.\nex)ALL_TOTAL: \"\""
+        }
+      },
+      "description": "WORK-IN-PROGRESS: totalInvoiceLayout resource definition."
     },
     "v1AccessGroup": {
       "type": "object",
@@ -11459,6 +12195,29 @@
         }
       },
       "title": "Response message for AddSideMenuFavorite"
+    },
+    "v1AssetsSummary": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "title": "Format is `yyyy-mm`"
+        },
+        "vendor": {
+          "type": "string",
+          "description": "Only `aws` is supported for now."
+        },
+        "totalResources": {
+          "type": "string",
+          "format": "int64",
+          "title": "Total number of resources"
+        },
+        "totalCost": {
+          "type": "number",
+          "format": "double",
+          "description": "Total Cost incurred for the resources on specified month."
+        }
+      }
     },
     "v1AssignCostGroupMemberResponse": {
       "type": "object",
@@ -12262,6 +13021,28 @@
       },
       "description": "See [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting] for more information.\n\nSee [https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html] for more information. Requirements include: Additional report details = 'Include Resource IDS' enabled, Prefix = non-empty (recommendation only), Time granularity = 'Hourly', File format = 'text/csv'."
     },
+    "v1CreateResellerRequest": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "Required. You can set billing internal id or access group id."
+        },
+        "email": {
+          "type": "string",
+          "description": "Required."
+        },
+        "password": {
+          "type": "string",
+          "description": "Required.\n\nWe recommend a password length of 8~32 characters. If you send 0 characters, a password will be generated automatically."
+        },
+        "notification": {
+          "type": "boolean",
+          "description": "Required. If valid, you will be notified via email address."
+        }
+      },
+      "description": "Request message for the CreateReseller rpc."
+    },
     "v1CreateRoleRequest": {
       "type": "object",
       "properties": {
@@ -12435,6 +13216,19 @@
       },
       "title": "Response message for DeleteCostGroup"
     },
+    "v1DeleteFeeDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. Cloud vendor."
+        },
+        "feeId": {
+          "type": "string"
+        }
+      },
+      "description": "Response message for the DeleteFeeDetails rpc."
+    },
     "v1DeleteMemberResponse": {
       "type": "object",
       "properties": {
@@ -12538,6 +13332,21 @@
       },
       "title": "Response message for GetAccounts"
     },
+    "v1GetAssetsSummaryResponse": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1AssetsSummary"
+          }
+        },
+        "recommendationSummary": {
+          "type": "string",
+          "title": "Format: JSON String"
+        }
+      }
+    },
     "v1GetBillingGroupResponse": {
       "type": "object",
       "properties": {
@@ -12546,6 +13355,42 @@
         }
       },
       "description": "Response message for the Billing.GetBillingGroup rpc."
+    },
+    "v1GetBillingSettingResponse": {
+      "type": "object",
+      "properties": {
+        "yearMonth": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/rippleYearMonth"
+          },
+          "description": "List of available yearmonth."
+        },
+        "roundingMethod": {
+          "$ref": "#/definitions/rippleRounding",
+          "description": "Rounding method."
+        },
+        "exportRoundingMethod": {
+          "$ref": "#/definitions/rippleRounding",
+          "description": "Rounding method for Export CSV."
+        },
+        "invoiceLayout": {
+          "$ref": "#/definitions/rippleInvoiceLayout",
+          "description": "Invoice layout."
+        },
+        "invoiceDueDate": {
+          "$ref": "#/definitions/rippleDueDate",
+          "description": "Invoice due date."
+        },
+        "supportCurrency": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of available currency."
+        }
+      },
+      "description": "Response message for the GetBillingSetting rpc."
     },
     "v1GetBreakevenPointResponse": {
       "type": "object",
@@ -12659,6 +13504,10 @@
           "$ref": "#/definitions/v1GetCostUsageRequestAwsOptions",
           "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
         },
+        "azureOptions": {
+          "$ref": "#/definitions/v1GetCostUsageRequestAzureOptions",
+          "description": "Optional. Valid only for the `azure` vendor. Azure-specific options."
+        },
         "includeCostForecast": {
           "type": "boolean",
           "title": "Optional. If set to true, include cost forecast for current month"
@@ -12674,14 +13523,48 @@
         },
         "groupAccounts": {
           "type": "boolean",
-          "title": "Optional. If set to true, group all input accounts into one.\nDefaul is `true`"
+          "description": "Optional. If set to true, group all input accounts into one."
         },
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/blueapicoverv1ReadCostsRequestAwsOptionsFilters"
+            "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
           },
-          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
+          "description": "Optional. A list of filtering options. See [ReadCostsRequestOptionsFilters] for more information on each filter item. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
+        },
+        "tagFilters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options specific for tags. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc. Discarded when `groupByColumns` field is set or if `groupByMonth` is true."
+        }
+      }
+    },
+    "v1GetCostUsageRequestAzureOptions": {
+      "type": "object",
+      "properties": {
+        "groupByColumns": {
+          "type": "string",
+          "description": "Optional. A comma-separated list of columns to aggregate the data into. \nValid values are `accountId`, `serviceName`, `serviceTier`, `location`, `product`, `partNumber`, `resourceGuid`, `offerId`, `consumedService`, `departmentId`, `departmentName`, `resourceGroup`, `enrollment`, `additionalInfo`\nA special value of `none` is also supported, which means query by date or month per account only.\n\nFor example, if you only want the services and location data, you can set this field to `serviceName,location`."
+        },
+        "groupAccounts": {
+          "type": "boolean",
+          "description": "Optional. If set to true, group all input subscription into one."
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options. See [ReadCostsRequestOptionsFilters] for more information on each filter item. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
+        },
+        "tagFilters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options specific for tags. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
         }
       }
     },
@@ -12749,42 +13632,6 @@
         }
       },
       "description": "Response message for the Admin.GetDefaultCostAccessTemplateUrl rpc."
-    },
-    "v1GetEC2InstancesRequest": {
-      "type": "object",
-      "properties": {
-        "costGroupId": {
-          "type": "string",
-          "description": "Required. Cost Group Id."
-        },
-        "startTime": {
-          "type": "string",
-          "description": "Optional. If not set, current month will be used. Format: `yyyymm`."
-        },
-        "endTime": {
-          "type": "string",
-          "description": "Optional. If not set, current month will be used. Format: `yyyymm`."
-        },
-        "filters": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "Optional. A map of \"key:value\" column filters."
-        }
-      },
-      "title": "Request message for GetEC2Instances"
-    },
-    "v1GetEC2InstancesResponse": {
-      "type": "object",
-      "properties": {
-        "instances": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/coverEC2Instance"
-          }
-        }
-      }
     },
     "v1GetFavoriteViewsResponse": {
       "type": "object",
@@ -13174,16 +14021,14 @@
       },
       "description": "Response message for the Admin.ListAccountGroups rpc."
     },
-    "v1ListAssetsAwsFilterOptions": {
+    "v1ListAssetsFilters": {
       "type": "object",
       "properties": {
-        "services": {
-          "type": "string",
-          "description": "Optional. Comma-separated list of services. If not set, all services are included."
-        },
-        "regions": {
-          "type": "string",
-          "description": "Optional. Comma-separated list of regions. If not set, all regions are included."
+        "andFilters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       }
     },
@@ -13194,17 +14039,31 @@
           "type": "string",
           "description": "Required. Cost Group Id."
         },
-        "startTime": {
+        "startMonth": {
           "type": "string",
           "description": "Optional. If not set, current month will be used. Format: `yyyymm`."
         },
-        "endTime": {
+        "endMonth": {
           "type": "string",
           "description": "Optional. If not set, current month will be used. Format: `yyyymm`."
+        },
+        "withRecommendation": {
+          "type": "boolean",
+          "title": "Optional. If true, returns only all assets with recommendation"
         },
         "awsOptions": {
-          "$ref": "#/definitions/v1ListAssetsAwsFilterOptions",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ListAssetsFilters"
+          },
           "description": "Optional. For AWS-specific filter options."
+        },
+        "awsPropertiesOptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ListAssetsFilters"
+          },
+          "description": "Optional. For AWS-specific properties filter options."
         }
       },
       "description": "Request message for the Asset.ListResources rpc."
@@ -13489,7 +14348,7 @@
         "filters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/blueapicostv1ReadCostsRequestAwsOptionsFilters"
+            "$ref": "#/definitions/v1ReadCostsRequestAwsOptionsFilters"
           },
           "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
         },
@@ -13522,6 +14381,18 @@
         }
       },
       "description": "AWS-specific options for ReadCostsRequest."
+    },
+    "v1ReadCostsRequestAwsOptionsFilters": {
+      "type": "object",
+      "properties": {
+        "andFilters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
     },
     "v1ReadCostsRequestGcpOptions": {
       "type": "object",
@@ -13571,6 +14442,18 @@
         }
       },
       "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `service` to return only `Compute Engine`, set to `{\"service\":\"eq:Compute Engine\"}` or `{\"service\":\"Compute Engine\"}`. You can also use a regular expression like `{\"service\":\"re:Compute Engine|Cloud Storage\"}`, which means return all Compute Engine or Cloud Storage lineitems. Or reverse regexp, such as `{\"service\":\"!re:^Cloud Engine$\"}`, which means return all items except `Cloud Engine`."
+    },
+    "v1ReadCostsRequestOptionsFilters": {
+      "type": "object",
+      "properties": {
+        "andFilters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
     },
     "v1ReadTagCostsRequestAwsOptions": {
       "type": "object",
@@ -13676,6 +14559,52 @@
           "items": {
             "$ref": "#/definitions/apicoverAccount"
           }
+        }
+      }
+    },
+    "v1Resource": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "title": "Format is `yyyy-mm`"
+        },
+        "orgId": {
+          "type": "string",
+          "title": "Organization ID"
+        },
+        "vendor": {
+          "type": "string",
+          "description": "Only `aws` is supported for now."
+        },
+        "account": {
+          "type": "string",
+          "title": "Resource owner account"
+        },
+        "service": {
+          "type": "string",
+          "description": "Only `AmazonEC2` is supported for now."
+        },
+        "resourceId": {
+          "type": "string",
+          "title": "Resource unique identifier"
+        },
+        "resourceType": {
+          "type": "string",
+          "title": "Only `AWS::EC2::Instance` is supported for now"
+        },
+        "cost": {
+          "type": "number",
+          "format": "double",
+          "description": "Cost incurred for the resource on specified month."
+        },
+        "properties": {
+          "type": "string",
+          "title": "Format: JSON String"
+        },
+        "recommendation": {
+          "type": "string",
+          "title": "Format: JSON String"
         }
       }
     },
