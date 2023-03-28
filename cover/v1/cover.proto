@@ -7,6 +7,7 @@ import "api/cover/view.proto";
 import "api/cover/costgroup.proto";
 import "api/cover/accountaccess.proto";
 import "api/cover/costforecast.proto";
+import "api/cover/fee.proto";
 import "api/cover/rightsizingrecommendation.proto";
 import "api/operation.proto";
 import "google/api/annotations.proto";
@@ -570,25 +571,27 @@ service Cover {
     };
   }
 
-  // Create assignments for fee reallocation
-  rpc CreateFeeReallocation(CreateFeeReallocationRequest) returns (stream FeeDetails) {
+  // Recalculate fee based on criteria
+  rpc RecalculateFee(RecalculateFeeRequest) returns (stream FeeDetails) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/fees"
+      post: "/v1/{vendor}/fees/recalculate"
       body: "*"
     };
   }
 
-  // Update fee details
-  rpc UpdateFeeDetails(UpdateFeeDetailsRequest) returns (api.Operation) {
+  // Restore distributed fees
+  rpc RestoreFee(RestoreFeeRequest) returns (stream FeeDetails) {
     option (google.api.http) = {
-      put: "/v1/{vendor}/fees/{feeId}"
+      post: "/v1/{vendor}/fees/restore"
+      body: "*"
     };
   }
 
-  // Deletes fee details
-  rpc DeleteFeeDetails(DeleteFeeDetailsRequest) returns (DeleteFeeDetailsResponse) {
+  // Get all available fees for the specified cost group
+  rpc GetCostGroupFee(GetCostGroupFeeRequest) returns (stream FeeItem) {
     option (google.api.http) = {
-      delete: "/v1/{vendor}/fees/{feeId}"
+      post: "/v1/fees:read"
+      body: "*"
     };
   }
 }
@@ -1663,33 +1666,36 @@ message FeeDetails {
   string lastUpdate = 18;
 }
 
-// Request message for the CreateFeeReallocation rpc.
-message CreateFeeReallocationRequest {
+// Request message for the RecalculateFee rpc.
+message RecalculateFeeRequest {
   // Required. Cloud vendor.
   string vendor = 1;
-  // Required. The fee to reallocate.
+  repeated api.cover.Accounts accounts = 2;
+  repeated api.cover.CostGroups costGroups = 3;
+}
+
+// Request message for the RestoreFee rpc.
+message RestoreFeeRequest {
+  // Required. Cloud vendor.
+  string vendor = 1;
+  // Required. The fee to restore.
   string feeId = 2;
 }
 
-// Request message for the UpdateFeeDetails rpc.
-message UpdateFeeDetailsRequest {
-  // Required. Cloud vendor.
-  string vendor = 1;
-  // Required. The fee to update.
-  string feeId = 2;
+// Request message for the GetCostGroupFee rpc.
+message GetCostGroupFeeRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+  string startTime = 2;
+  string endTime = 3;
 }
 
-// Request message for the DeleteFeeDetails rpc.
-message DeleteFeeDetailsRequest {
-  // Required. Cloud vendor.
+// Response message wrapper for cost group fees.
+message FeeItem {
   string vendor = 1;
-  // Required. The fee to delete.
-  string feeId = 2;
-}
-
-// Response message for the DeleteFeeDetails rpc.
-message DeleteFeeDetailsResponse {
-  // Required. Cloud vendor.
-  string vendor = 1;
-  string feeId = 2;
+  string month = 2;
+  string product = 3;
+  string account = 4;
+  string type = 5;
+  double cost = 6;
 }

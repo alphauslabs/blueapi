@@ -3287,6 +3287,48 @@
         ]
       }
     },
+    "/v1/fees:read": {
+      "post": {
+        "summary": "Get all available fees for the specified cost group",
+        "operationId": "Cover_GetCostGroupFee",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1FeeItem"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1FeeItem"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetCostGroupFeeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/invoice/status/{id}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Gets an invoice. Only available in Ripple.",
@@ -7182,62 +7224,6 @@
         ]
       }
     },
-    "/v1/{vendor}/fees": {
-      "post": {
-        "summary": "Create assignments for fee reallocation",
-        "operationId": "Cover_CreateFeeReallocation",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/coverv1FeeDetails"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of coverv1FeeDetails"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. Cloud vendor.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "feeId": {
-                  "type": "string",
-                  "description": "Required. The fee to reallocate."
-                }
-              },
-              "description": "Request message for the CreateFeeReallocation rpc."
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
     "/v1/{vendor}/fees/all:read": {
       "post": {
         "summary": "Lists the fees",
@@ -7292,6 +7278,126 @@
         ]
       }
     },
+    "/v1/{vendor}/fees/recalculate": {
+      "post": {
+        "summary": "Recalculate fee based on criteria",
+        "operationId": "Cover_RecalculateFee",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/coverv1FeeDetails"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of coverv1FeeDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Cloud vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accounts": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/coverAccounts"
+                  }
+                },
+                "costGroups": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/coverCostGroups"
+                  }
+                }
+              },
+              "description": "Request message for the RecalculateFee rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/{vendor}/fees/restore": {
+      "post": {
+        "summary": "Restore distributed fees",
+        "operationId": "Cover_RestoreFee",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/coverv1FeeDetails"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of coverv1FeeDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Cloud vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "feeId": {
+                  "type": "string",
+                  "description": "Required. The fee to restore."
+                }
+              },
+              "description": "Request message for the RestoreFee rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/{vendor}/fees/{feeId}": {
       "get": {
         "summary": "Gets the fee details",
@@ -7321,80 +7427,6 @@
           {
             "name": "feeId",
             "description": "Required. The fee id to query.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      },
-      "delete": {
-        "summary": "Deletes fee details",
-        "operationId": "Cover_DeleteFeeDetails",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DeleteFeeDetailsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. Cloud vendor.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "feeId",
-            "description": "Required. The fee to delete.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      },
-      "put": {
-        "summary": "Update fee details",
-        "operationId": "Cover_UpdateFeeDetails",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/blueapiapiOperation"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. Cloud vendor.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "feeId",
-            "description": "Required. The fee to update.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -10843,6 +10875,20 @@
       },
       "description": "Response message wrapper for cloud costs."
     },
+    "coverAccounts": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "allocation": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "string"
+        }
+      }
+    },
     "coverAwsCostForecast": {
       "type": "object",
       "properties": {
@@ -11012,6 +11058,20 @@
           "additionalProperties": {
             "type": "string"
           }
+        }
+      }
+    },
+    "coverCostGroups": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "allocation": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "string"
         }
       }
     },
@@ -13216,19 +13276,6 @@
       },
       "title": "Response message for DeleteCostGroup"
     },
-    "v1DeleteFeeDetailsResponse": {
-      "type": "object",
-      "properties": {
-        "vendor": {
-          "type": "string",
-          "description": "Required. Cloud vendor."
-        },
-        "feeId": {
-          "type": "string"
-        }
-      },
-      "description": "Response message for the DeleteFeeDetails rpc."
-    },
     "v1DeleteMemberResponse": {
       "type": "object",
       "properties": {
@@ -13266,6 +13313,31 @@
         }
       },
       "description": "Response message for the ExportInvoiceFile rpc."
+    },
+    "v1FeeItem": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string"
+        },
+        "month": {
+          "type": "string"
+        },
+        "product": {
+          "type": "string"
+        },
+        "account": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "cost": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "description": "Response message wrapper for cost group fees."
     },
     "v1GetAccessGroupResponse": {
       "type": "object",
@@ -13443,6 +13515,22 @@
         }
       },
       "title": "Response message for GetCostGroupDetails"
+    },
+    "v1GetCostGroupFeeRequest": {
+      "type": "object",
+      "properties": {
+        "costGroupId": {
+          "type": "string",
+          "description": "Required. Cost Group Id."
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": "string"
+        }
+      },
+      "description": "Request message for the GetCostGroupFee rpc."
     },
     "v1GetCostGroupsResponse": {
       "type": "object",
