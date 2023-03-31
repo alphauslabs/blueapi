@@ -237,7 +237,7 @@ service Iam {
   // BETA: Creates a partner token for custom integrations.
   rpc CreatePartnerToken(CreatePartnerTokenRequest) returns (PartnerToken) {
     option (google.api.http) = {
-      post: "/iam/v1/{partner}/token"
+      post: "/iam/v1/partners/{id}/token"
       body: "*"
     };
   }
@@ -533,5 +533,5 @@ message PartnerToken {
 // Request message for the Iam.CreatePartnerToken rpc.
 message CreatePartnerTokenRequest {
   // Required. Partner id or audience for the token.
-  string partner = 1;
+  string id = 1;
 }
