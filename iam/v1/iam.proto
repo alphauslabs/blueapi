@@ -63,7 +63,7 @@ service Iam {
       delete: "/iam/v1/users/{id}"
     };
   }
-  
+
   // WORK-IN-PROGRESS: Creates a new root user for a billing group or access group.
   rpc CreateGroupRootUser(CreateGroupRootUserRequest) returns (api.GroupRootUser) {
     option (google.api.http) = {
@@ -231,6 +231,14 @@ service Iam {
   rpc DeleteIpFilter(DeleteIpFilterRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/iam/v1/ipfilters/{id}"
+    };
+  }
+
+  // BETA: Creates a partner token for custom integrations.
+  rpc CreatePartnerToken(CreatePartnerTokenRequest) returns (PartnerToken) {
+    option (google.api.http) = {
+      post: "/iam/v1/{partner}/token"
+      body: "*"
     };
   }
 }
@@ -516,4 +524,14 @@ message CreateIpFilterRequest {
 message DeleteIpFilterRequest {
   // The IP filter id to delete.
   string id = 1;
+}
+
+message PartnerToken {
+  string token = 1;
+}
+
+// Request message for the Iam.CreatePartnerToken rpc.
+message CreatePartnerTokenRequest {
+  // Required. Partner id or audience for the token.
+  string partner = 1;
 }
