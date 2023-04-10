@@ -10,6 +10,7 @@ import "api/ripple/yearmonth.proto";
 import "api/ripple/rounding.proto";
 import "api/ripple/invoicelayout.proto";
 import "api/ripple/duedate.proto";
+import "api/ripple/exchangerate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -201,6 +202,13 @@ service Billing {
   rpc GetBillingSetting(GetBillingSettingRequest) returns (GetBillingSettingResponse) {
     option (google.api.http) = {
       get: "/v1/settings"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Lists all exchange rate. Only available in Ripple.
+  rpc ListExchangeRates(ListExchangeRatesRequest) returns (ListExchangeRatesResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/exchangerate"
     };
   }
 }
@@ -720,4 +728,17 @@ message GetBillingSettingResponse {
 
   // List of available currency.
   repeated string supportCurrency = 6;
+}
+
+// Request message for the ListExchangeRates rpc.
+message ListExchangeRatesRequest {
+  // Required. vendor.
+  string vendor = 1;
+}
+
+// Response message for the ListExchangeRates rpc.
+message ListExchangeRatesResponse {
+  api.ripple.MonthlyExchangeRate aws = 1;
+  api.gcp.MonthlyExchangeRate gcp = 2;
+  api.azure.MonthlyExchangeRate azure = 3;
 }
