@@ -241,6 +241,14 @@ service Iam {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Refreshes an expired partner token. Only partners are expected to call this API.
+  rpc RefreshPartnerToken(RefreshPartnerTokenRequest) returns (PartnerToken) {
+    option (google.api.http) = {
+      post: "/iam/v1/partners/{id}/token:refresh"
+      body: "*"
+    };
+  }
 }
 
 // Request message for the Iam.WhoAmI rpc.
@@ -534,4 +542,13 @@ message PartnerToken {
 message CreatePartnerTokenRequest {
   // Required. Partner id or audience for the token.
   string id = 1;
+}
+
+// Request message for the Iam.RefreshPartnerToken rpc.
+message RefreshPartnerTokenRequest {
+  // Required. Partner id or audience for the token.
+  string id = 1;
+
+  // Required. The previous (old) token to be refreshed.
+  string token = 2;
 }
