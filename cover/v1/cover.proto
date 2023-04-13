@@ -610,6 +610,14 @@ service Cover {
     };
   }
 
+  // WORK-IN-PROGRESS: Creates fee adjustment allocator
+  rpc UpdateFeeAdjustmentAllocator(UpdateFeeAdjustmentAllocatorRequest) returns (UpdateFeeAdjustmentAllocatorResponse) {
+    option (google.api.http) = {
+      put: "/v1/{vendor}/fees/adjustment/allocators/{id}"
+      body: "*"
+    };
+  }
+
   // WORK-IN-PROGRESS: Deletes a fee adjustment allocator
   rpc DeleteFeeAdjustmentAllocator(DeleteFeeAdjustmentAllocatorRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -1727,17 +1735,14 @@ message FeeAdjustmentAllocatorAwsOptions {
   // Optional. The specific fee to be adjusted.
   string feeId = 1;
   
-  // Optional. Refers to the number of months the allocator is valid. Expires when validity is over. If not set, will not expire.
-  string validity = 2;
+  // Optional. The number of months the fee is to be distributed starting from startMonth.
+  int64 duration = 2;
 
   // Optional. The starting month of the allocator to be effective.
-  string start = 3;
+  string startMonth = 3;
   
   // Optional. The default account for remaining costs. If not set, will allocate the cost to the original account.
-  string default = 4;
-
-  // Optional. Distribution, reallocation or both.
-  string category = 5;
+  string defaultAccount = 4;
 
   // A map of "key:value" attribute filters. The key indicates the column name while the value is the filter value prefixed by either "eq:" (equal), "re:" (regular expressions based on https://github.com/google/re2), or "!re:" (reverse "re:"). No prefix is the same as "eq:". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.
   message Criteria {
@@ -1745,27 +1750,31 @@ message FeeAdjustmentAllocatorAwsOptions {
   }
   
   // Required. Criteria for the adjustment to be applied.
-  repeated Criteria criteria = 6;
+  repeated Criteria criteria = 5;
 
   message Allocator {
     // Required. The type of attribute where the adjustments are to be applied. Only `account` is supported for now. Planning to support `costgroup`, `tag`, and `region`.
     string attribute = 1;
+
+    // Required. The value for the specified attribute. AccountId for account attribute.
+    string value = 2;
 	
-	// Required. The formula to use to compute the value of the allocation on an attribute.
-	string formula = 2;
+	  // Required. The formula to use to compute the value of the allocation on an attribute.
+	  string formula = 3;
 	
-	// Optional. The number of months the adjustment is to be applied. If set, it will divide the cost equally to the number of months.
-	string duration = 3;
+	  // Optional. The number of months the adjustment is to be applied. If set, it will divide the cost equally to the number of months.
+	  int64 months = 4;
   }
 
-  repeated Allocator allocator = 7;
+  repeated Allocator allocator = 6;
 }
 
 message FeeAdjustmentAllocator {
   string id = 1;
-  string createTime = 2;
-  string updateTime = 3;
-  FeeAdjustmentAllocatorAwsOptions awsOptions = 4;
+  int64 expiration = 2;
+  string createTime = 3;
+  string updateTime = 4;
+  FeeAdjustmentAllocatorAwsOptions awsOptions = 5;
 }
 
 // Request message for the ListFeeAdjustmentAllocators rpc.
@@ -1779,13 +1788,38 @@ message CreateFeeAdjustmentAllocatorRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
+  // Optional. The number of months the allocator is active. If not set, allocator won't expire (always active)
+  int64 expiration = 2;
+
   // Required if `{vendor}` is `aws`. AWS-specific options.
-  FeeAdjustmentAllocatorAwsOptions awsOptions = 2;
+  FeeAdjustmentAllocatorAwsOptions awsOptions = 3;
 }
 
 // Response message for the CreateFeeAdjustmentAllocator rpc.
 message CreateFeeAdjustmentAllocatorResponse {
-  repeated FeeAdjustmentAllocator aws = 1;
+  int64 expiration = 1;
+  FeeAdjustmentAllocator aws = 2;
+}
+
+// Request message for the UpdateFeeAdjustmentAllocator rpc.
+message UpdateFeeAdjustmentAllocatorRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. The id of the allocator to delete.
+  string id = 2;
+
+  // Optional. The number of months the allocator is active. If not set, allocator won't expire (always active)
+  int64 expiration = 3;
+
+  // Required if `{vendor}` is `aws`. AWS-specific options.
+  FeeAdjustmentAllocatorAwsOptions awsOptions = 4;
+}
+
+// Response message for the UpdateFeeAdjustmentAllocator rpc.
+message UpdateFeeAdjustmentAllocatorResponse {
+  int64 expiration = 1;
+  FeeAdjustmentAllocator aws = 2;
 }
 
 // Request message for the DeleteFeeAdjustmentAllocator rpc.

@@ -1364,7 +1364,7 @@
     },
     "/iam/v1/partners/{id}/token": {
       "post": {
-        "summary": "BETA: Creates a partner token for custom integrations.",
+        "summary": "BETA: Creates a partner token for custom integrations. Available only to Ripple and Cover users.",
         "operationId": "Iam_CreatePartnerToken",
         "responses": {
           "200": {
@@ -1395,6 +1395,53 @@
             "schema": {
               "type": "object",
               "description": "Request message for the Iam.CreatePartnerToken rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
+    "/iam/v1/partners/{id}/token:refresh": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Refreshes an expired partner token. Only partners are expected to call this API.",
+        "operationId": "Iam_RefreshPartnerToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PartnerToken"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. Partner id or audience for the token.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "description": "Required. The previous (old) token to be refreshed."
+                }
+              },
+              "description": "Request message for the Iam.RefreshPartnerToken rpc."
             }
           }
         ],
@@ -7340,6 +7387,38 @@
         ]
       }
     },
+    "/v1/{vendor}/exchangerate": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Lists all exchange rate. Only available in Ripple.",
+        "operationId": "Billing_ListExchangeRates",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListExchangeRatesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/{vendor}/fees/adjustment/allocators": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Lists the fee adjustment allocators",
@@ -7412,6 +7491,11 @@
             "schema": {
               "type": "object",
               "properties": {
+                "expiration": {
+                  "type": "string",
+                  "format": "int64",
+                  "title": "Optional. The number of months the allocator is active. If not set, allocator won't expire (always active)"
+                },
                 "awsOptions": {
                   "$ref": "#/definitions/v1FeeAdjustmentAllocatorAwsOptions",
                   "description": "Required if `{vendor}` is `aws`. AWS-specific options."
@@ -7459,6 +7543,63 @@
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Creates fee adjustment allocator",
+        "operationId": "Cover_UpdateFeeAdjustmentAllocator",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateFeeAdjustmentAllocatorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. The id of the allocator to delete.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "expiration": {
+                  "type": "string",
+                  "format": "int64",
+                  "title": "Optional. The number of months the allocator is active. If not set, allocator won't expire (always active)"
+                },
+                "awsOptions": {
+                  "$ref": "#/definitions/v1FeeAdjustmentAllocatorAwsOptions",
+                  "description": "Required if `{vendor}` is `aws`. AWS-specific options."
+                }
+              },
+              "description": "Request message for the UpdateFeeAdjustmentAllocator rpc."
+            }
           }
         ],
         "tags": [
@@ -8951,12 +9092,17 @@
           "type": "string",
           "description": "Required. The type of attribute where the adjustments are to be applied. Only `account` is supported for now. Planning to support `costgroup`, `tag`, and `region`."
         },
+        "value": {
+          "type": "string",
+          "description": "Required. The value for the specified attribute. AccountId for account attribute."
+        },
         "formula": {
           "type": "string",
           "description": "Required. The formula to use to compute the value of the allocation on an attribute."
         },
-        "duration": {
+        "months": {
           "type": "string",
+          "format": "int64",
           "description": "Optional. The number of months the adjustment is to be applied. If set, it will divide the cost equally to the number of months."
         }
       }
@@ -11996,6 +12142,21 @@
       },
       "description": "DueDate resource definition."
     },
+    "rippleExchangeRate": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string",
+          "description": "The currency code."
+        },
+        "rate": {
+          "type": "number",
+          "format": "double",
+          "description": "The rate."
+        }
+      },
+      "description": "ExchangeRate resource definition."
+    },
     "rippleInvoiceLayout": {
       "type": "object",
       "properties": {
@@ -12025,6 +12186,24 @@
         }
       },
       "description": "WORK-IN-PROGRESS: InvoiceLayout resource definition.\nDefinitions related to invoice display."
+    },
+    "rippleMonthlyExchangeRate": {
+      "type": "object",
+      "properties": {
+        "month": {
+          "type": "string",
+          "title": "The year-month. format: yyyymm"
+        },
+        "exchangeRate": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/rippleExchangeRate"
+          },
+          "description": "The exchange rate."
+        }
+      },
+      "description": "MonthlyExchangeRate resource definition."
     },
     "rippleOrg": {
       "type": "object",
@@ -12675,6 +12854,10 @@
           "type": "string",
           "description": "The billing group name."
         },
+        "companyName": {
+          "type": "string",
+          "description": "The company’s name."
+        },
         "accounts": {
           "type": "array",
           "items": {
@@ -13196,12 +13379,12 @@
     "v1CreateFeeAdjustmentAllocatorResponse": {
       "type": "object",
       "properties": {
+        "expiration": {
+          "type": "string",
+          "format": "int64"
+        },
         "aws": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1FeeAdjustmentAllocator"
-          }
+          "$ref": "#/definitions/v1FeeAdjustmentAllocator"
         }
       },
       "description": "Response message for the CreateFeeAdjustmentAllocator rpc."
@@ -13661,6 +13844,10 @@
         "id": {
           "type": "string"
         },
+        "expiration": {
+          "type": "string",
+          "format": "int64"
+        },
         "createTime": {
           "type": "string"
         },
@@ -13679,21 +13866,18 @@
           "type": "string",
           "description": "Optional. The specific fee to be adjusted."
         },
-        "validity": {
+        "duration": {
           "type": "string",
-          "description": "Optional. Refers to the number of months the allocator is valid. Expires when validity is over. If not set, will not expire."
+          "format": "int64",
+          "description": "Optional. The number of months the fee is to be distributed starting from startMonth."
         },
-        "start": {
+        "startMonth": {
           "type": "string",
           "description": "Optional. The starting month of the allocator to be effective."
         },
-        "default": {
+        "defaultAccount": {
           "type": "string",
           "description": "Optional. The default account for remaining costs. If not set, will allocate the cost to the original account."
-        },
-        "category": {
-          "type": "string",
-          "description": "Optional. Distribution, reallocation or both."
         },
         "criteria": {
           "type": "array",
@@ -14679,6 +14863,21 @@
       },
       "description": "Response message for the ListCostFilters rpc."
     },
+    "v1ListExchangeRatesResponse": {
+      "type": "object",
+      "properties": {
+        "aws": {
+          "$ref": "#/definitions/rippleMonthlyExchangeRate"
+        },
+        "gcp": {
+          "$ref": "#/definitions/rippleMonthlyExchangeRate"
+        },
+        "azure": {
+          "$ref": "#/definitions/rippleMonthlyExchangeRate"
+        }
+      },
+      "description": "Response message for the ListExchangeRates rpc."
+    },
     "v1ListIdentityProvidersResponse": {
       "type": "object",
       "properties": {
@@ -15243,6 +15442,19 @@
         }
       },
       "title": "Response message for UpdateCostGroupName"
+    },
+    "v1UpdateFeeAdjustmentAllocatorResponse": {
+      "type": "object",
+      "properties": {
+        "expiration": {
+          "type": "string",
+          "format": "int64"
+        },
+        "aws": {
+          "$ref": "#/definitions/v1FeeAdjustmentAllocator"
+        }
+      },
+      "description": "Response message for the UpdateFeeAdjustmentAllocator rpc."
     },
     "v1UpdateMemberPermissionResponse": {
       "type": "object",
