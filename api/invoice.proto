@@ -35,8 +35,11 @@ message VendorDetail {
   // details: Includes account-by-account details
   repeated AccountDetails details = 1;
 
-  // groupDetails: Includes account-by-account details(custom service and additional item data). 
+  // groupDetails: Includes account-by-account details(fee item data). 
   repeated GroupDetails groupDetails = 2;
+
+  // groupCustomDetails: Includes account-by-account details(custom service and additional item data). 
+  repeated GroupCustomDetails groupCustomDetails = 5;
 
   // total: Includes data on billing totals
   repeated InvoiceTotal total = 3;
@@ -143,6 +146,12 @@ message InvoiceTotal {
 }
 
 message GroupDetails {
+  string name = 1;
+  string currency = 2;
+  double amount = 3;
+}
+
+message GroupCustomDetails {
   string name = 1;
   string currency = 2;
   double amount = 3;
