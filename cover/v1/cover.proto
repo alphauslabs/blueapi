@@ -624,6 +624,14 @@ service Cover {
       delete: "/v1/{vendor}/fees/adjustment/allocators/{id}"
     };
   }
+
+  // WORK-IN-PROGRESS: Do not use.
+  rpc ProxyCreateCompletion(ProxyCreateCompletionRequest) returns (stream ProxyCreateCompletionResponse) {
+    option (google.api.http) = {
+      post: "/v1/x/pcc"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -1830,4 +1838,12 @@ message DeleteFeeAdjustmentAllocatorRequest {
 
   // Required. The id of the allocator to delete.
   string id = 2;
+}
+
+message ProxyCreateCompletionRequest {
+  map<string, string> params = 1;
+}
+
+message ProxyCreateCompletionResponse {
+  string data = 1;
 }
