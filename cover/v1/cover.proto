@@ -7,7 +7,6 @@ import "api/cover/view.proto";
 import "api/cover/costgroup.proto";
 import "api/cover/accountaccess.proto";
 import "api/cover/costforecast.proto";
-import "api/cover/fee.proto";
 import "api/cover/rightsizingrecommendation.proto";
 import "api/operation.proto";
 import "google/api/annotations.proto";
@@ -273,6 +272,14 @@ service Cover {
   rpc UpdateViewWidget(UpdateViewWidgetRequest) returns (UpdateViewWidgetResponse) {
     option (google.api.http) = {
       put: "/v1/views/layout/{viewId}/{widgetId}"
+      body: "*"
+    };
+  }
+
+  // Update view's color theme
+  rpc UpdateViewColorTheme(UpdateViewColorThemeRequest) returns (UpdateViewColorThemeResponse) {
+    option (google.api.http) = {
+      put: "/v1/views/{viewId}/colortheme"
       body: "*"
     };
   }
@@ -559,22 +566,7 @@ service Cover {
   // Lists the fees
   rpc ListFees(ListFeesRequest) returns (stream FeeDetails) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/fees/all:read"
-      body: "*"
-    };
-  }
-
-  // Gets the fee details
-  rpc GetFeeDetails(GetFeeDetailsRequest) returns (FeeDetails) {
-    option (google.api.http) = {
-      get: "/v1/{vendor}/fees/{feeId}"
-    };
-  }
-
-  // Recalculate fee based on criteria
-  rpc RecalculateFee(RecalculateFeeRequest) returns (stream FeeDetails) {
-    option (google.api.http) = {
-      post: "/v1/{vendor}/fees/recalculate"
+      post: "/v1/fees/all:read"
       body: "*"
     };
   }
@@ -582,7 +574,7 @@ service Cover {
   // Restore distributed fees
   rpc RestoreFee(RestoreFeeRequest) returns (stream FeeDetails) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/fees/restore"
+      post: "/v1/fees/restore"
       body: "*"
     };
   }
@@ -596,24 +588,24 @@ service Cover {
   }
 
   // WORK-IN-PROGRESS: Lists the fee adjustment allocators
-  rpc ListFeeAdjustmentAllocators(ListFeeAdjustmentAllocatorsRequest) returns (stream FeeAdjustmentAllocator) {
+  rpc ListFeeAdjustmentAllocators(ListFeeAdjustmentAllocatorsRequest) returns (stream FeeAdjustmentAllocatorResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/fees/adjustment/allocators"
+      get: "/v1/fees/adjustment/allocators"
     };
   }
 
   // WORK-IN-PROGRESS: Creates fee adjustment allocator
-  rpc CreateFeeAdjustmentAllocator(CreateFeeAdjustmentAllocatorRequest) returns (CreateFeeAdjustmentAllocatorResponse) {
+  rpc CreateFeeAdjustmentAllocator(CreateFeeAdjustmentAllocatorRequest) returns (FeeAdjustmentAllocatorResponse) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/fees/adjustment/allocators"
+      post: "/v1/fees/adjustment/allocators"
       body: "*"
     };
   }
 
   // WORK-IN-PROGRESS: Creates fee adjustment allocator
-  rpc UpdateFeeAdjustmentAllocator(UpdateFeeAdjustmentAllocatorRequest) returns (UpdateFeeAdjustmentAllocatorResponse) {
+  rpc UpdateFeeAdjustmentAllocator(FeeAdjustmentAllocatorRequest) returns (FeeAdjustmentAllocatorResponse) {
     option (google.api.http) = {
-      put: "/v1/{vendor}/fees/adjustment/allocators/{id}"
+      put: "/v1/fees/adjustment/allocators/{id}"
       body: "*"
     };
   }
@@ -621,7 +613,7 @@ service Cover {
   // WORK-IN-PROGRESS: Deletes a fee adjustment allocator
   rpc DeleteFeeAdjustmentAllocator(DeleteFeeAdjustmentAllocatorRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1/{vendor}/fees/adjustment/allocators/{id}"
+      delete: "/v1/fees/adjustment/allocators/{id}"
     };
   }
 
@@ -984,6 +976,17 @@ message UpdateViewWidgetRequest {
 message UpdateViewWidgetResponse {
   string widgetId = 1;
   api.cover.WidgetData widgetData = 2;
+}
+
+// Request message for UpdateViewColorTheme
+message UpdateViewColorThemeRequest {
+  string viewId = 1;
+  string colorTheme = 2;
+}
+
+// Response message for UpdateViewColorTheme
+message UpdateViewColorThemeResponse {
+  api.cover.ViewData viewData = 1;
 }
 
 // Request message for DeleteView
@@ -1670,16 +1673,7 @@ message GetTagsResponse {
 
 // Request message for the ListFees rpc.
 message ListFeesRequest {
-  string vendor = 1;
-  string month = 2;
-}
-
-// Request message for the GetFeeDetails rpc.
-message GetFeeDetailsRequest {
-  // Required. Cloud vendor.
-  string vendor = 1;
-  // Required. The fee id to query.
-  string feeId = 2;
+  string month = 1;
 }
 
 // Response message for GetFeeDetails, CreateFeeReallocation rpc.
@@ -1705,20 +1699,10 @@ message FeeDetails {
   string lastUpdate = 19;
 }
 
-// Request message for the RecalculateFee rpc.
-message RecalculateFeeRequest {
-  // Required. Cloud vendor.
-  string vendor = 1;
-  repeated api.cover.Accounts accounts = 2;
-  repeated api.cover.CostGroups costGroups = 3;
-}
-
 // Request message for the RestoreFee rpc.
 message RestoreFeeRequest {
-  // Required. Cloud vendor.
-  string vendor = 1;
   // Required. The fee to restore.
-  string feeId = 2;
+  string feeId = 1;
 }
 
 // Request message for the GetCostGroupFee rpc.
@@ -1739,105 +1723,83 @@ message FeeItem {
   double cost = 6;
 }
 
-// Fee adjustment allocator for aws
-message FeeAdjustmentAllocatorAwsOptions {
-  // Optional. The specific fee to be adjusted.
-  string feeId = 1;
-  
-  // Optional. The number of months the fee is to be distributed starting from startMonth.
-  int64 duration = 2;
+message Allocator {
+  // Required. The type of attribute where the adjustments are to be applied. Only `account` is supported for now. Planning to support `costgroup`, `tag`, and `region`.
+  string attribute = 1;
 
-  // Optional. The starting month of the allocator to be effective.
-  string startMonth = 3;
-  
-  // Optional. The default account for remaining costs. If not set, will allocate the cost to the original account.
-  string defaultAccount = 4;
-
-  // A map of "key:value" attribute filters. The key indicates the column name while the value is the filter value prefixed by either "eq:" (equal), "re:" (regular expressions based on https://github.com/google/re2), or "!re:" (reverse "re:"). No prefix is the same as "eq:". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.
-  message Criteria {
-    map<string, string> and = 1;
-  }
-  
-  // Required. Criteria for the adjustment to be applied.
-  repeated Criteria criteria = 5;
-
-  message Allocator {
-    // Required. The type of attribute where the adjustments are to be applied. Only `account` is supported for now. Planning to support `costgroup`, `tag`, and `region`.
-    string attribute = 1;
-
-    // Required. The value for the specified attribute. AccountId for account attribute.
-    string value = 2;
+  // Required. The value for the specified attribute. AccountId for account attribute.
+  string value = 2;
 	
-	  // Required. The formula to use to compute the value of the allocation on an attribute.
-	  string formula = 3;
+  // Required. The formula to use to compute the value of the allocation on an attribute.
+  string formula = 3;
 	
-	  // Optional. The number of months the adjustment is to be applied. If set, it will divide the cost equally to the number of months.
-	  int64 months = 4;
-  }
-
-  repeated Allocator allocator = 6;
+	// Optional. The number of months the adjustment is to be applied. If set, it will divide the cost equally to the number of months.
+	int64 months = 4;
 }
 
-message FeeAdjustmentAllocator {
+// A map of "key:value" attribute filters. The key indicates the column name while the value is the filter value prefixed by either "eq:" (equal), "re:" (regular expressions based on https://github.com/google/re2), or "!re:" (reverse "re:"). No prefix is the same as "eq:". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.
+message Criteria {
+  map<string, string> and = 1;
+}
+
+message FeeAdjustmentAllocatorResponse {
+  string id = 1;
+  string orgId = 2;
+  int64 expiration = 3;
+  // Optional. The specific fee to be adjusted.
+  string feeId = 4;
+  // Optional. The number of months the fee is to be distributed starting from startMonth.
+  int64 duration = 5;
+  // Optional. The starting month of the allocator to be effective.
+  string startMonth = 6;
+  // Optional. The default account for remaining costs. If not set, will allocate the cost to the original account.
+  string defaultAccount = 7;
+  // Required. Criteria for the adjustment to be applied.
+  repeated Criteria criteria = 8;
+  repeated Allocator allocator = 9;
+  string createTime = 10;
+  string updateTime = 11;
+}
+
+message FeeAdjustmentAllocatorRequest {
   string id = 1;
   int64 expiration = 2;
-  string createTime = 3;
-  string updateTime = 4;
-  FeeAdjustmentAllocatorAwsOptions awsOptions = 5;
+  // Optional. The specific fee to be adjusted.
+  string feeId = 3;
+  // Optional. The number of months the fee is to be distributed starting from startMonth.
+  int64 duration = 4;
+  // Optional. The starting month of the allocator to be effective.
+  string startMonth = 5;
+  // Optional. The default account for remaining costs. If not set, will allocate the cost to the original account.
+  string defaultAccount = 6;
+  // Required. Criteria for the adjustment to be applied.
+  repeated Criteria criteria = 7;
+  repeated Allocator allocator = 8;
 }
 
 // Request message for the ListFeeAdjustmentAllocators rpc.
-message ListFeeAdjustmentAllocatorsRequest {
-  // Required. At the moment, only `aws` is supported.
-  string vendor = 1;
-}
+message ListFeeAdjustmentAllocatorsRequest {}
 
 // Request message for the CreateFeeAdjustmentAllocator rpc.
 message CreateFeeAdjustmentAllocatorRequest {
-  // Required. At the moment, only `aws` is supported.
-  string vendor = 1;
-
-  // Optional. The number of months the allocator is active. If not set, allocator won't expire (always active)
-  int64 expiration = 2;
-
-  // Required if `{vendor}` is `aws`. AWS-specific options.
-  FeeAdjustmentAllocatorAwsOptions awsOptions = 3;
-}
-
-// Response message for the CreateFeeAdjustmentAllocator rpc.
-message CreateFeeAdjustmentAllocatorResponse {
   int64 expiration = 1;
-  FeeAdjustmentAllocator aws = 2;
-}
-
-// Request message for the UpdateFeeAdjustmentAllocator rpc.
-message UpdateFeeAdjustmentAllocatorRequest {
-  // Required. At the moment, only `aws` is supported.
-  string vendor = 1;
-
-  // Required. The id of the allocator to delete.
-  string id = 2;
-
-  // Optional. The number of months the allocator is active. If not set, allocator won't expire (always active)
-  int64 expiration = 3;
-
-  // Required if `{vendor}` is `aws`. AWS-specific options.
-  FeeAdjustmentAllocatorAwsOptions awsOptions = 4;
-}
-
-// Response message for the UpdateFeeAdjustmentAllocator rpc.
-message UpdateFeeAdjustmentAllocatorResponse {
-  int64 expiration = 1;
-  FeeAdjustmentAllocator aws = 2;
+  // Optional. The specific fee to be adjusted.
+  string feeId = 2;
+  // Optional. The number of months the fee is to be distributed starting from startMonth.
+  int64 duration = 3;
+  // Optional. The starting month of the allocator to be effective.
+  string startMonth = 4;
+  // Optional. The default account for remaining costs. If not set, will allocate the cost to the original account.
+  string defaultAccount = 5;
+  // Required. Criteria for the adjustment to be applied.
+  repeated Criteria criteria = 6;
+  repeated Allocator allocator = 7;
 }
 
 // Request message for the DeleteFeeAdjustmentAllocator rpc.
 message DeleteFeeAdjustmentAllocatorRequest {
-  // Required. At the moment, only `aws` is supported.
-  string vendor = 1;
-
   // Required. The id of the allocator to delete.
-  string id = 2;
+  string id = 1;
 }
 
 // Request message for the ProxyCreateCompletion rpc.

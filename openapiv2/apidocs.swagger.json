@@ -3429,6 +3429,264 @@
         ]
       }
     },
+    "/v1/fees/adjustment/allocators": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Lists the fee adjustment allocators",
+        "operationId": "Cover_ListFeeAdjustmentAllocators",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1FeeAdjustmentAllocatorResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1FeeAdjustmentAllocatorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Creates fee adjustment allocator",
+        "operationId": "Cover_CreateFeeAdjustmentAllocator",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1FeeAdjustmentAllocatorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the CreateFeeAdjustmentAllocator rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateFeeAdjustmentAllocatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/fees/adjustment/allocators/{id}": {
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Deletes a fee adjustment allocator",
+        "operationId": "Cover_DeleteFeeAdjustmentAllocator",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. The id of the allocator to delete.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Creates fee adjustment allocator",
+        "operationId": "Cover_UpdateFeeAdjustmentAllocator",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1FeeAdjustmentAllocatorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "expiration": {
+                  "type": "string",
+                  "format": "int64"
+                },
+                "feeId": {
+                  "type": "string",
+                  "description": "Optional. The specific fee to be adjusted."
+                },
+                "duration": {
+                  "type": "string",
+                  "format": "int64",
+                  "description": "Optional. The number of months the fee is to be distributed starting from startMonth."
+                },
+                "startMonth": {
+                  "type": "string",
+                  "description": "Optional. The starting month of the allocator to be effective."
+                },
+                "defaultAccount": {
+                  "type": "string",
+                  "description": "Optional. The default account for remaining costs. If not set, will allocate the cost to the original account."
+                },
+                "criteria": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/definitions/v1Criteria"
+                  },
+                  "description": "Required. Criteria for the adjustment to be applied."
+                },
+                "allocator": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/definitions/v1Allocator"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/fees/all:read": {
+      "post": {
+        "summary": "Lists the fees",
+        "operationId": "Cover_ListFees",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/coverv1FeeDetails"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of coverv1FeeDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the ListFees rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListFeesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/fees/restore": {
+      "post": {
+        "summary": "Restore distributed fees",
+        "operationId": "Cover_RestoreFee",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/coverv1FeeDetails"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of coverv1FeeDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the RestoreFee rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RestoreFeeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/fees:read": {
       "post": {
         "summary": "Get all available fees for the specified cost group",
@@ -4827,6 +5085,7 @@
                 "accounts": {
                   "type": "array",
                   "items": {
+                    "type": "object",
                     "$ref": "#/definitions/v1AccountServiceDiscounts"
                   },
                   "description": "Required."
@@ -4875,6 +5134,7 @@
                 "accounts": {
                   "type": "array",
                   "items": {
+                    "type": "object",
                     "$ref": "#/definitions/v1AccountServiceDiscounts"
                   },
                   "description": "Required."
@@ -4976,6 +5236,7 @@
                 "accounts": {
                   "type": "array",
                   "items": {
+                    "type": "object",
                     "$ref": "#/definitions/v1AccountServiceDiscounts"
                   },
                   "description": "Required."
@@ -5243,6 +5504,7 @@
                 "layout": {
                   "type": "array",
                   "items": {
+                    "type": "object",
                     "$ref": "#/definitions/coverWidgetData"
                   }
                 }
@@ -5302,6 +5564,7 @@
                 "requests": {
                   "type": "array",
                   "items": {
+                    "type": "object",
                     "$ref": "#/definitions/coverLayoutRequests"
                   }
                 }
@@ -5466,6 +5729,51 @@
         ]
       }
     },
+    "/v1/views/{viewId}/colortheme": {
+      "put": {
+        "summary": "Update view's color theme",
+        "operationId": "Cover_UpdateViewColorTheme",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateViewColorThemeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "viewId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "colorTheme": {
+                  "type": "string"
+                }
+              },
+              "title": "Request message for UpdateViewColorTheme"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/views/{viewId}/sidemenufavorite": {
       "post": {
         "summary": "Add as side menu favorite",
@@ -5548,6 +5856,7 @@
                 "sidemenustate": {
                   "type": "array",
                   "items": {
+                    "type": "object",
                     "$ref": "#/definitions/coverSideMenuState"
                   }
                 }
@@ -5599,6 +5908,49 @@
                 }
               },
               "title": "Request message for RemoveSideMenuFavorite"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/x/pcc": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Do not use.",
+        "operationId": "Cover_ProxyCreateCompletion",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1ProxyCreateCompletionResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1ProxyCreateCompletionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the ProxyCreateCompletion rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ProxyCreateCompletionRequest"
             }
           }
         ],
@@ -6739,6 +7091,66 @@
         ]
       }
     },
+    "/v1/{vendor}/costattrs": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Reads the available cost attributes of an organization (Ripple) or billing group (Wave).",
+        "operationId": "Cost_GetCostAttributes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCostAttributesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "month",
+            "description": "Required. Format: `yyyy-mm`.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "groupId",
+            "description": "Optional. If set, reads the cost attributes of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Optional. You can set it to a single account or a comma-separated list of accounts. If set, overrides `groupId`",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "category",
+            "description": "Optional. A comma-separated list of dimensions to query. Valid values are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `invoiceId`, `description`, `resourceId` and `tags`. Sequence doesn't matter. An empty value implies all attributes will be returned.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/{vendor}/costattrs:read": {
       "post": {
         "summary": "Reads the available cost attributes of an organization (Ripple) or billing group (Wave). Similar to the 'ReadCosts' API but without the aggregated usages and costs. At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
@@ -7109,7 +7521,7 @@
               "properties": {
                 "groupId": {
                   "type": "string",
-                  "description": "Optional. If set to a particular billing group, calculate for that billing group. If empty, calculate for all billing groups.\n\nAt the moment, for AWS, this is only valid for account type billing groups, not tag billing groups. If a tag billing group is provided, it is discarded and the calculation is done for the whole organization."
+                  "description": "Optional. A comma-separated list of billing internal ids. If empty, calculate for all billing groups.\n\nAt the moment, for AWS, this is only valid for account type billing groups, not tag billing groups. If a tag billing group is provided, it is discarded and the calculation is done for the whole organization."
                 },
                 "month": {
                   "type": "string",
@@ -7410,407 +7822,6 @@
         ],
         "tags": [
           "Billing"
-        ]
-      }
-    },
-    "/v1/{vendor}/fees/adjustment/allocators": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Lists the fee adjustment allocators",
-        "operationId": "Cover_ListFeeAdjustmentAllocators",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1FeeAdjustmentAllocator"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1FeeAdjustmentAllocator"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      },
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Creates fee adjustment allocator",
-        "operationId": "Cover_CreateFeeAdjustmentAllocator",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CreateFeeAdjustmentAllocatorResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "expiration": {
-                  "type": "string",
-                  "format": "int64",
-                  "title": "Optional. The number of months the allocator is active. If not set, allocator won't expire (always active)"
-                },
-                "awsOptions": {
-                  "$ref": "#/definitions/v1FeeAdjustmentAllocatorAwsOptions",
-                  "description": "Required if `{vendor}` is `aws`. AWS-specific options."
-                }
-              },
-              "description": "Request message for the CreateFeeAdjustmentAllocator rpc."
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/{vendor}/fees/adjustment/allocators/{id}": {
-      "delete": {
-        "summary": "WORK-IN-PROGRESS: Deletes a fee adjustment allocator",
-        "operationId": "Cover_DeleteFeeAdjustmentAllocator",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "Required. The id of the allocator to delete.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      },
-      "put": {
-        "summary": "WORK-IN-PROGRESS: Creates fee adjustment allocator",
-        "operationId": "Cover_UpdateFeeAdjustmentAllocator",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateFeeAdjustmentAllocatorResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "Required. The id of the allocator to delete.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "expiration": {
-                  "type": "string",
-                  "format": "int64",
-                  "title": "Optional. The number of months the allocator is active. If not set, allocator won't expire (always active)"
-                },
-                "awsOptions": {
-                  "$ref": "#/definitions/v1FeeAdjustmentAllocatorAwsOptions",
-                  "description": "Required if `{vendor}` is `aws`. AWS-specific options."
-                }
-              },
-              "description": "Request message for the UpdateFeeAdjustmentAllocator rpc."
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/{vendor}/fees/all:read": {
-      "post": {
-        "summary": "Lists the fees",
-        "operationId": "Cover_ListFees",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/coverv1FeeDetails"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of coverv1FeeDetails"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "month": {
-                  "type": "string"
-                }
-              },
-              "description": "Request message for the ListFees rpc."
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/{vendor}/fees/recalculate": {
-      "post": {
-        "summary": "Recalculate fee based on criteria",
-        "operationId": "Cover_RecalculateFee",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/coverv1FeeDetails"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of coverv1FeeDetails"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. Cloud vendor.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "accounts": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/coverAccounts"
-                  }
-                },
-                "costGroups": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/coverCostGroups"
-                  }
-                }
-              },
-              "description": "Request message for the RecalculateFee rpc."
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/{vendor}/fees/restore": {
-      "post": {
-        "summary": "Restore distributed fees",
-        "operationId": "Cover_RestoreFee",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/coverv1FeeDetails"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of coverv1FeeDetails"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. Cloud vendor.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "feeId": {
-                  "type": "string",
-                  "description": "Required. The fee to restore."
-                }
-              },
-              "description": "Request message for the RestoreFee rpc."
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/{vendor}/fees/{feeId}": {
-      "get": {
-        "summary": "Gets the fee details",
-        "operationId": "Cover_GetFeeDetails",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/coverv1FeeDetails"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. Cloud vendor.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "feeId",
-            "description": "Required. The fee id to query.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
         ]
       }
     },
@@ -9077,40 +9088,6 @@
       },
       "description": "A map of \"key:value\" attribute filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like apply your modifiers to `productCode:AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means apply to all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means apply to all items except `AmazonEC2`. Valid keys are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `description`, and `resourceId`."
     },
-    "FeeAdjustmentAllocatorAwsOptionsAllocator": {
-      "type": "object",
-      "properties": {
-        "attribute": {
-          "type": "string",
-          "description": "Required. The type of attribute where the adjustments are to be applied. Only `account` is supported for now. Planning to support `costgroup`, `tag`, and `region`."
-        },
-        "value": {
-          "type": "string",
-          "description": "Required. The value for the specified attribute. AccountId for account attribute."
-        },
-        "formula": {
-          "type": "string",
-          "description": "Required. The formula to use to compute the value of the allocation on an attribute."
-        },
-        "months": {
-          "type": "string",
-          "format": "int64",
-          "description": "Optional. The number of months the adjustment is to be applied. If set, it will divide the cost equally to the number of months."
-        }
-      }
-    },
-    "FeeAdjustmentAllocatorAwsOptionsCriteria": {
-      "type": "object",
-      "properties": {
-        "and": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      },
-      "description": "A map of \"key:value\" attribute filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc."
-    },
     "IdentityProvidersamlInfo": {
       "type": "object",
       "properties": {
@@ -9215,6 +9192,7 @@
         "details": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiUsageDetails"
           },
           "title": "details: Vendor service fees included"
@@ -9222,6 +9200,7 @@
         "customDetails": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiCustomDetails"
           },
           "title": "customDetails: Includes details of custom service and additional item data"
@@ -9229,6 +9208,7 @@
         "feeDetails": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/blueapiapiFeeDetails"
           },
           "title": "feeDetails: Includes details of re-caluclated fee data"
@@ -9236,6 +9216,7 @@
         "total": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiAccountTotal"
           },
           "description": "substitution\nsupportFee \nusageOnlyTotal\nusageTotal",
@@ -9257,6 +9238,7 @@
         "metadata": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/blueapiapiKeyValue"
           },
           "description": "The attributes (key/value pair) of the AccountGroup."
@@ -9264,6 +9246,7 @@
         "accounts": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/blueapiapiAccount"
           }
         }
@@ -9321,6 +9304,7 @@
         "data": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiForecastData"
           }
         }
@@ -9339,6 +9323,7 @@
         "monthlyBudget": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiMonthlyBudget"
           }
         }
@@ -9374,6 +9359,7 @@
         "tags": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/blueapiapiKeyValue"
           },
           "description": "The attributes (key/value pair) of the costtag."
@@ -9564,7 +9550,8 @@
           "type": "string"
         },
         "frequency": {
-          "type": "string"
+          "type": "string",
+          "title": "daily, monthly"
         },
         "date": {
           "type": "string"
@@ -9964,6 +9951,7 @@
         "ondemandChart": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiOndemandChart"
           }
         }
@@ -9994,6 +9982,7 @@
         "optionsChart": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiOptionsChart"
           }
         }
@@ -10014,6 +10003,7 @@
         "policies": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiPolicy"
           }
         }
@@ -10057,6 +10047,7 @@
         "policies": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiPolicy"
           }
         }
@@ -10143,6 +10134,7 @@
         "chartData": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/blueapiapiChartData"
           }
         }
@@ -10154,6 +10146,7 @@
         "details": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiAccountDetails"
           },
           "title": "details: Includes account-by-account details"
@@ -10161,6 +10154,7 @@
         "groupDetails": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiGroupDetails"
           },
           "description": "groupDetails: Includes account-by-account details(fee item data)."
@@ -10168,6 +10162,7 @@
         "groupCustomDetails": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiGroupCustomDetails"
           },
           "description": "groupCustomDetails: Includes account-by-account details(custom service and additional item data)."
@@ -10175,6 +10170,7 @@
         "total": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiInvoiceTotal"
           },
           "title": "total: Includes data on billing totals"
@@ -10340,6 +10336,59 @@
         }
       }
     },
+    "apiawsCostAttribute": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "groupId": {
+          "type": "string"
+        },
+        "productCode": {
+          "type": "string"
+        },
+        "serviceCode": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "zone": {
+          "type": "string"
+        },
+        "usageType": {
+          "type": "string"
+        },
+        "instanceType": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "invoiceId": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "resourceId": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "costCategories": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "apiazureCost": {
       "type": "object",
       "properties": {
@@ -10436,7 +10485,8 @@
           "type": "string"
         },
         "type": {
-          "type": "string"
+          "type": "string",
+          "title": "account, subscription, project"
         }
       }
     },
@@ -10569,6 +10619,7 @@
         "chartData": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiawsChartData"
           }
         }
@@ -10583,12 +10634,14 @@
         "riCostReductions": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/awsRiCostReduction"
           }
         },
         "spCostReductions": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/awsSpCostReduction"
           }
         }
@@ -10603,18 +10656,21 @@
         "riRecommendations": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/awsRiRecommendation"
           }
         },
         "spRecommendations": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/awsSpRecommendation"
           }
         },
         "estimatedCoverage": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/awsReservationEstimatedCoverage"
           }
         }
@@ -10630,65 +10686,13 @@
         "excludedServicesFromUsage": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/awsExcludedServiceFromUsage"
           },
           "description": "List of services that are of type 'Usage' in CUR that are excluded,\noptionally converted to Adjustments."
         }
       },
       "description": "AWS's calculation engine configuration(s)."
-    },
-    "awsCostAttribute": {
-      "type": "object",
-      "properties": {
-        "account": {
-          "type": "string"
-        },
-        "groupId": {
-          "type": "string"
-        },
-        "productCode": {
-          "type": "string"
-        },
-        "serviceCode": {
-          "type": "string"
-        },
-        "region": {
-          "type": "string"
-        },
-        "zone": {
-          "type": "string"
-        },
-        "usageType": {
-          "type": "string"
-        },
-        "instanceType": {
-          "type": "string"
-        },
-        "operation": {
-          "type": "string"
-        },
-        "invoiceId": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "resourceId": {
-          "type": "string"
-        },
-        "tags": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        },
-        "costCategories": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      }
     },
     "awsCostReductionSummary": {
       "type": "object",
@@ -11165,6 +11169,7 @@
         "metadata": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/blueapiapiKeyValue"
           },
           "description": "The attributes (key/value pair) of the account."
@@ -11297,17 +11302,20 @@
       },
       "description": "Response message wrapper for cloud costs."
     },
-    "coverAccounts": {
+    "costv1CostAttribute": {
       "type": "object",
       "properties": {
-        "accountId": {
+        "vendor": {
           "type": "string"
         },
-        "allocation": {
+        "category": {
           "type": "string"
         },
-        "duration": {
-          "type": "string"
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -11377,6 +11385,7 @@
         "filters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
           "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
@@ -11384,6 +11393,7 @@
         "tagFilters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
           "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
@@ -11397,6 +11407,7 @@
         "filters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
           "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
@@ -11404,6 +11415,7 @@
         "tagFilters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
           "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
@@ -11441,6 +11453,7 @@
         "members": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverMemberUserData"
           }
         },
@@ -11458,6 +11471,7 @@
         "filters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
           "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
@@ -11465,6 +11479,7 @@
         "tagFilters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
           "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
@@ -11480,20 +11495,6 @@
           "additionalProperties": {
             "type": "string"
           }
-        }
-      }
-    },
-    "coverCostGroups": {
-      "type": "object",
-      "properties": {
-        "accountId": {
-          "type": "string"
-        },
-        "allocation": {
-          "type": "string"
-        },
-        "duration": {
-          "type": "string"
         }
       }
     },
@@ -11632,6 +11633,7 @@
         "costGroups": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverMemberCostGroup"
           }
         },
@@ -11697,6 +11699,7 @@
         "recommendationDetail": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverRecommendationDetail"
           }
         },
@@ -11835,6 +11838,7 @@
         "costGroups": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverMemberCostGroup"
           }
         },
@@ -11882,6 +11886,7 @@
         "layout": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverWidgetData"
           }
         },
@@ -11889,6 +11894,9 @@
           "$ref": "#/definitions/coverSideMenu"
         },
         "reportType": {
+          "type": "string"
+        },
+        "colorTheme": {
           "type": "string"
         }
       }
@@ -11956,6 +11964,7 @@
         "requests": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverLayoutRequests"
           }
         }
@@ -12051,6 +12060,7 @@
         "details": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/protobufAny"
           },
           "description": "A list of messages that carry the error details.  There is a common set of\nmessage types for APIs to use."
@@ -12074,11 +12084,11 @@
       "properties": {
         "@type": {
           "type": "string",
-          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
         }
       },
       "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\nExample 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\nExample 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "protobufNullValue": {
       "type": "string",
@@ -12162,6 +12172,7 @@
         "exchangeRate": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/rippleExchangeRate"
           },
           "description": "The exchange rate."
@@ -12204,6 +12215,7 @@
         "metadata": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/blueapiapiKeyValue"
           },
           "description": "The attributes (key/value pair) of the account."
@@ -12211,6 +12223,7 @@
         "members": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/blueapiapiAccount"
           },
           "description": "List of all members under this payer."
@@ -12252,20 +12265,15 @@
         "waveConfig": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/rippleResellerConfig"
           },
           "title": "wave feature config"
         },
-        "waveProConfig": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/rippleResellerConfig"
-          },
-          "title": "wave pro feature config"
-        },
         "aquaConfig": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/rippleResellerConfig"
           },
           "title": "aqua feature config"
@@ -12558,6 +12566,7 @@
         "billingGroups": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1BillingGroup"
           },
           "description": "A list of billing groups contained in the access group."
@@ -12713,6 +12722,28 @@
       },
       "title": "Response message for AddSideMenuFavorite"
     },
+    "v1Allocator": {
+      "type": "object",
+      "properties": {
+        "attribute": {
+          "type": "string",
+          "description": "Required. The type of attribute where the adjustments are to be applied. Only `account` is supported for now. Planning to support `costgroup`, `tag`, and `region`."
+        },
+        "value": {
+          "type": "string",
+          "description": "Required. The value for the specified attribute. AccountId for account attribute."
+        },
+        "formula": {
+          "type": "string",
+          "description": "Required. The formula to use to compute the value of the allocation on an attribute."
+        },
+        "months": {
+          "type": "string",
+          "format": "int64",
+          "description": "Optional. The number of months the adjustment is to be applied. If set, it will divide the cost equally to the number of months."
+        }
+      }
+    },
     "v1AssetsSummary": {
       "type": "object",
       "properties": {
@@ -12775,6 +12806,7 @@
         "accounts": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1AwsDailyRunHistoryAccount"
           }
         }
@@ -12790,6 +12822,7 @@
         "history": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/AccountHistory"
           }
         }
@@ -12817,6 +12850,7 @@
         "accounts": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/blueapiapiAccount"
           },
           "title": "List of all accounts"
@@ -12824,6 +12858,7 @@
         "tags": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiCostTag"
           },
           "title": "List of all tags"
@@ -13000,6 +13035,7 @@
         "qualifiers": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/CalculatorCostModifierAwsOptionsQualifier"
           },
           "description": "Optional. Conditional qualifiers to further filter the modifier targets. Multiple qualifiers use the logical `or` operator; `qualifiers[0] || qualifiers[1] || qualifiers[n]`."
@@ -13048,7 +13084,7 @@
       "type": "object",
       "properties": {
         "aws": {
-          "$ref": "#/definitions/awsCostAttribute"
+          "$ref": "#/definitions/apiawsCostAttribute"
         }
       },
       "description": "Response message for the Cost.ReadCostAttributes rpc."
@@ -13079,6 +13115,7 @@
         "accounts": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1AccountServiceDiscounts"
           }
         }
@@ -13254,6 +13291,7 @@
         "aws": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1CalculatorCostModifier"
           }
         }
@@ -13327,18 +13365,47 @@
       "type": "object",
       "description": "Request message for the Admin.CreateDefaultNotificationChannel rpc."
     },
-    "v1CreateFeeAdjustmentAllocatorResponse": {
+    "v1CreateFeeAdjustmentAllocatorRequest": {
       "type": "object",
       "properties": {
         "expiration": {
           "type": "string",
           "format": "int64"
         },
-        "aws": {
-          "$ref": "#/definitions/v1FeeAdjustmentAllocator"
+        "feeId": {
+          "type": "string",
+          "description": "Optional. The specific fee to be adjusted."
+        },
+        "duration": {
+          "type": "string",
+          "format": "int64",
+          "description": "Optional. The number of months the fee is to be distributed starting from startMonth."
+        },
+        "startMonth": {
+          "type": "string",
+          "description": "Optional. The starting month of the allocator to be effective."
+        },
+        "defaultAccount": {
+          "type": "string",
+          "description": "Optional. The default account for remaining costs. If not set, will allocate the cost to the original account."
+        },
+        "criteria": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Criteria"
+          },
+          "description": "Required. Criteria for the adjustment to be applied."
+        },
+        "allocator": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Allocator"
+          }
         }
       },
-      "description": "Response message for the CreateFeeAdjustmentAllocator rpc."
+      "description": "Request message for the CreateFeeAdjustmentAllocator rpc."
     },
     "v1CreateGroupRootUserRequest": {
       "type": "object",
@@ -13630,6 +13697,7 @@
         "roles": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1MapRole"
           },
           "description": "Required. The roles to map to the user. Limited to 5 items."
@@ -13693,6 +13761,18 @@
         }
       },
       "title": "Response message for CreateView"
+    },
+    "v1Criteria": {
+      "type": "object",
+      "properties": {
+        "and": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "A map of \"key:value\" attribute filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc."
     },
     "v1DefaultCostAccess": {
       "type": "object",
@@ -13788,30 +13868,19 @@
       },
       "description": "Response message for the ExportInvoiceFile rpc."
     },
-    "v1FeeAdjustmentAllocator": {
+    "v1FeeAdjustmentAllocatorResponse": {
       "type": "object",
       "properties": {
         "id": {
+          "type": "string"
+        },
+        "orgId": {
           "type": "string"
         },
         "expiration": {
           "type": "string",
           "format": "int64"
         },
-        "createTime": {
-          "type": "string"
-        },
-        "updateTime": {
-          "type": "string"
-        },
-        "awsOptions": {
-          "$ref": "#/definitions/v1FeeAdjustmentAllocatorAwsOptions"
-        }
-      }
-    },
-    "v1FeeAdjustmentAllocatorAwsOptions": {
-      "type": "object",
-      "properties": {
         "feeId": {
           "type": "string",
           "description": "Optional. The specific fee to be adjusted."
@@ -13832,18 +13901,25 @@
         "criteria": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/FeeAdjustmentAllocatorAwsOptionsCriteria"
+            "type": "object",
+            "$ref": "#/definitions/v1Criteria"
           },
           "description": "Required. Criteria for the adjustment to be applied."
         },
         "allocator": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/FeeAdjustmentAllocatorAwsOptionsAllocator"
+            "type": "object",
+            "$ref": "#/definitions/v1Allocator"
           }
+        },
+        "createTime": {
+          "type": "string"
+        },
+        "updateTime": {
+          "type": "string"
         }
-      },
-      "title": "Fee adjustment allocator for aws"
+      }
     },
     "v1FeeItem": {
       "type": "object",
@@ -13941,6 +14017,7 @@
         "summary": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1AssetsSummary"
           }
         },
@@ -13965,6 +14042,7 @@
         "yearMonth": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/rippleYearMonth"
           },
           "description": "List of available yearmonth."
@@ -14038,6 +14116,20 @@
       },
       "description": "Response message for the Admin.GetCloudWatchMetricsStreamTemplateUrl rpc."
     },
+    "v1GetCostAttributesResponse": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/costv1CostAttribute"
+          },
+          "description": "The cost attributes."
+        }
+      },
+      "description": "Response message for the Cost.GetCostAttributes rpc."
+    },
     "v1GetCostGroupDetailsResponse": {
       "type": "object",
       "properties": {
@@ -14069,6 +14161,7 @@
         "costGroupData": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverCostGroupData"
           }
         }
@@ -14147,6 +14240,7 @@
         "filters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
           },
           "description": "Optional. A list of filtering options. See [ReadCostsRequestOptionsFilters] for more information on each filter item. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
@@ -14154,6 +14248,7 @@
         "tagFilters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
           },
           "description": "Optional. A list of filtering options specific for tags. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc. Discarded when `groupByColumns` field is set or if `groupByMonth` is true."
@@ -14174,6 +14269,7 @@
         "filters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
           },
           "description": "Optional. A list of filtering options. See [ReadCostsRequestOptionsFilters] for more information on each filter item. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
@@ -14181,6 +14277,7 @@
         "tagFilters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
           },
           "description": "Optional. A list of filtering options specific for tags. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
@@ -14196,6 +14293,7 @@
         "ondemandData": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiOndemandData"
           }
         }
@@ -14211,6 +14309,7 @@
         "optionsData": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiOptionsData"
           }
         }
@@ -14258,6 +14357,7 @@
         "favorites": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverFavorites"
           }
         }
@@ -14279,6 +14379,7 @@
         "costGroups": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverMemberCostGroup"
           }
         }
@@ -14300,6 +14401,7 @@
         "userData": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverUserData"
           }
         }
@@ -14315,6 +14417,7 @@
         "data": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiMonthOnMonthCostForecast"
           }
         },
@@ -14337,6 +14440,7 @@
         "data": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiMonthToDateCostForecast"
           }
         },
@@ -14355,6 +14459,7 @@
         "data": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiMonthlyCostForecast"
           }
         },
@@ -14475,6 +14580,7 @@
         "resource": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverResourceData"
           }
         }
@@ -14499,6 +14605,7 @@
         "tagData": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverTagData"
           }
         }
@@ -14523,6 +14630,7 @@
         "utilizationData": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiUtilizationData"
           }
         }
@@ -14535,6 +14643,7 @@
         "viewList": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverViewList"
           }
         }
@@ -14634,6 +14743,7 @@
         "accountGroups": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiAccountGroup"
           }
         }
@@ -14673,6 +14783,7 @@
         "awsOptions": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1ListAssetsFilters"
           },
           "description": "Optional. For AWS-specific filter options."
@@ -14680,6 +14791,7 @@
         "awsPropertiesOptions": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1ListAssetsFilters"
           },
           "description": "Optional. For AWS-specific properties filter options."
@@ -14707,6 +14819,7 @@
         "operations": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/blueapiapiOperation"
           }
         }
@@ -14728,6 +14841,7 @@
         "schedules": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1CalculationsSchedule"
           }
         }
@@ -14780,6 +14894,7 @@
         "costFilters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1ListCostFilters"
           }
         }
@@ -14801,12 +14916,22 @@
       },
       "description": "Response message for the ListExchangeRates rpc."
     },
+    "v1ListFeesRequest": {
+      "type": "object",
+      "properties": {
+        "month": {
+          "type": "string"
+        }
+      },
+      "description": "Request message for the ListFees rpc."
+    },
     "v1ListIdentityProvidersResponse": {
       "type": "object",
       "properties": {
         "data": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/ListIdentityProvidersResponseIdentityProvider"
           }
         }
@@ -14823,6 +14948,7 @@
         "channels": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiNotificationChannel"
           }
         }
@@ -14835,6 +14961,7 @@
         "notifications": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiNotification"
           }
         }
@@ -14847,6 +14974,7 @@
         "permissions": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiPermission"
           }
         }
@@ -14859,6 +14987,7 @@
         "roles": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiRole"
           }
         }
@@ -14871,6 +15000,7 @@
         "userRoleMappings": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apiUserRoleMapping"
           }
         }
@@ -14944,6 +15074,24 @@
     "v1Preference": {
       "type": "object"
     },
+    "v1ProxyCreateCompletionRequest": {
+      "type": "object",
+      "properties": {
+        "params": {
+          "type": "object"
+        }
+      },
+      "description": "Request message for the ProxyCreateCompletion rpc."
+    },
+    "v1ProxyCreateCompletionResponse": {
+      "type": "object",
+      "properties": {
+        "line": {
+          "type": "string"
+        }
+      },
+      "description": "Response message for the ProxyCreateCompletion rpc."
+    },
     "v1PublishViewRequest": {
       "type": "object",
       "properties": {
@@ -14990,6 +15138,7 @@
         "filters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1ReadCostsRequestAwsOptionsFilters"
           },
           "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
@@ -14997,6 +15146,7 @@
         "tagFilters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1ReadCostsRequestAwsOptionsTagFilters"
           },
           "description": "Optional. A list of filtering options specific for tags. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc. Discarded when `groupByColumns` field is set or if `groupByMonth` is true."
@@ -15066,6 +15216,7 @@
         "filters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1ReadCostsRequestGcpOptionsFilters"
           },
           "description": "Optional. A list of filtering options. See [ReadCostsRequestGcpOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
@@ -15127,6 +15278,7 @@
         "filters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1ReadCostsRequestAwsOptionsFilters"
           },
           "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
@@ -15134,6 +15286,7 @@
         "tagFilters": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1ReadTagCostsRequestAwsOptionsTagFilters"
           },
           "description": "Optional. A list of filtering options specific for tags. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc. Discarded when `groupByColumns` field is set or if `groupByMonth` is true."
@@ -15157,6 +15310,13 @@
         "noCache": {
           "type": "boolean",
           "description": "If true, force API to not use cached data."
+        },
+        "tagIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. If set, only return data list tags."
         }
       }
     },
@@ -15261,6 +15421,7 @@
         "accounts": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/apicoverAccount"
           }
         }
@@ -15312,6 +15473,16 @@
         }
       }
     },
+    "v1RestoreFeeRequest": {
+      "type": "object",
+      "properties": {
+        "feeId": {
+          "type": "string",
+          "description": "Required. The fee to restore."
+        }
+      },
+      "description": "Request message for the RestoreFee rpc."
+    },
     "v1SaveNotificationSettingsRequest": {
       "type": "object",
       "properties": {
@@ -15347,6 +15518,7 @@
         "accounts": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1AccountServiceDiscounts"
           }
         }
@@ -15416,19 +15588,6 @@
         }
       },
       "title": "Response message for UpdateCostGroupName"
-    },
-    "v1UpdateFeeAdjustmentAllocatorResponse": {
-      "type": "object",
-      "properties": {
-        "expiration": {
-          "type": "string",
-          "format": "int64"
-        },
-        "aws": {
-          "$ref": "#/definitions/v1FeeAdjustmentAllocator"
-        }
-      },
-      "description": "Response message for the UpdateFeeAdjustmentAllocator rpc."
     },
     "v1UpdateMemberPermissionResponse": {
       "type": "object",
@@ -15647,6 +15806,7 @@
         "roles": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/v1MapRole"
           },
           "description": "Required. The roles to map to the user. Limited to 5 items. Setting `role` to empty will remove the mapping."
@@ -15696,12 +15856,22 @@
       },
       "title": "Response message for UpdateUserTimezone"
     },
+    "v1UpdateViewColorThemeResponse": {
+      "type": "object",
+      "properties": {
+        "viewData": {
+          "$ref": "#/definitions/coverViewData"
+        }
+      },
+      "title": "Response message for UpdateViewColorTheme"
+    },
     "v1UpdateViewLayoutResponse": {
       "type": "object",
       "properties": {
         "layout": {
           "type": "array",
           "items": {
+            "type": "object",
             "$ref": "#/definitions/coverViewLayout"
           }
         }
@@ -15734,15 +15904,18 @@
       "properties": {
         "name": {
           "type": "string",
+          "description": "file name",
           "title": "Required. File name"
         },
         "type": {
           "type": "string",
+          "description": "file type",
           "title": "Required. File type"
         },
         "file": {
           "type": "string",
           "format": "byte",
+          "description": "file in bytes",
           "title": "Required. Convert file into bytes to transfer file"
         }
       },
