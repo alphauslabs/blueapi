@@ -590,14 +590,14 @@ service Cover {
   // WORK-IN-PROGRESS: Lists the fee adjustment allocators
   rpc ListFeeAdjustmentAllocators(ListFeeAdjustmentAllocatorsRequest) returns (stream FeeAdjustmentAllocatorResponse) {
     option (google.api.http) = {
-      get: "/v1/fees/adjustment/allocators"
+      get: "/v1/fees/adjustment"
     };
   }
 
   // WORK-IN-PROGRESS: Creates fee adjustment allocator
   rpc CreateFeeAdjustmentAllocator(CreateFeeAdjustmentAllocatorRequest) returns (FeeAdjustmentAllocatorResponse) {
     option (google.api.http) = {
-      post: "/v1/fees/adjustment/allocators"
+      post: "/v1/fees/adjustment"
       body: "*"
     };
   }
@@ -605,7 +605,7 @@ service Cover {
   // WORK-IN-PROGRESS: Creates fee adjustment allocator
   rpc UpdateFeeAdjustmentAllocator(FeeAdjustmentAllocatorRequest) returns (FeeAdjustmentAllocatorResponse) {
     option (google.api.http) = {
-      put: "/v1/fees/adjustment/allocators/{id}"
+      put: "/v1/fees/adjustment/{id}"
       body: "*"
     };
   }
@@ -613,7 +613,7 @@ service Cover {
   // WORK-IN-PROGRESS: Deletes a fee adjustment allocator
   rpc DeleteFeeAdjustmentAllocator(DeleteFeeAdjustmentAllocatorRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1/fees/adjustment/allocators/{id}"
+      delete: "/v1/fees/adjustment/{id}"
     };
   }
 
@@ -867,6 +867,7 @@ message CreateViewRequest {
   bool isEditable = 4;
   string icon = 5;
   string reportType = 6;
+  string colorTheme = 7;
 }
 
 // Response message for CreateView
@@ -943,6 +944,7 @@ message UpdateViewRequest {
   string icon = 4;
   bool isPrivate = 5;
   bool isEditable = 6;
+  string colorTheme = 7;
 }
 
 // Response message for UpdateView
