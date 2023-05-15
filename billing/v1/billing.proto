@@ -208,7 +208,7 @@ service Billing {
   // WORK-IN-PROGRESS: Lists all exchange rate. Only available in Ripple.
   rpc ListExchangeRates(ListExchangeRatesRequest) returns (ListExchangeRatesResponse) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/exchangerate"
+      get: "/v1/{vendor}/exchangerate/{month}"
     };
   }
 }
@@ -737,11 +737,22 @@ message GetBillingSettingResponse {
 message ListExchangeRatesRequest {
   // Required. vendor.
   string vendor = 1;
+
+  // Required. month. Format: `yyyymmdd`.
+  string month = 2;
 }
 
 // Response message for the ListExchangeRates rpc.
 message ListExchangeRatesResponse {
-  api.ripple.MonthlyExchangeRate aws = 1;
-  api.ripple.MonthlyExchangeRate gcp = 2;
-  api.ripple.MonthlyExchangeRate azure = 3;
+  // The Month.
+  string month = 1;
+
+  // The common exchange rate.
+  api.ripple.CommonExchangeRate common = 2;
+
+  // The billing group exchange rate.
+  repeated api.ripple.BillingGroupExchangeRate billingGroup = 3;
+
+  // The payer exchange rate.
+  api.ripple.VendorPayerExchangeRate payer = 4;
 }

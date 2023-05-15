@@ -23,3 +23,44 @@ message MonthlyExchangeRate {
   // The exchange rate.
   repeated ExchangeRate exchangeRate = 2;
 }
+
+// BillingGroupExchangeRate resource definition.
+message BillingGroupExchangeRate {
+  // The billing group's internal id.
+  string billingInternalId = 1;
+
+  // The billing group's id.
+  string billingGroupId = 2;
+
+  // The billing group's name.
+  string billingGroupName = 3;
+
+  // The exchange rate.
+  repeated ExchangeRate exchangeRate = 4;
+}
+
+// PayerExchangeRate resource definition.
+message PayerExchangeRate {
+  // The payer account Id.
+  string payerAccountId = 1;
+
+  // The payer account Name.
+  string payerAccountName = 2;
+
+  // The exchange rate.
+  repeated ExchangeRate exchangeRate = 4;
+}
+
+// CommonExchangeRate resource definition.
+message CommonExchangeRate {
+  repeated ExchangeRate aws = 1;
+  repeated ExchangeRate gcp = 2;
+  repeated ExchangeRate azure = 3;
+}
+
+// VendorPayerExchangeRate resource definition.
+message VendorPayerExchangeRate {
+  repeated PayerExchangeRate aws = 1;
+  repeated PayerExchangeRate gcp = 2;
+  repeated PayerExchangeRate azure = 3;
+}
