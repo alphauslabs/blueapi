@@ -15,14 +15,6 @@
       }
     },
     {
-      "name": "KvStore",
-      "description": "(BETA) KvStore API. Base URL: https://api.alphaus.cloud/m/blue/kv",
-      "externalDocs": {
-        "description": "Service definition",
-        "url": "https://github.com/alphauslabs/blueapi/tree/main/kvstore/"
-      }
-    },
-    {
       "name": "Iam",
       "description": "IAM API. Base URL: https://api.alphaus.cloud/m/blue",
       "externalDocs": {
@@ -2276,40 +2268,6 @@
         ]
       }
     },
-    "/v1": {
-      "post": {
-        "summary": "Writes a new (or update an existing) key:value data in your store.",
-        "operationId": "KvStore_Write",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/kvstorev1KeyValue"
-            }
-          }
-        ],
-        "tags": [
-          "KvStore"
-        ]
-      }
-    },
     "/v1/accessgroups/{accessGroupId}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Gets an access group.",
@@ -3560,15 +3518,6 @@
                   "type": "string",
                   "format": "int64"
                 },
-                "feeId": {
-                  "type": "string",
-                  "description": "Optional. The specific fee to be adjusted."
-                },
-                "duration": {
-                  "type": "string",
-                  "format": "int64",
-                  "description": "Optional. The number of months the fee is to be distributed starting from startMonth."
-                },
                 "startMonth": {
                   "type": "string",
                   "description": "Optional. The starting month of the allocator to be effective."
@@ -3970,110 +3919,6 @@
         ],
         "tags": [
           "Billing"
-        ]
-      }
-    },
-    "/v1/keys": {
-      "get": {
-        "summary": "Scans key:value data from your store.",
-        "operationId": "KvStore_Scan",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/kvstorev1KeyValue"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of kvstorev1KeyValue"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "like",
-            "description": "Optional. If non-empty, translates to SQL's `LIKE` operand.\nReturn all keys by default.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "KvStore"
-        ]
-      }
-    },
-    "/v1/keys/{key}": {
-      "get": {
-        "summary": "Reads a key:value data from your store.",
-        "operationId": "KvStore_Read",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/kvstorev1KeyValue"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "key",
-            "description": "Required. The key to read.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "KvStore"
-        ]
-      },
-      "delete": {
-        "summary": "Deletes a key:value data from your store.",
-        "operationId": "KvStore_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "key",
-            "description": "Required. The key to delete. To delete all keys, set this to `-` (hyphen).\nYou can also prefix this with `like:` which translates to SQL's LIKE operator.\nFor example, `like:%pattern%`.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "KvStore"
         ]
       }
     },
@@ -7796,7 +7641,7 @@
         ]
       }
     },
-    "/v1/{vendor}/exchangerate": {
+    "/v1/{vendor}/exchangerate/{month}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Lists all exchange rate. Only available in Ripple.",
         "operationId": "Billing_ListExchangeRates",
@@ -7818,6 +7663,13 @@
           {
             "name": "vendor",
             "description": "Required. vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "month",
+            "description": "Required. month. Format: `yyyymmdd`.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -9071,7 +8923,7 @@
       "properties": {
         "formula": {
           "type": "string",
-          "description": "Required. Our modifier formula. The final result should be a number. Integers are converted to floating points.\n\nSupported operators are `*`, `/`, `+`, `-`, and `%`. You can use parenthesis `()` to control precedence. Additional supported operators include `==`, `!=`, `!`, `\u003e`, `\u003c`, `\u003e=`, `\u003c=`, and the ternary operator `? :`, or `cond ? expr1 : expr2`.\nExamples:\n `1 + 2 * 3` = 7\n `(1 + 2) * 3` = 9\n `7.8 % 5` = 2.8\n `true ? 1.1 : 2.2` = 1.1\n `1 \u003e 2 ? 1.1 : 2.2` = 2.2\n\nYou can use the `cost` variable to reference the original lineitem cost. For example, if you want to add $10 to the cost, you can use the formula: `cost + 10`. For trueunblended-type billing groups, `cost` refers to the calculated trueunblended cost.\n\nThe `usage` variable refers to the usage amount of a lineitem. For example, if you want to use a different rate of $1.5, you can use the formula: `usage * 1.5`.\n\nYou can check out this [guide](https://alphauslabs.github.io/docs/guides/aws-cost-mods/) for more examples."
+          "description": "Required. Our modifier formula. The final result should be a number. Integers are converted to floating points.\n\nSupported operators are `*`, `/`, `+`, `-`, and `%`. You can use parenthesis `()` to control precedence. Additional supported operators include `==`, `!=`, `!`, `\u003e`, `\u003c`, `\u003e=`, `\u003c=`, and the ternary operator `? :`, or `cond ? expr1 : expr2`.\nExamples:\n `1 + 2 * 3` = 7\n `(1 + 2) * 3` = 9\n `7.8 % 5` = 2.8\n `true ? 1.1 : 2.2` = 1.1\n `1 \u003e 2 ? 1.1 : 2.2` = 2.2\n\nYou can use the `cost` variable to reference the original lineitem cost. For example, if you want to add $10 to the cost, you can use the formula: `cost + 10`. For trueunblended-type billing groups, `cost` refers to the calculated trueunblended cost.\n\nThe `usage` variable refers to the usage amount of a lineitem. For example, if you want to use a different rate of $1.5, you can use the formula: `usage * 1.5`.\n\nThe `unblendedcost` variable refers to the lineitem's unblended cost as indicated in the CUR. Note that the `unblendedcost` variable is different than the `cost` variable, although there are cases where the two are equal.\n\nThe `ondemandrate` variable refers to the lineitem's public ondemand rate as indicated in the CUR.\n\nYou can check out this [guide](https://alphauslabs.github.io/docs/guides/aws-cost-mods/) for more examples."
         },
         "descriptionModifier": {
           "$ref": "#/definitions/ModifierDescriptionModifier",
@@ -9242,7 +9094,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/blueapiapiKeyValue"
+            "$ref": "#/definitions/apiKeyValue"
           },
           "description": "The attributes (key/value pair) of the AccountGroup."
         },
@@ -9363,7 +9215,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/blueapiapiKeyValue"
+            "$ref": "#/definitions/apiKeyValue"
           },
           "description": "The attributes (key/value pair) of the costtag."
         }
@@ -9763,6 +9615,17 @@
         "amount": {
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "apiKeyValue": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
         }
       }
     },
@@ -11173,7 +11036,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/blueapiapiKeyValue"
+            "$ref": "#/definitions/apiKeyValue"
           },
           "description": "The attributes (key/value pair) of the account."
         }
@@ -11218,17 +11081,6 @@
         "amount": {
           "type": "number",
           "format": "double"
-        }
-      }
-    },
-    "blueapiapiKeyValue": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
         }
       }
     },
@@ -12071,17 +11923,6 @@
       },
       "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors)."
     },
-    "kvstorev1KeyValue": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
-        }
-      }
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -12100,6 +11941,59 @@
       ],
       "default": "NULL_VALUE",
       "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
+    },
+    "rippleBillingGroupExchangeRate": {
+      "type": "object",
+      "properties": {
+        "billingInternalId": {
+          "type": "string",
+          "description": "The billing group's internal id."
+        },
+        "billingGroupId": {
+          "type": "string",
+          "description": "The billing group's id."
+        },
+        "billingGroupName": {
+          "type": "string",
+          "description": "The billing group's name."
+        },
+        "exchangeRate": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/rippleExchangeRate"
+          },
+          "description": "The exchange rate."
+        }
+      },
+      "description": "BillingGroupExchangeRate resource definition."
+    },
+    "rippleCommonExchangeRate": {
+      "type": "object",
+      "properties": {
+        "aws": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/rippleExchangeRate"
+          }
+        },
+        "gcp": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/rippleExchangeRate"
+          }
+        },
+        "azure": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/rippleExchangeRate"
+          }
+        }
+      },
+      "description": "CommonExchangeRate resource definition."
     },
     "rippleDueDate": {
       "type": "object",
@@ -12165,24 +12059,6 @@
       },
       "description": "WORK-IN-PROGRESS: InvoiceLayout resource definition.\nDefinitions related to invoice display."
     },
-    "rippleMonthlyExchangeRate": {
-      "type": "object",
-      "properties": {
-        "month": {
-          "type": "string",
-          "title": "The year-month. format: yyyymm"
-        },
-        "exchangeRate": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/rippleExchangeRate"
-          },
-          "description": "The exchange rate."
-        }
-      },
-      "description": "MonthlyExchangeRate resource definition."
-    },
     "rippleOrg": {
       "type": "object",
       "properties": {
@@ -12219,7 +12095,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/blueapiapiKeyValue"
+            "$ref": "#/definitions/apiKeyValue"
           },
           "description": "The attributes (key/value pair) of the account."
         },
@@ -12233,6 +12109,28 @@
         }
       },
       "description": "Payer resource definition."
+    },
+    "ripplePayerExchangeRate": {
+      "type": "object",
+      "properties": {
+        "payerAccountId": {
+          "type": "string",
+          "description": "The payer account Id."
+        },
+        "payerAccountName": {
+          "type": "string",
+          "description": "The payer account Name."
+        },
+        "exchangeRate": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/rippleExchangeRate"
+          },
+          "description": "The exchange rate."
+        }
+      },
+      "description": "PayerExchangeRate resource definition."
     },
     "rippleReseller": {
       "type": "object",
@@ -12305,6 +12203,33 @@
         }
       },
       "description": "Rounding resource definition."
+    },
+    "rippleVendorPayerExchangeRate": {
+      "type": "object",
+      "properties": {
+        "aws": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ripplePayerExchangeRate"
+          }
+        },
+        "gcp": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ripplePayerExchangeRate"
+          }
+        },
+        "azure": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ripplePayerExchangeRate"
+          }
+        }
+      },
+      "description": "VendorPayerExchangeRate resource definition."
     },
     "rippleYearMonth": {
       "type": "object",
@@ -12728,13 +12653,9 @@
     "v1Allocator": {
       "type": "object",
       "properties": {
-        "attribute": {
+        "costGroupId": {
           "type": "string",
-          "description": "Required. The type of attribute where the adjustments are to be applied. Only `account` is supported for now. Planning to support `costgroup`, `tag`, and `region`."
-        },
-        "value": {
-          "type": "string",
-          "description": "Required. The value for the specified attribute. AccountId for account attribute."
+          "description": "Required. The id of the costgroup to be allocated."
         },
         "formula": {
           "type": "string",
@@ -13375,15 +13296,6 @@
           "type": "string",
           "format": "int64"
         },
-        "feeId": {
-          "type": "string",
-          "description": "Optional. The specific fee to be adjusted."
-        },
-        "duration": {
-          "type": "string",
-          "format": "int64",
-          "description": "Optional. The number of months the fee is to be distributed starting from startMonth."
-        },
         "startMonth": {
           "type": "string",
           "description": "Optional. The starting month of the allocator to be effective."
@@ -13880,21 +13792,9 @@
         "id": {
           "type": "string"
         },
-        "orgId": {
-          "type": "string"
-        },
         "expiration": {
           "type": "string",
           "format": "int64"
-        },
-        "feeId": {
-          "type": "string",
-          "description": "Optional. The specific fee to be adjusted."
-        },
-        "duration": {
-          "type": "string",
-          "format": "int64",
-          "description": "Optional. The number of months the fee is to be distributed starting from startMonth."
         },
         "startMonth": {
           "type": "string",
@@ -14910,14 +14810,25 @@
     "v1ListExchangeRatesResponse": {
       "type": "object",
       "properties": {
-        "aws": {
-          "$ref": "#/definitions/rippleMonthlyExchangeRate"
+        "month": {
+          "type": "string",
+          "description": "The Month."
         },
-        "gcp": {
-          "$ref": "#/definitions/rippleMonthlyExchangeRate"
+        "common": {
+          "$ref": "#/definitions/rippleCommonExchangeRate",
+          "description": "The common exchange rate."
         },
-        "azure": {
-          "$ref": "#/definitions/rippleMonthlyExchangeRate"
+        "billingGroup": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/rippleBillingGroupExchangeRate"
+          },
+          "description": "The billing group exchange rate."
+        },
+        "payer": {
+          "$ref": "#/definitions/rippleVendorPayerExchangeRate",
+          "description": "The payer exchange rate."
         }
       },
       "description": "Response message for the ListExchangeRates rpc."
