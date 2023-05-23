@@ -12653,13 +12653,17 @@
     "v1Allocator": {
       "type": "object",
       "properties": {
-        "costGroupId": {
+        "attribute": {
           "type": "string",
-          "description": "Required. The id of the costgroup to be allocated."
+          "description": "Required. The type of attribute where the adjustments are to be applied. This can support `account`, `costGroup`, `payer` and `accountName`."
+        },
+        "value": {
+          "type": "string",
+          "description": "Required. The value for the specified attribute. `accountId` for account, `costGroupId` for cost group, `payerId` for payer and account name regex for account name."
         },
         "formula": {
           "type": "string",
-          "description": "Required. The formula to use to compute the value of the allocation on an attribute."
+          "description": "Required. The formula to use to compute the value of the allocation on an attribute. If left blank, allocation is based on usage."
         },
         "months": {
           "type": "string",
@@ -15145,6 +15149,10 @@
         "includeCredits": {
           "type": "boolean",
           "description": "Optional. If set to true, stream will include credits{\"creditsType\",\"creditsName\"}. Discarded when `groupByColumns` field is set to `none`."
+        },
+        "rounding": {
+          "type": "boolean",
+          "description": "Optional. If set to true, round the cost data to a rounded format. It will be rounded off in the unit specified by `groupByColumns`."
         },
         "noCache": {
           "type": "boolean",
