@@ -6,10 +6,10 @@ option go_package = "github.com/alphauslabs/blue-sdk-go/api";
 option java_package = "cloud.alphaus.blueapi.api";
 option java_outer_classname = "InvoiceProto";
 
+// InvoiceMessage resource definition.
 message InvoiceMessage {
   // invoice generate request id
   string id = 1;
-
 
   // invoice generate request status
   //
@@ -20,6 +20,7 @@ message InvoiceMessage {
 
 }
 
+// Invoice resource definition.
 message Invoice {
   // Invoice vendor detail by 'aws'
   VendorDetail aws = 1;
@@ -31,6 +32,7 @@ message Invoice {
   VendorDetail azure = 3;
 }
 
+// VendorDetail resource definition.
 message VendorDetail {
   // details: Includes account-by-account details
   repeated AccountDetails details = 1;
@@ -48,6 +50,7 @@ message VendorDetail {
   InvoiceSettings settings = 4;
 }
 
+// AccountDetails resource definition.
 message AccountDetails {
   // Resource Id. 
   //
@@ -74,39 +77,55 @@ message AccountDetails {
 
   // The keys included in the account total column have the following values
   //
-  // substitution
-  // supportFee 
-  // usageOnlyTotal
-  // usageTotal
-  // marketplace
-  // marketplaceFees
+  // substitution:
+  //    Total amount of agency fee costs
+  //
+  // supportFee:
+  //    Total amount of Support Fee costs
+  //
+  // usageOnlyTotal:
+  //    Total amount of vendor usage fee only costs
+  //
+  // usageTotal:
+  //    Total amount of vendor usage fee costs
+  //
+  // marketplace:
+  //    Total amount of vendor marketplace usage costs
+  //
+  // marketplaceFees:
+  //    Total amount of vendor marketplace fee costs
   repeated AccountTotal total = 6;
 }
 
+// UsageDetails resource definition.
 message UsageDetails {
   string name = 1;
   string currency = 2;
   double amount = 3;
 }
 
+// CustomDetails resource definition.
 message CustomDetails {
   string name = 1;
   string currency = 2;
   double amount = 3;
 }
 
+// FeeDetails resource definition.
 message FeeDetails {
   string name = 1;
   string currency = 2;
   double amount = 3;
 }
 
+// AccountTotal resource definition.
 message AccountTotal {
   string name = 1;
   string currency = 2;
   double amount = 3;
 }
 
+// InvoiceTotal resource definition.
 message InvoiceTotal {
   // Key names related to the total. Each key is described in the following detail
   //
@@ -156,24 +175,28 @@ message InvoiceTotal {
   double amount = 3;
 }
 
+// GroupDetails resource definition.
 message GroupDetails {
   string name = 1;
   string currency = 2;
   double amount = 3;
 }
 
+// GroupCustomDetails resource definition.
 message GroupCustomDetails {
   string name = 1;
   string currency = 2;
   double amount = 3;
 }
 
+// GroupUsageDetails resource definition.
 message GroupUsageDetails {
   string name = 1;
   string currency = 2;
   double amount = 3;
 }
 
+// InvoiceSettings resource definition.
 message InvoiceSettings {
   string address = 1;
   string groupId = 2;
@@ -192,6 +215,7 @@ message InvoiceSettings {
   string title = 15;
 }
 
+// InvoiceSettingsAll resource definition.
 message InvoiceSettingsAll {
   AccountSupportPlan accountSupportPlan = 1;
   repeated AdditionalItems additionalItems = 2;
@@ -238,6 +262,7 @@ message InvoiceSettingsAll {
   string title = 43;
 }
 
+// AccountSupportPlan resource definition.
 message AccountSupportPlan {
   bool awsEnterpriseOnRamp = 1;
   bool awsBusiness = 2;
@@ -245,6 +270,7 @@ message AccountSupportPlan {
   bool awsDeveloper = 4;
 }
 
+// AdditionalItems resource definition.
 message AdditionalItems {
   string label = 1;
   double unitCost = 2;
@@ -252,6 +278,7 @@ message AdditionalItems {
   double quantity = 4;
 }
 
+// AccountSupportPlanSettings resource definition.
 message AccountSupportPlanSettings {
   bool enabled = 1;
   map<string, string> accounts = 2;
