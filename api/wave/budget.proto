@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package blueapi.api.wave;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/wave";
+option java_package = "cloud.alphaus.blueapi.api.wave";
+option java_outer_classname = "ApiWaveBudgetProto";
+
+// Budget resource definition.
+message BudgetAlert {
+  // budget alert id.
+  string id = 1;
+
+  // notification setting.
+  repeated Notification notification = 2;
+
+  // budget setting.
+  repeated Budget budget = 3;
+}
+
+// Notification resource definition.
+message Notification {
+  // notification id
+  string id = 1;
+
+  // destination email/slack
+  string destination = 2;
+
+  // notification enable/disable 
+  bool enabled = 3;
+}
+
+// Budget resource definition.
+message Budget {
+  // budget id
+  string id = 1;
+
+  // budget value
+  double value = 2;
+
+  // budget setting enable/disable 
+  bool enabled = 3;
+}

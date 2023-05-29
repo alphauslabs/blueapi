@@ -16,6 +16,7 @@ import "api/aws/reduction.proto";
 import "api/gcp/cost.proto";
 import "api/azure/cost.proto";
 import "api/ripple/payer.proto";
+import "api/wave/budget.proto";
 import "api/costtag.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -355,6 +356,13 @@ service Cost {
   rpc DeleteAccountBudget(DeleteAccountBudgetRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/{vendor}/budget/{budgetId}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get the budget alerts for the account id. Only available in Wave(Pro).
+  rpc GetAccountBudgetAlerts(GetAccountBudgetAlertsRequest) returns (api.wave.BudgetAlert) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/alerts/{id}"
     };
   }
 
@@ -1640,4 +1648,13 @@ message ReadCostsRequestGcpOptions {
 // For example, if you like to filter `service` to return only `Compute Engine`, set to `{"service":"eq:Compute Engine"}` or `{"service":"Compute Engine"}`. You can also use a regular expression like `{"service":"re:Compute Engine|Cloud Storage"}`, which means return all Compute Engine or Cloud Storage lineitems. Or reverse regexp, such as `{"service":"!re:^Cloud Engine$"}`, which means return all items except `Cloud Engine`.
 message ReadCostsRequestGcpOptionsFilters {
   map<string, string> andFilters = 1;
+}
+
+// Request message for GetAccountBudgetAlerts
+message GetAccountBudgetAlertsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+  
+  // Required. Account Id
+  string id = 2;
 }
