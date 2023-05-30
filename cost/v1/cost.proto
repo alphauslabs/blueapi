@@ -602,7 +602,7 @@ message GetCalculatorConfigResponse {
   api.aws.CalculatorConfig aws = 1;
 }
 
-// AWS-specific options definition. For overlapping cost modifier targets, the latest modifier will be applied. For example, you created a modifier for a specific account. Then you created another modifier for a billing group that includes that same account. In that case, the modifier for the billing group will be applied to the first account.
+// AWS-specific options definition.
 message CalculatorCostModifierAwsOptions {
   // Optional. The account to which the modifier is applied. A comma-separated list of accounts is also valid.
   string accountId = 1;
@@ -664,6 +664,9 @@ message CalculatorCostModifierAwsOptions {
   }
 
   Modifier modifier = 5;
+
+  // Optional. Specifies the modifier id in which this modifier will be applied after. For example, if you have another modifier `mod1` and you create a new modifier with `after` set to `mod1`, the calculator will apply `mod1` first, then this modifier. If `after` is not set, the application sequence for multiple overlapping modifiers will be by update timestamp, oldest to newest.
+  string after = 6;
 }
 
 message CalculatorCostModifier {
