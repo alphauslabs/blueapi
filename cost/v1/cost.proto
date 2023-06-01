@@ -366,6 +366,27 @@ service Cost {
     };
   }
 
+  // WORK-IN-PROGRESS: Create the budget alerts for the account id. Only available in Wave(Pro).
+  rpc CreateAccountBudgetAlerts(CreateAccountBudgetAlertsRequest) returns (api.wave.BudgetAlert) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/alerts/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Update the budget alerts for the account id. Only available in Wave(Pro).
+  rpc UpdateAccountBudgetAlerts(UpdateAccountBudgetAlertsRequest) returns (api.wave.BudgetAlert) {
+    option (google.api.http) = {
+      put: "/v1/{vendor}/alerts/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Delete the budget alerts for the account id. Only available in Wave(Pro).
+  rpc DeleteAccountBudgetAlerts(DeleteAccountBudgetAlertsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/{vendor}/alerts/{id}"
+    };
+  }
+
   // WORK-IN-PROGRESS: Get cost opmtimization recommendations for an organization (or MSP).
   rpc GetRecommendations(GetRecommendationsRequest) returns (GetRecommendationsResponse) {
     option (google.api.http) = {
@@ -1663,6 +1684,43 @@ message ReadCostsRequestGcpOptionsFilters {
 
 // Request message for GetAccountBudgetAlerts
 message GetAccountBudgetAlertsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+  
+  // Required. Account Id
+  string id = 2;
+}
+
+// Request message for CreateAccountBudgetAlerts
+message CreateAccountBudgetAlertsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+  
+  // Required. Account Id
+  string id = 2;
+
+  // Required. Budget alert setting.
+  api.wave.BudgetAlert budgetAlert = 3;
+}
+
+// Request message for UpdateAccountBudgetAlerts
+message UpdateAccountBudgetAlertsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+  
+  // Required. Account Id
+  string id = 2;
+
+  // Required. Budget alert setting.
+  //
+  // Set only the setting value to be changed.
+  // For example, If you want to change only daily value, set `{"budget":[{"id":"daily","value":100,"enabled":true}}` as a parameter
+  // The same goes for notification. If you want to change only email value, set `{"notification":[{"id":"email","destination":"budgetalert-example@alphaus.cloud","enabled":true}}` as a parameter
+  api.wave.BudgetAlert budgetAlert = 3;
+}
+
+// Request message for DeleteAccountBudgetAlerts
+message DeleteAccountBudgetAlertsRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
   
