@@ -806,6 +806,9 @@ message CalculationsSchedule {
   // The macro that augments `schedule`.
   string scheduleMacro = 8;
 
+  // The target month for the calculation. Empty means previous month (default).
+  string targetMonth = 9;
+
   // The schedule for the next run in UTC.
   string nextRun = 3;
 
@@ -857,6 +860,11 @@ message CreateCalculationsScheduleRequest {
   //
   // `@endofmonth` - If set, the backend scheduler will only use the `minute` and `hour` part of `schedule`'s value and set the days to 28th, 29th, 30th, and 31st but the runner will do the filtering for the actual end of the trigger month. Note that this is different than setting `schedule` to, say, `0 0 28-31 * *`.
   string scheduleMacro = 6;
+
+  // Optional. The desired month to calculate. If not set, defaults to previous month. The only supported value for now is `@current`.
+  //
+  // `@current` - If set, calculate for the month the schedule is triggered (or current month).
+  string targetMonth = 7;
 
   // Optional. The channel id to use for notifications. At the moment, only email-type notification channels are supported. If not set, your default channel will be used. And if non-existent, an email-type notification channel will be created using your primary email address.
   string notificationChannel = 3;
