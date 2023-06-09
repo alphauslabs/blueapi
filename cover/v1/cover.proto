@@ -624,6 +624,14 @@ service Cover {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Simulate fee allocator
+  rpc SimulateFeeAllocator(CreateFeeAdjustmentAllocatorRequest) returns (stream FeeDetails) {
+    option (google.api.http) = {
+      post: "/v1/fees/simulate"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -1726,8 +1734,8 @@ message FeeItem {
 }
 
 message Allocator {
-  // Required. The type of attribute where the adjustments are to be applied. This can support `account`, `costGroup`, `payer` and `accountName`.
-  string attribute = 1;
+  // Required. The type where the adjustments are to be applied. This can support `account`, `costGroup` and `payer`.
+  string type = 1;
 
   // Required. The value for the specified attribute. `accountId` for account, `costGroupId` for cost group, `payerId` for payer and account name regex for account name.
   string value = 2;
