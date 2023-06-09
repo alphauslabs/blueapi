@@ -715,7 +715,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiNotification"
+              "$ref": "#/definitions/blueapiapiNotification"
             }
           },
           "default": {
@@ -749,7 +749,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiNotification"
+              "$ref": "#/definitions/blueapiapiNotification"
             }
           },
           "default": {
@@ -824,7 +824,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiNotification"
+              "$ref": "#/definitions/blueapiapiNotification"
             }
           },
           "default": {
@@ -3636,6 +3636,49 @@
         ]
       }
     },
+    "/v1/fees/simulate": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Simulate fee allocator",
+        "operationId": "Cover_SimulateFeeAllocator",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/coverv1FeeDetails"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of coverv1FeeDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the CreateFeeAdjustmentAllocator rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateFeeAdjustmentAllocatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/fees:read": {
       "post": {
         "summary": "Get all available fees for the specified cost group",
@@ -6177,6 +6220,13 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "fieldMask",
+            "description": "Optional.",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -6286,6 +6336,187 @@
                 }
               },
               "description": "Request message for the Cost.ReadAdjustments rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/alerts/{id}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Get the budget alerts for the account id. Only available in Wave(Pro).",
+        "operationId": "Cost_GetAccountBudgetAlerts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/waveBudgetAlert"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. Account Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      },
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Delete the budget alerts for the account id. Only available in Wave(Pro).",
+        "operationId": "Cost_DeleteAccountBudgetAlerts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. Account Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Create the budget alerts for the account id. Only available in Wave(Pro).",
+        "operationId": "Cost_CreateAccountBudgetAlerts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/waveBudgetAlert"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. Account Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "budgetAlert": {
+                  "$ref": "#/definitions/waveBudgetAlert",
+                  "description": "Required. Budget alert setting."
+                }
+              },
+              "title": "Request message for CreateAccountBudgetAlerts"
+            }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      },
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Update the budget alerts for the account id. Only available in Wave(Pro).",
+        "operationId": "Cost_UpdateAccountBudgetAlerts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/waveBudgetAlert"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. Account Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "budgetAlert": {
+                  "$ref": "#/definitions/waveBudgetAlert",
+                  "description": "Required. Budget alert setting.\n\nSet only the setting value to be changed.\nFor example, If you want to change only daily value, set `{\"budget\":[{\"id\":\"daily\",\"value\":100,\"enabled\":true}}` as a parameter\nThe same goes for notification. If you want to change only email value, set `{\"notification\":[{\"id\":\"email\",\"destination\":\"budgetalert-example@alphaus.cloud\",\"enabled\":true}}` as a parameter"
+                }
+              },
+              "title": "Request message for UpdateAccountBudgetAlerts"
             }
           }
         ],
@@ -6427,7 +6658,7 @@
               "type": "object",
               "properties": {
                 "data": {
-                  "$ref": "#/definitions/apiBudget"
+                  "$ref": "#/definitions/blueapiapiBudget"
                 }
               },
               "title": "Request message for UpdateAccountBudget"
@@ -6538,7 +6769,7 @@
               "type": "object",
               "properties": {
                 "data": {
-                  "$ref": "#/definitions/apiBudget"
+                  "$ref": "#/definitions/blueapiapiBudget"
                 }
               },
               "title": "Request message for CreateAccountBudget"
@@ -6662,6 +6893,14 @@
                 "schedule": {
                   "type": "string",
                   "description": "Required. The desired schedule in UTC, using the unix-cron string format `* * * * *` which is a set of five fields in a line using the order: `minute hour day-of-the-month month day-of-the-week`.\n\n* `minute` values can be `0-59`\n* `hour` values can be `0-23`\n* `day-of-the-month` values can be `1-31`\n* `month` values can be `1-12`, or `JAN-DEC`\n* `day-of-the-week` values can be `0-6`, or `SUN-SAT`, or `7` for Sunday\n\nSpecial characters:\n* A field can contain an asterisk (*), which always stands for \"first-last\".\n* Ranges are two numbers separated with a hyphen (-) and the specified range is inclusive.\n* Following a range with `/NUMBER` specifies skips of the number's value through the range. For example, both `0-23/2` and `*/2` can be used in the `hour` field to specify execution every two hours.\n* A list is a set of numbers (or ranges) separated by commas (,). For example, `1,2,5,6` in the `month` field specifies an execution on the first, second, fifth, and sixth days of the month."
+                },
+                "scheduleMacro": {
+                  "type": "string",
+                  "description": "Optional. Non-standard macro(s) that augment(s) `schedule`'s behavior. The only supported value for now is `@endofmonth`.\n\n`@endofmonth` - If set, the backend scheduler will only use the `minute` and `hour` part of `schedule`'s value and set the days to 28th, 29th, 30th, and 31st but the runner will do the filtering for the actual end of the trigger month. Note that this is different than setting `schedule` to, say, `0 0 28-31 * *`."
+                },
+                "targetMonth": {
+                  "type": "string",
+                  "description": "Optional. The desired month to calculate. If not set, defaults to previous month. The only supported value for now is `@current`.\n\n`@current` - If set, calculate for the month the schedule is triggered (or current month)."
                 },
                 "notificationChannel": {
                   "type": "string",
@@ -8941,7 +9180,7 @@
           }
         }
       },
-      "description": "A map of \"key:value\" attribute filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like apply your modifiers to `productCode:AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means apply to all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means apply to all items except `AmazonEC2`. Valid keys are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `description`, and `resourceId`."
+      "description": "A map of \"key:value\" attribute filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like your modifiers to apply to `productCode:AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means apply to all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means apply to all items except `AmazonEC2`. Valid keys are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `description`, and `resourceId`."
     },
     "IdentityProvidersamlInfo": {
       "type": "object",
@@ -9009,7 +9248,7 @@
           "additionalProperties": {
             "type": "string"
           },
-          "description": "Optional. Replace matching occurences with the input. The key part is the regular expression matcher based on https://github.com/google/re2, while the value is the replacement. The order of replacement is not guaranteed."
+          "description": "Optional. Replace matching occurences with the input. The key part is the regular expression matcher based on https://github.com/google/re2, while the value is the replacement. The order of replacement is not guaranteed.\n\nYou can use the `{{ondemandrate}}` variable in the replacement value part to reference the public ondemand rate indicated in the CUR."
         }
       }
     },
@@ -9074,10 +9313,11 @@
             "type": "object",
             "$ref": "#/definitions/apiAccountTotal"
           },
-          "description": "substitution\nsupportFee \nusageOnlyTotal\nusageTotal",
+          "description": "substitution:\n   Total amount of agency fee costs\n\nsupportFee:\n   Total amount of Support Fee costs\n\nusageOnlyTotal:\n   Total amount of vendor usage fee only costs\n\nusageTotal:\n   Total amount of vendor usage fee costs\n\nmarketplace:\n   Total amount of vendor marketplace usage costs\n\nmarketplaceFees:\n   Total amount of vendor marketplace fee costs",
           "title": "The keys included in the account total column have the following values"
         }
-      }
+      },
+      "description": "AccountDetails resource definition."
     },
     "apiAccountGroup": {
       "type": "object",
@@ -9120,7 +9360,8 @@
           "type": "number",
           "format": "double"
         }
-      }
+      },
+      "description": "AccountTotal resource definition."
     },
     "apiApiClient": {
       "type": "object",
@@ -9161,25 +9402,6 @@
           "items": {
             "type": "object",
             "$ref": "#/definitions/apiForecastData"
-          }
-        }
-      }
-    },
-    "apiBudget": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "fiscalYear": {
-          "type": "string",
-          "title": "Format: yyyy"
-        },
-        "monthlyBudget": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/apiMonthlyBudget"
           }
         }
       }
@@ -9234,7 +9456,8 @@
           "type": "number",
           "format": "double"
         }
-      }
+      },
+      "description": "CustomDetails resource definition."
     },
     "apiEmailChannel": {
       "type": "object",
@@ -9442,7 +9665,8 @@
           "type": "number",
           "format": "double"
         }
-      }
+      },
+      "description": "GroupCustomDetails resource definition."
     },
     "apiGroupDetails": {
       "type": "object",
@@ -9457,7 +9681,8 @@
           "type": "number",
           "format": "double"
         }
-      }
+      },
+      "description": "GroupDetails resource definition."
     },
     "apiGroupRootUser": {
       "type": "object",
@@ -9533,7 +9758,8 @@
           "$ref": "#/definitions/apiVendorDetail",
           "title": "Invoice vendor detail by 'azure'"
         }
-      }
+      },
+      "description": "Invoice resource definition."
     },
     "apiInvoiceMessage": {
       "type": "object",
@@ -9547,7 +9773,8 @@
           "description": "done: Invoicing is complete.\nrunning: Invoicing in progress.\nfailed: Invoicing is failure.",
           "title": "invoice generate request status"
         }
-      }
+      },
+      "description": "InvoiceMessage resource definition."
     },
     "apiInvoiceSettings": {
       "type": "object",
@@ -9599,14 +9826,15 @@
         "title": {
           "type": "string"
         }
-      }
+      },
+      "description": "InvoiceSettings resource definition."
     },
     "apiInvoiceTotal": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string",
-          "description": "supportFee: \n   Total amount of Support Fee costs\n\nsubstitution: \n   Total amount of agency fee costs\n\ncharge: \n   Total amount of vendor usage fee costs\n\ndiscount: \n   Total amount after discounts. Inculuded Support fee costs\n\ndiscountWithSubstitution: \n   Total Discounts plus agency fee costs\n\nchargeTaxFree: \n   Amounts not included in consumption tax\n\nadditionalItem: \n   Total amount of additional item costs \n\ncustomService: \n   Total amount of custom service item costs \n\nsumOfBeforeTax: \n   Total amount before consumption tax\n\ntax: \n   Consumption tax amount on the total amount\n\ntotal: \n   Total billing amount including tax",
+          "description": "supportFee: \n   Total amount of Support Fee costs\n\nsubstitution: \n   Total amount of agency fee costs\n\nchargeOnly: \n   Total amount of vendor usage fee only costs\n\nmarketplace: \n   Total amount of vendor marketplace usage costs\n\nmarketplaceFees: \n   Total amount of vendor marketplace fee costs\n\ncharge: \n   Total amount of vendor usage fee costs\n\ndiscount: \n   Total amount after discounts. Inculuded Support fee costs\n\ndiscountWithSubstitution: \n   Total Discounts plus agency fee costs\n\nchargeTaxFree: \n   Amounts not included in consumption tax\n\nadditionalItem: \n   Total amount of additional item costs \n\ncustomService: \n   Total amount of custom service item costs \n\nsumOfBeforeTax: \n   Total amount before consumption tax\n\ntax: \n   Consumption tax amount on the total amount\n\ntotal: \n   Total billing amount including tax",
           "title": "Key names related to the total. Each key is described in the following detail"
         },
         "currency": {
@@ -9616,7 +9844,8 @@
           "type": "number",
           "format": "double"
         }
-      }
+      },
+      "description": "InvoiceTotal resource definition."
     },
     "apiKeyValue": {
       "type": "object",
@@ -9723,26 +9952,6 @@
         "lowerBound": {
           "type": "number",
           "format": "double"
-        }
-      }
-    },
-    "apiNotification": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "notificationType": {
-          "type": "string"
-        },
-        "channels": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "enabled": {
-          "type": "boolean"
         }
       }
     },
@@ -9949,7 +10158,8 @@
           "type": "number",
           "format": "double"
         }
-      }
+      },
+      "description": "UsageDetails resource definition."
     },
     "apiUser": {
       "type": "object",
@@ -10045,7 +10255,8 @@
           "$ref": "#/definitions/apiInvoiceSettings",
           "title": "settings: Includes settings related to billing"
         }
-      }
+      },
+      "description": "VendorDetail resource definition."
     },
     "apiawsChartData": {
       "type": "object",
@@ -10420,6 +10631,43 @@
       },
       "description": "see gcp billing data schema details:[https://cloud.google.com/billing/docs/how-to/export-data-bigquery-tables]",
       "title": "Cost for Api Response"
+    },
+    "apiwaveBudget": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "budget id\n`previousDay` / `daily` / `monthly`"
+        },
+        "value": {
+          "type": "number",
+          "format": "double",
+          "title": "budget value"
+        },
+        "enabled": {
+          "type": "boolean",
+          "title": "budget setting enable/disable"
+        }
+      },
+      "description": "Budget resource definition."
+    },
+    "apiwaveNotification": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "notification id\n`email` / `slack`"
+        },
+        "destination": {
+          "type": "string",
+          "title": "destination email address /slack webhook url"
+        },
+        "enabled": {
+          "type": "boolean",
+          "title": "notification enable/disable"
+        }
+      },
+      "description": "Notification resource definition."
     },
     "awsAdjustmentsTypeList": {
       "type": "object",
@@ -11042,6 +11290,25 @@
         }
       }
     },
+    "blueapiapiBudget": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "fiscalYear": {
+          "type": "string",
+          "title": "Format: yyyy"
+        },
+        "monthlyBudget": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apiMonthlyBudget"
+          }
+        }
+      }
+    },
     "blueapiapiChartData": {
       "type": "object",
       "properties": {
@@ -11081,6 +11348,27 @@
         "amount": {
           "type": "number",
           "format": "double"
+        }
+      },
+      "description": "FeeDetails resource definition."
+    },
+    "blueapiapiNotification": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "notificationType": {
+          "type": "string"
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "enabled": {
+          "type": "boolean"
         }
       }
     },
@@ -12186,6 +12474,7 @@
       "properties": {
         "key": {
           "type": "string",
+          "description": "For Wave\nThe available values are shown below.\n- Dashboard\n`dashboardGraph`: Display graph\n`reportFilters`: Display report filters\n\n- Usage Reports\n`usageAccount`: Account\n`usageAccountGraph`: Display graph\n`usageAccountMenuAccountEdit`: Edit account name\n`usageAccountMenuBudget`: Display Budget\n`usageAccountMenuBudgetEdit`: Edit Budget\n`usageAccountMenuFeesFee`: Display fee \n`usageAccountMenuFeesCredit`: Display credit\n`usageAccountMenuFeesRefund`: Display refund\n`usageAccountMenuFeesOtherFees`: Display other fees\n`usageReportDownload`: Download report data\n\n- Cross Tag\n`usageCrosstag`: Cross Tag\n`usageCrosstagGraph`: Display graph\n\n- Group\n`usageGroup`: Group\n`usageGroupGraph`: Display graph\n\n- Cost management\n`riPurchased`: Display purchased RI\n`riUtilization`: Display RI Utilization\n`riRecommendation`: Display RI Recommendations\n`spPurchased`: Display purchased Savings Plans\n\n- Other\n`invoice`: Invoice link\n`openApi`: API Access Tokens\n`usersManagement`: Sub-user management\n`invoiceDownloadCsvDiscount`: Enable discount CSV download\n`invoiceDownloadcsvMerged`: Enable merged CSV download\n`aquaLink`: Aqua link\n`waveproReportFilters`: WavePro Report Filters\n\nFor Aqua\nThe available values are shown below.\n- Instance Usage Status\n`aqCoverageRatio`: Coverage Ratio\n\n- Reservations Management\n`aqRiManagement`: RI Management\n`aqSpManagement`: SP Management\n\n- Recommendation\n`aqRiSpInstances`: RI/SP Instances\n`aqRightSizing`: Right Sizing\n`aqScheduling`: Scheduling",
           "title": "key"
         },
         "value": {
@@ -12653,9 +12942,9 @@
     "v1Allocator": {
       "type": "object",
       "properties": {
-        "attribute": {
+        "type": {
           "type": "string",
-          "description": "Required. The type of attribute where the adjustments are to be applied. This can support `account`, `costGroup`, `payer` and `accountName`."
+          "description": "Required. The type where the adjustments are to be applied. This can support `account`, `costGroup` and `payer`."
         },
         "value": {
           "type": "string",
@@ -12906,6 +13195,14 @@
           "type": "string",
           "description": "The desired schedule in UTC, using the [cron](https://man7.org/linux/man-pages/man5/crontab.5.html) format."
         },
+        "scheduleMacro": {
+          "type": "string",
+          "description": "The macro that augments `schedule`."
+        },
+        "targetMonth": {
+          "type": "string",
+          "description": "The target month for the calculation. Empty means previous month (default)."
+        },
         "nextRun": {
           "type": "string",
           "description": "The schedule for the next run in UTC."
@@ -12970,9 +13267,13 @@
         },
         "modifier": {
           "$ref": "#/definitions/CalculatorCostModifierAwsOptionsModifier"
+        },
+        "after": {
+          "type": "string",
+          "description": "Optional. Specifies the modifier id in which this modifier will be applied after. For example, if you have another modifier `mod1` and you create a new modifier with `after` set to `mod1`, the calculator will apply `mod1` first, then this modifier. If `after` is not set, the application sequence for multiple overlapping modifiers will be by update timestamp, newest to oldest."
         }
       },
-      "description": "AWS-specific options definition. For overlapping cost modifier targets, the latest modifier will be applied. For example, you created a modifier for a specific account. Then you created another modifier for a billing group that includes that same account. In that case, the modifier for the billing group will be applied to the first account."
+      "description": "AWS-specific options definition."
     },
     "v1CloudWatchMetricsStream": {
       "type": "object",
@@ -13559,6 +13860,22 @@
         "notification": {
           "type": "boolean",
           "description": "Required. If valid, you will be notified via email address."
+        },
+        "waveConfig": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/rippleResellerConfig"
+          },
+          "title": "Optional. Feature Config. If not set config value, use default config"
+        },
+        "aquaConfig": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/rippleResellerConfig"
+          },
+          "title": "Optional. Feature Config. If not set config value, use default config"
         }
       },
       "description": "Request message for the CreateReseller rpc."
@@ -13895,7 +14212,7 @@
       "type": "object",
       "properties": {
         "data": {
-          "$ref": "#/definitions/apiBudget"
+          "$ref": "#/definitions/blueapiapiBudget"
         }
       },
       "title": "Response message for GetAccountBudget"
@@ -14441,6 +14758,10 @@
           "type": "boolean",
           "description": "For recommendationType = 'reservation'. Optional. If set to \"true\", recommends EC2 Instance Savings Plan that will cover usage not covered by RI. Default: false."
         },
+        "ec2SpProductFamily": {
+          "type": "string",
+          "description": "For recommendationType = 'reservation'. Optional. Valid values: 'EC2Instance', 'Compute'. Default: 'EC2Instance'."
+        },
         "term": {
           "type": "string",
           "description": "For recommendationType = 'reservation'. Optional. Valid values: '1yr', '3yr'. Default: '1yr'."
@@ -14883,7 +15204,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/apiNotification"
+            "$ref": "#/definitions/blueapiapiNotification"
           }
         }
       },
@@ -15888,6 +16209,33 @@
         }
       },
       "description": "Streaming response message for the Billing.ListUsageCostsDrift rpc."
+    },
+    "waveBudgetAlert": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "account id.",
+          "readOnly": true
+        },
+        "notification": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apiwaveNotification"
+          },
+          "description": "notification setting."
+        },
+        "budget": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apiwaveBudget"
+          },
+          "description": "budget setting."
+        }
+      },
+      "description": "Budget resource definition."
     }
   }
 }
