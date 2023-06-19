@@ -249,6 +249,14 @@ service Iam {
       body: "*"
     };
   }
+
+  // Verify Email Input For Reset Password
+  rpc VerifyEmailForResetPassword(VerifyEmailForResetPasswordRequest) returns (VerifyEmailForResetPasswordResponse) {
+    option (google.api.http) = {
+      post: "/iam/v1/verify/{email}"
+      body: "*"
+    };
+  }
 }
 
 // Request message for the Iam.WhoAmI rpc.
@@ -551,4 +559,13 @@ message RefreshPartnerTokenRequest {
 
   // Required. The previous (old) token to be refreshed.
   string token = 2;
+}
+
+// Request message for Iam.VerifyEmailForResetPassword rpc.
+message VerifyEmailForResetPasswordRequest {
+  string email = 1;
+}
+
+message VerifyEmailForResetPasswordResponse {
+  bool exists = 1;
 }
