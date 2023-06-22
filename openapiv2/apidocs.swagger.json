@@ -1992,6 +1992,37 @@
         ]
       }
     },
+    "/iam/v1/verify/{username}": {
+      "post": {
+        "summary": "Verify Username Input for Reset Password",
+        "operationId": "Iam_VerifyUsernameForResetPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1VerifyUsernameForResetPasswordResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
     "/iam/v1/whoami": {
       "get": {
         "summary": "Gets user information about the caller. This call includes all of the user metadata.\nSee [https://alphauslabs.github.io/blueapi/] for the list of supported attributes.",
@@ -16416,11 +16447,20 @@
     "v1VerifyEmailForResetPasswordResponse": {
       "type": "object",
       "properties": {
-        "exists": {
+        "doesUserExists": {
           "type": "boolean"
         }
       },
       "description": "Response message for Iam.VerifyEmailForResetPassword rpc."
+    },
+    "v1VerifyUsernameForResetPasswordResponse": {
+      "type": "object",
+      "properties": {
+        "doesUserExists": {
+          "type": "boolean"
+        }
+      },
+      "description": "Response message for Iam.VerifyUsernameForResetPassword rpc."
     },
     "waveBudgetAlert": {
       "type": "object",
