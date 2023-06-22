@@ -281,7 +281,7 @@ service Iam {
   }
 
   //Request for updating password after successful validation of the 6-digit verification code 
-  rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse) {
+  rpc UpdatePasswordFromLogin(UpdatePasswordFromLoginRequest) returns (UpdatePasswordFromLoginResponse) {
     option(google.api.http) = {
       post: "/iam/v1/update-password"
       body: "*"
@@ -631,11 +631,11 @@ message ValidateVerificationCodeResponse {
 }
 
 //Request for message Iam.UpdatePassword rpc.
-message UpdatePasswordRequest {
+message UpdatePasswordFromLoginRequest {
   string encodedNewPassword = 1;
 }
 //Response for message Iam.UpdatePassword rpc.
-message UpdatePasswordResponse {
+message UpdatePasswordFromLoginResponse {
   bool isPasswordUpdated = 1;
   bool isError = 2;
 }
