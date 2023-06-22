@@ -1708,12 +1708,12 @@
     "/iam/v1/update-password": {
       "post": {
         "summary": "Request for updating password after successful validation of the 6-digit verification code",
-        "operationId": "Iam_UpdatePassword",
+        "operationId": "Iam_UpdatePasswordFromLogin",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UpdatePasswordResponse"
+              "$ref": "#/definitions/v1UpdatePasswordFromLoginResponse"
             }
           },
           "default": {
@@ -1730,7 +1730,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/blueapiiamv1UpdatePasswordRequest"
+              "$ref": "#/definitions/v1UpdatePasswordFromLoginRequest"
             }
           }
         ],
@@ -2344,7 +2344,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/blueapiorgv1UpdatePasswordRequest"
+              "$ref": "#/definitions/v1UpdatePasswordRequest"
             }
           }
         ],
@@ -11613,27 +11613,6 @@
       },
       "description": "Response message wrapper for cloud costs."
     },
-    "blueapiiamv1UpdatePasswordRequest": {
-      "type": "object",
-      "properties": {
-        "encodedNewPassword": {
-          "type": "string"
-        }
-      },
-      "description": "Request for message Iam.UpdatePassword rpc."
-    },
-    "blueapiorgv1UpdatePasswordRequest": {
-      "type": "object",
-      "properties": {
-        "oldPassword": {
-          "type": "string"
-        },
-        "newPassword": {
-          "type": "string"
-        }
-      },
-      "description": "Request message for the Organization.UpdatePassword rpc."
-    },
     "costv1CostAttribute": {
       "type": "object",
       "properties": {
@@ -16063,7 +16042,16 @@
       },
       "description": "Request message for the Organization.UpdateMetadata rpc."
     },
-    "v1UpdatePasswordResponse": {
+    "v1UpdatePasswordFromLoginRequest": {
+      "type": "object",
+      "properties": {
+        "encodedNewPassword": {
+          "type": "string"
+        }
+      },
+      "description": "Request for message Iam.UpdatePassword rpc."
+    },
+    "v1UpdatePasswordFromLoginResponse": {
       "type": "object",
       "properties": {
         "isPasswordUpdated": {
@@ -16074,6 +16062,18 @@
         }
       },
       "description": "Response for message Iam.UpdatePassword rpc."
+    },
+    "v1UpdatePasswordRequest": {
+      "type": "object",
+      "properties": {
+        "oldPassword": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        }
+      },
+      "description": "Request message for the Organization.UpdatePassword rpc."
     },
     "v1UpdateSideMenuStateResponse": {
       "type": "object",
