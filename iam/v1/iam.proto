@@ -254,6 +254,29 @@ service Iam {
   rpc VerifyEmailForResetPassword(VerifyEmailForResetPasswordRequest) returns (VerifyEmailForResetPasswordResponse) {
     option (google.api.http) = {
       post: "/iam/v1/verify/{email}"
+    };
+  }
+
+  //Request for 6-digit verification code from front-end
+  rpc RequestForVerificationCode(RequestForVerificationCodeRequest) returns (RequestForVerificationCodeResponse) {
+    option(google.api.http) = {
+      post: "/iam/v1/code/request"
+      body: "*"
+    };
+  }
+
+  //Request for 6-digit verification code validation
+  rpc ValidateVerificationCode(ValidateVerificationCodeRequest) returns (ValidateVerificationCodeResponse) {
+    option(google.api.http) = {
+      post: "/iam/v1/code/validate"
+      body: "*"
+    };
+  }
+
+  //Request for updating password after successful validation of the 6-digit verification code 
+  rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse) {
+    option(google.api.http) = {
+      post: "/iam/v1/update-password"
       body: "*"
     };
   }
@@ -565,7 +588,39 @@ message RefreshPartnerTokenRequest {
 message VerifyEmailForResetPasswordRequest {
   string email = 1;
 }
-
+// Response message for Iam.VerifyEmailForResetPassword rpc.
 message VerifyEmailForResetPasswordResponse {
   bool exists = 1;
+}
+
+
+//Request message for Iam.RequestForVerificationCode rpc.
+message RequestForVerificationCodeRequest {
+  string email = 1;
+}
+//Response message for Iam.RequestForVerificationCode rpc.
+message RequestForVerificationCodeResponse {
+  string encodedCodeWithCredentials = 1;
+}
+
+//Request for message Iam.ValidateVerificationCode rpc.
+message ValidateVerificationCodeRequest {
+  string originalEncodedCode = 1;
+  string userInputEncodedCode = 2;
+}
+//Response for message Iam.ValidateVerificationCode rpc.
+message ValidateVerificationCodeResponse {
+  bool isCodeValidated = 1;
+  bool isCodeExpired = 2;
+  bool isCodeInvalid = 3;
+}
+
+//Request for message Iam.UpdatePassword rpc.
+message UpdatePasswordRequest {
+  string encodedNewPassword = 1;
+}
+//Response for message Iam.UpdatePassword rpc.
+message UpdatePasswordResponse {
+  bool isPasswordUpdated = 1;
+  bool isError = 2;
 }
