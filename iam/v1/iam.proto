@@ -257,6 +257,13 @@ service Iam {
     };
   }
 
+  // Verify Username Input for Reset Password
+  rpc VerifyUsernameForResetPassword(VerifyUsernameForResetPasswordRequest) returns (VerifyUsernameForResetPasswordResponse) {
+    option (google.api.http) = {
+      post: "/iam/v1/verify/{username}"
+    };
+  }
+
   //Request for 6-digit verification code from front-end
   rpc RequestForVerificationCode(RequestForVerificationCodeRequest) returns (RequestForVerificationCodeResponse) {
     option(google.api.http) = {
@@ -590,9 +597,17 @@ message VerifyEmailForResetPasswordRequest {
 }
 // Response message for Iam.VerifyEmailForResetPassword rpc.
 message VerifyEmailForResetPasswordResponse {
-  bool exists = 1;
+  bool doesUserExists = 1;
 }
 
+//Request message for Iam.VerifyUsernameForResetPassword rpc.
+message VerifyUsernameForResetPasswordRequest {
+  string username = 1;
+}
+//Response message for Iam.VerifyUsernameForResetPassword rpc.
+message VerifyUsernameForResetPasswordResponse {
+  bool doesUserExists = 1;
+}
 
 //Request message for Iam.RequestForVerificationCode rpc.
 message RequestForVerificationCodeRequest {
