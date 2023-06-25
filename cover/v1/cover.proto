@@ -632,6 +632,14 @@ service Cover {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Simulate account cost allocator
+  rpc SimulateAccountCostAllocator(CreateFeeAdjustmentAllocatorRequest) returns (stream AccountCostDetails) {
+    option (google.api.http) = {
+      post: "/v1/account/simulate"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -1811,4 +1819,36 @@ message ProxyCreateCompletionRequest {
 // Response message for the ProxyCreateCompletion rpc.
 message ProxyCreateCompletionResponse {
   string line = 1;
+}
+
+// Response message for SimulateAccountCostAllocator rpc.
+message AccountCostDetails {
+  string account = 1;
+  string date = 2;
+  string productCode = 3;
+  string serviceCode = 4;
+  string region = 5;
+  string zone = 6;
+  string usageType = 7;
+  string instanceType = 8;
+  string operation = 9;
+  string invoiceId = 10;
+  string description = 11;
+  string resourceId = 12;
+  string tags = 13;
+  string costCategories = 14;
+  double usageAmount = 15;
+  double trueUnblendedCost = 16;
+  double unblendedCost = 17;
+  double effectiveCost = 18;
+  double amortizedCost = 19;
+  double publicOnDemandCost = 20;
+  double unusedAmortizedCost = 21;
+  string lastUpdate = 22;
+  string allocationId = 23;
+  string orgId = 24;
+  string splitStatus = 25;
+  bool isAllocated = 26;
+  bool isApplied = 27;
+  string source = 28;
 }
