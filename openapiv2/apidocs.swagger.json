@@ -972,7 +972,7 @@
     },
     "/iam/v1/code/request": {
       "post": {
-        "summary": "Request for 6-digit verification code from front-end",
+        "summary": "WORK-IN-PROGRESS: Request for 6-digit verification code from front-end.",
         "operationId": "Iam_RequestForVerificationCode",
         "responses": {
           "200": {
@@ -1006,7 +1006,7 @@
     },
     "/iam/v1/code/validate": {
       "post": {
-        "summary": "Request for 6-digit verification code validation",
+        "summary": "WORK-IN-PROGRESS: Request for 6-digit verification code validation.",
         "operationId": "Iam_ValidateVerificationCode",
         "responses": {
           "200": {
@@ -1707,7 +1707,7 @@
     },
     "/iam/v1/update-password": {
       "post": {
-        "summary": "Request for updating password after successful validation of the 6-digit verification code",
+        "summary": "WORK-IN-PROGRESS: Request for updating password after successful validation of the 6-digit verification code.",
         "operationId": "Iam_UpdatePasswordFromLogin",
         "responses": {
           "200": {
@@ -1963,7 +1963,7 @@
     },
     "/iam/v1/verify/{email}": {
       "post": {
-        "summary": "Verify Email Input For Reset Password",
+        "summary": "WORK-IN-PROGRESS: Verify Email Input For Reset Password.",
         "operationId": "Iam_VerifyEmailForResetPassword",
         "responses": {
           "200": {
@@ -1994,7 +1994,7 @@
     },
     "/iam/v1/verify/{username}": {
       "post": {
-        "summary": "Verify Username Input for Reset Password",
+        "summary": "WORK-IN-PROGRESS: Verify Username Input for Reset Password.",
         "operationId": "Iam_VerifyUsernameForResetPassword",
         "responses": {
           "200": {
@@ -2467,6 +2467,49 @@
         ],
         "tags": [
           "Billing"
+        ]
+      }
+    },
+    "/v1/account/simulate": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Simulate account cost allocator",
+        "operationId": "Cover_SimulateAccountCostAllocator",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1AccountCostDetails"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1AccountCostDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the CreateFeeAdjustmentAllocator rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateFeeAdjustmentAllocatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
         ]
       }
     },
@@ -5019,10 +5062,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "groupId": {
-                  "type": "string",
-                  "description": "Optional. You can set billing internal id or access group id."
-                },
                 "email": {
                   "type": "string",
                   "description": "Optional."
@@ -5031,9 +5070,27 @@
                   "type": "string",
                   "description": "Optional.\n\nWe recommend a password length of 8~32 characters. If you send 0 characters, a password will be generated automatically."
                 },
+                "waveConfig": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/definitions/rippleResellerConfig"
+                  },
+                  "description": "Set only the config to be changed.\nFor example, If you want to change only dashboardGraph, set `{\"waveConfig\": [{\"key\": \"dashboardGraph\",\"value\": true}]}` as a parameter",
+                  "title": "Optional. wave feature config"
+                },
+                "aquaConfig": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/definitions/rippleResellerConfig"
+                  },
+                  "description": "Set only the config to be changed.\nFor example, If you want to change only aqRiManagement, set `{\"waveConfig\": [{\"key\": \"aqRiManagement\",\"value\": true}]}` as a parameter",
+                  "title": "Optional. aqua feature config"
+                },
                 "notification": {
                   "type": "boolean",
-                  "description": "Optional. If valid when email or password is updated, you will be notified via email address."
+                  "description": "Optional.\n\nIf valid when email or password is updated, you will be notified via email address.\nIf only waveConfig or aquaConfig is changed, it is ignored."
                 }
               },
               "description": "Request message for the UpdateReseller rpc."
@@ -13027,6 +13084,103 @@
         }
       },
       "description": "Response message for GetAccountAccess, CreateAccountAccess rpc."
+    },
+    "v1AccountCostDetails": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "productCode": {
+          "type": "string"
+        },
+        "serviceCode": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "zone": {
+          "type": "string"
+        },
+        "usageType": {
+          "type": "string"
+        },
+        "instanceType": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "invoiceId": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "resourceId": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "string"
+        },
+        "costCategories": {
+          "type": "string"
+        },
+        "usageAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "trueUnblendedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "unblendedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "effectiveCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "amortizedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "publicOnDemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "unusedAmortizedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "lastUpdate": {
+          "type": "string"
+        },
+        "allocationId": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "splitStatus": {
+          "type": "string"
+        },
+        "isAllocated": {
+          "type": "boolean"
+        },
+        "isApplied": {
+          "type": "boolean"
+        },
+        "source": {
+          "type": "string"
+        }
+      },
+      "description": "Response message for SimulateAccountCostAllocator rpc."
     },
     "v1AccountInvoiceServiceDiscounts": {
       "type": "object",
