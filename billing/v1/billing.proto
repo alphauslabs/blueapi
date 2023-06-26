@@ -5,6 +5,7 @@ package blueapi.billing.v1;
 import "api/account.proto";
 import "api/invoice.proto";
 import "api/costtag.proto";
+import "api/ripple/accessgroup.proto";
 import "api/ripple/reseller.proto";
 import "api/ripple/yearmonth.proto";
 import "api/ripple/rounding.proto";
@@ -209,6 +210,36 @@ service Billing {
   rpc ListExchangeRates(ListExchangeRatesRequest) returns (ListExchangeRatesResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/exchangerate/{month}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Lists access group. Only available in Ripple.
+  rpc ListAccessGroups(ListAccessGroupsRequest) returns (api.ripple.AccessGroup) {
+    option (google.api.http) = {
+      get: "/v1/accessgroups"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Registers the access group. Only available in Ripple.
+  rpc CreateAccessGroup(CreateAccessGroupRequest) returns (api.ripple.AccessGroup) {
+    option (google.api.http) = {
+      post: "/v1/accessgroups"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Updates the access group. Only available in Ripple.
+  rpc UpdateAccessGroup(UpdateAccessGroupRequest) returns (api.ripple.AccessGroup) {
+    option (google.api.http) = {
+      put: "/v1/accessgroups/{id}"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Deletes the access group. Only available in Ripple.
+  rpc DeleteAccessGroup(DeleteAccessGroupRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/accessgroups/{id}"
     };
   }
 }
@@ -776,4 +807,51 @@ message ListExchangeRatesResponse {
 
   // The payer exchange rate.
   api.ripple.VendorPayerExchangeRate payer = 4;
+}
+
+
+// Request message for the ListAccessGroups rpc.
+message ListAccessGroupsRequest {
+  // Optional. Get only the value that set fieldMask.
+  //
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask field_mask = 1;
+}
+
+// Request message for the CreateAccessGroup rpc.
+message CreateAccessGroupRequest {
+  // Required. access group name.
+  string name = 1;
+
+  // Required. access group description.
+  string description = 2;
+
+  // Required. Billing group to be included in the access group.
+  //
+  // Specify the billingInternalIds. For example: [`billingInternalId1`,`billingInternalId2`,`billingInternalId3`]
+  repeated string billingGroups = 3;
+}
+
+// Request message for the UpdateAccessGroup rpc.
+message UpdateAccessGroupRequest {
+  // Required. access group id.
+  string id = 1;
+
+  // Optional. access group name. Set only the name to be changed.
+  string name = 2;
+
+  // Optional. access group description. Set only the description to be changed.
+  string description = 3;
+
+  // Optional. Billing group to be included in the access group.
+  //
+  // Set only the billingGroups to be changed.
+  // Specify the billingInternalIds. For example: [`billingInternalId1`,`billingInternalId2`,`billingInternalId3`]
+  repeated string billingGroups = 4;
+}
+
+// Request message for the DeleteAccessGroup rpc.
+message DeleteAccessGroupRequest {
+  // Required. access group id.
+  string id = 1;
 }
