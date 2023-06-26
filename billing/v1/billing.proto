@@ -821,13 +821,18 @@ message ListAccessGroupsRequest {
 // Request message for the CreateAccessGroup rpc.
 message CreateAccessGroupRequest {
   // Required. access group name.
+  //
+  // We recommend the name length of 1~60 characters.
   string name = 1;
 
   // Required. access group description.
+  //
+  // We recommend the description length of 0~150 characters.
   string description = 2;
 
   // Required. Billing group to be included in the access group.
   //
+  // You can only include billing groups with the same calculation type and currency type.
   // Specify the billingInternalIds. For example: [`billingInternalId1`,`billingInternalId2`,`billingInternalId3`]
   repeated string billingGroups = 3;
 }
@@ -838,13 +843,18 @@ message UpdateAccessGroupRequest {
   string id = 1;
 
   // Optional. access group name. Set only the name to be changed.
+  //
+  // We recommend the name length of 1~60 characters.
   string name = 2;
 
   // Optional. access group description. Set only the description to be changed.
+  //
+  // We recommend the description length of 0~150 characters.
   string description = 3;
 
   // Optional. Billing group to be included in the access group.
   //
+  // You can only include billing groups with the same calculation type and currency type.
   // Set only the billingGroups to be changed.
   // Specify the billingInternalIds. For example: [`billingInternalId1`,`billingInternalId2`,`billingInternalId3`]
   repeated string billingGroups = 4;
