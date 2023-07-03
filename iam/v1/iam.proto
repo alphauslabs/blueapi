@@ -253,14 +253,14 @@ service Iam {
   // WORK-IN-PROGRESS: Verify User Input For Reset Password
   rpc VerifyUserForResetPassword(VerifyUserForResetPasswordRequest) returns (VerifyUserForResetPasswordResponse) {
     option (google.api.http) = {
-      post: "/iam/v1/verify/{user}"
+      post: "/iam/v1/{user}/password:verify"
     };
   }
 
   // WORK-IN-PROGRESS: Validate reset password link and proceed to update password
   rpc ValidateResetPasswordLinkAndChangePassword(ValidateResetPasswordLinkAndChangePasswordRequest) returns (ValidateResetPasswordLinkAndChangePasswordResponse) {
     option(google.api.http) = {
-      post: "/iam/v1/reset"
+      post: "/iam/v1/password:reset"
       body: "*"
     };
   }
