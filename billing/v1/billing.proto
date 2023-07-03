@@ -5,6 +5,7 @@ package blueapi.billing.v1;
 import "api/account.proto";
 import "api/invoice.proto";
 import "api/costtag.proto";
+import "api/ripple/accessgroup.proto";
 import "api/ripple/reseller.proto";
 import "api/ripple/yearmonth.proto";
 import "api/ripple/rounding.proto";
@@ -209,6 +210,36 @@ service Billing {
   rpc ListExchangeRates(ListExchangeRatesRequest) returns (ListExchangeRatesResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/exchangerate/{month}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Lists access group. Only available in Ripple.
+  rpc ListAccessGroups(ListAccessGroupsRequest) returns (stream api.ripple.AccessGroup) {
+    option (google.api.http) = {
+      get: "/v1/accessgroups"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Registers the access group. Only available in Ripple.
+  rpc CreateAccessGroup(CreateAccessGroupRequest) returns (api.ripple.AccessGroup) {
+    option (google.api.http) = {
+      post: "/v1/accessgroups"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Updates the access group. Only available in Ripple.
+  rpc UpdateAccessGroup(UpdateAccessGroupRequest) returns (api.ripple.AccessGroup) {
+    option (google.api.http) = {
+      put: "/v1/accessgroups/{id}"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Deletes the access group. Only available in Ripple.
+  rpc DeleteAccessGroup(DeleteAccessGroupRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/accessgroups/{id}"
     };
   }
 }
@@ -691,19 +722,31 @@ message UpdateResellerRequest {
   // Required. reseller id.
   string id = 1;
 
-  // Optional. You can set billing internal id or access group id.
-  string groupId = 2;
-
   // Optional.
-  string email = 3;
+  string email = 2;
 
   // Optional.
   //
   // We recommend a password length of 8~32 characters. If you send 0 characters, a password will be generated automatically.
-  string password = 4;
+  string password = 3;
 
-  // Optional. If valid when email or password is updated, you will be notified via email address.
-  bool notification = 5;
+  // Optional. wave feature config
+  //
+  // Set only the config to be changed.
+  // For example, If you want to change only dashboardGraph, set `{"waveConfig": [{"key": "dashboardGraph","value": true}]}` as a parameter
+  repeated api.ripple.ResellerConfig waveConfig = 4;
+
+  // Optional. aqua feature config
+  //
+  // Set only the config to be changed.
+  // For example, If you want to change only aqRiManagement, set `{"waveConfig": [{"key": "aqRiManagement","value": true}]}` as a parameter
+  repeated api.ripple.ResellerConfig aquaConfig = 5;
+
+  // Optional.
+  //
+  // If valid when email or password is updated, you will be notified via email address.
+  // If only waveConfig or aquaConfig is changed, it is ignored.
+  bool notification = 6;
 }
 
 
@@ -764,4 +807,61 @@ message ListExchangeRatesResponse {
 
   // The payer exchange rate.
   api.ripple.VendorPayerExchangeRate payer = 4;
+}
+
+
+// Request message for the ListAccessGroups rpc.
+message ListAccessGroupsRequest {
+  // Optional. Get only the value that set fieldMask.
+  //
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask field_mask = 1;
+}
+
+// Request message for the CreateAccessGroup rpc.
+message CreateAccessGroupRequest {
+  // Required. access group name.
+  //
+  // We recommend the name length of 1~60 characters.
+  string name = 1;
+
+  // Required. access group description.
+  //
+  // We recommend the description length of 0~150 characters.
+  string description = 2;
+
+  // Required. Billing group to be included in the access group.
+  //
+  // You can only include billing groups with the same calculation type and currency type.
+  // Specify the billingInternalIds. For example: [`billingInternalId1`,`billingInternalId2`,`billingInternalId3`]
+  repeated string billingGroups = 3;
+}
+
+// Request message for the UpdateAccessGroup rpc.
+message UpdateAccessGroupRequest {
+  // Required. access group id.
+  string id = 1;
+
+  // Optional. access group name. Set only the name to be changed.
+  //
+  // We recommend the name length of 1~60 characters.
+  string name = 2;
+
+  // Optional. access group description. Set only the description to be changed.
+  //
+  // We recommend the description length of 0~150 characters.
+  string description = 3;
+
+  // Optional. Billing group to be included in the access group.
+  //
+  // You can only include billing groups with the same calculation type and currency type.
+  // Set only the billingGroups to be changed.
+  // Specify the billingInternalIds. For example: [`billingInternalId1`,`billingInternalId2`,`billingInternalId3`]
+  repeated string billingGroups = 4;
+}
+
+// Request message for the DeleteAccessGroup rpc.
+message DeleteAccessGroupRequest {
+  // Required. access group id.
+  string id = 1;
 }
