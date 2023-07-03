@@ -250,40 +250,17 @@ service Iam {
     };
   }
 
-  // WORK-IN-PROGRESS: Verify Email Input For Reset Password.
-  rpc VerifyEmailForResetPassword(VerifyEmailForResetPasswordRequest) returns (VerifyEmailForResetPasswordResponse) {
+  // WORK-IN-PROGRESS: Verify User Input For Reset Password
+  rpc VerifyUserForResetPassword(VerifyUserForResetPasswordRequest) returns (VerifyUserForResetPasswordResponse) {
     option (google.api.http) = {
-      post: "/iam/v1/verify/{email}"
+      post: "/iam/v1/{user}/password:verify"
     };
   }
 
-  // WORK-IN-PROGRESS: Verify Username Input for Reset Password.
-  rpc VerifyUsernameForResetPassword(VerifyUsernameForResetPasswordRequest) returns (VerifyUsernameForResetPasswordResponse) {
-    option (google.api.http) = {
-      post: "/iam/v1/verify/{username}"
-    };
-  }
-
-  // WORK-IN-PROGRESS: Request for 6-digit verification code from front-end.
-  rpc RequestForVerificationCode(RequestForVerificationCodeRequest) returns (RequestForVerificationCodeResponse) {
+  // WORK-IN-PROGRESS: Validate reset password link and proceed to update password
+  rpc ValidateResetPasswordLinkAndChangePassword(ValidateResetPasswordLinkAndChangePasswordRequest) returns (ValidateResetPasswordLinkAndChangePasswordResponse) {
     option(google.api.http) = {
-      post: "/iam/v1/code/request"
-      body: "*"
-    };
-  }
-
-  // WORK-IN-PROGRESS: Request for 6-digit verification code validation.
-  rpc ValidateVerificationCode(ValidateVerificationCodeRequest) returns (ValidateVerificationCodeResponse) {
-    option(google.api.http) = {
-      post: "/iam/v1/code/validate"
-      body: "*"
-    };
-  }
-
-  // WORK-IN-PROGRESS: Request for updating password after successful validation of the 6-digit verification code.
-  rpc UpdatePasswordFromLogin(UpdatePasswordFromLoginRequest) returns (UpdatePasswordFromLoginResponse) {
-    option(google.api.http) = {
-      post: "/iam/v1/update-password"
+      post: "/iam/v1/password:reset"
       body: "*"
     };
   }
@@ -591,51 +568,23 @@ message RefreshPartnerTokenRequest {
   string token = 2;
 }
 
-// Request message for Iam.VerifyEmailForResetPassword rpc.
-message VerifyEmailForResetPasswordRequest {
-  string email = 1;
+// Request message for Iam.VerifyUserForResetPassword rpc.
+message VerifyUserForResetPasswordRequest {
+  string user = 1;
 }
-// Response message for Iam.VerifyEmailForResetPassword rpc.
-message VerifyEmailForResetPasswordResponse {
+// Response message for Iam.VerifyUserForResetPassword rpc.
+message VerifyUserForResetPasswordResponse {
   bool doesUserExists = 1;
-}
-
-//Request message for Iam.VerifyUsernameForResetPassword rpc.
-message VerifyUsernameForResetPasswordRequest {
-  string username = 1;
-}
-//Response message for Iam.VerifyUsernameForResetPassword rpc.
-message VerifyUsernameForResetPasswordResponse {
-  bool doesUserExists = 1;
-}
-
-//Request message for Iam.RequestForVerificationCode rpc.
-message RequestForVerificationCodeRequest {
-  string email = 1;
-}
-//Response message for Iam.RequestForVerificationCode rpc.
-message RequestForVerificationCodeResponse {
-  string encodedCodeWithCredentials = 1;
 }
 
 //Request for message Iam.ValidateVerificationCode rpc.
-message ValidateVerificationCodeRequest {
+message ValidateResetPasswordLinkAndChangePasswordRequest {
   string originalEncodedCode = 1;
   string userInputEncodedCode = 2;
 }
-//Response for message Iam.ValidateVerificationCode rpc.
-message ValidateVerificationCodeResponse {
-  bool isCodeValidated = 1;
-  bool isCodeExpired = 2;
-  bool isCodeInvalid = 3;
-}
 
-//Request for message Iam.UpdatePassword rpc.
-message UpdatePasswordFromLoginRequest {
-  string encodedNewPassword = 1;
-}
-//Response for message Iam.UpdatePassword rpc.
-message UpdatePasswordFromLoginResponse {
+//Response for message Iam.ValidateVerificationCode rpc.
+message ValidateResetPasswordLinkAndChangePasswordResponse {
   bool isPasswordUpdated = 1;
-  bool isError = 2;
+  bool isResettingPasswordError = 2;
 }
