@@ -434,6 +434,14 @@ service Cost {
       get: "/v1/{vendor}/bep/{orgId}"
     };
   }
+
+  // WORK-IN-PROGRESS: Get report for company or account in specific time range
+  rpc GetReports(GetReportsRequest) returns (GetReportsResponse) {
+    option (google.api.http) = {
+      post: "/v1/reports/{vendor}"
+      body: "*"
+    };
+  }
 }
 
 // Request message for the Cost.ListPayerAccounts rpc.
@@ -1745,3 +1753,49 @@ message DeleteAccountBudgetAlertsRequest {
   // Required. Account Id
   string id = 2;
 }
+
+// ***********Start GetReports*************
+// Request messsge for the Cost.GetReports rpc.
+message GetReportsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Resolution is `monthly` | `daily`
+  string resolution = 2;
+
+  // Required. Value is `company` | `account` for now.
+  string owner = 3;
+
+  // Optional. This one is required if `owner` is `account`. Format: <account_id>|<payer_id>
+  string ownerId = 4;
+
+  // Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `YYYY-MM-DD`.
+  string from = 5;
+
+  // Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `YYYY-MM-DD`.
+  string to = 6;
+
+  // Optional. Grouping by `service` | `region` | `account`. In case of `owner` is `company`, group by `account` cannot be used.
+  string groupBy = 7;
+}
+
+// Response message for the GetReports RPC.
+message GetReportsResponse {
+  repeated Vendor vendor = 1;
+}
+
+message Vendor {
+  string id = 1;
+  string name = 2;
+  repeated Date date = 3;
+}
+
+message Date {
+  // The date in YYYY-MM format.
+  string date = 1;
+  double unblendedCost = 2;
+  double trueUnblendedCost = 3;
+  double blendedCost = 4;
+  int64 timestamp = 5;
+}
+// ***********End GetReports*************
