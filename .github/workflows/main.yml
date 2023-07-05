@@ -33,6 +33,7 @@ jobs:
         go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
         go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.4.0 \
           github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@v2.4.0
+        go install github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@latest
         export PATH="$PATH:$HOME/.local/bin:$(go env GOPATH)/bin"
         mkdir -p generated/py && chmod +x ./build.sh && ./build.sh
         if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
@@ -40,7 +41,8 @@ jobs:
         fi
         # Update blue-sdk-go:
         WORKSPACE_ROOT=$PWD
-        cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-go && cd blue-sdk-go
+        cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-go && cd blue-sdk-go/
+        cp -rv $WORKSPACE_ROOT/generated/index.html docs/
         cp -rv $WORKSPACE_ROOT/generated/go/* . && git status
         git config user.email "dev@mobingi.com"
         git config user.name "mobingideployer"
