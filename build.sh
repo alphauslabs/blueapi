@@ -41,7 +41,7 @@ protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true --opena
        ./preferences/v1/*.proto
 
 echo "Generating html docs..."
-protoc --doc_out=. --doc_opt=html,index.html \
+protoc --doc_out=./generated/ --doc_opt=html,index.html \
        ./org/v1/*.proto \
        ./iam/v1/*.proto \
        ./admin/v1/*.proto \
