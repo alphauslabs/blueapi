@@ -633,10 +633,58 @@ service Cover {
     };
   }
 
-  // WORK-IN-PROGRESS: Simulate account cost allocator
-  rpc SimulateAccountCostAllocator(CreateFeeAdjustmentAllocatorRequest) returns (stream AccountCostDetails) {
+  // WORK-IN-PROGRESS: Lists the allocated account usages
+  rpc ListAccountUsage(ListAccountUsageRequest) returns (stream AccountUsageDetails) {
     option (google.api.http) = {
-      post: "/v1/account/simulate"
+      post: "/v1/allocations/accountusage/all:read"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Restore the allocated account usages
+  rpc RestoreAccountUsage(RestoreAccountUsageRequest) returns (stream AccountUsageDetails) {
+    option (google.api.http) = {
+      post: "/v1/allocations/accountusage/restore"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Simulate the output of the account usage allocation
+  rpc SimulateAccountUsage(CreateFeeAdjustmentAllocatorRequest) returns (stream AccountUsageDetails) {
+    option (google.api.http) = {
+      post: "/v1/allocations/accountusage/simulate"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Lists the allocated ri and sp savings
+  rpc ListSavings(ListFeesRequest) returns (stream SavingsDetails) {
+    option (google.api.http) = {
+      post: "/v1/allocations/savings/all:read"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Restore the allocated ri and sp savings
+  rpc RestoreSavings(RestoreFeeRequest) returns (stream SavingsDetails) {
+    option (google.api.http) = {
+      post: "/v1/allocations/savings/restore"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Simulate the output of the ri and sp savings allocation
+  rpc SimulateSavings(CreateFeeAdjustmentAllocatorRequest) returns (stream SavingsDetails) {
+    option (google.api.http) = {
+      post: "/v1/allocations/savings/simulate"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get all available allocation items for the specified cost group
+  rpc GetCostGroupAllocation(GetCostGroupAllocationRequest) returns (stream AllocationItem) {
+    option (google.api.http) = {
+      post: "/v1/allocations:read"
       body: "*"
     };
   }
@@ -1822,7 +1870,7 @@ message ProxyCreateCompletionResponse {
 }
 
 // Response message for SimulateAccountCostAllocator rpc.
-message AccountCostDetails {
+message AccountUsageDetails {
   string account = 1;
   string date = 2;
   string productCode = 3;
@@ -1851,4 +1899,55 @@ message AccountCostDetails {
   bool isAllocated = 26;
   bool isApplied = 27;
   string source = 28;
+}
+
+// Request message for the RestoreAccountUsage rpc.
+message ListAccountUsageRequest {
+  string startDate = 1;
+  string endDate = 2;
+}
+
+// Request message for the RestoreAccountUsage rpc.
+message RestoreAccountUsageRequest {
+  // Required. The account usage to restore.
+  string allocationId = 1;
+}
+
+// Response message for ListSavings, RestoreSavings, SimulateSavings rpc.
+message SavingsDetails {
+  string id = 1;
+  string orgId = 2;
+  string type = 3;
+  string month = 4;
+  string account = 5;
+  string arn = 6;
+  string productCode = 7;
+  string offerClass = 8;
+  double ondemand = 9;
+  double effectiveCost = 10;
+  double savings = 11;
+  string splitStatus = 12;
+  bool isAllocated = 13;
+  bool isApplied = 14;
+  string source = 15;
+  string lastUpdate = 16;
+}
+
+// Request message for the GetCostGroupAllocation rpc.
+message GetCostGroupAllocationRequest {
+  // Required. Cost Group Id.
+  string allocationType = 1; // fee or savings
+  string costGroupId = 2;
+  string startDate = 3;
+  string endDate = 4;
+}
+
+// Response message wrapper for cost group allocations.
+message AllocationItem {
+  string vendor = 1;
+  string month = 2;
+  string product = 3;
+  string account = 4;
+  string type = 5;
+  double cost = 6;
 }
