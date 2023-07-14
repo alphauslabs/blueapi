@@ -2735,11 +2735,11 @@
         "parameters": [
           {
             "name": "body",
-            "description": "Request message for the RestoreFee rpc.",
+            "description": "Request message for the RestoreSavings rpc.",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1RestoreFeeRequest"
+              "$ref": "#/definitions/v1RestoreSavingsRequest"
             }
           }
         ],
@@ -3357,9 +3357,18 @@
         "operationId": "Cover_GetCostGroups",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response.(streaming responses)",
             "schema": {
-              "$ref": "#/definitions/v1GetCostGroupsResponse"
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1GetCostGroupsResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1GetCostGroupsResponse"
             }
           },
           "default": {
@@ -15080,12 +15089,13 @@
     "v1GetCostGroupAllocationRequest": {
       "type": "object",
       "properties": {
-        "allocationType": {
+        "category": {
           "type": "string",
-          "description": "Required. Cost Group Id.\n\nfee or savings"
+          "description": "Required. The category to display on the cost group. Supports `fee` or `savings`."
         },
         "costGroupId": {
-          "type": "string"
+          "type": "string",
+          "description": "Required. Cost Group Id."
         },
         "startDate": {
           "type": "string"
@@ -15124,12 +15134,42 @@
     "v1GetCostGroupsResponse": {
       "type": "object",
       "properties": {
-        "costGroupData": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "colorTheme": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "members": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/coverCostGroupData"
+            "$ref": "#/definitions/coverMemberUserData"
           }
+        },
+        "combinations": {
+          "$ref": "#/definitions/coverCombinations"
+        },
+        "createdBy": {
+          "$ref": "#/definitions/coverMemberUserData"
         }
       },
       "title": "Response message for GetCostGroups"
@@ -16489,6 +16529,16 @@
         }
       },
       "description": "Request message for the RestoreFee rpc."
+    },
+    "v1RestoreSavingsRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Required. The item to restore."
+        }
+      },
+      "description": "Request message for the RestoreSavings rpc."
     },
     "v1SaveNotificationSettingsRequest": {
       "type": "object",
