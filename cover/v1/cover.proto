@@ -324,7 +324,7 @@ service Cover {
   }
 
   // Get all the cost groups
-  rpc GetCostGroups(GetCostGroupsRequest) returns (stream GetCostGroupsResponse) {
+  rpc GetCostGroups(GetCostGroupsRequest) returns (GetCostGroupsResponse) {
     option (google.api.http) = {
       get: "/v1/costgroups"
     };
@@ -566,7 +566,7 @@ service Cover {
   // Lists the fees
   rpc ListFees(ListFeesRequest) returns (stream FeeDetails) {
     option (google.api.http) = {
-      post: "/v1/fees/all:read"
+      post: "/v1/allocations/fees/all:read"
       body: "*"
     };
   }
@@ -574,7 +574,7 @@ service Cover {
   // Restore distributed fees
   rpc RestoreFee(RestoreFeeRequest) returns (stream FeeDetails) {
     option (google.api.http) = {
-      post: "/v1/fees/restore"
+      post: "/v1/allocations/fees/restore"
       body: "*"
     };
   }
@@ -582,38 +582,38 @@ service Cover {
   // Get all available fees for the specified cost group
   rpc GetCostGroupFee(GetCostGroupFeeRequest) returns (stream FeeItem) {
     option (google.api.http) = {
-      post: "/v1/fees:read"
+      post: "/v1/allocations/fees:read"
       body: "*"
     };
   }
 
-  // WORK-IN-PROGRESS: Lists the fee adjustment allocators
-  rpc ListFeeAdjustmentAllocators(ListFeeAdjustmentAllocatorsRequest) returns (stream FeeAdjustmentAllocatorResponse) {
+  // WORK-IN-PROGRESS: Lists all the allocators
+  rpc ListAllocators(ListAllocatorsRequest) returns (stream CostAllocatorDetails) {
     option (google.api.http) = {
-      get: "/v1/fees/adjustment"
+      get: "/v1/allocators"
     };
   }
 
-  // WORK-IN-PROGRESS: Creates fee adjustment allocator
-  rpc CreateFeeAdjustmentAllocator(CreateFeeAdjustmentAllocatorRequest) returns (FeeAdjustmentAllocatorResponse) {
+  // WORK-IN-PROGRESS: Creates cost allocator item
+  rpc CreateAllocator(CreateAllocatorRequest) returns (CostAllocatorDetails) {
     option (google.api.http) = {
-      post: "/v1/fees/adjustment"
+      post: "/v1/allocators"
       body: "*"
     };
   }
 
-  // WORK-IN-PROGRESS: Creates fee adjustment allocator
-  rpc UpdateFeeAdjustmentAllocator(FeeAdjustmentAllocatorRequest) returns (FeeAdjustmentAllocatorResponse) {
+  // WORK-IN-PROGRESS: Updates a cost allocator item
+  rpc UpdateAllocator(CostAllocatorRequest) returns (CostAllocatorDetails) {
     option (google.api.http) = {
-      put: "/v1/fees/adjustment/{id}"
+      put: "/v1/allocators/{id}"
       body: "*"
     };
   }
 
-  // WORK-IN-PROGRESS: Deletes a fee adjustment allocator
-  rpc DeleteFeeAdjustmentAllocator(DeleteFeeAdjustmentAllocatorRequest) returns (google.protobuf.Empty) {
+  // WORK-IN-PROGRESS: Deletes a cost allocator
+  rpc DeleteAllocator(DeleteAllocatorRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1/fees/adjustment/{id}"
+      delete: "/v1/allocators/{id}"
     };
   }
 
@@ -626,9 +626,9 @@ service Cover {
   }
 
   // WORK-IN-PROGRESS: Simulate fee allocator
-  rpc SimulateFeeAllocator(CreateFeeAdjustmentAllocatorRequest) returns (stream FeeDetails) {
+  rpc SimulateFeeAllocator(CreateAllocatorRequest) returns (stream FeeDetails) {
     option (google.api.http) = {
-      post: "/v1/fees/simulate"
+      post: "/v1/allocations/fees/simulate"
       body: "*"
     };
   }
@@ -650,7 +650,7 @@ service Cover {
   }
 
   // WORK-IN-PROGRESS: Simulate the output of the account usage allocation
-  rpc SimulateAccountUsage(CreateFeeAdjustmentAllocatorRequest) returns (stream AccountUsageDetails) {
+  rpc SimulateAccountUsage(CreateAllocatorRequest) returns (stream AccountUsageDetails) {
     option (google.api.http) = {
       post: "/v1/allocations/accountusage/simulate"
       body: "*"
@@ -674,7 +674,7 @@ service Cover {
   }
 
   // WORK-IN-PROGRESS: Simulate the output of the ri and sp savings allocation
-  rpc SimulateSavings(CreateFeeAdjustmentAllocatorRequest) returns (stream SavingsDetails) {
+  rpc SimulateSavings(CreateAllocatorRequest) returns (stream SavingsDetails) {
     option (google.api.http) = {
       post: "/v1/allocations/savings/simulate"
       body: "*"
@@ -1122,17 +1122,7 @@ message GetCostGroupsRequest {}
 
 // Response message for GetCostGroups
 message GetCostGroupsResponse {
-    string id = 1;
-    string name = 2;
-    string description = 3;
-    string image = 4;
-    string icon = 5;
-    string colorTheme = 6;
-    string createdAt = 7;
-    string updatedAt = 8;
-    repeated api.cover.MemberUserData members = 9;
-    api.cover.Combinations combinations = 10;
-    api.cover.MemberUserData createdBy = 11;
+    repeated api.cover.CostGroupData costGroupData = 1;
 }
 
 // Request message for GetCostGroupDetails
@@ -1818,7 +1808,7 @@ message Criteria {
   map<string, string> and = 1;
 }
 
-message FeeAdjustmentAllocatorResponse {
+message CostAllocatorDetails {
   string id = 1;
   string category = 2;
   int64 expiration = 3;
@@ -1833,7 +1823,7 @@ message FeeAdjustmentAllocatorResponse {
   string updateTime = 9;
 }
 
-message FeeAdjustmentAllocatorRequest {
+message CostAllocatorRequest {
   string id = 1;
   string category = 2;
   int64 expiration = 3;
@@ -1846,11 +1836,11 @@ message FeeAdjustmentAllocatorRequest {
   repeated Allocator allocator = 7;
 }
 
-// Request message for the ListFeeAdjustmentAllocators rpc.
-message ListFeeAdjustmentAllocatorsRequest {}
+// Request message for the ListAllocators rpc.
+message ListAllocatorsRequest {}
 
-// Request message for the CreateFeeAdjustmentAllocator rpc.
-message CreateFeeAdjustmentAllocatorRequest {
+// Request message for the CreateAllocator rpc.
+message CreateAllocatorRequest {
   // Optional. The category where the allocator is to be applied. Applicable values are `fee`, `account`, or `savings`. Default value is `fee`.
   string category = 1;
   int64 expiration = 2;
@@ -1863,8 +1853,8 @@ message CreateFeeAdjustmentAllocatorRequest {
   repeated Allocator allocator = 6;
 }
 
-// Request message for the DeleteFeeAdjustmentAllocator rpc.
-message DeleteFeeAdjustmentAllocatorRequest {
+// Request message for the DeleteAllocator rpc.
+message DeleteAllocatorRequest {
   // Required. The id of the allocator to delete.
   string id = 1;
 }

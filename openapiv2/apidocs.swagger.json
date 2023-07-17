@@ -2649,11 +2649,183 @@
         "parameters": [
           {
             "name": "body",
-            "description": "Request message for the CreateFeeAdjustmentAllocator rpc.",
+            "description": "Request message for the CreateAllocator rpc.",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1CreateFeeAdjustmentAllocatorRequest"
+              "$ref": "#/definitions/v1CreateAllocatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/allocations/fees/all:read": {
+      "post": {
+        "summary": "Lists the fees",
+        "operationId": "Cover_ListFees",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/coverv1FeeDetails"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of coverv1FeeDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the ListFees rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListFeesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/allocations/fees/restore": {
+      "post": {
+        "summary": "Restore distributed fees",
+        "operationId": "Cover_RestoreFee",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/coverv1FeeDetails"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of coverv1FeeDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the RestoreFee rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RestoreFeeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/allocations/fees/simulate": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Simulate fee allocator",
+        "operationId": "Cover_SimulateFeeAllocator",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/coverv1FeeDetails"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of coverv1FeeDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the CreateAllocator rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateAllocatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/allocations/fees:read": {
+      "post": {
+        "summary": "Get all available fees for the specified cost group",
+        "operationId": "Cover_GetCostGroupFee",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1FeeItem"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1FeeItem"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the GetCostGroupFee rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetCostGroupFeeRequest"
             }
           }
         ],
@@ -2778,11 +2950,11 @@
         "parameters": [
           {
             "name": "body",
-            "description": "Request message for the CreateFeeAdjustmentAllocator rpc.",
+            "description": "Request message for the CreateAllocator rpc.",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1CreateFeeAdjustmentAllocatorRequest"
+              "$ref": "#/definitions/v1CreateAllocatorRequest"
             }
           }
         ],
@@ -2826,6 +2998,172 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1GetCostGroupAllocationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/allocators": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Lists all the allocators",
+        "operationId": "Cover_ListAllocators",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1CostAllocatorDetails"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1CostAllocatorDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Creates cost allocator item",
+        "operationId": "Cover_CreateAllocator",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CostAllocatorDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the CreateAllocator rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateAllocatorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/allocators/{id}": {
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Deletes a cost allocator",
+        "operationId": "Cover_DeleteAllocator",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. The id of the allocator to delete.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Updates a cost allocator item",
+        "operationId": "Cover_UpdateAllocator",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CostAllocatorDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "category": {
+                  "type": "string"
+                },
+                "expiration": {
+                  "type": "string",
+                  "format": "int64"
+                },
+                "startMonth": {
+                  "type": "string",
+                  "description": "Optional. The starting month of the allocator to be effective."
+                },
+                "defaultAccount": {
+                  "type": "string",
+                  "description": "Optional. The default account for remaining costs. If not set, will allocate the cost to the original account."
+                },
+                "criteria": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/definitions/v1Criteria"
+                  },
+                  "description": "Required. Criteria for the adjustment to be applied."
+                },
+                "allocator": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/definitions/v1Allocator"
+                  }
+                }
+              }
             }
           }
         ],
@@ -3357,18 +3695,9 @@
         "operationId": "Cover_GetCostGroups",
         "responses": {
           "200": {
-            "description": "A successful response.(streaming responses)",
+            "description": "A successful response.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1GetCostGroupsResponse"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1GetCostGroupsResponse"
+              "$ref": "#/definitions/v1GetCostGroupsResponse"
             }
           },
           "default": {
@@ -3916,344 +4245,6 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1GetCostUsageRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/fees/adjustment": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Lists the fee adjustment allocators",
-        "operationId": "Cover_ListFeeAdjustmentAllocators",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1FeeAdjustmentAllocatorResponse"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1FeeAdjustmentAllocatorResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Cover"
-        ]
-      },
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Creates fee adjustment allocator",
-        "operationId": "Cover_CreateFeeAdjustmentAllocator",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1FeeAdjustmentAllocatorResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the CreateFeeAdjustmentAllocator rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateFeeAdjustmentAllocatorRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/fees/adjustment/{id}": {
-      "delete": {
-        "summary": "WORK-IN-PROGRESS: Deletes a fee adjustment allocator",
-        "operationId": "Cover_DeleteFeeAdjustmentAllocator",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "Required. The id of the allocator to delete.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      },
-      "put": {
-        "summary": "WORK-IN-PROGRESS: Creates fee adjustment allocator",
-        "operationId": "Cover_UpdateFeeAdjustmentAllocator",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1FeeAdjustmentAllocatorResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "category": {
-                  "type": "string"
-                },
-                "expiration": {
-                  "type": "string",
-                  "format": "int64"
-                },
-                "startMonth": {
-                  "type": "string",
-                  "description": "Optional. The starting month of the allocator to be effective."
-                },
-                "defaultAccount": {
-                  "type": "string",
-                  "description": "Optional. The default account for remaining costs. If not set, will allocate the cost to the original account."
-                },
-                "criteria": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "$ref": "#/definitions/v1Criteria"
-                  },
-                  "description": "Required. Criteria for the adjustment to be applied."
-                },
-                "allocator": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "$ref": "#/definitions/v1Allocator"
-                  }
-                }
-              }
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/fees/all:read": {
-      "post": {
-        "summary": "Lists the fees",
-        "operationId": "Cover_ListFees",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/coverv1FeeDetails"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of coverv1FeeDetails"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the ListFees rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ListFeesRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/fees/restore": {
-      "post": {
-        "summary": "Restore distributed fees",
-        "operationId": "Cover_RestoreFee",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/coverv1FeeDetails"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of coverv1FeeDetails"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the RestoreFee rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1RestoreFeeRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/fees/simulate": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Simulate fee allocator",
-        "operationId": "Cover_SimulateFeeAllocator",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/coverv1FeeDetails"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of coverv1FeeDetails"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the CreateFeeAdjustmentAllocator rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateFeeAdjustmentAllocatorRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/fees:read": {
-      "post": {
-        "summary": "Get all available fees for the specified cost group",
-        "operationId": "Cover_GetCostGroupFee",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1FeeItem"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1FeeItem"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the GetCostGroupFee rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetCostGroupFeeRequest"
             }
           }
         ],
@@ -14018,6 +14009,50 @@
       },
       "description": "Response message for the Admin.CreateCloudWatchMetricsStream rpc."
     },
+    "v1CostAllocatorDetails": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "expiration": {
+          "type": "string",
+          "format": "int64"
+        },
+        "startMonth": {
+          "type": "string",
+          "description": "Optional. The starting month of the allocator to be effective."
+        },
+        "defaultAccount": {
+          "type": "string",
+          "description": "Optional. The default account for remaining costs. If not set, will allocate the cost to the original account."
+        },
+        "criteria": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Criteria"
+          },
+          "description": "Required. Criteria for the adjustment to be applied."
+        },
+        "allocator": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Allocator"
+          }
+        },
+        "createTime": {
+          "type": "string"
+        },
+        "updateTime": {
+          "type": "string"
+        }
+      }
+    },
     "v1CostAttributeItem": {
       "type": "object",
       "properties": {
@@ -14090,6 +14125,43 @@
         }
       },
       "description": "AWS-specific options for registering an account."
+    },
+    "v1CreateAllocatorRequest": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string",
+          "description": "Optional. The category where the allocator is to be applied. Applicable values are `fee`, `account`, or `savings`. Default value is `fee`."
+        },
+        "expiration": {
+          "type": "string",
+          "format": "int64"
+        },
+        "startMonth": {
+          "type": "string",
+          "description": "Optional. The starting month of the allocator to be effective."
+        },
+        "defaultAccount": {
+          "type": "string",
+          "description": "Optional. The default account for remaining costs. If not set, will allocate the cost to the original account."
+        },
+        "criteria": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Criteria"
+          },
+          "description": "Required. Criteria for the adjustment to be applied."
+        },
+        "allocator": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Allocator"
+          }
+        }
+      },
+      "description": "Request message for the CreateAllocator rpc."
     },
     "v1CreateApiClientRequest": {
       "type": "object",
@@ -14323,43 +14395,6 @@
     "v1CreateDefaultNotificationChannelRequest": {
       "type": "object",
       "description": "Request message for the Admin.CreateDefaultNotificationChannel rpc."
-    },
-    "v1CreateFeeAdjustmentAllocatorRequest": {
-      "type": "object",
-      "properties": {
-        "category": {
-          "type": "string",
-          "description": "Optional. The category where the allocator is to be applied. Applicable values are `fee`, `account`, or `savings`. Default value is `fee`."
-        },
-        "expiration": {
-          "type": "string",
-          "format": "int64"
-        },
-        "startMonth": {
-          "type": "string",
-          "description": "Optional. The starting month of the allocator to be effective."
-        },
-        "defaultAccount": {
-          "type": "string",
-          "description": "Optional. The default account for remaining costs. If not set, will allocate the cost to the original account."
-        },
-        "criteria": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Criteria"
-          },
-          "description": "Required. Criteria for the adjustment to be applied."
-        },
-        "allocator": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Allocator"
-          }
-        }
-      },
-      "description": "Request message for the CreateFeeAdjustmentAllocator rpc."
     },
     "v1CreateGroupRootUserRequest": {
       "type": "object",
@@ -14841,50 +14876,6 @@
       },
       "description": "Response message for the ExportInvoiceFile rpc."
     },
-    "v1FeeAdjustmentAllocatorResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "category": {
-          "type": "string"
-        },
-        "expiration": {
-          "type": "string",
-          "format": "int64"
-        },
-        "startMonth": {
-          "type": "string",
-          "description": "Optional. The starting month of the allocator to be effective."
-        },
-        "defaultAccount": {
-          "type": "string",
-          "description": "Optional. The default account for remaining costs. If not set, will allocate the cost to the original account."
-        },
-        "criteria": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Criteria"
-          },
-          "description": "Required. Criteria for the adjustment to be applied."
-        },
-        "allocator": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Allocator"
-          }
-        },
-        "createTime": {
-          "type": "string"
-        },
-        "updateTime": {
-          "type": "string"
-        }
-      }
-    },
     "v1FeeItem": {
       "type": "object",
       "properties": {
@@ -15142,42 +15133,12 @@
     "v1GetCostGroupsResponse": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "image": {
-          "type": "string"
-        },
-        "icon": {
-          "type": "string"
-        },
-        "colorTheme": {
-          "type": "string"
-        },
-        "createdAt": {
-          "type": "string"
-        },
-        "updatedAt": {
-          "type": "string"
-        },
-        "members": {
+        "costGroupData": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/coverMemberUserData"
+            "$ref": "#/definitions/coverCostGroupData"
           }
-        },
-        "combinations": {
-          "$ref": "#/definitions/coverCombinations"
-        },
-        "createdBy": {
-          "$ref": "#/definitions/coverMemberUserData"
         }
       },
       "title": "Response message for GetCostGroups"
