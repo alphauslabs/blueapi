@@ -257,6 +257,9 @@ message BillingGroup {
   // The company’s name.
   string companyName = 7;
 
+  // The account options.
+  AccountOptions accountOptions = 8;
+
   // List of all accounts
   repeated api.Account accounts = 4;
 
@@ -350,8 +353,35 @@ message CreateBillingGroupRequest {
   // Optional. Exchange rate type, payer or billing group
   string exchangeRateType = 13;
 
+  // Optional. Account options.
+  AccountOptions accountOptions = 15;
+
   // Invoice settings
   CreateBillingGroupRequestInvoice invoices = 14;
+}
+
+// Account options definition.
+message AccountOptions {
+  // AWS register accounts
+  RegisterAccounts aws = 1;
+  // GCP register accounts
+  RegisterAccounts gcp = 2;
+  // Azure register accounts
+  RegisterAccounts azure = 3;
+}
+
+// Register Accounts definition
+message RegisterAccounts {
+  // Optional.
+  // If enabled, any additional accounts will be automatically enrolled into the billing group.
+  // If disabled, register the account manually.
+  // 
+  // For GCP, Register projectId under the specific Sub billing account.
+  // For AWS, Register accountId under the specific payer account into the billing group
+  bool enabled = 1;
+
+  // Optional. AccountId to be used for registration into the billing group.
+  string accountId = 2;
 }
 
 // Vendor invoice setttings
