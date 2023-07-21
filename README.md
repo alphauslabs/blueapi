@@ -19,6 +19,16 @@ go install github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@latest
 
 * The [buf](https://docs.buf.build/installation) tool
 
+This repo depends on [protos](https://github.com/alphauslabs/protos) as a [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules). To update locally, you need to:
+
+```bash
+# First time cloning the repo:
+$ git submodule update --init --recursive
+
+# Otherwise:
+$ git submodule update --remote --merge
+```
+
 Then run:
 
 ```bash
