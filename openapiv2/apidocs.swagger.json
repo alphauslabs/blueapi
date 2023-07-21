@@ -12724,19 +12724,19 @@
     "coverv1FeeDetails": {
       "type": "object",
       "properties": {
-        "feeId": {
+        "id": {
           "type": "string"
         },
         "orgId": {
           "type": "string"
         },
-        "entity": {
-          "type": "string"
-        },
-        "month": {
+        "vendor": {
           "type": "string"
         },
         "account": {
+          "type": "string"
+        },
+        "month": {
           "type": "string"
         },
         "lineType": {
@@ -13449,6 +13449,24 @@
       },
       "description": "Streaming response message for the AccountInvoiceServiceDiscounts rpc."
     },
+    "v1AccountOptions": {
+      "type": "object",
+      "properties": {
+        "aws": {
+          "$ref": "#/definitions/v1RegisterAccounts",
+          "title": "AWS register accounts"
+        },
+        "gcp": {
+          "$ref": "#/definitions/v1RegisterAccounts",
+          "title": "GCP register accounts"
+        },
+        "azure": {
+          "$ref": "#/definitions/v1RegisterAccounts",
+          "title": "Azure register accounts"
+        }
+      },
+      "description": "Account options definition."
+    },
     "v1AccountServiceDiscounts": {
       "type": "object",
       "properties": {
@@ -13465,6 +13483,15 @@
     "v1AccountUsageDetails": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string"
+        },
         "account": {
           "type": "string"
         },
@@ -13536,12 +13563,6 @@
           "format": "double"
         },
         "lastUpdate": {
-          "type": "string"
-        },
-        "allocationId": {
-          "type": "string"
-        },
-        "orgId": {
           "type": "string"
         },
         "splitStatus": {
@@ -13763,6 +13784,10 @@
         "companyName": {
           "type": "string",
           "description": "The company’s name."
+        },
+        "accountOptions": {
+          "$ref": "#/definitions/v1AccountOptions",
+          "description": "The account options."
         },
         "accounts": {
           "type": "array",
@@ -14227,6 +14252,10 @@
         "exchangeRateType": {
           "type": "string",
           "title": "Optional. Exchange rate type, payer or billing group"
+        },
+        "accountOptions": {
+          "$ref": "#/definitions/v1AccountOptions",
+          "description": "Optional. Account options."
         },
         "invoices": {
           "$ref": "#/definitions/v1CreateBillingGroupRequestInvoice",
@@ -16342,6 +16371,20 @@
       },
       "description": "A map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
     },
+    "v1RegisterAccounts": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Optional.\nIf enabled, any additional accounts will be automatically enrolled into the billing group.\nIf disabled, register the account manually.\n\nFor GCP, Register projectId under the specific Sub billing account.\nFor AWS, Register accountId under the specific payer account into the billing group"
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Optional. AccountId to be used for registration into the billing group."
+        }
+      },
+      "title": "Register Accounts definition"
+    },
     "v1RemoveCostGroupMemberResponse": {
       "type": "object",
       "properties": {
@@ -16536,13 +16579,16 @@
         "orgId": {
           "type": "string"
         },
-        "type": {
+        "vendor": {
+          "type": "string"
+        },
+        "account": {
           "type": "string"
         },
         "month": {
           "type": "string"
         },
-        "account": {
+        "type": {
           "type": "string"
         },
         "arn": {
