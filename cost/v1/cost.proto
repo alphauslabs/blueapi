@@ -4,7 +4,6 @@ package blueapi.cost.v1;
 
 import "api/account.proto";
 import "api/coverage.proto";
-import "api/operation.proto";
 import "api/budget.proto";
 import "api/forecast.proto";
 import "api/utilization.proto";
@@ -18,6 +17,7 @@ import "api/azure/cost.proto";
 import "api/ripple/payer.proto";
 import "api/wave/budget.proto";
 import "api/costtag.proto";
+import "protos/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -172,7 +172,7 @@ service Cost {
   }
 
   // Initiates an ondemand import of all registered CUR files. See [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting] for more information.
-  rpc ImportCurFiles(ImportCurFilesRequest) returns (api.Operation) {
+  rpc ImportCurFiles(ImportCurFilesRequest) returns (protos.Operation) {
     option (google.api.http) = {
       post: "/v1/aws/cur:import"
       body: "*"
@@ -180,7 +180,7 @@ service Cost {
   }
 
   // Triggers monthly calculations for costs and invoices at either organization or billing group level. For the AWS calculator, aggregation is done at daily and monthly level. Also, all occurrences of the character `|` (pipe) in the CUR descriptions and tag key/values are replaced with the `/` (forward-slash) character. This is due to the `|` character having a special designation in the data processing workflows.
-  rpc CalculateCosts(CalculateCostsRequest) returns (api.Operation) {
+  rpc CalculateCosts(CalculateCostsRequest) returns (protos.Operation) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costs:calculate"
       body: "*"
@@ -788,7 +788,7 @@ message ListCalculationsHistoryRequest {
 
 // AWS-specific response message for the Cost.ListCalculationsHistory rpc. Should be compatible with the Operations API.
 message ListCalculationsHistoryAwsResponse {
-  repeated api.Operation operations = 1;
+  repeated protos.Operation operations = 1;
 }
 
 // Response message for the Cost.ListCalculationsHistory rpc.
