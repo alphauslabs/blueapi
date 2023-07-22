@@ -37,6 +37,9 @@ jobs:
           github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@v2.4.0
         go install github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@latest
         export PATH="$PATH:$HOME/.local/bin:$(go env GOPATH)/bin"
+        # Hack: I don't know how to setup go_package properly when importing protos via submodule so resort to good old sed:
+        grep -rl 'tobereplaced"' | xargs sed -i -e 's/tobereplaced"/protos"/g'
+        # Start build:
         mkdir -p generated/py && chmod +x ./build.sh && ./build.sh
         if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
           exit 0
