@@ -688,6 +688,14 @@ service Cover {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Add user from Auth0 as Root user
+  rpc AddUserFromAuth0asRoot(AddUserFromAuth0asRootRequest) returns (AddUserFromAuth0asRootResponse) {
+    option (google.api.http) = {
+      post: "/v1/user:add"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -1959,4 +1967,14 @@ message AllocationItem {
   string account = 4;
   string type = 5;
   double cost = 6;
+}
+
+// Request message for AddUserFromAuth0asRoot rpc
+message AddUserFromAuth0asRootRequest {
+  string email = 1;
+}
+
+// Response message wrapper for adding user from Auth0 as root
+message AddUserFromAuth0asRootResponse {
+  bool isAuthorized = 1;
 }
