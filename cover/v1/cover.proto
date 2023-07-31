@@ -692,7 +692,7 @@ service Cover {
   // WORK-IN-PROGRESS: Add user from Auth0 as Root user
   rpc AddUserFromAuth0asRoot(AddUserFromAuth0asRootRequest) returns (AddUserFromAuth0asRootResponse) {
     option (google.api.http) = {
-      post: "/v1/user:add"
+      post: "/v1/members/auth0"
       body: "*"
     };
   }
@@ -1971,7 +1971,7 @@ message AllocationItem {
 
 // Request message for AddUserFromAuth0asRoot rpc
 message AddUserFromAuth0asRootRequest {
-  string email = 1;
+  string identityToken = 1;
 }
 
 // Response message wrapper for adding user from Auth0 as root

@@ -4969,6 +4969,39 @@
         ]
       }
     },
+    "/v1/members/auth0": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Add user from Auth0 as Root user",
+        "operationId": "Cover_AddUserFromAuth0asRoot",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddUserFromAuth0asRootResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddUserFromAuth0asRootRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/members/invite": {
       "post": {
         "summary": "Invite members to the system",
@@ -5759,39 +5792,6 @@
         ],
         "tags": [
           "Billing"
-        ]
-      }
-    },
-    "/v1/user:add": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Add user from Auth0 as Root user",
-        "operationId": "Cover_AddUserFromAuth0asRoot",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1AddUserFromAuth0asRootResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1AddUserFromAuth0asRootRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
         ]
       }
     },
@@ -13675,7 +13675,7 @@
     "v1AddUserFromAuth0asRootRequest": {
       "type": "object",
       "properties": {
-        "email": {
+        "identityToken": {
           "type": "string"
         }
       },
