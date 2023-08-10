@@ -696,6 +696,13 @@ service Cover {
       body: "*"
     };
   }
+  // WORK-IN-PROGRESS: Delete Account Access on Azure CSP Accounts
+   rpc DeleteAccountAccessAzureCsp(DeleteAccountAccessRequestAzureCsp) returns (DeleteAccountAccessResponseAzureCsp) {
+    option (google.api.http) = {
+      delete: "/v1/azure/acctaccess/{accountId}"
+    };
+  }
+
 }
 
 // Request message for OnboardOrg
@@ -1978,3 +1985,15 @@ message AddUserFromAuth0asRootRequest {
 message AddUserFromAuth0asRootResponse {
   bool isAuthorized = 1;
 }
+
+// Request message for the DeleteAccountAccessAzureCsp rpc.
+message DeleteAccountAccessRequestAzureCsp {
+  // Required. The target AzureCsp account to delete.
+  string accountId = 1;
+}
+
+// Response message for the DeleteAccountAccessAzureCsp rpc.
+message DeleteAccountAccessResponseAzureCsp {
+  string accountId = 1;
+}
+
