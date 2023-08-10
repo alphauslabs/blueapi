@@ -696,6 +696,14 @@ service Cover {
       body: "*"
     };
   }
+
+  // Deletes the current GCP account access role attached to this target account.
+  rpc DeleteGCPAccountAccess(DeleteGCPAccountAccessRequest) returns (DeleteGCPAccountAccessResponse){
+    option (google.api.http) = {
+      delete: "/v1/gcp/acctaccess/{projectId}"
+    };
+  }
+
 }
 
 // Request message for OnboardOrg
@@ -1977,4 +1985,15 @@ message AddUserFromAuth0asRootRequest {
 // Response message wrapper for adding user from Auth0 as root
 message AddUserFromAuth0asRootResponse {
   bool isAuthorized = 1;
+}
+
+// Request message for the DeleteGCPAccountAccess rpc.
+message DeleteGCPAccountAccessRequest {
+  // Required. The target GCP account to delete.
+  string projectId = 1;
+}
+
+// Response message for the DeleteGCPAccountAccess rpc.
+message DeleteGCPAccountAccessResponse {
+  string projectId = 1;
 }
