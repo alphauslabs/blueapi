@@ -454,7 +454,7 @@ service Cover {
   // Deletes the current account access role attached to this target account. This does not delete the CloudFormation deployment in your account.
   rpc DeleteAccountAccess(DeleteAccountAccessRequest) returns (DeleteAccountAccessResponse) {
     option (google.api.http) = {
-      delete: "/v1/aws/acctaccess/{target}"
+      delete: "/v1/acctaccess/{target}"
     };
   }
 
@@ -1357,6 +1357,7 @@ message UpdateAccountAccessRequest {
 message DeleteAccountAccessRequest {
   // Required. The target AWS account to delete.
   string target = 1;
+  string vendor = 2;
 }
 
 // Response message for the DeleteAccountAccess rpc.
@@ -1978,3 +1979,5 @@ message AddUserFromAuth0asRootRequest {
 message AddUserFromAuth0asRootResponse {
   bool isAuthorized = 1;
 }
+
+
