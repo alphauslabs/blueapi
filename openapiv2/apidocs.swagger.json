@@ -2533,6 +2533,44 @@
         ]
       }
     },
+    "/v1/acctaccess/{target}": {
+      "delete": {
+        "summary": "Deletes the current account access role attached to this target account. This does not delete the CloudFormation deployment in your account.",
+        "operationId": "Cover_DeleteAccountAccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteAccountAccessResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "target",
+            "description": "Required. The target AWS account to delete.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "vendor",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/allocations/accountusage/all:read": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Lists the allocated account usages",
@@ -3406,36 +3444,6 @@
           "Cover"
         ]
       },
-      "delete": {
-        "summary": "Deletes the current account access role attached to this target account. This does not delete the CloudFormation deployment in your account.",
-        "operationId": "Cover_DeleteAccountAccess",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DeleteAccountAccessResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "target",
-            "description": "Required. The target AWS account to delete.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      },
       "put": {
         "summary": "Starts an update to an existing account access CloudFormation stack for template changes, if any. Only call this API if the status of your account access is 'outdated'.",
         "operationId": "Cover_UpdateAccountAccess",
@@ -3541,38 +3549,6 @@
         ],
         "tags": [
           "Billing"
-        ]
-      }
-    },
-    "/v1/azure/acctaccess/{accountId}": {
-      "delete": {
-        "summary": "WORK-IN-PROGRESS: Delete Account Access on Azure CSP Accounts",
-        "operationId": "Cover_DeleteAccountAccessAzureCsp",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DeleteAccountAccessResponseAzureCsp"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "accountId",
-            "description": "Required. The target AzureCsp account to delete.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
         ]
       }
     },
@@ -14925,15 +14901,6 @@
         }
       },
       "description": "Response message for the DeleteAccountAccess rpc."
-    },
-    "v1DeleteAccountAccessResponseAzureCsp": {
-      "type": "object",
-      "properties": {
-        "accountId": {
-          "type": "string"
-        }
-      },
-      "description": "Response message for the DeleteAccountAccessAzureCsp rpc."
     },
     "v1DeleteCostGroupResponse": {
       "type": "object",

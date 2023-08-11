@@ -454,7 +454,7 @@ service Cover {
   // Deletes the current account access role attached to this target account. This does not delete the CloudFormation deployment in your account.
   rpc DeleteAccountAccess(DeleteAccountAccessRequest) returns (DeleteAccountAccessResponse) {
     option (google.api.http) = {
-      delete: "/v1/aws/acctaccess/{target}"
+      delete: "/v1/acctaccess/{target}"
     };
   }
 
@@ -696,13 +696,6 @@ service Cover {
       body: "*"
     };
   }
-  // WORK-IN-PROGRESS: Delete Account Access on Azure CSP Accounts
-   rpc DeleteAccountAccessAzureCsp(DeleteAccountAccessRequestAzureCsp) returns (DeleteAccountAccessResponseAzureCsp) {
-    option (google.api.http) = {
-      delete: "/v1/azure/acctaccess/{accountId}"
-    };
-  }
-
 }
 
 // Request message for OnboardOrg
@@ -1364,6 +1357,7 @@ message UpdateAccountAccessRequest {
 message DeleteAccountAccessRequest {
   // Required. The target AWS account to delete.
   string target = 1;
+  string vendor = 2;
 }
 
 // Response message for the DeleteAccountAccess rpc.
@@ -1986,14 +1980,4 @@ message AddUserFromAuth0asRootResponse {
   bool isAuthorized = 1;
 }
 
-// Request message for the DeleteAccountAccessAzureCsp rpc.
-message DeleteAccountAccessRequestAzureCsp {
-  // Required. The target AzureCsp account to delete.
-  string accountId = 1;
-}
-
-// Response message for the DeleteAccountAccessAzureCsp rpc.
-message DeleteAccountAccessResponseAzureCsp {
-  string accountId = 1;
-}
 
