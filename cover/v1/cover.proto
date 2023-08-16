@@ -472,6 +472,14 @@ service Cover {
     };
   }
 
+  // Registers gcp account
+  rpc RegisterGCPAccount(RegisterGCPAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/gcp/account"
+      body: "*"
+    };
+  }
+
   // WORK-IN-PROGRESS: Lists assets for costgroup 
   rpc ListAssets(ListAssetsRequest) returns (stream Resource) {
     option (google.api.http) = {
@@ -1373,14 +1381,11 @@ message DeleteAccountAccessResponse {
 
 // Request message for the RegisterAccount rpc.
 message RegisterAccountRequest {
-  // Required. Cloud vendor.
-  string vendor = 1;
-
-  // Required. The AWS account Id.
-  string accountId = 2;
+  // Required. The account Id.
+  string accountId = 1;
 
   // The account name
-  string accountName = 3;
+  string accountName = 2;
 }
 
 // Request message for the Asset.ListResources rpc.
@@ -2006,3 +2011,12 @@ message DataAccess {
 
   string createTime = 6;
 }
+
+message RegisterGCPAccountRequest {
+  string projectId = 1;
+
+  string projectName = 2;
+
+  string billingId = 3;
+}
+
