@@ -472,6 +472,14 @@ service Cover {
     };
   }
 
+  // Registers GCP/Azure account.
+  rpc RegisterDataAccess(RegisterDataAccessRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/account"
+      body: "*"
+    };
+  }
+
   // WORK-IN-PROGRESS: Lists assets for costgroup 
   rpc ListAssets(ListAssetsRequest) returns (stream Resource) {
     option (google.api.http) = {
@@ -1993,16 +2001,38 @@ message GetDataAccessRequest {
   string vendor = 2;
 }
 
+// Message Response for GetDataAccess. For Azure and GCP
 message DataAccess {
+  // Project Id for GCP, Account Id for Azure
   string target = 1; 
 
+  // Org Id
   string orgId = 2;
 
+  // GCP Options
   api.cover.GcpOptions gcpOptions = 3;
 
+  // Azure Options
   api.cover.AzureOptions azureOptions = 4;
 
+  // Last Update
   string lastUpdate = 5; 
 
+  // Time Created
   string createTime = 6;
+}
+
+// Request message for Register Data Access. For azure and gcp.
+message RegisterDataAccessRequest {
+  // Vendor (Azure/GCP)
+  string vendor = 1;
+
+  // Project Id for GCP, Account Id for Azure
+  string target = 2;
+
+  // GCP Options. Specific for GCP
+  api.cover.GcpOptions gcpOptions = 3;
+
+  // Azure Options. Specific for Azure
+  api.cover.AzureOptions azureOptions = 4;
 }

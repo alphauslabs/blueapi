@@ -2533,6 +2533,41 @@
         ]
       }
     },
+    "/v1/account": {
+      "post": {
+        "summary": "Registers GCP/Azure account.",
+        "operationId": "Cover_RegisterDataAccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for Register Data Access. For azure and gcp.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RegisterDataAccessRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/acctaccess/{target}": {
       "get": {
         "operationId": "Cover_GetDataAccess",
@@ -14923,24 +14958,31 @@
       "type": "object",
       "properties": {
         "target": {
-          "type": "string"
+          "type": "string",
+          "title": "Project Id for GCP, Account Id for Azure"
         },
         "orgId": {
-          "type": "string"
+          "type": "string",
+          "title": "Org Id"
         },
         "gcpOptions": {
-          "$ref": "#/definitions/coverGcpOptions"
+          "$ref": "#/definitions/coverGcpOptions",
+          "title": "GCP Options"
         },
         "azureOptions": {
-          "$ref": "#/definitions/coverAzureOptions"
+          "$ref": "#/definitions/coverAzureOptions",
+          "title": "Azure Options"
         },
         "lastUpdate": {
-          "type": "string"
+          "type": "string",
+          "title": "Last Update"
         },
         "createTime": {
-          "type": "string"
+          "type": "string",
+          "title": "Time Created"
         }
-      }
+      },
+      "title": "Message Response for GetDataAccess. For Azure and GCP"
     },
     "v1DefaultCostAccess": {
       "type": "object",
@@ -16533,6 +16575,28 @@
         }
       },
       "title": "Register Accounts definition"
+    },
+    "v1RegisterDataAccessRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "title": "Vendor (Azure/GCP)"
+        },
+        "target": {
+          "type": "string",
+          "title": "Project Id for GCP, Account Id for Azure"
+        },
+        "gcpOptions": {
+          "$ref": "#/definitions/coverGcpOptions",
+          "title": "GCP Options. Specific for GCP"
+        },
+        "azureOptions": {
+          "$ref": "#/definitions/coverAzureOptions",
+          "title": "Azure Options. Specific for Azure"
+        }
+      },
+      "description": "Request message for Register Data Access. For azure and gcp."
     },
     "v1RemoveCostGroupMemberResponse": {
       "type": "object",
