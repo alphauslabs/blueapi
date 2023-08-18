@@ -2568,6 +2568,62 @@
         ]
       }
     },
+    "/v1/account/{target}": {
+      "put": {
+        "summary": "Update GCP/Azure account info",
+        "operationId": "Cover_UpdateDataAccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "target",
+            "description": "Project Id for GCP, Account Id for Azure",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "vendor": {
+                  "type": "string",
+                  "title": "GCP or Azure"
+                },
+                "gcpOptions": {
+                  "$ref": "#/definitions/coverGcpOptions",
+                  "title": "GCP Options"
+                },
+                "azureOptions": {
+                  "$ref": "#/definitions/coverAzureOptions",
+                  "title": "Azure Options"
+                }
+              },
+              "title": "Request message for UpdateDataAccess (GCP/Azure)"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/acctaccess/{target}": {
       "get": {
         "operationId": "Cover_GetDataAccess",
