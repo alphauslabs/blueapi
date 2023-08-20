@@ -2568,6 +2568,38 @@
         ]
       }
     },
+    "/v1/account/all:read": {
+      "post": {
+        "summary": "Lists Azure and GCP accounts.",
+        "operationId": "Cover_ListDataAccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1DataAccess"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1DataAccess"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/account/{target}": {
       "put": {
         "summary": "Update GCP/Azure account info",
@@ -2626,6 +2658,7 @@
     },
     "/v1/acctaccess/{target}": {
       "get": {
+        "summary": "Gets the current account. For GCP and Azure.",
         "operationId": "Cover_GetDataAccess",
         "responses": {
           "200": {

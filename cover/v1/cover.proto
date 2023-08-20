@@ -436,6 +436,7 @@ service Cover {
     };
   }
 
+  // Gets the current account. For GCP and Azure.
   rpc GetDataAccess(GetDataAccessRequest) returns (DataAccess) {
     option (google.api.http) = {
       get: "/v1/acctaccess/{target}"
@@ -477,6 +478,13 @@ service Cover {
     option (google.api.http) = {
       post: "/v1/account"
       body: "*"
+    };
+  }
+
+  // Lists Azure and GCP accounts.
+  rpc ListDataAccess(ListDataAccessRequest) returns (stream DataAccess) {
+    option (google.api.http) = {
+      post: "/v1/account/all:read"
     };
   }
 
@@ -2059,3 +2067,6 @@ message UpdateDataAccessRequest {
   // Azure Options
   api.cover.AzureOptions azureOptions = 4;
 }
+
+// Request message for ListDataAccess
+message ListDataAccessRequest {}
