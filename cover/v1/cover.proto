@@ -436,6 +436,13 @@ service Cover {
     };
   }
 
+  // Gets the current account. For GCP and Azure.
+  rpc GetDataAccess(GetDataAccessRequest) returns (DataAccess) {
+    option (google.api.http) = {
+      get: "/v1/acctaccess/{target}"
+    };
+  }
+
   // Starts validation of the account access stack deployment. If successful, the IAM role created from the CloudFormation stack will be registered to the target.
   rpc CreateAccountAccess(CreateAccountAccessRequest) returns (AccountAccess) {
     option (google.api.http) = {
@@ -454,7 +461,7 @@ service Cover {
   // Deletes the current account access role attached to this target account. This does not delete the CloudFormation deployment in your account.
   rpc DeleteAccountAccess(DeleteAccountAccessRequest) returns (DeleteAccountAccessResponse) {
     option (google.api.http) = {
-      delete: "/v1/aws/acctaccess/{target}"
+      delete: "/v1/acctaccess/{target}"
     };
   }
 
@@ -462,6 +469,29 @@ service Cover {
   rpc RegisterAccount(RegisterAccountRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/v1/{vendor}/account"
+      body: "*"
+    };
+  }
+
+  // Registers GCP/Azure account.
+  rpc RegisterDataAccess(RegisterDataAccessRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/account"
+      body: "*"
+    };
+  }
+
+  // Lists Azure and GCP accounts.
+  rpc ListDataAccess(ListDataAccessRequest) returns (stream DataAccess) {
+    option (google.api.http) = {
+      post: "/v1/account/all:read"
+    };
+  }
+
+  // Update GCP/Azure account info
+  rpc UpdateDataAccess(UpdateDataAccessRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/account/{target}"
       body: "*"
     };
   }
@@ -1358,6 +1388,7 @@ message UpdateAccountAccessRequest {
 message DeleteAccountAccessRequest {
   // Required. The target AWS account to delete.
   string target = 1;
+  string vendor = 2;
 }
 
 // Response message for the DeleteAccountAccess rpc.
@@ -1979,3 +2010,67 @@ message AddUserFromAuth0asRootRequest {
 message AddUserFromAuth0asRootResponse {
   bool isAuthorized = 1;
 }
+
+message GetDataAccessRequest {
+  // Required. (Project ID for GCP / Account ID for Azure) 
+  string target = 1;
+  // Vendor (GCP/Azure)
+  string vendor = 2;
+}
+
+// Message Response for GetDataAccess. For Azure and GCP
+message DataAccess {
+  // Project Id for GCP, Account Id for Azure
+  string target = 1; 
+
+  // Org Id
+  string orgId = 2;
+
+  // GCP Options
+  api.cover.GcpOptions gcpOptions = 3;
+
+  // Azure Options
+  api.cover.AzureOptions azureOptions = 4;
+ 
+  // Account type, linked or payer
+  string accountType = 5; 
+
+  // Last Update
+  string lastUpdate = 6; 
+
+  // Time Created
+  string createTime = 7;
+}
+
+// Request message for Register Data Access. For azure and gcp.
+message RegisterDataAccessRequest {
+  // Vendor (Azure/GCP)
+  string vendor = 1;
+
+  // Project Id for GCP, Account Id for Azure
+  string target = 2;
+
+  // GCP Options. Specific for GCP
+  api.cover.GcpOptions gcpOptions = 3;
+
+  // Azure Options. Specific for Azure
+  api.cover.AzureOptions azureOptions = 4;
+}
+
+// Request message for UpdateDataAccess (GCP/Azure)
+message UpdateDataAccessRequest {
+  // Project Id for GCP, Account Id for Azure
+  string target = 1;
+
+  // GCP or Azure
+  string vendor = 2;
+
+  // GCP Options
+  api.cover.GcpOptions gcpOptions = 3;
+
+  // Azure Options
+  api.cover.AzureOptions azureOptions = 4;
+}
+
+// Request message for ListDataAccess
+message ListDataAccessRequest {}
