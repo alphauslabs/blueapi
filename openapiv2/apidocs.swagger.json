@@ -3712,6 +3712,40 @@
         ]
       }
     },
+    "/v1/billingacct": {
+      "post": {
+        "summary": "Add Billing Account ID for GCP.",
+        "operationId": "Cover_AddBillingAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddBillingAccountRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/billinggroups": {
       "get": {
         "summary": "Lists all billing groups.",
@@ -13832,6 +13866,28 @@
         }
       },
       "title": "Response message for ActivateUser"
+    },
+    "v1AddBillingAccountRequest": {
+      "type": "object",
+      "properties": {
+        "billingId": {
+          "type": "string",
+          "description": "Required. The billing account id."
+        },
+        "datasetId": {
+          "type": "string",
+          "description": "Name of dataset you created."
+        },
+        "datasetRegion": {
+          "type": "string",
+          "description": "In creating dataset, It requires you to select a region."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Project Id where the datasetId of BQ can be found."
+        }
+      },
+      "title": "Request message for AddBillingAccount"
     },
     "v1AddFavoriteRequest": {
       "type": "object",
