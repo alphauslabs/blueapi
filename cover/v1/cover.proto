@@ -481,6 +481,14 @@ service Cover {
     };
   }
 
+  // Add Billing Account ID for GCP. 
+  rpc AddBillingAccount(AddBillingAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/billingacct"
+      body: "*"
+    };
+  }
+
   // Lists Azure and GCP accounts.
   rpc ListDataAccess(ListDataAccessRequest) returns (stream DataAccess) {
     option (google.api.http) = {
@@ -2070,3 +2078,18 @@ message UpdateDataAccessRequest {
 
 // Request message for ListDataAccess
 message ListDataAccessRequest {}
+
+// Request message for AddBillingAccount
+message AddBillingAccountRequest {
+  // Required. The billing account id.
+  string billingId = 1;
+
+  // Name of dataset you created.
+  string datasetId = 2;
+
+  // In creating dataset, It requires you to select a region.
+  string datasetRegion = 3;
+
+  // Project Id where the datasetId of BQ can be found.
+  string projectId = 4;
+}
