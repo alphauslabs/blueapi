@@ -3768,6 +3768,39 @@
         ]
       }
     },
+    "/v1/azure/credentials/partnercenter": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: PartnerCenterCredentials for Azure",
+        "operationId": "Cover_AddPartnerCenterCredentials",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddPartnerCenterCredentialsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddPartnerCenterCredentialsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/billingacct": {
       "post": {
         "summary": "Add Billing Account ID for GCP.",
@@ -14001,6 +14034,34 @@
         }
       },
       "title": "Response message for AddFavorite"
+    },
+    "v1AddPartnerCenterCredentialsRequest": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string",
+          "title": "The account Id"
+        },
+        "applicationId": {
+          "type": "string",
+          "title": "Application Id"
+        },
+        "secretKey": {
+          "type": "string",
+          "title": "Secret Key"
+        }
+      },
+      "title": "Request message for AddPartnerCenterCredentials"
+    },
+    "v1AddPartnerCenterCredentialsResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "title": "Response message"
+        }
+      },
+      "title": "Response message for AddPartnerCenterCredentials"
     },
     "v1AddSideMenuFavoriteResponse": {
       "type": "object",
