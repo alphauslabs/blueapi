@@ -489,6 +489,14 @@ service Cover {
     };
   }
 
+  // WORK-IN-PROGRESS: PartnerCenterCredentials for Azure
+  rpc AddPartnerCenterCredentials(AddPartnerCenterCredentialsRequest) returns (AddPartnerCenterCredentialsResponse) {
+    option (google.api.http) = {
+      post: "/v1/azure/credentials/partnercenter"
+      body: "*"
+    };
+  }
+
   // Lists Azure and GCP accounts.
   rpc ListDataAccess(ListDataAccessRequest) returns (stream DataAccess) {
     option (google.api.http) = {
@@ -2099,4 +2107,22 @@ message AddBillingAccountRequest {
 
   // Project Id where the datasetId of BQ can be found.
   string projectId = 4;
+}
+
+// Request message for AddPartnerCenterCredentials
+message AddPartnerCenterCredentialsRequest {
+  // The account Id
+  string accountId = 1;
+
+  // Application Id
+  string applicationId = 2;
+
+  // Secret Key
+  string secretKey = 3;
+}
+
+// Response message for AddPartnerApiCredentials
+message AddPartnerCenterCredentialsResponse {
+  // Response message 
+  string message = 1;
 }
