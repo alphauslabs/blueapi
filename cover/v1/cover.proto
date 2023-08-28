@@ -437,9 +437,16 @@ service Cover {
   }
 
   // Gets the current account. For GCP and Azure.
-  rpc GetDataAccess(GetDataAccessRequest) returns (DataAccess) {
+  rpc GetDataAccess(GetAndDeleteDataAccessRequest) returns (DataAccess) {
     option (google.api.http) = {
-      get: "/v1/acctaccess/{target}"
+      get: "/v1/account/{target}"
+    };
+  }
+
+  // Deletes GCP or Azure accounts based on the provided request.
+  rpc DeleteDataAccess(GetAndDeleteDataAccessRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/account/{target}"
     };
   }
 
@@ -482,12 +489,20 @@ service Cover {
   }
 
   // Add Billing Account ID for GCP. 
-  rpc AddBillingAccount(AddBillingAccountRequest) returns (google.protobuf.Empty) {
+  rpc AddBillingAccount(BillingAccountRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/v1/billingacct"
       body: "*"
     };
   }
+
+  // Update Billing Account ID for GCP. It updates DatasetId, DatasetRegion, etc.
+  rpc UpdateBillingAccount(BillingAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/billingacct/{billingId}"
+    };
+  }
+
 
   // Lists Azure and GCP accounts.
   rpc ListDataAccess(ListDataAccessRequest) returns (stream DataAccess) {
@@ -2019,13 +2034,6 @@ message AddUserFromAuth0asRootResponse {
   bool isAuthorized = 1;
 }
 
-message GetDataAccessRequest {
-  // Required. (Project ID for GCP / Account ID for Azure) 
-  string target = 1;
-  // Vendor (GCP/Azure)
-  string vendor = 2;
-}
-
 // Message Response for GetDataAccess. For Azure and GCP
 message DataAccess {
   // Project Id for GCP, Account Id for Azure
@@ -2048,6 +2056,7 @@ message DataAccess {
 
   // Time Created
   string createTime = 7;
+  
 }
 
 // Request message for Register Data Access. For azure and gcp.
@@ -2081,13 +2090,16 @@ message UpdateDataAccessRequest {
 
   // Azure Options
   api.cover.AzureOptions azureOptions = 4;
+
+   // Account Type
+   string accountType = 5;
 }
 
 // Request message for ListDataAccess
 message ListDataAccessRequest {}
 
 // Request message for AddBillingAccount
-message AddBillingAccountRequest {
+message BillingAccountRequest {
   // Required. The billing account id.
   string billingId = 1;
 
@@ -2099,4 +2111,15 @@ message AddBillingAccountRequest {
 
   // Project Id where the datasetId of BQ can be found.
   string projectId = 4;
+}
+
+message GetAndDeleteDataAccessRequest {
+  // Required. (Project ID for GCP / Account ID for Azure) 
+  string target = 1;
+
+  // Vendor (GCP/Azure)
+  string vendor = 2;
+
+  // In the context of fetching account details, specifying the account type is necessary. This is because the target alone might not uniquely identify an account and could result in multiple data points.
+  string accountType = 3;
 }

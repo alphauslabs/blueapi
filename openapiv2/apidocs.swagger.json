@@ -2601,6 +2601,95 @@
       }
     },
     "/v1/account/{target}": {
+      "get": {
+        "summary": "Gets the current account. For GCP and Azure.",
+        "operationId": "Cover_GetDataAccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DataAccess"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "target",
+            "description": "Required. (Project ID for GCP / Account ID for Azure)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "vendor",
+            "description": "Vendor (GCP/Azure)",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "accountType",
+            "description": "In the context of fetching account details, specifying the account type is necessary. This is because the target alone might not uniquely identify an account and could result in multiple data points.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes GCP or Azure accounts based on the provided request.",
+        "operationId": "Cover_DeleteDataAccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "target",
+            "description": "Required. (Project ID for GCP / Account ID for Azure)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "vendor",
+            "description": "Vendor (GCP/Azure)",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "accountType",
+            "description": "In the context of fetching account details, specifying the account type is necessary. This is because the target alone might not uniquely identify an account and could result in multiple data points.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
       "put": {
         "summary": "Update GCP/Azure account info",
         "operationId": "Cover_UpdateDataAccess",
@@ -2645,6 +2734,10 @@
                 "azureOptions": {
                   "$ref": "#/definitions/coverAzureOptions",
                   "title": "Azure Options"
+                },
+                "accountType": {
+                  "type": "string",
+                  "title": "Account Type"
                 }
               },
               "title": "Request message for UpdateDataAccess (GCP/Azure)"
@@ -2657,43 +2750,6 @@
       }
     },
     "/v1/acctaccess/{target}": {
-      "get": {
-        "summary": "Gets the current account. For GCP and Azure.",
-        "operationId": "Cover_GetDataAccess",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DataAccess"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "target",
-            "description": "Required. (Project ID for GCP / Account ID for Azure)",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "vendor",
-            "description": "Vendor (GCP/Azure)",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      },
       "delete": {
         "summary": "Deletes the current account access role attached to this target account. This does not delete the CloudFormation deployment in your account.",
         "operationId": "Cover_DeleteAccountAccess",
@@ -3737,8 +3793,62 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1AddBillingAccountRequest"
+              "$ref": "#/definitions/v1BillingAccountRequest"
             }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/billingacct/{billingId}": {
+      "put": {
+        "summary": "Update Billing Account ID for GCP. It updates DatasetId, DatasetRegion, etc.",
+        "operationId": "Cover_UpdateBillingAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "billingId",
+            "description": "Required. The billing account id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "datasetId",
+            "description": "Name of dataset you created.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "datasetRegion",
+            "description": "In creating dataset, It requires you to select a region.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "projectId",
+            "description": "Project Id where the datasetId of BQ can be found.",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -12503,6 +12613,12 @@
         },
         "billingId": {
           "type": "string"
+        },
+        "datasetId": {
+          "type": "string"
+        },
+        "datasetRegion": {
+          "type": "string"
         }
       }
     },
@@ -13058,7 +13174,7 @@
       "properties": {
         "@type": {
           "type": "string",
-          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
         }
       },
       "additionalProperties": {},
@@ -13867,28 +13983,6 @@
       },
       "title": "Response message for ActivateUser"
     },
-    "v1AddBillingAccountRequest": {
-      "type": "object",
-      "properties": {
-        "billingId": {
-          "type": "string",
-          "description": "Required. The billing account id."
-        },
-        "datasetId": {
-          "type": "string",
-          "description": "Name of dataset you created."
-        },
-        "datasetRegion": {
-          "type": "string",
-          "description": "In creating dataset, It requires you to select a region."
-        },
-        "projectId": {
-          "type": "string",
-          "description": "Project Id where the datasetId of BQ can be found."
-        }
-      },
-      "title": "Request message for AddBillingAccount"
-    },
     "v1AddFavoriteRequest": {
       "type": "object",
       "properties": {
@@ -14065,6 +14159,28 @@
           }
         }
       }
+    },
+    "v1BillingAccountRequest": {
+      "type": "object",
+      "properties": {
+        "billingId": {
+          "type": "string",
+          "description": "Required. The billing account id."
+        },
+        "datasetId": {
+          "type": "string",
+          "description": "Name of dataset you created."
+        },
+        "datasetRegion": {
+          "type": "string",
+          "description": "In creating dataset, It requires you to select a region."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Project Id where the datasetId of BQ can be found."
+        }
+      },
+      "title": "Request message for AddBillingAccount"
     },
     "v1BillingGroup": {
       "type": "object",
