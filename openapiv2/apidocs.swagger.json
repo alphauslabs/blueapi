@@ -3768,6 +3768,40 @@
         ]
       }
     },
+    "/v1/azure/credentials/mpn": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Adding MpnSetting for Azure",
+        "operationId": "Cover_AddMpnSetting",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddMpnSettingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/azure/credentials/partnercenter": {
       "post": {
         "summary": "WORK-IN-PROGRESS: PartnerCenterCredentials for Azure",
@@ -3776,7 +3810,8 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1AddPartnerCenterCredentialsResponse"
+              "type": "object",
+              "properties": {}
             }
           },
           "default": {
@@ -14035,6 +14070,16 @@
       },
       "title": "Response message for AddFavorite"
     },
+    "v1AddMpnSettingRequest": {
+      "type": "object",
+      "properties": {
+        "mpnId": {
+          "type": "string",
+          "title": "Partner Id / MPN Id"
+        }
+      },
+      "title": "Request message for AddMpnSetting"
+    },
     "v1AddPartnerCenterCredentialsRequest": {
       "type": "object",
       "properties": {
@@ -14052,16 +14097,6 @@
         }
       },
       "title": "Request message for AddPartnerCenterCredentials"
-    },
-    "v1AddPartnerCenterCredentialsResponse": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string",
-          "title": "Response message"
-        }
-      },
-      "title": "Response message for AddPartnerCenterCredentials"
     },
     "v1AddSideMenuFavoriteResponse": {
       "type": "object",

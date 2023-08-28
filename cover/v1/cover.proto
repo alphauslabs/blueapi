@@ -750,9 +750,17 @@ service Cover {
     };
   }
    // WORK-IN-PROGRESS: PartnerCenterCredentials for Azure
-  rpc AddPartnerCenterCredentials(AddPartnerCenterCredentialsRequest) returns (AddPartnerCenterCredentialsResponse) {
+  rpc AddPartnerCenterCredentials(AddPartnerCenterCredentialsRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/v1/azure/credentials/partnercenter"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Adding MpnSetting for Azure
+  rpc AddMpnSetting(AddMpnSettingRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/azure/credentials/mpn"
       body: "*"
     };
   }
@@ -2142,8 +2150,8 @@ message AddPartnerCenterCredentialsRequest {
   string secretKey = 3;
 }
 
-// Response message for AddPartnerCenterCredentials
-message AddPartnerCenterCredentialsResponse {
-  // Response message 
-  string message = 1;
+// Request message for AddMpnSetting
+message AddMpnSettingRequest {
+ // Partner Id / MPN Id
+  string mpnId = 1;
 }
