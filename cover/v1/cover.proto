@@ -749,6 +749,13 @@ service Cover {
       body: "*"
     };
   }
+   // WORK-IN-PROGRESS: PartnerCenterCredentials for Azure
+  rpc AddPartnerCenterCredentials(AddPartnerCenterCredentialsRequest) returns (AddPartnerCenterCredentialsResponse) {
+    option (google.api.http) = {
+      post: "/v1/azure/credentials/partnercenter"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -2121,4 +2128,22 @@ message GetAndDeleteDataAccessRequest {
 
   // In the context of fetching account details, specifying the account type is necessary. This is because the target alone might not uniquely identify an account and could result in multiple data points.
   string accountType = 3;
+}
+
+// Request message for AddPartnerCenterCredentials
+message AddPartnerCenterCredentialsRequest {
+  // The account Id
+  string accountId = 1;
+
+  // Application Id
+  string applicationId = 2;
+
+  // Secret Key
+  string secretKey = 3;
+}
+
+// Response message for AddPartnerCenterCredentials
+message AddPartnerCenterCredentialsResponse {
+  // Response message 
+  string message = 1;
 }
