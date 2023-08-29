@@ -4154,6 +4154,49 @@
         ]
       }
     },
+    "/v1/costgroups/{attributeType}/{costGroupId}": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Get Cost Group by Attribute Type",
+        "operationId": "Cover_GetCostGroupAttribute",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCostGroupAttributeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "attributeType",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "costGroupId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "vendor",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/costgroups/{costGroupId}": {
       "get": {
         "summary": "Get the details of the cost group",
@@ -15679,6 +15722,18 @@
         }
       },
       "description": "Request message for the GetCostGroupAllocation rpc."
+    },
+    "v1GetCostGroupAttributeResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "Response message for GetCostGroupAttribute"
     },
     "v1GetCostGroupDetailsResponse": {
       "type": "object",

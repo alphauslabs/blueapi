@@ -764,6 +764,13 @@ service Cover {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Get Cost Group by Attribute Type
+  rpc GetCostGroupAttribute(GetCostGroupAttributeRequest) returns (GetCostGroupAttributeResponse) {
+    option (google.api.http) = {
+      post: "/v1/costgroups/{attributeType}/{costGroupId}"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -2154,4 +2161,18 @@ message AddPartnerCenterCredentialsRequest {
 message AddMpnSettingRequest {
  // Partner Id / MPN Id
   string mpnId = 1;
+}
+
+// Request message for GetCostGroupAttribute
+message GetCostGroupAttributeRequest {
+  string vendor = 1;
+
+  string attributeType = 2;
+
+  string costGroupId = 3;
+}
+
+// Response message for GetCostGroupAttribute
+message GetCostGroupAttributeResponse {
+  repeated string result = 1;
 }
