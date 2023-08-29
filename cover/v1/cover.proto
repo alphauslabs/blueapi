@@ -496,14 +496,6 @@ service Cover {
     };
   }
 
-  // Update Billing Account ID for GCP. It updates DatasetId, DatasetRegion, etc.
-  rpc UpdateBillingAccount(BillingAccountRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      put: "/v1/billingacct/{billingId}"
-    };
-  }
-
-
   // Lists Azure and GCP accounts.
   rpc ListDataAccess(ListDataAccessRequest) returns (stream DataAccess) {
     option (google.api.http) = {
@@ -747,6 +739,13 @@ service Cover {
     option (google.api.http) = {
       post: "/v1/members/auth0"
       body: "*"
+    };
+  }
+  
+  // Get Cost Group by Attribute Type. 
+  rpc GetCostGroupAttribute(GetCostGroupAttributeRequest) returns (GetCostGroupAttributeResponse) {
+    option (google.api.http) = {
+      get: "/v1/costgroups/attr/{attributeType}"
     };
   }
 }
@@ -2121,4 +2120,18 @@ message GetAndDeleteDataAccessRequest {
 
   // In the context of fetching account details, specifying the account type is necessary. This is because the target alone might not uniquely identify an account and could result in multiple data points.
   string accountType = 3;
+}
+
+// Request message for GetCostGroupAttribute
+message GetCostGroupAttributeRequest {
+  string vendor = 1;
+
+  string attributeType = 2;
+
+  string costGroupId = 3;
+}
+
+// Response message for GetCostGroupAttribute
+message GetCostGroupAttributeResponse {
+  repeated string result = 1;
 }
