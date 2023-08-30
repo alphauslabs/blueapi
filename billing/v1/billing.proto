@@ -99,6 +99,14 @@ service Billing {
     };
   }
 
+  // Reads list of the invoice.
+  rpc ListInvoice(ListInvoiceRequest) returns (stream ListInvoiceResponse) {
+    option (google.api.http) = {
+      post: "/v1/invoice:read"
+      body: "*"
+    };
+  }
+
   // Updates an invoice preview. Only available in Ripple.
   rpc UpdateInvoicePreviews(UpdateInvoicePreviewsRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -894,4 +902,26 @@ message UpdateAccessGroupRequest {
 message DeleteAccessGroupRequest {
   // Required. access group id.
   string id = 1;
+}
+
+// Request message for the ListInvoice rpc.
+message ListInvoiceRequest {
+  // Optional. billing internal id.
+  string groupId = 1;
+}
+
+
+// Response message for the ListInvoice rpc.
+message ListInvoiceResponse {
+  // The billing internal id.
+  string billingInternalId = 1;
+
+  // The billing group id.
+  string BillingGroupId = 2;
+
+  // The billing group name.
+  string BillingGroupName = 3;
+
+  // The date.
+  string date = 4;
 }
