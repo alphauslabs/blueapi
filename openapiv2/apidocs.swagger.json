@@ -3870,60 +3870,6 @@
         ]
       }
     },
-    "/v1/billingacct/{billingId}": {
-      "put": {
-        "summary": "Update Billing Account ID for GCP. It updates DatasetId, DatasetRegion, etc.",
-        "operationId": "Cover_UpdateBillingAccount",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "billingId",
-            "description": "Required. The billing account id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "datasetId",
-            "description": "Name of dataset you created.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "datasetRegion",
-            "description": "In creating dataset, It requires you to select a region.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "projectId",
-            "description": "Project Id where the datasetId of BQ can be found.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
     "/v1/billinggroups": {
       "get": {
         "summary": "Lists all billing groups.",
@@ -4678,7 +4624,7 @@
     },
     "/v1/invoice/status/{id}": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Gets an invoice. Only available in Ripple.",
+        "summary": "Gets an invoice. Only available in Ripple.",
         "operationId": "Billing_GetInvoiceStatus",
         "responses": {
           "200": {
@@ -4710,7 +4656,7 @@
     },
     "/v1/invoice/{date}:create": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Creates an invoice. Only available in Ripple.",
+        "summary": "Creates an invoice. Only available in Ripple.",
         "operationId": "Billing_CreateInvoice",
         "responses": {
           "200": {
@@ -4911,6 +4857,49 @@
                 }
               },
               "description": "Request message for the Cost.GetInvoiceRequest rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/invoice:read": {
+      "post": {
+        "summary": "Reads list of the invoice.",
+        "operationId": "Billing_ListInvoice",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1ListInvoiceResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1ListInvoiceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the ListInvoice rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListInvoiceRequest"
             }
           }
         ],
@@ -15825,6 +15814,10 @@
           "$ref": "#/definitions/v1GetCostUsageRequestAzureOptions",
           "description": "Optional. Valid only for the `azure` vendor. Azure-specific options."
         },
+        "gcpOptions": {
+          "$ref": "#/definitions/v1GetCostUsageRequestGcpOptions",
+          "description": "Optional. Valid only for the `azure` vendor. Azure-specific options."
+        },
         "includeCostForecast": {
           "type": "boolean",
           "title": "Optional. If set to true, include cost forecast for current month"
@@ -15870,6 +15863,35 @@
         "groupAccounts": {
           "type": "boolean",
           "description": "Optional. If set to true, group all input subscription into one."
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options. See [ReadCostsRequestOptionsFilters] for more information on each filter item. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
+        },
+        "tagFilters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options specific for tags. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
+        }
+      }
+    },
+    "v1GetCostUsageRequestGcpOptions": {
+      "type": "object",
+      "properties": {
+        "groupByColumns": {
+          "type": "string",
+          "description": "Optional. A comma-separated list of columns to aggregate the data into. \nA special value of `none` is also supported, which means query by date or month per account only.\n\nFor example, if you only want the services and location data, you can set this field to `serviceName,location`."
+        },
+        "groupAccounts": {
+          "type": "boolean",
+          "description": "Optional. If set to true, group all input projects into one."
         },
         "filters": {
           "type": "array",
@@ -16569,6 +16591,38 @@
         }
       },
       "description": "Response message for the Iam.ListIdentityProviders rpc."
+    },
+    "v1ListInvoiceRequest": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "Optional. billing internal id."
+        }
+      },
+      "description": "Request message for the ListInvoice rpc."
+    },
+    "v1ListInvoiceResponse": {
+      "type": "object",
+      "properties": {
+        "billingInternalId": {
+          "type": "string",
+          "description": "The billing internal id."
+        },
+        "BillingGroupId": {
+          "type": "string",
+          "description": "The billing group id."
+        },
+        "BillingGroupName": {
+          "type": "string",
+          "description": "The billing group name."
+        },
+        "date": {
+          "type": "string",
+          "description": "The date."
+        }
+      },
+      "description": "Response message for the ListInvoice rpc."
     },
     "v1ListInvoiceServiceDiscountsRequest": {
       "type": "object",
