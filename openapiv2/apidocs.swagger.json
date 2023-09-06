@@ -8291,7 +8291,7 @@
                   "description": "Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`."
                 },
                 "awsOptions": {
-                  "$ref": "#/definitions/ReadCostAttributesRequestAwsOptions",
+                  "$ref": "#/definitions/v1ReadCostAttributesRequestAwsOptions",
                   "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
                 }
               },
@@ -10247,15 +10247,6 @@
             "type": "string"
           },
           "description": "Optional. Replace matching occurences with the input. The key part is the regular expression matcher based on https://github.com/google/re2, while the value is the replacement. The order of replacement is not guaranteed.\n\nYou can use the `{{ondemandrate}}` variable in the replacement value part to reference the public ondemand rate indicated in the CUR."
-        }
-      }
-    },
-    "ReadCostAttributesRequestAwsOptions": {
-      "type": "object",
-      "properties": {
-        "dimensions": {
-          "type": "string",
-          "description": "Optional. A comma-separated list of dimensions to query. Valid values are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `invoiceId`, `description`, `resourceId`, `tags`, and `costCategories`. Sequence doesn't matter. An empty value implies all attributes will be returned."
         }
       }
     },
@@ -12295,6 +12286,14 @@
       },
       "description": "Defines the fields associated with a Wave access group."
     },
+    "billingv1AwsOptions": {
+      "type": "object",
+      "properties": {
+        "useProFormaCur": {
+          "type": "boolean"
+        }
+      }
+    },
     "blueapiapiAccount": {
       "type": "object",
       "properties": {
@@ -12533,6 +12532,9 @@
           "type": "string"
         },
         "partnerAcct": {
+          "type": "string"
+        },
+        "companyId": {
           "type": "string"
         },
         "payerId": {
@@ -14352,6 +14354,10 @@
         "invoiceSettings": {
           "$ref": "#/definitions/v1BillingGroupInvoiceSettings",
           "description": "The invoice settings for this billing group."
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/billingv1AwsOptions",
+          "title": "AWS-specific options"
         }
       }
     },
@@ -14804,6 +14810,10 @@
         "invoices": {
           "$ref": "#/definitions/v1CreateBillingGroupRequestInvoice",
           "title": "Invoice settings"
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/billingv1AwsOptions",
+          "title": "Optional. AWS-specific options"
         }
       },
       "description": "Request message for the Billing.CreateBillingGroup rpc."
@@ -16806,6 +16816,15 @@
         "toCurrency": {
           "type": "string",
           "description": "Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which case, it will use the latest exchange rates provided by https://fixer.io. If you prefer a custom exchange rate, you can append the rate to the currency's three-letter symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate should be against the US dollar (USD)."
+        }
+      }
+    },
+    "v1ReadCostAttributesRequestAwsOptions": {
+      "type": "object",
+      "properties": {
+        "dimensions": {
+          "type": "string",
+          "description": "Optional. A comma-separated list of dimensions to query. Valid values are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `invoiceId`, `description`, `resourceId`, `tags`, and `costCategories`. Sequence doesn't matter. An empty value implies all attributes will be returned."
         }
       }
     },
