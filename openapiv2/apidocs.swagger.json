@@ -12556,6 +12556,10 @@
         "gcpOptions": {
           "$ref": "#/definitions/coverCostGroupGcpOptions",
           "description": "Optional. Valid only for the `gcp` vendor. GCP-specific options."
+        },
+        "azurecspOptions": {
+          "$ref": "#/definitions/coverCostGroupAzureCspOptions",
+          "description": "Optional. Valid only for the `azurecsp` vendor. AzureCSP-specific options."
         }
       }
     },
@@ -12580,6 +12584,28 @@
         }
       },
       "description": "AWS-specific options for CreateCostGroupRequest."
+    },
+    "coverCostGroupAzureCspOptions": {
+      "type": "object",
+      "properties": {
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverCostGroupOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
+        },
+        "tagFilters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverCostGroupOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
+        }
+      },
+      "description": "AzureCsp-specific options for CreateCostGroupRequest."
     },
     "coverCostGroupAzureOptions": {
       "type": "object",
