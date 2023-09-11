@@ -250,6 +250,20 @@ service Billing {
       delete: "/v1/accessgroups/{id}"
     };
   }
+
+  // WORK-IN-PROGRESS: Gets all Billing Groups in AWS Billing Conductor(ABC) for specific payer id.
+  rpc ListAbcBillingGroups(ListAbcBillingGroupsRequest) returns (stream AbcBillingGroup) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/billingconductor/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Gets all accounts associated to AWS Billing Conductor(ABC) Billing group
+  rpc ListAbcBillingGroupAccounts(ListAbcBillingGroupAccountsRequest) returns (stream AbcAccount){
+    option (google.api.http) = {
+      get: "/v1/billinggroups/billingconductor/{payerId}/{billingGroupId}"
+    };
+  }
 }
 
 message BillingGroup {
@@ -934,4 +948,41 @@ message ListInvoiceResponse {
 
   // The date.
   string date = 4;
+}
+
+// request message for ListAbcBillingGroups
+message ListAbcBillingGroupsRequest {
+  // Required. Payer Id.
+  string id = 1;
+}
+
+// request message for ListAbcBillingGroupAccounts
+message ListAbcBillingGroupAccountsRequest {
+  // Required. Payer Id.
+  string payerId = 1;
+
+  // Required. BillingGroup Id.
+  string billingGroupId = 2;
+}
+
+message AbcBillingGroup {
+  string arn = 1;
+
+  string name = 2;
+
+  string creationTime = 3;
+
+  string description = 4;
+
+  string primaryAccountId = 5;
+
+  string size = 6;
+
+  string status = 7;
+}
+
+message AbcAccount {
+  string accountId = 1;
+
+  string accountName = 2;
 }
