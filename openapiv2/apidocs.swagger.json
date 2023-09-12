@@ -3943,6 +3943,95 @@
         ]
       }
     },
+    "/v1/billinggroups/billingconductor/{id}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets all Billing Groups in AWS Billing Conductor(ABC) for specific payer id.",
+        "operationId": "Billing_ListAbcBillingGroups",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1AbcBillingGroup"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1AbcBillingGroup"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. Payer Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/billinggroups/billingconductor/{payerId}/{billingGroupId}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets all accounts associated to AWS Billing Conductor(ABC) Billing group",
+        "operationId": "Billing_ListAbcBillingGroupAccounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1AbcAccount"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1AbcAccount"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "payerId",
+            "description": "Required. Payer Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "billingGroupId",
+            "description": "Required. BillingGroup Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups/{billingInternalId}": {
       "get": {
         "summary": "Gets a billing group.",
@@ -13885,6 +13974,43 @@
       },
       "description": "WORK-IN-PROGRESS: totalInvoiceLayout resource definition."
     },
+    "v1AbcAccount": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "accountName": {
+          "type": "string"
+        }
+      }
+    },
+    "v1AbcBillingGroup": {
+      "type": "object",
+      "properties": {
+        "arn": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "creationTime": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "primaryAccountId": {
+          "type": "string"
+        },
+        "size": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
     "v1AccountAccess": {
       "type": "object",
       "properties": {
@@ -15864,7 +15990,11 @@
         },
         "gcpOptions": {
           "$ref": "#/definitions/v1GetCostUsageRequestGcpOptions",
-          "description": "Optional. Valid only for the `azure` vendor. Azure-specific options."
+          "description": "Optional. Valid only for the `gcp` vendor. gcp-specific options."
+        },
+        "azurecspOptions": {
+          "$ref": "#/definitions/v1GetCostUsageRequestAzureCspOptions",
+          "description": "Optional. Valid only for the `azurecsp` vendor. AzureCsp-specific options."
         },
         "includeCostForecast": {
           "type": "boolean",
@@ -15898,6 +16028,35 @@
             "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
           },
           "description": "Optional. A list of filtering options specific for tags. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc. Discarded when `groupByColumns` field is set or if `groupByMonth` is true."
+        }
+      }
+    },
+    "v1GetCostUsageRequestAzureCspOptions": {
+      "type": "object",
+      "properties": {
+        "groupByColumns": {
+          "type": "string",
+          "description": "Optional. A comma-separated list of columns to aggregate the data into. \nA special value of `none` is also supported, which means query by date or month per account only.\n\nFor example, if you only want the services and location data, you can set this field to `serviceName,location`."
+        },
+        "groupAccounts": {
+          "type": "boolean",
+          "description": "Optional. If set to true, group all input projects into one."
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options. See [ReadCostsRequestOptionsFilters] for more information on each filter item. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
+        },
+        "tagFilters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options specific for tags. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
         }
       }
     },
