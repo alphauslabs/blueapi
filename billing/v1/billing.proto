@@ -261,7 +261,7 @@ service Billing {
   // WORK-IN-PROGRESS: Gets all accounts associated to AWS Billing Conductor(ABC) Billing group
   rpc ListAbcBillingGroupAccounts(ListAbcBillingGroupAccountsRequest) returns (stream AbcAccount){
     option (google.api.http) = {
-      get: "/v1/billinggroups/billingconductor/{payerId}/{billingGroupId}"
+      get: "/v1/billinggroups/billingconductor/{payerId}/accounts"
     };
   }
 }
@@ -962,7 +962,7 @@ message ListAbcBillingGroupAccountsRequest {
   string payerId = 1;
 
   // Required. BillingGroup Id.
-  string billingGroupId = 2;
+  string billingGroupArn = 2;
 }
 
 message AbcBillingGroup {
