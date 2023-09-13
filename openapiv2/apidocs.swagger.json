@@ -3984,7 +3984,7 @@
         ]
       }
     },
-    "/v1/billinggroups/billingconductor/{payerId}/{billingGroupId}": {
+    "/v1/billinggroups/billingconductor/{payerId}/accounts": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Gets all accounts associated to AWS Billing Conductor(ABC) Billing group",
         "operationId": "Billing_ListAbcBillingGroupAccounts",
@@ -4020,10 +4020,10 @@
             "type": "string"
           },
           {
-            "name": "billingGroupId",
+            "name": "billingGroupArn",
             "description": "Required. BillingGroup Id.",
-            "in": "path",
-            "required": true,
+            "in": "query",
+            "required": false,
             "type": "string"
           }
         ],
@@ -11677,6 +11677,47 @@
         }
       }
     },
+    "apicoverAwsOptions": {
+      "type": "object",
+      "properties": {
+        "AccountName": {
+          "type": "string"
+        },
+        "PayerId": {
+          "type": "string"
+        },
+        "RoleArn": {
+          "type": "string"
+        },
+        "ExternalId": {
+          "type": "string"
+        },
+        "StackId": {
+          "type": "string"
+        },
+        "StackRegion": {
+          "type": "string"
+        },
+        "TemplateUrl": {
+          "type": "string"
+        },
+        "BucketName": {
+          "type": "string"
+        },
+        "Prefix": {
+          "type": "string"
+        },
+        "ReportName": {
+          "type": "string"
+        },
+        "registrationStatus": {
+          "$ref": "#/definitions/coverRegistrationStatus"
+        },
+        "Status": {
+          "type": "string"
+        }
+      }
+    },
     "apigcpCost": {
       "type": "object",
       "properties": {
@@ -15547,6 +15588,9 @@
         "azureOptions": {
           "$ref": "#/definitions/coverAzureOptions",
           "title": "Azure Options"
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/apicoverAwsOptions"
         },
         "accountType": {
           "type": "string",
