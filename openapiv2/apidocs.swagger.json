@@ -3526,6 +3526,61 @@
         ]
       }
     },
+    "/v1/attribute/{attributeType}/{costGroupId}": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Get Cost Group by Attribute Type",
+        "operationId": "Cover_GetCostGroupAttribute",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCostGroupAttributeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "attributeType",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "costGroupId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "vendor",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "startTime",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "endTime",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/aws/acctaccess": {
       "get": {
         "summary": "Gets a CloudFormation launch URL for enabling the account access.",
@@ -4185,61 +4240,6 @@
             "description": "Required. Cost Group Id.",
             "in": "path",
             "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/costgroups/{attributeType}/{costGroupId}": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Get Cost Group by Attribute Type",
-        "operationId": "Cover_GetCostGroupAttribute",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetCostGroupAttributeResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "attributeType",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "costGroupId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "vendor",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "startTime",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "endTime",
-            "in": "query",
-            "required": false,
             "type": "string"
           }
         ],
