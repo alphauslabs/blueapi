@@ -95,6 +95,14 @@ service Admin {
     };
   }
 
+  // WORK-IN-PROGRESS: Configure AWS Proforma Cost and Usage Report.
+  rpc CreateProformaCur(CreateProformaCurRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/admin/v1/aws/reports/proforma"
+      body: "*"
+    };
+  }
+
   // Get notification settings for login user's organization or group.
   rpc GetNotificationSettings(GetNotificationSettingsRequest) returns (api.NotificationSettings) {
     option (google.api.http) = {
@@ -484,4 +492,46 @@ message DeleteNotificationRequest {
   // `InvoiceCalculationFinished`, 
   // `CurUpdatedAfterInvoice`.
   string notificationType = 2;
+}
+
+// Request message for Admin.CreateProformaCur rpc
+message CreateProformaCurRequest {
+  //Required.
+  string payerId = 1;
+
+  //Required.
+  string billingInternalId = 2;
+  
+  // Required.
+  string reportName = 3;
+
+  // Required.
+  string billingGroupArn = 4;
+
+  //Optional. Default value: `alphaus-proforma-cur-export`
+  string s3BucketName = 5;
+
+  //Optional. Default value: `pre` 
+  string s3Prefix = 6;
+
+  //Optional. Default value: `us-east-1`
+  string s3Region = 7;
+
+}
+
+message ProformaCur {
+  string orgId = 1;
+
+  string payerId = 2;
+
+  string billingInternalId = 3;
+  
+  string reportName = 4;
+
+  string bucketName = 5;
+
+  string prefix = 6;
+
+  string timeCreated = 7;
+
 }
