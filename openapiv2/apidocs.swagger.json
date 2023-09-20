@@ -4217,6 +4217,37 @@
         ]
       }
     },
+    "/v1/costgroups/categories": {
+      "get": {
+        "summary": "Retrieve the categories to be utilized in the creation of the cost group.",
+        "operationId": "Cover_GetCategories",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCategoriesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/costgroups/resolve/{costGroupId}": {
       "get": {
         "operationId": "Cover_ResolveCostGroupCombinations",
@@ -15607,6 +15638,9 @@
         "createTime": {
           "type": "string",
           "title": "Time Created"
+        },
+        "vendor": {
+          "type": "string"
         }
       },
       "title": "Message Response for GetDataAccess. For Azure and GCP"
@@ -15877,6 +15911,17 @@
         }
       },
       "description": "Response message for the Cost.GetCalculatorConfig rpc."
+    },
+    "v1GetCategoriesResponse": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "v1GetCloudWatchMetricsStreamTemplateUrlResponse": {
       "type": "object",
