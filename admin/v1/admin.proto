@@ -96,7 +96,7 @@ service Admin {
   }
 
   // WORK-IN-PROGRESS: Configure AWS Proforma Cost and Usage Report.
-  rpc CreateProformaCur(CreateProformaCurRequest) returns (google.protobuf.Empty) {
+  rpc CreateProformaCur(CreateProformaCurRequest) returns (ProformaCur) {
     option (google.api.http) = {
       post: "/admin/v1/aws/reports/proforma"
       body: "*"
@@ -505,17 +505,14 @@ message CreateProformaCurRequest {
   // Required.
   string reportName = 3;
 
-  // Required.
-  string billingGroupArn = 4;
-
   //Optional. Default value: `alphaus-proforma-cur-export`
-  string s3BucketName = 5;
+  string s3BucketName = 4;
 
   //Optional. Default value: `pre` 
-  string s3Prefix = 6;
+  string s3Prefix = 5;
 
   //Optional. Default value: `us-east-1`
-  string s3Region = 7;
+  string s3Region = 6;
 
 }
 
