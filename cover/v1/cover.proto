@@ -330,6 +330,13 @@ service Cover {
     };
   }
 
+  // Retrieve the categories to be utilized in the creation of the cost group.
+  rpc GetCategories(GetCategoriesRequest) returns (GetCategoriesResponse) {
+    option (google.api.http) = {
+      get: "/v1/costgroups/categories"
+    };
+  }
+
   // Get the details of the cost group
   rpc GetCostGroupDetails(GetCostGroupDetailsRequest) returns (GetCostGroupDetailsResponse) {
     option (google.api.http) = {
@@ -2223,4 +2230,12 @@ message GetCostGroupAttributeResponse {
   repeated string result = 1;
 
   repeated api.cover.TagData tagData = 2;
+}
+
+message GetCategoriesRequest {
+  string vendor = 1;
+}
+
+message GetCategoriesResponse {
+  repeated string results = 1;
 }
