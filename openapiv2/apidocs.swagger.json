@@ -146,6 +146,39 @@
         ]
       }
     },
+    "/admin/v1/aws/reports/proforma": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Configure AWS Proforma Cost and Usage Report.",
+        "operationId": "Admin_CreateProformaCur",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ProformaCur"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateProformaCurRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
     "/admin/v1/aws/xacct/cwms": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Gets a CloudFormation launch URL for enabling CloudWatch metrics streaming on a target account.",
@@ -4217,7 +4250,7 @@
         ]
       }
     },
-    "/v1/costgroups/categories": {
+    "/v1/costgroups/categories/{vendor}": {
       "get": {
         "summary": "Retrieve the categories to be utilized in the creation of the cost group.",
         "operationId": "Cover_GetCategories",
@@ -4238,8 +4271,8 @@
         "parameters": [
           {
             "name": "vendor",
-            "in": "query",
-            "required": false,
+            "in": "path",
+            "required": true,
             "type": "string"
           }
         ],
@@ -15434,6 +15467,36 @@
       },
       "description": "See [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting] for more information.\n\nSee [https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html] for more information. Requirements include: Additional report details = 'Include Resource IDS' enabled, Prefix = non-empty (recommendation only), Time granularity = 'Hourly', File format = 'text/csv'."
     },
+    "v1CreateProformaCurRequest": {
+      "type": "object",
+      "properties": {
+        "payerId": {
+          "type": "string",
+          "description": "Required."
+        },
+        "billingInternalId": {
+          "type": "string",
+          "description": "Required."
+        },
+        "reportName": {
+          "type": "string",
+          "description": "Required."
+        },
+        "s3BucketName": {
+          "type": "string",
+          "title": "Optional. Default value: `alphaus-proforma-cur-export`"
+        },
+        "s3Prefix": {
+          "type": "string",
+          "title": "Optional. Default value: `pre`"
+        },
+        "s3Region": {
+          "type": "string",
+          "title": "Optional. Default value: `us-east-1`"
+        }
+      },
+      "title": "Request message for Admin.CreateProformaCur rpc"
+    },
     "v1CreateResellerRequest": {
       "type": "object",
       "properties": {
@@ -17069,6 +17132,32 @@
     },
     "v1Preference": {
       "type": "object"
+    },
+    "v1ProformaCur": {
+      "type": "object",
+      "properties": {
+        "orgId": {
+          "type": "string"
+        },
+        "payerId": {
+          "type": "string"
+        },
+        "billingInternalId": {
+          "type": "string"
+        },
+        "reportName": {
+          "type": "string"
+        },
+        "bucketName": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "timeCreated": {
+          "type": "string"
+        }
+      }
     },
     "v1ProxyCreateCompletionRequest": {
       "type": "object",
