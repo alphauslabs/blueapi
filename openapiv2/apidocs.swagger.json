@@ -3559,8 +3559,8 @@
         ]
       }
     },
-    "/v1/attributes/{attributeType}/{costGroupId}": {
-      "get": {
+    "/v1/attributes": {
+      "post": {
         "summary": "WORK-IN-PROGRESS: Get Cost Group by Attribute Type",
         "operationId": "Cover_GetCostGroupAttribute",
         "responses": {
@@ -3579,34 +3579,12 @@
         },
         "parameters": [
           {
-            "name": "attributeType",
-            "in": "path",
+            "name": "body",
+            "in": "body",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "costGroupId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "vendor",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "startTime",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "endTime",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/v1GetCostGroupAttributeRequest"
+            }
           }
         ],
         "tags": [
@@ -16041,6 +16019,27 @@
         }
       },
       "description": "Request message for the GetCostGroupAllocation rpc."
+    },
+    "v1GetCostGroupAttributeRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string"
+        },
+        "attributeType": {
+          "type": "string"
+        },
+        "costGroupId": {
+          "type": "string"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for GetCostGroupAttribute"
     },
     "v1GetCostGroupAttributeResponse": {
       "type": "object",
