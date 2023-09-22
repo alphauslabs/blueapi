@@ -330,13 +330,6 @@ service Cover {
     };
   }
 
-  // Retrieve the categories to be utilized in the creation of the cost group.
-  rpc GetCategories(GetCategoriesRequest) returns (GetCategoriesResponse) {
-    option (google.api.http) = {
-      get: "/v1/categories"
-    };
-  }
-
   // Get the details of the cost group
   rpc GetCostGroupDetails(GetCostGroupDetailsRequest) returns (GetCostGroupDetailsResponse) {
     option (google.api.http) = {
@@ -741,8 +734,8 @@ service Cover {
     };
   }
 
-  // WORK-IN-PROGRESS: Add or read user from Auth0
-  rpc ProcessAuth0User(ProcessAuth0UserRequest) returns (ProcessAuth0UserResponse) {
+  // WORK-IN-PROGRESS: Add user from Auth0 as Root user
+  rpc AddUserFromAuth0asRoot(AddUserFromAuth0asRootRequest) returns (AddUserFromAuth0asRootResponse) {
     option (google.api.http) = {
       post: "/v1/members/auth0"
       body: "*"
@@ -767,8 +760,7 @@ service Cover {
   // WORK-IN-PROGRESS: Get Cost Group by Attribute Type
   rpc GetCostGroupAttribute(GetCostGroupAttributeRequest) returns (GetCostGroupAttributeResponse) {
     option (google.api.http) = {
-      post: "/v1/attributes"
-      body: "*"
+      post: "/v1/costgroups/{attributeType}/{costGroupId}"
     };
   }
 }
@@ -779,6 +771,7 @@ message OnboardOrgRequest {
   string password = 2;
   string name = 3;
   string orgId = 4;
+  string userId = 5;
 }
 
 // Response message for OnboardOrg
@@ -1597,6 +1590,10 @@ message GetCostUsageRequest {
 
    // Optional. Valid only for the `azurecsp` vendor. AzureCsp-specific options.
   GetCostUsageRequestAzureCspOptions azurecspOptions = 12;
+ 
+  // Optional. For custom selection when creating cost groups.
+  // This field allows custom options for specifying criteria for cost group creation.
+  GetCostUsageRequestCustomOptions customOptions = 13;
 
   // Optional. If set to true, include cost forecast for current month 
   bool includeCostForecast = 9;
@@ -1681,6 +1678,20 @@ message GetCostUsageRequestAzureCspOptions {
   repeated ReadCostsRequestOptionsFilters tagFilters = 4;
 }
 
+message GetCostUsageRequestCustomOptions {
+  // Optional. A comma-separated list of columns to aggregate the data into. 
+  // A special value of `none` is also supported, which means query by date or month per account only.
+  //
+  // For example, if you only want the services and location data, you can set this field to `serviceName,location`. 
+  string groupByColumns = 1;
+
+  // Optional. If set to true, group all input projects into one.
+  bool groupAccounts = 2;
+
+  // Optional. A list of filtering options. See [ReadCostsRequestOptionsFilters] for more information on each filter item. 
+  // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.
+  repeated ReadCostsRequestOptionsFilters filters = 3;
+}
 
 // A map of "key:value" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either "eq:" (equal), "re:" (regular expressions based on https://github.com/google/re2), or "!re:" (reverse "re:"). No prefix is the same as "eq:". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.
 //
@@ -2091,11 +2102,12 @@ message AllocationItem {
 }
 
 // Request message for AddUserFromAuth0asRoot rpc
-message ProcessAuth0UserRequest {
+message AddUserFromAuth0asRootRequest {
+  string email = 1;
 }
 
 // Response message wrapper for adding user from Auth0 as root
-message ProcessAuth0UserResponse {
+message AddUserFromAuth0asRootResponse {
   bool isAuthorized = 1;
 }
 
@@ -2123,8 +2135,6 @@ message DataAccess {
 
   // Time Created
   string createTime = 8;
-
-  string vendor = 9;
 }
 
 // Request message for Register Data Access. For azure and gcp.
@@ -2143,9 +2153,6 @@ message RegisterDataAccessRequest {
 
   // Azure Options. Specific for Azure
   api.cover.AzureOptions azureOptions = 5;
-
-   // Aws Options. Specific for Aws
-  api.cover.AwsOptions awsOptions = 6;
 }
 
 // Request message for UpdateDataAccess (GCP/Azure)
@@ -2162,11 +2169,8 @@ message UpdateDataAccessRequest {
   // Azure Options
   api.cover.AzureOptions azureOptions = 4;
 
-  // AWS Options
-  api.cover.AwsOptions awsOptions = 5;
-  
    // Account Type
-   string accountType = 6;
+   string accountType = 5;
 }
 
 // Request message for ListDataAccess
@@ -2232,14 +2236,4 @@ message GetCostGroupAttributeRequest {
 // Response message for GetCostGroupAttribute
 message GetCostGroupAttributeResponse {
   repeated string result = 1;
-
-  repeated api.cover.TagData tagData = 2;
-}
-
-message GetCategoriesRequest {
-  string vendor = 1;
-}
-
-message GetCategoriesResponse {
-  repeated string results = 1;
 }

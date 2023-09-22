@@ -2768,10 +2768,6 @@
                   "$ref": "#/definitions/coverAzureOptions",
                   "title": "Azure Options"
                 },
-                "awsOptions": {
-                  "$ref": "#/definitions/apicoverAwsOptions",
-                  "title": "AWS Options"
-                },
                 "accountType": {
                   "type": "string",
                   "title": "Account Type"
@@ -3559,39 +3555,6 @@
         ]
       }
     },
-    "/v1/attributes": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Get Cost Group by Attribute Type",
-        "operationId": "Cover_GetCostGroupAttribute",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetCostGroupAttributeResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetCostGroupAttributeRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
     "/v1/aws/acctaccess": {
       "get": {
         "summary": "Gets a CloudFormation launch URL for enabling the account access.",
@@ -4140,37 +4103,6 @@
         ]
       }
     },
-    "/v1/categories": {
-      "get": {
-        "summary": "Retrieve the categories to be utilized in the creation of the cost group.",
-        "operationId": "Cover_GetCategories",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetCategoriesResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
     "/v1/chargecode/upload": {
       "post": {
         "summary": "Upload charge code",
@@ -4282,6 +4214,61 @@
             "description": "Required. Cost Group Id.",
             "in": "path",
             "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/costgroups/{attributeType}/{costGroupId}": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Get Cost Group by Attribute Type",
+        "operationId": "Cover_GetCostGroupAttribute",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCostGroupAttributeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "attributeType",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "costGroupId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "vendor",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "startTime",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "endTime",
+            "in": "query",
+            "required": false,
             "type": "string"
           }
         ],
@@ -5530,13 +5517,13 @@
     },
     "/v1/members/auth0": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Add or read user from Auth0",
-        "operationId": "Cover_ProcessAuth0User",
+        "summary": "WORK-IN-PROGRESS: Add user from Auth0 as Root user",
+        "operationId": "Cover_AddUserFromAuth0asRoot",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ProcessAuth0UserResponse"
+              "$ref": "#/definitions/v1AddUserFromAuth0asRootResponse"
             }
           },
           "default": {
@@ -5552,7 +5539,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ProcessAuth0UserRequest"
+              "$ref": "#/definitions/v1AddUserFromAuth0asRootRequest"
             }
           }
         ],
@@ -13494,7 +13481,7 @@
         }
       },
       "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\nExample 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\nExample 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "protobufNullValue": {
       "type": "string",
@@ -14391,6 +14378,24 @@
         }
       },
       "title": "Response message for AddSideMenuFavorite"
+    },
+    "v1AddUserFromAuth0asRootRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for AddUserFromAuth0asRoot rpc"
+    },
+    "v1AddUserFromAuth0asRootResponse": {
+      "type": "object",
+      "properties": {
+        "isAuthorized": {
+          "type": "boolean"
+        }
+      },
+      "title": "Response message wrapper for adding user from Auth0 as root"
     },
     "v1AllocationItem": {
       "type": "object",
@@ -15661,9 +15666,6 @@
         "createTime": {
           "type": "string",
           "title": "Time Created"
-        },
-        "vendor": {
-          "type": "string"
         }
       },
       "title": "Message Response for GetDataAccess. For Azure and GCP"
@@ -15935,17 +15937,6 @@
       },
       "description": "Response message for the Cost.GetCalculatorConfig rpc."
     },
-    "v1GetCategoriesResponse": {
-      "type": "object",
-      "properties": {
-        "results": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "v1GetCloudWatchMetricsStreamTemplateUrlResponse": {
       "type": "object",
       "properties": {
@@ -16002,27 +15993,6 @@
       },
       "description": "Request message for the GetCostGroupAllocation rpc."
     },
-    "v1GetCostGroupAttributeRequest": {
-      "type": "object",
-      "properties": {
-        "vendor": {
-          "type": "string"
-        },
-        "attributeType": {
-          "type": "string"
-        },
-        "costGroupId": {
-          "type": "string"
-        },
-        "startTime": {
-          "type": "string"
-        },
-        "endTime": {
-          "type": "string"
-        }
-      },
-      "title": "Request message for GetCostGroupAttribute"
-    },
     "v1GetCostGroupAttributeResponse": {
       "type": "object",
       "properties": {
@@ -16030,13 +16000,6 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
-        },
-        "tagData": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/coverTagData"
           }
         }
       },
@@ -16140,6 +16103,10 @@
           "$ref": "#/definitions/v1GetCostUsageRequestAzureCspOptions",
           "description": "Optional. Valid only for the `azurecsp` vendor. AzureCsp-specific options."
         },
+        "customOptions": {
+          "$ref": "#/definitions/v1GetCostUsageRequestCustomOptions",
+          "description": "Optional. For custom selection when creating cost groups.\nThis field allows custom options for specifying criteria for cost group creation."
+        },
         "includeCostForecast": {
           "type": "boolean",
           "title": "Optional. If set to true, include cost forecast for current month"
@@ -16230,6 +16197,27 @@
             "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
           },
           "description": "Optional. A list of filtering options specific for tags. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
+        }
+      }
+    },
+    "v1GetCostUsageRequestCustomOptions": {
+      "type": "object",
+      "properties": {
+        "groupByColumns": {
+          "type": "string",
+          "description": "Optional. A comma-separated list of columns to aggregate the data into. \nA special value of `none` is also supported, which means query by date or month per account only.\n\nFor example, if you only want the services and location data, you can set this field to `serviceName,location`."
+        },
+        "groupAccounts": {
+          "type": "boolean",
+          "description": "Optional. If set to true, group all input projects into one."
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ReadCostsRequestOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options. See [ReadCostsRequestOptionsFilters] for more information on each filter item. \nMultiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
         }
       }
     },
@@ -17087,6 +17075,9 @@
         },
         "orgId": {
           "type": "string"
+        },
+        "userId": {
+          "type": "string"
         }
       },
       "title": "Request message for OnboardOrg"
@@ -17110,19 +17101,6 @@
     },
     "v1Preference": {
       "type": "object"
-    },
-    "v1ProcessAuth0UserRequest": {
-      "type": "object",
-      "title": "Request message for AddUserFromAuth0asRoot rpc"
-    },
-    "v1ProcessAuth0UserResponse": {
-      "type": "object",
-      "properties": {
-        "isAuthorized": {
-          "type": "boolean"
-        }
-      },
-      "title": "Response message wrapper for adding user from Auth0 as root"
     },
     "v1ProformaCur": {
       "type": "object",
@@ -17479,10 +17457,6 @@
         "azureOptions": {
           "$ref": "#/definitions/coverAzureOptions",
           "title": "Azure Options. Specific for Azure"
-        },
-        "awsOptions": {
-          "$ref": "#/definitions/apicoverAwsOptions",
-          "title": "Aws Options. Specific for Aws"
         }
       },
       "description": "Request message for Register Data Access. For azure and gcp."
