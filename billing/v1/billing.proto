@@ -76,7 +76,7 @@ service Billing {
     };
   }
   
-  // WORK-IN-PROGRESS: Creates an invoice. Only available in Ripple.
+  // Creates an invoice. Only available in Ripple.
   rpc CreateInvoice(CreateInvoiceRequest) returns (api.InvoiceMessage) {
     option (google.api.http) = {
       post: "/v1/invoice/{date}:create"
@@ -84,7 +84,7 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Gets an invoice. Only available in Ripple.
+  // Gets an invoice. Only available in Ripple.
   rpc GetInvoiceStatus(GetInvoiceStatusRequest) returns (api.InvoiceMessage) {
     option (google.api.http) = {
       get: "/v1/invoice/status/{id}"
@@ -95,6 +95,14 @@ service Billing {
   rpc GetInvoice(GetInvoiceRequest) returns (api.Invoice) {
     option (google.api.http) = {
       post: "/v1/invoice/{date}:read"
+      body: "*"
+    };
+  }
+
+  // Reads list of the invoice.
+  rpc ListInvoice(ListInvoiceRequest) returns (stream ListInvoiceResponse) {
+    option (google.api.http) = {
+      post: "/v1/invoice:read"
       body: "*"
     };
   }
@@ -242,6 +250,20 @@ service Billing {
       delete: "/v1/accessgroups/{id}"
     };
   }
+
+  // WORK-IN-PROGRESS: Gets all Billing Groups in AWS Billing Conductor(ABC) for specific payer id.
+  rpc ListAbcBillingGroups(ListAbcBillingGroupsRequest) returns (stream AbcBillingGroup) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/billingconductor/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Gets all accounts associated to AWS Billing Conductor(ABC) Billing group
+  rpc ListAbcBillingGroupAccounts(ListAbcBillingGroupAccountsRequest) returns (stream AbcAccount){
+    option (google.api.http) = {
+      get: "/v1/billinggroups/billingconductor/{payerId}/accounts"
+    };
+  }
 }
 
 message BillingGroup {
@@ -268,6 +290,9 @@ message BillingGroup {
 
   // The invoice settings for this billing group.
   BillingGroupInvoiceSettings invoiceSettings = 5;
+
+  // AWS-specific options
+  AwsOptions awsOptions = 9;
 }
 
 // Invoice settings for a billing group.
@@ -358,6 +383,13 @@ message CreateBillingGroupRequest {
 
   // Invoice settings
   CreateBillingGroupRequestInvoice invoices = 14;
+
+  // Optional. AWS-specific options
+  AwsOptions awsOptions = 16;
+}
+
+message AwsOptions {
+  bool useProFormaCur = 1;
 }
 
 // Account options definition.
@@ -894,4 +926,63 @@ message UpdateAccessGroupRequest {
 message DeleteAccessGroupRequest {
   // Required. access group id.
   string id = 1;
+}
+
+// Request message for the ListInvoice rpc.
+message ListInvoiceRequest {
+  // Optional. billing internal id.
+  string groupId = 1;
+}
+
+
+// Response message for the ListInvoice rpc.
+message ListInvoiceResponse {
+  // The billing internal id.
+  string billingInternalId = 1;
+
+  // The billing group id.
+  string BillingGroupId = 2;
+
+  // The billing group name.
+  string BillingGroupName = 3;
+
+  // The date.
+  string date = 4;
+}
+
+// request message for ListAbcBillingGroups
+message ListAbcBillingGroupsRequest {
+  // Required. Payer Id.
+  string id = 1;
+}
+
+// request message for ListAbcBillingGroupAccounts
+message ListAbcBillingGroupAccountsRequest {
+  // Required. Payer Id.
+  string payerId = 1;
+
+  // Required. BillingGroup Id.
+  string billingGroupArn = 2;
+}
+
+message AbcBillingGroup {
+  string arn = 1;
+
+  string name = 2;
+
+  string creationTime = 3;
+
+  string description = 4;
+
+  string primaryAccountId = 5;
+
+  string size = 6;
+
+  string status = 7;
+}
+
+message AbcAccount {
+  string accountId = 1;
+
+  string accountName = 2;
 }

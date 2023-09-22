@@ -330,6 +330,13 @@ service Cover {
     };
   }
 
+  // Retrieve the categories to be utilized in the creation of the cost group.
+  rpc GetCategories(GetCategoriesRequest) returns (GetCategoriesResponse) {
+    option (google.api.http) = {
+      get: "/v1/categories"
+    };
+  }
+
   // Get the details of the cost group
   rpc GetCostGroupDetails(GetCostGroupDetailsRequest) returns (GetCostGroupDetailsResponse) {
     option (google.api.http) = {
@@ -437,9 +444,16 @@ service Cover {
   }
 
   // Gets the current account. For GCP and Azure.
-  rpc GetDataAccess(GetDataAccessRequest) returns (DataAccess) {
+  rpc GetDataAccess(GetAndDeleteDataAccessRequest) returns (DataAccess) {
     option (google.api.http) = {
-      get: "/v1/acctaccess/{target}"
+      get: "/v1/account/{target}"
+    };
+  }
+
+  // Deletes GCP or Azure accounts based on the provided request.
+  rpc DeleteDataAccess(GetAndDeleteDataAccessRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/account/{target}"
     };
   }
 
@@ -477,6 +491,14 @@ service Cover {
   rpc RegisterDataAccess(RegisterDataAccessRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/v1/account"
+      body: "*"
+    };
+  }
+
+  // Add Billing Account ID for GCP. 
+  rpc AddBillingAccount(BillingAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/billingacct"
       body: "*"
     };
   }
@@ -723,6 +745,29 @@ service Cover {
   rpc ProcessAuth0User(ProcessAuth0UserRequest) returns (ProcessAuth0UserResponse) {
     option (google.api.http) = {
       post: "/v1/members/auth0"
+      body: "*"
+    };
+  }
+   // WORK-IN-PROGRESS: PartnerCenterCredentials for Azure
+  rpc AddPartnerCenterCredentials(AddPartnerCenterCredentialsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/azure/credentials/partnercenter"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Adding MpnSetting for Azure
+  rpc AddMpnSetting(AddMpnSettingRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/azure/credentials/mpn"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get Cost Group by Attribute Type
+  rpc GetCostGroupAttribute(GetCostGroupAttributeRequest) returns (GetCostGroupAttributeResponse) {
+    option (google.api.http) = {
+      post: "/v1/attributes"
       body: "*"
     };
   }
@@ -1546,6 +1591,12 @@ message GetCostUsageRequest {
   // Optional. Valid only for the `azure` vendor. Azure-specific options.
   GetCostUsageRequestAzureOptions azureOptions = 10;
 
+  // Optional. Valid only for the `gcp` vendor. gcp-specific options.
+  GetCostUsageRequestGcpOptions gcpOptions = 11;
+
+   // Optional. Valid only for the `azurecsp` vendor. AzureCsp-specific options.
+  GetCostUsageRequestAzureCspOptions azurecspOptions = 12;
+
   // Optional. If set to true, include cost forecast for current month 
   bool includeCostForecast = 9;
 }
@@ -1590,6 +1641,45 @@ message GetCostUsageRequestAzureOptions {
   // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc. 
   repeated ReadCostsRequestOptionsFilters tagFilters = 4;
 }
+
+message GetCostUsageRequestGcpOptions {
+  // Optional. A comma-separated list of columns to aggregate the data into. 
+  // A special value of `none` is also supported, which means query by date or month per account only.
+  //
+  // For example, if you only want the services and location data, you can set this field to `serviceName,location`. 
+  string groupByColumns = 1;
+
+  // Optional. If set to true, group all input projects into one.
+  bool groupAccounts = 2;
+
+  // Optional. A list of filtering options. See [ReadCostsRequestOptionsFilters] for more information on each filter item. 
+  // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.
+  repeated ReadCostsRequestOptionsFilters filters = 3;
+
+  // Optional. A list of filtering options specific for tags. 
+  // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc. 
+  repeated ReadCostsRequestOptionsFilters tagFilters = 4;
+}
+
+message GetCostUsageRequestAzureCspOptions {
+  // Optional. A comma-separated list of columns to aggregate the data into. 
+  // A special value of `none` is also supported, which means query by date or month per account only.
+  //
+  // For example, if you only want the services and location data, you can set this field to `serviceName,location`. 
+  string groupByColumns = 1;
+
+  // Optional. If set to true, group all input projects into one.
+  bool groupAccounts = 2;
+
+  // Optional. A list of filtering options. See [ReadCostsRequestOptionsFilters] for more information on each filter item. 
+  // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.
+  repeated ReadCostsRequestOptionsFilters filters = 3;
+
+  // Optional. A list of filtering options specific for tags. 
+  // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc. 
+  repeated ReadCostsRequestOptionsFilters tagFilters = 4;
+}
+
 
 // A map of "key:value" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either "eq:" (equal), "re:" (regular expressions based on https://github.com/google/re2), or "!re:" (reverse "re:"). No prefix is the same as "eq:". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.
 //
@@ -2008,13 +2098,6 @@ message ProcessAuth0UserResponse {
   bool isAuthorized = 1;
 }
 
-message GetDataAccessRequest {
-  // Required. (Project ID for GCP / Account ID for Azure) 
-  string target = 1;
-  // Vendor (GCP/Azure)
-  string vendor = 2;
-}
-
 // Message Response for GetDataAccess. For Azure and GCP
 message DataAccess {
   // Project Id for GCP, Account Id for Azure
@@ -2028,15 +2111,19 @@ message DataAccess {
 
   // Azure Options
   api.cover.AzureOptions azureOptions = 4;
+
+  api.cover.AwsOptions awsOptions = 5;
  
   // Account type, linked or payer
-  string accountType = 5; 
+  string accountType = 6; 
 
   // Last Update
-  string lastUpdate = 6; 
+  string lastUpdate = 7; 
 
   // Time Created
-  string createTime = 7;
+  string createTime = 8;
+
+  string vendor = 9;
 }
 
 // Request message for Register Data Access. For azure and gcp.
@@ -2047,11 +2134,17 @@ message RegisterDataAccessRequest {
   // Project Id for GCP, Account Id for Azure
   string target = 2;
 
+  // Account type (payer/linked)
+  string accountType = 3;
+
   // GCP Options. Specific for GCP
-  api.cover.GcpOptions gcpOptions = 3;
+  api.cover.GcpOptions gcpOptions = 4;
 
   // Azure Options. Specific for Azure
-  api.cover.AzureOptions azureOptions = 4;
+  api.cover.AzureOptions azureOptions = 5;
+
+   // Aws Options. Specific for Aws
+  api.cover.AwsOptions awsOptions = 6;
 }
 
 // Request message for UpdateDataAccess (GCP/Azure)
@@ -2067,7 +2160,85 @@ message UpdateDataAccessRequest {
 
   // Azure Options
   api.cover.AzureOptions azureOptions = 4;
+
+  // AWS Options
+  api.cover.AwsOptions awsOptions = 5;
+  
+   // Account Type
+   string accountType = 6;
 }
 
 // Request message for ListDataAccess
 message ListDataAccessRequest {}
+
+// Request message for AddBillingAccount
+message BillingAccountRequest {
+  // Required. The billing account id.
+  string billingId = 1;
+
+  // Name of dataset you created.
+  string datasetId = 2;
+
+  // In creating dataset, It requires you to select a region.
+  string datasetRegion = 3;
+
+  // Project Id where the datasetId of BQ can be found.
+  string projectId = 4;
+}
+
+message GetAndDeleteDataAccessRequest {
+  // Required. (Project ID for GCP / Account ID for Azure) 
+  string target = 1;
+
+  // Vendor (GCP/Azure)
+  string vendor = 2;
+
+  // In the context of fetching account details, specifying the account type is necessary. This is because the target alone might not uniquely identify an account and could result in multiple data points.
+  string accountType = 3;
+}
+
+// Request message for AddPartnerCenterCredentials
+message AddPartnerCenterCredentialsRequest {
+  // The account Id
+  string accountId = 1;
+
+  // Application Id
+  string applicationId = 2;
+
+  // Secret Key
+  string secretKey = 3;
+}
+
+// Request message for AddMpnSetting
+message AddMpnSettingRequest {
+ // Partner Id / MPN Id
+  string mpnId = 1;
+}
+
+// Request message for GetCostGroupAttribute
+message GetCostGroupAttributeRequest {
+  string vendor = 1;
+
+  string attributeType = 2;
+
+  string costGroupId = 3;
+
+  string startTime = 4;
+
+  string endTime = 5;
+}
+
+// Response message for GetCostGroupAttribute
+message GetCostGroupAttributeResponse {
+  repeated string result = 1;
+
+  repeated api.cover.TagData tagData = 2;
+}
+
+message GetCategoriesRequest {
+  string vendor = 1;
+}
+
+message GetCategoriesResponse {
+  repeated string results = 1;
+}
