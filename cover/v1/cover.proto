@@ -741,8 +741,8 @@ service Cover {
     };
   }
 
-  // WORK-IN-PROGRESS: Add user from Auth0 as Root user
-  rpc AddUserFromAuth0asRoot(AddUserFromAuth0asRootRequest) returns (AddUserFromAuth0asRootResponse) {
+  // WORK-IN-PROGRESS: Add or read user from Auth0
+  rpc ProcessAuth0User(ProcessAuth0UserRequest) returns (ProcessAuth0UserResponse) {
     option (google.api.http) = {
       post: "/v1/members/auth0"
       body: "*"
@@ -779,7 +779,6 @@ message OnboardOrgRequest {
   string password = 2;
   string name = 3;
   string orgId = 4;
-  string userId = 5;
 }
 
 // Response message for OnboardOrg
@@ -2092,12 +2091,11 @@ message AllocationItem {
 }
 
 // Request message for AddUserFromAuth0asRoot rpc
-message AddUserFromAuth0asRootRequest {
-  string email = 1;
+message ProcessAuth0UserRequest {
 }
 
 // Response message wrapper for adding user from Auth0 as root
-message AddUserFromAuth0asRootResponse {
+message ProcessAuth0UserResponse {
   bool isAuthorized = 1;
 }
 
