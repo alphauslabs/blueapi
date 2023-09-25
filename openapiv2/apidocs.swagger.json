@@ -12748,6 +12748,10 @@
         "azurecspOptions": {
           "$ref": "#/definitions/coverCostGroupAzureCspOptions",
           "description": "Optional. Valid only for the `azurecsp` vendor. AzureCSP-specific options."
+        },
+        "customOptions": {
+          "$ref": "#/definitions/coverCostGroupCustomOptions",
+          "description": "Optional. For custom selection when creating cost groups.\nThis field allows custom options for specifying criteria for cost group creation."
         }
       }
     },
@@ -12816,6 +12820,20 @@
         }
       },
       "description": "Azure-specific options for CreateCostGroupRequest."
+    },
+    "coverCostGroupCustomOptions": {
+      "type": "object",
+      "properties": {
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverCostGroupOptionsFilters"
+          },
+          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
+        }
+      },
+      "description": "Custom-specific options for CreateCostGroupRequest."
     },
     "coverCostGroupData": {
       "type": "object",

@@ -34,6 +34,10 @@ message Combinations {
 
   // Optional. Valid only for the `azurecsp` vendor. AzureCSP-specific options.
   api.cover.CostGroupAzureCspOptions azurecspOptions = 4;
+
+  // Optional. For custom selection when creating cost groups.
+  // This field allows custom options for specifying criteria for cost group creation.
+  api.cover.CostGroupCustomOptions customOptions = 5;
 }
 
 // AWS-specific options for CreateCostGroupRequest.
@@ -94,6 +98,12 @@ message CostGroupGcpOptions {
   //
   // For example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{"project":"MY_PROJECT"}`. You can also use regular expressions for tag values, such as `{"name":"re:[A-Za-z0-9]*"}`.
   repeated CostGroupOptionsFilters tagFilters = 2;
+}
+
+// Custom-specific options for CreateCostGroupRequest.
+message CostGroupCustomOptions {
+  // Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.
+  repeated CostGroupOptionsFilters filters = 1;
 }
 
 message CostGroupOptionsFilters {
