@@ -8,6 +8,7 @@ import "api/cover/costgroup.proto";
 import "api/cover/accountaccess.proto";
 import "api/cover/costforecast.proto";
 import "api/cover/rightsizingrecommendation.proto";
+import "api/cover/alert.proto";
 import "protos/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -768,6 +769,80 @@ service Cover {
   rpc GetCostGroupAttribute(GetCostGroupAttributeRequest) returns (GetCostGroupAttributeResponse) {
     option (google.api.http) = {
       post: "/v1/attributes"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get Alerts under organization
+  rpc GetAlerts(GetAlertsRequest) returns (GetAlertsResponse) {
+    option (google.api.http) = {
+      get: "/v1/alerts"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Create Alerts under organization
+  rpc CreateAlert(CreateAlertRequest) returns (CreateAlertResponse) {
+    option (google.api.http) = {
+      post: "/v1/alerts"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get Specific Alert under organization
+  rpc GetAlertDetails(GetAlertDetailsRequest) returns (GetAlertDetailsResponse) {
+    option (google.api.http) = {
+      get: "/v1/alerts/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Delete Specific Alert under organization
+  rpc DeleteAlert(DeleteAlertRequest) returns (DeleteAlertResponse) {
+    option (google.api.http) = {
+      delete: "/v1/alerts/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Update Specific Alert under organization
+  rpc UpdateAlertDetails(UpdateAlertDetailsRequest) returns (UpdateAlertDetailsResponse) {
+    option (google.api.http) = {
+      put: "/v1/alerts/{id}"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get Channels under organization
+  rpc GetChannels(GetChannelsRequest) returns (GetChannelsResponse) {
+    option (google.api.http) = {
+      get: "/v1/channels"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Create Channel under organization
+  rpc CreateChannel(CreateChannelRequest) returns (CreateChannelResponse) {
+    option (google.api.http) = {
+      post: "/v1/channels"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get Specific Channel under organization
+  rpc GetChannelDetails(GetChannelDetailsRequest) returns (GetChannelDetailsResponse) {
+    option (google.api.http) = {
+      get: "/v1/channels/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Delete Specific Channel under organization
+  rpc DeleteChannel(DeleteChannelRequest) returns (DeleteChannelResponse) {
+    option (google.api.http) = {
+      delete: "/v1/channels/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Update Specific Channel under organization
+  rpc UpdateChannelDetails(UpdateChannelDetailsRequest) returns (UpdateChannelDetailsResponse) {
+    option (google.api.http) = {
+      put: "/v1/channels/{id}"
       body: "*"
     };
   }
@@ -2261,4 +2336,154 @@ message GetCategoriesRequest {
 
 message GetCategoriesResponse {
   repeated string results = 1;
+}
+
+// Request message for GetAlerts
+message GetAlertsRequest {}
+
+// Response message for GetAlerts
+message GetAlertsResponse {
+  repeated api.cover.AlertData alertData = 1;
+}
+
+// Request message for CreateAlert
+message CreateAlertRequest {
+  // Required.
+  string name = 1;
+
+  // At least one in either fixedAmount or percentage
+  int64 fixedAmount = 2;
+  int64 percentage = 3;
+
+  // Optional. daily or monthly. Only 'daily' is supported for now.
+  string granularity = 4;
+
+  // Required. Cost group IDs.
+  repeated string costGroups = 5;
+
+  // Required. Channel IDs.
+  repeated string channels = 6;
+}
+
+// Response message for CreateAlert
+message CreateAlertResponse {
+  api.cover.AlertData alertData = 1;
+}
+
+// Request message for GetAlertDetails
+message GetAlertDetailsRequest {
+  // Required. Alert ID.
+  string id = 1;
+}
+
+// Response message for GetAlertDetails
+message GetAlertDetailsResponse {
+  api.cover.AlertData alertData = 1;
+}
+
+// Request message for DeleteAlert
+message DeleteAlertRequest {
+  // Required. Alert ID.
+  string id = 1;
+}
+
+// Response message for DeleteAlert
+message DeleteAlertResponse {
+  string id = 1;
+}
+
+// Request message for UpdateAlertDetails
+message UpdateAlertDetailsRequest {
+  // Required. Alert ID.
+  string id = 1;
+
+  // If optional fields are not supplied, no changes occur.
+  // Optional. Actual email or channel name of slack/msteams
+  string name = 2;
+
+  // Both are optional
+  int64 fixedAmount = 3;
+  int64 percentage = 4;
+
+  // Optional. daily or monthly. Only 'daily' is supported for now.
+  string granularity = 5;
+
+  // Optional. Cost group IDs.
+  repeated string costGroups = 6;
+
+  // Optional. Channel IDs.
+  repeated string channels = 7;
+}
+
+// Response message for UpdateAlertDetails
+message UpdateAlertDetailsResponse {
+  api.cover.AlertData alertData = 1;
+}
+
+// Request message for GetChannels
+message GetChannelsRequest {}
+
+// Response message for GetChannels
+message GetChannelsResponse {
+  repeated api.cover.ChannelData channelData = 1;
+}
+
+// Request message for CreateChannel
+message CreateChannelRequest {
+  // Required. Either actual email address or slack/msteams channel name
+  string name = 1;
+
+  // Required. email, slack, or msteams.
+  string type = 2;
+
+  // Optional. Only needed for slack and msteams type.
+  string webhookUrl = 3;
+}
+
+// Response message for CreateChannel
+message CreateChannelResponse {
+  api.cover.AlertData channelData = 1;
+}
+
+// Request message for GetChannelDetails
+message GetChannelDetailsRequest {
+  // Required. Channel ID.
+  string id = 1;
+}
+
+// Response message for GetChannelDetails
+message GetChannelDetailsResponse {
+  api.cover.ChannelData channelData = 1;
+}
+
+// Request message for DeleteChannel
+message DeleteChannelRequest {
+  // Required. Channel ID.
+  string id = 1;
+}
+
+// Response message for DeleteChannel
+message DeleteChannelResponse {
+  string id = 1;
+}
+
+// Request message for UpdateChannelDetails
+message UpdateChannelDetailsRequest {
+  // Required. Channel ID.
+  string id = 1;
+
+  // If optional fields are not supplied, no changes occur.
+  // Optional. Either actual email address or slack/msteams channel name
+  string name = 2;
+
+  // Optional. email, slack, or msteams.
+  string type = 3;
+
+  // Optional. Only needed for slack and msteams type.
+  string webhookUrl = 4;
+}
+
+// Response message for UpdateChannelDetails
+message UpdateChannelDetailsResponse {
+  api.cover.ChannelData channelData = 1;
 }

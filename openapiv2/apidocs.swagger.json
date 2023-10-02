@@ -565,64 +565,35 @@
             "type": "string"
           },
           {
-            "name": "name",
-            "description": "Required. Name of the notification channel.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "type",
-            "description": "Required. Valid values: `email`, `slack`, `msteams`.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "email.format",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "email.recipients",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "slack.webhookUrl",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "slack.channelId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "slack.channel",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "slack.configurationUrl",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "msteams.webhookUrl",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Required. Name of the notification channel."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Required. Valid values: `email`, `slack`, `msteams`."
+                },
+                "email": {
+                  "$ref": "#/definitions/apiEmailChannel",
+                  "description": "Required if type = `email`."
+                },
+                "slack": {
+                  "$ref": "#/definitions/apiSlackChannel",
+                  "description": "Required if type = `slack`."
+                },
+                "msteams": {
+                  "$ref": "#/definitions/apiMSTeamsChannel",
+                  "description": "Required if type = `msteams`."
+                }
+              },
+              "description": "Request message for the Admin.UpdateNotificationChannel rpc."
+            }
           }
         ],
         "tags": [
@@ -876,29 +847,30 @@
             "type": "string"
           },
           {
-            "name": "channels",
-            "description": "Required",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "enabled",
-            "description": "Required",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "notificationType",
-            "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`.",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "channels": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Required"
+                },
+                "enabled": {
+                  "type": "boolean",
+                  "title": "Required"
+                },
+                "notificationType": {
+                  "type": "string",
+                  "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`."
+                }
+              },
+              "description": "Request message for the Admin.UpdateNotificationTypeChannels rpc."
+            }
           }
         ],
         "tags": [
@@ -2824,6 +2796,194 @@
         ]
       }
     },
+    "/v1/alerts": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Get Alerts under organization",
+        "operationId": "Cover_GetAlerts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAlertsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Create Alerts under organization",
+        "operationId": "Cover_CreateAlert",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateAlertResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateAlertRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/alerts/{id}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Get Specific Alert under organization",
+        "operationId": "Cover_GetAlertDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAlertDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. Alert ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Delete Specific Alert under organization",
+        "operationId": "Cover_DeleteAlert",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteAlertResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. Alert ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Update Specific Alert under organization",
+        "operationId": "Cover_UpdateAlertDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateAlertDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. Alert ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "If optional fields are not supplied, no changes occur.\nOptional. Actual email or channel name of slack/msteams"
+                },
+                "fixedAmount": {
+                  "type": "string",
+                  "format": "int64",
+                  "title": "Both are optional"
+                },
+                "percentage": {
+                  "type": "string",
+                  "format": "int64"
+                },
+                "granularity": {
+                  "type": "string",
+                  "description": "Optional. daily or monthly. Only 'daily' is supported for now."
+                },
+                "costGroups": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Optional. Cost group IDs."
+                },
+                "channels": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Optional. Channel IDs."
+                }
+              },
+              "title": "Request message for UpdateAlertDetails"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/allocations/accountusage/all:read": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Lists the allocated account usages",
@@ -4164,6 +4324,175 @@
             "in": "query",
             "required": false,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/channels": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Get Channels under organization",
+        "operationId": "Cover_GetChannels",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetChannelsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Create Channel under organization",
+        "operationId": "Cover_CreateChannel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateChannelResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateChannelRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/channels/{id}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Get Specific Channel under organization",
+        "operationId": "Cover_GetChannelDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetChannelDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. Channel ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Delete Specific Channel under organization",
+        "operationId": "Cover_DeleteChannel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteChannelResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. Channel ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Update Specific Channel under organization",
+        "operationId": "Cover_UpdateChannelDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateChannelDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. Channel ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "If optional fields are not supplied, no changes occur.\nOptional. Either actual email address or slack/msteams channel name"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Optional. email, slack, or msteams."
+                },
+                "webhookUrl": {
+                  "type": "string",
+                  "description": "Optional. Only needed for slack and msteams type."
+                }
+              },
+              "title": "Request message for UpdateChannelDetails"
+            }
           }
         ],
         "tags": [
@@ -12661,6 +12990,40 @@
         }
       }
     },
+    "coverAlertData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "fixedAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "percentage": {
+          "type": "string",
+          "format": "int64"
+        },
+        "granularity": {
+          "type": "string"
+        },
+        "costGroups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "coverAwsCostForecast": {
       "type": "object",
       "properties": {
@@ -12726,6 +13089,25 @@
           "type": "string"
         },
         "payerId": {
+          "type": "string"
+        }
+      }
+    },
+    "coverChannelData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "title": "actual email value of channel name in slack or ms teams"
+        },
+        "type": {
+          "type": "string",
+          "title": "email, slack, msteams"
+        },
+        "webhookUrl": {
           "type": "string"
         }
       }
@@ -13508,11 +13890,11 @@
       "properties": {
         "@type": {
           "type": "string",
-          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com. As of May 2023, there are no widely used type server\nimplementations and no plans to implement one.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
         }
       },
       "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "protobufNullValue": {
       "type": "string",
@@ -13520,7 +13902,7 @@
         "NULL_VALUE"
       ],
       "default": "NULL_VALUE",
-      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
+      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\nThe JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
     },
     "protosOperation": {
       "type": "object",
@@ -13788,7 +14170,7 @@
       "properties": {
         "key": {
           "type": "string",
-          "description": "For Wave\nThe available values are shown below.\n- Dashboard\n`dashboardGraph`: Display graph\n`reportFilters`: Display report filters\n\n- Usage Reports\n`usageAccount`: Account\n`usageAccountGraph`: Display graph\n`usageAccountMenuAccountEdit`: Edit account name\n`usageAccountMenuBudget`: Display Budget\n`usageAccountMenuBudgetEdit`: Edit Budget\n`usageAccountMenuFeesFee`: Display fee \n`usageAccountMenuFeesCredit`: Display credit\n`usageAccountMenuFeesRefund`: Display refund\n`usageAccountMenuFeesOtherFees`: Display other fees\n`usageReportDownload`: Download report data\n\n- Cross Tag\n`usageCrosstag`: Cross Tag\n`usageCrosstagGraph`: Display graph\n\n- Group\n`usageGroup`: Group\n`usageGroupGraph`: Display graph\n\n- Cost management\n`riPurchased`: Display purchased RI\n`riUtilization`: Display RI Utilization\n`riRecommendation`: Display RI Recommendations\n`spPurchased`: Display purchased Savings Plans\n\n- Other\n`invoice`: Invoice link\n`openApi`: API Access Tokens\n`usersManagement`: Sub-user management\n`invoiceDownloadCsvDiscount`: Enable discount CSV download\n`invoiceDownloadCsvMerged`: Enable merged CSV download\n`aquaLink`: Aqua link\n`waveproReportFilters`: WavePro Report Filters\n\nFor Aqua\nThe available values are shown below.\n- Instance Usage Status\n`aqCoverageRatio`: Coverage Ratio\n\n- Reservations Management\n`aqRiManagement`: RI Management\n`aqSpManagement`: SP Management\n\n- Recommendation\n`aqRiSpInstances`: RI/SP Instances\n`aqRightSizing`: Right Sizing\n`aqScheduling`: Scheduling",
+          "description": "For Wave\nThe available values are shown below.\n- Dashboard\n`dashboardGraph`: Display graph\n`reportFilters`: Display report filters\n\n- Usage Reports\n`usageAccount`: Account\n`usageAccountGraph`: Display graph\n`usageAccountMenuAccountEdit`: Edit account name\n`usageAccountMenuBudget`: Display Budget\n`usageAccountMenuBudgetEdit`: Edit Budget\n`usageAccountMenuFeesFee`: Display fee \n`usageAccountMenuFeesCredit`: Display credit\n`usageAccountMenuFeesRefund`: Display refund\n`usageAccountMenuFeesOtherFees`: Display other fees\n`usageReportDownload`: Download report data\n`cost_forecast_tab`: Cost Forecast\n\n- Cross Tag\n`usageCrosstag`: Cross Tag\n`usageCrosstagGraph`: Display graph\n\n- Group\n`usageGroup`: Group\n`usageGroupGraph`: Display graph\n\n- Cost management\n`riPurchased`: Display purchased RI\n`riUtilization`: Display RI Utilization\n`riRecommendation`: Display RI Recommendations\n`spPurchased`: Display purchased Savings Plans\n\n- Other\n`invoice`: Invoice link\n`openApi`: API Access Tokens\n`usersManagement`: Sub-user management\n`invoiceDownloadCsvDiscount`: Enable discount CSV download\n`invoiceDownloadCsvMerged`: Enable merged CSV download\n`aquaLink`: Aqua link\n`waveproReportFilters`: WavePro Report Filters\n\nFor Aqua\nThe available values are shown below.\n- Instance Usage Status\n`aqCoverageRatio`: Coverage Ratio\n\n- Reservations Management\n`aqRiManagement`: RI Management\n`aqSpManagement`: SP Management\n\n- Recommendation\n`aqRiSpInstances`: RI/SP Instances\n`aqRightSizing`: Right Sizing\n`aqScheduling`: Scheduling",
           "title": "key"
         },
         "value": {
@@ -14952,6 +15334,52 @@
       },
       "description": "AWS-specific options for registering an account."
     },
+    "v1CreateAlertRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required."
+        },
+        "fixedAmount": {
+          "type": "string",
+          "format": "int64",
+          "title": "At least one in either fixedAmount or percentage"
+        },
+        "percentage": {
+          "type": "string",
+          "format": "int64"
+        },
+        "granularity": {
+          "type": "string",
+          "description": "Optional. daily or monthly. Only 'daily' is supported for now."
+        },
+        "costGroups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required. Cost group IDs."
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required. Channel IDs."
+        }
+      },
+      "title": "Request message for CreateAlert"
+    },
+    "v1CreateAlertResponse": {
+      "type": "object",
+      "properties": {
+        "alertData": {
+          "$ref": "#/definitions/coverAlertData"
+        }
+      },
+      "title": "Response message for CreateAlert"
+    },
     "v1CreateAllocatorRequest": {
       "type": "object",
       "properties": {
@@ -15162,6 +15590,33 @@
         }
       },
       "description": "Response message for the Cost.CreateCalculatorCostModifier rpc."
+    },
+    "v1CreateChannelRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Required. Either actual email address or slack/msteams channel name"
+        },
+        "type": {
+          "type": "string",
+          "description": "Required. email, slack, or msteams."
+        },
+        "webhookUrl": {
+          "type": "string",
+          "description": "Optional. Only needed for slack and msteams type."
+        }
+      },
+      "title": "Request message for CreateChannel"
+    },
+    "v1CreateChannelResponse": {
+      "type": "object",
+      "properties": {
+        "channelData": {
+          "$ref": "#/definitions/coverAlertData"
+        }
+      },
+      "title": "Response message for CreateChannel"
     },
     "v1CreateCloudWatchMetricsStreamRequest": {
       "type": "object",
@@ -15733,6 +16188,24 @@
       },
       "description": "Response message for the DeleteAccountAccess rpc."
     },
+    "v1DeleteAlertResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for DeleteAlert"
+    },
+    "v1DeleteChannelResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for DeleteChannel"
+    },
     "v1DeleteCostGroupResponse": {
       "type": "object",
       "properties": {
@@ -15870,6 +16343,28 @@
       },
       "title": "Response message for GetAccounts"
     },
+    "v1GetAlertDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "alertData": {
+          "$ref": "#/definitions/coverAlertData"
+        }
+      },
+      "title": "Response message for GetAlertDetails"
+    },
+    "v1GetAlertsResponse": {
+      "type": "object",
+      "properties": {
+        "alertData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverAlertData"
+          }
+        }
+      },
+      "title": "Response message for GetAlerts"
+    },
     "v1GetAssetsSummaryResponse": {
       "type": "object",
       "properties": {
@@ -15963,6 +16458,28 @@
           }
         }
       }
+    },
+    "v1GetChannelDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "channelData": {
+          "$ref": "#/definitions/coverChannelData"
+        }
+      },
+      "title": "Response message for GetChannelDetails"
+    },
+    "v1GetChannelsResponse": {
+      "type": "object",
+      "properties": {
+        "channelData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverChannelData"
+          }
+        }
+      },
+      "title": "Response message for GetChannels"
     },
     "v1GetCloudWatchMetricsStreamTemplateUrlResponse": {
       "type": "object",
@@ -17802,6 +18319,24 @@
         }
       },
       "description": "Response message for the UpdateAccountInvoiceServiceDiscounts rpc."
+    },
+    "v1UpdateAlertDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "alertData": {
+          "$ref": "#/definitions/coverAlertData"
+        }
+      },
+      "title": "Response message for UpdateAlertDetails"
+    },
+    "v1UpdateChannelDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "channelData": {
+          "$ref": "#/definitions/coverChannelData"
+        }
+      },
+      "title": "Response message for UpdateChannelDetails"
     },
     "v1UpdateCostFiltersResponse": {
       "type": "object",
