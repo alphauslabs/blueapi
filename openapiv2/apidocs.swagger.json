@@ -565,64 +565,35 @@
             "type": "string"
           },
           {
-            "name": "name",
-            "description": "Required. Name of the notification channel.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "type",
-            "description": "Required. Valid values: `email`, `slack`, `msteams`.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "email.format",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "email.recipients",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "slack.webhookUrl",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "slack.channelId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "slack.channel",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "slack.configurationUrl",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "msteams.webhookUrl",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Required. Name of the notification channel."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Required. Valid values: `email`, `slack`, `msteams`."
+                },
+                "email": {
+                  "$ref": "#/definitions/apiEmailChannel",
+                  "description": "Required if type = `email`."
+                },
+                "slack": {
+                  "$ref": "#/definitions/apiSlackChannel",
+                  "description": "Required if type = `slack`."
+                },
+                "msteams": {
+                  "$ref": "#/definitions/apiMSTeamsChannel",
+                  "description": "Required if type = `msteams`."
+                }
+              },
+              "description": "Request message for the Admin.UpdateNotificationChannel rpc."
+            }
           }
         ],
         "tags": [
@@ -876,29 +847,30 @@
             "type": "string"
           },
           {
-            "name": "channels",
-            "description": "Required",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "enabled",
-            "description": "Required",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "notificationType",
-            "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`.",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "channels": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Required"
+                },
+                "enabled": {
+                  "type": "boolean",
+                  "title": "Required"
+                },
+                "notificationType": {
+                  "type": "string",
+                  "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`."
+                }
+              },
+              "description": "Request message for the Admin.UpdateNotificationTypeChannels rpc."
+            }
           }
         ],
         "tags": [
@@ -12886,7 +12858,7 @@
             "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
-          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
+          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `serviceDescriptinon` to return only `Cloud Spanner`, set to `{\"serviceDescription\":\"eq:Cloud Spanner\"}` or `{\"serviceDescription\":\"Cloud Spanner\"}`. You can also use a regular expression like `{\"serviceDescription\":\"re:Cloud Spanner|BigQuery\"}`, which means return all Cloud Spanner or BigQuery lineitems. Or reverse regexp, such as `{\"serviceDescription\":\"!re:^Cloud Spanner$\"}`, which means return all items except `Cloud Spanner`."
         },
         "tagFilters": {
           "type": "array",
@@ -12894,10 +12866,26 @@
             "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
-          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
+          "description": "Tags on gcp used to conditionally allow or deny policies based on whether a supported resource has a specific tag.\nSuppose you have a set of virtual machines (VMs) running various applications, and you want to distinguish between them based on their roles. You could assign tags like \"app:webserver\" and \"app:database\" to identify which VMs serve as web servers and which ones are database servers.\nIf you want to query lineitems with the tag `app:database`, set to `{\"app\":\"database\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverCostGroupOptionsFilters"
+          },
+          "description": "Labels on gcp help you organize resources and manage your costs at scale, with the granularity you need.\nFor example, on Compute Engine, you can use labels to group VMs in categories such as production, staging, or development so that you can search for resources that belong to each development stage.\nIf you want to query lineitems with the label `vm-prod: prod`, set to `{\"vm-prod\":\"prod\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
+        },
+        "projectLabels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverCostGroupOptionsFilters"
+          },
+          "description": "Project Labels refers to labels that have been assigned to GCP projects. \nFor example, projectId \"mobingi-main\" assigned as \"env:prod\"\nIf you want to query lineitems with the label `env: prod`, set to `{\"env\":\"prod\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
         }
       },
-      "description": "GCP-specific options for CreateCostGroupRequest."
+      "description": "GCP-specific options for CreateCostGroupRequest.\nGCP-specific options for CreateCostGroupRequest."
     },
     "coverCostGroupOptionsFilters": {
       "type": "object",
@@ -13788,7 +13776,7 @@
       "properties": {
         "key": {
           "type": "string",
-          "description": "For Wave\nThe available values are shown below.\n- Dashboard\n`dashboardGraph`: Display graph\n`reportFilters`: Display report filters\n\n- Usage Reports\n`usageAccount`: Account\n`usageAccountGraph`: Display graph\n`usageAccountMenuAccountEdit`: Edit account name\n`usageAccountMenuBudget`: Display Budget\n`usageAccountMenuBudgetEdit`: Edit Budget\n`usageAccountMenuFeesFee`: Display fee \n`usageAccountMenuFeesCredit`: Display credit\n`usageAccountMenuFeesRefund`: Display refund\n`usageAccountMenuFeesOtherFees`: Display other fees\n`usageReportDownload`: Download report data\n\n- Cross Tag\n`usageCrosstag`: Cross Tag\n`usageCrosstagGraph`: Display graph\n\n- Group\n`usageGroup`: Group\n`usageGroupGraph`: Display graph\n\n- Cost management\n`riPurchased`: Display purchased RI\n`riUtilization`: Display RI Utilization\n`riRecommendation`: Display RI Recommendations\n`spPurchased`: Display purchased Savings Plans\n\n- Other\n`invoice`: Invoice link\n`openApi`: API Access Tokens\n`usersManagement`: Sub-user management\n`invoiceDownloadCsvDiscount`: Enable discount CSV download\n`invoiceDownloadCsvMerged`: Enable merged CSV download\n`aquaLink`: Aqua link\n`waveproReportFilters`: WavePro Report Filters\n\nFor Aqua\nThe available values are shown below.\n- Instance Usage Status\n`aqCoverageRatio`: Coverage Ratio\n\n- Reservations Management\n`aqRiManagement`: RI Management\n`aqSpManagement`: SP Management\n\n- Recommendation\n`aqRiSpInstances`: RI/SP Instances\n`aqRightSizing`: Right Sizing\n`aqScheduling`: Scheduling",
+          "description": "For Wave\nThe available values are shown below.\n- Dashboard\n`dashboardGraph`: Display graph\n`reportFilters`: Display report filters\n\n- Usage Reports\n`usageAccount`: Account\n`usageAccountGraph`: Display graph\n`usageAccountMenuAccountEdit`: Edit account name\n`usageAccountMenuBudget`: Display Budget\n`usageAccountMenuBudgetEdit`: Edit Budget\n`usageAccountMenuFeesFee`: Display fee \n`usageAccountMenuFeesCredit`: Display credit\n`usageAccountMenuFeesRefund`: Display refund\n`usageAccountMenuFeesOtherFees`: Display other fees\n`usageReportDownload`: Download report data\n`cost_forecast_tab`: Cost Forecast\n\n- Cross Tag\n`usageCrosstag`: Cross Tag\n`usageCrosstagGraph`: Display graph\n\n- Group\n`usageGroup`: Group\n`usageGroupGraph`: Display graph\n\n- Cost management\n`riPurchased`: Display purchased RI\n`riUtilization`: Display RI Utilization\n`riRecommendation`: Display RI Recommendations\n`spPurchased`: Display purchased Savings Plans\n\n- Other\n`invoice`: Invoice link\n`openApi`: API Access Tokens\n`usersManagement`: Sub-user management\n`invoiceDownloadCsvDiscount`: Enable discount CSV download\n`invoiceDownloadCsvMerged`: Enable merged CSV download\n`aquaLink`: Aqua link\n`waveproReportFilters`: WavePro Report Filters\n\nFor Aqua\nThe available values are shown below.\n- Instance Usage Status\n`aqCoverageRatio`: Coverage Ratio\n\n- Reservations Management\n`aqRiManagement`: RI Management\n`aqSpManagement`: SP Management\n\n- Recommendation\n`aqRiSpInstances`: RI/SP Instances\n`aqRightSizing`: Right Sizing\n`aqScheduling`: Scheduling",
           "title": "key"
         },
         "value": {
