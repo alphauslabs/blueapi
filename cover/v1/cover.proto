@@ -813,7 +813,8 @@ service Cover {
   // WORK-IN-PROGRESS: Get Channels under organization
   rpc GetChannels(GetChannelsRequest) returns (stream GetChannelsResponse) {
     option (google.api.http) = {
-      get: "/v1/channels"
+      post: "/v1/channels:read"
+      body: "*"
     };
   }
 
@@ -2425,7 +2426,11 @@ message UpdateAlertDetailsResponse {
 }
 
 // Request message for GetChannels
-message GetChannelsRequest {}
+message GetChannelsRequest {
+  // Optional. Use email, slack, or msteams to filter the type of channels
+  // Otherwise, it returns all channels
+  string type = 1;
+}
 
 // Response message for GetChannels
 message GetChannelsResponse {

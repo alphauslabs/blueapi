@@ -4341,36 +4341,6 @@
       }
     },
     "/v1/channels": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Get Channels under organization",
-        "operationId": "Cover_GetChannels",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1GetChannelsResponse"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1GetChannelsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Cover"
-        ]
-      },
       "post": {
         "summary": "WORK-IN-PROGRESS: Create Channel under organization",
         "operationId": "Cover_CreateChannel",
@@ -4510,6 +4480,48 @@
                 }
               },
               "title": "Request message for UpdateChannelDetails"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/channels:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Get Channels under organization",
+        "operationId": "Cover_GetChannels",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1GetChannelsResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1GetChannelsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetChannelsRequest"
             }
           }
         ],
@@ -16501,6 +16513,16 @@
         }
       },
       "title": "Response message for GetChannelDetails"
+    },
+    "v1GetChannelsRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Optional. Use email, slack, or msteams to filter the type of channels\nOtherwise, it returns all channels"
+        }
+      },
+      "title": "Request message for GetChannels"
     },
     "v1GetChannelsResponse": {
       "type": "object",
