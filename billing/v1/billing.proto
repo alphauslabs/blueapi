@@ -12,6 +12,7 @@ import "api/ripple/rounding.proto";
 import "api/ripple/invoicelayout.proto";
 import "api/ripple/duedate.proto";
 import "api/ripple/exchangerate.proto";
+import "api/wave/adjustment.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -262,6 +263,14 @@ service Billing {
   rpc ListAbcBillingGroupAccounts(ListAbcBillingGroupAccountsRequest) returns (stream AbcAccount){
     option (google.api.http) = {
       get: "/v1/billinggroups/billingconductor/{payerId}/accounts"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Reads the adjustment details involved in invoicing of an organization billing group (Wave).
+  rpc ReadInvoiceAdjustments(ReadInvoiceAdjustmentsRequest) returns (stream api.wave.Adjustment) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/invoiceadjustments:read"
+      body: "*"
     };
   }
 }
@@ -985,4 +994,16 @@ message AbcAccount {
   string accountId = 1;
 
   string accountName = 2;
+
+}
+// Request message for the Billing.ReadInvoiceAdjustments rpc.
+message ReadInvoiceAdjustmentsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required.
+  string accountId = 2;
+
+  // Optional. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, June 2021 will be `202106`.
+  string month = 3;
 }
