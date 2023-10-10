@@ -435,6 +435,14 @@ message ListNotificationsResponse {
   repeated api.Notification notifications = 1;
 }
 
+message NotificationAccount {
+  // Required.
+  string vendor = 1;
+
+  // Required.
+  string accountId = 2;  
+}
+
 // Request message for the Admin.GetNotificationTypeChannels rpc.
 message GetNotificationRequest {
   // Required
@@ -462,6 +470,9 @@ message CreateNotificationRequest {
 
   // Required
   bool enabled = 3;
+
+  // Optional. only available Wave(Pro).
+  NotificationAccount account = 4;
 }
 
 // Request message for the Admin.UpdateNotificationTypeChannels rpc.
@@ -481,6 +492,9 @@ message UpdateNotificationRequest {
   // `InvoiceCalculationFinished`, 
   // `CurUpdatedAfterInvoice`.
   string notificationType = 4;
+
+  // Optional. only available Wave(Pro).
+  NotificationAccount account = 5;
 }
 
 // Request message for the Admin.DeleteNotification rpc.
