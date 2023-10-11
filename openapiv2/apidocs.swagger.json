@@ -867,6 +867,10 @@
                 "notificationType": {
                   "type": "string",
                   "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`."
+                },
+                "account": {
+                  "$ref": "#/definitions/v1NotificationAccount",
+                  "description": "Optional. only available Wave(Pro)."
                 }
               },
               "description": "Request message for the Admin.UpdateNotificationTypeChannels rpc."
@@ -9272,6 +9276,10 @@
                   "type": "string",
                   "description": "Optional. Account group Id."
                 },
+                "costGroupId": {
+                  "type": "string",
+                  "title": "Optional. Cost Group Id, currently used in octo"
+                },
                 "accounts": {
                   "type": "array",
                   "items": {
@@ -9653,6 +9661,66 @@
         ],
         "tags": [
           "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/invoiceadjustments:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Reads the adjustment details involved in invoicing of an organization billing group (Wave).",
+        "operationId": "Billing_ReadInvoiceAdjustments",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/waveAdjustment"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of waveAdjustment"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accountId": {
+                  "type": "string",
+                  "description": "Required."
+                },
+                "month": {
+                  "type": "string",
+                  "description": "Optional. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, June 2021 will be `202106`."
+                }
+              },
+              "description": "Request message for the Billing.ReadInvoiceAdjustments rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
         ]
       }
     },
@@ -15893,6 +15961,10 @@
         "enabled": {
           "type": "boolean",
           "title": "Required"
+        },
+        "account": {
+          "$ref": "#/definitions/v1NotificationAccount",
+          "description": "Optional. only available Wave(Pro)."
         }
       },
       "description": "Request message for the Admin.CreateNotificationTypeChannels rpc."
@@ -17707,6 +17779,19 @@
       },
       "title": "Response message for ModifyResourceType"
     },
+    "v1NotificationAccount": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Required."
+        }
+      }
+    },
     "v1OnboardOrgRequest": {
       "type": "object",
       "properties": {
@@ -18886,6 +18971,56 @@
         }
       },
       "description": "Response message for Iam.VerifyUserForResetPassword rpc."
+    },
+    "waveAdjustment": {
+      "type": "object",
+      "properties": {
+        "yearMonth": {
+          "type": "string",
+          "title": "Year month"
+        },
+        "feeType": {
+          "type": "string",
+          "title": "Fee type"
+        },
+        "description": {
+          "type": "string",
+          "title": "Description"
+        },
+        "productCode": {
+          "type": "string",
+          "title": "ProductCode"
+        },
+        "productName": {
+          "type": "string",
+          "title": "ProductName"
+        },
+        "usageAccountId": {
+          "type": "string",
+          "title": "UsageAccountId"
+        },
+        "currencyCode": {
+          "type": "string",
+          "title": "CurrencyCode"
+        },
+        "payerAccountId": {
+          "type": "string",
+          "title": "PayerAccountId"
+        },
+        "cost": {
+          "type": "string",
+          "title": "Cost"
+        },
+        "timeInterval": {
+          "type": "string",
+          "title": "TimeInterval"
+        },
+        "usageStartDate": {
+          "type": "string",
+          "title": "UsageStartDate"
+        }
+      },
+      "description": "Adjustment resource definition."
     },
     "waveBudgetAlert": {
       "type": "object",
