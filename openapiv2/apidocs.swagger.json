@@ -773,7 +773,7 @@
           },
           {
             "name": "notificationType",
-            "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`.",
+            "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`.\n`AccountBudgetAlert`.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -811,7 +811,7 @@
           },
           {
             "name": "notificationType",
-            "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`.",
+            "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`.\n`AccountBudgetAlert`.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -866,10 +866,10 @@
                 },
                 "notificationType": {
                   "type": "string",
-                  "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`."
+                  "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`.\n`AccountBudgetAlert`."
                 },
                 "account": {
-                  "$ref": "#/definitions/v1NotificationAccount",
+                  "$ref": "#/definitions/adminv1NotificationAccount",
                   "description": "Optional. only available Wave(Pro)."
                 }
               },
@@ -9368,6 +9368,10 @@
                   "type": "string",
                   "description": "Optional. Account group Id."
                 },
+                "costGroupId": {
+                  "type": "string",
+                  "title": "Optional. Cost Group Id"
+                },
                 "accounts": {
                   "type": "array",
                   "items": {
@@ -10834,6 +10838,19 @@
       "default": "ROUND",
       "description": "- ROUND: round\n - ROUNDUP: round up\n - ROUNDDOWN: round down",
       "title": "RoundingMethod"
+    },
+    "adminv1NotificationAccount": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Required."
+        }
+      }
     },
     "apiAccountDetails": {
       "type": "object",
@@ -13021,6 +13038,20 @@
         },
         "enabled": {
           "type": "boolean"
+        },
+        "account": {
+          "$ref": "#/definitions/blueapiapiNotificationAccount"
+        }
+      }
+    },
+    "blueapiapiNotificationAccount": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
         }
       }
     },
@@ -15949,7 +15980,7 @@
       "properties": {
         "notificationType": {
           "type": "string",
-          "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`."
+          "description": "Required\nValid values: \n`InvoiceCalculationStarted`, \n`InvoiceCalculationFinished`, \n`CurUpdatedAfterInvoice`.\n`AccountBudgetAlert`."
         },
         "channels": {
           "type": "array",
@@ -15963,7 +15994,7 @@
           "title": "Required"
         },
         "account": {
-          "$ref": "#/definitions/v1NotificationAccount",
+          "$ref": "#/definitions/adminv1NotificationAccount",
           "description": "Optional. only available Wave(Pro)."
         }
       },
@@ -17778,19 +17809,6 @@
         }
       },
       "title": "Response message for ModifyResourceType"
-    },
-    "v1NotificationAccount": {
-      "type": "object",
-      "properties": {
-        "vendor": {
-          "type": "string",
-          "description": "Required."
-        },
-        "accountId": {
-          "type": "string",
-          "description": "Required."
-        }
-      }
     },
     "v1OnboardOrgRequest": {
       "type": "object",
