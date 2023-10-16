@@ -8,6 +8,7 @@ import "api/cover/view.proto";
 import "api/cover/costgroup.proto";
 import "api/cover/accountaccess.proto";
 import "api/cover/costforecast.proto";
+import "api/cover/risprecommendation.proto";
 import "api/cover/rightsizingrecommendation.proto";
 import "api/cover/alert.proto";
 import "protos/operation.proto";
@@ -845,6 +846,14 @@ service Cover {
   rpc UpdateChannelDetails(UpdateChannelDetailsRequest) returns (UpdateChannelDetailsResponse) {
     option (google.api.http) = {
       put: "/v1/channels/{id}"
+      body: "*"
+    };
+  }
+
+  // Get the RI or SP recommendations for every account in a cost group
+  rpc GetRiSpRecommendations(GetRiSpRecommendationRequest) returns (GetRiSpRecommendationRequest) {
+    option (google.api.http) = {
+      post: "/v1/risprecommendations/{costGroupId}"
       body: "*"
     };
   }
@@ -2496,4 +2505,43 @@ message UpdateChannelDetailsRequest {
 // Response message for UpdateChannelDetails
 message UpdateChannelDetailsResponse {
   api.cover.ChannelData channelData = 1;
+}
+
+message GetRiSpRecommendationRequest {
+  // 'reservation' for RI, 'savingsplan' for SP
+  string type = 1;
+
+  // For RI recommendation input only. 
+  // This are the supported values
+  // 'Amazon Elastic Compute - Cloud' for AmazonEC2, 'Amazon Relational Database Service' for AmazonRDS, 'Amazon Redshift' for Redshift, 'Amazon ElastiCache' for ElastiCache and 'Amazon Opensearch Service' for AmazonES
+  string service = 2;
+
+  // For RI recommendation input
+  // This supports only to AmazonEC2
+  string offeringClass = 3;
+
+  // For SP recommendation input
+  // Supported Values are the following
+  // 'COMPUTE_SP' for Compute Savings Plans, 'EC2_INSTANCE_SP' for EC2 Savings Plans, 'SAGEMAKER_SP' for SageMaker Savings Plans
+  string savingsPlanType = 4;
+
+  // Supported values are the following
+  // 'ALL_UPFRONT', 'PARTIAL_UPFRONT', 'NO_UPFRONT'
+  // When making RI recommendations for Amazon ElastiCache, the 'HEAVY_UTILIZATION' value is also a valid choice.
+  string paymentOption = 5;
+
+  // Supported values are the following
+  // 'ONE_YEAR', 'THREE_YEARS'
+  string termInYears = 6;
+
+  // Supported values are the following
+  // 'SEVEN_DAYS', 'THIRTY_DAYS', 'SIXTY_DAYS'
+  string basedOnThePast = 7;
+
+  // Required. Cost Group Id
+  string costGroupId = 8;
+}
+
+message GetRiSpRecommendationResponse {
+  api.cover.AwsRecommendations recommendations = 1;
 }

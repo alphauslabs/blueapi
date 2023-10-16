@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package blueapi.api.cover;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/cover";
+option java_package = "cloud.alphaus.blueapi.api.cover";
+option java_outer_classname = "ApiCoverRispRecommendationProto";
+
+message EC2Options {
+    string InstanceType = 1;
+    string Tenancy = 2;
+    string Family = 3;
+    string Platform = 4;
+}
+
+message ElasticCacheOptions {
+    string Family = 1; 
+    string NodeType = 2;
+    string ProductDescription = 3;
+}
+
+message ESOptions {
+    string InstanceClass = 1;
+    string InstanceSize = 2;
+}
+
+message RDSOptions {
+    string dbEdition = 1;
+    string dbEngine = 2;
+    string deploymentOptions = 3;
+    string family = 4;
+    string instanceType = 5;
+    string licenseModel = 6;
+}
+
+message RedshiftOptions {
+    string family = 1;
+    string nodeType = 2;
+}
+
+message RiRecommendationDetails {
+    string accountId = 1;
+    string recommendedNumberOfInstanceToPurchase = 2;
+    string currencyCode = 3;
+    EC2Options ec2Options = 4;
+    ElasticCacheOptions elasticCacheOptions = 5;
+    ESOptions esOptions = 6;
+    RDSOptions rdsOptions = 7;
+    RedshiftOptions redshiftOptions = 8;
+    string region = 9;
+    bool sizeFlexEligible = 10;
+    bool currentGeneration = 11;
+    float upfrontCost = 12;
+    float EstimatedMonthlySavings = 13;
+}
+
+message RiSummary {
+    int64 TotalPurchaseRecommendations = 1;
+    float EstimatedMonthlySavings = 2;
+    float EstimatedSavingsVSOnDemandRates = 3;
+}
+
+message RiRecommendationResults {
+    RiSummary riSummary = 1;
+    repeated RiRecommendationDetails riRecommendationDetails = 2;
+}
+
+message SpRecommendationDetails {
+    string accountId = 1;
+    string currencyCode = 2;
+    float hourlyCommitmentToPurchase = 3;
+    float estimatedMonthlySavingsAmount = 4;
+    float estimatedSavingsPercentage = 5;
+    float estimatedAverageCoverage = 6;
+    float estimatedAverageUtilization = 7;
+}
+
+message SpSummary {
+    float currentOnDemandSpend = 1;
+    float estimatedMonthlySpend = 2;
+    float estimatedMonthlySavings = 3;
+    int64 totalRecommendationCount = 4;
+}
+
+message SpRecommendationResults {
+    SpSummary SpSummary = 1;
+    repeated SpRecommendationDetails spRecommendationDetails = 2;
+}
+
+message AwsRecommendations {
+    repeated RiRecommendationResults riRecommendations = 1;
+    repeated SpRecommendationResults spRecommendations = 2;
+}
