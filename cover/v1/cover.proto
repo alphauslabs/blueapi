@@ -851,7 +851,7 @@ service Cover {
   }
 
   // Get the RI or SP recommendations for every account in a cost group
-  rpc GetRiSpRecommendations(GetRiSpRecommendationRequest) returns (GetRiSpRecommendationRequest) {
+  rpc GetRiSpRecommendations(GetRiSpRecommendationsRequest) returns (GetRiSpRecommendationsRequest) {
     option (google.api.http) = {
       post: "/v1/risprecommendations/{costGroupId}"
       body: "*"
@@ -2508,7 +2508,7 @@ message UpdateChannelDetailsResponse {
 }
 
 // Request message for GetRiSpRecomemendations
-message GetRiSpRecommendationRequest {
+message GetRiSpRecommendationsRequest {
   // 'reservation' for RI, 'savingsplan' for SP
   string type = 1;
 
@@ -2544,6 +2544,6 @@ message GetRiSpRecommendationRequest {
 }
 
 // Response message for GetRiSpRecommendations
-message GetRiSpRecommendationResponse {
+message GetRiSpRecommendationsResponse {
   api.cover.AwsRecommendations recommendations = 1;
 }
