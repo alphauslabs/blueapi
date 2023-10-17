@@ -6418,7 +6418,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetRiSpRecommendationsRequest"
+              "$ref": "#/definitions/v1GetRiSpRecommendationsResponse"
             }
           },
           "default": {
@@ -6453,7 +6453,7 @@
                 },
                 "offeringClass": {
                   "type": "string",
-                  "title": "For RI recommendation input\nThis supports only to AmazonEC2"
+                  "title": "For RI recommendation input\nThis supports only to AmazonEC2. Supported values are the following:\n'STANDARD', 'CONVERTIBLE'"
                 },
                 "savingsPlanType": {
                   "type": "string",
@@ -12319,6 +12319,25 @@
         }
       }
     },
+    "apicoverAwsRecommendations": {
+      "type": "object",
+      "properties": {
+        "riRecommendations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverRiRecommendationResults"
+          }
+        },
+        "spRecommendations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverSpRecommendationResults"
+          }
+        }
+      }
+    },
     "apigcpCost": {
       "type": "object",
       "properties": {
@@ -13530,6 +13549,48 @@
         }
       }
     },
+    "coverEC2Options": {
+      "type": "object",
+      "properties": {
+        "instanceType": {
+          "type": "string"
+        },
+        "tenancy": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        }
+      }
+    },
+    "coverESOptions": {
+      "type": "object",
+      "properties": {
+        "instanceClass": {
+          "type": "string"
+        },
+        "instanceSize": {
+          "type": "string"
+        }
+      }
+    },
+    "coverElasticCacheOptions": {
+      "type": "object",
+      "properties": {
+        "family": {
+          "type": "string"
+        },
+        "nodeType": {
+          "type": "string"
+        },
+        "productDescription": {
+          "type": "string"
+        }
+      }
+    },
     "coverFavorites": {
       "type": "object",
       "properties": {
@@ -13694,6 +13755,29 @@
         }
       }
     },
+    "coverRDSOptions": {
+      "type": "object",
+      "properties": {
+        "dbEdition": {
+          "type": "string"
+        },
+        "dbEngine": {
+          "type": "string"
+        },
+        "deploymentOptions": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "instanceType": {
+          "type": "string"
+        },
+        "licenseModel": {
+          "type": "string"
+        }
+      }
+    },
     "coverRecommendationDetail": {
       "type": "object",
       "properties": {
@@ -13712,6 +13796,17 @@
           "format": "double"
         },
         "region": {
+          "type": "string"
+        }
+      }
+    },
+    "coverRedshiftOptions": {
+      "type": "object",
+      "properties": {
+        "family": {
+          "type": "string"
+        },
+        "nodeType": {
           "type": "string"
         }
       }
@@ -13785,6 +13880,84 @@
         }
       }
     },
+    "coverRiRecommendationDetails": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "recommendedNumberOfInstanceToPurchase": {
+          "type": "string"
+        },
+        "currencyCode": {
+          "type": "string"
+        },
+        "ec2Options": {
+          "$ref": "#/definitions/coverEC2Options"
+        },
+        "elasticCacheOptions": {
+          "$ref": "#/definitions/coverElasticCacheOptions"
+        },
+        "esOptions": {
+          "$ref": "#/definitions/coverESOptions"
+        },
+        "rdsOptions": {
+          "$ref": "#/definitions/coverRDSOptions"
+        },
+        "redshiftOptions": {
+          "$ref": "#/definitions/coverRedshiftOptions"
+        },
+        "region": {
+          "type": "string"
+        },
+        "sizeFlexEligible": {
+          "type": "boolean"
+        },
+        "currentGeneration": {
+          "type": "boolean"
+        },
+        "upfrontCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedMonthlySavings": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "coverRiRecommendationResults": {
+      "type": "object",
+      "properties": {
+        "riSummary": {
+          "$ref": "#/definitions/coverRiSummary"
+        },
+        "riRecommendationDetails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverRiRecommendationDetails"
+          }
+        }
+      }
+    },
+    "coverRiSummary": {
+      "type": "object",
+      "properties": {
+        "totalPurchaseRecommendations": {
+          "type": "string",
+          "format": "int64"
+        },
+        "estimatedMonthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedSavingsVSOnDemandRates": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
     "coverSideMenu": {
       "type": "object",
       "properties": {
@@ -13813,6 +13986,73 @@
         },
         "value": {
           "type": "boolean"
+        }
+      }
+    },
+    "coverSpRecommendationDetails": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "currencyCode": {
+          "type": "string"
+        },
+        "hourlyCommitmentToPurchase": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedMonthlySavingsAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedSavingsPercentage": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedAverageCoverage": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedAverageUtilization": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "coverSpRecommendationResults": {
+      "type": "object",
+      "properties": {
+        "spSummary": {
+          "$ref": "#/definitions/coverSpSummary"
+        },
+        "spRecommendationDetails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverSpRecommendationDetails"
+          }
+        }
+      }
+    },
+    "coverSpSummary": {
+      "type": "object",
+      "properties": {
+        "currentOnDemandSpend": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedMonthlySpend": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedMonthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalRecommendationCount": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -17375,43 +17615,14 @@
       },
       "title": "Response message for GetRegions"
     },
-    "v1GetRiSpRecommendationsRequest": {
+    "v1GetRiSpRecommendationsResponse": {
       "type": "object",
       "properties": {
-        "type": {
-          "type": "string",
-          "title": "'reservation' for RI, 'savingsplan' for SP"
-        },
-        "service": {
-          "type": "string",
-          "title": "For RI recommendation input only. \nThis are the supported values\n'Amazon Elastic Compute - Cloud' for AmazonEC2, 'Amazon Relational Database Service' for AmazonRDS, 'Amazon Redshift' for Redshift, 'Amazon ElastiCache' for ElastiCache and 'Amazon Opensearch Service' for AmazonES"
-        },
-        "offeringClass": {
-          "type": "string",
-          "title": "For RI recommendation input\nThis supports only to AmazonEC2"
-        },
-        "savingsPlanType": {
-          "type": "string",
-          "title": "For SP recommendation input\nSupported Values are the following\n'COMPUTE_SP' for Compute Savings Plans, 'EC2_INSTANCE_SP' for EC2 Savings Plans, 'SAGEMAKER_SP' for SageMaker Savings Plans"
-        },
-        "paymentOption": {
-          "type": "string",
-          "description": "Supported values are the following\n'ALL_UPFRONT', 'PARTIAL_UPFRONT', 'NO_UPFRONT'\nWhen making RI recommendations for Amazon ElastiCache, the 'HEAVY_UTILIZATION' value is also a valid choice."
-        },
-        "termInYears": {
-          "type": "string",
-          "title": "Supported values are the following\n'ONE_YEAR', 'THREE_YEARS'"
-        },
-        "basedOnThePast": {
-          "type": "string",
-          "title": "Supported values are the following\n'SEVEN_DAYS', 'THIRTY_DAYS', 'SIXTY_DAYS'"
-        },
-        "costGroupId": {
-          "type": "string",
-          "title": "Required. Cost Group Id"
+        "awsRecommendations": {
+          "$ref": "#/definitions/apicoverAwsRecommendations"
         }
       },
-      "title": "Request message for GetRiSpRecomemendations"
+      "title": "Response message for GetRiSpRecommendations"
     },
     "v1GetRightSizingRecommendationResponse": {
       "type": "object",

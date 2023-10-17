@@ -851,7 +851,7 @@ service Cover {
   }
 
   // Get the RI or SP recommendations for every account in a cost group
-  rpc GetRiSpRecommendations(GetRiSpRecommendationsRequest) returns (GetRiSpRecommendationsRequest) {
+  rpc GetRiSpRecommendations(GetRiSpRecommendationsRequest) returns (GetRiSpRecommendationsResponse) {
     option (google.api.http) = {
       post: "/v1/risprecommendations/{costGroupId}"
       body: "*"
@@ -2518,7 +2518,8 @@ message GetRiSpRecommendationsRequest {
   string service = 2;
 
   // For RI recommendation input
-  // This supports only to AmazonEC2
+  // This supports only to AmazonEC2. Supported values are the following:
+  // 'STANDARD', 'CONVERTIBLE'
   string offeringClass = 3;
 
   // For SP recommendation input
@@ -2545,5 +2546,5 @@ message GetRiSpRecommendationsRequest {
 
 // Response message for GetRiSpRecommendations
 message GetRiSpRecommendationsResponse {
-  api.cover.AwsRecommendations recommendations = 1;
+  api.cover.AwsRecommendations awsRecommendations = 1;
 }
