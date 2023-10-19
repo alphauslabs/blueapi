@@ -998,7 +998,7 @@ message AbcAccount {
 }
 // Request message for the Billing.ReadInvoiceAdjustments rpc.
 message ReadInvoiceAdjustmentsRequest {
-  // Required. At the moment, only `aws` is supported.
+  // Required. At the moment, only `aws`,`azure`,`gcp` is supported.
   string vendor = 1;
 
   // Required.
@@ -1011,4 +1011,7 @@ message ReadInvoiceAdjustmentsRequest {
   //
   // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
   google.protobuf.FieldMask field_mask = 4;
+
+  // Optional. If empty, defaults to all fee type. At the moment, only `Fee`,`Refund`,`Credit`,`SppDiscount` is supported.
+  string feeType = 5;
 }
