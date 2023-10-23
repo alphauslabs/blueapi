@@ -546,6 +546,15 @@ message CreateAccountRequestAwsOptions {
   string managementAccountId = 1;
 }
 
+// GCP-specific options for registering an account.
+message CreateAccountRequestGcpOptions {
+  // Optional. 
+  string managementAccountId = 1;
+
+  // Optional. 
+  string managementBillingId = 2;
+}
+
 // Request message for the Cost.CreateAccount rpc.
 message CreateAccountRequest {
   // Required. At the moment, only `aws` is supported.
@@ -562,6 +571,9 @@ message CreateAccountRequest {
 
   // Required for the `aws` vendor. AWS-specific options.
   CreateAccountRequestAwsOptions awsOptions = 5;
+
+  // Required for the `gcp` vendor. GCP-specific options.
+  CreateAccountRequestGcpOptions gcpOptions = 6;
 }
 
 // Request message for the Cost.DeleteAccount rpc.
