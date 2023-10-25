@@ -11,6 +11,7 @@ import "api/cover/costforecast.proto";
 import "api/cover/risprecommendation.proto";
 import "api/cover/rightsizingrecommendation.proto";
 import "api/cover/alert.proto";
+import "api/cover/anomaly.proto";
 import "protos/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -854,6 +855,14 @@ service Cover {
   rpc GetRiSpRecommendations(GetRiSpRecommendationsRequest) returns (GetRiSpRecommendationsResponse) {
     option (google.api.http) = {
       post: "/v1/risprecommendations/{costGroupId}"
+      body: "*"
+    };
+  }
+
+   // Get the data of a cost group containing anomaly values
+  rpc GetAnomalyinCostGroup(GetAnomalyinCostGroupRequest) returns (GetAnomalyinCostGroupResponse) {
+    option (google.api.http) = {
+      post: "/v1/anomaly/{costGroupId}"
       body: "*"
     };
   }
@@ -2555,4 +2564,14 @@ message GetRiSpRecommendationsRequest {
 // Response message for GetRiSpRecommendations
 message GetRiSpRecommendationsResponse {
   api.cover.AwsRecommendations awsRecommendations = 1;
+}
+
+// Request message for getting anomaly
+message GetAnomalyinCostGroupRequest {
+  string costGroupId = 1;
+}
+
+// Response message for getting anomaly
+message GetAnomalyinCostGroupResponse {
+  repeated api.cover.AnomalyData anomalyData = 1;
 }
