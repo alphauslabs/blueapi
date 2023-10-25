@@ -6450,6 +6450,40 @@
         ]
       }
     },
+    "/v1/rispexpirationalerts": {
+      "post": {
+        "summary": "Create RI or SP Expiration Alert.",
+        "operationId": "Cover_CreateRiSpExpirationAlert",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateRiSpExpirationAlertRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/risprecommendations/{costGroupId}": {
       "post": {
         "summary": "Get the RI or SP recommendations for every account in a cost group",
@@ -16564,6 +16598,42 @@
         }
       },
       "description": "Request message for the CreateReseller rpc."
+    },
+    "v1CreateRiSpExpirationAlertRequest": {
+      "type": "object",
+      "properties": {
+        "frequency": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          },
+          "title": "Supported values are the following:\n[0, 7, 30, 60, 90]"
+        },
+        "costGroupId": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "required. CostGroupId"
+        },
+        "alertEnabled": {
+          "type": "boolean",
+          "description": "Switch in enabling alert."
+        },
+        "notificationChannels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Array of notificationChannel Ids from DynamoDB. Existing in ripple."
+        },
+        "type": {
+          "type": "string",
+          "title": "\"ri\" or \"sp\""
+        }
+      },
+      "title": "Request message for CreateRiSpExpirationAlert"
     },
     "v1CreateRoleRequest": {
       "type": "object",
