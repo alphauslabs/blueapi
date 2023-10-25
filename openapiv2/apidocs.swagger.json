@@ -3636,6 +3636,46 @@
         ]
       }
     },
+    "/v1/anomaly/{costGroupId}": {
+      "post": {
+        "summary": "Get the data of a cost group containing anomaly values",
+        "operationId": "Cover_GetAnomalyinCostGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAnomalyinCostGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "title": "Request message for getting anomaly"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/assets/summary/{costGroupId}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Assets summary for costgroup",
@@ -7667,6 +7707,10 @@
                 "awsOptions": {
                   "$ref": "#/definitions/v1CreateAccountRequestAwsOptions",
                   "description": "Required for the `aws` vendor. AWS-specific options."
+                },
+                "gcpOptions": {
+                  "$ref": "#/definitions/v1CreateAccountRequestGcpOptions",
+                  "description": "Required for the `gcp` vendor. GCP-specific options."
                 }
               },
               "description": "Request message for the Cost.CreateAccount rpc."
@@ -9777,7 +9821,7 @@
         "parameters": [
           {
             "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
+            "description": "Required. At the moment, only `aws`,`azure`,`gcp` is supported.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -9796,6 +9840,10 @@
                 "month": {
                   "type": "string",
                   "description": "Optional. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, June 2021 will be `202106`."
+                },
+                "feeType": {
+                  "type": "string",
+                  "description": "Optional. If empty, defaults to all fee type. At the moment, only `Fee`,`Refund`,`Credit`,`SppDiscount` is supported."
                 }
               },
               "description": "Request message for the Billing.ReadInvoiceAdjustments rpc."
@@ -13271,6 +13319,45 @@
         }
       }
     },
+    "coverAnomalyData": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "costGrouppId": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string"
+        },
+        "product": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "totalCost": {
+          "type": "number",
+          "format": "float"
+        },
+        "isAnomaly": {
+          "type": "boolean"
+        }
+      }
+    },
+    "coverAnomalyResult": {
+      "type": "object",
+      "properties": {
+        "anomalyData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverAnomalyData"
+          }
+        }
+      }
+    },
     "coverAwsCostForecast": {
       "type": "object",
       "properties": {
@@ -15838,6 +15925,20 @@
       },
       "description": "AWS-specific options for registering an account."
     },
+    "v1CreateAccountRequestGcpOptions": {
+      "type": "object",
+      "properties": {
+        "managementAccountId": {
+          "type": "string",
+          "description": "Optional."
+        },
+        "managementBillingId": {
+          "type": "string",
+          "description": "Optional."
+        }
+      },
+      "description": "GCP-specific options for registering an account."
+    },
     "v1CreateAlertRequest": {
       "type": "object",
       "properties": {
@@ -16868,6 +16969,15 @@
         }
       },
       "title": "Response message for GetAlerts"
+    },
+    "v1GetAnomalyinCostGroupResponse": {
+      "type": "object",
+      "properties": {
+        "anomalyData": {
+          "$ref": "#/definitions/coverAnomalyResult"
+        }
+      },
+      "title": "Response message for getting anomaly"
     },
     "v1GetAssetsSummaryResponse": {
       "type": "object",
