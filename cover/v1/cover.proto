@@ -865,6 +865,14 @@ service Cover {
       body: "*"
     };
   }
+
+  // Create RI or SP Expiration Alert.
+  rpc CreateRiSpExpirationAlert(CreateRiSpExpirationAlertRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/alerts/expire/risp"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -2585,4 +2593,23 @@ message AnomalyData {
     float totalCost = 6;
 
     bool isAnomaly = 7;
+}
+
+// Request message for CreateRiSpExpirationAlert
+message CreateRiSpExpirationAlertRequest {
+  // Supported values are the following:
+  // [0, 7, 30, 60, 90]
+  repeated int64 frequency = 1;
+
+  // required. CostGroupId
+  repeated string costGroupId = 2;
+
+  // Switch in enabling alert.
+  bool alertEnabled = 3;
+
+  // Array of notificationChannel Ids from DynamoDB. Existing in ripple.
+  repeated string notificationChannels = 4;
+
+  // "ri" or "sp"
+  string type = 5;
 }
