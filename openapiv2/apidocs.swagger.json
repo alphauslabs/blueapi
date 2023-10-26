@@ -3676,9 +3676,18 @@
         "operationId": "Cover_GetAnomalyinCostGroup",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response.(streaming responses)",
             "schema": {
-              "$ref": "#/definitions/v1GetAnomalyinCostGroupResponse"
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1AnomalyData"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1AnomalyData"
             }
           },
           "default": {
@@ -13353,33 +13362,6 @@
         }
       }
     },
-    "coverAnomalyData": {
-      "type": "object",
-      "properties": {
-        "account": {
-          "type": "string"
-        },
-        "costGroupId": {
-          "type": "string"
-        },
-        "vendor": {
-          "type": "string"
-        },
-        "product": {
-          "type": "string"
-        },
-        "date": {
-          "type": "string"
-        },
-        "totalCost": {
-          "type": "number",
-          "format": "float"
-        },
-        "isAnomaly": {
-          "type": "boolean"
-        }
-      }
-    },
     "coverAwsCostForecast": {
       "type": "object",
       "properties": {
@@ -15452,6 +15434,34 @@
         }
       }
     },
+    "v1AnomalyData": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "costGroupId": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string"
+        },
+        "product": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "totalCost": {
+          "type": "number",
+          "format": "float"
+        },
+        "isAnomaly": {
+          "type": "boolean"
+        }
+      },
+      "title": "Message response for anomaly detection"
+    },
     "v1AssetsSummary": {
       "type": "object",
       "properties": {
@@ -17027,19 +17037,6 @@
         }
       },
       "title": "Response message for GetAlerts"
-    },
-    "v1GetAnomalyinCostGroupResponse": {
-      "type": "object",
-      "properties": {
-        "anomalyData": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/coverAnomalyData"
-          }
-        }
-      },
-      "title": "Response message for getting anomaly"
     },
     "v1GetAssetsSummaryResponse": {
       "type": "object",

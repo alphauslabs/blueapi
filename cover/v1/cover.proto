@@ -11,7 +11,6 @@ import "api/cover/costforecast.proto";
 import "api/cover/risprecommendation.proto";
 import "api/cover/rightsizingrecommendation.proto";
 import "api/cover/alert.proto";
-import "api/cover/anomaly.proto";
 import "protos/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -860,7 +859,7 @@ service Cover {
   }
 
    // Get the data of a cost group containing anomaly values
-  rpc GetAnomalyinCostGroup(GetAnomalyinCostGroupRequest) returns (GetAnomalyinCostGroupResponse) {
+  rpc GetAnomalyinCostGroup(GetAnomalyinCostGroupRequest) returns (stream AnomalyData) {
     option (google.api.http) = {
       post: "/v1/anomaly/{costGroupId}"
       body: "*"
@@ -2579,9 +2578,21 @@ message GetAnomalyinCostGroupRequest {
   string costGroupId = 1;
 }
 
-// Response message for getting anomaly
-message GetAnomalyinCostGroupResponse {
-  repeated api.cover.AnomalyData anomalyData = 1;
+// Message response for anomaly detection 
+message AnomalyData {
+    string account = 1;
+
+    string costGroupId = 2;
+
+    string vendor = 3;
+
+    string product = 4;
+
+    string date = 5;
+
+    float totalCost = 6;
+
+    bool isAnomaly = 7;
 }
 
 // Request message for CreateRiSpExpirationAlert
