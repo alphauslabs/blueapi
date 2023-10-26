@@ -117,6 +117,14 @@ service Cost {
     };
   }
 
+  // WORK-IN-PROGRESS: Updates a vendor account. Only available in Ripple.
+  rpc UpdateAccount(UpdateAccountRequest) returns (api.Account) {
+    option (google.api.http) = {
+      put: "/v1/{vendor}/accounts/{id}"
+      body: "*"
+    };
+  }
+
   // WORK-IN-PROGRESS: Deletes a vendor account.
   rpc DeleteAccount(DeleteAccountRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -574,6 +582,18 @@ message CreateAccountRequest {
 
   // Required for the `gcp` vendor. GCP-specific options.
   CreateAccountRequestGcpOptions gcpOptions = 6;
+}
+
+// Request message for the Cost.UpdateAccount rpc.
+message UpdateAccountRequest {
+  // Required.
+  string vendor = 1;
+
+  // Required.
+  string id = 2;
+
+  // Optional.
+  string name = 3;
 }
 
 // Request message for the Cost.DeleteAccount rpc.
