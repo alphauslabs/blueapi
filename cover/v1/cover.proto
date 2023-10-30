@@ -875,7 +875,7 @@ service Cover {
   }
 
   // Update RI or SP Expiration Alert
-  rpc UpdateRiSpExpirationAlert(ManipulateRiSpExpirationAlertRequest) returns (google.protobuf.Empty) {
+  rpc UpdateRiSpExpirationAlert(UpdateRiSpExpirationAlertRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/v1/alerts/expire/risp/{orgId}/{type}"
     };
@@ -2638,6 +2638,26 @@ message ManipulateRiSpExpirationAlertRequest {
   string orgId = 1;
   // required. ri or sp
   string type = 2;
+}
+
+message UpdateRiSpExpirationAlertRequest {
+  // required. MSP Id
+  string orgId = 1;
+
+  // required. ri or sp
+  string type = 2;
+
+  // required. 
+  bool alertEnabled = 3;
+
+  // Optional. This field must not empty.
+  repeated string notificationChannels = 4;
+
+  // Optional. This field must not empty
+  repeated int64 frequency = 5;
+
+  // Optional. This field must not empty.
+  repeated string costGroupId = 6;
 }
 
 message GetRiSpExpirationAlertResponse {
