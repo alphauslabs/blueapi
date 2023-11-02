@@ -877,14 +877,29 @@ service Cover {
   // Update RI or SP Expiration Alert
   rpc UpdateRiSpExpirationAlert(UpdateRiSpExpirationAlertRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/v1/alerts/expire/risp/{orgId}/{type}"
+      put: "/v1/alerts/expire/risp/{id}"
+      body: "*"
     };
   }
 
   // Get RI or SP Expiration Alert Data
-  rpc GetRiSpExpirationAlert(ManipulateRiSpExpirationAlertRequest) returns (GetRiSpExpirationAlertResponse) {
+  rpc GetRiSpExpirationAlert(ManipulateRiSpExpirationAlertRequest) returns (RiSpExpiryAlertData) {
     option (google.api.http) = {
-      get: "/v1/alerts/expire/risp/{orgId}/{type}"
+      get: "/v1/alerts/expire/risp/{id}"
+    };
+  }
+
+  // List all Ri and Sp Expiration Alert Data
+  rpc ListRiSpExpirationAlert(ListRiSpExpirationAlertRequest) returns (stream RiSpExpiryAlertData) {
+    option (google.api.http) = {
+      post: "/v1/alerts/expire/risp/all:read"
+    };
+  }
+
+  // Delete selected Ri and Sp Expiration Alert Data
+  rpc DeleteRiSpExpirationAlert(ManipulateRiSpExpirationAlertRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/alerts/expire/risp/{id}"
     };
   }
 }
@@ -2626,7 +2641,7 @@ message CreateRiSpExpirationAlertRequest {
   // [0, 7, 30, 60, 90]
   repeated int64 frequency = 1;
 
-  // required. CostGroupId
+  // Optional. if costGroupId is not provided, accountId must not empty.
   repeated string costGroupId = 2;
 
   // required. Switch in enabling alert.
@@ -2638,41 +2653,36 @@ message CreateRiSpExpirationAlertRequest {
   // required. "ri" or "sp"
   string type = 5;
 
-  // Optional. Ri and Sp Expiry Alert also supports by account Ids.
+  // Optional. if accountId is not provided, CostGroupId must not empty.
   repeated string accountId = 6;
 }
 
 message ManipulateRiSpExpirationAlertRequest {
-  // required. MSP Id
-  string orgId = 1;
-  // required. ri or sp
-  string type = 2;
+  // required. Id
+  string id = 1;
 }
 
 message UpdateRiSpExpirationAlertRequest {
-  // required. MSP Id
-  string orgId = 1;
-
-  // required. ri or sp
-  string type = 2;
+  // required. Id
+  string id = 1;
 
   // required. 
-  bool alertEnabled = 3;
+  bool alertEnabled = 2;
 
-  // Optional. This field must not empty.
-  repeated string notificationChannels = 4;
+  // required. Notification Channel Ids.
+  repeated string notificationChannels = 3;
 
-  // Optional. This field must not empty
-  repeated int64 frequency = 5;
+  // required. Frequency.
+  repeated int64 frequency = 4;
 
-  // Optional. This field must not empty.
-  repeated string costGroupId = 6;
+  // Optional. if costGroupId is not provided, accountId must not empty.
+  repeated string costGroupId = 5;
 
-  // Optional. Ri and Sp Expiry Alert also supports by account Ids.
-  repeated string accountId = 7;
+  // Optional. if accountId is not provided, CostGroupId must not empty.
+  repeated string accountId = 6;
 }
 
-message GetRiSpExpirationAlertResponse {
+message RiSpExpiryAlertData {
   string id = 1;
 
   string orgId = 2;
@@ -2691,3 +2701,6 @@ message GetRiSpExpirationAlertResponse {
 
   repeated string accountId = 9;
 }
+
+// Request message for ListRiSpExpirationAlert
+message ListRiSpExpirationAlertRequest {}
