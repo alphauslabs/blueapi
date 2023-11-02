@@ -2641,7 +2641,7 @@ message CreateRiSpExpirationAlertRequest {
   // [0, 7, 30, 60, 90]
   repeated int64 frequency = 1;
 
-  // required. CostGroupId
+  // Optional. if costGroupId is not provided, accountId must not empty.
   repeated string costGroupId = 2;
 
   // required. Switch in enabling alert.
@@ -2653,7 +2653,7 @@ message CreateRiSpExpirationAlertRequest {
   // required. "ri" or "sp"
   string type = 5;
 
-  // Optional. Ri and Sp Expiry Alert also supports by account Ids.
+  // Optional. if accountId is not provided, CostGroupId must not empty.
   repeated string accountId = 6;
 }
 
@@ -2669,16 +2669,16 @@ message UpdateRiSpExpirationAlertRequest {
   // required. 
   bool alertEnabled = 2;
 
-  // Optional. This field must not empty.
+  // required. Notification Channel Ids.
   repeated string notificationChannels = 3;
 
-  // Optional. This field must not empty
+  // required. Frequency.
   repeated int64 frequency = 4;
 
-  // Optional. This field must not empty.
+  // Optional. if costGroupId is not provided, accountId must not empty.
   repeated string costGroupId = 5;
 
-  // Optional. Ri and Sp Expiry Alert also supports by account Ids.
+  // Optional. if accountId is not provided, CostGroupId must not empty.
   repeated string accountId = 6;
 }
 
