@@ -3840,9 +3840,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "date": {
+                "startDate": {
                   "type": "string",
-                  "title": "The date when you want to know if there is an anomaly, cannot be the current date"
+                  "title": "Start date for detecting anomalies"
+                },
+                "endDate": {
+                  "type": "string",
+                  "title": "End date for detection anomalies"
                 }
               },
               "title": "Request message for getting anomaly"
@@ -6589,6 +6593,54 @@
               },
               "description": "Request message for the UpdateReseller rpc."
             }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/resources/accounts/{vendor}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Returns all registered accounts that are not associated to any billing groups and accounts found in CUR for the specified month. For Ripple only",
+        "operationId": "Billing_ListAccountResources",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1ResourceAccount"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1ResourceAccount"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws`,`azure`,`gcp` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "month",
+            "description": "Optional. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`.",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -15643,6 +15695,11 @@
         "isAnomaly": {
           "type": "boolean",
           "title": "The value will be true if there is an anomaly for a specific account and product"
+        },
+        "anomalyProbability": {
+          "type": "number",
+          "format": "float",
+          "title": "How many percentage does the data is considered anomaly"
         }
       },
       "title": "Message response for anomaly detection"
@@ -19136,6 +19193,20 @@
         "recommendation": {
           "type": "string",
           "title": "Format: JSON String"
+        }
+      }
+    },
+    "v1ResourceAccount": {
+      "type": "object",
+      "properties": {
+        "payerId": {
+          "type": "string"
+        },
+        "customerId": {
+          "type": "string"
+        },
+        "registered": {
+          "type": "boolean"
         }
       }
     },

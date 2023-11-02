@@ -2591,8 +2591,11 @@ message GetRiSpRecommendationsResponse {
 message GetAnomalyinCostGroupRequest {
   string costGroupId = 1;
 
-  // The date when you want to know if there is an anomaly, cannot be the current date
-  string date = 2;
+  // Start date for detecting anomalies
+  string startDate = 2;
+
+  // End date for detection anomalies
+  string endDate = 3;
 }
 
 // Message response for anomaly detection 
@@ -2611,6 +2614,9 @@ message AnomalyData {
 
     // The value will be true if there is an anomaly for a specific account and product
     bool isAnomaly = 7;
+
+    // How many percentage does the data is considered anomaly 
+    float anomalyProbability = 8;
 }
 
 // Request message for CreateRiSpExpirationAlert
