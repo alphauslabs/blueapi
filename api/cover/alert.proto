@@ -11,7 +11,7 @@ message AlertData {
     string name = 2;
     string granularity = 3;
     repeated string costGroups = 4;
-    repeated string channels = 5;
+    AlertChannels channels = 5;
     string createdBy = 6;
     string createdAt = 7;
     string updatedAt = 8;
@@ -24,4 +24,10 @@ message ChannelData {
     string name = 2; // actual email value of channel name in slack or ms teams
     string type = 3; // email, slack, msteams
     string webhookUrl = 4;
+}
+
+message AlertChannels {
+    repeated string email = 1;
+    repeated string slack = 2;
+    repeated string msteams = 3;
 }
