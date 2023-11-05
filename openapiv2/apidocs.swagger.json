@@ -3847,7 +3847,7 @@
         ]
       }
     },
-    "/v1/anomaly/{costGroupId}": {
+    "/v1/anomaly": {
       "post": {
         "summary": "Get the data of a cost group containing anomaly values",
         "operationId": "Cover_GetAnomalyinCostGroup",
@@ -3876,28 +3876,11 @@
         },
         "parameters": [
           {
-            "name": "costGroupId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "startDate": {
-                  "type": "string",
-                  "title": "Start date for detecting anomalies"
-                },
-                "endDate": {
-                  "type": "string",
-                  "title": "End date for detection anomalies"
-                }
-              },
-              "title": "Request message for getting anomaly"
+              "$ref": "#/definitions/v1GetAnomalyinCostGroupRequest"
             }
           }
         ],
@@ -17315,6 +17298,23 @@
         }
       },
       "title": "Response message for GetAlerts"
+    },
+    "v1GetAnomalyinCostGroupRequest": {
+      "type": "object",
+      "properties": {
+        "costGroupId": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "string",
+          "title": "Start date for detecting anomalies"
+        },
+        "endDate": {
+          "type": "string",
+          "title": "End date for detection anomalies"
+        }
+      },
+      "title": "Request message for getting anomaly"
     },
     "v1GetAssetsSummaryResponse": {
       "type": "object",
