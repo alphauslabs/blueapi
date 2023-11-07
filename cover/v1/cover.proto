@@ -902,6 +902,14 @@ service Cover {
       delete: "/v1/alerts/expire/risp/{id}"
     };
   }
+
+  // Create Anomaly Alert
+  rpc CreateAnomalyAlert(CreateAnomalyAlertRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/alerts/anomaly"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -2707,3 +2715,22 @@ message RiSpExpiryAlertData {
 
 // Request message for ListRiSpExpirationAlert
 message ListRiSpExpirationAlertRequest {}
+
+// Rquest message for CreateAnomalyAlert
+message CreateAnomalyAlertRequest {
+  // Required. Name of the Anomaly Alert
+  string name = 1;
+
+  // Required. Toggle disable and enable status of the alert
+  bool alertEnabled = 2;
+
+  // Required. How often the user wants to receive alerts. Daily or Weekly
+  string frequency = 3;
+
+  // Requried. The Id of the cost group you want to monitor if there is an anomaly
+  repeated string costGroupId = 4;
+
+  // Required. The Channels where you want to send the alerts.
+  repeated string notificationChannels = 5;
+
+}
