@@ -2867,6 +2867,40 @@
         ]
       }
     },
+    "/v1/alerts/anomaly": {
+      "post": {
+        "summary": "Create Anomaly Alert",
+        "operationId": "Cover_CreateAnomalyAlert",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateAnomalyAlertRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/alerts/expire/risp": {
       "post": {
         "summary": "Create RI or SP Expiration Alert.",
@@ -16320,6 +16354,38 @@
         }
       },
       "description": "Request message for the CreateAllocator rpc."
+    },
+    "v1CreateAnomalyAlertRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Required. Name of the Anomaly Alert"
+        },
+        "alertEnabled": {
+          "type": "boolean",
+          "title": "Required. Toggle disable and enable status of the alert"
+        },
+        "frequency": {
+          "type": "string",
+          "title": "Required. How often the user wants to receive alerts. Daily or Weekly"
+        },
+        "costGroupId": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Requried. The Id of the cost group you want to monitor if there is an anomaly"
+        },
+        "notificationChannels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required. The Channels where you want to send the alerts."
+        }
+      },
+      "title": "Rquest message for CreateAnomalyAlert"
     },
     "v1CreateApiClientRequest": {
       "type": "object",
