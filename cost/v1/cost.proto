@@ -397,6 +397,36 @@ service Cost {
     };
   }
 
+  // Gets the budget alerts. Only available in Wave(Pro).
+  rpc GetBudgetAlerts(GetBudgetAlertsRequest) returns (BudgetAlerts) {
+    option (google.api.http) = {
+      get: "/v1/alerts/{id}"
+    };
+  }
+
+  // Create the budget alerts. Only available in Wave(Pro).
+  rpc CreateBudgetAlerts(CreateBudgetAlertsRequest) returns (BudgetAlerts) {
+    option (google.api.http) = {
+      post: "/v1/alerts"
+      body: "*"
+    };
+  }
+
+  // Updates the budget alerts. Only available in Wave(Pro).
+  rpc UpdateBudgetAlerts(UpdateBudgetAlertsRequest) returns (BudgetAlerts) {
+    option (google.api.http) = {
+      put: "/v1/alerts/{id}"
+      body: "*"
+    };
+  }
+
+  // Deletes the budget alerts. Only available in Wave(Pro).
+  rpc DeleteBudgetAlerts(DeleteBudgetAlertsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/alerts/{id}"
+    };
+  }
+
   // WORK-IN-PROGRESS: Get cost opmtimization recommendations for an organization (or MSP).
   rpc GetRecommendations(GetRecommendationsRequest) returns (GetRecommendationsResponse) {
     option (google.api.http) = {
@@ -1808,4 +1838,71 @@ message ReadCostsRequestAzureOptions {
 
   // If true, force API to not use cached data.
   bool noCache = 3;
+}
+
+// Request message for the BudgetAlerts rpc.
+message BudgetAlerts {
+  // budget alert id
+  string id = 1;
+
+  string vendor = 2;
+
+  repeated string accounts = 3;
+
+  api.BudgetAlertNotification notification = 4;
+
+  api.DailyBudgetAlert daily = 5;
+
+  api.MonthlyBudgetAlert monthly = 6;
+}
+
+// Request message for the GetBudgetAlerts rpc.
+message GetBudgetAlertsRequest {
+  // Required. budget alert id
+  string id = 1;
+}
+
+// Request message for the CreateBudgetAlerts rpc.
+message CreateBudgetAlertsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required.
+  repeated string accounts = 2;
+
+  // Required.
+  api.BudgetAlertNotification notification = 3;
+
+  // Optional.
+  api.DailyBudgetAlert daily = 4;
+
+  // Optional.
+  api.MonthlyBudgetAlert monthly = 5;
+}
+
+// Request message for the UpdateBudgetAlerts rpc.
+message UpdateBudgetAlertsRequest {
+  // Required. budget alert id
+  string id = 1;
+
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 2;
+
+  // Required.
+  repeated string accounts = 3;
+
+  // Required.
+  api.BudgetAlertNotification notification = 4;
+
+  // Optional.
+  api.DailyBudgetAlert daily = 5;
+
+  // Optional.
+  api.MonthlyBudgetAlert monthly = 6;
+}
+
+// Request message for the DeleteBudgetAlerts rpc.
+message DeleteBudgetAlertsRequest {
+  // Required. budget alert id
+  string id = 1;
 }
