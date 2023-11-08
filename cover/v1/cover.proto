@@ -2638,8 +2638,17 @@ message AnomalyData {
     // The value will be true if there is an anomaly for a specific account and product
     bool isAnomaly = 7;
 
+     // Lower bound. If the total cost is lesser than the lowerlimit it is considered as anomaly
+    float lowerLimit = 8;
+
+    // Upper bound. If the total cost is greater than the upperlimit it is considered as anomaly
+    float upperLimit = 9;   
+
+    // The difference of the total cost and the upperlimit or lowerlimit if it is anomamly, if not anomaly then anomaly cost is 0
+    float anomalyCost = 10;
+
     // How many percentage does the data is considered anomaly 
-    float anomalyProbability = 8;
+    float anomalyProbability = 11;
 }
 
 // Request message for CreateRiSpExpirationAlert
