@@ -8,7 +8,7 @@ import "api/cover/view.proto";
 import "api/cover/costgroup.proto";
 import "api/cover/accountaccess.proto";
 import "api/cover/costforecast.proto";
-import "api/cover/risprecommendation.proto";
+import "api/cover/discountrecommendation.proto";
 import "api/cover/rightsizingrecommendation.proto";
 import "api/cover/alert.proto";
 import "protos/operation.proto";
@@ -850,10 +850,10 @@ service Cover {
     };
   }
 
-  // Get the RI or SP recommendations for every account in a cost group
-  rpc GetRiSpRecommendations(GetRiSpRecommendationsRequest) returns (GetRiSpRecommendationsResponse) {
+  // Get the discount recommendations for every account in a cost group
+  rpc GetDiscountRecommendations(GetDiscountRecommendationsRequest) returns (GetDiscountRecommendationsResponse) {
     option (google.api.http) = {
-      post: "/v1/risprecommendations"
+      post: "/v1/recommendations/discount"
       body: "*"
     };
   }
@@ -866,40 +866,40 @@ service Cover {
     };
   }
 
-  // Create RI or SP Expiration Alert.
-  rpc CreateRiSpExpirationAlert(CreateRiSpExpirationAlertRequest) returns (google.protobuf.Empty) {
+  // Create discount Expiration Alert.
+  rpc CreateDiscountExpirationAlert(CreateDiscountExpirationAlertRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/v1/alerts/expire/risp"
+      post: "/v1/alerts/expire/discount"
       body: "*"
     };
   }
 
-  // Update RI or SP Expiration Alert
-  rpc UpdateRiSpExpirationAlert(UpdateRiSpExpirationAlertRequest) returns (google.protobuf.Empty) {
+  // Update discount Expiration Alert
+  rpc UpdateDiscountExpirationAlert(UpdateDiscountExpirationAlertRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/v1/alerts/expire/risp/{id}"
+      put: "/v1/alerts/expire/discount/{id}"
       body: "*"
     };
   }
 
-  // Get RI or SP Expiration Alert Data
-  rpc GetRiSpExpirationAlert(ManipulateRiSpExpirationAlertRequest) returns (RiSpExpiryAlertData) {
+  // Get discount Expiration Alert Data
+  rpc GetDiscountExpirationAlert(ManipulateDiscountExpirationAlertRequest) returns (DiscountExpiryAlertData) {
     option (google.api.http) = {
-      get: "/v1/alerts/expire/risp/{id}"
+      get: "/v1/alerts/expire/discount/{id}"
     };
   }
 
-  // List all Ri and Sp Expiration Alert Data
-  rpc ListRiSpExpirationAlert(ListRiSpExpirationAlertRequest) returns (stream RiSpExpiryAlertData) {
+  // List all discount Expiration Alert Data
+  rpc ListDiscountExpirationAlert(ListDiscountExpirationAlertRequest) returns (stream DiscountExpiryAlertData) {
     option (google.api.http) = {
-      post: "/v1/alerts/expire/risp/all:read"
+      post: "/v1/alerts/expire/discount/all:read"
     };
   }
 
-  // Delete selected Ri and Sp Expiration Alert Data
-  rpc DeleteRiSpExpirationAlert(ManipulateRiSpExpirationAlertRequest) returns (google.protobuf.Empty) {
+  // Delete selected discount Expiration Alert Data
+  rpc DeleteDiscountExpirationAlert(ManipulateDiscountExpirationAlertRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1/alerts/expire/risp/{id}"
+      delete: "/v1/alerts/expire/discount/{id}"
     };
   }
 
@@ -2562,52 +2562,34 @@ message UpdateChannelDetailsResponse {
   api.cover.ChannelData channelData = 1;
 }
 
-// Request message for GetRiSpRecomemendations
-message GetRiSpRecommendationsRequest {
-  // 'reservation' for RI, 'savingsplan' for SP
-  string type = 1;
+// Request message for GetDiscountRecomemendations
+message GetDiscountRecommendationsRequest {
 
-  // For RI recommendation input only. 
-  // These are the supported values
-  // 'AmazonEC2', 'AmazonRDS', 'AmazonRedshift', 'AmazonElastiCache', 'AmazonOpenSearch' and 'AmazonMemoryDB'
-  string service = 2;
+  // Required.
+  string costGroupId = 1;
 
-  // For RI recommendation input
-  // This supports only to AmazonEC2. Supported values are the following:
-  // 'STANDARD', 'CONVERTIBLE'
-  string offeringClass = 3;
+  // service ('AmazonEC2', 'AmazonRDS', 'AmazonRedshift', 'AmazonElastiCache', 'AmazonOpenSearch', 'AmazonMemoryDB') -> for RI only
+  // offeringClass ('STANDARD', 'CONVERTIBLE') -> for RI only
+  // savingsPlanType ('COMPUTE_SP', 'EC2_INSTANCE_SP', 'SAGEMAKER_SP') -> for SP only
+  // paymentOption ('ALL_UPFRONT', 'PARTIAL_UPFRONT', 'NO_UPFRONT')
+  // termInYears ('ONE_YEAR', 'THREE_YEARS')
+  // basedOnThePast ('SEVEN_DAYS', 'THIRTY_DAYS', 'SIXTY_DAYS')
+  // accountScope ('PAYER', 'LINKED')
+  // type ('ri', 'sp')
+  api.cover.AwsInputs awsInputs = 2;
 
-  // For SP recommendation input
-  // Supported Values are the following
-  // 'COMPUTE_SP' for Compute Savings Plans, 'EC2_INSTANCE_SP' for EC2 Savings Plans, 'SAGEMAKER_SP' for SageMaker Savings Plans
-  string savingsPlanType = 4;
+  // NOT SUPPORTED YET
+  api.cover.AzureInputs azureInputs = 3;
 
-  // Supported values are the following
-  // 'ALL_UPFRONT', 'PARTIAL_UPFRONT', 'NO_UPFRONT'
-  // When making RI recommendations for Amazon ElastiCache, the 'HEAVY_UTILIZATION' value is also a valid choice.
-  string paymentOption = 5;
-
-  // Supported values are the following
-  // 'ONE_YEAR', 'THREE_YEARS'
-  string termInYears = 6;
-
-  // Supported values are the following
-  // 'SEVEN_DAYS', 'THIRTY_DAYS', 'SIXTY_DAYS'
-  string basedOnThePast = 7;
-
-  // If costgroupId is not provided, accountId must be provided.
-  string costGroupId = 8;
-
-  // If accountId is not provided, costGroupId must be provided.
-  string accountId = 9;
-
-  // Supported values are 'PAYER', 'LINKED'
-  string accountScope = 10;
+  // NOT SUPPORTED YET
+  api.cover.GcpInputs gcpInputs = 4;
 }
 
-// Response message for GetRiSpRecommendations
-message GetRiSpRecommendationsResponse {
-  api.cover.AwsRecommendations awsRecommendations = 1;
+// Response message for GetDiscountRecommendations
+message GetDiscountRecommendationsResponse {
+  api.cover.AwsDiscountRecommendations awsRecommendations = 1;
+  api.cover.AzureDiscountRecommendations azureRecommendations = 2;
+  api.cover.GcpDiscountRecommendations gcpRecommendations = 3;
 }
 
 // Request message for getting anomaly
@@ -2651,8 +2633,8 @@ message AnomalyData {
     float anomalyProbability = 11;
 }
 
-// Request message for CreateRiSpExpirationAlert
-message CreateRiSpExpirationAlertRequest {
+// Request message for CreateDiscountExpirationAlert
+message CreateDiscountExpirationAlertRequest {
   // Required if the alertEnabled is set to true
   // Supported values are the following:
   // [0, 7, 30, 60, 90]
@@ -2674,12 +2656,12 @@ message CreateRiSpExpirationAlertRequest {
   repeated string accountId = 6;
 }
 
-message ManipulateRiSpExpirationAlertRequest {
+message ManipulateDiscountExpirationAlertRequest {
   // required. Id
   string id = 1;
 }
 
-message UpdateRiSpExpirationAlertRequest {
+message UpdateDiscountExpirationAlertRequest {
   // required. Id
   string id = 1;
 
@@ -2702,7 +2684,7 @@ message UpdateRiSpExpirationAlertRequest {
   repeated string accountId = 7;
 }
 
-message RiSpExpiryAlertData {
+message DiscountExpiryAlertData {
   string id = 1;
 
   string orgId = 2;
@@ -2722,8 +2704,8 @@ message RiSpExpiryAlertData {
   repeated string accountId = 9;
 }
 
-// Request message for ListRiSpExpirationAlert
-message ListRiSpExpirationAlertRequest {}
+// Request message for ListDiscountExpirationAlert
+message ListDiscountExpirationAlertRequest {}
 
 // Rquest message for CreateAnomalyAlert
 message CreateAnomalyAlertRequest {

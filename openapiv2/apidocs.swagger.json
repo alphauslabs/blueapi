@@ -2806,7 +2806,7 @@
     },
     "/v1/alerts": {
       "post": {
-        "summary": "Create the budget alerts. Only available in Wave(Pro).",
+        "summary": "WORK-IN-PROGRESS: Create the budget alerts. Only available in Wave(Pro).",
         "operationId": "Cost_CreateBudgetAlerts",
         "responses": {
           "200": {
@@ -3069,10 +3069,10 @@
         ]
       }
     },
-    "/v1/alerts/expire/risp": {
+    "/v1/alerts/expire/discount": {
       "post": {
-        "summary": "Create RI or SP Expiration Alert.",
-        "operationId": "Cover_CreateRiSpExpirationAlert",
+        "summary": "Create discount Expiration Alert.",
+        "operationId": "Cover_CreateDiscountExpirationAlert",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -3094,7 +3094,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1CreateRiSpExpirationAlertRequest"
+              "$ref": "#/definitions/v1CreateDiscountExpirationAlertRequest"
             }
           }
         ],
@@ -3103,10 +3103,10 @@
         ]
       }
     },
-    "/v1/alerts/expire/risp/all:read": {
+    "/v1/alerts/expire/discount/all:read": {
       "post": {
-        "summary": "List all Ri and Sp Expiration Alert Data",
-        "operationId": "Cover_ListRiSpExpirationAlert",
+        "summary": "List all discount Expiration Alert Data",
+        "operationId": "Cover_ListDiscountExpirationAlert",
         "responses": {
           "200": {
             "description": "A successful response.(streaming responses)",
@@ -3114,13 +3114,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1RiSpExpiryAlertData"
+                  "$ref": "#/definitions/v1DiscountExpiryAlertData"
                 },
                 "error": {
                   "$ref": "#/definitions/googlerpcStatus"
                 }
               },
-              "title": "Stream result of v1RiSpExpiryAlertData"
+              "title": "Stream result of v1DiscountExpiryAlertData"
             }
           },
           "default": {
@@ -3135,15 +3135,15 @@
         ]
       }
     },
-    "/v1/alerts/expire/risp/{id}": {
+    "/v1/alerts/expire/discount/{id}": {
       "get": {
-        "summary": "Get RI or SP Expiration Alert Data",
-        "operationId": "Cover_GetRiSpExpirationAlert",
+        "summary": "Get discount Expiration Alert Data",
+        "operationId": "Cover_GetDiscountExpirationAlert",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1RiSpExpiryAlertData"
+              "$ref": "#/definitions/v1DiscountExpiryAlertData"
             }
           },
           "default": {
@@ -3167,8 +3167,8 @@
         ]
       },
       "delete": {
-        "summary": "Delete selected Ri and Sp Expiration Alert Data",
-        "operationId": "Cover_DeleteRiSpExpirationAlert",
+        "summary": "Delete selected discount Expiration Alert Data",
+        "operationId": "Cover_DeleteDiscountExpirationAlert",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -3198,8 +3198,8 @@
         ]
       },
       "put": {
-        "summary": "Update RI or SP Expiration Alert",
-        "operationId": "Cover_UpdateRiSpExpirationAlert",
+        "summary": "Update discount Expiration Alert",
+        "operationId": "Cover_UpdateDiscountExpirationAlert",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -3278,7 +3278,7 @@
     },
     "/v1/alerts/{id}": {
       "get": {
-        "summary": "Gets the budget alerts. Only available in Wave(Pro).",
+        "summary": "WORK-IN-PROGRESS: Gets the budget alerts. Only available in Wave(Pro).",
         "operationId": "Cost_GetBudgetAlerts",
         "responses": {
           "200": {
@@ -3308,7 +3308,7 @@
         ]
       },
       "delete": {
-        "summary": "Deletes the budget alerts. Only available in Wave(Pro).",
+        "summary": "WORK-IN-PROGRESS: Deletes the budget alerts. Only available in Wave(Pro).",
         "operationId": "Cost_DeleteBudgetAlerts",
         "responses": {
           "200": {
@@ -3339,7 +3339,7 @@
         ]
       },
       "put": {
-        "summary": "Updates the budget alerts. Only available in Wave(Pro).",
+        "summary": "WORK-IN-PROGRESS: Updates the budget alerts. Only available in Wave(Pro).",
         "operationId": "Cost_UpdateBudgetAlerts",
         "responses": {
           "200": {
@@ -6612,6 +6612,39 @@
         ]
       }
     },
+    "/v1/recommendations/discount": {
+      "post": {
+        "summary": "Get the discount recommendations for every account in a cost group",
+        "operationId": "Cover_GetDiscountRecommendations",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetDiscountRecommendationsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetDiscountRecommendationsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/resellers": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Lists all the reseller accounts. Only available in Ripple.",
@@ -6899,39 +6932,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/risprecommendations": {
-      "post": {
-        "summary": "Get the RI or SP recommendations for every account in a cost group",
-        "operationId": "Cover_GetRiSpRecommendations",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetRiSpRecommendationsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetRiSpRecommendationsRequest"
-            }
           }
         ],
         "tags": [
@@ -12494,35 +12494,6 @@
       },
       "description": "VendorDetail resource definition."
     },
-    "apiawsAwsRecommendations": {
-      "type": "object",
-      "properties": {
-        "summary": {
-          "$ref": "#/definitions/awsReservationRecommendationSummary"
-        },
-        "riRecommendations": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/awsRiRecommendation"
-          }
-        },
-        "spRecommendations": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/awsSpRecommendation"
-          }
-        },
-        "estimatedCoverage": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/awsReservationEstimatedCoverage"
-          }
-        }
-      }
-    },
     "apiawsChartData": {
       "type": "object",
       "properties": {
@@ -12893,25 +12864,6 @@
         }
       }
     },
-    "apicoverAwsRecommendations": {
-      "type": "object",
-      "properties": {
-        "riRecommendations": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/coverRiRecommendationResults"
-          }
-        },
-        "spRecommendations": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/coverSpRecommendationResults"
-          }
-        }
-      }
-    },
     "apigcpCost": {
       "type": "object",
       "properties": {
@@ -13096,6 +13048,35 @@
           "items": {
             "type": "object",
             "$ref": "#/definitions/awsSpCostReduction"
+          }
+        }
+      }
+    },
+    "awsAwsRecommendations": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "$ref": "#/definitions/awsReservationRecommendationSummary"
+        },
+        "riRecommendations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/awsRiRecommendation"
+          }
+        },
+        "spRecommendations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/awsSpRecommendation"
+          }
+        },
+        "estimatedCoverage": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/awsReservationEstimatedCoverage"
           }
         }
       }
@@ -13926,6 +13907,60 @@
         }
       }
     },
+    "coverAwsDiscountRecommendations": {
+      "type": "object",
+      "properties": {
+        "riRecommendations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverRiRecommendationResults"
+          }
+        },
+        "spRecommendations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverSpRecommendationResults"
+          }
+        }
+      }
+    },
+    "coverAwsInputs": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "type": "string"
+        },
+        "offeringClass": {
+          "type": "string"
+        },
+        "savingsPlanType": {
+          "type": "string"
+        },
+        "paymentOption": {
+          "type": "string"
+        },
+        "termInYears": {
+          "type": "string"
+        },
+        "basedOnThePast": {
+          "type": "string"
+        },
+        "accountScope": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "coverAzureDiscountRecommendations": {
+      "type": "object"
+    },
+    "coverAzureInputs": {
+      "type": "object"
+    },
     "coverAzureOptions": {
       "type": "object",
       "properties": {
@@ -14248,6 +14283,12 @@
           "type": "string"
         }
       }
+    },
+    "coverGcpDiscountRecommendations": {
+      "type": "object"
+    },
+    "coverGcpInputs": {
+      "type": "object"
     },
     "coverGcpOptions": {
       "type": "object",
@@ -15000,11 +15041,11 @@
       "properties": {
         "@type": {
           "type": "string",
-          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com. As of May 2023, there are no widely used type server\nimplementations and no plans to implement one.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
         }
       },
       "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "protobufNullValue": {
       "type": "string",
@@ -15012,7 +15053,7 @@
         "NULL_VALUE"
       ],
       "default": "NULL_VALUE",
-      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\nThe JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
+      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
     },
     "protosOperation": {
       "type": "object",
@@ -16947,6 +16988,49 @@
       "type": "object",
       "description": "Request message for the Admin.CreateDefaultNotificationChannel rpc."
     },
+    "v1CreateDiscountExpirationAlertRequest": {
+      "type": "object",
+      "properties": {
+        "frequency": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          },
+          "title": "Required if the alertEnabled is set to true\nSupported values are the following:\n[0, 7, 30, 60, 90]"
+        },
+        "costGroupId": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. if costGroupId is not provided, accountId must not empty."
+        },
+        "alertEnabled": {
+          "type": "boolean",
+          "description": "required. Switch in enabling alert."
+        },
+        "notificationChannels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "required. Array of notificationChannel Ids from DynamoDB. Existing in ripple."
+        },
+        "type": {
+          "type": "string",
+          "title": "required. \"ri\" or \"sp\""
+        },
+        "accountId": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. if accountId is not provided, CostGroupId must not empty."
+        }
+      },
+      "title": "Request message for CreateDiscountExpirationAlert"
+    },
     "v1CreateGroupRootUserRequest": {
       "type": "object",
       "properties": {
@@ -17238,49 +17322,6 @@
       },
       "description": "Request message for the CreateReseller rpc."
     },
-    "v1CreateRiSpExpirationAlertRequest": {
-      "type": "object",
-      "properties": {
-        "frequency": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          },
-          "title": "Required if the alertEnabled is set to true\nSupported values are the following:\n[0, 7, 30, 60, 90]"
-        },
-        "costGroupId": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Optional. if costGroupId is not provided, accountId must not empty."
-        },
-        "alertEnabled": {
-          "type": "boolean",
-          "description": "required. Switch in enabling alert."
-        },
-        "notificationChannels": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "required. Array of notificationChannel Ids from DynamoDB. Existing in ripple."
-        },
-        "type": {
-          "type": "string",
-          "title": "required. \"ri\" or \"sp\""
-        },
-        "accountId": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Optional. if accountId is not provided, CostGroupId must not empty."
-        }
-      },
-      "title": "Request message for CreateRiSpExpirationAlert"
-    },
     "v1CreateRoleRequest": {
       "type": "object",
       "properties": {
@@ -17545,6 +17586,54 @@
         }
       },
       "title": "Response message for DeleteView"
+    },
+    "v1DiscountExpiryAlertData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "alertEnabled": {
+          "type": "boolean"
+        },
+        "frequency": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        },
+        "costGroupId": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notificationChannels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "accountId": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "v1ExportCostFiltersFileResponse": {
       "type": "object",
@@ -18236,6 +18325,43 @@
       },
       "description": "Response message for the Admin.GetDefaultCostAccessTemplateUrl rpc."
     },
+    "v1GetDiscountRecommendationsRequest": {
+      "type": "object",
+      "properties": {
+        "costGroupId": {
+          "type": "string",
+          "description": "Required."
+        },
+        "awsInputs": {
+          "$ref": "#/definitions/coverAwsInputs",
+          "title": "service ('AmazonEC2', 'AmazonRDS', 'AmazonRedshift', 'AmazonElastiCache', 'AmazonOpenSearch', 'AmazonMemoryDB') -\u003e for RI only\nofferingClass ('STANDARD', 'CONVERTIBLE') -\u003e for RI only\nsavingsPlanType ('COMPUTE_SP', 'EC2_INSTANCE_SP', 'SAGEMAKER_SP') -\u003e for SP only\npaymentOption ('ALL_UPFRONT', 'PARTIAL_UPFRONT', 'NO_UPFRONT')\ntermInYears ('ONE_YEAR', 'THREE_YEARS')\nbasedOnThePast ('SEVEN_DAYS', 'THIRTY_DAYS', 'SIXTY_DAYS')\naccountScope ('PAYER', 'LINKED')\ntype ('ri', 'sp')"
+        },
+        "azureInputs": {
+          "$ref": "#/definitions/coverAzureInputs",
+          "title": "NOT SUPPORTED YET"
+        },
+        "gcpInputs": {
+          "$ref": "#/definitions/coverGcpInputs",
+          "title": "NOT SUPPORTED YET"
+        }
+      },
+      "title": "Request message for GetDiscountRecomemendations"
+    },
+    "v1GetDiscountRecommendationsResponse": {
+      "type": "object",
+      "properties": {
+        "awsRecommendations": {
+          "$ref": "#/definitions/coverAwsDiscountRecommendations"
+        },
+        "azureRecommendations": {
+          "$ref": "#/definitions/coverAzureDiscountRecommendations"
+        },
+        "gcpRecommendations": {
+          "$ref": "#/definitions/coverGcpDiscountRecommendations"
+        }
+      },
+      "title": "Response message for GetDiscountRecommendations"
+    },
     "v1GetFavoriteViewsResponse": {
       "type": "object",
       "properties": {
@@ -18446,7 +18572,7 @@
           "type": "string"
         },
         "awsRecommendations": {
-          "$ref": "#/definitions/apiawsAwsRecommendations"
+          "$ref": "#/definitions/awsAwsRecommendations"
         }
       },
       "title": "Request message for GetRecommendations"
@@ -18462,61 +18588,6 @@
         }
       },
       "title": "Response message for GetRegions"
-    },
-    "v1GetRiSpRecommendationsRequest": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "title": "'reservation' for RI, 'savingsplan' for SP"
-        },
-        "service": {
-          "type": "string",
-          "title": "For RI recommendation input only. \nThese are the supported values\n'AmazonEC2', 'AmazonRDS', 'AmazonRedshift', 'AmazonElastiCache', 'AmazonOpenSearch' and 'AmazonMemoryDB'"
-        },
-        "offeringClass": {
-          "type": "string",
-          "title": "For RI recommendation input\nThis supports only to AmazonEC2. Supported values are the following:\n'STANDARD', 'CONVERTIBLE'"
-        },
-        "savingsPlanType": {
-          "type": "string",
-          "title": "For SP recommendation input\nSupported Values are the following\n'COMPUTE_SP' for Compute Savings Plans, 'EC2_INSTANCE_SP' for EC2 Savings Plans, 'SAGEMAKER_SP' for SageMaker Savings Plans"
-        },
-        "paymentOption": {
-          "type": "string",
-          "description": "Supported values are the following\n'ALL_UPFRONT', 'PARTIAL_UPFRONT', 'NO_UPFRONT'\nWhen making RI recommendations for Amazon ElastiCache, the 'HEAVY_UTILIZATION' value is also a valid choice."
-        },
-        "termInYears": {
-          "type": "string",
-          "title": "Supported values are the following\n'ONE_YEAR', 'THREE_YEARS'"
-        },
-        "basedOnThePast": {
-          "type": "string",
-          "title": "Supported values are the following\n'SEVEN_DAYS', 'THIRTY_DAYS', 'SIXTY_DAYS'"
-        },
-        "costGroupId": {
-          "type": "string",
-          "description": "If costgroupId is not provided, accountId must be provided."
-        },
-        "accountId": {
-          "type": "string",
-          "description": "If accountId is not provided, costGroupId must be provided."
-        },
-        "accountScope": {
-          "type": "string",
-          "title": "Supported values are 'PAYER', 'LINKED'"
-        }
-      },
-      "title": "Request message for GetRiSpRecomemendations"
-    },
-    "v1GetRiSpRecommendationsResponse": {
-      "type": "object",
-      "properties": {
-        "awsRecommendations": {
-          "$ref": "#/definitions/apicoverAwsRecommendations"
-        }
-      },
-      "title": "Response message for GetRiSpRecommendations"
     },
     "v1GetRightSizingRecommendationResponse": {
       "type": "object",
@@ -19641,54 +19712,6 @@
         }
       },
       "description": "Request message for the RestoreSavings rpc."
-    },
-    "v1RiSpExpiryAlertData": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "orgId": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "alertEnabled": {
-          "type": "boolean"
-        },
-        "frequency": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
-        },
-        "costGroupId": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "details": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "notificationChannels": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "accountId": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
     },
     "v1SaveNotificationSettingsRequest": {
       "type": "object",
