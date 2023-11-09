@@ -2905,6 +2905,36 @@
       }
     },
     "/v1/alerts/anomaly/{id}": {
+      "get": {
+        "summary": "Get Anomaly Alert Data",
+        "operationId": "Cover_GetAnomalyAlert",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AnomalyAlertData"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "required. Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
       "delete": {
         "summary": "Delete Anomaly Alert",
         "operationId": "Cover_DeleteAnomalyAlert",
@@ -2930,6 +2960,73 @@
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "put": {
+        "summary": "Update Anomaly Alert",
+        "operationId": "Cover_UpdateAnomalyAlert",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "required. Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "required. alert name"
+                },
+                "alertEnabled": {
+                  "type": "boolean",
+                  "description": "required."
+                },
+                "notificationChannels": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "required. Notification Channel Ids."
+                },
+                "frequency": {
+                  "type": "string",
+                  "description": "required. Frequency."
+                },
+                "costGroupId": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "required. cost group id"
+                }
+              }
+            }
           }
         ],
         "tags": [
