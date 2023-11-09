@@ -924,6 +924,21 @@ service Cover {
       post: "/v1/alerts/anomaly/all:read"
     };
   }
+
+    // Get Anomaly Alert Data
+  rpc GetAnomalyAlert(ManipulateAnomalyAlertRequest) returns (AnomalyAlertData) {
+    option (google.api.http) = {
+      get: "/v1/alerts/anomaly/{id}"
+    };
+  }
+
+   // Update Anomaly Alert
+  rpc UpdateAnomalyAlert(UpdateAnomalyAlertRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/alerts/anomaly/{id}"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -2764,3 +2779,23 @@ message AnomalyAlertData {
 
 // Request message for ListAnomalyAlert
 message ListAnomalyAlertRequest {}
+
+message UpdateAnomalyAlertRequest {
+  // required. Id
+  string id = 1;
+
+  // required. alert name  
+  string name = 2;
+
+  // required. 
+  bool alertEnabled = 3;
+
+  // required. Notification Channel Ids.
+  repeated string notificationChannels = 4;
+
+  // required. Frequency.
+  string frequency = 5;
+
+  // required. cost group id   
+  repeated string costGroupId = 6;
+}
