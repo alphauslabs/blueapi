@@ -910,6 +910,20 @@ service Cover {
       body: "*"
     };
   }
+
+    // Delete Anomaly Alert
+  rpc DeleteAnomalyAlert(ManipulateAnomalyAlertRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/alerts/anomaly/{id}"
+    };
+  }
+
+   // List all the Anomaly Alert Data
+  rpc ListAnomalyAlert(ListAnomalyAlertRequest) returns (stream AnomalyAlertData) {
+    option (google.api.http) = {
+      post: "/v1/alerts/anomaly/all:read"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -2725,3 +2739,28 @@ message CreateAnomalyAlertRequest {
   repeated string notificationChannels = 5;
 
 }
+message ManipulateAnomalyAlertRequest {
+  // required. Id
+  string id = 1;
+}
+
+message AnomalyAlertData {
+
+  string id = 1;
+
+  string orgId = 2;
+  
+  string name = 3;
+
+  bool alertEnabled = 4;
+  
+  string frequency = 5;
+
+  repeated string costGroupId = 6;
+
+  repeated string notificationChannels = 7;
+
+}
+
+// Request message for ListAnomalyAlert
+message ListAnomalyAlertRequest {}

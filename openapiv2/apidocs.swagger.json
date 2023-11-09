@@ -2872,6 +2872,71 @@
         ]
       }
     },
+    "/v1/alerts/anomaly/all:read": {
+      "post": {
+        "summary": "List all the Anomaly Alert Data",
+        "operationId": "Cover_ListAnomalyAlert",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1AnomalyAlertData"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1AnomalyAlertData"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/alerts/anomaly/{id}": {
+      "delete": {
+        "summary": "Delete Anomaly Alert",
+        "operationId": "Cover_DeleteAnomalyAlert",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "required. Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/alerts/cost": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Get Alerts under organization",
@@ -15987,6 +16052,38 @@
           "type": "string",
           "format": "int64",
           "description": "Optional. The number of months the adjustment is to be applied. If set, it will divide the cost equally to the number of months."
+        }
+      }
+    },
+    "v1AnomalyAlertData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "alertEnabled": {
+          "type": "boolean"
+        },
+        "frequency": {
+          "type": "string"
+        },
+        "costGroupId": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notificationChannels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
