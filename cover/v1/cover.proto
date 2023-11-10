@@ -468,6 +468,14 @@ service Cover {
     };
   }
 
+  // Starts validation of the account access cur stack deployment. If successful, the IAM role created from the CloudFormation stack will be registered to the target.
+  rpc CreateAccountAccessCur(CreateAccountAccessRequest) returns (AccountAccess) {
+    option (google.api.http) = {
+      post: "/v1/aws/acctaccess/cur"
+      body: "*"
+    };
+  }
+
   // Starts an update to an existing account access CloudFormation stack for template changes, if any. Only call this API if the status of your account access is 'outdated'.
   rpc UpdateAccountAccess(UpdateAccountAccessRequest) returns (protos.Operation) {
     option (google.api.http) = {
