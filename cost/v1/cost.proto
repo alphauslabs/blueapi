@@ -397,6 +397,14 @@ service Cost {
     };
   }
 
+  // WORK-IN-PROGRESS: Reads the budget alerts. Only available in Wave(Pro).
+  rpc ReadBudgetAlerts(ReadBudgetAlertsRequest) returns (stream BudgetAlerts) {
+    option (google.api.http) = {
+      post: "/v1/alerts:read"
+      body: "*"
+    };
+  }
+
   // WORK-IN-PROGRESS: Gets the budget alerts. Only available in Wave(Pro).
   rpc GetBudgetAlerts(GetBudgetAlertsRequest) returns (BudgetAlerts) {
     option (google.api.http) = {
@@ -1854,6 +1862,12 @@ message BudgetAlerts {
   api.DailyBudgetAlert daily = 5;
 
   api.MonthlyBudgetAlert monthly = 6;
+}
+
+// Request message for the ReadBudgetAlerts rpc.
+message ReadBudgetAlertsRequest {
+  // Optional.
+  google.protobuf.FieldMask field_mask = 1;
 }
 
 // Request message for the GetBudgetAlerts rpc.
