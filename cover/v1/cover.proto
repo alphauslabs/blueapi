@@ -2680,7 +2680,7 @@ message CreateDiscountExpirationAlertRequest {
   bool alertEnabled = 3;
 
   // required. Array of notificationChannel Ids from DynamoDB. Existing in ripple.
-  repeated string notificationChannels = 4;
+  repeated string channels = 4;
 }
 
 message ManipulateDiscountExpirationAlertRequest {
@@ -2696,7 +2696,7 @@ message UpdateDiscountExpirationAlertRequest {
   bool alertEnabled = 2;
 
   // required. Notification Channel Ids.
-  repeated string notificationChannels = 3;
+  repeated string channels = 3;
 
   // required. Frequencies.
   repeated int64 frequencies = 4;
@@ -2710,17 +2710,15 @@ message DiscountExpiryAlertData {
 
   string orgId = 2;
 
-  string type = 3;
+  bool alertEnabled = 3;
 
-  bool alertEnabled = 4;
+  repeated int64 frequencies = 4;
 
-  repeated int64 frequencies = 5;
+  repeated string costGroups = 5;
 
-  repeated string costGroups = 6;
+  repeated string details = 6;
 
-  repeated string details = 7;
-
-  api.cover.AlertChannels channels = 8;
+  api.cover.AlertChannels channels = 7;
 }
 
 // Request message for ListDiscountExpirationAlert
