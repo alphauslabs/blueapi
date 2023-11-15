@@ -3551,6 +3551,49 @@
         ]
       }
     },
+    "/v1/alerts:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Reads the budget alerts. Only available in Wave(Pro).",
+        "operationId": "Cost_ReadBudgetAlerts",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1BudgetAlerts"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1BudgetAlerts"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the ReadBudgetAlerts rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ReadBudgetAlertsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/allocations/accountusage/all:read": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Lists the allocated account usages",
@@ -16181,11 +16224,8 @@
         "costGroupId": {
           "type": "string"
         },
-        "notificationChannels": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "channels": {
+          "$ref": "#/definitions/coverAlertChannels"
         }
       }
     },
@@ -19410,6 +19450,16 @@
           "description": "Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which case, it will use the latest exchange rates provided by https://fixer.io. If you prefer a custom exchange rate, you can append the rate to the currency's three-letter symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate should be against the US dollar (USD)."
         }
       }
+    },
+    "v1ReadBudgetAlertsRequest": {
+      "type": "object",
+      "properties": {
+        "fieldMask": {
+          "type": "string",
+          "description": "Optional."
+        }
+      },
+      "description": "Request message for the ReadBudgetAlerts rpc."
     },
     "v1ReadCostAttributesRequestAwsOptions": {
       "type": "object",
