@@ -1850,17 +1850,22 @@ message ReadCostsRequestAzureOptions {
 
 // Request message for the BudgetAlerts rpc.
 message BudgetAlerts {
-  // budget alert id
+  // Budget alert Id.
   string id = 1;
 
+  // Vnedor. At the moment, only `aws` is supported.
   string vendor = 2;
 
+  // Lsit of accountId.
   repeated string accounts = 3;
 
+  // Notification setting for budget alert.
   api.BudgetAlertNotification notification = 4;
 
+  // Daily setting for budget alert.
   api.DailyBudgetAlert daily = 5;
 
+  // Monthly setting for budget alert.
   api.MonthlyBudgetAlert monthly = 6;
 }
 
@@ -1881,7 +1886,7 @@ message CreateBudgetAlertsRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
-  // Required.
+  // Required. Lsit of accountId. For example, you set to ["accountId1","accountId2","accountId3"].
   repeated string accounts = 2;
 
   // Required.
@@ -1902,7 +1907,7 @@ message UpdateBudgetAlertsRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 2;
 
-  // Required.
+  // Required. Lsit of accountId. For example, you set to ["accountId1","accountId2","accountId3"].
   repeated string accounts = 3;
 
   // Required.
