@@ -2671,22 +2671,16 @@ message CreateDiscountExpirationAlertRequest {
   // Required if the alertEnabled is set to true
   // Supported values are the following:
   // [0, 7, 30, 60, 90]
-  repeated int64 frequency = 1;
+  repeated int64 frequencies = 1;
 
-  // Optional. if costGroupId is not provided, accountId must not empty.
-  repeated string costGroupId = 2;
+  // Required. Cost Group Id
+  repeated string costGroups = 2;
 
   // required. Switch in enabling alert.
   bool alertEnabled = 3;
 
   // required. Array of notificationChannel Ids from DynamoDB. Existing in ripple.
-  repeated string notificationChannels = 4;
-
-  // required. "ri" or "sp"
-  string type = 5;
-
-  // Optional. if accountId is not provided, CostGroupId must not empty.
-  repeated string accountId = 6;
+  repeated string channels = 4;
 }
 
 message ManipulateDiscountExpirationAlertRequest {
@@ -2702,19 +2696,13 @@ message UpdateDiscountExpirationAlertRequest {
   bool alertEnabled = 2;
 
   // required. Notification Channel Ids.
-  repeated string notificationChannels = 3;
+  repeated string channels = 3;
 
-  // required. Frequency.
-  repeated int64 frequency = 4;
+  // required. Frequencies.
+  repeated int64 frequencies = 4;
 
-  // required. ri or sp
-  string type = 5;
-
-  // Optional. if costGroupId is not provided, accountId must not empty.
-  repeated string costGroupId = 6;
-
-  // Optional. if accountId is not provided, CostGroupId must not empty.
-  repeated string accountId = 7;
+  // Required. Cost Group Ids
+  repeated string costGroups = 5;
 }
 
 message DiscountExpiryAlertData {
@@ -2722,19 +2710,15 @@ message DiscountExpiryAlertData {
 
   string orgId = 2;
 
-  string type = 3;
+  bool alertEnabled = 3;
 
-  bool alertEnabled = 4;
+  repeated int64 frequencies = 4;
 
-  repeated int64 frequency = 5;
+  repeated api.cover.AlertCostGroup costGroups = 5;
 
-  repeated string costGroupId = 6;
+  repeated string details = 6;
 
-  repeated string details = 7;
-
-  repeated string notificationChannels = 8;
-
-  repeated string accountId = 9;
+  api.cover.AlertChannels channels = 7;
 }
 
 // Request message for ListDiscountExpirationAlert

@@ -3393,38 +3393,27 @@
                   "type": "boolean",
                   "description": "required."
                 },
-                "notificationChannels": {
+                "channels": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
                   "description": "required. Notification Channel Ids."
                 },
-                "frequency": {
+                "frequencies": {
                   "type": "array",
                   "items": {
                     "type": "string",
                     "format": "int64"
                   },
-                  "description": "required. Frequency."
+                  "description": "required. Frequencies."
                 },
-                "type": {
-                  "type": "string",
-                  "title": "required. ri or sp"
-                },
-                "costGroupId": {
+                "costGroups": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "Optional. if costGroupId is not provided, accountId must not empty."
-                },
-                "accountId": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Optional. if accountId is not provided, CostGroupId must not empty."
+                  "title": "Required. Cost Group Ids"
                 }
               }
             }
@@ -17198,7 +17187,7 @@
     "v1CreateDiscountExpirationAlertRequest": {
       "type": "object",
       "properties": {
-        "frequency": {
+        "frequencies": {
           "type": "array",
           "items": {
             "type": "string",
@@ -17206,34 +17195,23 @@
           },
           "title": "Required if the alertEnabled is set to true\nSupported values are the following:\n[0, 7, 30, 60, 90]"
         },
-        "costGroupId": {
+        "costGroups": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "Optional. if costGroupId is not provided, accountId must not empty."
+          "title": "Required. Cost Group Id"
         },
         "alertEnabled": {
           "type": "boolean",
           "description": "required. Switch in enabling alert."
         },
-        "notificationChannels": {
+        "channels": {
           "type": "array",
           "items": {
             "type": "string"
           },
           "description": "required. Array of notificationChannel Ids from DynamoDB. Existing in ripple."
-        },
-        "type": {
-          "type": "string",
-          "title": "required. \"ri\" or \"sp\""
-        },
-        "accountId": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Optional. if accountId is not provided, CostGroupId must not empty."
         }
       },
       "title": "Request message for CreateDiscountExpirationAlert"
@@ -17803,23 +17781,21 @@
         "orgId": {
           "type": "string"
         },
-        "type": {
-          "type": "string"
-        },
         "alertEnabled": {
           "type": "boolean"
         },
-        "frequency": {
+        "frequencies": {
           "type": "array",
           "items": {
             "type": "string",
             "format": "int64"
           }
         },
-        "costGroupId": {
+        "costGroups": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "object",
+            "$ref": "#/definitions/coverAlertCostGroup"
           }
         },
         "details": {
@@ -17828,17 +17804,8 @@
             "type": "string"
           }
         },
-        "notificationChannels": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "accountId": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "channels": {
+          "$ref": "#/definitions/coverAlertChannels"
         }
       }
     },
