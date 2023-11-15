@@ -3400,7 +3400,7 @@
                   },
                   "description": "required. Notification Channel Ids."
                 },
-                "frequency": {
+                "frequencies": {
                   "type": "array",
                   "items": {
                     "type": "string",
@@ -3412,19 +3412,12 @@
                   "type": "string",
                   "title": "required. ri or sp"
                 },
-                "costGroupId": {
+                "costGroups": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
                   "description": "Optional. if costGroupId is not provided, accountId must not empty."
-                },
-                "accountId": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Optional. if accountId is not provided, CostGroupId must not empty."
                 }
               }
             }
@@ -17198,7 +17191,7 @@
     "v1CreateDiscountExpirationAlertRequest": {
       "type": "object",
       "properties": {
-        "frequency": {
+        "frequencies": {
           "type": "array",
           "items": {
             "type": "string",
@@ -17206,7 +17199,7 @@
           },
           "title": "Required if the alertEnabled is set to true\nSupported values are the following:\n[0, 7, 30, 60, 90]"
         },
-        "costGroupId": {
+        "costGroups": {
           "type": "array",
           "items": {
             "type": "string"
@@ -17227,13 +17220,6 @@
         "type": {
           "type": "string",
           "title": "required. \"ri\" or \"sp\""
-        },
-        "accountId": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Optional. if accountId is not provided, CostGroupId must not empty."
         }
       },
       "title": "Request message for CreateDiscountExpirationAlert"
@@ -17809,14 +17795,14 @@
         "alertEnabled": {
           "type": "boolean"
         },
-        "frequency": {
+        "frequencies": {
           "type": "array",
           "items": {
             "type": "string",
             "format": "int64"
           }
         },
-        "costGroupId": {
+        "costGroups": {
           "type": "array",
           "items": {
             "type": "string"
@@ -17828,17 +17814,8 @@
             "type": "string"
           }
         },
-        "notificationChannels": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "accountId": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "channels": {
+          "$ref": "#/definitions/coverAlertChannels"
         }
       }
     },

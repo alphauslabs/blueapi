@@ -2671,10 +2671,10 @@ message CreateDiscountExpirationAlertRequest {
   // Required if the alertEnabled is set to true
   // Supported values are the following:
   // [0, 7, 30, 60, 90]
-  repeated int64 frequency = 1;
+  repeated int64 frequencies = 1;
 
   // Optional. if costGroupId is not provided, accountId must not empty.
-  repeated string costGroupId = 2;
+  repeated string costGroups = 2;
 
   // required. Switch in enabling alert.
   bool alertEnabled = 3;
@@ -2684,9 +2684,6 @@ message CreateDiscountExpirationAlertRequest {
 
   // required. "ri" or "sp"
   string type = 5;
-
-  // Optional. if accountId is not provided, CostGroupId must not empty.
-  repeated string accountId = 6;
 }
 
 message ManipulateDiscountExpirationAlertRequest {
@@ -2705,16 +2702,13 @@ message UpdateDiscountExpirationAlertRequest {
   repeated string notificationChannels = 3;
 
   // required. Frequency.
-  repeated int64 frequency = 4;
+  repeated int64 frequencies = 4;
 
   // required. ri or sp
   string type = 5;
 
   // Optional. if costGroupId is not provided, accountId must not empty.
-  repeated string costGroupId = 6;
-
-  // Optional. if accountId is not provided, CostGroupId must not empty.
-  repeated string accountId = 7;
+  repeated string costGroups = 6;
 }
 
 message DiscountExpiryAlertData {
@@ -2726,15 +2720,13 @@ message DiscountExpiryAlertData {
 
   bool alertEnabled = 4;
 
-  repeated int64 frequency = 5;
+  repeated int64 frequencies = 5;
 
-  repeated string costGroupId = 6;
+  repeated string costGroups = 6;
 
   repeated string details = 7;
 
-  repeated string notificationChannels = 8;
-
-  repeated string accountId = 9;
+  api.cover.AlertChannels channels = 8;
 }
 
 // Request message for ListDiscountExpirationAlert
