@@ -2673,7 +2673,7 @@ message CreateDiscountExpirationAlertRequest {
   // [0, 7, 30, 60, 90]
   repeated int64 frequencies = 1;
 
-  // Optional. if costGroupId is not provided, accountId must not empty.
+  // Required. Cost Group Id
   repeated string costGroups = 2;
 
   // required. Switch in enabling alert.
@@ -2681,9 +2681,6 @@ message CreateDiscountExpirationAlertRequest {
 
   // required. Array of notificationChannel Ids from DynamoDB. Existing in ripple.
   repeated string notificationChannels = 4;
-
-  // required. "ri" or "sp"
-  string type = 5;
 }
 
 message ManipulateDiscountExpirationAlertRequest {
@@ -2701,14 +2698,11 @@ message UpdateDiscountExpirationAlertRequest {
   // required. Notification Channel Ids.
   repeated string notificationChannels = 3;
 
-  // required. Frequency.
+  // required. Frequencies.
   repeated int64 frequencies = 4;
 
-  // required. ri or sp
-  string type = 5;
-
-  // Optional. if costGroupId is not provided, accountId must not empty.
-  repeated string costGroups = 6;
+  // Required. Cost Group Ids
+  repeated string costGroups = 5;
 }
 
 message DiscountExpiryAlertData {
