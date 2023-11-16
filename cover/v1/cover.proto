@@ -947,6 +947,14 @@ service Cover {
       body: "*"
     };
   }
+
+  //Octo new user registration
+  rpc RegisterNewUser(RegisterNewUserRequest) returns (RegisterNewUserResponse) {
+    option (google.api.http) = {
+      post: "/v1/members/register"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -2794,4 +2802,32 @@ message UpdateAnomalyAlertRequest {
 
   // required. cost group id   
   string costGroupId = 6;
+}
+
+// Request message for RegisterNewUser
+message RegisterNewUserRequest {
+  //required email
+  string email = 1;
+
+  //required password
+  string password = 2;
+
+  //required user Name
+  string name = 3;
+
+  //required company name
+  string company = 4;
+
+  //required company role
+  string role = 5;
+
+  //optional company monthly cloud usage
+  string amount = 6;
+
+  //optional intention
+  string intention = 7;
+}
+
+message RegisterNewUserResponse {
+  bool isAuthorized = 1;
 }
