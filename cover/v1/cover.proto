@@ -955,6 +955,13 @@ service Cover {
       body: "*"
     };
   }
+
+  //Octo getting user profile
+  rpc GetUserProfile(GetUserProfileRequest) returns (GetUserProfileResponse) {
+    option (google.api.http) = {
+      get: "/v1/members/{email}"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -2830,4 +2837,14 @@ message RegisterNewUserRequest {
 
 message RegisterNewUserResponse {
   bool isAuthorized = 1;
+}
+
+//Request message for GetUserProfile
+message GetUserProfileRequest {
+  //required email
+  string email = 1;
+}
+
+message GetUserProfileResponse {
+  bool hasCreatedProfile = 1;
 }

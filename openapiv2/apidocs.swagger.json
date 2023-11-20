@@ -6737,6 +6737,38 @@
         ]
       }
     },
+    "/v1/members/{email}": {
+      "get": {
+        "summary": "Octo getting user profile",
+        "operationId": "Cover_GetUserProfile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetUserProfileResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "email",
+            "description": "required email",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/members/{userId}": {
       "get": {
         "summary": "Get the details of the user",
@@ -18928,6 +18960,14 @@
         }
       },
       "title": "Response message for GetUserDetails"
+    },
+    "v1GetUserProfileResponse": {
+      "type": "object",
+      "properties": {
+        "hasCreatedProfile": {
+          "type": "boolean"
+        }
+      }
     },
     "v1GetUtilizationResponse": {
       "type": "object",
