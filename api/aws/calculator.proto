@@ -6,6 +6,22 @@ option go_package = "github.com/alphauslabs/blue-sdk-go/api/aws";
 option java_package = "cloud.alphaus.blueapi.api.aws";
 option java_outer_classname = "ApiAwsCalculatorProto";
 
+message AccountMonthlyCostCalculated {
+  // AWS account id.
+  string account = 1;
+
+  // Expected format: yyyy-mm
+  string month = 2;
+
+  // Expected format: RFC3339
+  string timestamp = 3;
+
+  // Usually set when ondemand/invoice request, otherwise, empty.
+  string runId = 4;
+
+  map<string, string> meta = 5;
+}
+
 message AdjustmentsTypeList {
   repeated string types = 1;
 }
