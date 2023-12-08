@@ -964,6 +964,13 @@ service Cover {
     };
   }
 
+  // List all Budgets in an organization
+  rpc ListBudgets(ListBudgetsRequest) returns (stream ListBudgetsResponse) {
+    option (google.api.http) = {
+      get: "/v1/budget"
+    };
+  }
+
   // Get Budget data for specific cost group in an organization
   rpc GetBudget(GetBudgetRequest) returns (GetBudgetResponse) {
     option (google.api.http) = {
@@ -2876,6 +2883,12 @@ message GetUserProfileRequest {
 
 message GetUserProfileResponse {
   bool hasCreatedProfile = 1;
+}
+
+message ListBudgetsRequest {}
+
+message ListBudgetsResponse {
+  api.cover.BudgetData budgetData = 1;
 }
 
 message GetBudgetRequest {
