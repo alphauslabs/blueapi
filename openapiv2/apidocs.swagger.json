@@ -146,6 +146,40 @@
         ]
       }
     },
+    "/admin/v1/auditlogs:export": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Exports audit logs for login user's organization.",
+        "operationId": "Admin_ExportAuditLogs",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiAuditExport"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the ExportAuditLogs rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ExportAuditLogsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
     "/admin/v1/aws/reports/proforma": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Configure AWS Proforma Cost and Usage Report.",
@@ -4995,6 +5029,36 @@
       }
     },
     "/v1/budget": {
+      "get": {
+        "summary": "List all Budgets in an organization",
+        "operationId": "Cover_ListBudgets",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1ListBudgetsResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1ListBudgetsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      },
       "post": {
         "summary": "Create Budget for specific cost group in an organization",
         "operationId": "Cover_CreateBudget",
@@ -12009,6 +12073,35 @@
         }
       }
     },
+    "apiAuditExport": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/apiAuditExportData"
+        }
+      },
+      "description": "AuditExport resource definition."
+    },
+    "apiAuditExportData": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "title": "Encoded value"
+        },
+        "downloadedRows": {
+          "type": "string",
+          "format": "int64",
+          "description": "Downloaded content lines."
+        },
+        "totalRows": {
+          "type": "string",
+          "format": "int64",
+          "description": "Total of content lines."
+        }
+      },
+      "description": "AuditExportData resource definition."
+    },
     "apiBillingGroupForecast": {
       "type": "object",
       "properties": {
@@ -18207,6 +18300,24 @@
         }
       }
     },
+    "v1ExportAuditLogsRequest": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "description": "Required. At the moment, `CSV`,`JSON` is supported."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Required. The UTC date to start data from. If not set, the first day of the current year will be used. Format: `yyyymmdd`."
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Required. The UTC date to end data from. If not set, the first day of the current year will be used. Format: `yyyymmdd`."
+        }
+      },
+      "description": "Request message for the ExportAuditLogs rpc."
+    },
     "v1ExportCostFiltersFileResponse": {
       "type": "object",
       "properties": {
@@ -19437,6 +19548,14 @@
         }
       },
       "description": "Request message for the Billing.ListAwsCalculationHistory rpc."
+    },
+    "v1ListBudgetsResponse": {
+      "type": "object",
+      "properties": {
+        "budgetData": {
+          "$ref": "#/definitions/coverBudgetData"
+        }
+      }
     },
     "v1ListCalculationsHistoryAwsResponse": {
       "type": "object",
