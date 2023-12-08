@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package blueapi.api.cover;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/cover";
+option java_package = "cloud.alphaus.blueapi.api.cover";
+option java_outer_classname = "ApiCoverBudgetProto";
+
+message BudgetData {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string granularity = 4; // monthly, quarterly, yearly
+    string startDate = 5;
+    string endDate = 6;
+    float totalBudget = 7;
+    repeated GranularBudgetData granularBudget = 8; // budget per month/quarter/year
+    BudgetCostGroup costGroup = 9;
+    BudgetChannels channels = 10;
+}
+
+message GranularBudgetData {
+    string period = 1; // name of month, quarter, year
+    float budget = 2;
+}
+
+message BudgetCostGroup {
+    string id = 1; // required
+    string name = 2; // only used for response
+}
+
+message BudgetChannels {
+    repeated BudgetChannel email = 1;
+    repeated BudgetChannel slack = 2;
+    repeated BudgetChannel msteams = 3;
+}
+
+message BudgetChannel {
+    string id = 1;
+    string name = 2; // only used for response
+}
