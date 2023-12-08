@@ -4,6 +4,7 @@ package blueapi.admin.v1;
 
 import "api/accountgroup.proto";
 import "api/notification.proto";
+import "api/audit.proto";
 import "protos/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -197,6 +198,14 @@ service Admin {
   rpc DeleteNotification(DeleteNotificationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/admin/v1/notifications/{id}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Exports audit logs for login user's organization.
+  rpc ExportAuditLogs(ExportAuditLogsRequest) returns (api.AuditExport) {
+    option (google.api.http) = {
+      post: "/admin/v1/auditlogs:export"
+      body: "*"
     };
   }
 
@@ -557,4 +566,17 @@ message ProformaCur {
 
   string timeCreated = 7;
 
+}
+
+
+// Request message for the ExportAuditLogs rpc.
+message ExportAuditLogsRequest {
+  // Required. At the moment, `CSV`,`JSON` is supported.
+  string format = 1;
+
+  // Required. The UTC date to start data from. If not set, the first day of the current year will be used. Format: `yyyymmdd`.
+  string startTime = 2;
+
+  // Required. The UTC date to end data from. If not set, the first day of the current year will be used. Format: `yyyymmdd`.
+  string endTime = 3;
 }
