@@ -965,6 +965,35 @@ service Cover {
   }
 
   // Get Budget data for specific cost group in an organization
+  rpc GetBudget(GetBudgetRequest) returns (GetBudgetResponse) {
+    option (google.api.http) = {
+      post: "/v1/budget:read"
+      body: "*"
+    };
+  }
+
+  // Create Budget for specific cost group in an organization
+  rpc CreateBudget(CreateBudgetRequest) returns (CreateBudgetResponse) {
+    option (google.api.http) = {
+      post: "/v1/budget"
+      body: "*"
+    };
+  }
+
+  // Delete Budget for specific cost group in an organization
+  rpc DeleteBudget(DeleteBudgetRequest) returns (DeleteBudgetResponse) {
+    option (google.api.http) = {
+      delete: "/v1/budget/{id}"
+    };
+  }
+
+  // Update Budget for specific cost group in an organization
+  rpc UpdateBudget(UpdateBudgetRequest) returns (UpdateBudgetResponse) {
+    option (google.api.http) = {
+      put: "/v1/budget/{id}"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -2863,10 +2892,11 @@ message CreateBudgetRequest {
 }
 
 message CreateBudgetResponse {
-  api.cover.BudgetData budgetData = 2;
+  api.cover.BudgetData budgetData = 1;
 }
 
 message DeleteBudgetRequest {
+  // Required. Budget ID.
   string id = 1;
 }
 
@@ -2875,9 +2905,10 @@ message DeleteBudgetResponse {
 }
 
 message UpdateBudgetRequest {
-  api.cover.BudgetData budgetData = 1;
+  string id = 1;
+  api.cover.BudgetData budgetData = 2;
 }
 
 message UpdateBudgetResponse {
-  api.cover.BudgetData budgetData = 2;
+  api.cover.BudgetData budgetData = 1;
 }

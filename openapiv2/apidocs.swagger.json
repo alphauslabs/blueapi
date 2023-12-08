@@ -4994,6 +4994,146 @@
         ]
       }
     },
+    "/v1/budget": {
+      "post": {
+        "summary": "Create Budget for specific cost group in an organization",
+        "operationId": "Cover_CreateBudget",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateBudgetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateBudgetRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/budget/{id}": {
+      "delete": {
+        "summary": "Delete Budget for specific cost group in an organization",
+        "operationId": "Cover_DeleteBudget",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteBudgetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. Budget ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "put": {
+        "summary": "Update Budget for specific cost group in an organization",
+        "operationId": "Cover_UpdateBudget",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateBudgetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "budgetData": {
+                  "$ref": "#/definitions/coverBudgetData"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/budget:read": {
+      "post": {
+        "summary": "Get Budget data for specific cost group in an organization",
+        "operationId": "Cover_GetBudget",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBudgetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetBudgetRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/categories": {
       "get": {
         "summary": "Retrieve the categories to be utilized in the creation of the cost group.",
@@ -14295,6 +14435,49 @@
         }
       }
     },
+    "coverBudgetData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "not required for creating budget"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "granularity": {
+          "type": "string",
+          "title": "monthly, quarterly, yearly"
+        },
+        "startDate": {
+          "type": "string"
+        },
+        "endDate": {
+          "type": "string"
+        },
+        "totalBudget": {
+          "type": "number",
+          "format": "float"
+        },
+        "granularBudget": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverGranularBudgetData"
+          },
+          "title": "budget per month/quarter/year"
+        },
+        "costGroup": {
+          "$ref": "#/definitions/coverAlertCostGroup"
+        },
+        "channels": {
+          "$ref": "#/definitions/coverAlertChannels"
+        }
+      }
+    },
     "coverCategory": {
       "type": "object",
       "properties": {
@@ -14612,6 +14795,19 @@
         },
         "datasetRegion": {
           "type": "string"
+        }
+      }
+    },
+    "coverGranularBudgetData": {
+      "type": "object",
+      "properties": {
+        "period": {
+          "type": "string",
+          "title": "name of month, quarter, year"
+        },
+        "budget": {
+          "type": "number",
+          "format": "float"
         }
       }
     },
@@ -17251,6 +17447,22 @@
       },
       "description": "Request message for the CreateBudgetAlerts rpc."
     },
+    "v1CreateBudgetRequest": {
+      "type": "object",
+      "properties": {
+        "budgetData": {
+          "$ref": "#/definitions/coverBudgetData"
+        }
+      }
+    },
+    "v1CreateBudgetResponse": {
+      "type": "object",
+      "properties": {
+        "budgetData": {
+          "$ref": "#/definitions/coverBudgetData"
+        }
+      }
+    },
     "v1CreateCalculatorCostModifierResponse": {
       "type": "object",
       "properties": {
@@ -17914,6 +18126,14 @@
       },
       "title": "Response message for DeleteAlert"
     },
+    "v1DeleteBudgetResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
     "v1DeleteChannelResponse": {
       "type": "object",
       "properties": {
@@ -18205,6 +18425,23 @@
         }
       },
       "title": "Response message for GetBreakevenPoint"
+    },
+    "v1GetBudgetRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Required. Cost group ID."
+        }
+      }
+    },
+    "v1GetBudgetResponse": {
+      "type": "object",
+      "properties": {
+        "budgetData": {
+          "$ref": "#/definitions/coverBudgetData"
+        }
+      }
     },
     "v1GetCalculatorConfigResponse": {
       "type": "object",
@@ -20236,6 +20473,14 @@
         }
       },
       "title": "Response message for UpdateAlertDetails"
+    },
+    "v1UpdateBudgetResponse": {
+      "type": "object",
+      "properties": {
+        "budgetData": {
+          "$ref": "#/definitions/coverBudgetData"
+        }
+      }
     },
     "v1UpdateChannelDetailsResponse": {
       "type": "object",
