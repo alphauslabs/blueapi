@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package blueapi.api.cover;
+
+import "api/cover/alert.proto";
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/cover";
+option java_package = "cloud.alphaus.blueapi.api.cover";
+option java_outer_classname = "ApiCoverBudgetProto";
+
+message BudgetData {
+    string id = 1; // not required for creating budget
+    string name = 2;
+    string description = 3;
+    string granularity = 4; // monthly, quarterly, yearly
+    string startDate = 5;
+    string endDate = 6;
+    float totalBudget = 7;
+    repeated GranularBudgetData granularBudget = 8; // budget per month/quarter/year
+    api.cover.AlertCostGroup costGroup = 9;
+    api.cover.AlertChannels channels = 10;
+}
+
+message GranularBudgetData {
+    string period = 1; // name of month, quarter, year
+    float budget = 2;
+}

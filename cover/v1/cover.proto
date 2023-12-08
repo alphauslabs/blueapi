@@ -11,6 +11,7 @@ import "api/cover/costforecast.proto";
 import "api/cover/discountrecommendation.proto";
 import "api/cover/rightsizingrecommendation.proto";
 import "api/cover/alert.proto";
+import "api/cover/budget.proto";
 import "protos/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -783,14 +784,14 @@ service Cover {
     };
   }
 
-  // WORK-IN-PROGRESS: Get Alerts under organization
+  // Get Alerts under organization
   rpc GetAlerts(GetAlertsRequest) returns (stream GetAlertsResponse) {
     option (google.api.http) = {
       get: "/v1/alerts/cost"
     };
   }
 
-  // WORK-IN-PROGRESS: Create Alerts under organization
+  // Create Alerts under organization
   rpc CreateAlert(CreateAlertRequest) returns (CreateAlertResponse) {
     option (google.api.http) = {
       post: "/v1/alerts/cost"
@@ -798,21 +799,21 @@ service Cover {
     };
   }
 
-  // WORK-IN-PROGRESS: Get Specific Alert under organization
+  // Get Specific Alert under organization
   rpc GetAlertDetails(GetAlertDetailsRequest) returns (GetAlertDetailsResponse) {
     option (google.api.http) = {
       get: "/v1/alerts/cost/{id}"
     };
   }
 
-  // WORK-IN-PROGRESS: Delete Specific Alert under organization
+  // Delete Specific Alert under organization
   rpc DeleteAlert(DeleteAlertRequest) returns (DeleteAlertResponse) {
     option (google.api.http) = {
       delete: "/v1/alerts/cost/{id}"
     };
   }
 
-  // WORK-IN-PROGRESS: Update Specific Alert under organization
+  // Update Specific Alert under organization
   rpc UpdateAlertDetails(UpdateAlertDetailsRequest) returns (UpdateAlertDetailsResponse) {
     option (google.api.http) = {
       put: "/v1/alerts/cost/{id}"
@@ -960,6 +961,37 @@ service Cover {
   rpc GetUserProfile(GetUserProfileRequest) returns (GetUserProfileResponse) {
     option (google.api.http) = {
       get: "/v1/members/profile/{email}"
+    };
+  }
+
+  // Get Budget data for specific cost group in an organization
+  rpc GetBudget(GetBudgetRequest) returns (GetBudgetResponse) {
+    option (google.api.http) = {
+      post: "/v1/budget:read"
+      body: "*"
+    };
+  }
+
+  // Create Budget for specific cost group in an organization
+  rpc CreateBudget(CreateBudgetRequest) returns (CreateBudgetResponse) {
+    option (google.api.http) = {
+      post: "/v1/budget"
+      body: "*"
+    };
+  }
+
+  // Delete Budget for specific cost group in an organization
+  rpc DeleteBudget(DeleteBudgetRequest) returns (DeleteBudgetResponse) {
+    option (google.api.http) = {
+      delete: "/v1/budget/{id}"
+    };
+  }
+
+  // Update Budget for specific cost group in an organization
+  rpc UpdateBudget(UpdateBudgetRequest) returns (UpdateBudgetResponse) {
+    option (google.api.http) = {
+      put: "/v1/budget/{id}"
+      body: "*"
     };
   }
 }
@@ -2844,4 +2876,39 @@ message GetUserProfileRequest {
 
 message GetUserProfileResponse {
   bool hasCreatedProfile = 1;
+}
+
+message GetBudgetRequest {
+  // Required. Cost group ID.
+  string id = 1;
+}
+
+message GetBudgetResponse {
+  api.cover.BudgetData budgetData = 1;
+}
+
+message CreateBudgetRequest {
+  api.cover.BudgetData budgetData = 1;
+}
+
+message CreateBudgetResponse {
+  api.cover.BudgetData budgetData = 1;
+}
+
+message DeleteBudgetRequest {
+  // Required. Budget ID.
+  string id = 1;
+}
+
+message DeleteBudgetResponse {
+  string id = 1;
+}
+
+message UpdateBudgetRequest {
+  string id = 1;
+  api.cover.BudgetData budgetData = 2;
+}
+
+message UpdateBudgetResponse {
+  api.cover.BudgetData budgetData = 1;
 }
