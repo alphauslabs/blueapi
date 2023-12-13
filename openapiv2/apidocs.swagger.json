@@ -14568,6 +14568,17 @@
         },
         "channels": {
           "$ref": "#/definitions/coverAlertChannels"
+        },
+        "threshold": {
+          "$ref": "#/definitions/coverThreshold"
+        },
+        "repeat": {
+          "type": "boolean",
+          "title": "set to true if budget is repeated over multiple periods"
+        },
+        "draft": {
+          "type": "boolean",
+          "title": "set to true if the current budget set is still a draft"
         }
       }
     },
@@ -15360,6 +15371,27 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "coverThreshold": {
+      "type": "object",
+      "properties": {
+        "exactAmount": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          },
+          "title": "when spending reaches this amount, alert is sent"
+        },
+        "percentage": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          },
+          "title": "when spending reaches this percentage of the budget, alert is sent"
         }
       }
     },
