@@ -19,9 +19,17 @@ message BudgetData {
     repeated GranularBudgetData granularBudget = 8; // budget per month/quarter/year
     api.cover.AlertCostGroup costGroup = 9;
     api.cover.AlertChannels channels = 10;
+    Threshold threshold = 11;
+    bool repeat = 12; // set to true if budget is repeated over multiple periods
+    bool draft = 13; // set to true if the current budget set is still a draft
 }
 
 message GranularBudgetData {
     string period = 1; // name of month, quarter, year
     float budget = 2;
+}
+
+message Threshold {
+    repeated float exactAmount = 1; // when spending reaches this amount, alert is sent
+    repeated float percentage = 2; // when spending reaches this percentage of the budget, alert is sent
 }
