@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package blueapi.api;
 
+import "api/notification.proto";
+
 option go_package = "github.com/alphauslabs/blue-sdk-go/api";
 option java_package = "cloud.alphaus.blueapi.api";
 option java_outer_classname = "ApiBudgetProto";
@@ -56,6 +58,16 @@ message BudgetAlertNotification {
   repeated string channels = 2;
 
   // Required. notification enable/disable 
+  // If disabled, no alert is sent.
+  bool enabled = 3;
+}
+
+// BudgetAlertNotificationDetail resource definition.
+message BudgetAlertNotificationDetail {
+  // List of channel info.
+  repeated NotificationChannel channels = 2;
+
+  // Notification enable/disable 
   // If disabled, no alert is sent.
   bool enabled = 3;
 }
