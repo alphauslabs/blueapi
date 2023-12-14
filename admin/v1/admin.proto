@@ -9,6 +9,7 @@ import "protos/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/field_mask.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/admin";
 option java_package = "cloud.alphaus.api.admin";
@@ -386,6 +387,9 @@ message ListNotificationChannelsResponse {
 // Request message for the Admin.GetNotificationChannel rpc.
 message GetNotificationChannelRequest {
   string id = 1;
+
+  // Optional.
+  google.protobuf.FieldMask field_mask = 2;
 }
 
 // Request message for the Admin.CreateNotificationChannel rpc.
