@@ -964,14 +964,14 @@ service Cover {
     };
   }
 
-  // List all Budgets in an organization
+  // WORK-IN-PROGRESS: List all Budgets in an organization
   rpc ListBudgets(ListBudgetsRequest) returns (stream ListBudgetsResponse) {
     option (google.api.http) = {
       get: "/v1/budget"
     };
   }
 
-  // Get Budget data for specific cost group in an organization
+  // WORK-IN-PROGRESS: Get Budget data for specific cost group in an organization
   rpc GetBudget(GetBudgetRequest) returns (GetBudgetResponse) {
     option (google.api.http) = {
       post: "/v1/budget:read"
@@ -979,7 +979,7 @@ service Cover {
     };
   }
 
-  // Create Budget for specific cost group in an organization
+  // WORK-IN-PROGRESS: Create Budget for specific cost group in an organization
   rpc CreateBudget(CreateBudgetRequest) returns (CreateBudgetResponse) {
     option (google.api.http) = {
       post: "/v1/budget"
@@ -987,14 +987,14 @@ service Cover {
     };
   }
 
-  // Delete Budget for specific cost group in an organization
+  // WORK-IN-PROGRESS: Delete Budget for specific cost group in an organization
   rpc DeleteBudget(DeleteBudgetRequest) returns (DeleteBudgetResponse) {
     option (google.api.http) = {
       delete: "/v1/budget/{id}"
     };
   }
 
-  // Update Budget for specific cost group in an organization
+  // WORK-IN-PROGRESS: Update Budget for specific cost group in an organization
   rpc UpdateBudget(UpdateBudgetRequest) returns (UpdateBudgetResponse) {
     option (google.api.http) = {
       put: "/v1/budget/{id}"
@@ -2512,18 +2512,21 @@ message CreateAlertRequest {
   // Required.
   string name = 1;
 
-  // At least one in either fixedAmount or percentage
+  // At least one in either fixedAmount or percentage.  Not required for budget alerts.
   float fixedAmount = 2;
   float percentage = 3;
 
-  // Optional. daily or monthly. Only 'daily' is supported for now.
+  // Optional. daily or monthly. Only 'daily' is supported for now. Not required for budget alerts.
   string granularity = 4;
 
-  // Required. Cost group IDs.
+  // Required. Cost group IDs. Only one ID for budget alerts.
   repeated string costGroups = 5;
 
   // Required. Channel IDs.
   repeated string channels = 6;
+
+  // Optional. Budget ID.
+  string budget = 7;
 }
 
 // Response message for CreateAlert
@@ -2559,17 +2562,17 @@ message UpdateAlertDetailsRequest {
   string id = 1;
 
   // If optional fields are not supplied, no changes occur.
-  // Optional. Actual email or channel name of slack/msteams
+  // Optional.
   string name = 2;
 
-  // Both are optional
+  // Both are optional. Not required for budget alerts.
   float fixedAmount = 3;
   float percentage = 4;
 
-  // Optional. daily or monthly. Only 'daily' is supported for now.
+  // Optional. daily or monthly. Only 'daily' is supported for now. Not required for budget alerts.
   string granularity = 5;
 
-  // Optional. Cost group IDs.
+  // Optional. Cost group IDs. Not required for budget alerts.
   repeated string costGroups = 6;
 
   // Optional. Channel IDs.

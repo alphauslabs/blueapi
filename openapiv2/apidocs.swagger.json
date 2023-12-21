@@ -3230,12 +3230,12 @@
               "properties": {
                 "name": {
                   "type": "string",
-                  "title": "If optional fields are not supplied, no changes occur.\nOptional. Actual email or channel name of slack/msteams"
+                  "description": "If optional fields are not supplied, no changes occur.\nOptional."
                 },
                 "fixedAmount": {
                   "type": "number",
                   "format": "float",
-                  "title": "Both are optional"
+                  "description": "Both are optional. Not required for budget alerts."
                 },
                 "percentage": {
                   "type": "number",
@@ -3243,14 +3243,14 @@
                 },
                 "granularity": {
                   "type": "string",
-                  "description": "Optional. daily or monthly. Only 'daily' is supported for now."
+                  "description": "Optional. daily or monthly. Only 'daily' is supported for now. Not required for budget alerts."
                 },
                 "costGroups": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "Optional. Cost group IDs."
+                  "description": "Optional. Cost group IDs. Not required for budget alerts."
                 },
                 "channels": {
                   "type": "array",
@@ -5037,7 +5037,7 @@
     },
     "/v1/budget": {
       "get": {
-        "summary": "List all Budgets in an organization",
+        "summary": "WORK-IN-PROGRESS: List all Budgets in an organization",
         "operationId": "Cover_ListBudgets",
         "responses": {
           "200": {
@@ -5067,7 +5067,7 @@
         ]
       },
       "post": {
-        "summary": "Create Budget for specific cost group in an organization",
+        "summary": "WORK-IN-PROGRESS: Create Budget for specific cost group in an organization",
         "operationId": "Cover_CreateBudget",
         "responses": {
           "200": {
@@ -5100,7 +5100,7 @@
     },
     "/v1/budget/{id}": {
       "delete": {
-        "summary": "Delete Budget for specific cost group in an organization",
+        "summary": "WORK-IN-PROGRESS: Delete Budget for specific cost group in an organization",
         "operationId": "Cover_DeleteBudget",
         "responses": {
           "200": {
@@ -5130,7 +5130,7 @@
         ]
       },
       "put": {
-        "summary": "Update Budget for specific cost group in an organization",
+        "summary": "WORK-IN-PROGRESS: Update Budget for specific cost group in an organization",
         "operationId": "Cover_UpdateBudget",
         "responses": {
           "200": {
@@ -5174,7 +5174,7 @@
     },
     "/v1/budget:read": {
       "post": {
-        "summary": "Get Budget data for specific cost group in an organization",
+        "summary": "WORK-IN-PROGRESS: Get Budget data for specific cost group in an organization",
         "operationId": "Cover_GetBudget",
         "responses": {
           "200": {
@@ -17308,7 +17308,7 @@
         "fixedAmount": {
           "type": "number",
           "format": "float",
-          "title": "At least one in either fixedAmount or percentage"
+          "description": "At least one in either fixedAmount or percentage.  Not required for budget alerts."
         },
         "percentage": {
           "type": "number",
@@ -17316,14 +17316,14 @@
         },
         "granularity": {
           "type": "string",
-          "description": "Optional. daily or monthly. Only 'daily' is supported for now."
+          "description": "Optional. daily or monthly. Only 'daily' is supported for now. Not required for budget alerts."
         },
         "costGroups": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "Required. Cost group IDs."
+          "description": "Required. Cost group IDs. Only one ID for budget alerts."
         },
         "channels": {
           "type": "array",
@@ -17331,6 +17331,10 @@
             "type": "string"
           },
           "description": "Required. Channel IDs."
+        },
+        "budget": {
+          "type": "string",
+          "description": "Optional. Budget ID."
         }
       },
       "title": "Request message for CreateAlert"
