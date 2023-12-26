@@ -14569,15 +14569,13 @@
         "description": {
           "type": "string"
         },
-        "granularity": {
-          "type": "string",
-          "title": "monthly, quarterly, yearly"
-        },
         "startDate": {
-          "type": "string"
+          "type": "string",
+          "title": "use yyyymmdd format"
         },
         "endDate": {
-          "type": "string"
+          "type": "string",
+          "title": "use yyyymmdd format"
         },
         "totalBudget": {
           "type": "number",
@@ -14589,24 +14587,46 @@
             "type": "object",
             "$ref": "#/definitions/coverGranularBudgetData"
           },
-          "title": "budget per month/quarter/year"
+          "title": "budget per month"
         },
         "costGroup": {
           "$ref": "#/definitions/coverAlertCostGroup"
         },
-        "channels": {
-          "$ref": "#/definitions/coverAlertChannels"
+        "forecastedData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverGranularForecastData"
+          },
+          "title": "forecast data record of an expired budget"
         },
-        "threshold": {
-          "$ref": "#/definitions/coverThreshold"
+        "spendingData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverGranularSpendingData"
+          },
+          "title": "spending data record of an expired budget"
         },
-        "repeat": {
+        "expired": {
           "type": "boolean",
-          "title": "set to true if budget is repeated over multiple periods"
+          "title": "true if budget has expired"
         },
         "draft": {
           "type": "boolean",
-          "title": "set to true if the current budget set is still a draft"
+          "title": "true if the current budget set is still a draft"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedBy": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
         }
       }
     },
@@ -14933,13 +14953,48 @@
     "coverGranularBudgetData": {
       "type": "object",
       "properties": {
-        "period": {
+        "date": {
           "type": "string",
-          "title": "name of month, quarter, year"
+          "title": "use yyyymmdd format"
         },
         "budget": {
           "type": "number",
           "format": "float"
+        }
+      }
+    },
+    "coverGranularForecastData": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "title": "use yyyymmdd format"
+        },
+        "mid": {
+          "type": "number",
+          "format": "float"
+        },
+        "upperBound": {
+          "type": "number",
+          "format": "float"
+        },
+        "lowerBound": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "coverGranularSpendingData": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "title": "use yyyymmdd format"
+        },
+        "value": {
+          "type": "number",
+          "format": "float",
+          "title": "actual cost for the month"
         }
       }
     },
@@ -15402,27 +15457,6 @@
           "items": {
             "type": "string"
           }
-        }
-      }
-    },
-    "coverThreshold": {
-      "type": "object",
-      "properties": {
-        "exactAmount": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          },
-          "title": "when spending reaches this amount, alert is sent"
-        },
-        "percentage": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "format": "float"
-          },
-          "title": "when spending reaches this percentage of the budget, alert is sent"
         }
       }
     },

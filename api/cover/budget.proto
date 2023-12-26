@@ -12,24 +12,40 @@ message BudgetData {
     string id = 1; // not required for creating budget
     string name = 2;
     string description = 3;
-    string granularity = 4; // monthly, quarterly, yearly
-    string startDate = 5;
-    string endDate = 6;
-    float totalBudget = 7;
-    repeated GranularBudgetData granularBudget = 8; // budget per month/quarter/year
-    api.cover.AlertCostGroup costGroup = 9;
-    api.cover.AlertChannels channels = 10;
-    Threshold threshold = 11;
-    bool repeat = 12; // set to true if budget is repeated over multiple periods
-    bool draft = 13; // set to true if the current budget set is still a draft
+    string startDate = 4; // use yyyymmdd format
+    string endDate = 5; // use yyyymmdd format
+    float totalBudget = 6;
+    repeated GranularBudgetData granularBudget = 7; // budget per month
+    api.cover.AlertCostGroup costGroup = 8;
+    repeated GranularForecastData forecastedData = 9; // forecast data record of an expired budget
+    repeated GranularSpendingData spendingData = 10; // spending data record of an expired budget
+    bool expired = 11; // true if budget has expired
+    bool draft = 12; // true if the current budget set is still a draft
+    string createdBy = 13;
+    string createdAt = 14;
+    string updatedBy = 15;
+    string updatedAt = 16;
 }
 
 message GranularBudgetData {
-    string period = 1; // name of month, quarter, year
+    string date = 1; // use yyyymmdd format
     float budget = 2;
 }
 
+message GranularForecastData {
+    string date = 1; // use yyyymmdd format
+    float mid = 2;
+    float upperBound = 3;
+    float lowerBound = 4;
+}
+
+message GranularSpendingData {
+    string date = 1; // use yyyymmdd format
+    float value = 2; // actual cost for the month
+}
+
 message Threshold {
-    repeated float exactAmount = 1; // when spending reaches this amount, alert is sent
-    repeated float percentage = 2; // when spending reaches this percentage of the budget, alert is sent
+    string type = 1; // exact or percentage
+    float value = 2; // actual value of threshold
+    api.cover.AlertChannels channels = 3;
 }
