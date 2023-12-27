@@ -14592,6 +14592,14 @@
         "costGroup": {
           "$ref": "#/definitions/coverAlertCostGroup"
         },
+        "threshold": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverThreshold"
+          },
+          "title": "threshold and its respective channel(s) to alert"
+        },
         "forecastedData": {
           "type": "array",
           "items": {
@@ -15457,6 +15465,23 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "coverThreshold": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "exact or percentage"
+        },
+        "value": {
+          "type": "number",
+          "format": "float",
+          "title": "actual value of threshold"
+        },
+        "channels": {
+          "$ref": "#/definitions/coverAlertChannels"
         }
       }
     },
