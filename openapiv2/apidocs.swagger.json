@@ -8950,7 +8950,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/waveBudgetAlert"
+              "$ref": "#/definitions/apiwaveBudgetAlert"
             }
           },
           "default": {
@@ -9025,7 +9025,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/waveBudgetAlert"
+              "$ref": "#/definitions/apiwaveBudgetAlert"
             }
           },
           "default": {
@@ -9058,7 +9058,7 @@
               "type": "object",
               "properties": {
                 "budgetAlert": {
-                  "$ref": "#/definitions/waveBudgetAlert",
+                  "$ref": "#/definitions/apiwaveBudgetAlert",
                   "description": "Required. Budget alert setting."
                 }
               },
@@ -9077,7 +9077,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/waveBudgetAlert"
+              "$ref": "#/definitions/apiwaveBudgetAlert"
             }
           },
           "default": {
@@ -9110,7 +9110,7 @@
               "type": "object",
               "properties": {
                 "budgetAlert": {
-                  "$ref": "#/definitions/waveBudgetAlert",
+                  "$ref": "#/definitions/apiwaveBudgetAlert",
                   "description": "Required. Budget alert setting.\n\nSet only the setting value to be changed.\nFor example, If you want to change only daily value, set `{\"budget\":[{\"id\":\"daily\",\"value\":100,\"enabled\":true}}` as a parameter\nThe same goes for notification. If you want to change only email value, set `{\"notification\":[{\"id\":\"email\",\"destination\":\"budgetalert-example@alphaus.cloud\",\"enabled\":true}}` as a parameter"
                 }
               },
@@ -13435,6 +13435,21 @@
         }
       }
     },
+    "apicoverBudgetAlert": {
+      "type": "object",
+      "properties": {
+        "threshold": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverThreshold"
+          }
+        },
+        "channels": {
+          "$ref": "#/definitions/coverAlertChannels"
+        }
+      }
+    },
     "apigcpCost": {
       "type": "object",
       "properties": {
@@ -13536,6 +13551,33 @@
         "enabled": {
           "type": "boolean",
           "title": "budget setting enable/disable"
+        }
+      },
+      "description": "Budget resource definition."
+    },
+    "apiwaveBudgetAlert": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "account id.",
+          "readOnly": true
+        },
+        "notification": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apiwaveNotification"
+          },
+          "description": "notification setting."
+        },
+        "budget": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apiwaveBudget"
+          },
+          "description": "budget setting."
         }
       },
       "description": "Budget resource definition."
@@ -14581,6 +14623,11 @@
           "type": "number",
           "format": "float"
         },
+        "period": {
+          "type": "string",
+          "format": "int64",
+          "title": "3, 6, 12 months"
+        },
         "granularBudget": {
           "type": "array",
           "items": {
@@ -14592,13 +14639,13 @@
         "costGroup": {
           "$ref": "#/definitions/coverAlertCostGroup"
         },
-        "threshold": {
+        "alerts": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/coverThreshold"
+            "$ref": "#/definitions/apicoverBudgetAlert"
           },
-          "title": "threshold and its respective channel(s) to alert"
+          "title": "threshold(s) and its respective channel(s) to alert"
         },
         "forecastedData": {
           "type": "array",
@@ -14625,16 +14672,20 @@
           "title": "true if the current budget set is still a draft"
         },
         "createdBy": {
-          "type": "string"
+          "type": "string",
+          "title": "not required"
         },
         "createdAt": {
-          "type": "string"
+          "type": "string",
+          "title": "not required"
         },
         "updatedBy": {
-          "type": "string"
+          "type": "string",
+          "title": "not required"
         },
         "updatedAt": {
-          "type": "string"
+          "type": "string",
+          "title": "not required"
         }
       }
     },
@@ -15479,9 +15530,6 @@
           "type": "number",
           "format": "float",
           "title": "actual value of threshold"
-        },
-        "channels": {
-          "$ref": "#/definitions/coverAlertChannels"
         }
       }
     },
@@ -21261,33 +21309,6 @@
         }
       },
       "description": "Adjustment resource definition."
-    },
-    "waveBudgetAlert": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "account id.",
-          "readOnly": true
-        },
-        "notification": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/apiwaveNotification"
-          },
-          "description": "notification setting."
-        },
-        "budget": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/apiwaveBudget"
-          },
-          "description": "budget setting."
-        }
-      },
-      "description": "Budget resource definition."
     }
   }
 }
