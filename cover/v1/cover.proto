@@ -1001,6 +1001,14 @@ service Cover {
       body: "*"
     };
   }
+
+  //WORK-IN-PROGRESS:Resolve user for aws marketplace subscription integration
+  rpc ResolveAWSCustomerForOnboarding(ResolveAWSCustomerForOnboardingRequest) returns (ResolveAWSCustomerForOnboardingResponse) {
+    option (google.api.http) = {
+      post: "/v1/members/aws/resolve",
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -2924,4 +2932,12 @@ message UpdateBudgetRequest {
 
 message UpdateBudgetResponse {
   api.cover.BudgetData budgetData = 1;
+}
+
+message ResolveAWSCustomerForOnboardingRequest {
+  string registrationToken = 1;
+}
+
+message ResolveAWSCustomerForOnboardingResponse {
+  bool isAllowedToOnboard = 1;
 }
