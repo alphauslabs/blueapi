@@ -5036,36 +5036,6 @@
       }
     },
     "/v1/budget": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: List all Budgets in an organization",
-        "operationId": "Cover_ListBudgets",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1ListBudgetsResponse"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1ListBudgetsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Cover"
-        ]
-      },
       "post": {
         "summary": "WORK-IN-PROGRESS: Create Budget for specific cost group in an organization",
         "operationId": "Cover_CreateBudget",
@@ -5099,6 +5069,36 @@
       }
     },
     "/v1/budget/{id}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Get Budget data for specific cost group in an organization",
+        "operationId": "Cover_GetBudget",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBudgetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. Cost group ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
       "delete": {
         "summary": "WORK-IN-PROGRESS: Delete Budget for specific cost group in an organization",
         "operationId": "Cover_DeleteBudget",
@@ -5174,13 +5174,22 @@
     },
     "/v1/budget:read": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Get Budget data for specific cost group in an organization",
-        "operationId": "Cover_GetBudget",
+        "summary": "WORK-IN-PROGRESS: List all Budgets in an organization",
+        "operationId": "Cover_ListBudgets",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response.(streaming responses)",
             "schema": {
-              "$ref": "#/definitions/v1GetBudgetResponse"
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1ListBudgetsResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1ListBudgetsResponse"
             }
           },
           "default": {
@@ -5196,7 +5205,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1GetBudgetRequest"
+              "$ref": "#/definitions/v1ListBudgetsRequest"
             }
           }
         ],
@@ -14719,14 +14728,6 @@
           "type": "number",
           "format": "float",
           "title": "total accumulated spending within the budget period"
-        },
-        "includeSpend": {
-          "type": "boolean",
-          "title": "set to true to include monthly spending within the budget period"
-        },
-        "includeForecast": {
-          "type": "boolean",
-          "title": "set to true to include monthly forecast within the budget period"
         }
       }
     },
@@ -18749,15 +18750,6 @@
       },
       "title": "Response message for GetBreakevenPoint"
     },
-    "v1GetBudgetRequest": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Required. Cost group ID."
-        }
-      }
-    },
     "v1GetBudgetResponse": {
       "type": "object",
       "properties": {
@@ -19758,6 +19750,15 @@
         }
       },
       "description": "Request message for the Billing.ListAwsCalculationHistory rpc."
+    },
+    "v1ListBudgetsRequest": {
+      "type": "object",
+      "properties": {
+        "includeSpendAndForecast": {
+          "type": "boolean",
+          "title": "set to true to include monthly spending and forecast within the budget period"
+        }
+      }
     },
     "v1ListBudgetsResponse": {
       "type": "object",
