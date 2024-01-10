@@ -967,15 +967,15 @@ service Cover {
   // WORK-IN-PROGRESS: List all Budgets in an organization
   rpc ListBudgets(ListBudgetsRequest) returns (stream ListBudgetsResponse) {
     option (google.api.http) = {
-      get: "/v1/budget"
+      post: "/v1/budget:read"
+      body: "*"
     };
   }
 
   // WORK-IN-PROGRESS: Get Budget data for specific cost group in an organization
   rpc GetBudget(GetBudgetRequest) returns (GetBudgetResponse) {
     option (google.api.http) = {
-      post: "/v1/budget:read"
-      body: "*"
+      get: "/v1/budget/{id}"
     };
   }
 
@@ -2893,7 +2893,10 @@ message GetUserProfileResponse {
   bool hasCreatedProfile = 1;
 }
 
-message ListBudgetsRequest {}
+message ListBudgetsRequest {
+  // set to true to include monthly spending and forecast within the budget period
+  bool includeSpendAndForecast = 1;
+}
 
 message ListBudgetsResponse {
   api.cover.BudgetData budgetData = 1;
