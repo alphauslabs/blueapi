@@ -77,6 +77,14 @@ service Cost {
     };
   }
 
+  // Gets a payer account's proforma reports. Applicable for AWS payer accounts only.
+  rpc GetPayerProformaReports(GetPayerProformaReportsRequest) returns (GetPayerProformaReportsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/payers/{id}/proforma"
+    };
+  }
+
+
   // DEPRECATED: Registers a vendor payer account. This is now deprecated for AWS payer accounts. To register an AWS payer account, check out the 'CreateDefaultCostAccess' API.
   rpc CreatePayerAccount(CreatePayerAccountRequest) returns (api.Account) {
     option (google.api.http) = {
@@ -519,6 +527,43 @@ message GetPayerAccountImportHistoryResponse {
 
   // List of timestamps in RFC3339 format with the `T` separator. Example: `2019-10-12T07:20:50.52Z`
   repeated string timestamps = 3;
+}
+
+// Request message for Cost.GetPayerProformaReports rpc.
+message GetPayerProformaReportsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. The account id to query.
+  string id = 2;
+}
+
+// Response message for Cost.GetPayerProformaReports rpc.
+message GetPayerProformaReportsResponse {
+  repeated ProformaReports reports = 1;
+}
+
+message ProformaReports {
+  // payer account id
+  string id = 1;
+
+  // billing group internal id
+  string billingInternalId = 2;
+
+  // billing group name
+  string billingGroupName = 3;
+
+  // s3 bucket name
+  string bucketName = 4;
+
+  // s3 report prefix
+  string prefix = 5;
+
+  // report name
+  string reportName = 6;
+
+  // role arn
+  string roleArn = 7;
 }
 
 // See [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting] for more information.
