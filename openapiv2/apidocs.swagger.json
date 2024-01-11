@@ -5089,7 +5089,7 @@
         "parameters": [
           {
             "name": "id",
-            "description": "Required. Cost group ID.",
+            "description": "Required. Budget ID.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -5174,7 +5174,7 @@
     },
     "/v1/budget:read": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: List all Budgets in an organization",
+        "summary": "WORK-IN-PROGRESS: List all Budgets in an organization or Budgets under specific cost group",
         "operationId": "Cover_ListBudgets",
         "responses": {
           "200": {
@@ -19756,7 +19756,11 @@
       "properties": {
         "includeSpendAndForecast": {
           "type": "boolean",
-          "title": "set to true to include monthly spending and forecast within the budget period"
+          "title": "Optional. Set to true to include monthly spending and forecast within the budget period"
+        },
+        "costGroup": {
+          "type": "string",
+          "description": "Optional. Cost group ID. Return budgets under this specific cost group."
         }
       }
     },

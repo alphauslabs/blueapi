@@ -964,7 +964,7 @@ service Cover {
     };
   }
 
-  // WORK-IN-PROGRESS: List all Budgets in an organization
+  // WORK-IN-PROGRESS: List all Budgets in an organization or Budgets under specific cost group
   rpc ListBudgets(ListBudgetsRequest) returns (stream ListBudgetsResponse) {
     option (google.api.http) = {
       post: "/v1/budget:read"
@@ -2894,8 +2894,11 @@ message GetUserProfileResponse {
 }
 
 message ListBudgetsRequest {
-  // set to true to include monthly spending and forecast within the budget period
+  // Optional. Set to true to include monthly spending and forecast within the budget period
   bool includeSpendAndForecast = 1;
+
+  // Optional. Cost group ID. Return budgets under this specific cost group.
+  string costGroup = 2;
 }
 
 message ListBudgetsResponse {
@@ -2903,7 +2906,7 @@ message ListBudgetsResponse {
 }
 
 message GetBudgetRequest {
-  // Required. Cost group ID.
+  // Required. Budget ID.
   string id = 1;
 }
 
