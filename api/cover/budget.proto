@@ -17,8 +17,8 @@ message BudgetData {
     repeated GranularBudgetData granularBudget = 6; // budget per month
     api.cover.AlertCostGroup costGroup = 7;
     repeated BudgetAlert alerts = 8; // threshold(s) and its respective channel(s) to alert
-    repeated GranularForecastData forecastedData = 9; // forecast data record of an expired budget
-    repeated GranularSpendingData spendingData = 10; // spending data record of an expired budget
+    repeated GranularForecastData forecastedData = 9; // forecast for ongoing months of an active budget; if expired, archived forecast record
+    repeated GranularSpendingData spendingData = 10; // spending data
     bool expired = 11; // true if budget has expired
     bool draft = 12; // true if the current budget set is still a draft
     string createdBy = 13; // not required for creating budget
@@ -29,19 +29,19 @@ message BudgetData {
 }
 
 message GranularBudgetData {
-    string date = 1; // use yyyymmdd format
+    string date = 1; // use yyyymm format
     float budget = 2;
 }
 
 message GranularForecastData {
-    string date = 1; // use yyyymmdd format
+    string date = 1; // use yyyymm format
     float mid = 2;
     float upperBound = 3;
     float lowerBound = 4;
 }
 
 message GranularSpendingData {
-    string date = 1; // use yyyymmdd format
+    string date = 1; // use yyyymm format
     float value = 2; // actual cost for the month
 }
 
