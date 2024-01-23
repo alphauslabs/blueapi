@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package blueapi.api;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api";
+option java_package = "cloud.alphaus.blueapi.api";
+option java_outer_classname = "ApiAdjustmentProto";
+
+// AdjustmentConfig resource definition.
+message AdjustmentConfig {
+  // User configuration
+  repeated ConfigFilters config = 1;
+  // Management account configuration
+  repeated ManagementAccount accounts = 2;
+}
+
+// ManagementAccount resource definition.
+message ManagementAccount {
+  string managementAccountId = 1;
+  repeated ConfigFilters config = 2;
+}
+
+// ConfigFilters resource definition.
+// regex: https://github.com/google/re2
+message ConfigFilters {
+  map<string, string> andFilters = 1;
+}
+
