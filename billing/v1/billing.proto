@@ -12,6 +12,7 @@ import "api/ripple/rounding.proto";
 import "api/ripple/invoicelayout.proto";
 import "api/ripple/duedate.proto";
 import "api/ripple/exchangerate.proto";
+import "api/adjustment.proto";
 import "api/wave/adjustment.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -278,6 +279,36 @@ service Billing {
   rpc ListAccountResources(ListAccountResourcesRequest) returns (stream ResourceAccount) {
     option (google.api.http) = {
       get: "/v1/resources/accounts/{vendor}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Gets adjustment config
+  rpc GetAdjustmentConfig(GetAdjustmentConfigRequest) returns (api.AdjustmentConfig) {
+    option (google.api.http) = {
+      get: "/v1/adjustmentconfig/{vendor}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Creates adjustment config
+  rpc CreateAdjustmentConfig(CreateAdjustmentConfigRequest) returns (api.AdjustmentConfig) {
+    option (google.api.http) = {
+      post: "/v1/adjustmentconfig/{vendor}"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Updates adjustment config
+  rpc UpdateAdjustmentConfig(UpdateAdjustmentConfigRequest) returns (api.AdjustmentConfig) {
+    option (google.api.http) = {
+      put: "/v1/adjustmentconfig/{vendor}"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Deletes adjustment config
+  rpc DeleteAdjustmentConfig(DeleteAdjustmentConfigRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/adjustmentconfig/{vendor}"
     };
   }
 }
@@ -1033,4 +1064,40 @@ message ResourceAccount {
   string customerId = 2;
 
   bool registered = 3;
+}
+
+//Request message for the Billing.GetAdjustmentConfig rpc.
+message GetAdjustmentConfigRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+}
+
+//Request message for the Billing.CreateAdjustmentConfig rpc.
+message CreateAdjustmentConfigRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. 
+  repeated api.ConfigFilters config = 2;
+
+  // Optional. 
+  repeated api.ManagementAccount accounts = 3;
+}
+
+//Request message for the Billing.UpdateAdjustmentConfig rpc.
+message UpdateAdjustmentConfigRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Optional. 
+  repeated api.ConfigFilters config = 2;
+
+  // Optional. 
+  repeated api.ManagementAccount accounts = 3;
+}
+
+//Request message for the Billing.DeleteAdjustmentConfig rpc.
+message DeleteAdjustmentConfigRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
 }
