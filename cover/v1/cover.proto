@@ -1003,7 +1003,7 @@ service Cover {
   }
 
   //WORK-IN-PROGRESS:Resolve user for aws marketplace subscription integration
-  rpc ResolveAWSCustomerForOnboarding(ResolveAWSCustomerForOnboardingRequest) returns (ResolveAWSCustomerForOnboardingResponse) {
+  rpc ResolveAWSMarketplaceTokenForOnboarding(ResolveAWSMarketplaceTokenForOnboardingRequest) returns (ResolveAWSMarketplaceTokenForOnboardingResponse) {
     option (google.api.http) = {
       post: "/v1/members/aws/subscription",
       body: "*"
@@ -2941,10 +2941,12 @@ message UpdateBudgetResponse {
   api.cover.BudgetData budgetData = 1;
 }
 
-message ResolveAWSCustomerForOnboardingRequest {
+message ResolveAWSMarketplaceTokenForOnboardingRequest {
   string registrationToken = 1;
 }
 
-message ResolveAWSCustomerForOnboardingResponse {
+message ResolveAWSMarketplaceTokenForOnboardingResponse {
   bool isAllowedToOnboard = 1;
+
+  string customerId = 2;
 }
