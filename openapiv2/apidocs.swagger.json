@@ -2945,7 +2945,7 @@
                     "type": "object",
                     "$ref": "#/definitions/apiConfigFilters"
                   },
-                  "description": "Required."
+                  "description": "Required. \nA list of filtering options. See [api.ConfigFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
                 },
                 "accounts": {
                   "type": "array",
@@ -6211,6 +6211,29 @@
         ]
       }
     },
+    "/v1/free-trial-expiry": {
+      "get": {
+        "summary": "Get the free trial expiry for newly onboard organization.",
+        "operationId": "Cover_GetFreeTrialExpiry",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetFreeTrialExpiryResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/invoice/status/{id}": {
       "get": {
         "summary": "Gets an invoice. Only available in Ripple.",
@@ -7376,7 +7399,7 @@
     },
     "/v1/resellers": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Lists all the reseller accounts. Only available in Ripple.",
+        "summary": "Lists all the reseller accounts. Only available in Ripple.",
         "operationId": "Billing_ListResellers",
         "responses": {
           "200": {
@@ -7415,7 +7438,7 @@
         ]
       },
       "post": {
-        "summary": "WORK-IN-PROGRESS: Registers the reseller account. Only available in Ripple.",
+        "summary": "Registers the reseller account. Only available in Ripple.",
         "operationId": "Billing_CreateReseller",
         "responses": {
           "200": {
@@ -7449,7 +7472,7 @@
     },
     "/v1/resellers/{id}": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Gets the reseller account. Only available in Ripple.",
+        "summary": "Gets the reseller account. Only available in Ripple.",
         "operationId": "Billing_GetReseller",
         "responses": {
           "200": {
@@ -7486,7 +7509,7 @@
         ]
       },
       "delete": {
-        "summary": "WORK-IN-PROGRESS: Deletes the reseller account. Only available in Ripple.",
+        "summary": "Deletes the reseller account. Only available in Ripple.",
         "operationId": "Billing_DeleteReseller",
         "responses": {
           "200": {
@@ -7517,7 +7540,7 @@
         ]
       },
       "put": {
-        "summary": "WORK-IN-PROGRESS: Updates the reseller account. Only available in Ripple.",
+        "summary": "Updates the reseller account. Only available in Ripple.",
         "operationId": "Billing_UpdateReseller",
         "responses": {
           "200": {
@@ -11148,6 +11171,13 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "fieldMask",
+            "description": "Optional. Get only the value that set fieldMask.\n\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -12326,6 +12356,10 @@
           },
           "title": "User configuration"
         },
+        "vendor": {
+          "type": "string",
+          "title": "Vendor"
+        },
         "accounts": {
           "type": "array",
           "items": {
@@ -12454,7 +12488,7 @@
           }
         }
       },
-      "title": "ConfigFilters resource definition.\nregex: https://github.com/google/re2"
+      "description": "ConfigFilters resource definition.\nA map of \"key:value\" config filters. The key indicates the adjustment key while the value is the filter adjustment value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the adjustment `productCode:AmazonEC2`, set to `{\"productCode\":\"AmazonEC2\"}`. You can also use regular expressions for adjustment values, such as `{\"description\":\"re:[A-Za-z0-9]*\"}`.\nList of available adjustment keys: productCode, type, description\nFor example value on productCode: AmazonEC2, AmazonRDS, AWSLambda, etc.\nFor example value on type: Fee, Refund, SppDiscount, etc."
     },
     "apiCostTag": {
       "type": "object",
@@ -12950,14 +12984,16 @@
       "type": "object",
       "properties": {
         "managementAccountId": {
-          "type": "string"
+          "type": "string",
+          "title": "Vendor-managed organization account Id"
         },
         "config": {
           "type": "array",
           "items": {
             "type": "object",
             "$ref": "#/definitions/apiConfigFilters"
-          }
+          },
+          "description": "A list of filtering options. See [ConfigFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc."
         }
       },
       "description": "ManagementAccount resource definition."
@@ -16147,7 +16183,7 @@
         }
       },
       "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\nExample 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\nExample 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "protobufNullValue": {
       "type": "string",
@@ -19569,6 +19605,18 @@
         }
       },
       "description": "Response message for GetForecasts per billing group."
+    },
+    "v1GetFreeTrialExpiryResponse": {
+      "type": "object",
+      "properties": {
+        "dateRegistered": {
+          "type": "string"
+        },
+        "freeTrialExpiry": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for GetFreeTrialExpiry"
     },
     "v1GetMemberCostGroupResponse": {
       "type": "object",
