@@ -93,6 +93,14 @@ service Billing {
     };
   }
 
+  // WORK-IN-PROGRESS: Reads an invoice status. Only available in Ripple.
+  rpc ListInvoiceStatus(ListInvoiceStatusRequest) returns (stream api.InvoiceMessage) {
+    option (google.api.http) = {
+      post: "/v1/invoice/status/{date}:read"
+      body: "*"
+    };
+  }
+
   // Gets an invoice.
   rpc GetInvoice(GetInvoiceRequest) returns (api.Invoice) {
     option (google.api.http) = {
@@ -763,6 +771,12 @@ message CreateInvoiceRequest {
 message GetInvoiceStatusRequest {
   // Required. invoice generate request id.
   string id = 1;
+}
+
+// Request message for the ListInvoiceStatus rpc.
+message ListInvoiceStatusRequest {
+  // Required. Month to get invoice status. Format: `yyyymm`.
+  string date = 1;
 }
 
 // Request message for the UpdateInvoicePreviews rpc.
