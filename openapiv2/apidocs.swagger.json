@@ -4723,6 +4723,37 @@
         ]
       }
     },
+    "/v1/billing/status": {
+      "get": {
+        "summary": "Get the Customer Subscription status from marketplace",
+        "operationId": "Cover_GetCustomerSubscriptionStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCustomerSubscriptionStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/billingacct": {
       "post": {
         "summary": "Add Billing Account ID for GCP.",
@@ -19859,6 +19890,17 @@
         }
       },
       "title": "Response message for GetCurrentView"
+    },
+    "v1GetCustomerSubscriptionStatusResponse": {
+      "type": "object",
+      "properties": {
+        "isSubscribed": {
+          "type": "boolean"
+        },
+        "isExpired": {
+          "type": "boolean"
+        }
+      }
     },
     "v1GetDefaultCostAccessTemplateUrlResponse": {
       "type": "object",
