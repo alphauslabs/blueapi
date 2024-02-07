@@ -1011,11 +1011,18 @@ service Cover {
   }
 
   //Get the free trial expiry for newly onboard organization.
-    rpc GetFreeTrialExpiry(GetFreeTrialExpiryRequest) returns (GetFreeTrialExpiryResponse) {
-      option (google.api.http) = {
-        get: "/v1/billing/free"
-      };
-    }
+  rpc GetFreeTrialExpiry(GetFreeTrialExpiryRequest) returns (GetFreeTrialExpiryResponse) {
+    option (google.api.http) = {
+      get: "/v1/billing/free"
+    };
+  }
+
+  //Get the Customer Subscription status from marketplace
+  rpc GetCustomerSubscriptionStatus(GetCustomerSubscriptionStatusRequest) returns (GetCustomerSubscriptionStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/billing/status"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -2967,4 +2974,14 @@ message GetFreeTrialExpiryResponse{
   string dateRegistered = 1;
   string freeTrialExpiry = 2;
   int32 daysLeft = 3;
+}
+
+message GetCustomerSubscriptionStatusRequest {
+  string orgId = 1;
+}
+
+message GetCustomerSubscriptionStatusResponse {
+  bool isSubscribed = 1;
+
+  bool isExpired = 2;
 }
