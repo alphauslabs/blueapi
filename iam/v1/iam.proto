@@ -264,6 +264,13 @@ service Iam {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: List MFA users info for login user's organization based on status.
+  rpc GetMFAUsers(MFAUsersInfoRequest) returns (MFAUsersInfoResponse) {
+    option (google.api.http) = {
+      get: "/iam/v1/mfausers"
+    };
+  }  
 }
 
 // Request message for the Iam.WhoAmI rpc.
@@ -588,4 +595,23 @@ message ValidateResetPasswordLinkAndChangePasswordResponse {
   bool isPasswordUpdated = 1;
   bool isResetPasswordLinkValid = 2;
   string errorMessage = 3;
+}
+
+// Request message for the Iam.MFAUsersInfoRequest rpc.
+message MFAUsersInfoRequest {
+  // Optional. If non empty: list users by status. Otherwise will list all MFA users.
+  string status = 1;
+}
+
+message MFAUser {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+  string status = 4;
+  string createdAt = 5;
+}
+
+// Response message for the MFAUsersInfoResponse rpc.
+message MFAUsersInfoResponse {
+  repeated MFAUser users = 1;
 }
