@@ -1023,6 +1023,14 @@ service Cover {
       get: "/v1/billing/status"
     };
   }
+
+  // Profiling for new users.
+  rpc CreateProfiling(CreateProfilingRequest) returns (CreateProfilingResponse) {
+    option (google.api.http) = {
+      post: "/v1/members/profile"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -2985,3 +2993,14 @@ message GetCustomerSubscriptionStatusResponse {
 
   bool isExpired = 2;
 }
+
+message CreateProfilingRequest {
+  string name = 1;
+  string role = 2;
+  string usage = 3;
+  string intention = 4;
+  string companyName = 5;
+  string emailAddress = 6;
+}
+
+message CreateProfilingResponse {}
