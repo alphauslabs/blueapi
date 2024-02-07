@@ -7238,6 +7238,39 @@
         ]
       }
     },
+    "/v1/members/profile": {
+      "post": {
+        "summary": "Profiling for new users.",
+        "operationId": "Cover_CreateProfiling",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateProfilingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateProfilingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/members/profile/{email}": {
       "get": {
         "summary": "Octo getting user profile",
@@ -7469,39 +7502,6 @@
                 }
               },
               "title": "Request message for UpdateMemberPermission"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/profiling": {
-      "post": {
-        "summary": "Profiling for new users.",
-        "operationId": "Cover_CreateProfiling",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CreateProfilingResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateProfilingRequest"
             }
           }
         ],
@@ -16100,9 +16100,6 @@
         },
         "orgId": {
           "type": "string"
-        },
-        "isProfilingDone": {
-          "type": "boolean"
         }
       }
     },
