@@ -210,6 +210,13 @@ service Admin {
     };
   }
 
+  // WORK-IN-PROGRESS: List MFA users info for login user's organization based on status.
+  rpc GetMFAUsersInfo(GetMFAUsersInfoRequest) returns (GetMFAUsersInfoResponse) {
+    option (google.api.http) = {
+      get: "/admin/v1/mfausersinfo"
+    };
+  }  
+
 }
 
 // Request message for the Admin.ListAccountGroups rpc.
@@ -583,4 +590,23 @@ message ExportAuditLogsRequest {
 
   // Required. The UTC date to end data from. If not set, the first day of the current year will be used. Format: `yyyymmdd`.
   string endTime = 3;
+}
+
+// Request message for the Admin.GetMFAUsersInfoRequest rpc.
+message GetMFAUsersInfoRequest {
+  // Optional. If non empty: list users by status. Otherwise will list all MFA users.
+  string status = 1;
+}
+
+message MFAUser {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+  string status = 4;
+  string createdAt = 5;
+}
+
+// Response message for the GetMFAUsersInfoResponse rpc.
+message GetMFAUsersInfoResponse {
+  repeated MFAUser users = 1;
 }
