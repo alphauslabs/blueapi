@@ -1010,13 +1010,6 @@ service Cover {
     };
   }
 
-  //Get the free trial expiry for newly onboard organization.
-  rpc GetFreeTrialExpiry(GetFreeTrialExpiryRequest) returns (GetFreeTrialExpiryResponse) {
-    option (google.api.http) = {
-      get: "/v1/billing/free"
-    };
-  }
-
   //Get the Customer Subscription status from marketplace
   rpc GetCustomerSubscriptionStatus(GetCustomerSubscriptionStatusRequest) returns (GetCustomerSubscriptionStatusResponse) {
     option (google.api.http) = {
@@ -2974,24 +2967,15 @@ message ResolveAWSMarketplaceTokenForOnboardingResponse {
   string customerId = 2;
 }
 
-//Request message for GetFreeTrialExpiry
-message GetFreeTrialExpiryRequest{}
-
-//Response message for GetFreeTrialExpiry
-message GetFreeTrialExpiryResponse{
-  string dateRegistered = 1;
-  string freeTrialExpiry = 2;
-  int32 daysLeft = 3;
-}
-
-message GetCustomerSubscriptionStatusRequest {
-  string orgId = 1;
-}
+message GetCustomerSubscriptionStatusRequest {}
 
 message GetCustomerSubscriptionStatusResponse {
-  bool isSubscribed = 1;
-
-  bool isExpired = 2;
+  string dateRegistered = 1;
+  string subscriptionExpiry = 2;
+  int32 daysLeft = 3;
+  bool isSubscribed = 4;
+  bool isExpired = 5;
+  string plan = 6;
 }
 
 message CreateProfilingRequest {
