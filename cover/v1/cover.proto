@@ -1024,6 +1024,14 @@ service Cover {
       body: "*"
     };
   }
+
+   // Adding orgId to marketplace customers
+   rpc AddOrgIdtoMarketplace(AddOrgIdtoMarketplaceRequest) returns (AddOrgIdtoMarketplaceResponse) {
+    option (google.api.http) = {
+      post: "/v1/marketplace/addorgId"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -2988,3 +2996,9 @@ message CreateProfilingRequest {
 }
 
 message CreateProfilingResponse {}
+
+message AddOrgIdtoMarketplaceRequest{
+  string customerIdentifier = 1;
+}
+
+message AddOrgIdtoMarketplaceResponse{}
