@@ -298,6 +298,12 @@ service Billing {
   }
 
   // WORK-IN-PROGRESS: Creates adjustment config
+  //
+  //[ERRORS] 
+  //- InvalidArgument:
+  //  - the AdjustmentConfig is already exists.
+  //- NotFound:
+  //  - the AdjustmentConfig is not found.
   rpc CreateAdjustmentConfig(CreateAdjustmentConfigRequest) returns (api.AdjustmentConfig) {
     option (google.api.http) = {
       post: "/v1/adjustmentconfig/{vendor}"
@@ -1081,12 +1087,6 @@ message ResourceAccount {
 }
 
 //Request message for the Billing.GetAdjustmentConfig rpc.
-//
-//[ERRORS] 
-//- InvalidArgument:
-//  - the AdjustmentConfig is already exists.
-//- NotFound:
-//  - the AdjustmentConfig is not found.
 message GetAdjustmentConfigRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
