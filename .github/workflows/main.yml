@@ -67,6 +67,8 @@ jobs:
         # Update OpenAPI docs repo:
         cd /tmp/ && git clone https://github.com/alphauslabs/blueapidocs && cd blueapidocs
         cp $WORKSPACE_ROOT/openapiv2/apidocs.swagger.json ./apidocs.json && git status
+        val=$(cat ./apidocs.json)
+        curl -X 'POST' 'https://converter.swagger.io/api/convert' -H 'accept: application/json' -H 'Content-Type: application/json' -d "${val}" | jq > ./openapiv3/apidocs.json
         git config user.email "dev@mobingi.com"
         git config user.name "mobingideployer"
         git add . && git commit -am "$GITHUB_REF $GITHUB_SHA" || true
