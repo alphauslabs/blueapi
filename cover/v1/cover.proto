@@ -1026,9 +1026,9 @@ service Cover {
   }
 
    // Adding orgId to marketplace customers
-   rpc AddOrgIdtoMarketplace(AddOrgIdtoMarketplaceRequest) returns (AddOrgIdtoMarketplaceResponse) {
+   rpc AddInfotoMarketplace(AddInfotoMarketplaceRequest) returns (AddInfotoMarketplaceResponse) {
     option (google.api.http) = {
-      post: "/v1/marketplace/addorgId"
+      post: "/v1/marketplace/info"
       body: "*"
     };
   }
@@ -2985,6 +2985,9 @@ message GetCustomerSubscriptionStatusResponse {
   bool isSubscribed = 4;
   bool isExpired = 5;
   string plan = 6;
+  string amount = 7;
+  string paymentOption = 8;
+  string paymentMethod = 9;
 }
 
 message CreateProfilingRequest {
@@ -2998,8 +3001,8 @@ message CreateProfilingRequest {
 
 message CreateProfilingResponse {}
 
-message AddOrgIdtoMarketplaceRequest{
+message AddInfotoMarketplaceRequest{
   string customerIdentifier = 1;
 }
 
-message AddOrgIdtoMarketplaceResponse{}
+message AddInfotoMarketplaceResponse{}
