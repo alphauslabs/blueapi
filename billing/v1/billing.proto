@@ -227,7 +227,10 @@ service Billing {
     };
   }
 
-  // Lists all exchange rate. Only available in Ripple.
+  // ListExchangeRates
+  // 
+  // Lists all exchange rate.
+  // > Only available in Ripple.
   rpc ListExchangeRates(ListExchangeRatesRequest) returns (ListExchangeRatesResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/exchangerate/{month}"
@@ -925,7 +928,7 @@ message ListExchangeRatesRequest {
   // Required. vendor.
   string vendor = 1;
 
-  // Required. month. Format: `yyyymmdd`.
+  // Required. month. Format: `yyyymm`.
   string month = 2;
 }
 
