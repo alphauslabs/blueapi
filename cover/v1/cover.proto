@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package blueapi.cover.v1;
 
+import "api/cover/optimizationrecommendation.proto";
 import "api/cover/attribute.proto";
 import "api/cover/user.proto";
 import "api/cover/view.proto";
@@ -1041,6 +1042,28 @@ service Cover {
       body: "*"
     };
   }
+
+   // Lists recommendations based on specified criteria.
+   rpc ListRecommendations(ListRecommendationRequest) returns (stream ListRecommendationResponse) {
+    option (google.api.http) = {
+      get: "/v1/recommendations"
+    };
+  }
+
+  // Retrieves a specific recommendation by its ID.
+  rpc GetRecommendation(GetRecommendationRequest) returns (GetRecommendationResponse) {
+    option (google.api.http) = {
+      get: "/v1/recommendations/{id}"
+    };
+  }
+
+  // Executes optimization based on a recommendation.
+  rpc ExecuteOptimization(ExecuteOptimizationRequest) returns (ExecuteOptimizationResponse) {
+    option (google.api.http) = {
+      post: "/v1/recommendations/{id}"
+    };
+  }
+
 }
 
 // Request message for OnboardOrg
@@ -3032,4 +3055,37 @@ message GetReportSummaryRequest{
 
 message GetReportSummaryResponse{
   api.cover.ExecutiveSummary executiveSummary = 1;
+}
+
+message ListRecommendationRequest{
+  // Required. Cost Group Id.
+  string costgroupId = 1;
+  
+  //Required. Valid inputs are: "all", "aws", "gcp", and  "azure".
+  string vendor = 2;
+
+  //Required. Valid inputs are: "all", "trusted-advisor", "cost-explorer", and  "cost-optimization-hub".
+  string source = 3;
+
+  //Required. Valid inputs are: "all", "rate", and  "usage".
+  string optimizationType = 4;
+}
+
+message ListRecommendationResponse{
+  api.cover.RecommendationData recommendationData = 1;
+}
+
+message GetRecommendationRequest{
+  string recommendationId = 1;
+}
+
+message GetRecommendationResponse{
+  api.cover.RecommendationData recommendationData = 1;
+}
+
+message ExecuteOptimizationRequest{
+  string recommendationId = 1;
+}
+
+message ExecuteOptimizationResponse{
 }
