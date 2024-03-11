@@ -16,6 +16,7 @@ import "api/ripple/exchangerate.proto";
 import "api/adjustment.proto";
 import "api/wave/adjustment.proto";
 import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/protobuf/field_mask.proto";
@@ -889,6 +890,10 @@ message UpdateResellerRequest {
   // If valid when email or password is updated, you will be notified via email address.
   // If only waveConfig or aquaConfig is changed, it is ignored.
   bool notification = 6;
+
+  // Required.
+  google.protobuf.FieldMask updateMask = 7
+      [(google.api.field_behavior) = REQUIRED];
 }
 
 
