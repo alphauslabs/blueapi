@@ -16,6 +16,9 @@ import "api/ripple/exchangerate.proto";
 import "api/adjustment.proto";
 import "api/wave/adjustment.proto";
 import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/protobuf/field_mask.proto";
@@ -206,12 +209,13 @@ service Billing {
     };
   }
 
-  // Updates the reseller account. Only available in Ripple.
+  // WORK-IN-PROGRESS: Updates the reseller account. Only available in Ripple.
   rpc UpdateReseller(UpdateResellerRequest) returns (api.ripple.Reseller) {
     option (google.api.http) = {
-      put: "/v1/resellers/{id}"
-      body: "*"
+      put: "/v1/{reseller.name=resellers/*}"
+      body: "reseller"
     };
+    option (google.api.method_signature) = "reseller,update_mask";
   }
 
   // Deletes the reseller account. Only available in Ripple.
@@ -859,8 +863,75 @@ message GetResellerRequest {
   google.protobuf.FieldMask field_mask = 2;
 }
 
+// A Reseller information of billing access to Wave[Pro]
+message BillingReseller {
+  option (google.api.resource) = {
+    type: "blueapi.alphaus.cloud/Reseller"
+    pattern: "resellers/{reseller}"
+  };
+
+  // The unique name of the reseller. Values are of the form
+  // `reseller/[a-z][a-z0-9\\-]+[a-z0-9]`.
+  string name = 1;
+
+  // Output only.
+  string id = 2 
+    [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Required.
+  string email = 3
+    [(google.api.field_behavior) = REQUIRED];
+
+  // Input only.
+  string password = 4
+    [(google.api.field_behavior) = INPUT_ONLY];
+
+  // Required.
+  string groupId = 5
+    [(google.api.field_behavior) = REQUIRED];
+
+  // Output only.
+  string groupName = 6
+    [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only.
+  string groupType = 7
+    [(google.api.field_behavior) = OUTPUT_ONLY];
+  
+  // Output only.
+  string waveStatus = 8
+    [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Input only.
+  bool notification = 9
+    [(google.api.field_behavior) = INPUT_ONLY];
+
+  // Required.
+  repeated api.ripple.ResellerConfig waveConfig = 10
+    [(google.api.field_behavior) = REQUIRED];
+
+  // Required.
+  repeated api.ripple.ResellerConfig aquaConfig = 11
+    [(google.api.field_behavior) = REQUIRED];
+}
+
 // Request message for the UpdateReseller rpc.
 message UpdateResellerRequest {
+  // Required. The reseller to update. `reseller.name`, and the fields to be updated
+  // as specified by `update_mask` are required. Other fields are ignored.
+  BillingReseller reseller = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. A mask specifying which fields (e.g. `password`) in the
+  // Reseller resource should be updated. This mask is relative to the Reseller
+  // resource, not to the request message. The field mask must always be
+  // specified; this prevents any future fields from being erased accidentally
+  // by clients that do not know about them.
+  google.protobuf.FieldMask update_mask = 2
+      [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request message for the UpdateReseller rpc.
+message _UpdateResellerRequest {
   // Required. reseller id.
   string id = 1;
 
