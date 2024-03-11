@@ -863,33 +863,41 @@ message GetResellerRequest {
 // Request message for the UpdateReseller rpc.
 message UpdateResellerRequest {
   // Required. reseller id.
-  string id = 1;
+  string id = 1
+    [(google.api.field_behavior) = REQUIRED];
 
   // Optional.
-  string email = 2;
+  string email = 2
+    [(google.api.field_behavior) = OPTIONAL];
 
   // Optional.
   //
   // We recommend a password length of 8~32 characters. If you send 0 characters, a password will be generated automatically.
-  string password = 3;
+  string password = 3 [
+    (google.api.field_behavior) = INPUT_ONLY,
+    (google.api.field_behavior) = OPTIONAL];
 
   // Optional. wave feature config
   //
   // Set only the config to be changed.
   // For example, If you want to change only dashboardGraph, set `{"waveConfig": [{"key": "dashboardGraph","value": true}]}` as a parameter
-  repeated api.ripple.ResellerConfig waveConfig = 4;
+  repeated api.ripple.ResellerConfig waveConfig = 4
+    [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. aqua feature config
   //
   // Set only the config to be changed.
   // For example, If you want to change only aqRiManagement, set `{"waveConfig": [{"key": "aqRiManagement","value": true}]}` as a parameter
-  repeated api.ripple.ResellerConfig aquaConfig = 5;
+  repeated api.ripple.ResellerConfig aquaConfig = 5
+    [(google.api.field_behavior) = OPTIONAL];
 
   // Optional.
   //
   // If valid when email or password is updated, you will be notified via email address.
   // If only waveConfig or aquaConfig is changed, it is ignored.
-  bool notification = 6;
+  bool notification = 6 [
+    (google.api.field_behavior) = INPUT_ONLY,
+    (google.api.field_behavior) = OPTIONAL];
 
   // Required.
   google.protobuf.FieldMask updateMask = 7
