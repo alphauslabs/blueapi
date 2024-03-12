@@ -11624,9 +11624,16 @@
         "notification": {
           "type": "boolean",
           "description": "Optional.\n\nIf valid when email or password is updated, you will be notified via email address.\nIf only waveConfig or aquaConfig is changed, it is ignored."
+        },
+        "updateMask": {
+          "type": "string",
+          "description": "Required."
         }
       },
-      "description": "Request message for the UpdateReseller rpc."
+      "description": "Request message for the UpdateReseller rpc.",
+      "required": [
+        "updateMask"
+      ]
     },
     "CalculatorCostModifierAwsOptionsModifier": {
       "type": "object",
@@ -16139,6 +16146,26 @@
         },
         "updatedAt": {
           "type": "string"
+        }
+      }
+    },
+    "coverOptimizationRecommendationSummary": {
+      "type": "object",
+      "properties": {
+        "potentialSavings": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "float"
+          },
+          "title": "Potential savings per month"
+        },
+        "action": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "The recommended action to perform to achieve potential savings"
         }
       }
     },
@@ -20658,6 +20685,9 @@
       "properties": {
         "executiveSummary": {
           "$ref": "#/definitions/coverExecutiveSummary"
+        },
+        "optimizationRecommendationSummary": {
+          "$ref": "#/definitions/coverOptimizationRecommendationSummary"
         }
       }
     },
