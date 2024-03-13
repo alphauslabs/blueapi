@@ -6274,15 +6274,15 @@
         ]
       }
     },
-    "/v1/discounts/{id}": {
+    "/v1/discount": {
       "post": {
-        "summary": "Executes optimization based on a recommendation.",
-        "operationId": "Cover_ExecuteOptimization",
+        "summary": "Get the discount recommendations for every account in a cost group",
+        "operationId": "Cover_GetDiscountRecommendations",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ExecuteOptimizationResponse"
+              "$ref": "#/definitions/v1GetDiscountRecommendationsResponse"
             }
           },
           "default": {
@@ -6294,10 +6294,12 @@
         },
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
+            "name": "body",
+            "in": "body",
             "required": true,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/v1GetDiscountRecommendationsRequest"
+            }
           }
         ],
         "tags": [
@@ -7551,7 +7553,7 @@
         ]
       }
     },
-    "/v1/recommendations": {
+    "/v1/recommendations/optimization": {
       "get": {
         "summary": "Lists recommendations based on specified criteria.",
         "operationId": "Cover_ListRecommendations",
@@ -7587,6 +7589,20 @@
             "type": "string"
           },
           {
+            "name": "dateRangeStart",
+            "description": "Required. Start date of retrieved data.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "dateRangeEnd",
+            "description": "Required. End date of retrieved data.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "vendor",
             "description": "Required. Valid inputs are: \"all\", \"aws\", \"gcp\", and  \"azure\".",
             "in": "query",
@@ -7595,14 +7611,14 @@
           },
           {
             "name": "source",
-            "description": "Required. Valid inputs are: \"all\", \"trusted-advisor\", \"cost-explorer\", and  \"cost-optimization-hub\".",
+            "description": "Valid inputs are: \"all\", \"trusted-advisor\", \"cost-explorer\", and  \"cost-optimization-hub\". Default is \"All\".",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "optimizationType",
-            "description": "Required. Valid inputs are: \"all\", \"rate\", and  \"usage\".",
+            "description": "Required. Valid inputs are: \"all\", \"rate\", and  \"usage\". Default is \"All\"",
             "in": "query",
             "required": false,
             "type": "string"
@@ -7613,40 +7629,7 @@
         ]
       }
     },
-    "/v1/recommendations/discount": {
-      "post": {
-        "summary": "Get the discount recommendations for every account in a cost group",
-        "operationId": "Cover_GetDiscountRecommendations",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetDiscountRecommendationsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetDiscountRecommendationsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/recommendations/{id}": {
+    "/v1/recommendations/optimization/{id}": {
       "get": {
         "summary": "Retrieves a specific recommendation by its ID.",
         "operationId": "Cover_GetRecommendation",
@@ -7670,6 +7653,43 @@
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "post": {
+        "summary": "Executes optimization based on a recommendation.",
+        "operationId": "Cover_ExecuteOptimization",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ExecuteOptimizationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
           }
         ],
         "tags": [
@@ -15969,7 +15989,7 @@
         "recommendation": {
           "type": "string"
         },
-        "action": {
+        "recommendationDetails": {
           "type": "string"
         },
         "estimatedMonthlyCost": {
@@ -15980,16 +16000,22 @@
           "type": "number",
           "format": "float"
         },
-        "recommendationDetails": {
+        "assignedTo": {
+          "type": "string"
+        },
+        "isActionImplemented": {
           "type": "string"
         },
         "scoring": {
           "type": "string"
         },
-        "actionImplemented": {
+        "isInProgress": {
           "type": "boolean"
         },
-        "implementedBy": {
+        "dateImplemented": {
+          "type": "string"
+        },
+        "details": {
           "type": "string"
         }
       }
