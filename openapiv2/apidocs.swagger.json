@@ -6274,6 +6274,39 @@
         ]
       }
     },
+    "/v1/discount": {
+      "post": {
+        "summary": "Get the discount recommendations for every account in a cost group",
+        "operationId": "Cover_GetDiscountRecommendations",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetDiscountRecommendationsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetDiscountRecommendationsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/invoice/status/{date}:read": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Reads an invoice status. Only available in Ripple.",
@@ -7520,7 +7553,7 @@
         ]
       }
     },
-    "/v1/optimization/recommendations": {
+    "/v1/recommendations/optimization": {
       "get": {
         "summary": "Lists recommendations based on specified criteria.",
         "operationId": "Cover_ListRecommendations",
@@ -7596,40 +7629,7 @@
         ]
       }
     },
-    "/v1/optimization/recommendations/assign": {
-      "post": {
-        "summary": "Assign a person to implement the optimization recommendation.",
-        "operationId": "Cover_AssignOptimizationTask",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1AssignOptimizationTaskResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1AssignOptimizationTaskRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/optimization/recommendations/{id}": {
+    "/v1/recommendations/optimization/{id}": {
       "get": {
         "summary": "Retrieves a specific recommendation by its ID.",
         "operationId": "Cover_GetRecommendation",
@@ -7689,39 +7689,6 @@
             "required": true,
             "schema": {
               "type": "object"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/recommendations/discount": {
-      "post": {
-        "summary": "Get the discount recommendations for every account in a cost group",
-        "operationId": "Cover_GetDiscountRecommendations",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetDiscountRecommendationsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetDiscountRecommendationsRequest"
             }
           }
         ],
@@ -17813,23 +17780,6 @@
         }
       },
       "title": "Response message for AssignCostGroupMember"
-    },
-    "v1AssignOptimizationTaskRequest": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "v1AssignOptimizationTaskResponse": {
-      "type": "object"
     },
     "v1AssignPayerResponse": {
       "type": "object",

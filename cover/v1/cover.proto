@@ -864,7 +864,7 @@ service Cover {
   // Get the discount recommendations for every account in a cost group
   rpc GetDiscountRecommendations(GetDiscountRecommendationsRequest) returns (GetDiscountRecommendationsResponse) {
     option (google.api.http) = {
-      post: "/v1/recommendations/discount"
+      post: "/v1/discount"
       body: "*"
     };
   }
@@ -1046,31 +1046,24 @@ service Cover {
    // Lists recommendations based on specified criteria.
    rpc ListRecommendations(ListRecommendationRequest) returns (stream ListRecommendationResponse) {
     option (google.api.http) = {
-      get: "/v1/optimization/recommendations"
+      get: "/v1/recommendations/optimization"
     };
   }
 
   // Retrieves a specific recommendation by its ID.
   rpc GetRecommendation(GetRecommendationRequest) returns (GetRecommendationResponse) {
     option (google.api.http) = {
-      get: "/v1/optimization/recommendations/{id}"
+      get: "/v1/recommendations/optimization/{id}"
     };
   }
 
   // Executes optimization based on a recommendation.
   rpc ExecuteOptimization(ExecuteOptimizationRequest) returns (ExecuteOptimizationResponse) {
     option (google.api.http) = {
-      post: "/v1/optimization/recommendations/{id}"
+      post: "/v1/recommendations/optimization/{id}"
       body: "*"
     };
   }
- // Assign a person to implement the optimization recommendation.
- rpc AssignOptimizationTask(AssignOptimizationTaskRequest) returns (AssignOptimizationTaskResponse) {
-  option (google.api.http) = {
-    post: "/v1/optimization/recommendations/assign"
-    body: "*"
-  };
-}
 }
 
 // Request message for OnboardOrg
@@ -3102,13 +3095,4 @@ message ExecuteOptimizationRequest{
 }
 
 message ExecuteOptimizationResponse{
-}
-
-message AssignOptimizationTaskRequest{
-  repeated string id = 1;
-
-  string name = 2;
-}
-
-message AssignOptimizationTaskResponse{
 }
