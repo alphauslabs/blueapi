@@ -1046,24 +1046,31 @@ service Cover {
    // Lists recommendations based on specified criteria.
    rpc ListRecommendations(ListRecommendationRequest) returns (stream ListRecommendationResponse) {
     option (google.api.http) = {
-      get: "/v1/recommendations"
+      get: "/v1/optimization/recommendations"
     };
   }
 
   // Retrieves a specific recommendation by its ID.
   rpc GetRecommendation(GetRecommendationRequest) returns (GetRecommendationResponse) {
     option (google.api.http) = {
-      get: "/v1/recommendations/{id}"
+      get: "/v1/optimization/recommendations/{id}"
     };
   }
 
   // Executes optimization based on a recommendation.
   rpc ExecuteOptimization(ExecuteOptimizationRequest) returns (ExecuteOptimizationResponse) {
     option (google.api.http) = {
-      post: "/v1/discounts/{id}"
+      post: "/v1/optimization/recommendations/{id}"
+      body: "*"
     };
   }
-
+ // Assign a person to implement the optimization recommendation.
+ rpc AssignOptimizationTask(AssignOptimizationTaskRequest) returns (AssignOptimizationTaskResponse) {
+  option (google.api.http) = {
+    post: "/v1/optimization/recommendations/assign"
+    body: "*"
+  };
+}
 }
 
 // Request message for OnboardOrg
@@ -3062,14 +3069,20 @@ message ListRecommendationRequest{
   // Required. Cost Group Id.
   string costgroupId = 1;
   
+  //Required. Start date of retrieved data.
+  string dateRangeStart = 2;
+  
+  //Required. End date of retrieved data.
+  string dateRangeEnd = 3; 
+
   //Required. Valid inputs are: "all", "aws", "gcp", and  "azure".
-  string vendor = 2;
+  string vendor = 4;
 
-  //Required. Valid inputs are: "all", "trusted-advisor", "cost-explorer", and  "cost-optimization-hub".
-  string source = 3;
+  // Valid inputs are: "all", "trusted-advisor", "cost-explorer", and  "cost-optimization-hub". Default is "All".
+  string source = 5;
 
-  //Required. Valid inputs are: "all", "rate", and  "usage".
-  string optimizationType = 4;
+  //Required. Valid inputs are: "all", "rate", and  "usage". Default is "All"
+  string optimizationType = 6;
 }
 
 message ListRecommendationResponse{
@@ -3089,4 +3102,13 @@ message ExecuteOptimizationRequest{
 }
 
 message ExecuteOptimizationResponse{
+}
+
+message AssignOptimizationTaskRequest{
+  repeated string id = 1;
+
+  string name = 2;
+}
+
+message AssignOptimizationTaskResponse{
 }
