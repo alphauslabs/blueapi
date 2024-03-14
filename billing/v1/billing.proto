@@ -363,8 +363,23 @@ message BillingGroup {
   // The invoice settings for this billing group.
   BillingGroupInvoiceSettings invoiceSettings = 5;
 
+  // List of all additionalItems
+  BillingGroupAdditionalItems additionalItems = 11;
+
   // AWS-specific options
   AwsOptions awsOptions = 9;
+}
+
+// Additional items for a billing group.
+message BillingGroupAdditionalItems {
+  // AWS additional items
+  repeated api.AdditionalItems aws = 1;
+
+  // Azure additional items
+  repeated api.AdditionalItems azure = 2;
+
+  // GCP additional items
+  repeated api.AdditionalItems gcp = 3;
 }
 
 // Invoice settings for a billing group.
