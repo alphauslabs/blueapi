@@ -7622,6 +7622,51 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "isExecuted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/recommendations/optimization/executed/{id}": {
+      "post": {
+        "summary": "Mark a recommendation executed.",
+        "operationId": "Cover_MarkAsExecuted",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1MarkAsExecutedResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
           }
         ],
         "tags": [
@@ -16035,17 +16080,17 @@
         },
         "estimatedMonthlyCost": {
           "type": "number",
-          "format": "float"
+          "format": "double"
         },
         "estimatedMonthlySavings": {
           "type": "number",
-          "format": "float"
+          "format": "double"
         },
         "assignedTo": {
           "type": "string"
         },
         "isActionImplemented": {
-          "type": "string"
+          "type": "boolean"
         },
         "scoring": {
           "type": "string"
@@ -16054,6 +16099,9 @@
           "type": "boolean"
         },
         "dateImplemented": {
+          "type": "string"
+        },
+        "optimizationtype": {
           "type": "string"
         },
         "details": {
@@ -21156,6 +21204,9 @@
           "type": "string"
         }
       }
+    },
+    "v1MarkAsExecutedResponse": {
+      "type": "object"
     },
     "v1ModifyResourceTypeResponse": {
       "type": "object",

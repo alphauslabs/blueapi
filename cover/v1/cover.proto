@@ -1063,6 +1063,14 @@ service Cover {
       body: "*"
     };
   }
+
+  //Mark a recommendation executed.
+  rpc MarkAsExecuted(MarkAsExecutedRequest) returns (MarkAsExecutedResponse){
+    option (google.api.http) = {
+      post: "/v1/recommendations/optimization/executed/{id}"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -3085,6 +3093,8 @@ message ListRecommendationRequest{
 
   //Required. Valid inputs are: "all", "rate", and  "usage". Default is "All"
   string optimizationType = 6;
+
+  bool isExecuted = 7;
 }
 
 message ListRecommendationResponse{
@@ -3104,4 +3114,11 @@ message ExecuteOptimizationRequest{
 }
 
 message ExecuteOptimizationResponse{
+}
+
+message MarkAsExecutedRequest{
+  string id = 1;
+}
+
+message MarkAsExecutedResponse{
 }
