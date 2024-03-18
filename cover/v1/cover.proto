@@ -1038,8 +1038,7 @@ service Cover {
   // Get data for insights reports summary
   rpc GetReportSummary(GetReportSummaryRequest) returns (GetReportSummaryResponse) {
     option (google.api.http) = {
-      post: "/v1/report/summary"
-      body: "*"
+      get: "/v1/report/insight/summary/{costGroupId}"
     };
   }
 
@@ -3049,13 +3048,23 @@ message GetReportSummaryRequest{
   // Required. Cost Group Id.
   string costGroupId = 1;
 
-  // Required. Valid inputs are Quarters: "Q1-{YEAR}", "Q2-{YEAR}", "Q3-{YEAR}", "Q4-{YEAR}" and Year: "{YEAR}"
-  string period = 2;
+  // Required. Start date Format: "YYYYMMDD"
+  string startDate = 2;
+
+  // Required. End date Format: "YYYYMMDD"
+  string endDate = 3;
+
+  // Required. Report Type. Valid inputs are: "quarterly", "yearly"
+  string reportType = 4;
 }
 
 message GetReportSummaryResponse{
-  api.cover.ExecutiveSummary executiveSummary = 1;
-  api.cover.OptimizationRecommendationSummary optimizationRecommendationSummary = 2;
+  string costGroupName = 1;
+  string startDate = 2;
+  string endDate = 3;
+  api.cover.ExecutiveSummary executiveSummary = 4;
+  api.cover.OptimizationRecommendationSummary optimizationRecommendationSummary = 5;
+  api.cover.SavingsSummary savingsSummary = 6;
 }
 
 message ListRecommendationRequest{
