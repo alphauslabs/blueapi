@@ -1071,6 +1071,13 @@ service Cover {
       body: "*"
     };
   }
+
+    // Lists recommendations based on specified criteria.
+    rpc OptimizationHistory(OptimizationHistoryRequest) returns (OptimizationHistoryResponse) {
+      option (google.api.http) = {
+        get: "/v1/recommendations/optimization/history"
+      };
+    }
 }
 
 // Request message for OnboardOrg
@@ -3098,7 +3105,19 @@ message ListRecommendationRequest{
 }
 
 message ListRecommendationResponse{
-  api.cover.RecommendationData recommendationData = 1;
+  string recommendation = 1 ;
+  
+  string service = 2;
+
+  double estimatedMonthlySaving = 3;
+
+  double estimatedMonthlyCost = 4;
+
+  string scoring = 5;
+
+  string vendor = 6;
+
+  string optimizationType = 7;
 }
 
 message GetRecommendationRequest{
@@ -3106,7 +3125,7 @@ message GetRecommendationRequest{
 }
 
 message GetRecommendationResponse{
-  api.cover.RecommendationData recommendationData = 1;
+  api.cover.AWSRecommendations recommendationData = 1;
 }
 
 message ExecuteOptimizationRequest{
@@ -3121,4 +3140,32 @@ message MarkAsExecutedRequest{
 }
 
 message MarkAsExecutedResponse{
+}
+
+message OptimizationHistoryRequest{
+    // Required. Cost Group Id.
+    string costgroupId = 1;
+  
+    //Required. Start date of retrieved data.
+    string dateRangeStart = 2;
+    
+    //Required. End date of retrieved data.
+    string dateRangeEnd = 3; 
+  
+    //Required. Valid inputs are: "all", "aws", "gcp", and  "azure".
+    string vendor = 4;
+  
+    // Valid inputs are: "all", "trusted-advisor", "cost-explorer", and  "cost-optimization-hub". Default is "All".
+    string source = 5;
+  
+    //Required. Valid inputs are: "all", "rate", and  "usage". Default is "All"
+    string optimizationType = 6;
+  
+    bool isExecuted = 7;
+}
+
+message OptimizationHistoryResponse{
+  repeated api.cover.CostGroupSpendingData costGroupSpendingData = 1;
+  repeated api.cover.NoOfExecutedRecommendationPerMonth noOfExecutedRecommendationPerMonth = 2;
+  repeated api.cover.ExecutedRecommendationDetails executedRecommendationDetails = 3;
 }
