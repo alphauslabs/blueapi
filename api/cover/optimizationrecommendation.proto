@@ -6,22 +6,127 @@ option go_package = "github.com/alphauslabs/blue-sdk-go/api/cover";
 option java_package = "cloud.alphaus.blueapi.api.cover";
 option java_outer_classname = "ApiCoverOptimizationRecommendationProto";
 
-message RecommendationData{
+
+
+message GeneralDetails{
     string id = 1;
     string accountId = 2;
-    string region = 3;
-    string vendor = 4;
-    string service = 5;
-    string source = 6;
-    string recommendation = 7;
-    string recommendationDetails = 8;
-    float estimatedMonthlyCost = 9;
-    float estimatedMonthlySavings = 10;
-    string assignedTo = 11;
-    string isActionImplemented = 12;
-    string scoring = 13; 
-    bool isInProgress = 14;
-    string dateImplemented = 15;
-    string details = 16;
+    string accountName = 3;
+    string instanceId = 4;
+    string instanceName = 5;
+    string service = 6;
+    string source = 7;
+    string costGroup = 8;
+    string type = 9;
 }
 
+message PurchaseRIRecommendationDetails {
+    EC2Details ec2Options = 1;
+    ElasticCacheDetails elasticCacheOptions = 2;
+    ESDetails esOptions = 3;
+    RDSDetails rdsOptions = 4;
+    RedshiftDetails redshiftOptions = 5;
+    int32 numberOfInstanceToPurchase = 6;
+    string offeringClass = 7;
+    string paymentOption = 8;
+    string platform = 9;
+    double recurringMonthlyCost = 10;
+    double estimatedMonthlyCost = 11;
+    double estimatedMonthlySavings = 12;
+    double estimatedOnDemandCost = 13;
+    string region = 14;
+    string sizeFlexible = 15;
+    bool sizeFlexEligible = 16;
+    string tenancy = 17;
+    string term = 18;
+}
+
+
+message EC2Details {
+    string instanceType = 1;
+    string tenancy = 2;
+    string family = 3;
+    string platform = 4;
+}
+
+message ElasticCacheDetails {
+    string family = 1; 
+    string nodeType = 2;
+    string productDescription = 3;
+}
+
+message ESDetails {
+    string instanceClass = 1;
+    string instanceSize = 2;
+}
+
+message RDSDetails {
+    string dbEdition = 1;
+    string dbEngine = 2;
+    string deploymentOptions = 3;
+    string family = 4;
+    string instanceType = 5;
+    string licenseModel = 6;
+}
+
+message RedshiftDetails {
+    string family = 1;
+    string nodeType = 2;
+}
+
+message SavingsPlanRecommendationDetails {
+    string currencyCode = 1;
+    double hourlyCommitmentToPurchase = 2;
+    double estimatedMonthlySavingsAmount = 3;
+    double estimatedSavingsPercentage = 4;
+    double estimatedAverageCoverage = 5;
+    double estimatedAverageUtilization = 6;
+    double currentOnDemandSpend = 7;
+    double estimatedMonthlySpend = 8;
+    double estimatedMonthlySavings = 9;
+    CurrentUtilizationDetails currentUtilizationDetails = 10;
+    repeated SPUtilizationRate spUtilizationRate = 11;
+    repeated SPCoverageRate spCoverageRate = 12;
+}
+
+message CurrentUtilizationDetails{
+    double avgOnDemandCostPerHour = 1;
+    double minOnDemandCostPerHour = 2;
+    double maxOnDemandCostPerHour = 3;
+    double avgSavingsPlansCoverage = 4;
+    double avgSavingsPlansUtilization = 5;
+}
+
+message SPUtilizationRate{
+    string date = 1;
+    double value  = 2;
+}
+
+message SPCoverageRate{
+    string date = 1;
+    double value  = 2;
+}
+message AWSRecommendations {
+    GeneralDetails generalDetails = 1;
+    PurchaseRIRecommendationDetails purchaseRIRecommendationDetails = 2;
+    SavingsPlanRecommendationDetails savingsPlanRecommendationDetails = 3;
+}
+
+message NoOfExecutedRecommendationPerMonth {
+    string date = 1; // use yyyymm format
+    int32 numberOfRecommendationExecuted = 2;
+}
+
+message CostGroupSpendingData {
+    string date = 1; // use yyyymm format
+    float value = 2; // actual cost for the month
+}
+
+message ExecutedRecommendationDetails{
+    string recommendationId = 1;
+    string recommendaton = 2;
+    string service = 3;
+    string completedDate = 4;
+    double estSavingsPerMonth = 5;
+    string vendor = 6;
+}
