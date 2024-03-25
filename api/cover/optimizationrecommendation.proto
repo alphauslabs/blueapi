@@ -130,3 +130,82 @@ message ExecutedRecommendationDetails{
     double estSavingsPerMonth = 5;
     string vendor = 6;
 }
+
+message RightSizingRecommendationDetails{
+    GeneralDetails generalDetails = 1;
+    EC2rightSizingDetails ec2RightSizingDetails = 2;
+}
+
+message EC2rightSizingDetails{
+    CurrentEC2Details currentEC2Details = 1;
+    EC2ModifyRecommendationDetails eC2ModifyRecommendationDetails = 2; 
+    double estimatedMonthlyCost = 3;
+    double estimatedMonthlySavings = 4;
+}
+message CurrentEC2Details{
+    string instanceType = 1;
+    string os = 2;
+    string region = 3;
+    double cpuUtilization = 4;
+    double memoryUtilization = 5;
+    double diskUtilization = 6;
+    string networkCapacity = 7;
+    double monthlyCost = 8;
+    repeated EC2CpuUtilization eC2CpuUtilization = 9;
+    repeated EC2DiskUtilization eC2DiskUtilization = 10;
+    repeated EC2MemoryUtilization eC2MemoryUtilization = 11;
+}
+
+message EC2ModifyRecommendationDetails{
+    string instanceType = 1;
+    string os = 2;
+    string region = 3;
+    double estCpuUtilization = 4;
+    double estMemoryUtilization = 5;
+    double estDiskUtilization = 6;
+    string estNetworkCapacity = 7;
+    double estMonthlyCost = 8;
+}
+
+message EC2CpuUtilization {
+    string date = 1; 
+    float value = 2; 
+}
+message EC2DiskUtilization {
+    string date = 1; 
+    float value = 2; 
+}
+
+message EC2MemoryUtilization {
+    string date = 1; 
+    float value = 2; 
+}
+
+message LambdaRightSizingRecommendationDetails{
+    LambdaCurrentConfiguration lambdaCurrentConfiguration = 1;
+    LambdaRecommendedConfiguration lambdaRecommendedConfiguration = 2;
+
+}
+
+message LambdaCurrentConfiguration{
+    string architecture = 1;
+    double memorysizeInMB = 2;
+    string platform  = 3;
+    int32 vCpu = 4;
+    string operation = 5;
+    string productCode = 6;
+    string unit = 7;
+    double usageAmount = 8;
+    double usageType = 9;
+}
+message LambdaRecommendedConfiguration{
+    string architecture = 1;
+    double memorysizeInMB = 2;
+    string platform  = 3;
+    int32 vCpu = 4;
+    string operation = 5;
+    string productCode = 6;
+    string unit = 7;
+    double usageAmount = 8;
+    double usageType = 9;
+}
