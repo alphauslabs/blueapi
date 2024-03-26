@@ -134,6 +134,7 @@ message ExecutedRecommendationDetails{
 message RightSizingRecommendationDetails{
     GeneralDetails generalDetails = 1;
     EC2rightSizingDetails ec2RightSizingDetails = 2;
+    LambdaRightSizingRecommendationDetails lambdaRightSizingRecommendationDetails = 3;
 }
 
 message EC2rightSizingDetails{
@@ -208,4 +209,80 @@ message LambdaRecommendedConfiguration{
     string unit = 7;
     double usageAmount = 8;
     double usageType = 9;
+}
+
+message UpgradeRecommendationDetails{
+    GeneralDetails generalDetails = 1;
+    UpgradeEBSDetails upgradeEC2Details = 2;
+    UpgradeEBSDetails upgradeEBSDetails = 3;
+
+}
+
+message UpgradeEC2Details{
+    EC2CurrentDetails eC2CurrentDetails = 1;
+    EC2RecommendationDetails ugradeEC2RecommendationDetails = 2;
+    double estimatedMonthlyCost = 3;
+    double estimatedMonthlySavings = 4;
+}
+
+message EC2RecommendationDetails {
+    string instanceType = 1;
+    string operation = 2;
+    string productCode = 3;
+    string unit = 4;
+    double usageAmount = 5;
+    double usageType = 6;
+}
+
+message EC2CurrentDetails {
+    string instanceType = 1;
+    string operation = 2;
+    string productCode = 3;
+    string unit = 4;
+    double usageAmount = 5;
+    double usageType = 6;
+}
+
+message UpgradeEBSDetails{
+    CurrentEBSDetails currentEBSDetails = 1;
+    UpgradeEBSDetails upgradeEBSDetails = 2;
+    double estimatedMonthlyCost = 3;
+    double estimatedMonthlySavings = 4;
+}
+message UpgradeEBSRecommendationDetails {
+    string attachmentState = 1;
+    double iops = 2;
+    double throughput = 3;
+    double sizeInGb = 4;
+    string storageType = 5;
+    string operation = 6;
+    string productCode = 7;
+    string unit = 8;
+    double usageAmount = 9;
+    double usageType = 10;
+}
+
+message CurrentEBSDetails {
+    string attachmentState = 1;
+    double iops = 2;
+    double throughput = 3;
+    double sizeInGb = 4;
+    string storageType = 5;
+    string operation = 6;
+    string productCode = 7;
+    string unit = 8;
+    double usageAmount = 9;
+    double usageType = 10;
+}
+
+message MigrateRecommendationDetails{
+    GeneralDetails generalDetails = 1;
+    MigrateEC2Details migrateEC2Details =2 ;
+}
+
+message MigrateEC2Details{
+    EC2CurrentDetails eC2CurrentDetails = 1;
+    EC2RecommendationDetails ugradeEC2RecommendationDetails = 2;
+    double estimatedMonthlyCost = 3;
+    double estimatedMonthlySavings = 4;
 }
