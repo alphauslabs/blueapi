@@ -5109,6 +5109,13 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "vendors",
+            "description": "Optional. Filter vendor accounts included in BillingGroup. Format: vendors=vendor1,vendor2,vendor3.\nFor example, When Aws and Gcp to be filtered vendors=aws,gcp\nIf you want to get all vendors, not set parameter.",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -15262,8 +15269,32 @@
     "coverAWSRecommendations": {
       "type": "object",
       "properties": {
-        "generalDetails": {
-          "$ref": "#/definitions/coverGeneralDetails"
+        "id": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
+        },
+        "accountName": {
+          "type": "string"
+        },
+        "instanceId": {
+          "type": "string"
+        },
+        "instanceName": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "costGroup": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
         },
         "purchaseRIRecommendationDetails": {
           "$ref": "#/definitions/coverPurchaseRIRecommendationDetails"
@@ -16039,10 +16070,6 @@
         },
         "estNetworkCapacity": {
           "type": "string"
-        },
-        "estMonthlyCost": {
-          "type": "number",
-          "format": "double"
         }
       }
     },
@@ -16096,14 +16123,6 @@
         },
         "eC2ModifyRecommendationDetails": {
           "$ref": "#/definitions/coverEC2ModifyRecommendationDetails"
-        },
-        "estimatedMonthlyCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "estimatedMonthlySavings": {
-          "type": "number",
-          "format": "double"
         }
       }
     },
@@ -16173,6 +16192,10 @@
           "type": "string"
         },
         "estSavingsPerMonth": {
+          "type": "number",
+          "format": "double"
+        },
+        "estCostPerMonth": {
           "type": "number",
           "format": "double"
         },
@@ -16262,38 +16285,6 @@
           "type": "string"
         },
         "datasetRegion": {
-          "type": "string"
-        }
-      }
-    },
-    "coverGeneralDetails": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "accountId": {
-          "type": "string"
-        },
-        "accountName": {
-          "type": "string"
-        },
-        "instanceId": {
-          "type": "string"
-        },
-        "instanceName": {
-          "type": "string"
-        },
-        "service": {
-          "type": "string"
-        },
-        "source": {
-          "type": "string"
-        },
-        "costGroup": {
-          "type": "string"
-        },
-        "type": {
           "type": "string"
         }
       }
@@ -16570,6 +16561,14 @@
         },
         "ugradeEC2RecommendationDetails": {
           "$ref": "#/definitions/coverEC2RecommendationDetails"
+        }
+      }
+    },
+    "coverMigrateRecommendationDetails": {
+      "type": "object",
+      "properties": {
+        "migrateEC2Details": {
+          "$ref": "#/definitions/coverMigrateEC2Details"
         },
         "estimatedMonthlyCost": {
           "type": "number",
@@ -16578,17 +16577,6 @@
         "estimatedMonthlySavings": {
           "type": "number",
           "format": "double"
-        }
-      }
-    },
-    "coverMigrateRecommendationDetails": {
-      "type": "object",
-      "properties": {
-        "generalDetails": {
-          "$ref": "#/definitions/coverGeneralDetails"
-        },
-        "migrateEC2Details": {
-          "$ref": "#/definitions/coverMigrateEC2Details"
         }
       }
     },
@@ -16943,14 +16931,19 @@
     "coverRightSizingRecommendationDetails": {
       "type": "object",
       "properties": {
-        "generalDetails": {
-          "$ref": "#/definitions/coverGeneralDetails"
-        },
         "ec2RightSizingDetails": {
           "$ref": "#/definitions/coverEC2rightSizingDetails"
         },
         "lambdaRightSizingRecommendationDetails": {
           "$ref": "#/definitions/coverLambdaRightSizingRecommendationDetails"
+        },
+        "estimatedMonthlyCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedMonthlySavings": {
+          "type": "number",
+          "format": "double"
         }
       }
     },
@@ -17229,14 +17222,30 @@
         }
       }
     },
+    "coverUpgradeEC2Details": {
+      "type": "object",
+      "properties": {
+        "eC2CurrentDetails": {
+          "$ref": "#/definitions/coverEC2CurrentDetails"
+        },
+        "ugradeEC2RecommendationDetails": {
+          "$ref": "#/definitions/coverEC2RecommendationDetails"
+        },
+        "estimatedMonthlyCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedMonthlySavings": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
     "coverUpgradeRecommendationDetails": {
       "type": "object",
       "properties": {
-        "generalDetails": {
-          "$ref": "#/definitions/coverGeneralDetails"
-        },
         "upgradeEC2Details": {
-          "$ref": "#/definitions/coverUpgradeEBSDetails"
+          "$ref": "#/definitions/coverUpgradeEC2Details"
         },
         "upgradeEBSDetails": {
           "$ref": "#/definitions/coverUpgradeEBSDetails"

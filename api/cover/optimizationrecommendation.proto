@@ -9,15 +9,7 @@ option java_outer_classname = "ApiCoverOptimizationRecommendationProto";
 
 
 message GeneralDetails{
-    string id = 1;
-    string accountId = 2;
-    string accountName = 3;
-    string instanceId = 4;
-    string instanceName = 5;
-    string service = 6;
-    string source = 7;
-    string costGroup = 8;
-    string type = 9;
+
 }
 
 message PurchaseRIRecommendationDetails {
@@ -107,13 +99,22 @@ message SPCoverageRate{
     double value  = 2;
 }
 message AWSRecommendations {
-    GeneralDetails generalDetails = 1;
-    PurchaseRIRecommendationDetails purchaseRIRecommendationDetails = 2;
-    SavingsPlanRecommendationDetails savingsPlanRecommendationDetails = 3;
-    RightSizingRecommendationDetails rightSizingRecommendationDetails = 4;
-    UpgradeRecommendationDetails upgradeRecommendationDetails = 5;
-    MigrateRecommendationDetails migrateRecommendationDetails = 6;
+    string id = 1;
+    string accountId = 2;
+    string accountName = 3;
+    string instanceId = 4;
+    string instanceName = 5;
+    string service = 6;
+    string source = 7;
+    string costGroup = 8;
+    string type = 9;
+    PurchaseRIRecommendationDetails purchaseRIRecommendationDetails = 10;
+    SavingsPlanRecommendationDetails savingsPlanRecommendationDetails = 11;
+    RightSizingRecommendationDetails rightSizingRecommendationDetails = 12;
+    UpgradeRecommendationDetails upgradeRecommendationDetails = 13;
+    MigrateRecommendationDetails migrateRecommendationDetails = 14;
 }
+
 
 message NoOfExecutedRecommendationPerMonth {
     string date = 1; // use yyyymm format
@@ -131,20 +132,20 @@ message ExecutedRecommendationDetails{
     string service = 3;
     string completedDate = 4;
     double estSavingsPerMonth = 5;
-    string vendor = 6;
+    double estCostPerMonth = 6;
+    string vendor = 7;
 }
 
 message RightSizingRecommendationDetails{
-    GeneralDetails generalDetails = 1;
-    EC2rightSizingDetails ec2RightSizingDetails = 2;
-    LambdaRightSizingRecommendationDetails lambdaRightSizingRecommendationDetails = 3;
+    EC2rightSizingDetails ec2RightSizingDetails = 1;
+    LambdaRightSizingRecommendationDetails lambdaRightSizingRecommendationDetails = 2;
+    double estimatedMonthlyCost = 3;
+    double estimatedMonthlySavings = 4;
 }
 
 message EC2rightSizingDetails{
     CurrentEC2Details currentEC2Details = 1;
     EC2ModifyRecommendationDetails eC2ModifyRecommendationDetails = 2; 
-    double estimatedMonthlyCost = 3;
-    double estimatedMonthlySavings = 4;
 }
 message CurrentEC2Details{
     string instanceType = 1;
@@ -168,7 +169,6 @@ message EC2ModifyRecommendationDetails{
     double estMemoryUtilization = 5;
     double estDiskUtilization = 6;
     string estNetworkCapacity = 7;
-    double estMonthlyCost = 8;
 }
 
 message EC2CpuUtilization {
@@ -188,7 +188,6 @@ message EC2MemoryUtilization {
 message LambdaRightSizingRecommendationDetails{
     LambdaCurrentConfiguration lambdaCurrentConfiguration = 1;
     LambdaRecommendedConfiguration lambdaRecommendedConfiguration = 2;
-
 }
 
 message LambdaCurrentConfiguration{
@@ -215,9 +214,8 @@ message LambdaRecommendedConfiguration{
 }
 
 message UpgradeRecommendationDetails{
-    GeneralDetails generalDetails = 1;
-    UpgradeEBSDetails upgradeEC2Details = 2;
-    UpgradeEBSDetails upgradeEBSDetails = 3;
+    UpgradeEC2Details upgradeEC2Details = 1;
+    UpgradeEBSDetails upgradeEBSDetails = 2;
 
 }
 
@@ -279,13 +277,12 @@ message CurrentEBSDetails {
 }
 
 message MigrateRecommendationDetails{
-    GeneralDetails generalDetails = 1;
-    MigrateEC2Details migrateEC2Details =2 ;
+    MigrateEC2Details migrateEC2Details = 1 ;
+    double estimatedMonthlyCost = 2;
+    double estimatedMonthlySavings = 3;
 }
 
 message MigrateEC2Details{
     EC2CurrentDetails eC2CurrentDetails = 1;
     EC2RecommendationDetails ugradeEC2RecommendationDetails = 2;
-    double estimatedMonthlyCost = 3;
-    double estimatedMonthlySavings = 4;
 }
