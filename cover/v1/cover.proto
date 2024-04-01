@@ -1078,6 +1078,14 @@ service Cover {
         get: "/v1/recommendations/optimization/history"
       };
     }
+
+    // Sets Cost group event indicator
+    rpc SetCostGroupEventIndicator(SetCostGroupEventIndicatorRequest) returns (SetCostGroupEventIndicatorResponse) {
+      option (google.api.http) = {
+        post: "/v1/costgroups/{costGroupId}/eventIndicator"
+        body: "*"
+      };
+    }
 }
 
 // Request message for OnboardOrg
@@ -2772,6 +2780,11 @@ message GetAnomalyinCostGroupRequest {
 
   // End date for detection anomalies
   string endDate = 3;
+
+  // The threshold for detecting anomalies
+  float threshold = 4;
+
+  bool isPercentage = 5;
 }
 
 // Message response for anomaly detection 
@@ -3174,3 +3187,16 @@ message OptimizationHistoryResponse{
   repeated api.cover.NoOfExecutedRecommendationPerMonth noOfExecutedRecommendationPerMonth = 2;
   repeated api.cover.ExecutedRecommendationDetails executedRecommendationDetails = 3;
 }
+
+message SetCostGroupEventIndicatorRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+
+  // Required.Supported value for now: "anomaly".
+  string event = 2;
+
+  // Required. Supported value for now: "true" or "false".
+  bool value = 3; 
+}
+
+message SetCostGroupEventIndicatorResponse {}
