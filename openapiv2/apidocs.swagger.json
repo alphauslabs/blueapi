@@ -5534,6 +5534,46 @@
         ]
       }
     },
+    "/v1/costgroups/{costGroupId}/anomaly": {
+      "post": {
+        "summary": "Sets Cost group's anomaly options",
+        "operationId": "Cover_SetCostGroupAnomalyOptions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SetCostGroupAnomalyOptionsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "costGroupId",
+            "description": "Required. Cost Group Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CoverSetCostGroupAnomalyOptionsBody"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/costgroups/{costGroupId}/colortheme": {
       "put": {
         "summary": "Update cost group's color theme",
@@ -5656,7 +5696,7 @@
     },
     "/v1/costgroups/{costGroupId}/eventIndicator": {
       "post": {
-        "summary": "Sets Cost group event indicator",
+        "summary": "Sets Cost group's event indicator",
         "operationId": "Cover_SetCostGroupEventIndicator",
         "responses": {
           "200": {
@@ -12525,6 +12565,19 @@
       },
       "title": "Request message for RemoveSideMenuFavorite"
     },
+    "CoverSetCostGroupAnomalyOptionsBody": {
+      "type": "object",
+      "properties": {
+        "threshold": {
+          "type": "string",
+          "title": "Required"
+        },
+        "isPercentage": {
+          "type": "boolean",
+          "description": "Required. When set to true, the threshold is a percentage to the actual cost. Otherwise, it is a fixed amount."
+        }
+      }
+    },
     "CoverSetCostGroupEventIndicatorBody": {
       "type": "object",
       "properties": {
@@ -15706,6 +15759,18 @@
         }
       }
     },
+    "coverAnomalyOptions": {
+      "type": "object",
+      "properties": {
+        "threshold": {
+          "type": "number",
+          "format": "float"
+        },
+        "isPercentage": {
+          "type": "boolean"
+        }
+      }
+    },
     "coverAwsCostForecast": {
       "type": "object",
       "properties": {
@@ -16088,6 +16153,9 @@
         },
         "eventIndicator": {
           "$ref": "#/definitions/coverEventIndicator"
+        },
+        "anomalyOptions": {
+          "$ref": "#/definitions/coverAnomalyOptions"
         }
       }
     },
@@ -20840,14 +20908,6 @@
         "endDate": {
           "type": "string",
           "title": "End date for detection anomalies"
-        },
-        "threshold": {
-          "type": "number",
-          "format": "float",
-          "title": "The threshold for detecting anomalies"
-        },
-        "isPercentage": {
-          "type": "boolean"
         }
       },
       "title": "Request message for getting anomaly"
@@ -23156,6 +23216,17 @@
         }
       },
       "description": "Response message for ListSavings, RestoreSavings, SimulateSavings rpc."
+    },
+    "v1SetCostGroupAnomalyOptionsResponse": {
+      "type": "object",
+      "properties": {
+        "costGroupId": {
+          "type": "string"
+        },
+        "anomalyOptions": {
+          "$ref": "#/definitions/coverAnomalyOptions"
+        }
+      }
     },
     "v1SetCostGroupEventIndicatorResponse": {
       "type": "object",

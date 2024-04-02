@@ -1079,10 +1079,18 @@ service Cover {
       };
     }
 
-    // Sets Cost group event indicator
+    // Sets Cost group's event indicator
     rpc SetCostGroupEventIndicator(SetCostGroupEventIndicatorRequest) returns (SetCostGroupEventIndicatorResponse) {
       option (google.api.http) = {
         post: "/v1/costgroups/{costGroupId}/eventIndicator"
+        body: "*"
+      };
+    }
+
+     // Sets Cost group's anomaly options
+     rpc SetCostGroupAnomalyOptions(SetCostGroupAnomalyOptionsRequest) returns (SetCostGroupAnomalyOptionsResponse) {
+      option (google.api.http) = {
+        post: "/v1/costgroups/{costGroupId}/anomaly"
         body: "*"
       };
     }
@@ -2780,11 +2788,6 @@ message GetAnomalyinCostGroupRequest {
 
   // End date for detection anomalies
   string endDate = 3;
-
-  // The threshold for detecting anomalies
-  float threshold = 4;
-
-  bool isPercentage = 5;
 }
 
 // Message response for anomaly detection 
@@ -3199,4 +3202,20 @@ message SetCostGroupEventIndicatorRequest {
 message SetCostGroupEventIndicatorResponse {
   string costGroupId = 1;
   api.cover.EventIndicator eventIndicator = 2;
+}
+
+message SetCostGroupAnomalyOptionsRequest {
+  // Required. Cost Group Id.
+  string costGroupId = 1;
+  
+  // Required
+  string threshold = 2;
+
+  // Required. When set to true, the threshold is a percentage to the actual cost. Otherwise, it is a fixed amount.
+  bool isPercentage = 3;
+}
+
+message SetCostGroupAnomalyOptionsResponse {
+  string costGroupId = 1;
+  api.cover.AnomalyOptions anomalyOptions = 2;
 }
