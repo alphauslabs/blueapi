@@ -12528,13 +12528,9 @@
     "CoverSetCostGroupEventIndicatorBody": {
       "type": "object",
       "properties": {
-        "event": {
-          "type": "string",
-          "description": "Required.Supported value for now: \"anomaly\"."
-        },
-        "value": {
+        "anomaly": {
           "type": "boolean",
-          "description": "Required. Supported value for now: \"true\" or \"false\"."
+          "title": "Required. Only anomaly is supported as of now"
         }
       }
     },
@@ -23162,7 +23158,15 @@
       "description": "Response message for ListSavings, RestoreSavings, SimulateSavings rpc."
     },
     "v1SetCostGroupEventIndicatorResponse": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "costGroupId": {
+          "type": "string"
+        },
+        "eventIndicator": {
+          "$ref": "#/definitions/coverEventIndicator"
+        }
+      }
     },
     "v1TerminateResourceResponse": {
       "type": "object",
