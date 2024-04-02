@@ -3192,11 +3192,11 @@ message SetCostGroupEventIndicatorRequest {
   // Required. Cost Group Id.
   string costGroupId = 1;
 
-  // Required.Supported value for now: "anomaly".
-  string event = 2;
-
-  // Required. Supported value for now: "true" or "false".
-  bool value = 3; 
+  // Required. Only anomaly is supported as of now
+  bool anomaly = 2;
 }
 
-message SetCostGroupEventIndicatorResponse {}
+message SetCostGroupEventIndicatorResponse {
+  string costGroupId = 1;
+  api.cover.EventIndicator eventIndicator = 2;
+}
