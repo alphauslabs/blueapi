@@ -1060,7 +1060,7 @@ service Cover {
   // Executes optimization based on a recommendation.
   rpc ExecuteOptimization(ExecuteOptimizationRequest) returns (ExecuteOptimizationResponse) {
     option (google.api.http) = {
-      post: "/v1/recommendations/optimization/{target}"
+      post: "/v1/recommendations/optimization/{recommendationId}"
       body: "*"
     };
   }
@@ -3153,15 +3153,14 @@ message GetRecommendationResponse{
 message ExecuteOptimizationRequest {
     string target = 1;
     string recommendationId = 2;
-    string executedBy = 3;
-    string resourceId = 4;
-    string vendor = 5;
-    string service = 6;
-    string category = 7;
-    string region = 8;
-    api.cover.AWS awsOptions = 9;
-    api.cover.GCP gcpOptions = 10;
-    api.cover.AzureCSP azureCspOptions = 11;
+    string resourceId = 3;
+    string vendor = 4;
+    string service = 5;
+    string category = 6;
+    string region = 7;
+    api.cover.AWS awsOptions = 8;
+    api.cover.GCP gcpOptions = 9;
+    api.cover.AzureCSP azureCspOptions = 10;
 }
 
 message ExecuteOptimizationResponse{
