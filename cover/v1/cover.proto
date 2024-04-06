@@ -3104,22 +3104,20 @@ message ListRecommendationRequest{
   // Required. Cost Group Id.
   string costgroupId = 1;
   
-  //Required. Start date of retrieved data.
+  //Required. Start date of retrieved data. If not set, the default would be today.
   string dateRangeStart = 2;
   
-  //Required. End date of retrieved data.
+  //Required. End date of retrieved data. If not set, the default would be today.
   string dateRangeEnd = 3; 
 
-  //Required. Valid inputs are: "all", "aws", "gcp", and  "azure".
+  //Valid inputs are: "all", "aws", "gcp", and  "azure". Default is "all".
   string vendor = 4;
 
-  // Valid inputs are: "all", "trusted-advisor", "cost-explorer", and  "cost-optimization-hub". Default is "All".
+  // Valid inputs are: "all", "trustedadvisor", "costexplorer", and  "costoptimizationhub". Default is "all".
   string source = 5;
-
-  //Required. Valid inputs are: "all", "rate", and  "usage". Default is "All"
-  string optimizationType = 6;
-
-  bool isExecuted = 7;
+ 
+  // Valid inputs are: "in-progress", "error", "open" and "all"
+  string optimizationStatus = 7;
 }
 
 message ListRecommendationResponse{
@@ -3137,12 +3135,17 @@ message ListRecommendationResponse{
 
   string vendor = 7;
 
-  string optimizationType = 8;
+  string optimizationStatus = 8;
+
+  string errorMessage = 9;
 }
 
 message GetRecommendationRequest{
   string id = 1;
   string costGroupId = 2;
+
+  //Valid inputs are: "30days", "60days". and "90days". Default is "30days".
+  string PeriodOption = 3;
 }
 
 message GetRecommendationResponse{
@@ -3167,7 +3170,7 @@ message OptimizationHistoryRequest{
     // Required. Cost Group Id.
     string costgroupId = 1;
   
-    //Required. Start date of retrieved data.
+    //Required. Start date of retrieved data. If not set, default is three months past.
     string dateRangeStart = 2;
     
     //Required. End date of retrieved data.
@@ -3179,15 +3182,13 @@ message OptimizationHistoryRequest{
     // Valid inputs are: "all", "trusted-advisor", "cost-explorer", and  "cost-optimization-hub". Default is "All".
     string source = 5;
   
-    //Required. Valid inputs are: "all", "rate", and  "usage". Default is "All"
-    string optimizationType = 6;
-  
-    bool isExecuted = 7;
+    //Valid inputs are: "daily", "monthly". and "yearly". Default is "monthly".
+    string periodOption = 6;
 }
 
 message OptimizationHistoryResponse{
   repeated api.cover.CostGroupSpendingData costGroupSpendingData = 1;
-  repeated api.cover.NoOfExecutedRecommendationPerMonth noOfExecutedRecommendationPerMonth = 2;
+  repeated api.cover.NoOfExecutedRecommendation noOfExecutedRecommendation = 2;
   repeated api.cover.ExecutedRecommendationDetails executedRecommendationDetails = 3;
 }
 
