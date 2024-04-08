@@ -508,6 +508,13 @@ service Cost {
       get: "/v1/{vendor}/bep/{orgId}"
     };
   }
+
+  // WORK-IN-PROGRESS: Find customer by customer/account id.
+  rpc GetCustomerByAccountId(GetCustomerByAccountIdRequest) returns (Customer) {
+    option (google.api.http) = {
+      get: "/v1/accounts/customer/{id}"
+    };
+  }
 }
 
 // Request message for the Cost.ListPayerAccounts rpc.
@@ -2006,4 +2013,30 @@ message UpdateBudgetAlertsRequest {
 message DeleteBudgetAlertsRequest {
   // Required. budget alert id
   string id = 1;
+}
+
+// Request message for the Cost.GetCustomerByAccountId rpc.
+message GetCustomerByAccountIdRequest {
+  // Required. The id of the account/customer.
+  string id = 1;
+}
+
+message Customer {
+  // The id of the customer.
+  string id = 1;
+
+  // The name of the customer.
+  string name = 2;
+
+  // The payerId of the customer.
+  string payerId = 3;
+
+  // The mspId of the customer.
+  string mspId = 4;
+
+  // The companyId of the customer.
+  string companyId = 5;
+
+  // The lastUpdate timestamp of the customer.
+  string lastUpdate = 6;
 }
