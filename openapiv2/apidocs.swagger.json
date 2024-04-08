@@ -7694,44 +7694,38 @@
           },
           {
             "name": "dateRangeStart",
-            "description": "Required. Start date of retrieved data.",
+            "description": "Required. Start date of retrieved data. If not set, the default would be today.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "dateRangeEnd",
-            "description": "Required. End date of retrieved data.",
+            "description": "Required. End date of retrieved data. If not set, the default would be today.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "vendor",
-            "description": "Required. Valid inputs are: \"all\", \"aws\", \"gcp\", and  \"azure\".",
+            "description": "Valid inputs are: \"all\", \"aws\", \"gcp\", and  \"azure\". Default is \"all\".",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "source",
-            "description": "Valid inputs are: \"all\", \"trusted-advisor\", \"cost-explorer\", and  \"cost-optimization-hub\". Default is \"All\".",
+            "description": "Valid inputs are: \"all\", \"trustedadvisor\", \"costexplorer\", and  \"costoptimizationhub\". Default is \"all\".",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "optimizationType",
-            "description": "Required. Valid inputs are: \"all\", \"rate\", and  \"usage\". Default is \"All\"",
+            "name": "optimizationStatus",
+            "description": "Valid inputs are: \"in-progress\", \"error\", \"open\" and \"all\"",
             "in": "query",
             "required": false,
             "type": "string"
-          },
-          {
-            "name": "isExecuted",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
           }
         ],
         "tags": [
@@ -7806,7 +7800,7 @@
           },
           {
             "name": "dateRangeStart",
-            "description": "Required. Start date of retrieved data.",
+            "description": "Required. Start date of retrieved data. If not set, default is three months past.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -7833,17 +7827,11 @@
             "type": "string"
           },
           {
-            "name": "optimizationType",
-            "description": "Required. Valid inputs are: \"all\", \"rate\", and  \"usage\". Default is \"All\"",
+            "name": "periodOption",
+            "description": "Valid inputs are: \"daily\", \"monthly\". and \"yearly\". Default is \"monthly\".",
             "in": "query",
             "required": false,
             "type": "string"
-          },
-          {
-            "name": "isExecuted",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
           }
         ],
         "tags": [
@@ -7878,6 +7866,13 @@
           },
           {
             "name": "costGroupId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "PeriodOption",
+            "description": "Valid inputs are: \"30days\", \"60days\". and \"90days\". Default is \"30days\".",
             "in": "query",
             "required": false,
             "type": "string"
@@ -15390,7 +15385,10 @@
         "costGroup": {
           "type": "string"
         },
-        "type": {
+        "recommendation": {
+          "type": "string"
+        },
+        "region": {
           "type": "string"
         },
         "purchaseRIRecommendationDetails": {
@@ -15952,13 +15950,11 @@
       "type": "object",
       "properties": {
         "date": {
-          "type": "string",
-          "title": "use yyyymm format"
+          "type": "string"
         },
         "value": {
           "type": "number",
-          "format": "float",
-          "title": "actual cost for the month"
+          "format": "float"
         }
       }
     },
@@ -16053,31 +16049,6 @@
             "type": "object",
             "$ref": "#/definitions/coverEC2MemoryUtilization"
           }
-        }
-      }
-    },
-    "coverCurrentUtilizationDetails": {
-      "type": "object",
-      "properties": {
-        "avgOnDemandCostPerHour": {
-          "type": "number",
-          "format": "double"
-        },
-        "minOnDemandCostPerHour": {
-          "type": "number",
-          "format": "double"
-        },
-        "maxOnDemandCostPerHour": {
-          "type": "number",
-          "format": "double"
-        },
-        "avgSavingsPlansCoverage": {
-          "type": "number",
-          "format": "double"
-        },
-        "avgSavingsPlansUtilization": {
-          "type": "number",
-          "format": "double"
         }
       }
     },
@@ -16291,6 +16262,76 @@
         }
       }
     },
+    "coverEstOutcomeFromPurchaseRIRecommendation": {
+      "type": "object",
+      "properties": {
+        "aveUtilization": {
+          "type": "number",
+          "format": "double"
+        },
+        "aveNormalizedUnitsUsedPerHour": {
+          "type": "number",
+          "format": "double"
+        },
+        "aveNumberofInstanceUsedPerHour": {
+          "type": "number",
+          "format": "double"
+        },
+        "breakEvenInMonths": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyOnDemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyRICost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySavingsPercentage": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "coverEstOutcomeFromSPRecommendation": {
+      "type": "object",
+      "properties": {
+        "aveCoverage": {
+          "type": "number",
+          "format": "double"
+        },
+        "aveUtilization": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySavingsAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "OnDemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "roi": {
+          "type": "number",
+          "format": "double"
+        },
+        "savingsPlanCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "savingsPercentage": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
     "coverEventIndicator": {
       "type": "object",
       "properties": {
@@ -16315,11 +16356,11 @@
         "completedDate": {
           "type": "string"
         },
-        "estSavingsPerMonth": {
+        "estSavings": {
           "type": "number",
           "format": "double"
         },
-        "estCostPerMonth": {
+        "estCost": {
           "type": "number",
           "format": "double"
         },
@@ -16704,12 +16745,11 @@
         }
       }
     },
-    "coverNoOfExecutedRecommendationPerMonth": {
+    "coverNoOfExecutedRecommendation": {
       "type": "object",
       "properties": {
         "date": {
-          "type": "string",
-          "title": "use yyyymm format"
+          "type": "string"
         },
         "numberOfRecommendationExecuted": {
           "type": "integer",
@@ -16755,39 +16795,34 @@
         "redshiftOptions": {
           "$ref": "#/definitions/coverRedshiftDetails"
         },
+        "normalizedUnits": {
+          "type": "integer",
+          "format": "int32"
+        },
         "numberOfInstanceToPurchase": {
           "type": "integer",
           "format": "int32"
         },
+        "paymentOption": {
+          "type": "string"
+        },
         "offeringClass": {
           "type": "string"
         },
-        "paymentOption": {
+        "term": {
+          "type": "string"
+        },
+        "upfrontCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "instanceType": {
           "type": "string"
         },
         "platform": {
           "type": "string"
         },
-        "recurringMonthlyCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "estimatedMonthlyCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "estimatedMonthlySavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "estimatedOnDemandCost": {
-          "type": "number",
-          "format": "double"
-        },
         "region": {
-          "type": "string"
-        },
-        "sizeFlexible": {
           "type": "string"
         },
         "sizeFlexEligible": {
@@ -16796,8 +16831,15 @@
         "tenancy": {
           "type": "string"
         },
-        "term": {
-          "type": "string"
+        "estOutcomeFromPurchaseRIRecommendation": {
+          "$ref": "#/definitions/coverEstOutcomeFromPurchaseRIRecommendation"
+        },
+        "costGroupSpendingData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverCostGroupSpendingData"
+          }
         }
       }
     },
@@ -17071,25 +17113,30 @@
         }
       }
     },
-    "coverSPCoverageRate": {
+    "coverSPCurrentUtilizationDetails": {
       "type": "object",
       "properties": {
-        "date": {
-          "type": "string"
-        },
-        "value": {
+        "aveCoverage": {
           "type": "number",
           "format": "double"
-        }
-      }
-    },
-    "coverSPUtilizationRate": {
-      "type": "object",
-      "properties": {
-        "date": {
-          "type": "string"
         },
-        "value": {
+        "aveHourOnDemandSpend": {
+          "type": "number",
+          "format": "double"
+        },
+        "maxHourlyOndemandSpend": {
+          "type": "number",
+          "format": "double"
+        },
+        "minHourlyOndemandSpend": {
+          "type": "number",
+          "format": "double"
+        },
+        "existingHourlyCommitment": {
+          "type": "number",
+          "format": "double"
+        },
+        "estOnDemandCostWithHourlyCommitment": {
           "type": "number",
           "format": "double"
         }
@@ -17105,49 +17152,29 @@
           "type": "number",
           "format": "double"
         },
-        "estimatedMonthlySavingsAmount": {
-          "type": "number",
-          "format": "double"
+        "offeringId": {
+          "type": "string"
         },
-        "estimatedSavingsPercentage": {
-          "type": "number",
-          "format": "double"
+        "paymentOption": {
+          "type": "string"
         },
-        "estimatedAverageCoverage": {
-          "type": "number",
-          "format": "double"
+        "savingsPlanType": {
+          "type": "string"
         },
-        "estimatedAverageUtilization": {
-          "type": "number",
-          "format": "double"
-        },
-        "currentOnDemandSpend": {
-          "type": "number",
-          "format": "double"
-        },
-        "estimatedMonthlySpend": {
-          "type": "number",
-          "format": "double"
-        },
-        "estimatedMonthlySavings": {
-          "type": "number",
-          "format": "double"
+        "term": {
+          "type": "string"
         },
         "currentUtilizationDetails": {
-          "$ref": "#/definitions/coverCurrentUtilizationDetails"
+          "$ref": "#/definitions/coverSPCurrentUtilizationDetails"
         },
-        "spUtilizationRate": {
+        "estOutcomeFromSPRecommendation": {
+          "$ref": "#/definitions/coverEstOutcomeFromSPRecommendation"
+        },
+        "costGroupSpendingData": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/coverSPUtilizationRate"
-          }
-        },
-        "spCoverageRate": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/coverSPCoverageRate"
+            "$ref": "#/definitions/coverCostGroupSpendingData"
           }
         }
       }
@@ -22081,7 +22108,10 @@
         "vendor": {
           "type": "string"
         },
-        "optimizationType": {
+        "optimizationStatus": {
+          "type": "string"
+        },
+        "errorMessage": {
           "type": "string"
         }
       }
@@ -22214,11 +22244,11 @@
             "$ref": "#/definitions/coverCostGroupSpendingData"
           }
         },
-        "noOfExecutedRecommendationPerMonth": {
+        "noOfExecutedRecommendation": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/coverNoOfExecutedRecommendationPerMonth"
+            "$ref": "#/definitions/coverNoOfExecutedRecommendation"
           }
         },
         "executedRecommendationDetails": {
