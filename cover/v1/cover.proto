@@ -14,6 +14,7 @@ import "api/cover/rightsizingrecommendation.proto";
 import "api/cover/alert.proto";
 import "api/cover/budget.proto";
 import "api/cover/insightreport.proto";
+import "api/cover/applyrecommendation.proto";
 import "protos/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -1059,7 +1060,7 @@ service Cover {
   // Executes optimization based on a recommendation.
   rpc ExecuteOptimization(ExecuteOptimizationRequest) returns (ExecuteOptimizationResponse) {
     option (google.api.http) = {
-      post: "/v1/recommendations/optimization/{id}"
+      post: "/v1/recommendations/optimization/{recommendationId}"
       body: "*"
     };
   }
@@ -3152,8 +3153,17 @@ message GetRecommendationResponse{
   api.cover.AWSRecommendations recommendationData = 1;
 }
 
-message ExecuteOptimizationRequest{
-  string id = 1;
+message ExecuteOptimizationRequest {
+    string target = 1;
+    string recommendationId = 2;
+    string resourceId = 3;
+    string vendor = 4;
+    string service = 5;
+    string category = 6;
+    string region = 7;
+    api.cover.AWS awsOptions = 8;
+    api.cover.GCP gcpOptions = 9;
+    api.cover.AzureCSP azureCspOptions = 10;
 }
 
 message ExecuteOptimizationResponse{
