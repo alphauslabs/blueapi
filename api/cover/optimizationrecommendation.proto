@@ -6,7 +6,43 @@ option go_package = "github.com/alphauslabs/blue-sdk-go/api/cover";
 option java_package = "cloud.alphaus.blueapi.api.cover";
 option java_outer_classname = "ApiCoverOptimizationRecommendationProto";
 
+message NoOfExecutedRecommendation {
+    string date = 1; 
+    int32 numberOfRecommendationExecuted = 2;
+}
 
+message CostGroupSpendingData {
+    string date = 1;
+    float value = 2; 
+}
+
+message ExecutedRecommendationDetails{
+    string recommendationId = 1;
+    string recommendaton = 2;
+    string service = 3;
+    string completedDate = 4;
+    double estSavings = 5;
+    double estCost = 6;
+    string vendor = 7;
+}
+
+message AWSRecommendations {
+    string id = 1;
+    string accountId = 2;
+    string accountName = 3;
+    string instanceId = 4;
+    string instanceName = 5;
+    string service = 6;
+    string source = 7;
+    string costGroup = 8;
+    string recommendation = 9;
+    string region = 10;
+    PurchaseRIRecommendationDetails purchaseRIRecommendationDetails = 11;
+    SavingsPlanRecommendationDetails savingsPlanRecommendationDetails = 12;
+    RightSizingRecommendationDetails rightSizingRecommendationDetails = 13;
+    UpgradeRecommendationDetails upgradeRecommendationDetails = 14;
+    MigrateRecommendationDetails migrateRecommendationDetails = 15;
+}
 
 message PurchaseRIRecommendationDetails {
     EC2Details ec2Options = 1;
@@ -14,21 +50,30 @@ message PurchaseRIRecommendationDetails {
     ESDetails esOptions = 3;
     RDSDetails rdsOptions = 4;
     RedshiftDetails redshiftOptions = 5;
-    int32 numberOfInstanceToPurchase = 6;
-    string offeringClass = 7;
+    int32 normalizedUnits = 6;
+    int32 numberOfInstanceToPurchase = 7;
     string paymentOption = 8;
-    string platform = 9;
-    double recurringMonthlyCost = 10;
-    double estimatedMonthlyCost = 11;
-    double estimatedMonthlySavings = 12;
-    double estimatedOnDemandCost = 13;
+    string offeringClass = 9;
+    string term = 10;
+    double upfrontCost = 11;
+    string instanceType = 12;
+    string platform = 13;
     string region = 14;
-    string sizeFlexible = 15;
-    bool sizeFlexEligible = 16;
-    string tenancy = 17;
-    string term = 18;
+    bool sizeFlexEligible = 15;
+    string tenancy = 16;
+    EstOutcomeFromPurchaseRIRecommendation estOutcomeFromPurchaseRIRecommendation = 17;
+    repeated CostGroupSpendingData costGroupSpendingData = 18;
 }
-
+message EstOutcomeFromPurchaseRIRecommendation{
+    double aveUtilization = 1;
+    double aveNormalizedUnitsUsedPerHour = 2;
+    double aveNumberofInstanceUsedPerHour = 3;
+    double breakEvenInMonths = 4;
+    double monthlyOnDemandCost = 5;
+    double monthlyRICost = 6;
+    double monthlySavings = 7;
+    double monthlySavingsPercentage = 8;
+}
 
 message EC2Details {
     string instanceType = 1;
@@ -65,71 +110,32 @@ message RedshiftDetails {
 message SavingsPlanRecommendationDetails {
     string currencyCode = 1;
     double hourlyCommitmentToPurchase = 2;
-    double estimatedMonthlySavingsAmount = 3;
-    double estimatedSavingsPercentage = 4;
-    double estimatedAverageCoverage = 5;
-    double estimatedAverageUtilization = 6;
-    double currentOnDemandSpend = 7;
-    double estimatedMonthlySpend = 8;
-    double estimatedMonthlySavings = 9;
-    CurrentUtilizationDetails currentUtilizationDetails = 10;
-    repeated SPUtilizationRate spUtilizationRate = 11;
-    repeated SPCoverageRate spCoverageRate = 12;
+    string offeringId = 3;
+    string paymentOption = 4;
+    string savingsPlanType = 5;
+    string term = 6;
+    SPCurrentUtilizationDetails currentUtilizationDetails = 7;
+    EstOutcomeFromSPRecommendation estOutcomeFromSPRecommendation = 8;
+    repeated CostGroupSpendingData costGroupSpendingData = 9;
 }
 
-message CurrentUtilizationDetails{
-    double avgOnDemandCostPerHour = 1;
-    double minOnDemandCostPerHour = 2;
-    double maxOnDemandCostPerHour = 3;
-    double avgSavingsPlansCoverage = 4;
-    double avgSavingsPlansUtilization = 5;
+message SPCurrentUtilizationDetails{
+ double aveCoverage = 1;
+ double aveHourOnDemandSpend = 2;
+ double maxHourlyOndemandSpend = 3;
+ double minHourlyOndemandSpend = 4;
+ double existingHourlyCommitment = 5;
+ double estOnDemandCostWithHourlyCommitment = 6;
 }
 
-message SPUtilizationRate{
-    string date = 1;
-    double value  = 2;
-}
-
-message SPCoverageRate{
-    string date = 1;
-    double value  = 2;
-}
-message AWSRecommendations {
-    string id = 1;
-    string accountId = 2;
-    string accountName = 3;
-    string instanceId = 4;
-    string instanceName = 5;
-    string service = 6;
-    string source = 7;
-    string costGroup = 8;
-    string type = 9;
-    PurchaseRIRecommendationDetails purchaseRIRecommendationDetails = 10;
-    SavingsPlanRecommendationDetails savingsPlanRecommendationDetails = 11;
-    RightSizingRecommendationDetails rightSizingRecommendationDetails = 12;
-    UpgradeRecommendationDetails upgradeRecommendationDetails = 13;
-    MigrateRecommendationDetails migrateRecommendationDetails = 14;
-}
-
-
-message NoOfExecutedRecommendationPerMonth {
-    string date = 1; // use yyyymm format
-    int32 numberOfRecommendationExecuted = 2;
-}
-
-message CostGroupSpendingData {
-    string date = 1; // use yyyymm format
-    float value = 2; // actual cost for the month
-}
-
-message ExecutedRecommendationDetails{
-    string recommendationId = 1;
-    string recommendaton = 2;
-    string service = 3;
-    string completedDate = 4;
-    double estSavingsPerMonth = 5;
-    double estCostPerMonth = 6;
-    string vendor = 7;
+message EstOutcomeFromSPRecommendation{
+    double aveCoverage = 1;
+    double aveUtilization = 2;
+    double monthlySavingsAmount = 3;
+    double OnDemandCost = 4;
+    double roi = 5;
+    double savingsPlanCost = 6;
+    double savingsPercentage = 7;
 }
 
 message RightSizingRecommendationDetails{
