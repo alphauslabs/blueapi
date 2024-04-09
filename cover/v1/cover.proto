@@ -1095,6 +1095,21 @@ service Cover {
         body: "*"
       };
     }
+
+     // Sets Org's starting month/ fiscal month
+     rpc SetOrgFiscalMonth(SetOrgFiscalMonthRequest) returns (SetOrgFiscalMonthResponse) {
+      option (google.api.http) = {
+        post: "/v1/fiscalmonth"
+        body: "*"
+      };
+    }
+
+     // Get Org's starting month/ fiscal month
+     rpc GetOrgFiscalMonth(GetOrgFiscalMonthRequest) returns (GetOrgFiscalMonthResponse) {
+      option (google.api.http) = {
+        get: "/v1/fiscalmonth"
+      };
+    }
 }
 
 // Request message for OnboardOrg
@@ -3229,4 +3244,19 @@ message SetCostGroupAnomalyOptionsRequest {
 message SetCostGroupAnomalyOptionsResponse {
   string costGroupId = 1;
   api.cover.AnomalyOptions anomalyOptions = 2;
+}
+
+message SetOrgFiscalMonthRequest {
+  // Required. Fiscal month. Valid inputs are: "01 - 12"
+  string fiscalMonth = 1;
+}
+
+message SetOrgFiscalMonthResponse {
+  string fiscalMonth = 1;
+}
+
+message GetOrgFiscalMonthRequest {}
+
+message GetOrgFiscalMonthResponse {
+  string fiscalMonth = 1;
 }
