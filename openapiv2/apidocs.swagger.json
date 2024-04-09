@@ -7462,6 +7462,60 @@
         ]
       }
     },
+    "/v1/reports/fiscalmonth": {
+      "get": {
+        "summary": "Get Org's starting month/ fiscal month",
+        "operationId": "Cover_GetOrgFiscalMonth",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetOrgFiscalMonthResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      },
+      "post": {
+        "summary": "Sets Org's starting month/ fiscal month",
+        "operationId": "Cover_SetOrgFiscalMonth",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SetOrgFiscalMonthResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SetOrgFiscalMonthRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/reports/insight/summary/{costGroupId}": {
       "get": {
         "summary": "Get data for insights reports summary",
@@ -21775,6 +21829,14 @@
       },
       "title": "Response message for GetMonthlyCostForecast"
     },
+    "v1GetOrgFiscalMonthResponse": {
+      "type": "object",
+      "properties": {
+        "fiscalMonth": {
+          "type": "string"
+        }
+      }
+    },
     "v1GetPayerAccountImportHistoryResponse": {
       "type": "object",
       "properties": {
@@ -23362,6 +23424,23 @@
         },
         "eventIndicator": {
           "$ref": "#/definitions/coverEventIndicator"
+        }
+      }
+    },
+    "v1SetOrgFiscalMonthRequest": {
+      "type": "object",
+      "properties": {
+        "fiscalMonth": {
+          "type": "string",
+          "title": "Required. Fiscal month. Valid inputs are: \"01 - 12\""
+        }
+      }
+    },
+    "v1SetOrgFiscalMonthResponse": {
+      "type": "object",
+      "properties": {
+        "fiscalMonth": {
+          "type": "string"
         }
       }
     },
