@@ -508,6 +508,14 @@ service Cost {
       get: "/v1/{vendor}/bep/{orgId}"
     };
   }
+
+  // WORK-IN-PROGRESS: Find customers by customer/account ids.
+  rpc GetCustomersByAccountIds(GetCustomerByAccountIdsRequest) returns (stream Customer) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/accounts/customers"
+      body: "*"
+    };
+  }
 }
 
 // Request message for the Cost.ListPayerAccounts rpc.
@@ -2006,4 +2014,36 @@ message UpdateBudgetAlertsRequest {
 message DeleteBudgetAlertsRequest {
   // Required. budget alert id
   string id = 1;
+}
+
+// Request message for the Cost.GetCustomersByAccountIds rpc.
+message GetCustomerByAccountIdsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+  
+  // Required. Ids of the account/customer.
+  repeated string ids = 2;
+}
+
+message Customer {
+  // The vendor
+  string vendor = 7;
+
+  // The id of the customer.
+  string id = 1;
+
+  // The name of the customer.
+  string name = 2;
+
+  // The payerId of the customer.
+  string payerId = 3;
+
+  // The mspId of the customer.
+  string mspId = 4;
+
+  // The companyId of the customer.
+  string companyId = 5;
+
+  // The lastUpdate timestamp of the customer.
+  string lastUpdate = 6;
 }
