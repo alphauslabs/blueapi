@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package blueapi.api.ripple;
+
+import "api/account.proto";
+import "google/api/field_behavior.proto";
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/ripple";
+option java_package = "cloud.alphaus.blueapi.api.ripple";
+option java_outer_classname = "ApiRippleUntaggedGroupProto";
+
+// UntaggedGroup resource definition.
+message UntaggedGroup {
+  // The unique id of the untagged group.
+  // Automatically generated.
+  string id = 1;
+
+  // Required. The unique name of the untagged group. This value can be up to 60
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. The assigned that rules set for untagged groups
+  Assigned assigned = 3 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional.
+  repeated AssignedBillingGroup billing_groups = 4 [(google.api.field_behavior) = OPTIONAL];
+
+  // Output only. The time when the `UntaggedGroup` was created.
+  string created = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. The time when the `UntaggedGroup` was last updated.
+  string updated = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// AssignedBillingGroup resource definition.
+message AssignedBillingGroup {
+  // The unique id of the billing group internal.
+  string id = 1;
+
+  // The unique id of the billing group.
+  string groupId = 2;
+
+  // The name of the billing group.
+  string groupName = 3;
+
+  // A list of accounts.
+  repeated api.Account accounts = 4;
+
+  // The assigned that rules set for untagged groups
+  Assigned assigned = 5;
+}
+
+// Assigned resource definition.
+message Assigned {
+  // Required.  This value can be up to 100.
+  int32 percentage = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. 
+  int32 fixed = 2 [(google.api.field_behavior) = REQUIRED];
+}
