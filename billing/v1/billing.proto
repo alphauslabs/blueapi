@@ -13,6 +13,7 @@ import "api/ripple/rounding.proto";
 import "api/ripple/invoicelayout.proto";
 import "api/ripple/duedate.proto";
 import "api/ripple/exchangerate.proto";
+import "api/ripple/untaggedgroup.proto";
 import "api/adjustment.proto";
 import "api/wave/adjustment.proto";
 import "google/api/annotations.proto";
@@ -331,6 +332,14 @@ service Billing {
   rpc DeleteAdjustmentConfig(DeleteAdjustmentConfigRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/adjustmentconfig/{vendor}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Reads the untagged group. Only available in Ripple.
+  rpc ReadUntaggedGroups(ReadUntaggedGroupsRequest) returns (stream api.ripple.UntaggedGroup) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/untaggedgroups:read"
+      body: "*"
     };
   }
 }
@@ -1167,4 +1176,15 @@ message UpdateAdjustmentConfigRequest {
 message DeleteAdjustmentConfigRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
+}
+
+// Request message for the Billing.ReadUntaggedGroups rpc.
+message ReadUntaggedGroupsRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Get only the value that set fieldMask.
+  //
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask field_mask = 2 [(google.api.field_behavior) = OPTIONAL];
 }
