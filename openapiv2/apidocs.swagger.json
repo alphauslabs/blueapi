@@ -10730,7 +10730,7 @@
     },
     "/v1/{vendor}/invoiceadjustments:read": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Reads the adjustment details involved in invoicing of an organization billing group (Wave).",
+        "summary": "Reads the adjustment details involved in invoicing of an organization billing group (Wave).",
         "operationId": "Billing_ReadInvoiceAdjustments",
         "responses": {
           "200": {
@@ -11530,6 +11530,55 @@
         ]
       }
     },
+    "/v1/{vendor}/untaggedgroups:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Reads the untagged group. Only available in Ripple.",
+        "operationId": "Billing_ReadUntaggedGroups",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/rippleUntaggedGroup"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of rippleUntaggedGroup"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingReadUntaggedGroupsBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/{vendor}/usagecostsdrift:read": {
       "post": {
         "summary": "Returns a list of accounts that have been updated after invoice along with the differences in costs, if any. Only available in Ripple.",
@@ -11853,6 +11902,16 @@
         }
       },
       "description": "Request message for the Billing.ReadInvoiceAdjustments rpc."
+    },
+    "BillingReadUntaggedGroupsBody": {
+      "type": "object",
+      "properties": {
+        "fieldMask": {
+          "type": "string",
+          "description": "Optional. Get only the value that set fieldMask.\n\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto"
+        }
+      },
+      "description": "Request message for the Billing.ReadUntaggedGroups rpc."
     },
     "BillingRemoveAccountInvoiceServiceDiscountsBody": {
       "type": "object",
@@ -12718,6 +12777,11 @@
         "isPercentage": {
           "type": "boolean",
           "description": "Required. When set to true, the threshold is a percentage to the actual cost. Otherwise, it is a fixed amount."
+        },
+        "pastDataInMonths": {
+          "type": "string",
+          "format": "int64",
+          "description": "Optional. The number of past months to be used in training the model. Note: This will affect the results of anomaly detection. Default and max is 9 while min is 1."
         }
       }
     },
@@ -15928,6 +15992,10 @@
         },
         "isPercentage": {
           "type": "boolean"
+        },
+        "pastDataInMonths": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -18181,11 +18249,11 @@
       "properties": {
         "@type": {
           "type": "string",
-          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com. As of May 2023, there are no widely used type server\nimplementations and no plans to implement one.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
         }
       },
       "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "protobufNullValue": {
       "type": "string",
@@ -18193,7 +18261,7 @@
         "NULL_VALUE"
       ],
       "default": "NULL_VALUE",
-      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\nThe JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
+      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
     },
     "protosOperation": {
       "type": "object",
@@ -18220,6 +18288,56 @@
         }
       },
       "description": "This resource represents a long-running operation that is the result of a\nnetwork API call."
+    },
+    "rippleAssigned": {
+      "type": "object",
+      "properties": {
+        "percentage": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Required.  This value can be up to 100."
+        },
+        "fixed": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Required."
+        }
+      },
+      "description": "Assigned resource definition.",
+      "required": [
+        "percentage",
+        "fixed"
+      ]
+    },
+    "rippleAssignedBillingGroup": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique id of the billing group internal."
+        },
+        "groupId": {
+          "type": "string",
+          "description": "The unique id of the billing group."
+        },
+        "groupName": {
+          "type": "string",
+          "description": "The name of the billing group."
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/blueapiapiAccount"
+          },
+          "description": "A list of accounts."
+        },
+        "assigned": {
+          "$ref": "#/definitions/rippleAssigned",
+          "title": "The assigned that rules set for untagged groups"
+        }
+      },
+      "description": "AssignedBillingGroup resource definition."
     },
     "rippleBillingGroupExchangeRate": {
       "type": "object",
@@ -18529,6 +18647,45 @@
         }
       },
       "description": "Rounding resource definition."
+    },
+    "rippleUntaggedGroup": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique id of the untagged group.\nAutomatically generated."
+        },
+        "name": {
+          "type": "string",
+          "title": "Required. The unique name of the untagged group. This value can be up to 60"
+        },
+        "assigned": {
+          "$ref": "#/definitions/rippleAssigned",
+          "title": "Optional. The assigned that rules set for untagged groups"
+        },
+        "billingGroups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/rippleAssignedBillingGroup"
+          },
+          "description": "Optional."
+        },
+        "created": {
+          "type": "string",
+          "description": "Output only. The time when the `UntaggedGroup` was created.",
+          "readOnly": true
+        },
+        "updated": {
+          "type": "string",
+          "description": "Output only. The time when the `UntaggedGroup` was last updated.",
+          "readOnly": true
+        }
+      },
+      "description": "UntaggedGroup resource definition.",
+      "required": [
+        "name"
+      ]
     },
     "rippleVendorPayerExchangeRate": {
       "type": "object",
