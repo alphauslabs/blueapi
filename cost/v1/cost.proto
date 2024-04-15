@@ -509,10 +509,10 @@ service Cost {
     };
   }
 
-  // WORK-IN-PROGRESS: Find customers by customer/account ids.
-  rpc GetCustomersByAccountIds(GetCustomerByAccountIdsRequest) returns (stream Customer) {
+  // WORK-IN-PROGRESS: Check inputed accountIds belong to current MSP or not
+  rpc CheckAccountsBelongToMsp (CheckAccountsRequest) returns (CheckAccountsResponse) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/accounts/customers"
+      post: "/v1/{vendor}/accounts/customers/accounts:check"
       body: "*"
     };
   }
@@ -2016,34 +2016,15 @@ message DeleteBudgetAlertsRequest {
   string id = 1;
 }
 
-// Request message for the Cost.GetCustomersByAccountIds rpc.
-message GetCustomerByAccountIdsRequest {
+message CheckAccountsRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
   
-  // Required. Ids of the account/customer.
-  repeated string ids = 2;
+  // Required. A comma-separated list of account ids. For example, you set to ["accountId1","accountId2","accountId3"].
+  repeated string accountIds = 2;
 }
 
-message Customer {
-  // The vendor
-  string vendor = 7;
-
-  // The id of the customer.
-  string id = 1;
-
-  // The name of the customer.
-  string name = 2;
-
-  // The payerId of the customer.
-  string payerId = 3;
-
-  // The mspId of the customer.
-  string mspId = 4;
-
-  // The companyId of the customer.
-  string companyId = 5;
-
-  // The lastUpdate timestamp of the customer.
-  string lastUpdate = 6;
+message CheckAccountsResponse {
+  // Map of accountIds to boolean values indicating if the account exists.
+  map<string, bool> exists = 1;
 }
