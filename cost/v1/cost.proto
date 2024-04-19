@@ -56,21 +56,27 @@ service Cost {
     }
   };
 
-  // Lists vendor payer accounts. For AWS, these are management accounts (formerly known as master or payer accounts); for Azure, these are subscriptions, for GCP, these are projects.
+  // Lists vendor payer accounts.
+  //
+  // For AWS, these are management accounts (formerly known as master or payer accounts); for Azure, these are subscriptions, for GCP, these are projects.
   rpc ListPayerAccounts(ListPayerAccountsRequest) returns (stream api.Account) {
     option (google.api.http) = {
       get: "/v1/{vendor}/payers"
     };
   }
 
-  // Gets a vendor payer account. This API includes all of the account's metadata. See https://alphauslabs.github.io/blueapi/ for the list of supported attributes. For AWS, this means a management account (formerly known as master or payer account); for Azure, this means a subscription, for GCP, this means a project.
+  // Gets a vendor payer account.
+  //
+  // This API includes all of the account's metadata. See (https://alphauslabs.github.io/blueapi/)[https://alphauslabs.github.io/blueapi/] for the list of supported attributes. For AWS, this means a management account (formerly known as master or payer account); for Azure, this means a subscription, for GCP, this means a project.
   rpc GetPayerAccount(GetPayerAccountRequest) returns (api.ripple.Payer) {
     option (google.api.http) = {
       get: "/v1/{vendor}/payers/{id}"
     };
   }
 
-  // Gets a payer account's import history, which is a list of timestamps our system tracks when the account's data are imported to our system, which in turn, triggers processing. At the moment, this only supports AWS (CUR files). You can also set {id} to `*` to return all payers' information under the organization.
+  // Gets a payer account's import history.
+  //
+  // Import history is a list of timestamps our system tracks when the account's data are imported to our system, which in turn, triggers processing. At the moment, this only supports AWS (CUR files). You can also set `{id}` to `*` to return all payers' information under the organization.
   rpc GetPayerAccountImportHistory(GetPayerAccountImportHistoryRequest) returns (stream GetPayerAccountImportHistoryResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/payers/{id}/importhistory"
@@ -150,7 +156,9 @@ service Cost {
     };
   }
 
-  // Lists the vendor calculator's queued accounts for calculation. If result is non-empty, it means calculation is still in progress for the returned accounts. Only available in Ripple.
+  // Lists the vendor calculator's queued accounts for calculation.
+  //
+  // If result is non-empty, it means calculation is still in progress for the returned accounts. Only available in Ripple.
   rpc ListCalculatorRunningAccounts(ListCalculatorRunningAccountsRequest) returns (stream ListCalculatorRunningAccountsResponse) {
     option (google.api.http) = {
       post: "/v1/{vendor}/calculator/running:read"
@@ -189,7 +197,9 @@ service Cost {
     };
   }
 
-  // Initiates an ondemand import of all registered CUR files. See [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting] for more information.
+  // Initiates an ondemand import of all registered CUR files.
+  //
+  // See (https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting)[https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting] for more information.
   rpc ImportCurFiles(ImportCurFilesRequest) returns (protos.Operation) {
     option (google.api.http) = {
       post: "/v1/aws/cur:import"
@@ -197,7 +207,9 @@ service Cost {
     };
   }
 
-  // Triggers monthly calculations for costs and invoices at either organization or billing group level. For the AWS calculator, aggregation is done at daily and monthly level. Also, all occurrences of the character `|` (pipe) in the CUR descriptions and tag key/values are replaced with the `/` (forward-slash) character. This is due to the `|` character having a special designation in the data processing workflows.
+  // Triggers monthly calculations for costs and invoices at either organization or billing group level.
+  //
+  // For the AWS calculator, aggregation is done at daily and monthly level. Also, all occurrences of the character `|` (pipe) in the CUR descriptions and tag key/values are replaced with the `/` (forward-slash) character. This is due to the `|` character having a special designation in the data processing workflows.
   rpc CalculateCosts(CalculateCostsRequest) returns (protos.Operation) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costs:calculate"
@@ -241,7 +253,9 @@ service Cost {
     };
   }
 
-  // Creates the usage-based cost filter condition. You can consider cost filters as predefined/prefiltered queries using the 'v1/{vendor}/costs:read' or 'ReadCosts' API. Only available in Wave(Pro).
+  // Creates the usage-based cost filter condition.
+  //
+  // You can consider cost filters as predefined/prefiltered queries using the `v1/{vendor}/costs:read` or `ReadCosts` API. Only available in Wave(Pro).
   rpc CreateCostFilters(CreateCostFiltersRequest) returns (CreateCostFiltersResponse) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costfilters"
@@ -272,7 +286,9 @@ service Cost {
     };
   }
 
-  // Reads the available cost attributes of an organization (Ripple) or billing group (Wave). Similar to the 'ReadCosts' API but without the aggregated usages and costs. At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
+  // Reads the available cost attributes of an organization (Ripple) or billing group (Wave).
+  //
+  // Similar to the `ReadCosts` API but without the aggregated usages and costs. At the moment, the supported `{vendor}` is `aws`. If datetime range parameters are not set, month-to-date (current month) will be returned.
   rpc ReadCostAttributes(ReadCostAttributesRequest) returns (stream CostAttributeItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costattrs:read"
@@ -287,7 +303,9 @@ service Cost {
     };
   }
 
-  // Reads the usage-based cost details of an organization (Ripple) or billing group (Wave). At the moment, the supported {vendor} are 'aws' and 'gcp'. If datetime range parameters are not set, month-to-date (current month) will be returned.
+  // Reads the usage-based cost details of an organization (Ripple) or billing group (Wave).
+  //
+  // At the moment, the supported `{vendor}` are `aws` and `gcp`. If datetime range parameters are not set, month-to-date (current month) will be returned.
   rpc ReadCosts(ReadCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costs:read"
@@ -295,7 +313,9 @@ service Cost {
     };
   }
 
-  // Reads the non-usage-based details of an organization (Ripple) or billing group (Wave). This API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment, the supported {vendor} is 'aws' or 'azure'. If datetime range parameters are not set, month-to-date (current month) will be returned.
+  // Reads the non-usage-based details of an organization (Ripple) or billing group (Wave[Pro]).
+  //
+  // This API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment, the supported `{vendor}` is `aws` or `azure`. If datetime range parameters are not set, month-to-date (current month) will be returned.
   rpc ReadAdjustments(ReadAdjustmentsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/adjustments:read"
@@ -303,7 +323,9 @@ service Cost {
     };
   }
 
-  // Reads the usage-based tag costs of a billing group. At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
+  // Reads the usage-based tag costs of a billing group.
+  //
+  // At the moment, the supported `{vendor}` is `aws`. If datetime range parameters are not set, month-to-date (current month) will be returned.
   rpc ReadTagCosts(ReadTagCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/tagcosts:read"
@@ -311,7 +333,9 @@ service Cost {
     };
   }
 
-  // Reads the usage-based non tag costs of a billing group. At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.
+  // Reads the usage-based non tag costs of a billing group.
+  //
+  // At the moment, the supported `{vendor}` is `aws`. If datetime range parameters are not set, month-to-date (current month) will be returned.
   rpc ReadNonTagCosts(ReadNonTagCostsRequest) returns (stream CostItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/nontagcosts:read"
