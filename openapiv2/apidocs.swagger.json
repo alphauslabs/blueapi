@@ -4910,7 +4910,8 @@
     },
     "/v1/aws/cur:import": {
       "post": {
-        "summary": "Initiates an ondemand import of all registered CUR files. See [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting] for more information.",
+        "summary": "Initiates an ondemand import of all registered CUR files.",
+        "description": "See https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting for more information.",
         "operationId": "Cost_ImportCurFiles",
         "responses": {
           "200": {
@@ -9849,7 +9850,8 @@
     },
     "/v1/{vendor}/adjustments:read": {
       "post": {
-        "summary": "Reads the non-usage-based details of an organization (Ripple) or billing group (Wave). This API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment, the supported {vendor} is 'aws' or 'azure'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
+        "summary": "Reads the non-usage-based details of an organization (Ripple) or billing group (Wave[Pro]).",
+        "description": "This API covers non-usage-based adjustments, such as Fees, Credits, Discounts, Tax, Upfront Fees, etc. At the moment, the supported `{vendor}` is `aws` or `azure`. If datetime range parameters are not set, month-to-date (current month) will be returned.",
         "operationId": "Cost_ReadAdjustments",
         "responses": {
           "200": {
@@ -10612,7 +10614,8 @@
         ]
       },
       "post": {
-        "summary": "Creates a cost modifier. A cost modifier allows you to modify the cost per lineitem. At the moment, the supported {vendor} is 'aws' and only applies to items not affected by trueunblended calculations. Items not covered include some usages under AmazonEC2, AmazonRDS, AmazonElastiCache, AmazonES, and AmazonRedShift, that are covered by their respective RIs and/or SPs. Non-usage items such as discounts, refunds, fees, etc. are also not covered. Only available in Ripple.",
+        "summary": "Creates a cost modifier.",
+        "description": "A cost modifier allows you to modify the cost per lineitem. At the moment, the supported `{vendor}` is `aws` and only applies to items not affected by trueunblended calculations. Items not covered include some usages under `AmazonEC2`, `AmazonRDS`, `AmazonElastiCache`, `AmazonES`, and `AmazonRedShift`, that are covered by their respective RIs and/or SPs. Non-usage items such as discounts, refunds, fees, etc. are also not covered. Only available in Ripple.",
         "operationId": "Cost_CreateCalculatorCostModifier",
         "responses": {
           "200": {
@@ -10699,7 +10702,8 @@
     },
     "/v1/{vendor}/calculator/running:read": {
       "post": {
-        "summary": "Lists the vendor calculator's queued accounts for calculation. If result is non-empty, it means calculation is still in progress for the returned accounts. Only available in Ripple.",
+        "summary": "Lists the vendor calculator's queued accounts for calculation.",
+        "description": "If result is non-empty, it means calculation is still in progress for the returned accounts. Only available in Ripple.",
         "operationId": "Cost_ListCalculatorRunningAccounts",
         "responses": {
           "200": {
@@ -10815,7 +10819,8 @@
     },
     "/v1/{vendor}/costattrs:read": {
       "post": {
-        "summary": "Reads the available cost attributes of an organization (Ripple) or billing group (Wave). Similar to the 'ReadCosts' API but without the aggregated usages and costs. At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
+        "summary": "Reads the available cost attributes of an organization (Ripple) or billing group (Wave).",
+        "description": "Similar to the `ReadCosts` API but without the aggregated usages and costs. At the moment, the supported `{vendor}` is `aws`. If datetime range parameters are not set, month-to-date (current month) will be returned.",
         "operationId": "Cost_ReadCostAttributes",
         "responses": {
           "200": {
@@ -10917,7 +10922,8 @@
         ]
       },
       "post": {
-        "summary": "Creates the usage-based cost filter condition. You can consider cost filters as predefined/prefiltered queries using the 'v1/{vendor}/costs:read' or 'ReadCosts' API. Only available in Wave(Pro).",
+        "summary": "Creates the usage-based cost filter condition.",
+        "description": "You can consider cost filters as predefined/prefiltered queries using the `v1/{vendor}/costs:read` or `ReadCosts` API. Only available in Wave(Pro).",
         "operationId": "Cost_CreateCostFilters",
         "responses": {
           "200": {
@@ -11150,7 +11156,8 @@
     },
     "/v1/{vendor}/costs:calculate": {
       "post": {
-        "summary": "Triggers monthly calculations for costs and invoices at either organization or billing group level. For the AWS calculator, aggregation is done at daily and monthly level. Also, all occurrences of the character `|` (pipe) in the CUR descriptions and tag key/values are replaced with the `/` (forward-slash) character. This is due to the `|` character having a special designation in the data processing workflows.",
+        "summary": "Triggers monthly calculations for costs and invoices at either organization or billing group level.",
+        "description": "For the AWS calculator, aggregation is done at daily and monthly level. Also, all occurrences of the character `|` (pipe) in the CUR descriptions and tag key/values are replaced with the `/` (forward-slash) character. This is due to the `|` character having a special designation in the data processing workflows.",
         "operationId": "Cost_CalculateCosts",
         "responses": {
           "200": {
@@ -11205,7 +11212,8 @@
     },
     "/v1/{vendor}/costs:read": {
       "post": {
-        "summary": "Reads the usage-based cost details of an organization (Ripple) or billing group (Wave). At the moment, the supported {vendor} are 'aws' and 'gcp'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
+        "summary": "Reads the usage-based cost details of an organization (Ripple) or billing group (Wave).",
+        "description": "At the moment, the supported `{vendor}` are `aws` and `gcp`. If datetime range parameters are not set, month-to-date (current month) will be returned.",
         "operationId": "Cost_ReadCosts",
         "responses": {
           "200": {
@@ -11806,7 +11814,8 @@
     },
     "/v1/{vendor}/nontagcosts:read": {
       "post": {
-        "summary": "Reads the usage-based non tag costs of a billing group. At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
+        "summary": "Reads the usage-based non tag costs of a billing group.",
+        "description": "At the moment, the supported `{vendor}` is `aws`. If datetime range parameters are not set, month-to-date (current month) will be returned.",
         "operationId": "Cost_ReadNonTagCosts",
         "responses": {
           "200": {
@@ -11874,7 +11883,8 @@
     },
     "/v1/{vendor}/payers": {
       "get": {
-        "summary": "Lists vendor payer accounts. For AWS, these are management accounts (formerly known as master or payer accounts); for Azure, these are subscriptions, for GCP, these are projects.",
+        "summary": "Lists vendor payer accounts.",
+        "description": "For AWS, these are management accounts (formerly known as master or payer accounts); for Azure, these are subscriptions, for GCP, these are projects.",
         "operationId": "Cost_ListPayerAccounts",
         "responses": {
           "200": {
@@ -11967,7 +11977,8 @@
     },
     "/v1/{vendor}/payers/{id}": {
       "get": {
-        "summary": "Gets a vendor payer account. This API includes all of the account's metadata. See https://alphauslabs.github.io/blueapi/ for the list of supported attributes. For AWS, this means a management account (formerly known as master or payer account); for Azure, this means a subscription, for GCP, this means a project.",
+        "summary": "Gets a vendor payer account.",
+        "description": "This API includes all of the account's metadata. See (https://alphauslabs.github.io/blueapi/)[https://alphauslabs.github.io/blueapi/] for the list of supported attributes. For AWS, this means a management account (formerly known as master or payer account); for Azure, this means a subscription, for GCP, this means a project.",
         "operationId": "Cost_GetPayerAccount",
         "responses": {
           "200": {
@@ -12044,7 +12055,8 @@
     },
     "/v1/{vendor}/payers/{id}/importhistory": {
       "get": {
-        "summary": "Gets a payer account's import history, which is a list of timestamps our system tracks when the account's data are imported to our system, which in turn, triggers processing. At the moment, this only supports AWS (CUR files). You can also set {id} to `*` to return all payers' information under the organization.",
+        "summary": "Gets a payer account's import history.",
+        "description": "Import history is a list of timestamps our system tracks when the account's data are imported to our system, which in turn, triggers processing. At the moment, this only supports AWS (CUR files). You can also set `{id}` to `*` to return all payers' information under the organization.",
         "operationId": "Cost_GetPayerAccountImportHistory",
         "responses": {
           "200": {
@@ -12489,7 +12501,8 @@
     },
     "/v1/{vendor}/tagcosts:read": {
       "post": {
-        "summary": "Reads the usage-based tag costs of a billing group. At the moment, the supported {vendor} is 'aws'. If datetime range parameters are not set, month-to-date (current month) will be returned.",
+        "summary": "Reads the usage-based tag costs of a billing group.",
+        "description": "At the moment, the supported `{vendor}` is `aws`. If datetime range parameters are not set, month-to-date (current month) will be returned.",
         "operationId": "Cost_ReadTagCosts",
         "responses": {
           "200": {
@@ -15597,6 +15610,14 @@
         "region": {
           "type": "string"
         },
+        "estsavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "estcost": {
+          "type": "number",
+          "format": "double"
+        },
         "purchaseRIRecommendationDetails": {
           "$ref": "#/definitions/coverPurchaseRIRecommendationDetails"
         },
@@ -16524,7 +16545,7 @@
           "type": "number",
           "format": "double"
         },
-        "OnDemandCost": {
+        "onDemandCost": {
           "type": "number",
           "format": "double"
         },
@@ -17373,6 +17394,10 @@
         },
         "term": {
           "type": "string"
+        },
+        "upfrontCost": {
+          "type": "number",
+          "format": "double"
         },
         "currentUtilizationDetails": {
           "$ref": "#/definitions/coverSPCurrentUtilizationDetails"

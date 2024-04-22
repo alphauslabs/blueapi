@@ -37,12 +37,15 @@ message AWSRecommendations {
     string costGroup = 8;
     string recommendation = 9;
     string region = 10;
-    PurchaseRIRecommendationDetails purchaseRIRecommendationDetails = 11;
-    SavingsPlanRecommendationDetails savingsPlanRecommendationDetails = 12;
-    RightSizingRecommendationDetails rightSizingRecommendationDetails = 13;
-    UpgradeRecommendationDetails upgradeRecommendationDetails = 14;
-    MigrateRecommendationDetails migrateRecommendationDetails = 15;
+    double estsavings = 11;
+    double estcost = 12;
+    PurchaseRIRecommendationDetails purchaseRIRecommendationDetails = 13;
+    SavingsPlanRecommendationDetails savingsPlanRecommendationDetails = 14;
+    RightSizingRecommendationDetails rightSizingRecommendationDetails = 15;
+    UpgradeRecommendationDetails upgradeRecommendationDetails = 16;
+    MigrateRecommendationDetails migrateRecommendationDetails = 17;
 }
+
 
 message PurchaseRIRecommendationDetails {
     EC2Details ec2Options = 1;
@@ -114,9 +117,10 @@ message SavingsPlanRecommendationDetails {
     string paymentOption = 4;
     string savingsPlanType = 5;
     string term = 6;
-    SPCurrentUtilizationDetails currentUtilizationDetails = 7;
-    EstOutcomeFromSPRecommendation estOutcomeFromSPRecommendation = 8;
-    repeated CostGroupSpendingData costGroupSpendingData = 9;
+    double upfrontCost = 7;
+    SPCurrentUtilizationDetails currentUtilizationDetails = 8;
+    EstOutcomeFromSPRecommendation estOutcomeFromSPRecommendation = 9;
+    repeated CostGroupSpendingData costGroupSpendingData = 10;
 }
 
 message SPCurrentUtilizationDetails{
@@ -132,7 +136,7 @@ message EstOutcomeFromSPRecommendation{
     double aveCoverage = 1;
     double aveUtilization = 2;
     double monthlySavingsAmount = 3;
-    double OnDemandCost = 4;
+    double onDemandCost = 4;
     double roi = 5;
     double savingsPlanCost = 6;
     double savingsPercentage = 7;
