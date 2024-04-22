@@ -11,11 +11,6 @@ message NoOfExecutedRecommendation {
     int32 numberOfRecommendationExecuted = 2;
 }
 
-message CostGroupSpendingData {
-    string date = 1;
-    float value = 2; 
-}
-
 message ExecutedRecommendationDetails{
     string recommendationId = 1;
     string recommendaton = 2;
@@ -39,11 +34,12 @@ message AWSRecommendations {
     string region = 10;
     double estsavings = 11;
     double estcost = 12;
-    PurchaseRIRecommendationDetails purchaseRIRecommendationDetails = 13;
-    SavingsPlanRecommendationDetails savingsPlanRecommendationDetails = 14;
-    RightSizingRecommendationDetails rightSizingRecommendationDetails = 15;
-    UpgradeRecommendationDetails upgradeRecommendationDetails = 16;
-    MigrateRecommendationDetails migrateRecommendationDetails = 17;
+    double estsavingsPercentage = 13;
+    PurchaseRIRecommendationDetails purchaseRIRecommendationDetails = 14;
+    SavingsPlanRecommendationDetails savingsPlanRecommendationDetails = 15;
+    RightSizingRecommendationDetails rightSizingRecommendationDetails = 16;
+    UpgradeRecommendationDetails upgradeRecommendationDetails = 17;
+    MigrateRecommendationDetails migrateRecommendationDetails = 18;
 }
 
 
@@ -65,7 +61,6 @@ message PurchaseRIRecommendationDetails {
     bool sizeFlexEligible = 15;
     string tenancy = 16;
     EstOutcomeFromPurchaseRIRecommendation estOutcomeFromPurchaseRIRecommendation = 17;
-    repeated CostGroupSpendingData costGroupSpendingData = 18;
 }
 message EstOutcomeFromPurchaseRIRecommendation{
     double aveUtilization = 1;
@@ -120,7 +115,6 @@ message SavingsPlanRecommendationDetails {
     double upfrontCost = 7;
     SPCurrentUtilizationDetails currentUtilizationDetails = 8;
     EstOutcomeFromSPRecommendation estOutcomeFromSPRecommendation = 9;
-    repeated CostGroupSpendingData costGroupSpendingData = 10;
 }
 
 message SPCurrentUtilizationDetails{
