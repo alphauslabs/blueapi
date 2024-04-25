@@ -35,13 +35,15 @@ message AWSRecommendations {
     double estsavings = 11;
     double estcost = 12;
     double estsavingsPercentage = 13;
-    PurchaseRIRecommendationDetails purchaseRIRecommendationDetails = 14;
-    SavingsPlanRecommendationDetails savingsPlanRecommendationDetails = 15;
-    RightSizingRecommendationDetails rightSizingRecommendationDetails = 16;
-    UpgradeRecommendationDetails upgradeRecommendationDetails = 17;
-    MigrateRecommendationDetails migrateRecommendationDetails = 18;
+    string resourceArn = 14;
+    bool restartNeeded = 15;
+    bool rollbackPossible = 16;
+    PurchaseRIRecommendationDetails purchaseRIRecommendationDetails = 17;
+    SavingsPlanRecommendationDetails savingsPlanRecommendationDetails = 18;
+    RightSizingRecommendationDetails rightSizingRecommendationDetails = 19;
+    UpgradeRecommendationDetails upgradeRecommendationDetails = 20;
+    MigrateRecommendationDetails migrateRecommendationDetails = 21;
 }
-
 
 message PurchaseRIRecommendationDetails {
     EC2Details ec2Options = 1;
@@ -49,8 +51,8 @@ message PurchaseRIRecommendationDetails {
     ESDetails esOptions = 3;
     RDSDetails rdsOptions = 4;
     RedshiftDetails redshiftOptions = 5;
-    int32 normalizedUnits = 6;
-    int32 numberOfInstanceToPurchase = 7;
+    int32 recommendedNormalizedUnits = 6;
+    int32 recommendedNumberOfInstanceToPurchase = 7;
     string paymentOption = 8;
     string offeringClass = 9;
     string term = 10;
@@ -60,7 +62,8 @@ message PurchaseRIRecommendationDetails {
     string region = 14;
     bool sizeFlexEligible = 15;
     string tenancy = 16;
-    EstOutcomeFromPurchaseRIRecommendation estOutcomeFromPurchaseRIRecommendation = 17;
+    bool currentGeneration = 17;
+    EstOutcomeFromPurchaseRIRecommendation estOutcomeFromPurchaseRIRecommendation = 18;
 }
 message EstOutcomeFromPurchaseRIRecommendation{
     double aveUtilization = 1;
@@ -71,6 +74,10 @@ message EstOutcomeFromPurchaseRIRecommendation{
     double monthlyRICost = 6;
     double monthlySavings = 7;
     double monthlySavingsPercentage = 8;
+    double maxNormalizedUnitsUsedPerHour = 9;
+    double maxNumberOfInstanceUsedPerHour = 10;
+    double minNormalizedUnitsUsedPerHour = 11;
+    double minNumberOfInstanceUsedPerHour = 12;
 }
 
 message EC2Details {
@@ -186,31 +193,33 @@ message EC2MemoryUtilization {
 }
 
 message LambdaRightSizingRecommendationDetails{
-    LambdaCurrentConfiguration lambdaCurrentConfiguration = 1;
-    LambdaRecommendedConfiguration lambdaRecommendedConfiguration = 2;
+    LambdaDetails lambdaCurrentConfiguration = 1;
+    LambdaDetails lambdaRecommendedConfiguration = 2;
 }
 
-message LambdaCurrentConfiguration{
+message LambdaDetails{
     string architecture = 1;
     double memorysizeInMB = 2;
     string platform  = 3;
     int32 vCpu = 4;
-    string operation = 5;
-    string productCode = 6;
-    string unit = 7;
-    double usageAmount = 8;
-    double usageType = 9;
+    CostCalculation costCalculation = 5;
+    APNDetails apn1LambdaGBUsage = 6;
+    APNDetails apn1RequestUsage = 7;
 }
-message LambdaRecommendedConfiguration{
-    string architecture = 1;
-    double memorysizeInMB = 2;
-    string platform  = 3;
-    int32 vCpu = 4;
-    string operation = 5;
-    string productCode = 6;
-    string unit = 7;
-    double usageAmount = 8;
-    double usageType = 9;
+message APNDetails{
+    string operation = 1;
+    string productCode = 2;
+    string unit = 3;
+    double usageAmount = 4;
+    string usageType = 5;
+}
+
+message CostCalculation{
+    double estCostAfterDiscount = 1;
+    double estCostBeforeDiscount = 2;
+    double otherDiscount = 3;
+    double savingsPlanDiscount = 4;
+    double estNetUnusedAmortizedCommitments = 5;
 }
 
 message UpgradeRecommendationDetails{
@@ -220,22 +229,15 @@ message UpgradeRecommendationDetails{
 }
 
 message UpgradeEC2Details{
-    EC2CurrentDetails eC2CurrentDetails = 1;
-    EC2RecommendationDetails ugradeEC2RecommendationDetails = 2;
-    double estimatedMonthlyCost = 3;
-    double estimatedMonthlySavings = 4;
+    EC2UpgadeDetails eC2CurrentDetails = 1;
+    EC2UpgadeDetails ugradeEC2RecommendationDetails = 2;
+    CostCalculation currentCostCalculation = 3;
+    CostCalculation estimatedCostCalculation = 4;
+    double estimatedMonthlyCost = 5;
+    double estimatedMonthlySavings = 6;
 }
 
-message EC2RecommendationDetails {
-    string instanceType = 1;
-    string operation = 2;
-    string productCode = 3;
-    string unit = 4;
-    double usageAmount = 5;
-    double usageType = 6;
-}
-
-message EC2CurrentDetails {
+message EC2UpgadeDetails {
     string instanceType = 1;
     string operation = 2;
     string productCode = 3;
@@ -246,7 +248,7 @@ message EC2CurrentDetails {
 
 message UpgradeEBSDetails{
     CurrentEBSDetails currentEBSDetails = 1;
-    UpgradeEBSDetails upgradeEBSDetails = 2;
+    UpgradeEBSRecommendationDetails upgradeEBSDetails = 2;
     double estimatedMonthlyCost = 3;
     double estimatedMonthlySavings = 4;
 }
@@ -255,12 +257,10 @@ message UpgradeEBSRecommendationDetails {
     double iops = 2;
     double throughput = 3;
     double sizeInGb = 4;
-    string storageType = 5;
-    string operation = 6;
-    string productCode = 7;
-    string unit = 8;
-    double usageAmount = 9;
-    double usageType = 10;
+    CostCalculation EstcostCalculation = 5;
+    APS1EBSDetails volumeUsageGP3 = 6;
+    APS1EBSDetails volumeIopsGP3 = 7;
+    APS1EBSDetails volumeThroughputGP3 = 8;
 }
 
 message CurrentEBSDetails {
@@ -268,12 +268,14 @@ message CurrentEBSDetails {
     double iops = 2;
     double throughput = 3;
     double sizeInGb = 4;
-    string storageType = 5;
-    string operation = 6;
-    string productCode = 7;
-    string unit = 8;
-    double usageAmount = 9;
-    double usageType = 10;
+    CostCalculation costCalculation = 5;
+    APS1EBSDetails volumeUsage = 6;
+}
+
+message APS1EBSDetails{
+    string productCode = 1;
+    string unit = 2;
+    double usageAmount = 3;
 }
 
 message MigrateRecommendationDetails{
@@ -283,6 +285,8 @@ message MigrateRecommendationDetails{
 }
 
 message MigrateEC2Details{
-    EC2CurrentDetails eC2CurrentDetails = 1;
-    EC2RecommendationDetails ugradeEC2RecommendationDetails = 2;
+    EC2UpgadeDetails eC2CurrentDetails = 1;
+    EC2UpgadeDetails ugradeEC2RecommendationDetails = 2;
+    CostCalculation currentCostCalculation = 3;
+    CostCalculation estCostCalculation = 4;
 }
