@@ -7773,7 +7773,7 @@
         ]
       }
     },
-    "/v1/recommendations/optimization/executed/{id}": {
+    "/v1/recommendations/optimization/executed": {
       "post": {
         "summary": "Mark a recommendation executed.",
         "operationId": "Cover_MarkAsExecuted",
@@ -7793,22 +7793,11 @@
         },
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "csv",
-            "minItems": 1
-          },
-          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object"
+              "$ref": "#/definitions/v1MarkAsExecutedRequest"
             }
           }
         ],
@@ -7916,7 +7905,7 @@
             "type": "string"
           },
           {
-            "name": "PeriodOption",
+            "name": "periodOption",
             "description": "Valid inputs are: \"30days\", \"60days\". and \"90days\". Default is \"30days\".",
             "in": "query",
             "required": false,
@@ -22619,6 +22608,17 @@
         },
         "role": {
           "type": "string"
+        }
+      }
+    },
+    "v1MarkAsExecutedRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
