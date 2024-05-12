@@ -1117,6 +1117,13 @@ service Cover {
         get: "/v1/reports/fiscalmonth"
       };
     }
+
+  // WORK-IN-PROGRESS: Leaves the existing organization where the account is linked and process all the other setup also.
+  rpc LeaveOrganization(LeaveOrganizationRequest) returns (LeaveOrganizationResponse) {
+    option (google.api.http) = {
+      get: "/v1/organizations/leave/{target}"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -3270,4 +3277,12 @@ message GetOrgFiscalMonthRequest {}
 message GetOrgFiscalMonthResponse {
   string fiscalMonth = 1;
   string dateRegistered = 2;
+}
+
+message LeaveOrganizationRequest {
+  string target = 1;
+}
+
+message LeaveOrganizationResponse {
+    string target = 1;
 }
