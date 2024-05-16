@@ -1118,10 +1118,10 @@ service Cover {
       };
     }
 
-  // WORK-IN-PROGRESS: Leaves the existing organization where the account is linked and process all the other setup also.
-  rpc LeaveOrganization(LeaveOrganizationRequest) returns (LeaveOrganizationResponse) {
+  // WORK-IN-PROGRESS: Transfer the account from the original organization to Alphaus payer account
+  rpc TransferOrganization(TransferOrganizationRequest) returns (TransferOrganizationResponse) {
     option (google.api.http) = {
-      get: "/v1/organizations/leave/{target}"
+      get: "/v1/organizations/transfer/{target}"
     };
   }
 }
@@ -3281,10 +3281,17 @@ message GetOrgFiscalMonthResponse {
   string dateRegistered = 2;
 }
 
-message LeaveOrganizationRequest {
+message TransferOrganizationRequest {
+  // Required. The target account to be transferred.
   string target = 1;
+  // Required. The region of the target account.
+  string region = 2;
+  // Optional. Alphaus payer account to be used for the transfer.
+  string payer = 3;
+  // Optional. The org id of the payer account.
+  string orgId = 4;
 }
 
-message LeaveOrganizationResponse {
+message TransferOrganizationResponse {
     string target = 1;
 }
