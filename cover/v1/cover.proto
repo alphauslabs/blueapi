@@ -1080,6 +1080,14 @@ service Cover {
     };
   }
 
+   //Undo a executed recommendation (For recommendation).
+   rpc UndoExecutedRecommendation(UndoExecutedRecommendationRequest) returns (UndoExecutedRecommendationResponse){
+    option (google.api.http) = {
+      post: "/v1/recommendations/optimization/undo"
+      body: "*"
+    };
+  }
+
     // Lists recommendations based on specified criteria.
     rpc OptimizationHistory(OptimizationHistoryRequest) returns (OptimizationHistoryResponse) {
       option (google.api.http) = {
@@ -3207,6 +3215,13 @@ message MarkAsExecutedRequest{
 }
 
 message MarkAsExecutedResponse{
+}
+
+message UndoExecutedRecommendationRequest{
+  repeated string id = 1;
+}
+
+message UndoExecutedRecommendationResponse{
 }
 
 message OptimizationHistoryRequest{
