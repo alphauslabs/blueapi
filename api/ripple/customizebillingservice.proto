@@ -1,0 +1,130 @@
+syntax = "proto3";
+
+package blueapi.api.ripple;
+
+import "google/api/field_behavior.proto";
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/ripple";
+option java_package = "cloud.alphaus.blueapi.api.ripple";
+option java_outer_classname = "ApiRippleCustomizeBillingServiceProto";
+
+// CustomizeBillingService resource definition.
+message CustomizeBillingService {
+  string id = 1;
+
+  string name = 2;
+
+  string description = 3 [(google.api.field_behavior) = OPTIONAL];
+
+  MethodConfig methodConfig = 4;
+  
+  string created = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  string updated = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// MethodConfig resource definition.
+message MethodConfig {
+  // supported currency.
+  enum Currency {
+    USD = 0;
+
+    JPY = 1;
+
+    SGD = 2;
+
+    MYR = 3;
+
+    IDR = 4;
+
+    INR = 5;
+  }
+
+  Currency currency = 1;
+
+  enum ChargingMethod {
+    FIXED_FEE = 0;
+
+    PERCENTAGE = 1;
+
+    FIXED_FEE_OR_PERCENTAGE = 3;
+
+    TIERED_PRICE = 4;
+
+    TIERED_PERCENTAGE = 5;
+  }
+
+  ChargingMethod chargingMethod = 2;
+
+  oneof Config {
+    FixedFee fixedFee = 3;
+
+    Percentage percentage = 4;
+
+    FixedFeeOrPercentage fixedFeeOrPercentage = 5;
+
+    TieredPrice TieredPrice = 6;
+    
+    TieredPercentage TieredPercentage = 7;
+  }
+}
+
+// fixed fee
+message FixedFee {
+  double value = 1;
+}
+
+// percentage
+message Percentage {
+  double value = 1;
+
+  TargetServiceConfig service = 2;
+
+  TargetUsageConfig usage = 3;
+
+  bool discounted = 4;
+}
+
+// fixed fee or percentage
+message FixedFeeOrPercentage {
+  double fixedFeeValue = 1;
+
+  double percentageValue = 2;
+
+  TargetServiceConfig service = 3;
+
+  TargetUsageConfig usage = 4;
+
+  bool discounted = 5;
+
+  double upperLimit = 6;
+}
+
+// tired price
+message TieredPrice {
+  repeated TierdConfig tiredConfig = 1;
+}
+
+// tired percentage
+message TieredPercentage {
+  repeated TierdConfig tiredConfig = 1;
+}
+
+// tired config
+message TierdConfig {
+  double min = 1;
+
+  double max = 2;
+
+  double value = 3;
+}
+
+// Describes the overall config of a [blueapi.api.ripple.MethodConfig].
+enum TargetServiceConfig {
+  ALL = 0;
+}
+
+// Describes the overall config of a [blueapi.api.ripple.MethodConfig].
+enum TargetUsageConfig {
+  USAGE = 0;
+}
