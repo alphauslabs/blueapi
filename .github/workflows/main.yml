@@ -32,9 +32,11 @@ jobs:
         cp buf/bin/* $HOME/.local/bin/
         export GO111MODULE=on
         echo 'Go environment:' && go env
-        cd /tmp/ && curl -LO https://github.com/grpc/grpc-go/releases/download/cmd%2Fprotoc-gen-go-grpc%2Fv1.4.0/protoc-gen-go-grpc.v1.4.0.linux.amd64.tar.gz
+        WORKSPACE_ROOT=$PWD
+        cd $HOME/ && curl -LO https://github.com/grpc/grpc-go/releases/download/cmd%2Fprotoc-gen-go-grpc%2Fv1.4.0/protoc-gen-go-grpc.v1.4.0.linux.amd64.tar.gz
         tar xvzf protoc-gen-go-grpc.v1.4.0.linux.amd64.tar.gz
         ls -laF && cp protoc-gen-go-grpc $HOME/.local/bin/
+        cd $WORKSPACE_ROOT/ && echo $PWD && ls -laF
         go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.34.1
         go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.64.0        
         go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.20.0 \
@@ -50,7 +52,6 @@ jobs:
           exit 0
         fi
         # Update blue-sdk-go:
-        WORKSPACE_ROOT=$PWD
         # Hack: I don't know how to setup go_package properly when importing protos via submodule so resort to good old sed:
         grep -rl 'alphauslabs/protos' generated/go/ | xargs sed -i -e 's/alphauslabs\/protos/alphauslabs\/blue-sdk-go\/protos/g'
         cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-go && cd blue-sdk-go/
