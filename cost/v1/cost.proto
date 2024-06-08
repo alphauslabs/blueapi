@@ -946,7 +946,7 @@ message CalculatorCostModifier {
 
 // Request message for the Cost.ListCalculatorCostModifiers rpc.
 message ListCalculatorCostModifiersRequest {
-  // Required. At the moment, only `aws` is supported.
+  // Required. At the moment, only `aws` and `azure` are supported.
   string vendor = 1;
 }
 
@@ -957,16 +957,20 @@ message CreateCalculatorCostModifierRequest {
 
   // Required if `{vendor}` is `aws`. AWS-specific options.
   CalculatorCostModifierAwsOptions awsOptions = 2;
+
+  // Required if `{vendor}` is `azure`. Azure-specific options.
+  CalculatorCostModifierAzureOptions azureOptions = 3;
 }
 
 // Response message for the Cost.CreateCalculatorCostModifier rpc.
 message CreateCalculatorCostModifierResponse {
   repeated CalculatorCostModifier aws = 1;
+  repeated CalculatorCostModifier azure = 2;
 }
 
 // Request message for the Cost.DeleteCalculatorCostModifier rpc.
 message DeleteCalculatorCostModifierRequest {
-  // Required. At the moment, only `aws` is supported.
+  // Required. At the moment, only `aws` and `azure` are supported.
   string vendor = 1;
 
   // Required. The id of the modifier to delete.
