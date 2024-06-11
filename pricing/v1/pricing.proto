@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package blueapi.pricing.v1;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/pricing";
+option java_package = "cloud.alphaus.api.pricing";
+option java_outer_classname = "PricingProto";
+
+// Pricing service definition.
+service Pricing {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "(BETA) Pricing API. Base URL: https://api.alphaus.cloud/m/blue/pricing"
+    external_docs: {
+      url: "https://github.com/alphauslabs/blueapi/tree/main/pricing/";
+      description: "Service definition";
+    }
+  };
+
+  // Test endpoint only.
+  rpc GetInfo(GetInfoRequest) returns (GetInfoResponse) {
+    option (google.api.http) = {
+      get: "/v0/info"
+    };
+  }
+}
+
+// Request message for the Pricing.GetInfo rpc.
+message GetInfoRequest {}
+
+// Response message for the Pricing.GetInfo rpc.
+message GetInfoResponse {
+  string response = 1;
+}
