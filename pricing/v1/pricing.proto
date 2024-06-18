@@ -26,8 +26,8 @@ service Pricing {
     };
   }
 
-  // New endpoint for EC2 service pricing
-  rpc EC2Service(EC2ServiceRequest) returns (EC2ServiceResponse) {
+  //  EC2 service pricing endpoint
+  rpc EC2Service(GetEC2InfoRequest) returns (GetEC2InfoResponse ) {
     option (google.api.http) = {
       post: "/v0/ec2service"
       body: "*"
@@ -43,13 +43,12 @@ message GetInfoResponse {
   string response = 1;
 }
 
-// Request message for the Pricing.EC2Service rpc.
-message EC2ServiceRequest {
+// Request message for the Pricing.GetEC2Info rpc.
+message GetEC2InfoRequest {
   string cloud = 1;
   string service = 2;
   string region = 3;
   Compute compute = 4;
-  Storage storage = 5;
 }
 
 message Compute {
@@ -58,13 +57,9 @@ message Compute {
   string os = 3;
 }
 
-message Storage {
-  string tier = 1;
-  int32 size_gb = 2;
-}
 
-// Response message for the Pricing.EC2Service rpc.
-message EC2ServiceResponse {
+// Response message for the Pricing.GetEC2Info rpc.
+message GetEC2InfoResponse  {
   repeated UnitCost unit_cost_matrix = 1;
   ServiceDetails service_details = 2;
 }
@@ -77,7 +72,6 @@ message UnitCost {
 
 message ServiceDetails {
   ComputeDetails compute = 1;
-  StorageDetails storage = 2;
 }
 
 message ComputeDetails {
@@ -87,9 +81,4 @@ message ComputeDetails {
   string os = 4;
   string tenancy = 5;
   string region = 6;
-}
-
-message StorageDetails {
-  string tier = 1;
-  int32 size_gb = 2;
 }
