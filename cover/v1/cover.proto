@@ -2008,6 +2008,9 @@ message GetCostUsageRequestAwsOptions {
   // Optional. A list of filtering options specific for tags. 
   // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc. Discarded when `groupByColumns` field is set or if `groupByMonth` is true.
   repeated ReadCostsRequestOptionsFilters tagFilters = 4;
+
+  // Optional. Tag key, only used when groupBy is set to `tag`.
+  string tagKey = 5;
 }
 
 message GetCostUsageRequestAzureOptions {
@@ -2051,6 +2054,9 @@ message GetCostUsageRequestGcpOptions {
   repeated ReadCostsRequestOptionsFilters labelFilters = 5;
 
   repeated ReadCostsRequestOptionsFilters projectLabelFilters = 6;
+
+  // Optional. Tag key, only used when groupBy is set to `tag`.
+  string tagKey = 7;
 }
 
 message GetCostUsageRequestAzureCspOptions {
@@ -2070,6 +2076,9 @@ message GetCostUsageRequestAzureCspOptions {
   // Optional. A list of filtering options specific for tags. 
   // Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc. 
   repeated ReadCostsRequestOptionsFilters tagFilters = 4;
+
+  // Optional. Tag key, only used when groupBy is set to `tag`.
+  string tagKey = 5;
 }
 
 message GetCostUsageRequestCustomOptions {
@@ -2111,6 +2120,8 @@ message CostItem {
   string region = 8;
   // AWS payer acount, GCP billing account, Azure Payer account
   string billingAccount = 9;
+  // Tag Value. Contains tag value of the input tag key. Only used if groupBy is set to tag
+  string tagValue = 10;
 }
 
 // Request message for GetRightSizingRecommendation
