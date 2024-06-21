@@ -2,8 +2,10 @@ syntax = "proto3";
 
 package blueapi.pricing.v1;
 
+import "api/pricing/details.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+
 
 option go_package = "github.com/alphauslabs/blueapi/pricing";
 option java_package = "cloud.alphaus.api.pricing";
@@ -26,10 +28,10 @@ service Pricing {
     };
   }
 
-  //  EC2 service pricing endpoint
-  rpc GetEC2Info(GetEC2InfoRequest) returns (GetEC2InfoResponse ) {
+  // Get pricing info
+  rpc GetPricingInfo(GetPricingInfoRequest) returns (stream GetPricingInfoResponse) {
     option (google.api.http) = {
-      post: "/v0/ec2"
+      post: "/v0/pricingInfo"
       body: "*"
     };
   }
@@ -43,42 +45,24 @@ message GetInfoResponse {
   string response = 1;
 }
 
-// Request message for the Pricing.GetEC2Info rpc.
-message GetEC2InfoRequest {
+// Request message for GetPricingInfo
+message GetPricingInfoRequest {
   string cloud = 1;
   string service = 2;
   string region = 3;
-  Compute compute = 4;
+  string token = 4;
 }
 
-message Compute {
-  string sku = 1;
-  string tenancy = 2;
-  string os = 3;
-}
+// Response message for GetPricingInfo
+message GetPricingInfoResponse {
+  string cloud = 1;
+  string service = 2;
+  string region_code = 3;
+  string token = 4;
+  string sku = 5;
+  string unit = 6;
+  double priceperunit = 7;
+  api.pricing.ServiceDetails serviceDetails = 8;
 
-
-// Response message for the Pricing.GetEC2Info rpc.
-message GetEC2InfoResponse  {
-  repeated UnitCost unit_cost_matrix = 1;
-  ServiceDetails service_details = 2;
 }
-
-message UnitCost {
-  string unit = 1;
-  double unit_cost = 2;
-  string currency = 3;
-}
-
-message ServiceDetails {
-  ComputeDetails compute = 1;
-}
-
-message ComputeDetails {
-  string instance_type = 1;
-  int32 vcpu = 2;
-  int32 memory_gb = 3;
-  string os = 4;
-  string tenancy = 5;
-  string region = 6;
-}
+ 
