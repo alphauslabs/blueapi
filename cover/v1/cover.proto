@@ -1132,6 +1132,14 @@ service Cover {
       get: "/v1/organizations/transfer/{target}"
     };
   }
+
+  // WORK-IN-PROGRESS: Set user preference in cost group creation UI
+  rpc UpdateCostGroupCreationUI(UpdateCostGroupCreationUIRequest) returns (UpdateCostGroupCreationUIResponse) {
+    option (google.api.http) = {
+      put: "/v1/me/costgroupcreation"
+      body: "*"
+    };
+  }
 }
 
 // Request message for OnboardOrg
@@ -3332,4 +3340,12 @@ message TransferOrganizationRequest {
 
 message TransferOrganizationResponse {
     string target = 1;
+}
+
+message UpdateCostGroupCreationUIRequest {
+  bool useNewCostGroupCreationUI = 1;
+}
+
+message UpdateCostGroupCreationUIResponse {
+  api.cover.UserData userData = 1;
 }
