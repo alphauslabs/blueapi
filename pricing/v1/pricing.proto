@@ -2,9 +2,10 @@ syntax = "proto3";
 
 package blueapi.pricing.v1;
 
+import "api/pricing/details.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
-import "api/pricing/servicedetails.proto";
+
 
 option go_package = "github.com/alphauslabs/blueapi/pricing";
 option java_package = "cloud.alphaus.api.pricing";
@@ -28,7 +29,7 @@ service Pricing {
   }
 
   // Get pricing info
-  rpc GetPricingInfo(PricingRequest) returns (stream PricingResponse) {
+  rpc GetPricingInfo(GetPricingInfoRequest) returns (stream GetPricingInfoResponse) {
     option (google.api.http) = {
       post: "/v0/pricingInfo"
       body: "*"
@@ -61,5 +62,7 @@ message GetPricingInfoResponse {
   string sku = 5;
   string unit = 6;
   double priceperunit = 7;
-  ServiceDetails service_details = 8;
+  api.pricing.ServiceDetails serviceDetails = 8;
+
 }
+ //GetFavoriteViewsRequest {}
