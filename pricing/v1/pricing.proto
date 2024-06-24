@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package blueapi.pricing.v1;
 
-import "api/pricing/details.proto";
+import "api/pricing/awsdetails.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -28,10 +28,11 @@ service Pricing {
     };
   }
 
-  // Get pricing info
-  rpc GetPricingInfo(GetPricingInfoRequest) returns (stream GetPricingInfoResponse) {
+
+ //  EC2 service pricing endpoint
+  rpc GetEC2Info(GetEC2InfoRequest) returns (GetEC2InfoResponse ) {
     option (google.api.http) = {
-      post: "/v0/pricingInfo"
+      post: "/v0/ec2"
       body: "*"
     };
   }
@@ -45,24 +46,24 @@ message GetInfoResponse {
   string response = 1;
 }
 
-// Request message for GetPricingInfo
-message GetPricingInfoRequest {
+// Request message for GetEC2Info
+message GetEC2InfoRequest {
   string cloud = 1;
   string service = 2;
   string region = 3;
   string token = 4;
 }
 
-// Response message for GetPricingInfo
-message GetPricingInfoResponse {
+// Response message for GetEC2Info
+message GetEC2InfoResponse {
   string cloud = 1;
   string service = 2;
-  string region_code = 3;
+  string regionCode = 3;
   string token = 4;
   string sku = 5;
   string unit = 6;
-  double priceperunit = 7;
-  api.pricing.ServiceDetails serviceDetails = 8;
+  double pricePerUnit = 7;
+  api.pricing.EC2ServiceDetails ec2ServiceDetails = 8;
 
 }
  

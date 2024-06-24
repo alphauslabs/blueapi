@@ -2351,6 +2351,39 @@
         ]
       }
     },
+    "/v0/ec2": {
+      "post": {
+        "summary": "EC2 service pricing endpoint",
+        "operationId": "Pricing_GetEC2Info",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetEC2InfoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetEC2InfoRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Pricing"
+        ]
+      }
+    },
     "/v0/info": {
       "get": {
         "summary": "Test endpoint only.",
@@ -2369,48 +2402,6 @@
             }
           }
         },
-        "tags": [
-          "Pricing"
-        ]
-      }
-    },
-    "/v0/pricingInfo": {
-      "post": {
-        "summary": "Get pricing info",
-        "operationId": "Pricing_GetPricingInfo",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1GetPricingInfoResponse"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1GetPricingInfoResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetPricingInfoRequest"
-            }
-          }
-        ],
         "tags": [
           "Pricing"
         ]
@@ -18350,7 +18341,7 @@
       },
       "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors)."
     },
-    "pricingServiceDetails": {
+    "pricingEC2ServiceDetails": {
       "type": "object",
       "properties": {
         "offerTermCode": {
@@ -18521,6 +18512,9 @@
         "gpuMemory": {
           "type": "string"
         },
+        "instance": {
+          "type": "string"
+        },
         "instanceCapacity10xlarge": {
           "type": "string"
         },
@@ -18612,7 +18606,7 @@
           "type": "string"
         }
       },
-      "title": "ServiceDetails message"
+      "title": "ServiceDetails message for AWS EC2"
     },
     "protobufAny": {
       "type": "object",
@@ -22484,6 +22478,55 @@
       },
       "title": "Response message for GetDiscountRecommendations"
     },
+    "v1GetEC2InfoRequest": {
+      "type": "object",
+      "properties": {
+        "cloud": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        }
+      },
+      "title": "Request message for GetEC2Info"
+    },
+    "v1GetEC2InfoResponse": {
+      "type": "object",
+      "properties": {
+        "cloud": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "regionCode": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "sku": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "pricePerUnit": {
+          "type": "number",
+          "format": "double"
+        },
+        "ec2ServiceDetails": {
+          "$ref": "#/definitions/pricingEC2ServiceDetails"
+        }
+      },
+      "title": "Response message for GetEC2Info"
+    },
     "v1GetFavoriteViewsResponse": {
       "type": "object",
       "properties": {
@@ -22667,55 +22710,6 @@
         }
       },
       "title": "Response message for GetPayers"
-    },
-    "v1GetPricingInfoRequest": {
-      "type": "object",
-      "properties": {
-        "cloud": {
-          "type": "string"
-        },
-        "service": {
-          "type": "string"
-        },
-        "region": {
-          "type": "string"
-        },
-        "token": {
-          "type": "string"
-        }
-      },
-      "title": "Request message for GetPricingInfo"
-    },
-    "v1GetPricingInfoResponse": {
-      "type": "object",
-      "properties": {
-        "cloud": {
-          "type": "string"
-        },
-        "service": {
-          "type": "string"
-        },
-        "regionCode": {
-          "type": "string"
-        },
-        "token": {
-          "type": "string"
-        },
-        "sku": {
-          "type": "string"
-        },
-        "unit": {
-          "type": "string"
-        },
-        "priceperunit": {
-          "type": "number",
-          "format": "double"
-        },
-        "serviceDetails": {
-          "$ref": "#/definitions/pricingServiceDetails"
-        }
-      },
-      "title": "Response message for GetPricingInfo"
     },
     "v1GetRecommendationResponse": {
       "type": "object",
