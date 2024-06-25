@@ -90,14 +90,15 @@ message EC2Details {
 }
 
 message ElasticCacheDetails {
-    string family = 1; 
+    bool currentGeneration = 1;
     string nodeType = 2;
-    string productDescription = 3;
+    string family = 3; 
 }
 
 message ESDetails {
-    string instanceClass = 1;
-    string instanceSize = 2;
+    bool currentGeneration = 1;
+    string instanceClass = 2;
+    string instanceSize = 3;
 }
 
 message RDSDetails {
@@ -110,8 +111,9 @@ message RDSDetails {
 }
 
 message RedshiftDetails {
-    string family = 1;
+    bool currentGeneration = 1;
     string nodeType = 2;
+    string family = 3;
 }
 
 message SavingsPlanRecommendationDetails {
@@ -148,8 +150,10 @@ message EstOutcomeFromSPRecommendation{
 message RightSizingRecommendationDetails{
     EC2rightSizingDetails ec2RightSizingDetails = 1;
     LambdaRightSizingRecommendationDetails lambdaRightSizingRecommendationDetails = 2;
-    double estimatedMonthlyCost = 3;
-    double estimatedMonthlySavings = 4;
+    EBSDetails ebsRightSizingRecommendationDetails = 3;
+    EcsRightSizingRecommendationDetails ecsRightSizingRecommendationDetails = 4;
+    double estimatedMonthlyCost = 5;
+    double estimatedMonthlySavings = 6;
 }
 
 message EC2rightSizingDetails{
@@ -187,18 +191,22 @@ message UtilizationData {
 }
 
 message LambdaRightSizingRecommendationDetails{
-    LambdaDetails lambdaCurrentConfiguration = 1;
-    LambdaDetails lambdaRecommendedConfiguration = 2;
+    ResourceDetails lambdaCurrentConfiguration = 1;
+    ResourceDetails lambdaRecommendedConfiguration = 2;
 }
 
-message LambdaDetails{
+message EcsRightSizingRecommendationDetails{
+    ResourceDetails  EcsCurrentConfiguration = 1;
+    ResourceDetails  EcsRecommendedConfiguration = 2;
+}
+message ResourceDetails{
     string architecture = 1;
     double memorysizeInMB = 2;
     string platform  = 3;
     int32 vCpu = 4;
     CostCalculation costCalculation = 5;
-    APNDetails apn1LambdaGBUsage = 6;
-    APNDetails apn1RequestUsage = 7;
+    APNDetails apn1details0 = 6;
+    APNDetails apn1details1 = 7;
 }
 message APNDetails{
     string operation = 1;
@@ -218,8 +226,9 @@ message CostCalculation{
 
 message UpgradeRecommendationDetails{
     UpgradeEC2Details upgradeEC2Details = 1;
-    UpgradeEBSDetails upgradeEBSDetails = 2;
-
+    EBSDetails upgradeEBSDetails = 2;
+    double estimatedMonthlyCost = 3;
+    double estimatedMonthlySavings = 4;
 }
 
 message UpgradeEC2Details{
@@ -227,8 +236,6 @@ message UpgradeEC2Details{
     EC2UpgadeDetails ugradeEC2RecommendationDetails = 2;
     CostCalculation currentCostCalculation = 3;
     CostCalculation estimatedCostCalculation = 4;
-    double estimatedMonthlyCost = 5;
-    double estimatedMonthlySavings = 6;
 }
 
 message EC2UpgadeDetails {
@@ -240,13 +247,12 @@ message EC2UpgadeDetails {
     string usageType = 6;
 }
 
-message UpgradeEBSDetails{
+message EBSDetails{
     CurrentEBSDetails currentEBSDetails = 1;
-    UpgradeEBSRecommendationDetails upgradeEBSDetails = 2;
-    double estimatedMonthlyCost = 3;
-    double estimatedMonthlySavings = 4;
+    EBSRecommendationDetails upgradeEBSDetails = 2;
 }
-message UpgradeEBSRecommendationDetails {
+
+message EBSRecommendationDetails {
     string attachmentState = 1;
     double iops = 2;
     double throughput = 3;
