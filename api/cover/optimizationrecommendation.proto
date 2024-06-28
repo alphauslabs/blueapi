@@ -45,6 +45,7 @@ message AWSRecommendations {
     RightSizingRecommendationDetails rightSizingRecommendationDetails = 19;
     UpgradeRecommendationDetails upgradeRecommendationDetails = 20;
     MigrateRecommendationDetails migrateRecommendationDetails = 21;
+    StopInstanceRecommendationDetails stopInstanceRecommendationDetails  = 22;
 }
 
 message PurchaseRIRecommendationDetails {
@@ -289,4 +290,17 @@ message MigrateEC2Details{
     EC2UpgadeDetails ugradeEC2RecommendationDetails = 2;
     CostCalculation currentCostCalculation = 3;
     CostCalculation estCostCalculation = 4;
+}
+
+message StopInstanceRecommendationDetails{
+   StopEC2InstanceRecommendationDetails stopEC2InstanceRecommendationDetails = 1;
+}
+
+message StopEC2InstanceRecommendationDetails{
+    string instanceId = 1;
+    string instanceType = 2;
+    double AveCpuUtilizationBy14Day = 3;
+    double AveNetworkIOBy14Day = 4;
+    UtilizationData cpuUtilization = 5;
+    UtilizationData netWorkIO = 6;
 }
