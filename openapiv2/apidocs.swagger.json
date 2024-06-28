@@ -2376,7 +2376,7 @@
     },
     "/v0/pricing": {
       "post": {
-        "summary": "Get pricing",
+        "summary": "WORK-IN-PROGRESS: Get cloud pricing information",
         "operationId": "Pricing_GetPricing",
         "responses": {
           "200": {
@@ -18705,7 +18705,7 @@
         "instanceCapacityMetal": {
           "type": "string"
         },
-        "instanceCapacityXLarge": {
+        "instanceCapacityXlarge": {
           "type": "string"
         },
         "instanceSku": {
@@ -22833,29 +22833,29 @@
       "properties": {
         "cloud": {
           "type": "string",
-          "title": "Required cloud (AWS/Azure)"
+          "description": "Required. Cloud vendor (aws/azure). Supports aws and azure for now."
         },
         "service": {
           "type": "string",
-          "title": "Required service. \nEC2, Lambda, S3, Elastic Block Storage, Data Transfer, RDS, DynamoDB, and Cloud Watch for AWS\nVirual Machine, Functions, Blob Storage, Storage Account, Data Transfer, SQL Database, Cosmos DB, and Monitor for Azure"
+          "description": "Required. Cloud vendor service. \nec2, lambda, s3, elasticBlockStorage, dataTransfer, rds, dynamoDb, and cloudWatch services for aws cloud vendor.\nvirualMachine, functions, blobStorage, storageAccount, dataTransfer, sqlDatabase,cosmosDb, and monitor services for  azure cloud vendor."
         },
         "region": {
           "type": "string",
-          "description": "Required region."
+          "description": "Required. Region."
         },
         "token": {
           "type": "string",
-          "title": "Required token for continuing request"
+          "description": "Required. Token for continuing request."
         },
         "columns": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "title": "Optional column number"
+          "description": "Optional. This string represent valid columns which will serve as basis as to what columns will be returned by the API.\nAll columns will be returned if this array is empty.\nThis is not yet implemented."
         }
       },
-      "title": "Request message for GetPricingInfo"
+      "title": "Request message for GetPricing"
     },
     "v1GetPricingResponse": {
       "type": "object",
@@ -22886,7 +22886,7 @@
           "$ref": "#/definitions/pricingServiceDetails"
         }
       },
-      "title": "Response message for GetPricingInfo"
+      "title": "Response message for GetPricing"
     },
     "v1GetRecommendationResponse": {
       "type": "object",
