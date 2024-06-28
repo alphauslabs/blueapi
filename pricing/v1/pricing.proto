@@ -29,7 +29,7 @@ service Pricing {
   }
 
   // Get pricing info
-  rpc GetPricingInfo(GetPricingInfoRequest) returns (stream GetPricingInfoResponse) {
+  rpc GetPricingInfo(GetPricingInfoRequest) returns (GetPricingInfoResponse) {
     option (google.api.http) = {
       post: "/v0/pricingInfo"
       body: "*"
@@ -51,6 +51,7 @@ message GetPricingInfoRequest {
   string service = 2;
   string region = 3;
   string token = 4;
+  repeated string columns = 5;
 }
 
 // Response message for GetPricingInfo
