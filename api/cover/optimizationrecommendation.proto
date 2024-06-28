@@ -46,6 +46,8 @@ message AWSRecommendations {
     UpgradeRecommendationDetails upgradeRecommendationDetails = 20;
     MigrateRecommendationDetails migrateRecommendationDetails = 21;
     StopInstanceRecommendationDetails stopInstanceRecommendationDetails  = 22;
+    DeleteRecommendationDetails deleteRecommendationDetails = 23;
+    OtherRecommendationDetails otherRecommendationDetails = 24;
 }
 
 message PurchaseRIRecommendationDetails {
@@ -296,6 +298,67 @@ message StopInstanceRecommendationDetails{
    StopEC2InstanceRecommendationDetails stopEC2InstanceRecommendationDetails = 1;
 }
 
+message DeleteRecommendationDetails{
+    EbsVolumeDetails ebsVolumeDetails = 1;
+    ElasticIpAddressDetails elasticIpAddressDetails = 2;
+    IdleRdsDetails idleRdsDetails = 3;
+    IdleLoadBalancerDetails idleLoadBalancerDetails = 4;
+    string lastUpdatedAt = 5;
+    string exclusionStatus = 6;
+    string status = 7;
+
+}
+
+message EbsVolumeDetails{
+    string volumeId = 1;
+    int64 volumeSize = 2;
+    string volumeType = 3;
+}
+
+message ElasticIpAddressDetails{
+    string ipAddress = 2;
+    string service = 3;
+}
+
+message IdleRdsDetails{
+    string dbInstanceName = 1;
+    string daysSinceLastConnection = 2;
+    string instanceType = 3;
+    string multiAZ = 4;
+    double storageProvisioned = 5;
+}
+
+message IdleLoadBalancerDetails{
+    string loadBalancerName = 1;
+    string reason = 2;
+    string service = 3;
+}
+
+message OtherRecommendationDetails{
+    HighErrorRatesLambda highErrorRatesLambda = 1;
+    S3IncompleteMultiPartUploadAbortConfiguration s3IncompleteMultiPartUploadAbortConfiguration = 2;
+    string lastUpdatedAt = 5;
+    string status = 7;
+}
+
+message HighErrorRatesLambda{
+    double avgDailyErrorRates = 1;
+    double avgDailyInvokes = 2;
+    double currentDayErrorRates = 3;
+    double currentDayInvokes = 4;
+    string dateForMaxErrorRates = 5;
+    string functionArn = 6;
+    double lostDailyComputeCost = 7;
+    double maxDailyErrorRates = 8;
+}
+
+message S3IncompleteMultiPartUploadAbortConfiguration{
+    string bucketArn = 1;
+    string bucketName = 2;
+    string lifeCycleRuleForDeletingIncompleteMCU = 3;
+    string daysAfterInitiation = 4;
+
+}
 message StopEC2InstanceRecommendationDetails{
     string instanceId = 1;
     string instanceType = 2;
