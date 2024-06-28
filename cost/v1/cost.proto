@@ -1160,11 +1160,25 @@ message ReadCostAttributesRequest {
 
   // Optional. Valid only for the `aws` vendor. AWS-specific options.
   AwsOptions awsOptions = 6;
+
+  message AzureOptions {
+    // Optional. The Azure customer id to which the modifier is applied. A comma-separated list of customers is also valid.
+    string customerId = 1;
+
+    // Optional. The Azure subscription id to which the modifier is applied. A comma-separated list of subscriptions is also valid.
+    string subscriptionId = 2;
+
+    // Optional. The Azure entitlement id to which the modifier is applied. A comma-separated list of entitlements is also valid.
+    string entitlementId = 3;
+  }
+
+  AzureOptions azureOptions = 7;
 }
 
 // Response message for the Cost.ReadCostAttributes rpc.
 message CostAttributeItem {
   api.aws.CostAttribute aws = 1;
+  api.azure.CostAttribute azure = 2;
 }
 
 // Request message for the Cost.GetCostAttributes rpc.
