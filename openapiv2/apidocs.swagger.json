@@ -2374,9 +2374,9 @@
         ]
       }
     },
-    "/v0/pricingInfo": {
+    "/v0/pricing": {
       "post": {
-        "summary": "Get pricing info",
+        "summary": "Get pricing",
         "operationId": "Pricing_GetPricingInfo",
         "responses": {
           "200": {
@@ -18656,7 +18656,7 @@
         "instanceCapacityMetal": {
           "type": "string"
         },
-        "instanceCapacityXLarge": {
+        "instanceCapacityxLarge": {
           "type": "string"
         },
         "instanceSku": {
@@ -22780,22 +22780,27 @@
       "type": "object",
       "properties": {
         "cloud": {
-          "type": "string"
+          "type": "string",
+          "title": "Required cloud (AWS/Azure)"
         },
         "service": {
-          "type": "string"
+          "type": "string",
+          "title": "Required service. \nEC2, Lambda, S3, Elastic Block Storage, Data Transfer, RDS, DynamoDB, and Cloud Watch for AWS\nVirual Machine, Functions, Blob Storage, Storage Account, Data Transfer, SQL Database, Cosmos DB, and Monitor for Azure"
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "Required region."
         },
         "token": {
-          "type": "string"
+          "type": "string",
+          "title": "Required token for continuing request"
         },
         "columns": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "title": "Optional column number"
         }
       },
       "title": "Request message for GetPricingInfo"
@@ -22821,7 +22826,7 @@
         "unit": {
           "type": "string"
         },
-        "priceperunit": {
+        "pricePerUnit": {
           "type": "number",
           "format": "double"
         },

@@ -28,10 +28,10 @@ service Pricing {
     };
   }
 
-  // Get pricing info
+  // Get pricing
   rpc GetPricingInfo(GetPricingInfoRequest) returns (GetPricingInfoResponse) {
     option (google.api.http) = {
-      post: "/v0/pricingInfo"
+      post: "/v0/pricing"
       body: "*"
     };
   }
@@ -47,10 +47,21 @@ message GetInfoResponse {
 
 // Request message for GetPricingInfo
 message GetPricingInfoRequest {
+
+  //Required cloud (AWS/Azure)
   string cloud = 1;
+
+  // Required service. 
+  //EC2, Lambda, S3, Elastic Block Storage, Data Transfer, RDS, DynamoDB, and Cloud Watch for AWS
+  //Virual Machine, Functions, Blob Storage, Storage Account, Data Transfer, SQL Database, Cosmos DB, and Monitor for Azure
   string service = 2;
+
+  // Required region.
   string region = 3;
+
+  // Required token for continuing request
   string token = 4;
+  // Optional column number
   repeated string columns = 5;
 }
 
@@ -58,11 +69,11 @@ message GetPricingInfoRequest {
 message GetPricingInfoResponse {
   string cloud = 1;
   string service = 2;
-  string region_code = 3;
+  string regionCode = 3;
   string token = 4;
   string sku = 5;
   string unit = 6;
-  double priceperunit = 7;
+  double pricePerUnit = 7;
   api.pricing.ServiceDetails serviceDetails = 8;
 
 }
