@@ -28,10 +28,10 @@ service Pricing {
     };
   }
 
-  // Get pricing info
-  rpc GetPricingInfo(GetPricingInfoRequest) returns (GetPricingInfoResponse) {
+  //WORK-IN-PROGRESS: Get cloud pricing information
+  rpc GetPricing(GetPricingRequest) returns (GetPricingResponse) {
     option (google.api.http) = {
-      post: "/v0/pricingInfo"
+      post: "/v0/pricing"
       body: "*"
     };
   }
@@ -45,25 +45,38 @@ message GetInfoResponse {
   string response = 1;
 }
 
-// Request message for GetPricingInfo
-message GetPricingInfoRequest {
+// Request message for GetPricing
+message GetPricingRequest {
+
+  //Required. Cloud vendor (aws/azure). Supports aws and azure for now.
   string cloud = 1;
+
+  // Required. Cloud vendor service. 
+  //ec2, lambda, s3, elasticBlockStorage, dataTransfer, rds, dynamoDb, and cloudWatch services for aws cloud vendor.
+  //virualMachine, functions, blobStorage, storageAccount, dataTransfer, sqlDatabase,cosmosDb, and monitor services for  azure cloud vendor.
   string service = 2;
+
+  // Required. Region.
   string region = 3;
+
+  // Required. Token for continuing request.
   string token = 4;
+
+  // Optional. This string represent valid columns which will serve as basis as to what columns will be returned by the API.
+  // All columns will be returned if this array is empty.
+  // This is not yet implemented.
   repeated string columns = 5;
 }
 
-// Response message for GetPricingInfo
-message GetPricingInfoResponse {
+// Response message for GetPricing
+message GetPricingResponse {
   string cloud = 1;
   string service = 2;
-  string region_code = 3;
+  string regionCode = 3;
   string token = 4;
   string sku = 5;
   string unit = 6;
-  double priceperunit = 7;
+  double pricePerUnit = 7;
   api.pricing.ServiceDetails serviceDetails = 8;
-
 }
  
