@@ -2452,7 +2452,7 @@
         ]
       }
     },
-    "/v0/pricing": {
+    "/v0/{vendor}/pricing": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Get cloud pricing information",
         "operationId": "Pricing_GetPricing",
@@ -2472,11 +2472,40 @@
         },
         "parameters": [
           {
+            "name": "vendor",
+            "description": "Required. Cloud vendor, only `aws` and `azure` are supported for now.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1GetPricingRequest"
+              "type": "object",
+              "properties": {
+                "service": {
+                  "type": "string",
+                  "description": "Required. Cloud vendor service. \nValid values are `ec2`, `lambda`, `s3`, `ebs`, `dataTransfer`, `rds`, `dynamoDb`, and `cloudWatch` for AWS.\nValid values are `vm`, `functions`, `blobStorage`, `storageAccount`, `dataTransfer`, `sqlDb`,`cosmosDb`, and `monitor` for Azure."
+                },
+                "region": {
+                  "type": "string",
+                  "description": "Required. Region."
+                },
+                "token": {
+                  "type": "string",
+                  "description": "Required. Token for continuing request."
+                },
+                "columns": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Optional. This string represent valid columns which will serve as basis as to what columns will be returned by the API.\nAll columns will be returned if this array is empty.\nThis is not yet implemented."
+                }
+              },
+              "title": "Request message for GetPricing"
             }
           }
         ],
@@ -18390,6 +18419,34 @@
       },
       "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors)."
     },
+    "pricingPricingData": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "regionCode": {
+          "type": "string"
+        },
+        "sku": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "pricePerUnit": {
+          "type": "number",
+          "format": "double"
+        },
+        "serviceDetails": {
+          "$ref": "#/definitions/pricingServiceDetails"
+        }
+      },
+      "title": "Pricing details"
+    },
     "pricingServiceDetails": {
       "type": "object",
       "properties": {
@@ -22726,62 +22783,18 @@
       },
       "title": "Response message for GetPayers"
     },
-    "v1GetPricingRequest": {
-      "type": "object",
-      "properties": {
-        "cloud": {
-          "type": "string",
-          "description": "Required. Cloud vendor (aws/azure). Supports aws and azure for now."
-        },
-        "service": {
-          "type": "string",
-          "description": "Required. Cloud vendor service. \nec2, lambda, s3, elasticBlockStorage, dataTransfer, rds, dynamoDb, and cloudWatch services for aws cloud vendor.\nvirualMachine, functions, blobStorage, storageAccount, dataTransfer, sqlDatabase,cosmosDb, and monitor services for  azure cloud vendor."
-        },
-        "region": {
-          "type": "string",
-          "description": "Required. Region."
-        },
-        "token": {
-          "type": "string",
-          "description": "Required. Token for continuing request."
-        },
-        "columns": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Optional. This string represent valid columns which will serve as basis as to what columns will be returned by the API.\nAll columns will be returned if this array is empty.\nThis is not yet implemented."
-        }
-      },
-      "title": "Request message for GetPricing"
-    },
     "v1GetPricingResponse": {
       "type": "object",
       "properties": {
-        "cloud": {
-          "type": "string"
-        },
-        "service": {
-          "type": "string"
-        },
-        "regionCode": {
-          "type": "string"
-        },
         "token": {
           "type": "string"
         },
-        "sku": {
-          "type": "string"
-        },
-        "unit": {
-          "type": "string"
-        },
-        "pricePerUnit": {
-          "type": "number",
-          "format": "double"
-        },
-        "serviceDetails": {
-          "$ref": "#/definitions/pricingServiceDetails"
+        "pricingData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/pricingPricingData"
+          }
         }
       },
       "title": "Response message for GetPricing"
