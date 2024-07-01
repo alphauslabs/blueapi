@@ -31,7 +31,7 @@ service Pricing {
   //WORK-IN-PROGRESS: Get cloud pricing information
   rpc GetPricing(GetPricingRequest) returns (GetPricingResponse) {
     option (google.api.http) = {
-      post: "/v0/pricing"
+      post: "/v0/{vendor}/pricing"
       body: "*"
     };
   }
@@ -48,12 +48,12 @@ message GetInfoResponse {
 // Request message for GetPricing
 message GetPricingRequest {
 
-  //Required. Cloud vendor (aws/azure). Supports aws and azure for now.
-  string cloud = 1;
+  //Required. Cloud vendor, only `aws` and `azure` are supported for now.
+  string vendor = 1;
 
   // Required. Cloud vendor service. 
-  //ec2, lambda, s3, elasticBlockStorage, dataTransfer, rds, dynamoDb, and cloudWatch services for aws cloud vendor.
-  //virualMachine, functions, blobStorage, storageAccount, dataTransfer, sqlDatabase,cosmosDb, and monitor services for  azure cloud vendor.
+  // Valid values are `ec2`, `lambda`, `s3`, `ebs`, `dataTransfer`, `rds`, `dynamoDb`, and `cloudWatch` for AWS.
+  // Valid values are `vm`, `functions`, `blobStorage`, `storageAccount`, `dataTransfer`, `sqlDb`,`cosmosDb`, and `monitor` for Azure.
   string service = 2;
 
   // Required. Region.
@@ -70,13 +70,7 @@ message GetPricingRequest {
 
 // Response message for GetPricing
 message GetPricingResponse {
-  string cloud = 1;
-  string service = 2;
-  string regionCode = 3;
-  string token = 4;
-  string sku = 5;
-  string unit = 6;
-  double pricePerUnit = 7;
-  api.pricing.ServiceDetails serviceDetails = 8;
+  string token = 1;
+  repeated api.pricing.PricingData pricingData = 2;
 }
  
