@@ -40,14 +40,15 @@ message AWSRecommendations {
     string resourceArn = 14;
     bool restartNeeded = 15;
     bool rollbackPossible = 16;
-    PurchaseRIRecommendationDetails purchaseRIRecommendationDetails = 17;
-    SavingsPlanRecommendationDetails savingsPlanRecommendationDetails = 18;
-    RightSizingRecommendationDetails rightSizingRecommendationDetails = 19;
-    UpgradeRecommendationDetails upgradeRecommendationDetails = 20;
-    MigrateRecommendationDetails migrateRecommendationDetails = 21;
-    StopInstanceRecommendationDetails stopInstanceRecommendationDetails  = 22;
-    DeleteRecommendationDetails deleteRecommendationDetails = 23;
-    OtherRecommendationDetails otherRecommendationDetails = 24;
+    string lastUpdatedAt = 17;
+    PurchaseRIRecommendationDetails purchaseRIRecommendationDetails = 18;
+    SavingsPlanRecommendationDetails savingsPlanRecommendationDetails = 19;
+    RightSizingRecommendationDetails rightSizingRecommendationDetails = 20;
+    UpgradeRecommendationDetails upgradeRecommendationDetails = 21;
+    MigrateRecommendationDetails migrateRecommendationDetails = 22;
+    StopInstanceRecommendationDetails stopInstanceRecommendationDetails  = 23;
+    DeleteRecommendationDetails deleteRecommendationDetails = 24;
+    OtherRecommendationDetails otherRecommendationDetails = 25;
 }
 
 message PurchaseRIRecommendationDetails {
@@ -303,9 +304,8 @@ message DeleteRecommendationDetails{
     ElasticIpAddressDetails elasticIpAddressDetails = 2;
     IdleRdsDetails idleRdsDetails = 3;
     IdleLoadBalancerDetails idleLoadBalancerDetails = 4;
-    string lastUpdatedAt = 5;
-    string exclusionStatus = 6;
-    string status = 7;
+    string exclusionStatus = 5;
+    string status = 6;
 
 }
 
@@ -313,6 +313,7 @@ message EbsVolumeDetails{
     string volumeId = 1;
     int64 volumeSize = 2;
     string volumeType = 3;
+    double monthlyStorageCost = 4;
 }
 
 message ElasticIpAddressDetails{
@@ -337,8 +338,7 @@ message IdleLoadBalancerDetails{
 message OtherRecommendationDetails{
     HighErrorRatesLambda highErrorRatesLambda = 1;
     S3IncompleteMultiPartUploadAbortConfiguration s3IncompleteMultiPartUploadAbortConfiguration = 2;
-    string lastUpdatedAt = 5;
-    string status = 7;
+    string status = 3;
 }
 
 message HighErrorRatesLambda{
