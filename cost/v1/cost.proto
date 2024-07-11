@@ -542,6 +542,14 @@ service Cost {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Read the invoice ids. Only available in Ripple.
+  rpc ReadInvoiceId (ReadInvoiceIdRequest) returns (stream ReadInvoiceIdResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/invoiceid:read"
+      body: "*"
+    };
+  }
 }
 
 // Request message for the Cost.ListPayerAccounts rpc.
@@ -2143,4 +2151,19 @@ message CheckAccountsRequest {
 message CheckAccountsResponse {
   // Map of accountIds to boolean values indicating if the account exists.
   map<string, bool> exists = 1;
+}
+
+// Request message for the ReadInvoiceId rpc.
+message ReadInvoiceIdRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Optional. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, July 2024 will be `202407`.
+  string month = 2;
+}
+
+// Response message for the ReadInvoiceId rpc.
+message ReadInvoiceIdResponse {
+  // The invoice id
+  string id = 1;
 }
