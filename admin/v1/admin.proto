@@ -209,6 +209,13 @@ service Admin {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Get settings value for wave features management per msp
+  rpc GetWaveFeatures(GetWaveFeaturesRequest) returns (GetWaveFeaturesResponse) {
+    option (google.api.http) = {
+      get: "/admin/v1/wavefeatures"
+    };
+  }
 }
 
 // Request message for the Admin.ListAccountGroups rpc.
@@ -583,3 +590,18 @@ message ExportAuditLogsRequest {
   // Required. The UTC date to end data from. If not set, the first day of the current year will be used. Format: `yyyymmdd`.
   string endTime = 3;
 }
+
+// for wave features settings data maping
+message WaveFeature {
+  string key = 1;
+  string value = 2;
+  string label = 3; 
+  string description = 4;
+  repeated WaveFeature children = 5;
+}
+
+message GetWaveFeaturesResponse {
+  repeated WaveFeature settings = 1;
+}
+
+message GetWaveFeaturesRequest {}
