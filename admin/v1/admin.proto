@@ -213,7 +213,7 @@ service Admin {
   // WORK-IN-PROGRESS: Get settings value for wave features management per organization
   rpc GetWaveFeatures(GetWaveFeaturesRequest) returns (GetWaveFeaturesResponse) {
     option (google.api.http) = {
-      get: "/admin/v1/wavefeatures"
+      get: "/admin/v1/wavefeatures/{id}"
     };
   }
 }
@@ -604,4 +604,6 @@ message GetWaveFeaturesResponse {
   repeated WaveFeature settings = 1;
 }
 
-message GetWaveFeaturesRequest {}
+message GetWaveFeaturesRequest {
+  string id = 1;
+}
