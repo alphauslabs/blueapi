@@ -544,9 +544,9 @@ service Cost {
   }
 
   // WORK-IN-PROGRESS: Read the invoice ids. Only available in Ripple.
-  rpc ReadInvoiceId (ReadInvoiceIdRequest) returns (stream ReadInvoiceIdResponse) {
+  rpc ReadInvoiceIds (ReadInvoiceIdsRequest) returns (stream ReadInvoiceIdsResponse) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/invoiceid:read"
+      post: "/v1/{vendor}/invoiceids:read"
       body: "*"
     };
   }
@@ -2153,8 +2153,8 @@ message CheckAccountsResponse {
   map<string, bool> exists = 1;
 }
 
-// Request message for the ReadInvoiceId rpc.
-message ReadInvoiceIdRequest {
+// Request message for the ReadInvoiceIds rpc.
+message ReadInvoiceIdsRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
 
@@ -2162,8 +2162,8 @@ message ReadInvoiceIdRequest {
   string month = 2;
 }
 
-// Response message for the ReadInvoiceId rpc.
-message ReadInvoiceIdResponse {
+// Response message for the ReadInvoiceIds rpc.
+message ReadInvoiceIdsResponse {
   // The invoice id
   string id = 1;
 }
