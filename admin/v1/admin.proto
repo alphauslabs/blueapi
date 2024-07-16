@@ -213,7 +213,7 @@ service Admin {
   // WORK-IN-PROGRESS: Get settings value for wave features management per organization
   rpc GetWaveFeatures(GetWaveFeaturesRequest) returns (GetWaveFeaturesResponse) {
     option (google.api.http) = {
-      get: "/admin/v1/wavefeatures/{id}"
+      get: "/admin/v1/wavefeatures"
     };
   }
 }
@@ -465,7 +465,7 @@ message NotificationAccount {
   string vendor = 1;
 
   // Required.
-  string accountId = 2;  
+  string accountId = 2;
 }
 
 // Request message for the Admin.GetNotificationTypeChannels rpc.
@@ -474,9 +474,9 @@ message GetNotificationRequest {
   string id = 1;
 
   // Required
-  // Valid values: 
-  // `InvoiceCalculationStarted`, 
-  // `InvoiceCalculationFinished`, 
+  // Valid values:
+  // `InvoiceCalculationStarted`,
+  // `InvoiceCalculationFinished`,
   // `CurUpdatedAfterInvoice`.
   // `AccountBudgetAlert`.
   string notificationType = 2;
@@ -485,9 +485,9 @@ message GetNotificationRequest {
 // Request message for the Admin.CreateNotificationTypeChannels rpc.
 message CreateNotificationRequest {
   // Required
-  // Valid values: 
-  // `InvoiceCalculationStarted`, 
-  // `InvoiceCalculationFinished`, 
+  // Valid values:
+  // `InvoiceCalculationStarted`,
+  // `InvoiceCalculationFinished`,
   // `CurUpdatedAfterInvoice`.
   // `AccountBudgetAlert`.
   string notificationType = 1;
@@ -504,7 +504,7 @@ message CreateNotificationRequest {
 
 // Request message for the Admin.UpdateNotificationTypeChannels rpc.
 message UpdateNotificationRequest {
-  // Required 
+  // Required
   string id = 1;
 
   // Required
@@ -514,9 +514,9 @@ message UpdateNotificationRequest {
   bool enabled = 3;
 
   // Required
-  // Valid values: 
-  // `InvoiceCalculationStarted`, 
-  // `InvoiceCalculationFinished`, 
+  // Valid values:
+  // `InvoiceCalculationStarted`,
+  // `InvoiceCalculationFinished`,
   // `CurUpdatedAfterInvoice`.
   // `AccountBudgetAlert`.
   string notificationType = 4;
@@ -527,13 +527,13 @@ message UpdateNotificationRequest {
 
 // Request message for the Admin.DeleteNotification rpc.
 message DeleteNotificationRequest {
-  // Required 
+  // Required
   string id = 1;
 
   // Required
-  // Valid values: 
-  // `InvoiceCalculationStarted`, 
-  // `InvoiceCalculationFinished`, 
+  // Valid values:
+  // `InvoiceCalculationStarted`,
+  // `InvoiceCalculationFinished`,
   // `CurUpdatedAfterInvoice`.
   // `AccountBudgetAlert`.
   string notificationType = 2;
@@ -546,14 +546,14 @@ message CreateProformaCurRequest {
 
   //Required.
   string billingInternalId = 2;
-  
+
   // Required.
   string reportName = 3;
 
   //Optional. Default value: `alphaus-proforma-cur-export`
   string s3BucketName = 4;
 
-  //Optional. Default value: `pre` 
+  //Optional. Default value: `pre`
   string s3Prefix = 5;
 
   //Optional. Default value: `us-east-1`
@@ -567,7 +567,7 @@ message ProformaCur {
   string payerId = 2;
 
   string billingInternalId = 3;
-  
+
   string reportName = 4;
 
   string bucketName = 5;
@@ -593,17 +593,16 @@ message ExportAuditLogsRequest {
 
 // for wave features settings data maping
 message WaveFeature {
-  string key = 1;
-  bool value = 2;
-  string label = 3; 
-  string description = 4;
-  repeated WaveFeature children = 5;
+  string label  = 1;
+  string value  = 2;
+  bool default_setting = 3;
+  string tickStrategy = 4;
+  bool isDisabled = 5;
+  repeated WaveFeature children = 6;
 }
 
 message GetWaveFeaturesResponse {
   repeated WaveFeature settings = 1;
 }
 
-message GetWaveFeaturesRequest {
-  string id = 1;
-}
+message GetWaveFeaturesRequest {}
