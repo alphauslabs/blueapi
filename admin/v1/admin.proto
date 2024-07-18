@@ -213,7 +213,15 @@ service Admin {
   // WORK-IN-PROGRESS: Get settings value for wave features management per organization
   rpc GetWaveFeatures(GetWaveFeaturesRequest) returns (GetWaveFeaturesResponse) {
     option (google.api.http) = {
-      get: "/admin/v1/wavefeatures"
+      get: "/admin/v1/wavefeatures/{language}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Update the default wave feature management per org value given an array of  featureId and its bool value
+  rpc UpdateWaveFeatures(UpdateWaveFeaturesRequest) returns (protos.Operation) {
+    option (google.api.http) = {
+      put: "/admin/v1/wavefeatures"
+      body: "*"
     };
   }
 }
@@ -594,16 +602,28 @@ message ExportAuditLogsRequest {
 // for wave features settings data maping
 message WaveFeature {
   string label  = 1;
-  string value  = 2;
+  string featureId  = 2;
   string tickStrategy = 3;
   bool isDisabled = 4;
-  bool defaultSetting = 5;
+  bool defaultVal = 5;
   string flag = 6;
-  repeated WaveFeature children = 7;
+  string condition = 7;
+  repeated WaveFeature children = 8;
 }
 
 message GetWaveFeaturesResponse {
-  repeated WaveFeature settings = 1;
+  repeated WaveFeature waveFeatures = 1;
 }
 
-message GetWaveFeaturesRequest {}
+message GetWaveFeaturesRequest {
+  string language = 1;
+}
+
+// For updating the wave feature management default value per org
+message WaveFeatureIdVal {
+  string featureId = 1;
+  bool value = 2;
+}
+message UpdateWaveFeaturesRequest {
+  repeated WaveFeatureIdVal features = 1;
+}

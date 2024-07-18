@@ -887,6 +887,39 @@
       }
     },
     "/admin/v1/wavefeatures": {
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Update the default wave feature management per org value given an array of  featureId and its bool value",
+        "operationId": "Admin_UpdateWaveFeatures",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protosOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateWaveFeaturesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/v1/wavefeatures/{language}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Get settings value for wave features management per organization",
         "operationId": "Admin_GetWaveFeatures",
@@ -904,6 +937,14 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "language",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "tags": [
           "Admin"
         ]
@@ -23470,7 +23511,7 @@
     "v1GetWaveFeaturesResponse": {
       "type": "object",
       "properties": {
-        "settings": {
+        "waveFeatures": {
           "type": "array",
           "items": {
             "type": "object",
@@ -25384,6 +25425,18 @@
       },
       "title": "Response message for UpdateViewWidget"
     },
+    "v1UpdateWaveFeaturesRequest": {
+      "type": "object",
+      "properties": {
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1WaveFeatureIdVal"
+          }
+        }
+      }
+    },
     "v1UploadChargeCodeRequest": {
       "type": "object",
       "properties": {
@@ -25491,7 +25544,7 @@
         "label": {
           "type": "string"
         },
-        "value": {
+        "featureId": {
           "type": "string"
         },
         "tickStrategy": {
@@ -25500,10 +25553,13 @@
         "isDisabled": {
           "type": "boolean"
         },
-        "defaultSetting": {
+        "defaultVal": {
           "type": "boolean"
         },
         "flag": {
+          "type": "string"
+        },
+        "condition": {
           "type": "string"
         },
         "children": {
@@ -25515,6 +25571,18 @@
         }
       },
       "title": "for wave features settings data maping"
+    },
+    "v1WaveFeatureIdVal": {
+      "type": "object",
+      "properties": {
+        "featureId": {
+          "type": "string"
+        },
+        "value": {
+          "type": "boolean"
+        }
+      },
+      "title": "For updating the wave feature management default value per org"
     },
     "waveAdjustment": {
       "type": "object",
