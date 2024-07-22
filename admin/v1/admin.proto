@@ -216,6 +216,14 @@ service Admin {
       get: "/admin/v1/wavefeatures"
     };
   }
+
+  // WORK-IN-PROGRESS: Updates the wave feature management default value per organization
+  rpc UpdateWaveFeatureSetting(UpdateWaveFeatureSettingRequest) returns (GetWaveFeaturesResponse) {
+    option (google.api.http) = {
+      put: "/admin/v1/wavefeatures"
+      body: "*"
+    };
+  }
 }
 
 // Request message for the Admin.ListAccountGroups rpc.
@@ -594,10 +602,10 @@ message ExportAuditLogsRequest {
 // for wave features settings data maping
 message WaveFeature {
   string label  = 1;
-  string value  = 2;
+  string featureId  = 2;
+  bool isEnabled = 5;
   string tickStrategy = 3;
-  bool isDisabled = 4;
-  bool defaultSetting = 5;
+  string condition = 4;
   string flag = 6;
   repeated WaveFeature children = 7;
 }
@@ -607,3 +615,13 @@ message GetWaveFeaturesResponse {
 }
 
 message GetWaveFeaturesRequest {}
+
+// For rpc UpdateWaveFeature
+message FeatureSetting {
+  string featureId = 1;
+  bool isEnabled = 2;
+}
+
+message UpdateWaveFeatureSettingRequest {
+  repeated FeatureSetting featureSetting = 1;
+}
