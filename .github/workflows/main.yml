@@ -72,6 +72,6 @@ jobs:
         curl -X POST 'https://converter.swagger.io/api/convert' -H 'accept: application/json' -H 'Content-Type: application/json' -d @apidocs.json | jq > ./openapiv3/apidocs.json
         git config user.email "dev@mobingi.com"
         git config user.name "mobingideployer"
-        git add . && git commit -am "$GITHUB_REF $GITHUB_SHA" || true
+        git add . && git commit -am "[OpenAPI] $GITHUB_REF $GITHUB_SHA" || true
         git remote add origin-tmp https://$DEPLOYER_TOKEN@github.com/alphauslabs/blueapidocs.git > /dev/null 2>&1
         git push --set-upstream origin-tmp
