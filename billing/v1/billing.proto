@@ -14,6 +14,7 @@ import "api/ripple/invoicelayout.proto";
 import "api/ripple/duedate.proto";
 import "api/ripple/exchangerate.proto";
 import "api/ripple/untaggedgroup.proto";
+import "api/ripple/customizebillingservice.proto";
 import "api/adjustment.proto";
 import "api/wave/adjustment.proto";
 import "google/api/annotations.proto";
@@ -339,6 +340,14 @@ service Billing {
   rpc ReadUntaggedGroups(ReadUntaggedGroupsRequest) returns (stream api.ripple.UntaggedGroup) {
     option (google.api.http) = {
       post: "/v1/{vendor}/untaggedgroups:read"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Reads the customize billing service. Only available in Ripple.
+  rpc ReadCustomizeBillingServices(ReadCustomizeBillingServicesRequest) returns (stream api.ripple.CustomizeBillingService) {
+    option (google.api.http) = {
+      post: "/v1/customizebillingservices:read"
       body: "*"
     };
   }
@@ -1187,4 +1196,12 @@ message ReadUntaggedGroupsRequest {
   //
   // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
   google.protobuf.FieldMask field_mask = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Request message for the Billing.ReadCustomizeBillingServices rpc.
+message ReadCustomizeBillingServicesRequest {
+  // Optional. Get only the value that set fieldMask.
+  //
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask field_mask = 1 [(google.api.field_behavior) = OPTIONAL];
 }
