@@ -6136,6 +6136,49 @@
         ]
       }
     },
+    "/v1/customizebillingservices:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Reads the customize billing service. Only available in Ripple.",
+        "operationId": "Billing_ReadCustomizeBillingServices",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/rippleCustomizeBillingService"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of rippleCustomizeBillingService"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the Billing.ReadCustomizeBillingServices rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ReadCustomizeBillingServicesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/discount": {
       "post": {
         "summary": "Get the discount recommendations for every account in a cost group",
@@ -11057,7 +11100,7 @@
     },
     "/v1/{vendor}/invoiceids:read": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Read the invoice ids. Only available in Ripple.",
+        "summary": "Read the invoice ids. Only available in Ripple.",
         "operationId": "Cost_ReadInvoiceIds",
         "responses": {
           "200": {
@@ -13524,6 +13567,30 @@
         }
       }
     },
+    "MethodConfigChargingMethod": {
+      "type": "string",
+      "enum": [
+        "FIXED_FEE",
+        "PERCENTAGE",
+        "FIXED_FEE_OR_PERCENTAGE",
+        "TIERED_PRICE",
+        "TIERED_PERCENTAGE"
+      ],
+      "default": "FIXED_FEE"
+    },
+    "MethodConfigCurrency": {
+      "type": "string",
+      "enum": [
+        "USD",
+        "JPY",
+        "SGD",
+        "MYR",
+        "IDR",
+        "INR"
+      ],
+      "default": "USD",
+      "description": "supported currency."
+    },
     "OperationsCancelOperationBody": {
       "type": "object",
       "description": "Request message for the Operations.CancelOperation rpc."
@@ -13537,7 +13604,7 @@
         },
         "region": {
           "type": "string",
-          "description": "Required. Region.\nValid values for AWS services are `af-south-1`, `af-south-1-los-1`, `ap-east-1`, `ap-northeast-1`, `ap-northeast-1-tpe-1`, `ap-northeast-1-wl1-kix1`, `ap-northeast-1-wl1-nrt1`, `ap-northeast-2`, `ap-northeast-2-wl1-cjj1`, `ap-northeast-2-wl1-sel1`, `ap-northeast-3`, `ap-south-1`, `ap-south-1-ccu-1`, `ap-south-1-del-1`, `ap-south-2`, `ap-southeast-1`, `ap-southeast-1-bkk-1`, `ap-southeast-1-mnl-`, `ap-southeast-2`, `ap-southeast-2-akl-1`, `ap-southeast-2-per-1`, `ap-southeast-3`, `ap-southeast-4`, `ca-central-1`, `ca-central-1-wl1-yto1`, `ca-west-1`, `eu-central-1`, `eu-central-1-ham-1`, `eu-central-1-waw-1`, `eu-central-1-wl1-ber1`, `eu-central-1-wl1-dtm1`, `eu-central-1-wl1-muc1`, `eu-central-2`, `eu-north-1`, `eu-north-1-cph-1`, `eu-north-1-hel-1`, `eu-south-1`, `eu-south-2`, `eu-west-1`, `eu-west-2`, `eu-west-2-wl1-lon1`, `eu-west-2-wl1-man1`, `eu-west-2-wl2-man1`, `eu-west-3`, `il-central-1`, `me-central-1`, `me-south-1`, `me-south-1-mct-1`, `sa-east-1`, `us-east-1`, `us-east-1-atl-1`, `us-east-1-bos-1`, `us-east-1-bue-1`, `us-east-1-chi-1`, `us-east-1-dfw-1`, `us-east-1-iah-1`, `us-east-1-lim-1`, `us-east-1-mci-1`, `us-east-1-mia-1`, `us-east-1-msp-1`, `us-east-1-nyc-1`, `us-east-1-phl-1`, `us-east-1-qro-1`, `us-east-1-scl-1`, `us-east-1-wl1`, `us-east-1-wl1-atl1`, `us-east-1-wl1-bna1`, `us-east-1-wl1-chi1`, `us-east-1-wl1-clt1`, `us-east-1-wl1-dfw1`, `us-east-1-wl1-dtw1`, `us-east-1-wl1-iah1`, `us-east-1-wl1-mia1`, `us-east-1-wl1-msp1`, `us-east-1-wl1-nyc1`, `us-east-1-wl1-tpa1`, `us-east-1-wl1-was1`, `us-east-2`, `us-gov-east-1`, `us-gov-west-1`, `us-west-1`, `us-west-2`, `us-west-2-den-1`, `us-west-2-hnl-1`, `us-west-2-las-1`, `us-west-2-lax-1`, `us-west-2-pdx-1`, `us-west-2-phx-1`, `us-west-2-sea-1`, `us-west-2-wl1`, `us-west-2-wl1-den1`, `us-west-2-wl1-las1`, `us-west-2-wl1-lax1`, `us-west-2-wl1-phx1`, `us-west-2-wl1-sea1`.\nValid values for Azure services are `westus`, `westus2`, `ukwest`,  `japanwest`,  `norwayeast`,  `eastus`,  `southeastasia`,  `centralus`,  `eastasia`,  `westus3`,  `germanywestcentral`,  `westindia`,  `eastus2`,  `swedencentral`,  `francecentral`,  `northeurope`,  `uksouth`,  `japaneast`,  `southafricanorth`,  `northcentralus`,  `canadacentral`,  `westeurope`,  `koreacentral`,  `brazilsouth`,  `westcentralus`,  `australiaeast`,  `southcentralus`,  `centralindia`, `global`, `usnorth`.\nAvailable AWS services by region can be accessed in https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/.\nAvailable Azure services by region can be accessed in https://azure.microsoft.com/en-us/explore/global-infrastructure/products-by-region/."
+          "description": "Required. Region.\nValid values for AWS services are `af-south-1`, `af-south-1-los-1`, `ap-east-1`, `ap-northeast-1`, `ap-northeast-1-tpe-1`, `ap-northeast-1-wl1-kix1`, `ap-northeast-1-wl1-nrt1`, `ap-northeast-2`, `ap-northeast-2-wl1-cjj1`, `ap-northeast-2-wl1-sel1`, `ap-northeast-3`, `ap-south-1`, `ap-south-1-ccu-1`, `ap-south-1-del-1`, `ap-south-2`, `ap-southeast-1`, `ap-southeast-1-bkk-1`, `ap-southeast-1-mnl-`, `ap-southeast-2`, `ap-southeast-2-akl-1`, `ap-southeast-2-per-1`, `ap-southeast-3`, `ap-southeast-4`, `ca-central-1`, `ca-central-1-wl1-yto1`, `ca-west-1`, `eu-central-1`, `eu-central-1-ham-1`, `eu-central-1-waw-1`, `eu-central-1-wl1-ber1`, `eu-central-1-wl1-dtm1`, `eu-central-1-wl1-muc1`, `eu-central-2`, `eu-north-1`, `eu-north-1-cph-1`, `eu-north-1-hel-1`, `eu-south-1`, `eu-south-2`, `eu-west-1`, `eu-west-2`, `eu-west-2-wl1-lon1`, `eu-west-2-wl1-man1`, `eu-west-2-wl2-man1`, `eu-west-3`, `il-central-1`, `me-central-1`, `me-south-1`, `me-south-1-mct-1`, `sa-east-1`, `us-east-1`, `us-east-1-atl-1`, `us-east-1-bos-1`, `us-east-1-bue-1`, `us-east-1-chi-1`, `us-east-1-dfw-1`, `us-east-1-iah-1`, `us-east-1-lim-1`, `us-east-1-mci-1`, `us-east-1-mia-1`, `us-east-1-msp-1`, `us-east-1-nyc-1`, `us-east-1-phl-1`, `us-east-1-qro-1`, `us-east-1-scl-1`, `us-east-1-wl1`, `us-east-1-wl1-atl1`, `us-east-1-wl1-bna1`, `us-east-1-wl1-chi1`, `us-east-1-wl1-clt1`, `us-east-1-wl1-dfw1`, `us-east-1-wl1-dtw1`, `us-east-1-wl1-iah1`, `us-east-1-wl1-mia1`, `us-east-1-wl1-msp1`, `us-east-1-wl1-nyc1`, `us-east-1-wl1-tpa1`, `us-east-1-wl1-was1`, `us-east-2`, `us-gov-east-1`, `us-gov-west-1`, `us-west-1`, `us-west-2`, `us-west-2-den-1`, `us-west-2-hnl-1`, `us-west-2-las-1`, `us-west-2-lax-1`, `us-west-2-pdx-1`, `us-west-2-phx-1`, `us-west-2-sea-1`, `us-west-2-wl1`, `us-west-2-wl1-den1`, `us-west-2-wl1-las1`, `us-west-2-wl1-lax1`, `us-west-2-wl1-phx1`, `us-west-2-wl1-sea1`.\nValid values for Azure services are `asiapacific`, `australia`, `australiacentral`, `australiacentral2`, `australiaeast`, `australiasoutheast`, `brazil`, `brazilsouth`, `brazilsoutheast`, `canada`, `canadacentral`, `canadaeast`, `centralindia`, `centralus`, `eastasia`, `eastus`, `eastus2`, `europe`, `france`, `francecentral`, `francesouth`, `germany`, `germanynorth`, `germanywestcentral`, `india`, `israel`, `israelcentral`, `italy`, `italynorth`, `japan`, `japaneast`, `japanwest`, `korea`, `koreacentral`, `koreasouth`, `mexicocentral`, `newzealand`, `northcentralus`, `northeurope`, `norway`, `norwayeast`, `norwaywest`, `poland`, `polandcentral`, `qatar`, `qatarcentral`, `singapore`, `southafrica`, `southafricanorth`, `southafricawest`, `southcentralus`, `southeastasia`, `southindia`, `spaincentral`, `sweden`, `swedencentral`, `swedensouth`, `switzerland`, `switzerlandnorth`, `switzerlandwest`, `uae`, `uaecentral`, `uaenorth`, `uk`, `uknorth`, `uksouth`, `uksouth2`, `ukwest`, `unitedstates`, `westcentralus`, `westeurope`, `westindia`, `westus`, `westus2`.\nAvailable AWS services by region can be accessed in https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/.\nAvailable Azure services by region can be accessed in https://azure.microsoft.com/en-us/explore/global-infrastructure/products-by-region/."
         },
         "token": {
           "type": "string",
@@ -19454,6 +19521,32 @@
       },
       "description": "CommonExchangeRate resource definition."
     },
+    "rippleCustomizeBillingService": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "methodConfig": {
+          "$ref": "#/definitions/rippleMethodConfig"
+        },
+        "created": {
+          "type": "string",
+          "readOnly": true
+        },
+        "updated": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "description": "CustomizeBillingService resource definition."
+    },
     "rippleDueDate": {
       "type": "object",
       "properties": {
@@ -19488,6 +19581,43 @@
       },
       "description": "ExchangeRate resource definition."
     },
+    "rippleFixedFee": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "title": "fixed fee"
+    },
+    "rippleFixedFeeOrPercentage": {
+      "type": "object",
+      "properties": {
+        "fixedFeeValue": {
+          "type": "number",
+          "format": "double"
+        },
+        "percentageValue": {
+          "type": "number",
+          "format": "double"
+        },
+        "service": {
+          "$ref": "#/definitions/rippleTargetServiceConfig"
+        },
+        "usage": {
+          "$ref": "#/definitions/rippleTargetUsageConfig"
+        },
+        "discounted": {
+          "type": "boolean"
+        },
+        "upperLimit": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "title": "fixed fee or percentage"
+    },
     "rippleInvoiceLayout": {
       "type": "object",
       "properties": {
@@ -19517,6 +19647,33 @@
         }
       },
       "description": "WORK-IN-PROGRESS: InvoiceLayout resource definition.\nDefinitions related to invoice display."
+    },
+    "rippleMethodConfig": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "$ref": "#/definitions/MethodConfigCurrency"
+        },
+        "chargingMethod": {
+          "$ref": "#/definitions/MethodConfigChargingMethod"
+        },
+        "fixedFee": {
+          "$ref": "#/definitions/rippleFixedFee"
+        },
+        "percentage": {
+          "$ref": "#/definitions/ripplePercentage"
+        },
+        "fixedFeeOrPercentage": {
+          "$ref": "#/definitions/rippleFixedFeeOrPercentage"
+        },
+        "TieredPrice": {
+          "$ref": "#/definitions/rippleTieredPrice"
+        },
+        "TieredPercentage": {
+          "$ref": "#/definitions/rippleTieredPercentage"
+        }
+      },
+      "description": "MethodConfig resource definition."
     },
     "rippleOrg": {
       "type": "object",
@@ -19591,6 +19748,25 @@
       },
       "description": "PayerExchangeRate resource definition."
     },
+    "ripplePercentage": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number",
+          "format": "double"
+        },
+        "service": {
+          "$ref": "#/definitions/rippleTargetServiceConfig"
+        },
+        "usage": {
+          "$ref": "#/definitions/rippleTargetUsageConfig"
+        },
+        "discounted": {
+          "type": "boolean"
+        }
+      },
+      "title": "percentage"
+    },
     "rippleReseller": {
       "type": "object",
       "properties": {
@@ -19659,6 +19835,66 @@
         }
       },
       "description": "Rounding resource definition."
+    },
+    "rippleTargetServiceConfig": {
+      "type": "string",
+      "enum": [
+        "ALL"
+      ],
+      "default": "ALL",
+      "description": "Describes the overall config of a [blueapi.api.ripple.MethodConfig]."
+    },
+    "rippleTargetUsageConfig": {
+      "type": "string",
+      "enum": [
+        "USAGE"
+      ],
+      "default": "USAGE",
+      "description": "Describes the overall config of a [blueapi.api.ripple.MethodConfig]."
+    },
+    "rippleTierdConfig": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "number",
+          "format": "double"
+        },
+        "max": {
+          "type": "number",
+          "format": "double"
+        },
+        "value": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "title": "tired config"
+    },
+    "rippleTieredPercentage": {
+      "type": "object",
+      "properties": {
+        "tiredConfig": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/rippleTierdConfig"
+          }
+        }
+      },
+      "title": "tired percentage"
+    },
+    "rippleTieredPrice": {
+      "type": "object",
+      "properties": {
+        "tiredConfig": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/rippleTierdConfig"
+          }
+        }
+      },
+      "title": "tired price"
     },
     "rippleUntaggedGroup": {
       "type": "object",
@@ -24519,6 +24755,16 @@
         }
       },
       "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
+    },
+    "v1ReadCustomizeBillingServicesRequest": {
+      "type": "object",
+      "properties": {
+        "fieldMask": {
+          "type": "string",
+          "description": "Optional. Get only the value that set fieldMask.\n\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto"
+        }
+      },
+      "description": "Request message for the Billing.ReadCustomizeBillingServices rpc."
     },
     "v1ReadInvoiceIdsResponse": {
       "type": "object",
