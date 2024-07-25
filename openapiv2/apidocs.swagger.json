@@ -2570,7 +2570,7 @@
     },
     "/v0/{vendor}/services": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Get list of supported services, regions, and attribute keys for filtering",
+        "summary": "WORK-IN-PROGRESS: Get list of supported services, regions, attributes, and columns for filtering",
         "operationId": "Pricing_GetSupportedServices",
         "responses": {
           "200": {
@@ -20533,6 +20533,20 @@
       },
       "title": "Response message for AssignPayer"
     },
+    "v1Attribute": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "v1AwsDailyRunHistory": {
       "type": "object",
       "properties": {
@@ -23531,7 +23545,7 @@
             "type": "object",
             "$ref": "#/definitions/v1SupportedService"
           },
-          "title": "Suported services, regions, and attributes keys that can be used to fetch pricing data"
+          "title": "Suported services, regions, and attributes that can be used to fetch pricing data"
         }
       },
       "title": "Response message for GetSupportedServices"
@@ -25113,9 +25127,10 @@
         "attributes": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "object",
+            "$ref": "#/definitions/v1Attribute"
           },
-          "title": "Attributes that can be used as keys for filtering"
+          "title": "Attributes that can be used as key-value pairs for filtering"
         },
         "columns": {
           "type": "array",
