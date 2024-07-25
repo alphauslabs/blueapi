@@ -34,6 +34,13 @@ service Pricing {
       body: "*"
     };
   }
+
+  //WORK-IN-PROGRESS: Get list of supported services, regions, and attribute keys for filtering
+  rpc GetSupportedServices(GetSupportedServicesRequest) returns (GetSupportedServicesResponse) {
+    option (google.api.http) = {
+      get: "/v0/{vendor}/services"
+    };
+  }
 }
 
 // Request message for the Pricing.GetInfo rpc.
@@ -76,4 +83,29 @@ message GetPricingResponse {
   string token = 1;
   repeated api.pricing.PricingData pricingData = 2;
 }
- 
+
+// Request message for GetSupportedServices
+message GetSupportedServicesRequest{
+  //Required. Cloud vendor, only `aws` and `azure` are supported for now.
+  string vendor = 1;
+}
+
+// Response message for GetSupportedServices
+message GetSupportedServicesResponse {
+  // Suported services, regions, and attributes keys that can be used to fetch pricing data
+  repeated SupportedService supportedServices = 1;
+}
+
+message SupportedService {
+  // AWS or Azure services only as of now
+  string service = 1;
+
+  // Regions supported for the specific service
+  repeated string regions = 2;
+
+  // Attributes that can be used as keys for filtering
+  repeated string attributes = 3;
+
+  // Column names that can be used to specify what columns should GetPricing return
+  repeated string columns = 4;
+}
