@@ -351,6 +351,13 @@ service Billing {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Gets the customize billing service. Only available in Ripple.
+  rpc GetCustomizeBillingService(GetCustomizeBillingServiceRequest) returns (api.ripple.CustomizeBillingService) {
+    option (google.api.http) = {
+      get: "/v1/customizebillingservices/{id}"
+    };
+  }
 }
 
 message BillingGroup {
@@ -1204,4 +1211,15 @@ message ReadCustomizeBillingServicesRequest {
   //
   // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
   google.protobuf.FieldMask field_mask = 1 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Request message for the Billing.GetCustomizeBillingService rpc.
+message GetCustomizeBillingServiceRequest {
+  // Required. api.ripple.CustomizeBillingService.id
+  string id = 1;
+
+  // Optional. Get only the value that set fieldMask.
+  //
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask field_mask = 2 [(google.api.field_behavior) = OPTIONAL];
 }
