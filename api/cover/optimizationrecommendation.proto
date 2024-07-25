@@ -247,6 +247,15 @@ message ResourceDetails{
     string platform  = 3;
     int32 vCpu = 4;
     CostCalculation costCalculation = 5;
+    APNDetails apn1details0 = 6;
+    APNDetails apn1details1 = 7;
+}
+message APNDetails{
+    string operation = 1;
+    string productCode = 2;
+    string unit = 3;
+    double usageAmount = 4;
+    string usageType = 5;
 }
 
 message UsageTypes {
@@ -283,6 +292,11 @@ message UpgradeEC2Details{
 
 message EC2UpgadeDetails {
     string instanceType = 1;
+    string operation = 2;
+    string productCode = 3;
+    string unit = 4;
+    double usageAmount = 5;
+    string usageType = 6;
 }
 
 message EBSDetails{
@@ -296,6 +310,9 @@ message EBSRecommendationDetails {
     double throughput = 3;
     double sizeInGb = 4;
     CostCalculation EstcostCalculation = 5;
+    APS1EBSDetails volumeUsageGP3 = 6;
+    APS1EBSDetails volumeIopsGP3 = 7;
+    APS1EBSDetails volumeThroughputGP3 = 8;
 }
 
 message CurrentEBSDetails {
@@ -304,6 +321,13 @@ message CurrentEBSDetails {
     double throughput = 3;
     double sizeInGb = 4;
     CostCalculation costCalculation = 5;
+    APS1EBSDetails volumeUsage = 6;
+}
+
+message APS1EBSDetails{
+    string productCode = 1;
+    string unit = 2;
+    double usageAmount = 3;
 }
 
 message MigrateRecommendationDetails{
