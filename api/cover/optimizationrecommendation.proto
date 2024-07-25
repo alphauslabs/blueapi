@@ -158,8 +158,44 @@ message RightSizingRecommendationDetails{
     LambdaRightSizingRecommendationDetails lambdaRightSizingRecommendationDetails = 2;
     EBSDetails ebsRightSizingRecommendationDetails = 3;
     EcsRightSizingRecommendationDetails ecsRightSizingRecommendationDetails = 4;
+    RDSRightsizingDetails rdsRightSizingRecommendationDetails = 7;
     double estimatedMonthlyCost = 5;
     double estimatedMonthlySavings = 6;
+}
+
+message MigrateRDSDetails {
+    RDSDBInstance rdsDbInstance = 1;
+}
+
+message RDSUpgradeDetails {
+    RDSDBInstance rdsDbInstance = 1;
+    RDSDBInstanceStorage rdsDbInstanceStorage = 2;
+}
+
+message RDSRightsizingDetails {
+    RDSDBInstance rdsDbInstance = 1;
+    RDSDBInstanceStorage rdsDbInstanceStorage = 2;
+}
+
+message RDSDBInstance {
+    message Details{
+        string instanceClass = 1;
+        CostCalculation costCalculation = 2;
+    }
+    Details currentDetails = 1;
+    Details recommendationDetails = 2;
+}
+
+message RDSDBInstanceStorage {
+    message Details {
+        double allocatedStorageInGb = 1;
+        double iops = 2;
+        double storageThroughput = 3;
+        string storageType = 4;
+        CostCalculation costCalculation = 5;
+    }
+    Details currentDetails = 1;
+    Details recommendationDetails = 2;
 }
 
 message EC2rightSizingDetails{
@@ -211,15 +247,6 @@ message ResourceDetails{
     string platform  = 3;
     int32 vCpu = 4;
     CostCalculation costCalculation = 5;
-    APNDetails apn1details0 = 6;
-    APNDetails apn1details1 = 7;
-}
-message APNDetails{
-    string operation = 1;
-    string productCode = 2;
-    string unit = 3;
-    double usageAmount = 4;
-    string usageType = 5;
 }
 
 message UsageTypes {
@@ -242,6 +269,7 @@ message CostCalculation{
 message UpgradeRecommendationDetails{
     UpgradeEC2Details upgradeEC2Details = 1;
     EBSDetails upgradeEBSDetails = 2;
+    RDSUpgradeDetails upgradeRDSDetails = 5;
     double estimatedMonthlyCost = 3;
     double estimatedMonthlySavings = 4;
 }
@@ -255,11 +283,6 @@ message UpgradeEC2Details{
 
 message EC2UpgadeDetails {
     string instanceType = 1;
-    string operation = 2;
-    string productCode = 3;
-    string unit = 4;
-    double usageAmount = 5;
-    string usageType = 6;
 }
 
 message EBSDetails{
@@ -273,9 +296,6 @@ message EBSRecommendationDetails {
     double throughput = 3;
     double sizeInGb = 4;
     CostCalculation EstcostCalculation = 5;
-    APS1EBSDetails volumeUsageGP3 = 6;
-    APS1EBSDetails volumeIopsGP3 = 7;
-    APS1EBSDetails volumeThroughputGP3 = 8;
 }
 
 message CurrentEBSDetails {
@@ -284,17 +304,11 @@ message CurrentEBSDetails {
     double throughput = 3;
     double sizeInGb = 4;
     CostCalculation costCalculation = 5;
-    APS1EBSDetails volumeUsage = 6;
-}
-
-message APS1EBSDetails{
-    string productCode = 1;
-    string unit = 2;
-    double usageAmount = 3;
 }
 
 message MigrateRecommendationDetails{
     MigrateEC2Details migrateEC2Details = 1 ;
+    MigrateRDSDetails migrateRDSDetails = 4;
     double estimatedMonthlyCost = 2;
     double estimatedMonthlySavings = 3;
 }
