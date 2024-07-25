@@ -158,8 +158,48 @@ message RightSizingRecommendationDetails{
     LambdaRightSizingRecommendationDetails lambdaRightSizingRecommendationDetails = 2;
     EBSDetails ebsRightSizingRecommendationDetails = 3;
     EcsRightSizingRecommendationDetails ecsRightSizingRecommendationDetails = 4;
+    RDSRightsizingDetails rdsRightSizingRecommendationDetails = 7;
     double estimatedMonthlyCost = 5;
     double estimatedMonthlySavings = 6;
+}
+
+message StopRDSDetails {
+    RDSDBInstance rdsDBInstance = 1;
+}
+
+message MigrateRDSDetails {
+    RDSDBInstance rdsDbInstance = 1;
+}
+
+message RDSUpgradeDetails {
+    RDSDBInstance rdsDbInstance = 1;
+    RDSDBInstanceStorage rdsDbInstanceStorage = 2;
+}
+
+message RDSRightsizingDetails {
+    RDSDBInstance rdsDbInstance = 1;
+    RDSDBInstanceStorage rdsDbInstanceStorage = 2;
+}
+
+message RDSDBInstance {
+    message Details{
+        string instanceClass = 1;
+        CostCalculation costCalculation = 2;
+    }
+    Details currentDetails = 1;
+    Details recommendationDetails = 2;
+}
+
+message RDSDBInstanceStorage {
+    message Details {
+        double allocatedStorageInGb = 1;
+        double iops = 2;
+        double storageThroughput = 3;
+        string storageType = 4;
+        CostCalculation costCalculation = 5;
+    }
+    Details currentDetails = 1;
+    Details recommendationDetails = 2;
 }
 
 message EC2rightSizingDetails{
@@ -242,6 +282,7 @@ message CostCalculation{
 message UpgradeRecommendationDetails{
     UpgradeEC2Details upgradeEC2Details = 1;
     EBSDetails upgradeEBSDetails = 2;
+    RDSUpgradeDetails upgradeRDSDetails = 5;
     double estimatedMonthlyCost = 3;
     double estimatedMonthlySavings = 4;
 }
@@ -295,6 +336,7 @@ message APS1EBSDetails{
 
 message MigrateRecommendationDetails{
     MigrateEC2Details migrateEC2Details = 1 ;
+    MigrateRDSDetails migrateRDSDetails = 4;
     double estimatedMonthlyCost = 2;
     double estimatedMonthlySavings = 3;
 }
@@ -308,6 +350,7 @@ message MigrateEC2Details{
 
 message StopInstanceRecommendationDetails{
    StopEC2InstanceRecommendationDetails stopEC2InstanceRecommendationDetails = 1;
+   StopRDSDetails stopRDSRecommendationDetails = 2;
 }
 
 message DeleteRecommendationDetails{
