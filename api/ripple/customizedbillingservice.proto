@@ -26,7 +26,7 @@ message CustomizedBillingService {
 // MethodConfig resource definition.
 message MethodConfig {
   // supported currency.
-  enum Currency {
+  enum SupportedCurrency {
     USD = 0;
 
     JPY = 1;
@@ -40,7 +40,7 @@ message MethodConfig {
     INR = 5;
   }
 
-  Currency currency = 1;
+  SupportedCurrency currency = 1;
 
   enum ChargingMethod {
     FIXED_FEE = 0;
@@ -78,7 +78,15 @@ message FixedFee {
 message Percentage {
   double value = 1;
 
+  enum TargetServiceConfig {
+    ALL = 0;
+  }
+
   TargetServiceConfig service = 2;
+
+  enum TargetUsageConfig {
+    USAGE = 0;
+  }
 
   TargetUsageConfig usage = 3;
 
@@ -91,8 +99,16 @@ message FixedFeeOrPercentage {
 
   double percentageValue = 2;
 
+  enum TargetServiceConfig {
+    ALL = 0;
+  }
+
   TargetServiceConfig service = 3;
 
+  enum TargetUsageConfig {
+    USAGE = 0;
+  }
+  
   TargetUsageConfig usage = 4;
 
   bool discounted = 5;
@@ -117,14 +133,4 @@ message TierdConfig {
   double max = 2;
 
   double value = 3;
-}
-
-// Describes the overall config of a [blueapi.api.ripple.MethodConfig].
-enum TargetServiceConfig {
-  ALL = 0;
-}
-
-// Describes the overall config of a [blueapi.api.ripple.MethodConfig].
-enum TargetUsageConfig {
-  USAGE = 0;
 }
