@@ -6,6 +6,7 @@ import "api/cover/optimizationrecommendation.proto";
 import "api/cover/attribute.proto";
 import "api/cover/user.proto";
 import "api/cover/view.proto";
+import "api/cover/unitcost.proto";
 import "api/cover/costgroup.proto";
 import "api/cover/accountaccess.proto";
 import "api/cover/costforecast.proto";
@@ -1140,7 +1141,47 @@ service Cover {
       body: "*"
     };
   }
+
+  // Lists Unit Types
+  rpc ListUnitTypes(ListUnitTypesRequest) returns (ListUnitTypesResponse) {
+    option (google.api.http) = {
+      get: "/v1/unitcost"
+    };
+  }
+
+   // Create Unit Type
+   rpc CreateUnitType(CreateUnitTypeRequest) returns (CreateUnitTypeResponse) {
+    option (google.api.http) = {
+      post: "/v1/unitcost"
+      body: "*"
+    };
+  }
+
+   // Get Specific Unit Type 
+   rpc GetUnitType(GetUnitTypeRequest) returns (GetUnitTypeResponse) {
+    option (google.api.http) = {
+      get: "/v1/unitcost/{id}"
+    };
+  }
+
+   // Update Specific Unit Type
+   rpc UpdateUnitType(UpdateUnitTypeRequest) returns (UpdateUnitTypeResponse) {
+    option (google.api.http) = {
+      put: "/v1/unitcost/{id}"
+      body: "*"
+    };
+  }
+
+  // Delete Specific Unit Type
+  rpc DeleteUnitType(DeleteUnitTypeRequest) returns (DeleteUnitTypeResponse) {
+    option (google.api.http) = {
+      delete: "/v1/unitcost/{id}"
+    };
+  }
 }
+
+ 
+
 
 // Request message for OnboardOrg
 message OnboardOrgRequest {
@@ -3353,4 +3394,57 @@ message UpdateCostGroupCreationUIRequest {
 
 message UpdateCostGroupCreationUIResponse {
   api.cover.UserData userData = 1;
+}
+
+message ListUnitTypesRequest{
+}
+
+message ListUnitTypesResponse{
+  repeated api.cover.UnitCostData unitCostData = 1;
+}
+
+message CreateUnitTypeRequest{
+  string unitName = 1;
+  map<string, double> unitItems = 2;
+  string description = 3;
+}
+
+message CreateUnitTypeResponse{
+  api.cover.UnitCostData unitCostData = 1;
+}
+
+message GetUnitTypeRequest{
+  //Required. Unit Type Id
+  string id = 1;
+}
+
+message GetUnitTypeResponse{
+  api.cover.UnitCostData unitCostData = 1;
+}
+
+message UpdateUnitTypeRequest{
+  //Required. Unit Type Id
+  string id = 1;
+
+  //Optional
+  string unitName = 2;
+
+  //Optional
+  map<string, double> unitItems = 3;
+
+  //Optional
+  string description = 4;
+}
+
+message UpdateUnitTypeResponse{
+  api.cover.UnitCostData unitCostData = 1;
+}
+
+message DeleteUnitTypeRequest{
+  //Required. Unit Type Id
+  string id = 1;
+}
+
+message DeleteUnitTypeResponse{
+  string id = 1;
 }
