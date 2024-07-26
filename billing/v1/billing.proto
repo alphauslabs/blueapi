@@ -14,7 +14,7 @@ import "api/ripple/invoicelayout.proto";
 import "api/ripple/duedate.proto";
 import "api/ripple/exchangerate.proto";
 import "api/ripple/untaggedgroup.proto";
-import "api/ripple/customizebillingservice.proto";
+import "api/ripple/customizedbillingservice.proto";
 import "api/adjustment.proto";
 import "api/wave/adjustment.proto";
 import "google/api/annotations.proto";
@@ -344,18 +344,18 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Reads the customize billing service. Only available in Ripple.
-  rpc ReadCustomizeBillingServices(ReadCustomizeBillingServicesRequest) returns (stream api.ripple.CustomizeBillingService) {
+  // WORK-IN-PROGRESS: Reads the customized billing service. Only available in Ripple.
+  rpc ReadCustomizedBillingServices(ReadCustomizedBillingServicesRequest) returns (stream api.ripple.CustomizedBillingService) {
     option (google.api.http) = {
-      post: "/v1/customizebillingservices:read"
+      post: "/v1/customizedbillingservices:read"
       body: "*"
     };
   }
 
-  // WORK-IN-PROGRESS: Gets the customize billing service. Only available in Ripple.
-  rpc GetCustomizeBillingService(GetCustomizeBillingServiceRequest) returns (api.ripple.CustomizeBillingService) {
+  // WORK-IN-PROGRESS: Gets the customized billing service. Only available in Ripple.
+  rpc GetCustomizedBillingService(GetCustomizedBillingServiceRequest) returns (api.ripple.CustomizedBillingService) {
     option (google.api.http) = {
-      get: "/v1/customizebillingservices/{id}"
+      get: "/v1/customizedbillingservices/{id}"
     };
   }
 }
@@ -1205,17 +1205,17 @@ message ReadUntaggedGroupsRequest {
   google.protobuf.FieldMask field_mask = 2 [(google.api.field_behavior) = OPTIONAL];
 }
 
-// Request message for the Billing.ReadCustomizeBillingServices rpc.
-message ReadCustomizeBillingServicesRequest {
+// Request message for the Billing.ReadCustomizedBillingServices rpc.
+message ReadCustomizedBillingServicesRequest {
   // Optional. Get only the value that set fieldMask.
   //
   // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
   google.protobuf.FieldMask field_mask = 1 [(google.api.field_behavior) = OPTIONAL];
 }
 
-// Request message for the Billing.GetCustomizeBillingService rpc.
-message GetCustomizeBillingServiceRequest {
-  // Required. api.ripple.CustomizeBillingService.id
+// Request message for the Billing.GetCustomizedBillingService rpc.
+message GetCustomizedBillingServiceRequest {
+  // Required. [blueapi.api.ripple.CustomizedBillingService.id]
   string id = 1;
 
   // Optional. Get only the value that set fieldMask.
