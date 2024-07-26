@@ -358,6 +358,29 @@ service Billing {
       get: "/v1/customizedbillingservices/{id}"
     };
   }
+
+  // WORK-IN-PROGRESS: Creates the customized billing service. Only available in Ripple.
+  rpc CreateCustomizedBillingService(CreateCustomizedBillingServiceRequest) returns (api.ripple.CustomizedBillingService) {
+    option (google.api.http) = {
+      post: "/v1/customizedbillingservices"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Updates the customized billing service by updating the fields specified in the update mask. Only available in Ripple.
+  rpc UpdateCustomizedBillingService(UpdateCustomizedBillingServiceRequest) returns (api.ripple.CustomizedBillingService) {
+    option (google.api.http) = {
+      put: "/v1/customizedbillingservices/{id}"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Deletes the customized billing service. Only available in Ripple.
+  rpc DeleteCustomizedBillingService(DeleteCustomizedBillingServiceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/customizedbillingservices/{id}"
+    };
+  }
 }
 
 message BillingGroup {
@@ -1222,4 +1245,37 @@ message GetCustomizedBillingServiceRequest {
   //
   // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
   google.protobuf.FieldMask field_mask = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Request message for the Billing.CreateCustomizedBillingService rpc.
+message CreateCustomizedBillingServiceRequest {
+  // Required. [blueapi.api.ripple.CustomizedBillingService.name]
+  string name = 1;
+
+  // Optional. [blueapi.api.ripple.CustomizedBillingService.description]
+  string description = 2;
+
+  // Required. [blueapi.api.ripple.CustomizedBillingService.MethodConfig]
+  api.ripple.MethodConfig config = 3;
+}
+
+// Request message for the Billing.UpdateCustomizedBillingService rpc.
+message UpdateCustomizedBillingServiceRequest {
+  // Required. [blueapi.api.ripple.CustomizedBillingService.id]
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. The updated customized billing service object.
+  api.ripple.CustomizedBillingService CustomizedBillingService = 2
+      [(google.api.field_behavior) = REQUIRED];
+
+  // Required. Indicates which fields in the provided CustomizedBillingService to update. Must be
+  // specified and non-empty. 
+  google.protobuf.FieldMask update_mask = 3
+      [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request message for the Billing.DeleteCustomizedBillingService rpc.
+message DeleteCustomizedBillingServiceRequest {
+  // Required. [blueapi.api.ripple.CustomizedBillingService.id]
+  string id = 1;
 }
