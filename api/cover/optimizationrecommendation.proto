@@ -59,6 +59,7 @@ message PurchaseRIRecommendationDetails {
     ESDetails esOptions = 3;
     RDSDetails rdsOptions = 4;
     RedshiftDetails redshiftOptions = 5;
+    MemoryDBDetails memoryDbDetails = 19;
     int32 recommendedNormalizedUnits = 6;
     int32 recommendedNumberOfInstanceToPurchase = 7;
     string paymentOption = 8;
@@ -73,6 +74,7 @@ message PurchaseRIRecommendationDetails {
     bool currentGeneration = 17;
     EstOutcomeFromPurchaseRIRecommendation estOutcomeFromPurchaseRIRecommendation = 18;
 }
+
 message EstOutcomeFromPurchaseRIRecommendation{
     double aveUtilization = 1;
     double aveNormalizedUnitsUsedPerHour = 2;
@@ -86,6 +88,14 @@ message EstOutcomeFromPurchaseRIRecommendation{
     double maxNumberOfInstanceUsedPerHour = 10;
     double minNormalizedUnitsUsedPerHour = 11;
     double minNumberOfInstanceUsedPerHour = 12;
+}
+
+message MemoryDBDetails {
+    bool currentGeneration = 1;
+    string family = 2;
+    string nodeType = 3;
+    string region = 4;
+    bool sizeFlexEligible = 5;
 }
 
 message EC2Details {
@@ -220,6 +230,14 @@ message CurrentEC2Details{
     repeated UtilizationData eC2DiskUtilization = 10;
     repeated UtilizationData eC2MemoryUtilization = 11;
     repeated UtilizationData networkTrafficData = 12;
+    message OtherDetails {
+        string exclusionStatus = 1;
+        string status = 2;
+        string resource = 3;
+        string awsConfigRule = 4;
+        string inputParameters = 5;
+    }
+    OtherDetails otherDetails = 13;
 }
 
 message EC2ModifyRecommendationDetails{
