@@ -59,7 +59,7 @@ message PurchaseRIRecommendationDetails {
     ESDetails esOptions = 3;
     RDSDetails rdsOptions = 4;
     RedshiftDetails redshiftOptions = 5;
-    MemoryDBDetails memoryDbDetails = 19;
+    MemoryDBDetails memoryDbOptions = 19;
     int32 recommendedNormalizedUnits = 6;
     int32 recommendedNumberOfInstanceToPurchase = 7;
     string paymentOption = 8;
@@ -91,11 +91,8 @@ message EstOutcomeFromPurchaseRIRecommendation{
 }
 
 message MemoryDBDetails {
-    bool currentGeneration = 1;
-    string family = 2;
-    string nodeType = 3;
-    string region = 4;
-    bool sizeFlexEligible = 5;
+    string family = 1;
+    string nodeType = 2;
 }
 
 message EC2Details {
@@ -238,6 +235,7 @@ message CurrentEC2Details{
         string inputParameters = 5;
     }
     OtherDetails otherDetails = 13;
+    CostCalculation costCalculation = 14;
 }
 
 message EC2ModifyRecommendationDetails{
@@ -248,6 +246,7 @@ message EC2ModifyRecommendationDetails{
     double memoryUtilization = 5;
     double diskUtilization = 6;
     string networkCapacity = 7;
+    CostCalculation costCalculation = 15;
 }
 
 message UtilizationData {
@@ -270,15 +269,6 @@ message ResourceDetails{
     string platform  = 3;
     int32 vCpu = 4;
     CostCalculation costCalculation = 5;
-    APNDetails apn1details0 = 6;
-    APNDetails apn1details1 = 7;
-}
-message APNDetails{
-    string operation = 1;
-    string productCode = 2;
-    string unit = 3;
-    double usageAmount = 4;
-    string usageType = 5;
 }
 
 message UsageTypes {
@@ -334,9 +324,6 @@ message EBSRecommendationDetails {
     double throughput = 3;
     double sizeInGb = 4;
     CostCalculation EstcostCalculation = 5;
-    APS1EBSDetails volumeUsageGP3 = 6;
-    APS1EBSDetails volumeIopsGP3 = 7;
-    APS1EBSDetails volumeThroughputGP3 = 8;
 }
 
 message CurrentEBSDetails {
@@ -345,13 +332,6 @@ message CurrentEBSDetails {
     double throughput = 3;
     double sizeInGb = 4;
     CostCalculation costCalculation = 5;
-    APS1EBSDetails volumeUsage = 6;
-}
-
-message APS1EBSDetails{
-    string productCode = 1;
-    string unit = 2;
-    double usageAmount = 3;
 }
 
 message MigrateRecommendationDetails{
