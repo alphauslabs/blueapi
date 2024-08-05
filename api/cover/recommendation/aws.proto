@@ -1,0 +1,363 @@
+syntax = "proto3";
+
+package blueapi.api.cover.recommendation;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/cover/recommendation";
+option java_package = "cloud.alphaus.blueapi.api.cover.recommendation";
+option java_outer_classname = "ApiCoverRecommendationProto";
+
+
+message MetricData {
+    message Metrics {
+        string date = 1;
+        double value = 2;
+    }
+    repeated Metrics metrics = 1;
+    double maxMetricInPercentage = 2;
+    string metricCapacity = 3;
+}
+
+message RecommendationData {
+    AWSRecommendations awsRecommendations = 1;
+    GCPRecommendations gcpRecommendations = 2;
+    AzureCSPRecommendations azureCspRecommendations = 3;
+    string target = 18;
+    string targetName = 19;
+    string resourceId = 4;
+    string service = 5;
+    string costGroup = 6;
+    string recommendationGroup = 7;
+    string category = 8;
+    string source = 9;
+    string id = 10;
+    string lastUpdatedAt = 11;
+    string region = 12;
+    string recommendation = 13;
+    double estimatedMonthlyCost = 14;
+    double estimatedMonthlySavings = 15;
+    double estimatedSavingsPercentage = 16;
+    string resourceName = 17;
+    optional bool restartNeeded = 20;
+    optional bool rollbackPossible = 21;
+}
+
+message CostExplorerRecommendations {
+    message DiscountPlans {
+        message RIOption {
+            message EstOutcomeFromPurchaseRI {
+                double aveUtilization = 1;
+                double aveNormalizesUnitsUsedPerHour = 2;
+                double aveNumberOfInstanceUsedPerHour = 3;
+                double breakEvenInMonths = 4;
+                double monthlyOnDemandCost = 5;
+                double monthlyRICost = 6;
+                double monthlySavings = 7;
+                double monthlySavingsPercentage = 8;
+                double maxNormalizedUnitsUsedPerHour = 9;
+                double minNormalizedUnitsUsedPerHour = 10;
+                double minNumberOfInstanceUsedPerHour = 11;
+                double maxNumberOfInstanceUsedPerHour = 12;
+            }
+            AWSResourceDetails.EC2Details ec2Details = 1;
+            AWSResourceDetails.RDSDetails rdsDetails = 9;
+            AWSResourceDetails.ElastiCacheDetails elasticacheDetails = 10;
+            AWSResourceDetails.RedshiftDetails redshiftDetails = 11;
+            AWSResourceDetails.OpensearchDetails opensearchDetails = 12;
+            AWSResourceDetails.MemoryDBDetails memoryDBDetails = 13;
+            double recommendedNormalizedUnits = 2;
+            double recommendedNumberOfInstanceToPurchase = 3;
+            EstOutcomeFromPurchaseRI estOutcomeFromPurchaseRI = 4;
+            string region = 5;
+            bool sizeFlexEligible = 6;
+            string tenancy = 7;
+            bool currentGeneration = 8;
+            
+        }
+        message SPOption {
+            message CurrentUtilizationDetails {
+                double aveCoverage = 1;
+                double aveHourOnDemandSpend = 2;
+                double maxHourlyOnDemandSpend = 3;
+                double minHourlyOnDemandSpend = 4;
+                double existingHourlyCommitment = 5;
+                double estOnDemandCostWithHourlyCommitment = 6;
+            }
+            message EstOutcomeFromPurchaseSP {
+                double aveCoverage = 1;
+                double aveUtilization = 2;
+                double monthlySavingsAmount = 3;
+                double onDemandCost = 4;
+                double roi = 5;
+                double savingsPlanCost = 6;
+                double savingsPercentage = 7;
+            }
+            string type = 1;
+            string currencyCode = 2;
+            double hourlyCommitmentToPurchase = 3;
+            string offeringId = 4;
+            CurrentUtilizationDetails currentUtilizationDetails = 5;
+            EstOutcomeFromPurchaseSP estOutcomeFromPurchaseSP = 6;
+
+        }
+        string paymentOption = 1;
+        string term = 2;
+        double upfrontCost = 3;
+        RIOption riOption = 4;
+        SPOption spOption = 5;
+
+    }
+    message EC2Rightsize {
+        message Details {
+            double monthlyCost = 1;
+            double monthlySavingsAmount = 2;
+            double monthlySavingsPercentage = 3;
+            AWSResourceDetails.EC2Details ec2Details = 4;
+        }
+        Details currentDetails = 1;
+        Details recommendationDetails = 2;
+    }
+    message TerminateEC2 {
+        AWSResourceDetails.EC2Details ec2Details = 1;
+        double monthlyCost = 2;
+    }
+    EC2Rightsize ec2Rightsize = 2;
+    DiscountPlans discountPlans = 1;
+    TerminateEC2 terminateEc2 = 3;
+}
+
+message CostOptimizationHubRecommendations {
+    message Details {
+        message CostCalculation {
+            message EstimatedDiscounts {
+                double reservedInstancesDiscount = 1;
+                double savingsPlansDiscount = 2;
+                double otherDiscount = 3;
+            }
+            message UsageTypes {
+                string operation = 1;
+                string productCode = 2;
+                string unit = 3;
+                double usageAmount = 4;
+                string usageType = 5;
+            }
+            double estimatedCostAfterDiscount = 1;
+            double estimatedCostBeforeDiscount = 2;
+            double estimatedNetUnusedAmortizedCommitments = 3;
+            EstimatedDiscounts estimatedDiscounts = 4;
+            repeated UsageTypes usageTypes = 5;
+        }
+        CostCalculation costCalculation = 1;
+        AWSResourceDetails.EC2Details ec2Details = 2;
+        AWSResourceDetails.RDSDetails rdsDetails = 3;
+        AWSResourceDetails.EBSDetails ebsDetails = 4;
+        AWSResourceDetails.EC2AutoScalingGroupDetails ec2AutoScalingGroupDetails = 5;
+        AWSResourceDetails.ECSDetails ecsDetails = 6;
+        AWSResourceDetails.LambdaDetails lambdaDetails = 7;
+    }
+    Details currentDetails = 1;
+    Details recommendationDetails = 2;
+}
+
+message AWSResourceDetails {
+    message ELBDetails {
+        message LoadBalancer {
+            string name = 1;
+        }
+        LoadBalancer loadBalancer = 1;
+    }
+    message S3Details {
+        message BucketDetails {
+            string arn = 1;
+            string name = 2;
+        }
+        BucketDetails bucket = 1;
+    }
+    message MemoryDBDetails {
+        message NodeDetails {
+            string type = 1;
+            string family = 2;
+        }
+        NodeDetails node = 1;
+    }
+    message OpensearchDetails {
+        message InstanceDetails {
+            string instanceClass = 1;
+            string instanceSize = 2;
+        }
+        InstanceDetails instance = 1;
+    }
+    message RedshiftDetails {
+        message NodeDetails {
+            string type = 1;
+            string family = 2;
+        }
+        NodeDetails node = 2;
+    }
+    message ElastiCacheDetails {
+        message NodeDetails {
+            string type = 1;
+            string family = 2;
+        }
+        NodeDetails node = 1;
+    }
+    message EC2Details {
+        message InstanceDetails {
+            string type = 1;
+            string tenancy = 2;
+            string platform = 3;
+            string family = 4;
+            EC2Metrics metrics = 5;
+            string name = 6;
+            EIPDetails eip = 7;
+            string status = 8;
+            message EC2Metrics {
+                MetricData cpuUtilizationMetrics = 1;
+                MetricData diskUtilizationMetrics = 2;
+                MetricData networkUtilizationMetrics = 3;
+                MetricData memoryUtilizationMetrics = 4;
+            }
+            message EIPDetails {
+                string ipAddress = 1;
+            }
+        }
+        message RISpecsDetails {
+            string offeringClass = 1;
+        }
+        InstanceDetails instance = 1;
+        RISpecsDetails riSpecsDetails = 2;
+    }
+
+    message RDSDetails {
+        message DBInstanceDetails {
+            message Storage {
+                double allocatedStorageInGb = 1;
+                double iops = 2;
+                double storageThroughput = 3;
+                string type = 4;
+            }
+            Storage storage = 1;
+            string name = 9;
+            string instanceClass = 2;
+            string dbEdition = 3;
+            string dbEngine = 4;
+            string deploymentOptions = 5;
+            string family = 6;
+            string multiAZ = 10;
+            string licenseModel = 7;
+            RDSMetrics metrics = 8;
+            message RDSMetrics {
+                MetricData cpuUtilizationMetrics = 1;
+            }
+        }
+        DBInstanceDetails dbInstance = 1;
+    }
+
+    message EBSDetails {
+        message VolumeDetails {
+            string attachmentState = 1;
+            double iops = 2;
+            double throughput = 3;
+            double sizeInGb = 4;
+            string type = 5;
+            string id = 6;
+        }
+        VolumeDetails volumeDetails = 1;
+    }
+
+    message EC2AutoScalingGroupDetails {
+        message InstanceConfigurationDetails {
+            string type = 1;
+        }
+        InstanceConfigurationDetails instanceConfigurationDetails = 1;
+    }
+
+    message ECSDetails {
+        message ServiceDetails {
+            string architecture = 1;
+            int64 memorySizeInMB = 2;
+            string platform = 3;
+            double vCpu = 4;
+        }
+        ServiceDetails service = 1;
+    }
+
+    message LambdaDetails {
+        message FunctionDetails {
+            string architecture = 1;
+            int64 memorySizeInMB = 2;
+            string arn = 3;
+        }
+        FunctionDetails function = 1;
+    }
+}
+
+
+message TrustedAdvisorRecommendations {
+    string severityStatus = 1;
+    string recommendationArn = 2;
+    string exclusionStatus = 3;
+    LowUtilizationEC2Instances lowUtilizationEc2Instances = 4;
+    RDSIdleDBInstances rdsIdleDbInstances = 5;
+    S3IncompleteMPU s3IncompleteMPU = 6;
+    LambdaHighErrorRates lambdaHighErrorRates = 7;
+    UnderutilizedEBSVolume underutilizedEBSVolume = 8;
+    UnassociatedEIP unassociatedEIP = 9;
+    IdleLoadBalancer idleLoadBalancer = 10;
+    AmazonEC2InstanceStopped ec2InstancesStopped = 11;
+    message LowUtilizationEC2Instances {
+        AWSResourceDetails.EC2Details ec2Instance = 1;
+        double aveCpuUtilizationBy14Day = 2;
+        double aveNetworkIOBy14Day = 3;
+    }
+    message RDSIdleDBInstances {
+        AWSResourceDetails.RDSDetails rdsDetails = 1;
+        string daysLastConnection = 2;
+    }
+    message S3IncompleteMPU {
+        AWSResourceDetails.S3Details s3Details = 1;
+        string lifecycleRuleForDeletingIMPU = 2;
+        string daysAfterInitiation = 3;
+    }
+    message LambdaHighErrorRates {
+        double avgDailyErrorRates = 1;
+        double avgDailyInvokes = 2;
+        double currentDayErrorRates = 3;
+        double currentDayInvokes = 4;
+        string dateForMaxErrorRates = 5;
+        double lostDailyComputeCost = 6;
+        double maxDailyErrorRates = 7;
+        AWSResourceDetails.LambdaDetails lambdaDetails = 8;
+    }
+    message UnderutilizedEBSVolume {
+        AWSResourceDetails.EBSDetails ebsDetails = 1;
+        double monthlyStorageCost = 2;
+    }
+    message UnassociatedEIP {
+        AWSResourceDetails.EC2Details.InstanceDetails.EIPDetails eipDetails = 1;
+    }
+    message IdleLoadBalancer {
+        AWSResourceDetails.ELBDetails elbDetails = 1;
+        string reason = 2;
+    }
+    message AmazonEC2InstanceStopped {
+        AWSResourceDetails.EC2Details ec2Details = 1;
+        string awsConfigRule = 2;
+        string inputParameters = 3;
+        string resource = 4;
+    }
+}
+
+message AWSRecommendations {
+    CostExplorerRecommendations costExplorerRecommendations = 1;
+    CostOptimizationHubRecommendations costOptimizationHubRecommendations = 2;
+    TrustedAdvisorRecommendations trustedAdvisorRecommendations = 3;
+    string resourceArn = 4;
+}
+
+message GCPRecommendations {
+
+}
+
+message AzureCSPRecommendations {
+
+}
