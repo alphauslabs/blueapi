@@ -3,6 +3,7 @@ syntax = "proto3";
 package blueapi.cover.v1;
 
 import "api/cover/optimizationrecommendation.proto";
+import "api/cover/recommendation/aws.proto";
 import "api/cover/attribute.proto";
 import "api/cover/user.proto";
 import "api/cover/view.proto";
@@ -1065,6 +1066,13 @@ service Cover {
     };
   }
 
+  // Retrieves a specifiv recommendation by its ID. (Version 2)
+  rpc GetRecommendationV2(GetRecommendationV2Request) returns (GetRecommendationV2Response) {
+    option (google.api.http) = {
+      get: '/v1/recommendations/{id}'
+    };
+  }
+
   // Executes optimization based on a recommendation.
   rpc ExecuteOptimization(ExecuteOptimizationRequest) returns (ExecuteOptimizationResponse) {
     option (google.api.http) = {
@@ -1180,7 +1188,15 @@ service Cover {
   }
 }
 
- 
+message GetRecommendationV2Request {
+  string id = 1;
+  string costGroupId = 2;
+  string periodOption = 3;
+} 
+
+message GetRecommendationV2Response {
+  api.cover.recommendation.RecommendationData data = 1;
+}
 
 
 // Request message for OnboardOrg
