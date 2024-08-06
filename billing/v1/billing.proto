@@ -475,6 +475,18 @@ message ListBillingGroupsRequest {
   // For example, When Aws and Gcp to be filtered vendors=aws,gcp
   // If you want to get all vendors, not set parameter.
   string vendors = 2;
+  
+  // Optional. Filter BillingGroups by its tags. Format tags=key1:val1,key2:val2
+  repeated BillingGroupsTag tags = 3;
+
+  // Optional. The logical operation if multiple tag is specified. Format: tagsLogic=and
+  // Valid values and,or. Default: "or" 
+  string tagsLogic = 4;
+}
+
+message BillingGroupsTag {
+  string key = 1;
+  string value = 2;
 }
 
 // Request message for the Billing.CreateBillingGroup rpc.
