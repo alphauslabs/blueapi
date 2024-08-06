@@ -7668,6 +7668,49 @@
         ]
       }
     },
+    "/v1/recommendations/details/{id}": {
+      "get": {
+        "summary": "Retrieves a specifiv recommendation by its ID. (Version 2)",
+        "operationId": "Cover_GetRecommendationV2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetRecommendationV2Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "costGroupId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "periodOption",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/recommendations/optimization": {
       "get": {
         "summary": "Lists recommendations based on specified criteria.",
@@ -7960,49 +8003,6 @@
             "schema": {
               "$ref": "#/definitions/CoverExecuteOptimizationBody"
             }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/recommendations/{id}": {
-      "get": {
-        "summary": "Retrieves a specifiv recommendation by its ID. (Version 2)",
-        "operationId": "Cover_GetRecommendationV2",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetRecommendationV2Response"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "costGroupId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "periodOption",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "tags": [
