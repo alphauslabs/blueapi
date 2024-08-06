@@ -7668,6 +7668,49 @@
         ]
       }
     },
+    "/v1/recommendations/details/{id}": {
+      "get": {
+        "summary": "Retrieves a specific recommendation by its ID. (Version 2)",
+        "operationId": "Cover_GetRecommendationV2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetRecommendationV2Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "costGroupId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "periodOption",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/recommendations/optimization": {
       "get": {
         "summary": "Lists recommendations based on specified criteria.",
@@ -12429,6 +12472,154 @@
     }
   },
   "definitions": {
+    "AWSResourceDetailsEC2AutoScalingGroupDetails": {
+      "type": "object",
+      "properties": {
+        "instanceConfigurationDetails": {
+          "$ref": "#/definitions/EC2AutoScalingGroupDetailsInstanceConfigurationDetails"
+        }
+      }
+    },
+    "AWSResourceDetailsEC2DetailsInstanceDetails": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "tenancy": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "metrics": {
+          "$ref": "#/definitions/InstanceDetailsEC2Metrics"
+        },
+        "name": {
+          "type": "string"
+        },
+        "eip": {
+          "$ref": "#/definitions/InstanceDetailsEIPDetails"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "AWSResourceDetailsECSDetails": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "$ref": "#/definitions/AWSResourceDetailsECSDetailsServiceDetails"
+        }
+      }
+    },
+    "AWSResourceDetailsECSDetailsServiceDetails": {
+      "type": "object",
+      "properties": {
+        "architecture": {
+          "type": "string"
+        },
+        "memorySizeInMB": {
+          "type": "string",
+          "format": "int64"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "vCpu": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "AWSResourceDetailsELBDetails": {
+      "type": "object",
+      "properties": {
+        "loadBalancer": {
+          "$ref": "#/definitions/ELBDetailsLoadBalancer"
+        }
+      }
+    },
+    "AWSResourceDetailsElastiCacheDetails": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "$ref": "#/definitions/AWSResourceDetailsElastiCacheDetailsNodeDetails"
+        }
+      }
+    },
+    "AWSResourceDetailsElastiCacheDetailsNodeDetails": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        }
+      }
+    },
+    "AWSResourceDetailsLambdaDetails": {
+      "type": "object",
+      "properties": {
+        "function": {
+          "$ref": "#/definitions/LambdaDetailsFunctionDetails"
+        }
+      }
+    },
+    "AWSResourceDetailsMemoryDBDetailsNodeDetails": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        }
+      }
+    },
+    "AWSResourceDetailsOpensearchDetails": {
+      "type": "object",
+      "properties": {
+        "instance": {
+          "$ref": "#/definitions/AWSResourceDetailsOpensearchDetailsInstanceDetails"
+        }
+      }
+    },
+    "AWSResourceDetailsOpensearchDetailsInstanceDetails": {
+      "type": "object",
+      "properties": {
+        "instanceClass": {
+          "type": "string"
+        },
+        "instanceSize": {
+          "type": "string"
+        }
+      }
+    },
+    "AWSResourceDetailsRedshiftDetailsNodeDetails": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        }
+      }
+    },
+    "AWSResourceDetailsS3Details": {
+      "type": "object",
+      "properties": {
+        "bucket": {
+          "$ref": "#/definitions/S3DetailsBucketDetails"
+        }
+      }
+    },
     "AccountHistory": {
       "type": "object",
       "properties": {
@@ -12794,6 +12985,23 @@
       },
       "description": "Request message for the Cost.CalculateCosts rpc."
     },
+    "CostCalculationEstimatedDiscounts": {
+      "type": "object",
+      "properties": {
+        "reservedInstancesDiscount": {
+          "type": "number",
+          "format": "double"
+        },
+        "savingsPlansDiscount": {
+          "type": "number",
+          "format": "double"
+        },
+        "otherDiscount": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
     "CostCheckAccountsBelongToMspBody": {
       "type": "object",
       "properties": {
@@ -12926,6 +13134,70 @@
         }
       },
       "description": "Request message for the Cost.CreatePayerAccount rpc."
+    },
+    "CostExplorerRecommendationsDiscountPlans": {
+      "type": "object",
+      "properties": {
+        "paymentOption": {
+          "type": "string"
+        },
+        "term": {
+          "type": "string"
+        },
+        "upfrontCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "riOption": {
+          "$ref": "#/definitions/DiscountPlansRIOption"
+        },
+        "spOption": {
+          "$ref": "#/definitions/DiscountPlansSPOption"
+        }
+      }
+    },
+    "CostExplorerRecommendationsEC2Rightsize": {
+      "type": "object",
+      "properties": {
+        "currentDetails": {
+          "$ref": "#/definitions/CostExplorerRecommendationsEC2RightsizeDetails"
+        },
+        "recommendationDetails": {
+          "$ref": "#/definitions/CostExplorerRecommendationsEC2RightsizeDetails"
+        }
+      }
+    },
+    "CostExplorerRecommendationsEC2RightsizeDetails": {
+      "type": "object",
+      "properties": {
+        "monthlyCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySavingsAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySavingsPercentage": {
+          "type": "number",
+          "format": "double"
+        },
+        "ec2Details": {
+          "$ref": "#/definitions/recommendationAWSResourceDetailsEC2Details"
+        }
+      }
+    },
+    "CostExplorerRecommendationsTerminateEC2": {
+      "type": "object",
+      "properties": {
+        "ec2Details": {
+          "$ref": "#/definitions/recommendationAWSResourceDetailsEC2Details"
+        },
+        "monthlyCost": {
+          "type": "number",
+          "format": "double"
+        }
+      }
     },
     "CostExportCostFiltersFileBody": {
       "type": "object",
@@ -13131,6 +13403,33 @@
         }
       },
       "description": "Request message for the Cost.ListCalculatorRunningAccounts rpc."
+    },
+    "CostOptimizationHubRecommendationsDetailsCostCalculation": {
+      "type": "object",
+      "properties": {
+        "estimatedCostAfterDiscount": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedCostBeforeDiscount": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedNetUnusedAmortizedCommitments": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedDiscounts": {
+          "$ref": "#/definitions/CostCalculationEstimatedDiscounts"
+        },
+        "usageTypes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/DetailsCostCalculationUsageTypes"
+          }
+        }
+      }
     },
     "CostReadAdjustmentsBody": {
       "type": "object",
@@ -13876,6 +14175,175 @@
         }
       }
     },
+    "DBInstanceDetailsRDSMetrics": {
+      "type": "object",
+      "properties": {
+        "cpuUtilizationMetrics": {
+          "$ref": "#/definitions/recommendationMetricData"
+        }
+      }
+    },
+    "DBInstanceDetailsStorage": {
+      "type": "object",
+      "properties": {
+        "allocatedStorageInGb": {
+          "type": "number",
+          "format": "double"
+        },
+        "iops": {
+          "type": "number",
+          "format": "double"
+        },
+        "storageThroughput": {
+          "type": "number",
+          "format": "double"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "DetailsCostCalculationUsageTypes": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "type": "string"
+        },
+        "productCode": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "usageAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "usageType": {
+          "type": "string"
+        }
+      }
+    },
+    "DiscountPlansRIOption": {
+      "type": "object",
+      "properties": {
+        "ec2Details": {
+          "$ref": "#/definitions/recommendationAWSResourceDetailsEC2Details"
+        },
+        "rdsDetails": {
+          "$ref": "#/definitions/recommendationAWSResourceDetailsRDSDetails"
+        },
+        "elasticacheDetails": {
+          "$ref": "#/definitions/AWSResourceDetailsElastiCacheDetails"
+        },
+        "redshiftDetails": {
+          "$ref": "#/definitions/recommendationAWSResourceDetailsRedshiftDetails"
+        },
+        "opensearchDetails": {
+          "$ref": "#/definitions/AWSResourceDetailsOpensearchDetails"
+        },
+        "memoryDBDetails": {
+          "$ref": "#/definitions/recommendationAWSResourceDetailsMemoryDBDetails"
+        },
+        "recommendedNormalizedUnits": {
+          "type": "number",
+          "format": "double"
+        },
+        "recommendedNumberOfInstanceToPurchase": {
+          "type": "number",
+          "format": "double"
+        },
+        "estOutcomeFromPurchaseRI": {
+          "$ref": "#/definitions/RIOptionEstOutcomeFromPurchaseRI"
+        },
+        "region": {
+          "type": "string"
+        },
+        "sizeFlexEligible": {
+          "type": "boolean"
+        },
+        "tenancy": {
+          "type": "string"
+        },
+        "currentGeneration": {
+          "type": "boolean"
+        }
+      }
+    },
+    "DiscountPlansSPOption": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "currencyCode": {
+          "type": "string"
+        },
+        "hourlyCommitmentToPurchase": {
+          "type": "number",
+          "format": "double"
+        },
+        "offeringId": {
+          "type": "string"
+        },
+        "currentUtilizationDetails": {
+          "$ref": "#/definitions/SPOptionCurrentUtilizationDetails"
+        },
+        "estOutcomeFromPurchaseSP": {
+          "$ref": "#/definitions/SPOptionEstOutcomeFromPurchaseSP"
+        }
+      }
+    },
+    "EBSDetailsVolumeDetails": {
+      "type": "object",
+      "properties": {
+        "attachmentState": {
+          "type": "string"
+        },
+        "iops": {
+          "type": "number",
+          "format": "double"
+        },
+        "throughput": {
+          "type": "number",
+          "format": "double"
+        },
+        "sizeInGb": {
+          "type": "number",
+          "format": "double"
+        },
+        "type": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "EC2AutoScalingGroupDetailsInstanceConfigurationDetails": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "EC2DetailsRISpecsDetails": {
+      "type": "object",
+      "properties": {
+        "offeringClass": {
+          "type": "string"
+        }
+      }
+    },
+    "ELBDetailsLoadBalancer": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
     "IamCreatePartnerTokenBody": {
       "type": "object",
       "description": "Request message for the Iam.CreatePartnerToken rpc."
@@ -13920,6 +14388,46 @@
       "type": "object",
       "properties": {
         "metadata": {
+          "type": "string"
+        }
+      }
+    },
+    "InstanceDetailsEC2Metrics": {
+      "type": "object",
+      "properties": {
+        "cpuUtilizationMetrics": {
+          "$ref": "#/definitions/recommendationMetricData"
+        },
+        "diskUtilizationMetrics": {
+          "$ref": "#/definitions/recommendationMetricData"
+        },
+        "networkUtilizationMetrics": {
+          "$ref": "#/definitions/recommendationMetricData"
+        },
+        "memoryUtilizationMetrics": {
+          "$ref": "#/definitions/recommendationMetricData"
+        }
+      }
+    },
+    "InstanceDetailsEIPDetails": {
+      "type": "object",
+      "properties": {
+        "ipAddress": {
+          "type": "string"
+        }
+      }
+    },
+    "LambdaDetailsFunctionDetails": {
+      "type": "object",
+      "properties": {
+        "architecture": {
+          "type": "string"
+        },
+        "memorySizeInMB": {
+          "type": "string",
+          "format": "int64"
+        },
+        "arn": {
           "type": "string"
         }
       }
@@ -13986,6 +14494,18 @@
       "default": "JPY",
       "description": "supported currency."
     },
+    "MetricDataMetrics": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
     "OperationsCancelOperationBody": {
       "type": "object",
       "description": "Request message for the Operations.CancelOperation rpc."
@@ -14022,6 +14542,94 @@
       },
       "title": "Request message for GetPricing"
     },
+    "RDSDetailsDBInstanceDetails": {
+      "type": "object",
+      "properties": {
+        "storage": {
+          "$ref": "#/definitions/DBInstanceDetailsStorage"
+        },
+        "name": {
+          "type": "string"
+        },
+        "instanceClass": {
+          "type": "string"
+        },
+        "dbEdition": {
+          "type": "string"
+        },
+        "dbEngine": {
+          "type": "string"
+        },
+        "deploymentOptions": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "multiAZ": {
+          "type": "string"
+        },
+        "licenseModel": {
+          "type": "string"
+        },
+        "metrics": {
+          "$ref": "#/definitions/DBInstanceDetailsRDSMetrics"
+        }
+      }
+    },
+    "RIOptionEstOutcomeFromPurchaseRI": {
+      "type": "object",
+      "properties": {
+        "aveUtilization": {
+          "type": "number",
+          "format": "double"
+        },
+        "aveNormalizesUnitsUsedPerHour": {
+          "type": "number",
+          "format": "double"
+        },
+        "aveNumberOfInstanceUsedPerHour": {
+          "type": "number",
+          "format": "double"
+        },
+        "breakEvenInMonths": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyOnDemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyRICost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySavingsPercentage": {
+          "type": "number",
+          "format": "double"
+        },
+        "maxNormalizedUnitsUsedPerHour": {
+          "type": "number",
+          "format": "double"
+        },
+        "minNormalizedUnitsUsedPerHour": {
+          "type": "number",
+          "format": "double"
+        },
+        "minNumberOfInstanceUsedPerHour": {
+          "type": "number",
+          "format": "double"
+        },
+        "maxNumberOfInstanceUsedPerHour": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
     "RoundingRoundingMethod": {
       "type": "string",
       "enum": [
@@ -14032,6 +14640,203 @@
       "default": "ROUND",
       "description": "- ROUND: round\n - ROUNDUP: round up\n - ROUNDDOWN: round down",
       "title": "RoundingMethod"
+    },
+    "S3DetailsBucketDetails": {
+      "type": "object",
+      "properties": {
+        "arn": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "SPOptionCurrentUtilizationDetails": {
+      "type": "object",
+      "properties": {
+        "aveCoverage": {
+          "type": "number",
+          "format": "double"
+        },
+        "aveHourOnDemandSpend": {
+          "type": "number",
+          "format": "double"
+        },
+        "maxHourlyOnDemandSpend": {
+          "type": "number",
+          "format": "double"
+        },
+        "minHourlyOnDemandSpend": {
+          "type": "number",
+          "format": "double"
+        },
+        "existingHourlyCommitment": {
+          "type": "number",
+          "format": "double"
+        },
+        "estOnDemandCostWithHourlyCommitment": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "SPOptionEstOutcomeFromPurchaseSP": {
+      "type": "object",
+      "properties": {
+        "aveCoverage": {
+          "type": "number",
+          "format": "double"
+        },
+        "aveUtilization": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySavingsAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "onDemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "roi": {
+          "type": "number",
+          "format": "double"
+        },
+        "savingsPlanCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "savingsPercentage": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsAmazonEC2InstanceStopped": {
+      "type": "object",
+      "properties": {
+        "ec2Details": {
+          "$ref": "#/definitions/recommendationAWSResourceDetailsEC2Details"
+        },
+        "awsConfigRule": {
+          "type": "string"
+        },
+        "inputParameters": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsIdleLoadBalancer": {
+      "type": "object",
+      "properties": {
+        "elbDetails": {
+          "$ref": "#/definitions/AWSResourceDetailsELBDetails"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsLambdaHighErrorRates": {
+      "type": "object",
+      "properties": {
+        "avgDailyErrorRates": {
+          "type": "number",
+          "format": "double"
+        },
+        "avgDailyInvokes": {
+          "type": "number",
+          "format": "double"
+        },
+        "currentDayErrorRates": {
+          "type": "number",
+          "format": "double"
+        },
+        "currentDayInvokes": {
+          "type": "number",
+          "format": "double"
+        },
+        "dateForMaxErrorRates": {
+          "type": "string"
+        },
+        "lostDailyComputeCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "maxDailyErrorRates": {
+          "type": "number",
+          "format": "double"
+        },
+        "lambdaDetails": {
+          "$ref": "#/definitions/AWSResourceDetailsLambdaDetails"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsLowUtilizationEC2Instances": {
+      "type": "object",
+      "properties": {
+        "ec2Instance": {
+          "$ref": "#/definitions/recommendationAWSResourceDetailsEC2Details"
+        },
+        "aveCpuUtilizationBy14Day": {
+          "type": "number",
+          "format": "double"
+        },
+        "aveNetworkIOBy14Day": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsRDSIdleDBInstances": {
+      "type": "object",
+      "properties": {
+        "rdsDetails": {
+          "$ref": "#/definitions/recommendationAWSResourceDetailsRDSDetails"
+        },
+        "daysLastConnection": {
+          "type": "string"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsS3IncompleteMPU": {
+      "type": "object",
+      "properties": {
+        "s3Details": {
+          "$ref": "#/definitions/AWSResourceDetailsS3Details"
+        },
+        "lifecycleRuleForDeletingIMPU": {
+          "type": "string"
+        },
+        "daysAfterInitiation": {
+          "type": "string"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsUnassociatedEIP": {
+      "type": "object",
+      "properties": {
+        "eipDetails": {
+          "$ref": "#/definitions/InstanceDetailsEIPDetails"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsUnderutilizedEBSVolume": {
+      "type": "object",
+      "properties": {
+        "ebsDetails": {
+          "$ref": "#/definitions/recommendationAWSResourceDetailsEBSDetails"
+        },
+        "monthlyStorageCost": {
+          "type": "number",
+          "format": "double"
+        }
+      }
     },
     "adminv1NotificationAccount": {
       "type": "object",
@@ -15584,6 +16389,95 @@
         }
       }
     },
+    "apicoverAWSRecommendations": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
+        },
+        "accountName": {
+          "type": "string"
+        },
+        "instanceId": {
+          "type": "string"
+        },
+        "instanceName": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "costGroup": {
+          "type": "string"
+        },
+        "recommendation": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "estsavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "estcost": {
+          "type": "number",
+          "format": "double"
+        },
+        "estsavingsPercentage": {
+          "type": "number",
+          "format": "double"
+        },
+        "resourceArn": {
+          "type": "string"
+        },
+        "restartNeeded": {
+          "type": "boolean"
+        },
+        "rollbackPossible": {
+          "type": "boolean"
+        },
+        "lastUpdatedAt": {
+          "type": "string"
+        },
+        "recommendationGroup": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "purchaseRIRecommendationDetails": {
+          "$ref": "#/definitions/coverPurchaseRIRecommendationDetails"
+        },
+        "savingsPlanRecommendationDetails": {
+          "$ref": "#/definitions/coverSavingsPlanRecommendationDetails"
+        },
+        "rightSizingRecommendationDetails": {
+          "$ref": "#/definitions/coverRightSizingRecommendationDetails"
+        },
+        "upgradeRecommendationDetails": {
+          "$ref": "#/definitions/coverUpgradeRecommendationDetails"
+        },
+        "migrateRecommendationDetails": {
+          "$ref": "#/definitions/coverMigrateRecommendationDetails"
+        },
+        "stopInstanceRecommendationDetails": {
+          "$ref": "#/definitions/coverStopInstanceRecommendationDetails"
+        },
+        "deleteRecommendationDetails": {
+          "$ref": "#/definitions/coverDeleteRecommendationDetails"
+        },
+        "otherRecommendationDetails": {
+          "$ref": "#/definitions/coverOtherRecommendationDetails"
+        }
+      }
+    },
     "apicoverAccount": {
       "type": "object",
       "properties": {
@@ -15685,6 +16579,139 @@
         }
       }
     },
+    "apicoverCostCalculation": {
+      "type": "object",
+      "properties": {
+        "estCostAfterDiscount": {
+          "type": "number",
+          "format": "double"
+        },
+        "estCostBeforeDiscount": {
+          "type": "number",
+          "format": "double"
+        },
+        "otherDiscount": {
+          "type": "number",
+          "format": "double"
+        },
+        "savingsPlanDiscount": {
+          "type": "number",
+          "format": "double"
+        },
+        "estNetUnusedAmortizedCommitments": {
+          "type": "number",
+          "format": "double"
+        },
+        "reservedInstanceDiscount": {
+          "type": "number",
+          "format": "double"
+        },
+        "usageTypes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apicoverUsageTypes"
+          }
+        }
+      }
+    },
+    "apicoverEBSDetails": {
+      "type": "object",
+      "properties": {
+        "currentEBSDetails": {
+          "$ref": "#/definitions/coverCurrentEBSDetails"
+        },
+        "upgradeEBSDetails": {
+          "$ref": "#/definitions/coverEBSRecommendationDetails"
+        }
+      }
+    },
+    "apicoverEC2Details": {
+      "type": "object",
+      "properties": {
+        "instanceType": {
+          "type": "string"
+        },
+        "tenancy": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        }
+      }
+    },
+    "apicoverMemoryDBDetails": {
+      "type": "object",
+      "properties": {
+        "family": {
+          "type": "string"
+        },
+        "nodeType": {
+          "type": "string"
+        }
+      }
+    },
+    "apicoverRDSDetails": {
+      "type": "object",
+      "properties": {
+        "dbEdition": {
+          "type": "string"
+        },
+        "dbEngine": {
+          "type": "string"
+        },
+        "deploymentOptions": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "instanceType": {
+          "type": "string"
+        },
+        "licenseModel": {
+          "type": "string"
+        }
+      }
+    },
+    "apicoverRedshiftDetails": {
+      "type": "object",
+      "properties": {
+        "currentGeneration": {
+          "type": "boolean"
+        },
+        "nodeType": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        }
+      }
+    },
+    "apicoverUsageTypes": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "type": "string"
+        },
+        "productCode": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "usageAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "usageType": {
+          "type": "string"
+        }
+      }
+    },
     "apicoverUtilizationData": {
       "type": "object",
       "properties": {
@@ -15761,6 +16788,396 @@
       },
       "description": "see gcp billing data schema details:[https://cloud.google.com/billing/docs/how-to/export-data-bigquery-tables]",
       "title": "Cost for Api Response"
+    },
+    "apipricingServiceDetails": {
+      "type": "object",
+      "properties": {
+        "offerTermCode": {
+          "type": "string"
+        },
+        "rateCode": {
+          "type": "string"
+        },
+        "termType": {
+          "type": "string"
+        },
+        "priceDescription": {
+          "type": "string"
+        },
+        "effectiveDate": {
+          "type": "string"
+        },
+        "startingRange": {
+          "type": "string"
+        },
+        "endingRange": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "relatedTo": {
+          "type": "string"
+        },
+        "leaseContractLength": {
+          "type": "string"
+        },
+        "purchaseOption": {
+          "type": "string"
+        },
+        "offeringClass": {
+          "type": "string"
+        },
+        "productFamily": {
+          "type": "string"
+        },
+        "serviceCode": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "locationType": {
+          "type": "string"
+        },
+        "instanceType": {
+          "type": "string"
+        },
+        "currentGeneration": {
+          "type": "string"
+        },
+        "instanceFamily": {
+          "type": "string"
+        },
+        "vcpu": {
+          "type": "string"
+        },
+        "physicalProcessor": {
+          "type": "string"
+        },
+        "clockSpeed": {
+          "type": "string"
+        },
+        "memory": {
+          "type": "string"
+        },
+        "storage": {
+          "type": "string"
+        },
+        "networkPerformance": {
+          "type": "string"
+        },
+        "processorArchitecture": {
+          "type": "string"
+        },
+        "storageMedia": {
+          "type": "string"
+        },
+        "volumeType": {
+          "type": "string"
+        },
+        "maxVolumeSize": {
+          "type": "string"
+        },
+        "maxIopsVolume": {
+          "type": "string"
+        },
+        "maxIopsBurstPerformance": {
+          "type": "string"
+        },
+        "maxThroughputVolume": {
+          "type": "string"
+        },
+        "provisioned": {
+          "type": "string"
+        },
+        "tenancy": {
+          "type": "string"
+        },
+        "ebsOptimized": {
+          "type": "string"
+        },
+        "operatingSystem": {
+          "type": "string"
+        },
+        "licenseModel": {
+          "type": "string"
+        },
+        "groupings": {
+          "type": "string"
+        },
+        "groupDescription": {
+          "type": "string"
+        },
+        "transferType": {
+          "type": "string"
+        },
+        "fromLocation": {
+          "type": "string"
+        },
+        "fromLocationType": {
+          "type": "string"
+        },
+        "toLocation": {
+          "type": "string"
+        },
+        "toLocationType": {
+          "type": "string"
+        },
+        "usageType": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "availabilityZone": {
+          "type": "string"
+        },
+        "capacityStatus": {
+          "type": "string"
+        },
+        "classicNetworkingSupport": {
+          "type": "string"
+        },
+        "dedicatedEbsThroughput": {
+          "type": "string"
+        },
+        "ecu": {
+          "type": "string"
+        },
+        "elasticGraphicsType": {
+          "type": "string"
+        },
+        "enhancedNetworkingSupported": {
+          "type": "string"
+        },
+        "fromRegionCode": {
+          "type": "string"
+        },
+        "gpu": {
+          "type": "string"
+        },
+        "gpuMemory": {
+          "type": "string"
+        },
+        "instance": {
+          "type": "string"
+        },
+        "instanceCapacity10Xlarge": {
+          "type": "string"
+        },
+        "instanceCapacity12Xlarge": {
+          "type": "string"
+        },
+        "instanceCapacity16Xlarge": {
+          "type": "string"
+        },
+        "instanceCapacity18Xlarge": {
+          "type": "string"
+        },
+        "instanceCapacity24Xlarge": {
+          "type": "string"
+        },
+        "instanceCapacity2Xlarge": {
+          "type": "string"
+        },
+        "instanceCapacity32Xlarge": {
+          "type": "string"
+        },
+        "instanceCapacity4Xlarge": {
+          "type": "string"
+        },
+        "instanceCapacity8Xlarge": {
+          "type": "string"
+        },
+        "instanceCapacity9Xlarge": {
+          "type": "string"
+        },
+        "instanceCapacityLarge": {
+          "type": "string"
+        },
+        "instanceCapacityMedium": {
+          "type": "string"
+        },
+        "instanceCapacityMetal": {
+          "type": "string"
+        },
+        "instanceCapacityXlarge": {
+          "type": "string"
+        },
+        "instanceSku": {
+          "type": "string"
+        },
+        "intelAvx2Available": {
+          "type": "string"
+        },
+        "intelAvxAvailable": {
+          "type": "string"
+        },
+        "intelTurboAvailable": {
+          "type": "string"
+        },
+        "marketOption": {
+          "type": "string"
+        },
+        "normalizationSizeFactor": {
+          "type": "string"
+        },
+        "physicalCores": {
+          "type": "string"
+        },
+        "preInstalledSw": {
+          "type": "string"
+        },
+        "processorFeatures": {
+          "type": "string"
+        },
+        "productType": {
+          "type": "string"
+        },
+        "resourceType": {
+          "type": "string"
+        },
+        "serviceName": {
+          "type": "string"
+        },
+        "snapShotArchiveFeeType": {
+          "type": "string"
+        },
+        "toRegionCode": {
+          "type": "string"
+        },
+        "volumeApiName": {
+          "type": "string"
+        },
+        "vpcNetworkingSupport": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "availability": {
+          "type": "string"
+        },
+        "storageClass": {
+          "type": "string"
+        },
+        "feeCode": {
+          "type": "string"
+        },
+        "feeDescription": {
+          "type": "string"
+        },
+        "durability": {
+          "type": "string"
+        },
+        "overhead": {
+          "type": "string"
+        },
+        "cacheEngine": {
+          "type": "string"
+        },
+        "ssd": {
+          "type": "string"
+        },
+        "minVolumeSize": {
+          "type": "string"
+        },
+        "engineCode": {
+          "type": "string"
+        },
+        "databaseEngine": {
+          "type": "string"
+        },
+        "databaseEdition": {
+          "type": "string"
+        },
+        "deploymentOption": {
+          "type": "string"
+        },
+        "acu": {
+          "type": "string"
+        },
+        "deploymentModel": {
+          "type": "string"
+        },
+        "engineMajorVersion": {
+          "type": "string"
+        },
+        "engineMediaType": {
+          "type": "string"
+        },
+        "extendedSupportPricingYear": {
+          "type": "string"
+        },
+        "instanceTypeFamily": {
+          "type": "string"
+        },
+        "limitlessPreview": {
+          "type": "string"
+        },
+        "volumename": {
+          "type": "string"
+        },
+        "alarmType": {
+          "type": "string"
+        },
+        "logsDestination": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "typeDescription": {
+          "type": "string"
+        },
+        "effectiveStartDate": {
+          "type": "string"
+        },
+        "currencyCode": {
+          "type": "string"
+        },
+        "reservationTerm": {
+          "type": "string"
+        },
+        "retailPrice": {
+          "type": "string"
+        },
+        "meterId": {
+          "type": "string"
+        },
+        "meterName": {
+          "type": "string"
+        },
+        "productId": {
+          "type": "string"
+        },
+        "productName": {
+          "type": "string"
+        },
+        "skuName": {
+          "type": "string"
+        },
+        "serviceId": {
+          "type": "string"
+        },
+        "serviceFamily": {
+          "type": "string"
+        },
+        "isPrimaryMeterRegion": {
+          "type": "boolean"
+        },
+        "armSkuName": {
+          "type": "string"
+        },
+        "term": {
+          "type": "string"
+        },
+        "tierMinimumUnits": {
+          "type": "string"
+        }
+      },
+      "title": "ServiceDetails message"
     },
     "apirippleAccessGroup": {
       "type": "object",
@@ -16698,95 +18115,6 @@
       },
       "description": "Response message for the ListCostFilters rpc."
     },
-    "coverAWSRecommendations": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "accountId": {
-          "type": "string"
-        },
-        "accountName": {
-          "type": "string"
-        },
-        "instanceId": {
-          "type": "string"
-        },
-        "instanceName": {
-          "type": "string"
-        },
-        "service": {
-          "type": "string"
-        },
-        "source": {
-          "type": "string"
-        },
-        "costGroup": {
-          "type": "string"
-        },
-        "recommendation": {
-          "type": "string"
-        },
-        "region": {
-          "type": "string"
-        },
-        "estsavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "estcost": {
-          "type": "number",
-          "format": "double"
-        },
-        "estsavingsPercentage": {
-          "type": "number",
-          "format": "double"
-        },
-        "resourceArn": {
-          "type": "string"
-        },
-        "restartNeeded": {
-          "type": "boolean"
-        },
-        "rollbackPossible": {
-          "type": "boolean"
-        },
-        "lastUpdatedAt": {
-          "type": "string"
-        },
-        "recommendationGroup": {
-          "type": "string"
-        },
-        "category": {
-          "type": "string"
-        },
-        "purchaseRIRecommendationDetails": {
-          "$ref": "#/definitions/coverPurchaseRIRecommendationDetails"
-        },
-        "savingsPlanRecommendationDetails": {
-          "$ref": "#/definitions/coverSavingsPlanRecommendationDetails"
-        },
-        "rightSizingRecommendationDetails": {
-          "$ref": "#/definitions/coverRightSizingRecommendationDetails"
-        },
-        "upgradeRecommendationDetails": {
-          "$ref": "#/definitions/coverUpgradeRecommendationDetails"
-        },
-        "migrateRecommendationDetails": {
-          "$ref": "#/definitions/coverMigrateRecommendationDetails"
-        },
-        "stopInstanceRecommendationDetails": {
-          "$ref": "#/definitions/coverStopInstanceRecommendationDetails"
-        },
-        "deleteRecommendationDetails": {
-          "$ref": "#/definitions/coverDeleteRecommendationDetails"
-        },
-        "otherRecommendationDetails": {
-          "$ref": "#/definitions/coverOtherRecommendationDetails"
-        }
-      }
-    },
     "coverAlertChannel": {
       "type": "object",
       "properties": {
@@ -17126,42 +18454,6 @@
         }
       }
     },
-    "coverCostCalculation": {
-      "type": "object",
-      "properties": {
-        "estCostAfterDiscount": {
-          "type": "number",
-          "format": "double"
-        },
-        "estCostBeforeDiscount": {
-          "type": "number",
-          "format": "double"
-        },
-        "otherDiscount": {
-          "type": "number",
-          "format": "double"
-        },
-        "savingsPlanDiscount": {
-          "type": "number",
-          "format": "double"
-        },
-        "estNetUnusedAmortizedCommitments": {
-          "type": "number",
-          "format": "double"
-        },
-        "reservedInstanceDiscount": {
-          "type": "number",
-          "format": "double"
-        },
-        "usageTypes": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/coverUsageTypes"
-          }
-        }
-      }
-    },
     "coverCostGroupAwsOptions": {
       "type": "object",
       "properties": {
@@ -17358,7 +18650,7 @@
           "format": "double"
         },
         "costCalculation": {
-          "$ref": "#/definitions/coverCostCalculation"
+          "$ref": "#/definitions/apicoverCostCalculation"
         }
       }
     },
@@ -17425,7 +18717,7 @@
           "$ref": "#/definitions/CurrentEC2DetailsOtherDetails"
         },
         "costCalculation": {
-          "$ref": "#/definitions/coverCostCalculation"
+          "$ref": "#/definitions/apicoverCostCalculation"
         }
       }
     },
@@ -17455,17 +18747,6 @@
         }
       }
     },
-    "coverEBSDetails": {
-      "type": "object",
-      "properties": {
-        "currentEBSDetails": {
-          "$ref": "#/definitions/coverCurrentEBSDetails"
-        },
-        "upgradeEBSDetails": {
-          "$ref": "#/definitions/coverEBSRecommendationDetails"
-        }
-      }
-    },
     "coverEBSRecommendationDetails": {
       "type": "object",
       "properties": {
@@ -17485,24 +18766,7 @@
           "format": "double"
         },
         "EstcostCalculation": {
-          "$ref": "#/definitions/coverCostCalculation"
-        }
-      }
-    },
-    "coverEC2Details": {
-      "type": "object",
-      "properties": {
-        "instanceType": {
-          "type": "string"
-        },
-        "tenancy": {
-          "type": "string"
-        },
-        "family": {
-          "type": "string"
-        },
-        "platform": {
-          "type": "string"
+          "$ref": "#/definitions/apicoverCostCalculation"
         }
       }
     },
@@ -17534,7 +18798,7 @@
           "type": "string"
         },
         "costCalculation": {
-          "$ref": "#/definitions/coverCostCalculation"
+          "$ref": "#/definitions/apicoverCostCalculation"
         }
       }
     },
@@ -18162,17 +19426,6 @@
         }
       }
     },
-    "coverMemoryDBDetails": {
-      "type": "object",
-      "properties": {
-        "family": {
-          "type": "string"
-        },
-        "nodeType": {
-          "type": "string"
-        }
-      }
-    },
     "coverMigrateEC2Details": {
       "type": "object",
       "properties": {
@@ -18183,10 +19436,10 @@
           "$ref": "#/definitions/coverEC2UpgadeDetails"
         },
         "currentCostCalculation": {
-          "$ref": "#/definitions/coverCostCalculation"
+          "$ref": "#/definitions/apicoverCostCalculation"
         },
         "estCostCalculation": {
-          "$ref": "#/definitions/coverCostCalculation"
+          "$ref": "#/definitions/apicoverCostCalculation"
         }
       }
     },
@@ -18255,7 +19508,7 @@
       "type": "object",
       "properties": {
         "ec2Options": {
-          "$ref": "#/definitions/coverEC2Details"
+          "$ref": "#/definitions/apicoverEC2Details"
         },
         "elasticCacheOptions": {
           "$ref": "#/definitions/coverElasticCacheDetails"
@@ -18264,13 +19517,13 @@
           "$ref": "#/definitions/coverESDetails"
         },
         "rdsOptions": {
-          "$ref": "#/definitions/coverRDSDetails"
+          "$ref": "#/definitions/apicoverRDSDetails"
         },
         "redshiftOptions": {
-          "$ref": "#/definitions/coverRedshiftDetails"
+          "$ref": "#/definitions/apicoverRedshiftDetails"
         },
         "memoryDbOptions": {
-          "$ref": "#/definitions/coverMemoryDBDetails"
+          "$ref": "#/definitions/apicoverMemoryDBDetails"
         },
         "recommendedNormalizedUnits": {
           "type": "integer",
@@ -18341,7 +19594,7 @@
           "type": "string"
         },
         "costCalculation": {
-          "$ref": "#/definitions/coverCostCalculation"
+          "$ref": "#/definitions/apicoverCostCalculation"
         }
       }
     },
@@ -18375,30 +19628,7 @@
           "type": "string"
         },
         "costCalculation": {
-          "$ref": "#/definitions/coverCostCalculation"
-        }
-      }
-    },
-    "coverRDSDetails": {
-      "type": "object",
-      "properties": {
-        "dbEdition": {
-          "type": "string"
-        },
-        "dbEngine": {
-          "type": "string"
-        },
-        "deploymentOptions": {
-          "type": "string"
-        },
-        "family": {
-          "type": "string"
-        },
-        "instanceType": {
-          "type": "string"
-        },
-        "licenseModel": {
-          "type": "string"
+          "$ref": "#/definitions/apicoverCostCalculation"
         }
       }
     },
@@ -18465,20 +19695,6 @@
           "format": "double"
         },
         "region": {
-          "type": "string"
-        }
-      }
-    },
-    "coverRedshiftDetails": {
-      "type": "object",
-      "properties": {
-        "currentGeneration": {
-          "type": "boolean"
-        },
-        "nodeType": {
-          "type": "string"
-        },
-        "family": {
           "type": "string"
         }
       }
@@ -18590,7 +19806,7 @@
           "format": "int32"
         },
         "costCalculation": {
-          "$ref": "#/definitions/coverCostCalculation"
+          "$ref": "#/definitions/apicoverCostCalculation"
         }
       }
     },
@@ -18693,7 +19909,7 @@
           "$ref": "#/definitions/coverLambdaRightSizingRecommendationDetails"
         },
         "ebsRightSizingRecommendationDetails": {
-          "$ref": "#/definitions/coverEBSDetails"
+          "$ref": "#/definitions/apicoverEBSDetails"
         },
         "ecsRightSizingRecommendationDetails": {
           "$ref": "#/definitions/coverEcsRightSizingRecommendationDetails"
@@ -19058,10 +20274,10 @@
           "$ref": "#/definitions/coverEC2UpgadeDetails"
         },
         "currentCostCalculation": {
-          "$ref": "#/definitions/coverCostCalculation"
+          "$ref": "#/definitions/apicoverCostCalculation"
         },
         "estimatedCostCalculation": {
-          "$ref": "#/definitions/coverCostCalculation"
+          "$ref": "#/definitions/apicoverCostCalculation"
         }
       }
     },
@@ -19072,7 +20288,7 @@
           "$ref": "#/definitions/coverUpgradeEC2Details"
         },
         "upgradeEBSDetails": {
-          "$ref": "#/definitions/coverEBSDetails"
+          "$ref": "#/definitions/apicoverEBSDetails"
         },
         "upgradeRDSDetails": {
           "$ref": "#/definitions/coverRDSUpgradeDetails"
@@ -19084,27 +20300,6 @@
         "estimatedMonthlySavings": {
           "type": "number",
           "format": "double"
-        }
-      }
-    },
-    "coverUsageTypes": {
-      "type": "object",
-      "properties": {
-        "operation": {
-          "type": "string"
-        },
-        "productCode": {
-          "type": "string"
-        },
-        "unit": {
-          "type": "string"
-        },
-        "usageAmount": {
-          "type": "number",
-          "format": "double"
-        },
-        "usageType": {
-          "type": "string"
         }
       }
     },
@@ -19324,6 +20519,23 @@
         }
       }
     },
+    "coverrecommendationAWSRecommendations": {
+      "type": "object",
+      "properties": {
+        "costExplorerRecommendations": {
+          "$ref": "#/definitions/recommendationCostExplorerRecommendations"
+        },
+        "costOptimizationHubRecommendations": {
+          "$ref": "#/definitions/recommendationCostOptimizationHubRecommendations"
+        },
+        "trustedAdvisorRecommendations": {
+          "$ref": "#/definitions/recommendationTrustedAdvisorRecommendations"
+        },
+        "resourceArn": {
+          "type": "string"
+        }
+      }
+    },
     "coverv1FeeDetails": {
       "type": "object",
       "properties": {
@@ -19445,400 +20657,10 @@
           "format": "double"
         },
         "serviceDetails": {
-          "$ref": "#/definitions/pricingServiceDetails"
+          "$ref": "#/definitions/apipricingServiceDetails"
         }
       },
       "title": "Pricing details"
-    },
-    "pricingServiceDetails": {
-      "type": "object",
-      "properties": {
-        "offerTermCode": {
-          "type": "string"
-        },
-        "rateCode": {
-          "type": "string"
-        },
-        "termType": {
-          "type": "string"
-        },
-        "priceDescription": {
-          "type": "string"
-        },
-        "effectiveDate": {
-          "type": "string"
-        },
-        "startingRange": {
-          "type": "string"
-        },
-        "endingRange": {
-          "type": "string"
-        },
-        "currency": {
-          "type": "string"
-        },
-        "relatedTo": {
-          "type": "string"
-        },
-        "leaseContractLength": {
-          "type": "string"
-        },
-        "purchaseOption": {
-          "type": "string"
-        },
-        "offeringClass": {
-          "type": "string"
-        },
-        "productFamily": {
-          "type": "string"
-        },
-        "serviceCode": {
-          "type": "string"
-        },
-        "location": {
-          "type": "string"
-        },
-        "locationType": {
-          "type": "string"
-        },
-        "instanceType": {
-          "type": "string"
-        },
-        "currentGeneration": {
-          "type": "string"
-        },
-        "instanceFamily": {
-          "type": "string"
-        },
-        "vcpu": {
-          "type": "string"
-        },
-        "physicalProcessor": {
-          "type": "string"
-        },
-        "clockSpeed": {
-          "type": "string"
-        },
-        "memory": {
-          "type": "string"
-        },
-        "storage": {
-          "type": "string"
-        },
-        "networkPerformance": {
-          "type": "string"
-        },
-        "processorArchitecture": {
-          "type": "string"
-        },
-        "storageMedia": {
-          "type": "string"
-        },
-        "volumeType": {
-          "type": "string"
-        },
-        "maxVolumeSize": {
-          "type": "string"
-        },
-        "maxIopsVolume": {
-          "type": "string"
-        },
-        "maxIopsBurstPerformance": {
-          "type": "string"
-        },
-        "maxThroughputVolume": {
-          "type": "string"
-        },
-        "provisioned": {
-          "type": "string"
-        },
-        "tenancy": {
-          "type": "string"
-        },
-        "ebsOptimized": {
-          "type": "string"
-        },
-        "operatingSystem": {
-          "type": "string"
-        },
-        "licenseModel": {
-          "type": "string"
-        },
-        "groupings": {
-          "type": "string"
-        },
-        "groupDescription": {
-          "type": "string"
-        },
-        "transferType": {
-          "type": "string"
-        },
-        "fromLocation": {
-          "type": "string"
-        },
-        "fromLocationType": {
-          "type": "string"
-        },
-        "toLocation": {
-          "type": "string"
-        },
-        "toLocationType": {
-          "type": "string"
-        },
-        "usageType": {
-          "type": "string"
-        },
-        "operation": {
-          "type": "string"
-        },
-        "availabilityZone": {
-          "type": "string"
-        },
-        "capacityStatus": {
-          "type": "string"
-        },
-        "classicNetworkingSupport": {
-          "type": "string"
-        },
-        "dedicatedEbsThroughput": {
-          "type": "string"
-        },
-        "ecu": {
-          "type": "string"
-        },
-        "elasticGraphicsType": {
-          "type": "string"
-        },
-        "enhancedNetworkingSupported": {
-          "type": "string"
-        },
-        "fromRegionCode": {
-          "type": "string"
-        },
-        "gpu": {
-          "type": "string"
-        },
-        "gpuMemory": {
-          "type": "string"
-        },
-        "instance": {
-          "type": "string"
-        },
-        "instanceCapacity10Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity12Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity16Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity18Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity24Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity2Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity32Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity4Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity8Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity9Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacityLarge": {
-          "type": "string"
-        },
-        "instanceCapacityMedium": {
-          "type": "string"
-        },
-        "instanceCapacityMetal": {
-          "type": "string"
-        },
-        "instanceCapacityXlarge": {
-          "type": "string"
-        },
-        "instanceSku": {
-          "type": "string"
-        },
-        "intelAvx2Available": {
-          "type": "string"
-        },
-        "intelAvxAvailable": {
-          "type": "string"
-        },
-        "intelTurboAvailable": {
-          "type": "string"
-        },
-        "marketOption": {
-          "type": "string"
-        },
-        "normalizationSizeFactor": {
-          "type": "string"
-        },
-        "physicalCores": {
-          "type": "string"
-        },
-        "preInstalledSw": {
-          "type": "string"
-        },
-        "processorFeatures": {
-          "type": "string"
-        },
-        "productType": {
-          "type": "string"
-        },
-        "resourceType": {
-          "type": "string"
-        },
-        "serviceName": {
-          "type": "string"
-        },
-        "snapShotArchiveFeeType": {
-          "type": "string"
-        },
-        "toRegionCode": {
-          "type": "string"
-        },
-        "volumeApiName": {
-          "type": "string"
-        },
-        "vpcNetworkingSupport": {
-          "type": "string"
-        },
-        "version": {
-          "type": "string"
-        },
-        "availability": {
-          "type": "string"
-        },
-        "storageClass": {
-          "type": "string"
-        },
-        "feeCode": {
-          "type": "string"
-        },
-        "feeDescription": {
-          "type": "string"
-        },
-        "durability": {
-          "type": "string"
-        },
-        "overhead": {
-          "type": "string"
-        },
-        "cacheEngine": {
-          "type": "string"
-        },
-        "ssd": {
-          "type": "string"
-        },
-        "minVolumeSize": {
-          "type": "string"
-        },
-        "engineCode": {
-          "type": "string"
-        },
-        "databaseEngine": {
-          "type": "string"
-        },
-        "databaseEdition": {
-          "type": "string"
-        },
-        "deploymentOption": {
-          "type": "string"
-        },
-        "acu": {
-          "type": "string"
-        },
-        "deploymentModel": {
-          "type": "string"
-        },
-        "engineMajorVersion": {
-          "type": "string"
-        },
-        "engineMediaType": {
-          "type": "string"
-        },
-        "extendedSupportPricingYear": {
-          "type": "string"
-        },
-        "instanceTypeFamily": {
-          "type": "string"
-        },
-        "limitlessPreview": {
-          "type": "string"
-        },
-        "volumename": {
-          "type": "string"
-        },
-        "alarmType": {
-          "type": "string"
-        },
-        "logsDestination": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "typeDescription": {
-          "type": "string"
-        },
-        "effectiveStartDate": {
-          "type": "string"
-        },
-        "currencyCode": {
-          "type": "string"
-        },
-        "reservationTerm": {
-          "type": "string"
-        },
-        "retailPrice": {
-          "type": "string"
-        },
-        "meterId": {
-          "type": "string"
-        },
-        "meterName": {
-          "type": "string"
-        },
-        "productId": {
-          "type": "string"
-        },
-        "productName": {
-          "type": "string"
-        },
-        "skuName": {
-          "type": "string"
-        },
-        "serviceId": {
-          "type": "string"
-        },
-        "serviceFamily": {
-          "type": "string"
-        },
-        "isPrimaryMeterRegion": {
-          "type": "boolean"
-        },
-        "armSkuName": {
-          "type": "string"
-        },
-        "term": {
-          "type": "string"
-        },
-        "tierMinimumUnits": {
-          "type": "string"
-        }
-      },
-      "title": "ServiceDetails message"
     },
     "protobufAny": {
       "type": "object",
@@ -19884,6 +20706,234 @@
         }
       },
       "description": "This resource represents a long-running operation that is the result of a\nnetwork API call."
+    },
+    "recommendationAWSResourceDetailsEBSDetails": {
+      "type": "object",
+      "properties": {
+        "volumeDetails": {
+          "$ref": "#/definitions/EBSDetailsVolumeDetails"
+        }
+      }
+    },
+    "recommendationAWSResourceDetailsEC2Details": {
+      "type": "object",
+      "properties": {
+        "instance": {
+          "$ref": "#/definitions/AWSResourceDetailsEC2DetailsInstanceDetails"
+        },
+        "riSpecsDetails": {
+          "$ref": "#/definitions/EC2DetailsRISpecsDetails"
+        }
+      }
+    },
+    "recommendationAWSResourceDetailsMemoryDBDetails": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "$ref": "#/definitions/AWSResourceDetailsMemoryDBDetailsNodeDetails"
+        }
+      }
+    },
+    "recommendationAWSResourceDetailsRDSDetails": {
+      "type": "object",
+      "properties": {
+        "dbInstance": {
+          "$ref": "#/definitions/RDSDetailsDBInstanceDetails"
+        }
+      }
+    },
+    "recommendationAWSResourceDetailsRedshiftDetails": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "$ref": "#/definitions/AWSResourceDetailsRedshiftDetailsNodeDetails"
+        }
+      }
+    },
+    "recommendationAzureCSPRecommendations": {
+      "type": "object"
+    },
+    "recommendationCostExplorerRecommendations": {
+      "type": "object",
+      "properties": {
+        "ec2Rightsize": {
+          "$ref": "#/definitions/CostExplorerRecommendationsEC2Rightsize"
+        },
+        "discountPlans": {
+          "$ref": "#/definitions/CostExplorerRecommendationsDiscountPlans"
+        },
+        "terminateEc2": {
+          "$ref": "#/definitions/CostExplorerRecommendationsTerminateEC2"
+        }
+      }
+    },
+    "recommendationCostOptimizationHubRecommendations": {
+      "type": "object",
+      "properties": {
+        "currentDetails": {
+          "$ref": "#/definitions/recommendationCostOptimizationHubRecommendationsDetails"
+        },
+        "recommendationDetails": {
+          "$ref": "#/definitions/recommendationCostOptimizationHubRecommendationsDetails"
+        }
+      }
+    },
+    "recommendationCostOptimizationHubRecommendationsDetails": {
+      "type": "object",
+      "properties": {
+        "costCalculation": {
+          "$ref": "#/definitions/CostOptimizationHubRecommendationsDetailsCostCalculation"
+        },
+        "ec2Details": {
+          "$ref": "#/definitions/recommendationAWSResourceDetailsEC2Details"
+        },
+        "rdsDetails": {
+          "$ref": "#/definitions/recommendationAWSResourceDetailsRDSDetails"
+        },
+        "ebsDetails": {
+          "$ref": "#/definitions/recommendationAWSResourceDetailsEBSDetails"
+        },
+        "ec2AutoScalingGroupDetails": {
+          "$ref": "#/definitions/AWSResourceDetailsEC2AutoScalingGroupDetails"
+        },
+        "ecsDetails": {
+          "$ref": "#/definitions/AWSResourceDetailsECSDetails"
+        },
+        "lambdaDetails": {
+          "$ref": "#/definitions/AWSResourceDetailsLambdaDetails"
+        }
+      }
+    },
+    "recommendationGCPRecommendations": {
+      "type": "object"
+    },
+    "recommendationMetricData": {
+      "type": "object",
+      "properties": {
+        "metrics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/MetricDataMetrics"
+          }
+        },
+        "maxMetricInPercentage": {
+          "type": "number",
+          "format": "double"
+        },
+        "metricCapacity": {
+          "type": "string"
+        }
+      }
+    },
+    "recommendationRecommendationData": {
+      "type": "object",
+      "properties": {
+        "awsRecommendations": {
+          "$ref": "#/definitions/coverrecommendationAWSRecommendations"
+        },
+        "gcpRecommendations": {
+          "$ref": "#/definitions/recommendationGCPRecommendations"
+        },
+        "azureCspRecommendations": {
+          "$ref": "#/definitions/recommendationAzureCSPRecommendations"
+        },
+        "target": {
+          "type": "string"
+        },
+        "targetName": {
+          "type": "string"
+        },
+        "resourceId": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "costGroup": {
+          "type": "string"
+        },
+        "recommendationGroup": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "lastUpdatedAt": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "recommendation": {
+          "type": "string"
+        },
+        "estimatedMonthlyCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedMonthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedSavingsPercentage": {
+          "type": "number",
+          "format": "double"
+        },
+        "resourceName": {
+          "type": "string"
+        },
+        "restartNeeded": {
+          "type": "boolean"
+        },
+        "rollbackPossible": {
+          "type": "boolean"
+        }
+      }
+    },
+    "recommendationTrustedAdvisorRecommendations": {
+      "type": "object",
+      "properties": {
+        "severityStatus": {
+          "type": "string"
+        },
+        "recommendationArn": {
+          "type": "string"
+        },
+        "exclusionStatus": {
+          "type": "string"
+        },
+        "lowUtilizationEc2Instances": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsLowUtilizationEC2Instances"
+        },
+        "rdsIdleDbInstances": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsRDSIdleDBInstances"
+        },
+        "s3IncompleteMPU": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsS3IncompleteMPU"
+        },
+        "lambdaHighErrorRates": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsLambdaHighErrorRates"
+        },
+        "underutilizedEBSVolume": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsUnderutilizedEBSVolume"
+        },
+        "unassociatedEIP": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsUnassociatedEIP"
+        },
+        "idleLoadBalancer": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsIdleLoadBalancer"
+        },
+        "ec2InstancesStopped": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsAmazonEC2InstanceStopped"
+        }
+      }
     },
     "rippleAssigned": {
       "type": "object",
@@ -24180,7 +25230,15 @@
       "type": "object",
       "properties": {
         "recommendationData": {
-          "$ref": "#/definitions/coverAWSRecommendations"
+          "$ref": "#/definitions/apicoverAWSRecommendations"
+        }
+      }
+    },
+    "v1GetRecommendationV2Response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/recommendationRecommendationData"
         }
       }
     },
