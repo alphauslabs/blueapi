@@ -58,15 +58,13 @@ message GetPricingRequest {
   string vendor = 1;
 
   // Required. Cloud vendor service. 
-  // Valid values are `cloudWatch`, `dataTransfer`, `dynamoDb`, `ebs`, `ec2`, `lambda`, `rds`, and `s3` for AWS.
-  //Valid values are `virtualMachines`, `containerInstances`, `functions`, `virtualNetwork`, `azureDns`, `expressRoute`, `sqlDbEdge`, `sqlDataWarehouse`, `sqlDatabase`, `sqlManagedInstance`, `sqlServerStretchDatabase`, `azureCosmosDb`, `azureSynapseAnalytics`, `azureMonitor`, and `storage` for Azure.
+  // Supported services can be listed using /v0/{vendor}/services endpoint. For usage information visit https://labs.alphaus.cloud/blueapidocs/#/Pricing/Pricing_GetSupportedServices
   string service = 2;
 
-  // Required. Region.
-  // Valid values for AWS services are `af-south-1`, `af-south-1-los-1`, `ap-east-1`, `ap-northeast-1`, `ap-northeast-1-tpe-1`, `ap-northeast-1-wl1-kix1`, `ap-northeast-1-wl1-nrt1`, `ap-northeast-2`, `ap-northeast-2-wl1-cjj1`, `ap-northeast-2-wl1-sel1`, `ap-northeast-3`, `ap-south-1`, `ap-south-1-ccu-1`, `ap-south-1-del-1`, `ap-south-2`, `ap-southeast-1`, `ap-southeast-1-bkk-1`, `ap-southeast-1-mnl-`, `ap-southeast-2`, `ap-southeast-2-akl-1`, `ap-southeast-2-per-1`, `ap-southeast-3`, `ap-southeast-4`, `ca-central-1`, `ca-central-1-wl1-yto1`, `ca-west-1`, `eu-central-1`, `eu-central-1-ham-1`, `eu-central-1-waw-1`, `eu-central-1-wl1-ber1`, `eu-central-1-wl1-dtm1`, `eu-central-1-wl1-muc1`, `eu-central-2`, `eu-north-1`, `eu-north-1-cph-1`, `eu-north-1-hel-1`, `eu-south-1`, `eu-south-2`, `eu-west-1`, `eu-west-2`, `eu-west-2-wl1-lon1`, `eu-west-2-wl1-man1`, `eu-west-2-wl2-man1`, `eu-west-3`, `il-central-1`, `me-central-1`, `me-south-1`, `me-south-1-mct-1`, `sa-east-1`, `us-east-1`, `us-east-1-atl-1`, `us-east-1-bos-1`, `us-east-1-bue-1`, `us-east-1-chi-1`, `us-east-1-dfw-1`, `us-east-1-iah-1`, `us-east-1-lim-1`, `us-east-1-mci-1`, `us-east-1-mia-1`, `us-east-1-msp-1`, `us-east-1-nyc-1`, `us-east-1-phl-1`, `us-east-1-qro-1`, `us-east-1-scl-1`, `us-east-1-wl1`, `us-east-1-wl1-atl1`, `us-east-1-wl1-bna1`, `us-east-1-wl1-chi1`, `us-east-1-wl1-clt1`, `us-east-1-wl1-dfw1`, `us-east-1-wl1-dtw1`, `us-east-1-wl1-iah1`, `us-east-1-wl1-mia1`, `us-east-1-wl1-msp1`, `us-east-1-wl1-nyc1`, `us-east-1-wl1-tpa1`, `us-east-1-wl1-was1`, `us-east-2`, `us-gov-east-1`, `us-gov-west-1`, `us-west-1`, `us-west-2`, `us-west-2-den-1`, `us-west-2-hnl-1`, `us-west-2-las-1`, `us-west-2-lax-1`, `us-west-2-pdx-1`, `us-west-2-phx-1`, `us-west-2-sea-1`, `us-west-2-wl1`, `us-west-2-wl1-den1`, `us-west-2-wl1-las1`, `us-west-2-wl1-lax1`, `us-west-2-wl1-phx1`, and `us-west-2-wl1-sea1`.
-  // Valid values for Azure services are `Germany`, `Global`, `US Gov`, `US Gov Zone 1`, `Zone 1`, `Zone 2`, `Zone 3`, `Zone 4`, `attatlanta1`, `attdallas1`, `attdetroit1`, `attnewyork1`, `australiacentral`, `australiacentral2`, `australiaeast`, `australiasoutheast`, `brazilsouth`, `brazilsoutheast`, `canadacentral`, `canadaeast`, `centralindia`, `centralus`, `eastasia`, `eastus`, `eastus2`, `eastusslv`, ` francecentral`, ` francesouth`, ` germanynorth`, ` germanywestcentral`, ` israelcentral`, ` italynorth`, ` japaneast`, ` japanwest`, ` jioindiacentral`, `jioindiawest`, `koreacentral`, `koreasouth`, `mexicocentral`, `northcentralus`, `northeurope`, `norwayeast`, `norwaywest`, `polandcentral`, `qatarcentral`, `sgxsingapore1`, `southafricanorth`, `southafricawest`, `southcentralus`, `southcentralusstg`, `southeastasia`, `southindia`, `spaincentral`, `swedencentral`, `swedensouth`, `switzerlandnorth`, `switzerlandwest`, `taiwannorth`, `taiwannorthwest`, `uaecentral`, `uaenorth`, `uknorth`, `uksouth`, `uksouth2`, `ukwest`, `usgovarizona`, `usgoviowa`, `usgovtexas`, `usgovvirginia`, `westcentralus`, `westeurope`, `westindia`, `westus`, `westus2`, and `westus3` .
-  // Available AWS services by region can be accessed in https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/.
-  // Available Azure services by region can be accessed in https://azure.microsoft.com/en-us/explore/global-infrastructure/products-by-region/.
+  // Required. Region code.
+  // Supported regions can be listed using /v0/{vendor}/services endpoint. For usage information visit https://labs.alphaus.cloud/blueapidocs/#/Pricing/Pricing_GetSupportedServices
+  // View all available AWS services by region at https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/
+  // View all available Azure services by region at https://azure.microsoft.com/en-us/explore/global-infrastructure/products-by-region/
   string region = 3;
 
   // Optional. Supply token that was included in the latest response to continue fetching the remaining chunks of data. All data has been returned once token is null.
@@ -76,7 +74,7 @@ message GetPricingRequest {
   // This is a map of column names to filter values. Each key-value pair in the map represents a filter condition.
   map<string, string> filters = 6;
 
-  // Optional. This string represent valid columns which will serve as basis as to what columns will be returned by the API.
+  // Optional. This string array represent valid columns which will serve as basis as to what items in the serviceDetails will be returned by the API.
   // All columns will be returned if this array is empty.
   // This is not yet implemented.
   repeated string columns = 5;
