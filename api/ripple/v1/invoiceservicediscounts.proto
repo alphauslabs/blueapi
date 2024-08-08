@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package blueapi.api.ripple.v1;
+
+import "google/api/field_behavior.proto";
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/ripple/v1";
+option java_package = "cloud.alphaus.blueapi.api.ripple.v1";
+option java_outer_classname = "ApiRippleInvoiceServiceDiscountsProto";
+
+// InvoiceServiceDiscounts resource definition.
+message InvoiceServiceDiscounts {
+  // The invoice service discounts id.
+  string id = 1;
+  
+  // The invoice service discount name.
+  string name = 2;
+  
+  // The invoice service discount description.
+  string description = 3 [(google.api.field_behavior) = OPTIONAL];
+  
+  // The invoice service discount setting.
+  InvoiceServiceDiscountsSetting setting = 4;
+  
+  // Timestamp associated with the created.
+  string created = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+  
+  // Timestamp associated with the updated.
+  string updated = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// InvoiceServiceDiscountsSetting resource definition.
+message InvoiceServiceDiscountsSetting {
+  // The invoice service discounts setting details.
+  repeated InvoiceServiceDiscountsSettingDetails awsDetails = 1;
+
+  // The invoice service discounts setting details.
+  repeated InvoiceServiceDiscountsSettingDetails azureDetails = 2;
+
+  // The invoice service discounts setting details.
+  repeated InvoiceServiceDiscountsSettingDetails gcpDetails = 3;
+}
+
+// InvoiceServiceDiscountsSettingDetails resource definition.
+message InvoiceServiceDiscountsSettingDetails {
+  // The vendor service code.
+  // aws: ProductCode
+  // azure: ServiceCode
+  // gcp: ServiceName
+  string code = 1 [(google.api.field_behavior) = REQUIRED];
+  
+  // The vendor service name.
+  string name = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  
+  // Value associated with the set premiums or discounts.
+  string value = 3;
+  
+  // The calculation scope.
+  // If enabled, all Usage and Fee are included in the calculation.
+  // If disabled, only the Usage is included in the calculation.
+  bool calculationScope = 4;
+}
+
+// Service resource definition.
+// Services of each vendor available for Service Discounts.
+message Service {
+  // The service code.
+  string serviceCode = 1;
+
+  // The service name.
+  string serviceName = 2;
+}

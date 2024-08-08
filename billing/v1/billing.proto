@@ -15,6 +15,7 @@ import "api/ripple/duedate.proto";
 import "api/ripple/exchangerate.proto";
 import "api/ripple/untaggedgroup.proto";
 import "api/ripple/customizedbillingservice.proto";
+import "api/ripple/v1/invoiceservicediscounts.proto";
 import "api/adjustment.proto";
 import "api/wave/adjustment.proto";
 import "google/api/annotations.proto";
@@ -133,6 +134,14 @@ service Billing {
   rpc ExportInvoiceFile(ExportInvoiceFileRequest) returns (ExportInvoiceFileResponse) {
     option (google.api.http) = {
       post: "/v1/invoice/{date}:export"
+      body: "*"
+    };
+  }
+
+  // Reads the service relate to the service discounts. Only available in Ripple.
+  rpc ReadServiceDiscountsService(ReadServiceDiscountsServiceRequest) returns (stream api.ripple.v1.Service) {
+    option (google.api.http) = {
+      post: "/v1/servicediscounts/{vendor}/services:read"
       body: "*"
     };
   }
@@ -739,6 +748,12 @@ message ExportInvoiceFileResponse {
   string url = 1;
 }
 
+
+// Request message for the ReadServiceDiscountsService rpc.
+message ReadServiceDiscountsServiceRequest {
+  // Required. At the moment, only `aws`,`azure`,`gcp` is supported.
+  string vendor = 1;
+}
 
 // Request message for the ListInvoiceServiceDiscounts rpc.
 message ListInvoiceServiceDiscountsRequest {}
