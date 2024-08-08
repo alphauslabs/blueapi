@@ -139,7 +139,7 @@ service Billing {
   }
 
   // Reads the service relate to the service discounts. Only available in Ripple.
-  rpc ReadServiceDiscountsService(ReadServiceDiscountsServiceRequest) returns (stream api.ripple.v1.Service) {
+  rpc ReadServiceDiscountsServices(ReadServiceDiscountsServicesRequest) returns (stream api.ripple.v1.Service) {
     option (google.api.http) = {
       post: "/v1/servicediscounts/{vendor}/services:read"
       body: "*"
@@ -749,8 +749,8 @@ message ExportInvoiceFileResponse {
 }
 
 
-// Request message for the ReadServiceDiscountsService rpc.
-message ReadServiceDiscountsServiceRequest {
+// Request message for the ReadServiceDiscountsServices rpc.
+message ReadServiceDiscountsServicesRequest {
   // Required. At the moment, only `aws`,`azure`,`gcp` is supported.
   string vendor = 1;
 }
