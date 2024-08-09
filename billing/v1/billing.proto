@@ -146,6 +146,29 @@ service Billing {
     };
   }
 
+  // Creates the invoice service discounts. Only available in Ripple.
+  rpc CreateInvoiceServiceDiscounts(CreateInvoiceServiceDiscountsRequest) returns (stream api.ripple.v1.InvoiceServiceDiscounts) {
+    option (google.api.http) = {
+      post: "/v1/servicediscounts"
+      body: "*"
+    };
+  }
+
+  // Updates the invoice service discounts. Only available in Ripple.
+  rpc UpdateInvoiceServiceDiscounts(UpdateInvoiceServiceDiscountsRequest) returns (stream api.ripple.v1.InvoiceServiceDiscounts) {
+    option (google.api.http) = {
+      put: "/v1/servicediscounts/{id}"
+      body: "*"
+    };
+  }
+
+  // Deletes the invoice service discounts. Only available in Ripple.
+  rpc DeleteInvoiceServiceDiscounts(DeleteInvoiceServiceDiscountsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/servicediscounts/{id}"
+    };
+  }
+
   // Reads the invoice service discounts. Only available in Ripple.
   rpc ListInvoiceServiceDiscounts(ListInvoiceServiceDiscountsRequest) returns (stream InvoiceServiceDiscounts) {
     option (google.api.http) = {
@@ -1300,5 +1323,38 @@ message UpdateCustomizedBillingServiceRequest {
 // Request message for the Billing.DeleteCustomizedBillingService rpc.
 message DeleteCustomizedBillingServiceRequest {
   // Required. [blueapi.api.ripple.CustomizedBillingService.id]
+  string id = 1;
+}
+
+// Request message for the Billing.CreateInvoiceServiceDiscounts rpc.
+message CreateInvoiceServiceDiscountsRequest {
+  // Required. [blueapi.api.ripple.v1.InvoiceServiceDiscounts.name]
+  string name = 1;
+
+  // Optional. [blueapi.api.ripple.v1.InvoiceServiceDiscounts.description]
+  string description = 2;
+
+  // Required. [blueapi.api.ripple.v1.InvoiceServiceDiscounts.InvoiceServiceDiscountsSetting]
+  api.ripple.v1.InvoiceServiceDiscountsSetting setting = 3;
+}
+
+// Request message for the Billing.UpdateInvoiceServiceDiscounts rpc.
+message UpdateInvoiceServiceDiscountsRequest {
+  // Required. [blueapi.api.ripple.v1.InvoiceServiceDiscounts.id]
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. The updated invoice service discounts object.
+  api.ripple.v1.InvoiceServiceDiscounts invoiceServiceDiscounts = 2
+      [(google.api.field_behavior) = REQUIRED];
+
+  // Required. Indicates which fields in the provided InvoiceServiceDiscounts to update. Must be
+  // specified and non-empty. 
+  google.protobuf.FieldMask update_mask = 3
+      [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request message for the Billing.DeleteInvoiceServiceDiscounts rpc.
+message DeleteInvoiceServiceDiscountsRequest {
+  // Required. [blueapi.api.ripple.v1.InvoiceServiceDiscounts.id]
   string id = 1;
 }
