@@ -14,9 +14,11 @@ message InvoiceServiceDiscounts {
   string id = 1;
   
   // The invoice service discount name.
+  // must be 1-60 characters long.
   string name = 2;
   
   // The invoice service discount description.
+  // Maximum 150 characters long.
   string description = 3 [(google.api.field_behavior) = OPTIONAL];
   
   // The invoice service discount setting.
@@ -47,6 +49,9 @@ message InvoiceServiceDiscountsSettingDetails {
   // aws: ProductCode
   // azure: ServiceCode
   // gcp: ServiceName
+  // `otherServices`: The code to specify other services as a whole, regardless of vendor.
+  // For exmaple: Other services set at 1%.
+  // {"code":"otherServices", "value":0.01}
   string code = 1 [(google.api.field_behavior) = REQUIRED];
   
   // The vendor service name.
