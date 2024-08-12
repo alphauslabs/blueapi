@@ -9178,6 +9178,56 @@
         ]
       }
     },
+    "/v1/servicediscounts/{vendor}/services:read": {
+      "post": {
+        "summary": "Reads the service relate to the service discounts. Only available in Ripple.",
+        "operationId": "Billing_ReadServiceDiscountsServices",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1Service"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1Service"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws`,`azure`,`gcp` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "description": "Request message for the ReadServiceDiscountsServices rpc."
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/servicediscounts:read": {
       "post": {
         "summary": "Reads the invoice service discounts. Only available in Ripple.",
@@ -9189,13 +9239,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1InvoiceServiceDiscounts"
+                  "$ref": "#/definitions/blueapibillingv1InvoiceServiceDiscounts"
                 },
                 "error": {
                   "$ref": "#/definitions/googlerpcStatus"
                 }
               },
-              "title": "Stream result of v1InvoiceServiceDiscounts"
+              "title": "Stream result of blueapibillingv1InvoiceServiceDiscounts"
             }
           },
           "default": {
@@ -13771,26 +13821,7 @@
       "type": "object",
       "properties": {
         "service": {
-          "$ref": "#/definitions/AWSResourceDetailsECSDetailsServiceDetails"
-        }
-      }
-    },
-    "AWSResourceDetailsECSDetailsServiceDetails": {
-      "type": "object",
-      "properties": {
-        "architecture": {
-          "type": "string"
-        },
-        "memorySizeInMB": {
-          "type": "string",
-          "format": "int64"
-        },
-        "platform": {
-          "type": "string"
-        },
-        "vCpu": {
-          "type": "number",
-          "format": "double"
+          "$ref": "#/definitions/ECSDetailsServiceDetails"
         }
       }
     },
@@ -14177,6 +14208,25 @@
       "properties": {
         "offeringClass": {
           "type": "string"
+        }
+      }
+    },
+    "ECSDetailsServiceDetails": {
+      "type": "object",
+      "properties": {
+        "architecture": {
+          "type": "string"
+        },
+        "memorySizeInMB": {
+          "type": "string",
+          "format": "int64"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "vCpu": {
+          "type": "number",
+          "format": "double"
         }
       }
     },
@@ -16557,396 +16607,6 @@
       "description": "see gcp billing data schema details:[https://cloud.google.com/billing/docs/how-to/export-data-bigquery-tables]",
       "title": "Cost for Api Response"
     },
-    "apipricingServiceDetails": {
-      "type": "object",
-      "properties": {
-        "offerTermCode": {
-          "type": "string"
-        },
-        "rateCode": {
-          "type": "string"
-        },
-        "termType": {
-          "type": "string"
-        },
-        "priceDescription": {
-          "type": "string"
-        },
-        "effectiveDate": {
-          "type": "string"
-        },
-        "startingRange": {
-          "type": "string"
-        },
-        "endingRange": {
-          "type": "string"
-        },
-        "currency": {
-          "type": "string"
-        },
-        "relatedTo": {
-          "type": "string"
-        },
-        "leaseContractLength": {
-          "type": "string"
-        },
-        "purchaseOption": {
-          "type": "string"
-        },
-        "offeringClass": {
-          "type": "string"
-        },
-        "productFamily": {
-          "type": "string"
-        },
-        "serviceCode": {
-          "type": "string"
-        },
-        "location": {
-          "type": "string"
-        },
-        "locationType": {
-          "type": "string"
-        },
-        "instanceType": {
-          "type": "string"
-        },
-        "currentGeneration": {
-          "type": "string"
-        },
-        "instanceFamily": {
-          "type": "string"
-        },
-        "vcpu": {
-          "type": "string"
-        },
-        "physicalProcessor": {
-          "type": "string"
-        },
-        "clockSpeed": {
-          "type": "string"
-        },
-        "memory": {
-          "type": "string"
-        },
-        "storage": {
-          "type": "string"
-        },
-        "networkPerformance": {
-          "type": "string"
-        },
-        "processorArchitecture": {
-          "type": "string"
-        },
-        "storageMedia": {
-          "type": "string"
-        },
-        "volumeType": {
-          "type": "string"
-        },
-        "maxVolumeSize": {
-          "type": "string"
-        },
-        "maxIopsVolume": {
-          "type": "string"
-        },
-        "maxIopsBurstPerformance": {
-          "type": "string"
-        },
-        "maxThroughputVolume": {
-          "type": "string"
-        },
-        "provisioned": {
-          "type": "string"
-        },
-        "tenancy": {
-          "type": "string"
-        },
-        "ebsOptimized": {
-          "type": "string"
-        },
-        "operatingSystem": {
-          "type": "string"
-        },
-        "licenseModel": {
-          "type": "string"
-        },
-        "groupings": {
-          "type": "string"
-        },
-        "groupDescription": {
-          "type": "string"
-        },
-        "transferType": {
-          "type": "string"
-        },
-        "fromLocation": {
-          "type": "string"
-        },
-        "fromLocationType": {
-          "type": "string"
-        },
-        "toLocation": {
-          "type": "string"
-        },
-        "toLocationType": {
-          "type": "string"
-        },
-        "usageType": {
-          "type": "string"
-        },
-        "operation": {
-          "type": "string"
-        },
-        "availabilityZone": {
-          "type": "string"
-        },
-        "capacityStatus": {
-          "type": "string"
-        },
-        "classicNetworkingSupport": {
-          "type": "string"
-        },
-        "dedicatedEbsThroughput": {
-          "type": "string"
-        },
-        "ecu": {
-          "type": "string"
-        },
-        "elasticGraphicsType": {
-          "type": "string"
-        },
-        "enhancedNetworkingSupported": {
-          "type": "string"
-        },
-        "fromRegionCode": {
-          "type": "string"
-        },
-        "gpu": {
-          "type": "string"
-        },
-        "gpuMemory": {
-          "type": "string"
-        },
-        "instance": {
-          "type": "string"
-        },
-        "instanceCapacity10Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity12Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity16Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity18Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity24Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity2Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity32Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity4Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity8Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacity9Xlarge": {
-          "type": "string"
-        },
-        "instanceCapacityLarge": {
-          "type": "string"
-        },
-        "instanceCapacityMedium": {
-          "type": "string"
-        },
-        "instanceCapacityMetal": {
-          "type": "string"
-        },
-        "instanceCapacityXlarge": {
-          "type": "string"
-        },
-        "instanceSku": {
-          "type": "string"
-        },
-        "intelAvx2Available": {
-          "type": "string"
-        },
-        "intelAvxAvailable": {
-          "type": "string"
-        },
-        "intelTurboAvailable": {
-          "type": "string"
-        },
-        "marketOption": {
-          "type": "string"
-        },
-        "normalizationSizeFactor": {
-          "type": "string"
-        },
-        "physicalCores": {
-          "type": "string"
-        },
-        "preInstalledSw": {
-          "type": "string"
-        },
-        "processorFeatures": {
-          "type": "string"
-        },
-        "productType": {
-          "type": "string"
-        },
-        "resourceType": {
-          "type": "string"
-        },
-        "serviceName": {
-          "type": "string"
-        },
-        "snapShotArchiveFeeType": {
-          "type": "string"
-        },
-        "toRegionCode": {
-          "type": "string"
-        },
-        "volumeApiName": {
-          "type": "string"
-        },
-        "vpcNetworkingSupport": {
-          "type": "string"
-        },
-        "version": {
-          "type": "string"
-        },
-        "availability": {
-          "type": "string"
-        },
-        "storageClass": {
-          "type": "string"
-        },
-        "feeCode": {
-          "type": "string"
-        },
-        "feeDescription": {
-          "type": "string"
-        },
-        "durability": {
-          "type": "string"
-        },
-        "overhead": {
-          "type": "string"
-        },
-        "cacheEngine": {
-          "type": "string"
-        },
-        "ssd": {
-          "type": "string"
-        },
-        "minVolumeSize": {
-          "type": "string"
-        },
-        "engineCode": {
-          "type": "string"
-        },
-        "databaseEngine": {
-          "type": "string"
-        },
-        "databaseEdition": {
-          "type": "string"
-        },
-        "deploymentOption": {
-          "type": "string"
-        },
-        "acu": {
-          "type": "string"
-        },
-        "deploymentModel": {
-          "type": "string"
-        },
-        "engineMajorVersion": {
-          "type": "string"
-        },
-        "engineMediaType": {
-          "type": "string"
-        },
-        "extendedSupportPricingYear": {
-          "type": "string"
-        },
-        "instanceTypeFamily": {
-          "type": "string"
-        },
-        "limitlessPreview": {
-          "type": "string"
-        },
-        "volumename": {
-          "type": "string"
-        },
-        "alarmType": {
-          "type": "string"
-        },
-        "logsDestination": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "typeDescription": {
-          "type": "string"
-        },
-        "effectiveStartDate": {
-          "type": "string"
-        },
-        "currencyCode": {
-          "type": "string"
-        },
-        "reservationTerm": {
-          "type": "string"
-        },
-        "retailPrice": {
-          "type": "string"
-        },
-        "meterId": {
-          "type": "string"
-        },
-        "meterName": {
-          "type": "string"
-        },
-        "productId": {
-          "type": "string"
-        },
-        "productName": {
-          "type": "string"
-        },
-        "skuName": {
-          "type": "string"
-        },
-        "serviceId": {
-          "type": "string"
-        },
-        "serviceFamily": {
-          "type": "string"
-        },
-        "isPrimaryMeterRegion": {
-          "type": "boolean"
-        },
-        "armSkuName": {
-          "type": "string"
-        },
-        "term": {
-          "type": "string"
-        },
-        "tierMinimumUnits": {
-          "type": "string"
-        }
-      },
-      "title": "ServiceDetails message"
-    },
     "apirippleAccessGroup": {
       "type": "object",
       "properties": {
@@ -17777,6 +17437,32 @@
           }
         }
       }
+    },
+    "blueapibillingv1InvoiceServiceDiscounts": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Service discount id."
+        },
+        "name": {
+          "type": "string",
+          "description": "Service discount name."
+        },
+        "description": {
+          "type": "string",
+          "description": "Service discount description."
+        },
+        "created": {
+          "type": "string",
+          "description": "create timestamp."
+        },
+        "updated": {
+          "type": "string",
+          "description": "update timestamp."
+        }
+      },
+      "description": "Streaming response message for the InvoiceServiceDiscounts rpc."
     },
     "blueapicostv1CostItem": {
       "type": "object",
@@ -20419,7 +20105,10 @@
           "format": "double"
         },
         "serviceDetails": {
-          "$ref": "#/definitions/apipricingServiceDetails"
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
         }
       },
       "title": "Pricing details"
@@ -25291,32 +24980,6 @@
       },
       "title": "Response message for InviteMember"
     },
-    "v1InvoiceServiceDiscounts": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Service discount id."
-        },
-        "name": {
-          "type": "string",
-          "description": "Service discount name."
-        },
-        "description": {
-          "type": "string",
-          "description": "Service discount description."
-        },
-        "created": {
-          "type": "string",
-          "description": "create timestamp."
-        },
-        "updated": {
-          "type": "string",
-          "description": "update timestamp."
-        }
-      },
-      "description": "Streaming response message for the InvoiceServiceDiscounts rpc."
-    },
     "v1IpFilter": {
       "type": "object",
       "properties": {
@@ -26708,6 +26371,20 @@
         }
       },
       "description": "Response message for ListSavings, RestoreSavings, SimulateSavings rpc."
+    },
+    "v1Service": {
+      "type": "object",
+      "properties": {
+        "serviceCode": {
+          "type": "string",
+          "description": "The service code."
+        },
+        "serviceName": {
+          "type": "string",
+          "description": "The service name."
+        }
+      },
+      "description": "Service resource definition.\nServices of each vendor available for Service Discounts."
     },
     "v1SetCostGroupAnomalyOptionsResponse": {
       "type": "object",
