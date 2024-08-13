@@ -103,11 +103,23 @@ message FixedFeeOrPercentage {
 // tired price
 message TieredPrice {
   repeated TierdConfig tiredConfig = 1;
+
+  TargetServiceConfig service = 2;
+
+  TargetUsageConfig usage = 3;
+
+  bool discounted = 4;
 }
 
 // tired percentage
 message TieredPercentage {
   repeated TierdConfig tiredConfig = 1;
+
+  TargetServiceConfig service = 2;
+
+  TargetUsageConfig usage = 3;
+
+  bool discounted = 4;
 }
 
 // tired config
@@ -127,4 +139,6 @@ enum TargetServiceConfig {
 // Describes the overall config of a [blueapi.api.ripple.MethodConfig].
 enum TargetUsageConfig {
   USAGE = 0;
+
+  USAGE_ONLY = 1;
 }
