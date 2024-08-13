@@ -6,6 +6,8 @@ option go_package = "github.com/alphauslabs/blue-sdk-go/api/pricing";
 option java_package = "cloud.alphaus.blueapi.api.pricing";
 option java_outer_classname = "ApiPricingDetailsProto";
 
+import "google/protobuf/struct.proto";
+
 // Pricing details
 message PricingData {
   string vendor = 1;
@@ -14,12 +16,5 @@ message PricingData {
   string sku = 4;
   string unit = 5;
   double pricePerUnit = 6;
-  map<string, Value>  serviceDetails = 7;
-}
-
-message Value {
-  oneof value {
-    string strVal = 1;
-    float floatVal = 2;
-  }
+  google.protobuf.Struct  serviceDetails = 7;
 }
