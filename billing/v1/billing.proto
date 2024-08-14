@@ -413,6 +413,14 @@ service Billing {
       delete: "/v1/customizedbillingservices/{id}"
     };
   }
+
+  // WORK-IN-PROGRESS: Returns the customer details and its tags. 
+  // Port for: m/ripple/tags/vendor/{vendor}?type={type}
+  rpc GetTags(GetTagsRequest) returns (stream Customer) {
+    option (google.api.http) = {
+      get: "/v1/tags"
+    };
+  }
 }
 
 message BillingGroup {
@@ -1357,4 +1365,21 @@ message UpdateInvoiceServiceDiscountsRequest {
 message DeleteInvoiceServiceDiscountsRequest {
   // Required. [blueapi.api.ripple.v1.InvoiceServiceDiscounts.id]
   string id = 1;
+}
+
+// Response for tag request
+message Customer {
+  string id = 1;
+  string accountId = 2;
+  string name = 3;
+  repeated Tags tags = 4;
+}
+message Tags {
+  string key = 1;
+  repeated string values = 2;
+}
+
+message GetTagsRequest {
+  string vendor = 1;
+  string type = 2;
 }
