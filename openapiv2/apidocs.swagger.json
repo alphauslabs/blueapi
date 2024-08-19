@@ -12807,6 +12807,30 @@
         }
       }
     },
+    "AWSResourceDetailsReservedInstance": {
+      "type": "object",
+      "properties": {
+        "expirationDate": {
+          "type": "string"
+        },
+        "instanceCount": {
+          "type": "number",
+          "format": "double"
+        },
+        "instanceType": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "metrics": {
+          "$ref": "#/definitions/ReservedInstanceRIMetrics"
+        }
+      }
+    },
     "AWSResourceDetailsS3Details": {
       "type": "object",
       "properties": {
@@ -13183,6 +13207,24 @@
       "required": [
         "updateMask"
       ]
+    },
+    "ComprehendDetailsEndpoint": {
+      "type": "object",
+      "properties": {
+        "arn": {
+          "type": "string"
+        },
+        "provisionedInferenceUnit": {
+          "type": "number",
+          "format": "double"
+        },
+        "autoScalingStatus": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
     },
     "CostCalculateCostsBody": {
       "type": "object",
@@ -14665,6 +14707,9 @@
         },
         "arn": {
           "type": "string"
+        },
+        "status": {
+          "type": "string"
         }
       }
     },
@@ -14866,6 +14911,32 @@
         }
       }
     },
+    "RedshiftDetailsClusterDetails": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "clusterId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "ReservedInstanceRIMetrics": {
+      "type": "object",
+      "properties": {
+        "utilization": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/MetricDataMetrics"
+          }
+        }
+      }
+    },
     "RoundingRoundingMethod": {
       "type": "string",
       "enum": [
@@ -14967,6 +15038,36 @@
         }
       }
     },
+    "TrustedAdvisorRecommendationsComprehendUnderutilizedEndpoints": {
+      "type": "object",
+      "properties": {
+        "endpoint": {
+          "$ref": "#/definitions/ComprehendDetailsEndpoint"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsEC2RILeaseExpiration": {
+      "type": "object",
+      "properties": {
+        "currentMonthlyCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "estMonthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "riDetails": {
+          "$ref": "#/definitions/AWSResourceDetailsReservedInstance"
+        }
+      }
+    },
     "TrustedAdvisorRecommendationsIdleLoadBalancer": {
       "type": "object",
       "properties": {
@@ -15010,6 +15111,45 @@
         },
         "lambdaDetails": {
           "$ref": "#/definitions/AWSResourceDetailsLambdaDetails"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsLambdaWithExcessiveTimeouts": {
+      "type": "object",
+      "properties": {
+        "maxDailyTimeoutRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "dateOfDailyTimeoutRate": {
+          "type": "string"
+        },
+        "aveDailyTimeoutRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "functionTimeoutSettings": {
+          "type": "number",
+          "format": "double"
+        },
+        "lostDailyComputeCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "aveDailyInvokes": {
+          "type": "number",
+          "format": "double"
+        },
+        "currentDayInvokes": {
+          "type": "number",
+          "format": "double"
+        },
+        "currentDayTimeoutRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "function": {
+          "$ref": "#/definitions/LambdaDetailsFunctionDetails"
         }
       }
     },
@@ -15069,6 +15209,21 @@
           "$ref": "#/definitions/recommendationAWSResourceDetailsEBSDetails"
         },
         "monthlyStorageCost": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsUnderutilizedRedshiftCluster": {
+      "type": "object",
+      "properties": {
+        "cluster": {
+          "$ref": "#/definitions/RedshiftDetailsClusterDetails"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "estimatedMonthlySavings": {
           "type": "number",
           "format": "double"
         }
@@ -20681,6 +20836,9 @@
     "recommendationAWSResourceDetailsRedshiftDetails": {
       "type": "object",
       "properties": {
+        "cluster": {
+          "$ref": "#/definitions/RedshiftDetailsClusterDetails"
+        },
         "node": {
           "$ref": "#/definitions/AWSResourceDetailsRedshiftDetailsNodeDetails"
         }
@@ -20871,6 +21029,18 @@
         },
         "ec2InstancesStopped": {
           "$ref": "#/definitions/TrustedAdvisorRecommendationsAmazonEC2InstanceStopped"
+        },
+        "ec2RILeaseExpiration": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsEC2RILeaseExpiration"
+        },
+        "comprehendUnderutilizedEndpoints": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsComprehendUnderutilizedEndpoints"
+        },
+        "underutilizedRedshiftCluster": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsUnderutilizedRedshiftCluster"
+        },
+        "lambdaWithExcessiveTimeouts": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsLambdaWithExcessiveTimeouts"
         }
       }
     },
