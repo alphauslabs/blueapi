@@ -335,6 +335,25 @@ message TrustedAdvisorRecommendations {
     ComprehendUnderutilizedEndpoints comprehendUnderutilizedEndpoints = 13;
     UnderutilizedRedshiftCluster underutilizedRedshiftCluster = 14;
     LambdaWithExcessiveTimeouts lambdaWithExcessiveTimeouts = 15;
+    AWSWellArchitectedHighRiskIssues awsWellArchitectedHighRiskIssues = 16;
+    CommonDetails commonDetails = 17;
+    message CommonDetails {
+        string awsConfigRule = 1;
+        string inputParameters = 2;
+        string resource = 3;
+    }
+    message AWSWellArchitectedHighRiskIssues {
+        string workloadArn = 1;
+        string workloadName = 2;
+        string reviewerName = 3;
+        string workloadType = 4;
+        string workloadStartedDate = 5;
+        string workloadLastModifiedDate = 6;
+        string numberOfIDHRI = 7;
+        string numberOfHRIResolved = 8;
+        string numberOfQuestionsAnswered = 9;
+        string totalNumberOfQuestions = 10;
+    }
     message LowUtilizationEC2Instances {
         AWSResourceDetails.EC2Details ec2Instance = 1;
         double aveCpuUtilizationBy14Day = 2;
