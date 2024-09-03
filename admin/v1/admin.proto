@@ -231,6 +231,14 @@ service Admin {
       get: "/admin/v1/defaultmeta/{mspId}"
     };
   }
+
+  // WORK-IN-PROGRESS: Set the default meta saved per organization
+  rpc UpdateMSPDefaultMeta(UpdateMSPDefaultMetaRequest) returns  (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/admin/v1/defaultmeta"
+      body: "*"
+    };
+  }
 }
 
 // Request message for the Admin.ListAccountGroups rpc.
@@ -642,4 +650,9 @@ message GetMSPDefaultMetaRequest {
 
 message GetMSPDefaultMetaResponse {
   repeated string defaultMeta = 1;
+}
+
+message UpdateMSPDefaultMetaRequest {
+  string mspId = 1;
+  repeated string defaultMeta = 2;
 }
