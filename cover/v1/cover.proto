@@ -2198,6 +2198,7 @@ message CostItem {
   string billingAccount = 9;
   // Tag Value. Contains tag value of the input tag key. Only used if groupBy is set to tag
   string tagValue = 10;
+  string lastUpdate = 11;
 }
 
 // Request message for GetRightSizingRecommendation
@@ -3290,6 +3291,16 @@ message ListRecommendationResponse{
   string source = 22;
   string dateRecommended = 23;
   string recommendationGroup = 24;
+  string lastUpdatedAt = 25;
+  PurchaseOption purchaseOption = 26;
+  message PurchaseOption {
+    string spType = 1;
+    string offeringClass = 2;
+    double commitment = 3;
+    int64 numberToPurchase = 4;
+    string paymentOption = 5;
+    string term = 6;
+  }
 }
 
 message GetRecommendationRequest{

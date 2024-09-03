@@ -37,8 +37,8 @@ message RecommendationData {
     double estimatedMonthlySavings = 15;
     double estimatedSavingsPercentage = 16;
     string resourceName = 17;
-    optional bool restartNeeded = 20;
-    optional bool rollbackPossible = 21;
+    bool restartNeeded = 20;
+    bool rollbackPossible = 21;
     string launchUrl = 22;
 }
 
@@ -160,6 +160,26 @@ message CostOptimizationHubRecommendations {
 }
 
 message AWSResourceDetails {
+    message ComprehendDetails {
+        message Endpoint {
+            string arn = 1;
+            double provisionedInferenceUnit = 2;
+            string autoScalingStatus = 3;
+            string status = 4;
+        }
+        Endpoint endpoint = 1;
+    }
+    message ReservedInstance {
+        string expirationDate = 1;
+        double instanceCount = 2;
+        string instanceType = 3;
+        string platform = 4;
+        string id = 5;
+        RIMetrics metrics = 6;
+        message RIMetrics {
+            repeated MetricData.Metrics utilization = 1;
+        }
+    }
     message ELBDetails {
         message LoadBalancer {
             string name = 1;
@@ -188,10 +208,16 @@ message AWSResourceDetails {
         InstanceDetails instance = 1;
     }
     message RedshiftDetails {
+        message ClusterDetails {
+            string type = 1;
+            string clusterId = 2;
+            string status = 3;
+        }
         message NodeDetails {
             string type = 1;
             string family = 2;
         }
+        ClusterDetails cluster = 1;
         NodeDetails node = 2;
     }
     message ElastiCacheDetails {
@@ -287,11 +313,11 @@ message AWSResourceDetails {
             string architecture = 1;
             int64 memorySizeInMB = 2;
             string arn = 3;
+            string status = 4;
         }
         FunctionDetails function = 1;
     }
 }
-
 
 message TrustedAdvisorRecommendations {
     string severityStatus = 1;
@@ -305,6 +331,29 @@ message TrustedAdvisorRecommendations {
     UnassociatedEIP unassociatedEIP = 9;
     IdleLoadBalancer idleLoadBalancer = 10;
     AmazonEC2InstanceStopped ec2InstancesStopped = 11;
+    EC2RILeaseExpiration ec2RILeaseExpiration  = 12;
+    ComprehendUnderutilizedEndpoints comprehendUnderutilizedEndpoints = 13;
+    UnderutilizedRedshiftCluster underutilizedRedshiftCluster = 14;
+    LambdaWithExcessiveTimeouts lambdaWithExcessiveTimeouts = 15;
+    AWSWellArchitectedHighRiskIssues awsWellArchitectedHighRiskIssues = 16;
+    CommonDetails commonDetails = 17;
+    message CommonDetails {
+        string awsConfigRule = 1;
+        string inputParameters = 2;
+        string resource = 3;
+    }
+    message AWSWellArchitectedHighRiskIssues {
+        string workloadArn = 1;
+        string workloadName = 2;
+        string reviewerName = 3;
+        string workloadType = 4;
+        string workloadStartedDate = 5;
+        string workloadLastModifiedDate = 6;
+        string numberOfIDHRI = 7;
+        string numberOfHRIResolved = 8;
+        string numberOfQuestionsAnswered = 9;
+        string totalNumberOfQuestions = 10;
+    }
     message LowUtilizationEC2Instances {
         AWSResourceDetails.EC2Details ec2Instance = 1;
         double aveCpuUtilizationBy14Day = 2;
@@ -345,6 +394,32 @@ message TrustedAdvisorRecommendations {
         string awsConfigRule = 2;
         string inputParameters = 3;
         string resource = 4;
+    }
+    message EC2RILeaseExpiration {
+        double currentMonthlyCost = 1;
+        double estMonthlySavings = 2;
+        string reason = 3;
+        AWSResourceDetails.ReservedInstance riDetails = 4;
+    }
+    message ComprehendUnderutilizedEndpoints {
+        AWSResourceDetails.ComprehendDetails.Endpoint endpoint = 1;
+        string reason = 2;
+    }
+    message UnderutilizedRedshiftCluster {
+        AWSResourceDetails.RedshiftDetails.ClusterDetails cluster = 1;
+        string reason = 2;
+        double estimatedMonthlySavings = 3;
+    }
+    message LambdaWithExcessiveTimeouts {
+        double maxDailyTimeoutRate = 1;
+        string dateOfDailyTimeoutRate = 2;
+        double aveDailyTimeoutRate = 3;
+        double functionTimeoutSettings = 4;
+        double lostDailyComputeCost = 5;
+        double aveDailyInvokes = 6;
+        double currentDayInvokes = 7;
+        double currentDayTimeoutRate = 8;
+        AWSResourceDetails.LambdaDetails.FunctionDetails function = 9;
     }
 }
 

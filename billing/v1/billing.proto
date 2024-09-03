@@ -416,7 +416,7 @@ service Billing {
 
   // WORK-IN-PROGRESS: Returns the customer details and its tags. 
   // Port for: m/ripple/tags/vendor/{vendor}?type={type}
-  rpc GetTags(GetTagsRequest) returns (stream Customer) {
+  rpc GetTags(GetTagsRequest) returns (stream TagData) {
     option (google.api.http) = {
       get: "/v1/tags"
     };
@@ -1368,10 +1368,10 @@ message DeleteInvoiceServiceDiscountsRequest {
 }
 
 // Response for tag request
-message Customer {
-  string id = 1;
+message TagData {
+  string customerId = 1;
   string accountId = 2;
-  string name = 3;
+  string customerName = 3;
   repeated Tags tags = 4;
 }
 message Tags {

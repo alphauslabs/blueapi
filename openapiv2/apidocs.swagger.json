@@ -8832,13 +8832,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1Customer"
+                  "$ref": "#/definitions/billingv1TagData"
                 },
                 "error": {
                   "$ref": "#/definitions/googlerpcStatus"
                 }
               },
-              "title": "Stream result of v1Customer"
+              "title": "Stream result of billingv1TagData"
             }
           },
           "default": {
@@ -12807,6 +12807,30 @@
         }
       }
     },
+    "AWSResourceDetailsReservedInstance": {
+      "type": "object",
+      "properties": {
+        "expirationDate": {
+          "type": "string"
+        },
+        "instanceCount": {
+          "type": "number",
+          "format": "double"
+        },
+        "instanceType": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "metrics": {
+          "$ref": "#/definitions/ReservedInstanceRIMetrics"
+        }
+      }
+    },
     "AWSResourceDetailsS3Details": {
       "type": "object",
       "properties": {
@@ -13183,6 +13207,24 @@
       "required": [
         "updateMask"
       ]
+    },
+    "ComprehendDetailsEndpoint": {
+      "type": "object",
+      "properties": {
+        "arn": {
+          "type": "string"
+        },
+        "provisionedInferenceUnit": {
+          "type": "number",
+          "format": "double"
+        },
+        "autoScalingStatus": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
     },
     "CostCalculateCostsBody": {
       "type": "object",
@@ -14665,6 +14707,9 @@
         },
         "arn": {
           "type": "string"
+        },
+        "status": {
+          "type": "string"
         }
       }
     },
@@ -14703,6 +14748,31 @@
         },
         "saml": {
           "$ref": "#/definitions/IdentityProvidersamlInfo"
+        }
+      }
+    },
+    "ListRecommendationResponsePurchaseOption": {
+      "type": "object",
+      "properties": {
+        "spType": {
+          "type": "string"
+        },
+        "offeringClass": {
+          "type": "string"
+        },
+        "commitment": {
+          "type": "number",
+          "format": "double"
+        },
+        "numberToPurchase": {
+          "type": "string",
+          "format": "int64"
+        },
+        "paymentOption": {
+          "type": "string"
+        },
+        "term": {
+          "type": "string"
         }
       }
     },
@@ -14866,6 +14936,32 @@
         }
       }
     },
+    "RedshiftDetailsClusterDetails": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "clusterId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "ReservedInstanceRIMetrics": {
+      "type": "object",
+      "properties": {
+        "utilization": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/MetricDataMetrics"
+          }
+        }
+      }
+    },
     "RoundingRoundingMethod": {
       "type": "string",
       "enum": [
@@ -14950,6 +15046,41 @@
         }
       }
     },
+    "TrustedAdvisorRecommendationsAWSWellArchitectedHighRiskIssues": {
+      "type": "object",
+      "properties": {
+        "workloadArn": {
+          "type": "string"
+        },
+        "workloadName": {
+          "type": "string"
+        },
+        "reviewerName": {
+          "type": "string"
+        },
+        "workloadType": {
+          "type": "string"
+        },
+        "workloadStartedDate": {
+          "type": "string"
+        },
+        "workloadLastModifiedDate": {
+          "type": "string"
+        },
+        "numberOfIDHRI": {
+          "type": "string"
+        },
+        "numberOfHRIResolved": {
+          "type": "string"
+        },
+        "numberOfQuestionsAnswered": {
+          "type": "string"
+        },
+        "totalNumberOfQuestions": {
+          "type": "string"
+        }
+      }
+    },
     "TrustedAdvisorRecommendationsAmazonEC2InstanceStopped": {
       "type": "object",
       "properties": {
@@ -14964,6 +15095,50 @@
         },
         "resource": {
           "type": "string"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsCommonDetails": {
+      "type": "object",
+      "properties": {
+        "awsConfigRule": {
+          "type": "string"
+        },
+        "inputParameters": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsComprehendUnderutilizedEndpoints": {
+      "type": "object",
+      "properties": {
+        "endpoint": {
+          "$ref": "#/definitions/ComprehendDetailsEndpoint"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsEC2RILeaseExpiration": {
+      "type": "object",
+      "properties": {
+        "currentMonthlyCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "estMonthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "riDetails": {
+          "$ref": "#/definitions/AWSResourceDetailsReservedInstance"
         }
       }
     },
@@ -15010,6 +15185,45 @@
         },
         "lambdaDetails": {
           "$ref": "#/definitions/AWSResourceDetailsLambdaDetails"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsLambdaWithExcessiveTimeouts": {
+      "type": "object",
+      "properties": {
+        "maxDailyTimeoutRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "dateOfDailyTimeoutRate": {
+          "type": "string"
+        },
+        "aveDailyTimeoutRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "functionTimeoutSettings": {
+          "type": "number",
+          "format": "double"
+        },
+        "lostDailyComputeCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "aveDailyInvokes": {
+          "type": "number",
+          "format": "double"
+        },
+        "currentDayInvokes": {
+          "type": "number",
+          "format": "double"
+        },
+        "currentDayTimeoutRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "function": {
+          "$ref": "#/definitions/LambdaDetailsFunctionDetails"
         }
       }
     },
@@ -15069,6 +15283,21 @@
           "$ref": "#/definitions/recommendationAWSResourceDetailsEBSDetails"
         },
         "monthlyStorageCost": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "TrustedAdvisorRecommendationsUnderutilizedRedshiftCluster": {
+      "type": "object",
+      "properties": {
+        "cluster": {
+          "$ref": "#/definitions/RedshiftDetailsClusterDetails"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "estimatedMonthlySavings": {
           "type": "number",
           "format": "double"
         }
@@ -16050,11 +16279,19 @@
         "date": {
           "type": "string"
         },
+        "cost": {
+          "type": "number",
+          "format": "double"
+        },
         "coverage": {
           "type": "number",
           "format": "double"
         },
         "usage": {
+          "type": "number",
+          "format": "double"
+        },
+        "usageCoverage": {
           "type": "number",
           "format": "double"
         }
@@ -16927,6 +17164,20 @@
         }
       }
     },
+    "apicoverTagData": {
+      "type": "object",
+      "properties": {
+        "tagKey": {
+          "type": "string"
+        },
+        "tagValue": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "apicoverUsageTypes": {
       "type": "object",
       "properties": {
@@ -17744,6 +17995,28 @@
         }
       }
     },
+    "billingv1TagData": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
+        },
+        "customerName": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Tags"
+          }
+        }
+      },
+      "title": "Response for tag request"
+    },
     "blueapiapiAccount": {
       "type": "object",
       "properties": {
@@ -17968,6 +18241,9 @@
         "tagValue": {
           "type": "string",
           "title": "Tag Value. Contains tag value of the input tag key. Only used if groupBy is set to tag"
+        },
+        "lastUpdate": {
+          "type": "string"
         }
       },
       "description": "Response message wrapper for cloud costs."
@@ -20134,20 +20410,6 @@
         }
       }
     },
-    "coverTagData": {
-      "type": "object",
-      "properties": {
-        "tagKey": {
-          "type": "string"
-        },
-        "tagValue": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "coverThreshold": {
       "type": "object",
       "properties": {
@@ -20595,11 +20857,11 @@
       "properties": {
         "@type": {
           "type": "string",
-          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com. As of May 2023, there are no widely used type server\nimplementations and no plans to implement one.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
         }
       },
       "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "protobufNullValue": {
       "type": "string",
@@ -20607,7 +20869,7 @@
         "NULL_VALUE"
       ],
       "default": "NULL_VALUE",
-      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\nThe JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
+      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
     },
     "protosOperation": {
       "type": "object",
@@ -20673,6 +20935,9 @@
     "recommendationAWSResourceDetailsRedshiftDetails": {
       "type": "object",
       "properties": {
+        "cluster": {
+          "$ref": "#/definitions/RedshiftDetailsClusterDetails"
+        },
         "node": {
           "$ref": "#/definitions/AWSResourceDetailsRedshiftDetailsNodeDetails"
         }
@@ -20863,6 +21128,24 @@
         },
         "ec2InstancesStopped": {
           "$ref": "#/definitions/TrustedAdvisorRecommendationsAmazonEC2InstanceStopped"
+        },
+        "ec2RILeaseExpiration": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsEC2RILeaseExpiration"
+        },
+        "comprehendUnderutilizedEndpoints": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsComprehendUnderutilizedEndpoints"
+        },
+        "underutilizedRedshiftCluster": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsUnderutilizedRedshiftCluster"
+        },
+        "lambdaWithExcessiveTimeouts": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsLambdaWithExcessiveTimeouts"
+        },
+        "awsWellArchitectedHighRiskIssues": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsAWSWellArchitectedHighRiskIssues"
+        },
+        "commonDetails": {
+          "$ref": "#/definitions/TrustedAdvisorRecommendationsCommonDetails"
         }
       }
     },
@@ -23992,28 +24275,6 @@
       },
       "description": "A map of \"key:value\" attribute filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc."
     },
-    "v1Customer": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "accountId": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Tags"
-          }
-        }
-      },
-      "title": "Response for tag request"
-    },
     "v1DataAccess": {
       "type": "object",
       "properties": {
@@ -24593,7 +24854,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/coverTagData"
+            "$ref": "#/definitions/apicoverTagData"
           }
         }
       },
@@ -25402,7 +25663,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/coverTagData"
+            "$ref": "#/definitions/apicoverTagData"
           }
         }
       },
@@ -25566,7 +25827,7 @@
         },
         "calculationScope": {
           "type": "boolean",
-          "description": "The calculation scope.\nIf enabled, all Usage and Fee are included in the calculation.\nIf disabled, only the Usage is included in the calculation."
+          "description": "The calculation scope.\ndefault is `disabled`.\nIf enabled, Usage and any lineitem type including Fee are included in the calculation.\nIf disabled, only the Usage is included in the calculation."
         }
       },
       "description": "InvoiceServiceDiscountsSettingDetails resource definition.",
@@ -25971,6 +26232,12 @@
         },
         "recommendationGroup": {
           "type": "string"
+        },
+        "lastUpdatedAt": {
+          "type": "string"
+        },
+        "purchaseOption": {
+          "$ref": "#/definitions/ListRecommendationResponsePurchaseOption"
         }
       }
     },
