@@ -224,6 +224,13 @@ service Admin {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Fetch the default meta saved per organization
+  rpc GetMSPDefaultMeta(GetMSPDefaultMetaRequest) returns (GetMSPDefaultMetaResponse) {
+    option (google.api.http) = {
+      get: "/admin/v1/defaultmeta/{mspId}"
+    }
+  }
 }
 
 // Request message for the Admin.ListAccountGroups rpc.
@@ -627,4 +634,12 @@ message FeatureSetting {
 message UpdateWaveFeatureSettingRequest {
   string lang = 2;
   repeated FeatureSetting featureSetting = 1;
+}
+
+message GetMSPDefaultMetaRequest {
+  string mspId = 1;
+}
+
+message GetMSPDefaultMetaResponse {
+  repeated string defaultMeta = 1;
 }
