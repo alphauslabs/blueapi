@@ -465,6 +465,40 @@
         ]
       }
     },
+    "/admin/v1/defaultmeta": {
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Set the default meta saved per organization",
+        "operationId": "Admin_UpdateMSPDefaultMeta",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateMSPDefaultMetaRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
     "/admin/v1/defaultmeta/{mspId}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Fetch the default meta saved per organization",
@@ -27502,6 +27536,20 @@
         }
       },
       "title": "Response message for UpdateCostGroupName"
+    },
+    "v1UpdateMSPDefaultMetaRequest": {
+      "type": "object",
+      "properties": {
+        "mspId": {
+          "type": "string"
+        },
+        "defaultMeta": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "v1UpdateMemberPermissionResponse": {
       "type": "object",
