@@ -431,9 +431,9 @@ service Billing {
   }
 
   // WORK-IN-PROGRESS: Returns all registered customfields
-  rpc ListCustomField(google.protobuf.Empty) returns (CustomFieldList) {
+  rpc ListCustomField(ListCustomFieldRequest) returns (stream CustomField) {
     option (google.api.http) = {
-      get: "/v1/customfieldlist"
+      post: "/v1/customfield:read"
     };
   }
 
@@ -1434,10 +1434,6 @@ message CustomField {
   string description = 3;
 }
 
-message CustomFieldList {
-  repeated CustomField customField = 1;
-}
-
 message CreateCustomFieldRequest {
   string key = 1;
   string description = 2;
@@ -1451,4 +1447,8 @@ message UpdateCustomFieldRequest {
 
 message DeleteCustomFieldRequest {
   string id = 1;
+}
+
+message ListCustomFieldRequest {
+
 }
