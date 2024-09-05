@@ -10,9 +10,18 @@ message UnitCostData{
     string id = 1;
     string unitName = 2;
     string description = 3;
-    map<string, double> unitItems = 4;
+    repeated UnitItem unitItems = 4;
     string createdBy = 5;
     string createTime = 6;
     string lastUpdatedAt = 7;
 }
 
+message UnitItem{
+    string itemName = 1;
+    double distribution = 2;
+    repeated ResourcesFilter dedicatedResourcesCombination = 3;
+}
+
+message ResourcesFilter{
+    map<string, string> andFilters = 1;
+}
