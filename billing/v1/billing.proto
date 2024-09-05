@@ -421,6 +421,38 @@ service Billing {
       get: "/v1/tags"
     };
   }
+
+  // WORK-IN-PROGRESS: Creates new customfield
+  rpc CreateCustomField(CreateCustomFieldRequest) returns (CustomField) {
+    option (google.api.http) = {
+      post: "/v1/customfield"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Returns all registered customfields
+  rpc ListCustomField(google.protobuf.Empty) returns (CustomFieldList) {
+    option (google.api.http) = {
+      get: "/v1/customfieldlist"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Updates an existing CustomField. You can provide new values for the `key` and/or `description` fields.
+  // If you only need to update one field, set the other field to null. 
+  // The `id` in the URL path identifies the CustomField to be updated.
+  rpc UpdateCustomField(UpdateCustomFieldRequest) returns (CustomField) {
+    option (google.api.http) = {
+      patch: "/v1/customfield/{id}"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Deletes the customfield
+  rpc DeleteCustomField(DeleteCustomFieldRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/customfield/{id}"
+    };
+  }
 }
 
 message BillingGroup {
@@ -1389,4 +1421,34 @@ message Tags {
 message GetTagsRequest {
   string vendor = 1;
   string type = 2;
+}
+
+message CustomField {
+  // Unique identifier for the custom field, automatically generated and immutable.
+  string id = 1;
+
+  // Descriptive name of the custom field
+  string key = 2;
+
+  // Detailed description of the custom field
+  string description = 3;
+}
+
+message CustomFieldList {
+  repeated CustomField customField = 1;
+}
+
+message CreateCustomFieldRequest {
+  string key = 1;
+  string description = 2;
+}
+
+message UpdateCustomFieldRequest {
+  string id = 1;
+  string key = 2;
+  string description = 3;
+}
+
+message DeleteCustomFieldRequest {
+  string id = 1;
 }
