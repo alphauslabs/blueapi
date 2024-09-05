@@ -6262,6 +6262,131 @@
         ]
       }
     },
+    "/v1/customfield": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Creates new customfield",
+        "operationId": "Billing_CreateCustomField",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CustomField"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateCustomFieldRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/customfield/{id}": {
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Deletes the customfield",
+        "operationId": "Billing_DeleteCustomField",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
+      "patch": {
+        "summary": "WORK-IN-PROGRESS: Updates an existing CustomField. You can provide new values for the `key` and/or `description` fields.\nIf you only need to update one field, set the other field to null. \nThe `id` in the URL path identifies the CustomField to be updated.",
+        "operationId": "Billing_UpdateCustomField",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CustomField"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingUpdateCustomFieldBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/customfieldlist": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Returns all registered customfields",
+        "operationId": "Billing_ListCustomField",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CustomFieldList"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/customizedbillingservices": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Creates the customized billing service. Only available in Ripple.",
@@ -13179,6 +13304,17 @@
         }
       },
       "description": "Request message for the Billing.UpdateAdjustmentConfig rpc."
+    },
+    "BillingUpdateCustomFieldBody": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
     },
     "BillingUpdateCustomizedBillingServiceBody": {
       "type": "object",
@@ -23761,6 +23897,17 @@
       },
       "title": "Response message for CreateCostGroup"
     },
+    "v1CreateCustomFieldRequest": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
     "v1CreateCustomizedBillingServiceRequest": {
       "type": "object",
       "properties": {
@@ -24350,6 +24497,35 @@
         }
       },
       "description": "A map of \"key:value\" attribute filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc."
+    },
+    "v1CustomField": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the custom field, automatically generated and immutable."
+        },
+        "key": {
+          "type": "string",
+          "title": "Descriptive name of the custom field"
+        },
+        "description": {
+          "type": "string",
+          "title": "Detailed description of the custom field"
+        }
+      }
+    },
+    "v1CustomFieldList": {
+      "type": "object",
+      "properties": {
+        "customField": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1CustomField"
+          }
+        }
+      }
     },
     "v1DataAccess": {
       "type": "object",
