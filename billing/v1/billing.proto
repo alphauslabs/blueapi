@@ -431,18 +431,16 @@ service Billing {
   }
 
   // WORK-IN-PROGRESS: Returns all registered customfields
-  rpc ListCustomField(google.protobuf.Empty) returns (CustomFieldList) {
+  rpc ListCustomField(ListCustomFieldRequest) returns (stream CustomField) {
     option (google.api.http) = {
-      get: "/v1/customfieldlist"
+      post: "/v1/customfield:read"
     };
   }
 
-  // WORK-IN-PROGRESS: Updates an existing CustomField. You can provide new values for the `key` and/or `description` fields.
-  // If you only need to update one field, set the other field to null. 
-  // The `id` in the URL path identifies the CustomField to be updated.
+  // WORK-IN-PROGRESS: Update the `customField` specified id, modifying its key and description
   rpc UpdateCustomField(UpdateCustomFieldRequest) returns (CustomField) {
     option (google.api.http) = {
-      patch: "/v1/customfield/{id}"
+      put: "/v1/customfield/{id}"
       body: "*"
     };
   }
@@ -1434,10 +1432,6 @@ message CustomField {
   string description = 3;
 }
 
-message CustomFieldList {
-  repeated CustomField customField = 1;
-}
-
 message CreateCustomFieldRequest {
   string key = 1;
   string description = 2;
@@ -1451,4 +1445,8 @@ message UpdateCustomFieldRequest {
 
 message DeleteCustomFieldRequest {
   string id = 1;
+}
+
+message ListCustomFieldRequest {
+
 }
