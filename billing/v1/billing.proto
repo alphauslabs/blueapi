@@ -437,12 +437,10 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Updates an existing CustomField. You can provide new values for the `key` and/or `description` fields.
-  // If you only need to update one field, set the other field to null. 
-  // The `id` in the URL path identifies the CustomField to be updated.
+  // WORK-IN-PROGRESS: Update the `customField` specified id, modifying its key and description
   rpc UpdateCustomField(UpdateCustomFieldRequest) returns (CustomField) {
     option (google.api.http) = {
-      patch: "/v1/customfield/{id}"
+      put: "/v1/customfield/{id}"
       body: "*"
     };
   }
