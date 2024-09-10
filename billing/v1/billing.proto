@@ -451,6 +451,20 @@ service Billing {
       delete: "/v1/customfield/{id}"
     };
   }
+
+  // WORK-IN-PROGRESS: Creates new billing group free format item (miscellaneous)
+  rpc CreateFreeFormat(CreateFreeFormatRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/freeformat"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Delete billing group free format item (miscellaneous)
+  rpc DeleteFreeFormat(DeleteFreeFormatRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/freeformat/{id}"
+    };
+  }
 }
 
 message BillingGroup {
@@ -1449,4 +1463,16 @@ message DeleteCustomFieldRequest {
 
 message ListCustomFieldRequest {
 
+}
+
+// BillingGroup FreeFormat: Also known as miscellaneous
+message CreateFreeFormatRequest {
+  string id = 1;
+  string vendor = 2;
+  repeated string items = 3;
+}
+
+message DeleteFreeFormatRequest {
+  string id = 1;
+  string vendor = 2;
 }
