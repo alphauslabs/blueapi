@@ -184,6 +184,14 @@ service Cover {
     };
   }
 
+  // Modify user's currency
+  rpc UpdateUserCurrency(UpdateUserCurrencyRequest) returns (UpdateUserCurrencyResponse) {
+    option (google.api.http) = {
+      put: "/v1/me/currency"
+      body: "*"
+    };
+  }
+
   // Modify attributes
   rpc UpdateUserAttributes(UpdateUserAttributesRequest) returns (UpdateUserAttributesResponse) {
     option (google.api.http) = {
@@ -1401,10 +1409,21 @@ message UpdateUserAppThemeResponse {
 // Request message for UpdateUserTimezone
 message UpdateUserTimezoneRequest {
   string timezone = 1;
+  bool autoTimeZone = 2;
 }
 
 // Response message for UpdateUserTimezone
 message UpdateUserTimezoneResponse {
+  api.cover.UserData userData = 1;
+}
+
+// Request message for UpdateUserCurrency
+message UpdateUserCurrencyRequest {
+  string currency = 1;
+}
+
+// Response message for UpdateUserCurrency
+message UpdateUserCurrencyResponse {
   api.cover.UserData userData = 1;
 }
 
