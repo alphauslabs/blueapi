@@ -10,11 +10,117 @@ import "google/protobuf/struct.proto";
 
 // Pricing details
 message PricingData {
+  // Cloud vendor.
   string vendor = 1;
+
+  // Cloud vendor service. We have a limited number of services supported currently.
+  // Refer to https://labs.alphaus.cloud/blueapidocs/#/Pricing/Pricing_GetSupportedServices to list supported services.
   string service = 2;
+
+  // Region code.
   string regionCode = 3;
+
+  // SKU ID.
   string sku = 4;
+
+  // Unit of measure.
   string unit = 5;
+
+  // Price per unit.
   double pricePerUnit = 6;
+
+  // Service details. A protobuf struct which translates to a map for HTTP. Keys are of type string and values can be of type string, float, or bool, depending on the detail.
+  // The following is an example of a serviceDetails field of a response,
+  // ```
+  // "serviceDetails": {
+  //   "availabilityZone": "NA",
+  //   "capacityStatus": "Used",
+  //   "classicNetworkingSupport": "false",
+  //   "clockSpeed": "3.5 GHz",
+  //   "currency": "USD",
+  //   "currentGeneration": "Yes",
+  //   "dedicatedEbsThroughput": "Up to 10000 Mbps",
+  //   "ebsOptimized": "",
+  //   "ecu": "NA",
+  //   "effectiveDate": "2022-04-01",
+  //   "elasticGraphicsType": "",
+  //   "endingRange": "Inf",
+  //   "enhancedNetworkingSupported": "Yes",
+  //   "fromLocation": "",
+  //   "fromLocationType": "",
+  //   "fromRegionCode": "",
+  //   "gpu": "",
+  //   "gpuMemory": "NA",
+  //   "groupDescription": "",
+  //   "groupings": "",
+  //   "instance": "",
+  //   "instanceCapacity10Xlarge": "",
+  //   "instanceCapacity12Xlarge": "",
+  //   "instanceCapacity16Xlarge": "",
+  //   "instanceCapacity18Xlarge": "",
+  //   "instanceCapacity24Xlarge": "",
+  //   "instanceCapacity2Xlarge": "",
+  //   "instanceCapacity32Xlarge": "",
+  //   "instanceCapacity4Xlarge": "",
+  //   "instanceCapacity8Xlarge": "",
+  //   "instanceCapacity9Xlarge": "",
+  //   "instanceCapacityLarge": "",
+  //   "instanceCapacityMedium": "",
+  //   "instanceCapacityMetal": "",
+  //   "instanceCapacityXlarge": "",
+  //   "instanceFamily": "Compute optimized",
+  //   "instanceSku": "",
+  //   "instanceType": "c6i.large",
+  //   "intelAvx2Available": "Yes",
+  //   "intelAvxAvailable": "Yes",
+  //   "intelTurboAvailable": "Yes",
+  //   "leaseContractLength": "1yr",
+  //   "licenseModel": "No License required",
+  //   "location": "Asia Pacific (Tokyo)",
+  //   "locationType": "AWS Region",
+  //   "marketOption": "OnDemand",
+  //   "maxIopsBurstPerformance": "",
+  //   "maxIopsVolume": "",
+  //   "maxThroughputVolume": "",
+  //   "maxVolumeSize": "",
+  //   "memory": "4 GiB",
+  //   "networkPerformance": "Up to 12500 Megabit",
+  //   "normalizationSizeFactor": "4",
+  //   "offerTermCode": "4NA7Y494T4",
+  //   "offeringClass": "standard",
+  //   "operatingSystem": "Windows",
+  //   "operation": "RunInstances:0202",
+  //   "physicalCores": "",
+  //   "physicalProcessor": "Intel Xeon 8375C (Ice Lake)",
+  //   "preInstalledSw": "SQL Web",
+  //   "priceDescription": "Windows with SQL Server Web (Amazon VPC), c6i.large reserved instance applied",
+  //   "processorArchitecture": "64-bit",
+  //   "processorFeatures": "Intel AVX; Intel AVX2; Intel AVX512; Intel Turbo",
+  //   "productFamily": "Compute Instance",
+  //   "productType": "",
+  //   "provisioned": "",
+  //   "purchaseOption": "No Upfront",
+  //   "rateCode": "2223B6PCG6QAUYY6.4NA7Y494T4.6YS6EN2CT7",
+  //   "relatedTo": "",
+  //   "resourceType": "",
+  //   "serviceCode": "AmazonEC2",
+  //   "serviceName": "Amazon Elastic Compute Cloud",
+  //   "snapShotArchiveFeeType": "",
+  //   "startingRange": "0",
+  //   "storage": "EBS only",
+  //   "storageMedia": "",
+  //   "tenancy": "Dedicated",
+  //   "termType": "Reserved",
+  //   "toLocation": "",
+  //   "toLocationType": "",
+  //   "toRegionCode": "",
+  //   "transferType": "",
+  //   "usageType": "APN1-DedicatedUsage:c6i.large",
+  //   "vcpu": "2",
+  //   "volumeApiName": "",
+  //   "volumeType": "",
+  //   "vpcNetworkingSupport": "true"
+  // }
+  // ```
   google.protobuf.Struct  serviceDetails = 7;
 }
