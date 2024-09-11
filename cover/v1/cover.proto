@@ -300,6 +300,14 @@ service Cover {
     };
   }
 
+  // Update report's currency settings
+  rpc UpdateViewCurrency(UpdateViewCurrencyRequest) returns (UpdateViewCurrencyResponse) {
+    option (google.api.http) = {
+      put: "/v1/views/{viewId}/currency"
+      body: "*"
+    };
+  }
+
   // Deletes a view
   rpc DeleteView(DeleteViewRequest) returns (DeleteViewResponse) {
     option (google.api.http) = {
@@ -1408,7 +1416,7 @@ message UpdateUserAppThemeResponse {
 
 // Request message for UpdateUserTimezone
 message UpdateUserTimezoneRequest {
-  string timezone = 1;
+  string timeZone = 1;
   bool autoTimeZone = 2;
 }
 
@@ -1419,7 +1427,8 @@ message UpdateUserTimezoneResponse {
 
 // Request message for UpdateUserCurrency
 message UpdateUserCurrencyRequest {
-  string currency = 1;
+    string currency = 1;
+    string exchangeRateDate = 2;
 }
 
 // Response message for UpdateUserCurrency
@@ -1588,6 +1597,17 @@ message UpdateViewColorThemeRequest {
 
 // Response message for UpdateViewColorTheme
 message UpdateViewColorThemeResponse {
+  api.cover.ViewData viewData = 1;
+}
+
+// Request message for UpdateViewCurrency
+message UpdateViewCurrencyRequest {
+  string viewId = 1;
+  string currency = 2;
+}
+
+// Response message for UpdateViewCurrency
+message UpdateViewCurrencyResponse {
   api.cover.ViewData viewData = 1;
 }
 
