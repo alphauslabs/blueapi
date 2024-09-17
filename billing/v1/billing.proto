@@ -177,6 +177,13 @@ service Billing {
     };
   }
 
+  // WORK-IN-PROGRESS: Gets the invoice service discounts. Only available in Ripple.
+  rpc GetInvoiceServiceDiscounts(GetInvoiceServiceDiscountsRequest) returns (api.ripple.v1.InvoiceServiceDiscounts) {
+    option (google.api.http) = {
+      get: "/v1/servicediscounts/{id}"
+    };
+  }
+
   // Reads the account invoice service discounts. Only available in Ripple.
   rpc ListAccountInvoiceServiceDiscounts(ListAccountInvoiceServiceDiscountsRequest) returns (stream AccountInvoiceServiceDiscounts) {
     option (google.api.http) = {
@@ -839,6 +846,17 @@ message ReadServiceDiscountsServicesRequest {
 
 // Request message for the ListInvoiceServiceDiscounts rpc.
 message ListInvoiceServiceDiscountsRequest {}
+
+// Request message for the GetInvoiceServiceDiscounts rpc.
+message GetInvoiceServiceDiscountsRequest {
+  // Required. [blueapi.api.ripple.v1.InvoiceServiceDiscounts.id].
+  string id = 1;
+
+  // Optional. Get only the value that set fieldMask.
+  //
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask fieldMask = 2;
+}
 
 // Streaming response message for the InvoiceServiceDiscounts rpc.
 message InvoiceServiceDiscounts {
