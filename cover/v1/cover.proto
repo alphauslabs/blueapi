@@ -308,6 +308,13 @@ service Cover {
     };
   }
 
+  // Get list of exchange rates for a fixed report
+  rpc ListExchangeRates(ListExchangeRatesRequest) returns (ListExchangeRatesResponse) {
+    option (google.api.http) = {
+      get: "/v1/views/{viewId}/exchangerates"
+    };
+  }
+
   // Deletes a view
   rpc DeleteView(DeleteViewRequest) returns (DeleteViewResponse) {
     option (google.api.http) = {
@@ -1427,8 +1434,7 @@ message UpdateUserTimezoneResponse {
 
 // Request message for UpdateUserCurrency
 message UpdateUserCurrencyRequest {
-    string currency = 1;
-    string exchangeRateDate = 2;
+  int64 updateCurrency = 1;
 }
 
 // Response message for UpdateUserCurrency
@@ -1609,6 +1615,28 @@ message UpdateViewCurrencyRequest {
 // Response message for UpdateViewCurrency
 message UpdateViewCurrencyResponse {
   api.cover.ViewData viewData = 1;
+}
+
+// Request message for ListExchangeRates
+message ListExchangeRatesRequest {
+  // Required. View Id.
+  string viewId = 1;
+
+  // Required. Start date Format: "YYYYMMDD"
+  string startDate = 2;
+
+  // Required. End date Format: "YYYYMMDD"
+  string endDate = 3;
+}
+
+// Response message for ListExchangeRates
+message ListExchangeRatesResponse {
+  repeated ExchangeRates exchangeRates = 1;
+}
+
+message ExchangeRates {
+  string month = 1;
+  float exchangeRate = 2;
 }
 
 // Request message for DeleteView
