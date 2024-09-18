@@ -9536,6 +9536,43 @@
       }
     },
     "/v1/servicediscounts/{id}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets the invoice service discounts. Only available in Ripple.",
+        "operationId": "Billing_GetInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiripplev1InvoiceServiceDiscounts"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. [blueapi.api.ripple.v1.InvoiceServiceDiscounts.id].",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "fieldMask",
+            "description": "Optional. Get only the value that set fieldMask.\n\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
       "delete": {
         "summary": "WORK-IN-PROGRESS: Deletes the invoice service discounts. Only available in Ripple.",
         "operationId": "Billing_DeleteInvoiceServiceDiscounts",
@@ -18370,6 +18407,10 @@
         },
         "lastUpdate": {
           "type": "string"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Contains the list of unit items. Used only when groupBy is set to the selected unit type (e.g., \"Product\", \"Environment\", \"Customer\").\nExample: If groupBy is set to \"Environment\", this field might include values like \"dev\", \"next\", or \"prod\"."
         }
       },
       "description": "Response message wrapper for cloud costs."
@@ -21010,7 +21051,7 @@
       "properties": {
         "@type": {
           "type": "string",
-          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
         }
       },
       "additionalProperties": {},
@@ -26041,7 +26082,8 @@
           "readOnly": true
         },
         "value": {
-          "type": "string",
+          "type": "number",
+          "format": "double",
           "description": "Value associated with the set premiums or discounts."
         },
         "calculationScope": {
