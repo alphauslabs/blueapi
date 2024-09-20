@@ -160,6 +160,23 @@ message CostOptimizationHubRecommendations {
 }
 
 message AWSResourceDetails {
+    message Route53Details {
+        string hostedZoneName = 1;
+        string hostedZoneId = 2;
+        string resourceRecordSetName = 3;
+        string resourceRecordSetType = 4;
+    }
+    message NetworkFirewallDetails {
+        message Endpoint {
+            string id = 1;
+            string subnet = 2;
+            string az = 3;
+        }
+        Endpoint endpoint = 1;
+        string arn = 2;
+        string vpcId = 3;
+        repeated string subnets = 4;
+    }
     message ComprehendDetails {
         message Endpoint {
             string arn = 1;
@@ -237,6 +254,20 @@ message AWSResourceDetails {
             string name = 6;
             EIPDetails eip = 7;
             string status = 8;
+            string vCpu = 9;
+            NatGatewayDetails natGateway = 10;
+            message NatGatewayDetails {
+                string id = 1;
+                string subnetId = 2;
+                string vpcId = 3;
+                NatGatewayMetrics metrics = 4;
+                message NatGatewayMetrics {
+                    MetricData bytesInFromDest = 1;
+                    MetricData bytesInFromSrc = 2;
+                    MetricData bytesOutToDest = 3;
+                    MetricData bytesOutToSrc = 4;
+                }
+            }
             message EC2Metrics {
                 MetricData cpuUtilizationMetrics = 1;
                 MetricData diskUtilizationMetrics = 2;
@@ -337,6 +368,39 @@ message TrustedAdvisorRecommendations {
     LambdaWithExcessiveTimeouts lambdaWithExcessiveTimeouts = 15;
     AWSWellArchitectedHighRiskIssues awsWellArchitectedHighRiskIssues = 16;
     CommonDetails commonDetails = 17;
+    InactiveNATGateways inactiveNatGateways = 18;
+    NetworkFirewallEndpointAZIndependence networkFirewallEndpointAZIndependence = 19;
+    InactiveAWSNetworkFirewall inactiveNetworkFirewall = 20;
+    EC2OverProvisionedForMSSqlServer ec2OverprovisionedMSSqlServer = 21;
+    EC2ConsolidationForMSSqlServer ec2ConsolidationMSSqlServer = 22;
+    Route53LatencyResourceRecordsSets route53LatencyResourceRecordSets = 23;
+    message Route53LatencyResourceRecordsSets {
+        AWSResourceDetails.Route53Details route53Details = 1;
+    }
+    message InactiveAWSNetworkFirewall {
+        AWSResourceDetails.NetworkFirewallDetails firewallDetails = 1;
+        double totalBytesProcessed = 2;
+    }
+    message NetworkFirewallEndpointAZIndependence {
+        AWSResourceDetails.NetworkFirewallDetails.Endpoint endpoint = 1;
+        string crossAZSubnetsList = 2;
+    }
+    message InactiveNATGateways {
+        AWSResourceDetails.EC2Details.InstanceDetails.NatGatewayDetails natGatewayDetails = 1;
+        double totalBytesFromDest = 2;
+        double totalBytesFromSrc = 3;
+        double totalBytes = 4;
+    }
+    message EC2OverProvisionedForMSSqlServer {
+        AWSResourceDetails.EC2Details.InstanceDetails ec2Details = 1;
+        string maxVCpu = 2;
+        string recommendedInstanceType = 3;
+    }
+    message EC2ConsolidationForMSSqlServer {
+        AWSResourceDetails.EC2Details.InstanceDetails ec2Details = 1;
+        string minVCpu = 2;
+        string sqlServerEdition = 3;
+    }
     message CommonDetails {
         string awsConfigRule = 1;
         string inputParameters = 2;
