@@ -184,14 +184,6 @@ service Cover {
     };
   }
 
-  // Modify user's currency
-  rpc UpdateUserCurrency(UpdateUserCurrencyRequest) returns (UpdateUserCurrencyResponse) {
-    option (google.api.http) = {
-      put: "/v1/me/currency"
-      body: "*"
-    };
-  }
-
   // Modify attributes
   rpc UpdateUserAttributes(UpdateUserAttributesRequest) returns (UpdateUserAttributesResponse) {
     option (google.api.http) = {
@@ -305,6 +297,21 @@ service Cover {
     option (google.api.http) = {
       put: "/v1/views/{viewId}/currency"
       body: "*"
+    };
+  }
+
+  // Sets Org's reference of currency exchange rate
+  rpc SetOrgUpdateCurrency(SetOrgUpdateCurrencyRequest) returns (SetOrgUpdateCurrencyResponse) {
+    option (google.api.http) = {
+      post: "/v1/organizations/currency"
+      body: "*"
+    };
+  }
+
+  // Get Org's reference of currency exchange rate
+  rpc GetOrgUpdateCurrency(GetOrgUpdateCurrencyRequest) returns (GetOrgUpdateCurrencyResponse) {
+    option (google.api.http) = {
+      get: "/v1/organizations/currency"
     };
   }
 
@@ -1432,16 +1439,6 @@ message UpdateUserTimezoneResponse {
   api.cover.UserData userData = 1;
 }
 
-// Request message for UpdateUserCurrency
-message UpdateUserCurrencyRequest {
-  int64 updateCurrency = 1;
-}
-
-// Response message for UpdateUserCurrency
-message UpdateUserCurrencyResponse {
-  api.cover.UserData userData = 1;
-}
-
 // Request message for UpdateUserAttributes
 message UpdateUserAttributesRequest {
   repeated string attributes = 1;
@@ -1615,6 +1612,22 @@ message UpdateViewCurrencyRequest {
 // Response message for UpdateViewCurrency
 message UpdateViewCurrencyResponse {
   api.cover.ViewData viewData = 1;
+}
+
+message SetOrgUpdateCurrencyRequest {
+  // Required. Day of the month. Valid inputs are: "1 - 31"
+  int64 updateCurrency = 1;
+}
+
+message SetOrgUpdateCurrencyResponse {
+  int64 updateCurrency = 1;
+}
+
+message GetOrgUpdateCurrencyRequest {}
+
+message GetOrgUpdateCurrencyResponse {
+  int64 updateCurrency = 1;
+  string dateRegistered = 2;
 }
 
 // Request message for ListExchangeRates
