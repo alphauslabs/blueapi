@@ -1089,6 +1089,14 @@ service Cover {
     };
   }
 
+    // Lists recommendations based on specified criteria.
+   rpc ListRecommendationsV2(ListRecommendationV2Request) returns (stream ListRecommendationResponse) {
+    option (google.api.http) = {
+      post: "/v1/recommendations/all:read"
+      body: "*"
+    };
+  }
+
   // Retrieves a specific recommendation by its ID.
   rpc GetRecommendation(GetRecommendationRequest) returns (GetRecommendationResponse) {
     option (google.api.http) = {
@@ -3349,6 +3357,30 @@ message ListRecommendationRequest{
 
   // Valid inputs are: "rate", "usage", and "all". If not set, default is "all".
   string type = 8;
+
+  string spType = 9;
+  string rateModel = 10;
+  string paymentOption = 11;
+  string term = 12;
+  string service = 13;
+  string offeringClass = 14;
+
+}
+
+message ListRecommendationV2Request {
+  string costgroupId = 1;
+  string dateRangeStart = 2;
+  string dateRangeEnd = 3;
+  RateSettings rateSettings = 4;
+  message RateSettings {
+    string spType = 1;
+    string rateModel = 2;
+    string paymentOption = 3;
+    string term = 4;
+    string service = 5;
+    string offeringClass = 6;
+    string vendor = 7;
+  }
 }
 
 message ListRecommendationResponse{
