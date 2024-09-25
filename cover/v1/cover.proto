@@ -318,7 +318,7 @@ service Cover {
   // Get list of exchange rates for a fixed report
   rpc ListExchangeRates(ListExchangeRatesRequest) returns (ListExchangeRatesResponse) {
     option (google.api.http) = {
-      get: "/v1/views/{viewId}/exchangerates"
+      get: "/v1/organizations/rates"
     };
   }
 
@@ -1634,25 +1634,24 @@ message SetOrgUpdateCurrencyResponse {
 message GetOrgUpdateCurrencyRequest {}
 
 message GetOrgUpdateCurrencyResponse {
-  int64 updateCurrency = 1;
-  string dateRegistered = 2;
+  string orgId = 1;
+  int64 updateCurrency = 2;
+  string lastUpdate = 3;
 }
 
 // Request message for ListExchangeRates
 message ListExchangeRatesRequest {
-  // Required. View Id.
-  string viewId = 1;
-
   // Required. Start date Format: "YYYYMMDD"
-  string startDate = 2;
+  string startDate = 1;
 
   // Required. End date Format: "YYYYMMDD"
-  string endDate = 3;
+  string endDate = 2;
 }
 
 // Response message for ListExchangeRates
 message ListExchangeRatesResponse {
-  repeated ExchangeRates exchangeRates = 1;
+  string orgId = 1;
+  repeated ExchangeRates exchangeRates = 2;
 }
 
 message ExchangeRates {
@@ -2140,6 +2139,9 @@ message GetCostUsageRequest {
 
   // Optional. If set to true, include cost forecast 
   bool includeForecast = 14;
+
+  // Optional. If not set, default value is `USD`.
+  string currency = 15;
 }
 
 message GetCostUsageRequestAwsOptions {
