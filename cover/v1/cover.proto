@@ -1230,6 +1230,7 @@ message GetRecommendationV2Request {
   string id = 1;
   string costGroupId = 2;
   string periodOption = 3;
+  string currency = 4;
 } 
 
 message GetRecommendationV2Response {
@@ -1657,6 +1658,7 @@ message ListExchangeRatesResponse {
 message ExchangeRates {
   string month = 1;
   float exchangeRate = 2;
+  string date = 3;
 }
 
 // Request message for DeleteView
@@ -3379,6 +3381,8 @@ message ListRecommendationV2Request {
   string dateRangeStart = 2;
   string dateRangeEnd = 3;
   RateSettings rateSettings = 4;
+  // Optional. If not set, default value is `USD`.
+  string currency = 5;
   message RateSettings {
     string spType = 1;
     string rateModel = 2;
