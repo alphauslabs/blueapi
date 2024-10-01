@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package blueapi.api.cover.recommendation;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/cover/recommendation";
+option java_package = "cloud.alphaus.blueapi.api.cover.recommendation";
+option java_outer_classname = "ApiCoverRecommendationProto";
+
+import "api/cover/recommendation/octoaws.proto";
+import "api/cover/recommendation/octogcp.proto";
+import "api/cover/recommendation/octoazurecsp.proto";
+import "api/cover/recommendation/gcp.proto";
+import "api/cover/recommendation/azurecsp.proto";
+import "api/cover/recommendation/aws.proto";
+
+message RecommendationData {
+    api.cover.recommendation.aws.AWSRecommendations awsRecommendations = 1;
+    api.cover.recommendation.gcp.GCPRecommendations gcpRecommendations = 2;
+    api.cover.recommendation.azurecsp.AzureCSPRecommendations azureCspRecommendations = 3;
+    OCTOGeneratedRecommendations octoGeneratedRecommendations = 23;
+    string target = 18;
+    string targetName = 19;
+    string resourceId = 4;
+    string service = 5;
+    string costGroup = 6;
+    string recommendationGroup = 7;
+    string category = 8;
+    string source = 9;
+    string id = 10;
+    string lastUpdatedAt = 11;
+    string region = 12;
+    string recommendation = 13;
+    double estimatedMonthlyCost = 14;
+    double estimatedMonthlySavings = 15;
+    double estimatedSavingsPercentage = 16;
+    string resourceName = 17;
+    bool restartNeeded = 20;
+    bool rollbackPossible = 21;
+    string launchUrl = 22;
+}
+
+message OCTOGeneratedRecommendations {
+    api.cover.recommendation.octoaws.AWSRecommendations aws = 1;
+    api.cover.recommendation.octogcp.GCPRecommendations gcp = 2;
+    api.cover.recommendation.octoazurecsp.AzureCSPRecommendations azurecsp = 3;
+}
