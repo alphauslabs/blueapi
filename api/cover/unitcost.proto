@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package blueapi.api.cover;
 
+import "api/cover/costgroup.proto";
+
 option go_package = "github.com/alphauslabs/blue-sdk-go/api/cover";
 option java_package = "cloud.alphaus.blueapi.api.cover";
 option java_outer_classname = "ApiUnitCostProto";
@@ -19,9 +21,20 @@ message UnitCostData{
 message UnitItem{
     string itemName = 1;
     double distribution = 2;
-    repeated ResourcesFilter dedicatedResourcesCombination = 3;
+    ResourcesCombinations dedicatedResourcesCombination = 3;
 }
 
-message ResourcesFilter{
-    map<string, string> andFilters = 1;
-}
+message ResourcesCombinations {
+    // Optional. Valid only for the `aws` vendor. AWS-specific options.
+    api.cover.CostGroupAwsOptions awsOptions = 1;
+  
+    // Optional. Valid only for the `azure` vendor. Azure-specific options.
+    api.cover.CostGroupAzureOptions azureOptions = 2;
+  
+    // Optional. Valid only for the `gcp` vendor. GCP-specific options.
+    api.cover.CostGroupGcpOptions gcpOptions = 3;
+  
+    // Optional. Valid only for the `azurecsp` vendor. AzureCSP-specific options.
+    api.cover.CostGroupAzureCspOptions azurecspOptions = 4;
+  
+  }
