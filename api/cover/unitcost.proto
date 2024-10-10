@@ -21,7 +21,12 @@ message UnitCostData{
 message UnitItem{
     string itemName = 1;
     double distribution = 2;
-    ResourcesCombinations dedicatedResourcesCombination = 3;
+    repeated ResourcesFilter dedicatedResourcesCombination = 3;
+    ResourcesCombinations dedicatedResourcesCombinations = 4;
+}
+
+message ResourcesFilter{
+    map<string, string> andFilters = 1;
 }
 
 message ResourcesCombinations {
