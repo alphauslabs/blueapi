@@ -1006,6 +1006,14 @@ service Cover {
     };
   }
 
+  //Update user profile
+  rpc UpdateUserProfile(UpdateUserProfileRequest) returns (UpdateUserProfileResponse) {
+    option (google.api.http) = {
+      put: "/v1/members/profile/{email}"
+      body: "*"
+    };
+  }
+
   // WORK-IN-PROGRESS: List all Budgets in an organization or Budgets under specific cost group
   rpc ListBudgets(ListBudgetsRequest) returns (stream ListBudgetsResponse) {
     option (google.api.http) = {
@@ -3226,6 +3234,38 @@ message GetUserProfileRequest {
 
 message GetUserProfileResponse {
   bool hasCreatedProfile = 1;
+  string name = 2;
+  string role = 3;
+  string usage = 4;
+  string intention = 5;
+  string companyName = 6;
+  string emailAddress = 7;
+  string linkSource = 8;
+  bool hasSubscribedUpdates = 9;
+}
+
+//Request message for UpdateUserProfile
+message UpdateUserProfileRequest {
+  //required email
+  string email = 1;
+  string name = 2;
+  string role = 3;
+  string usage = 4;
+  string intention = 5;
+  string companyName = 6;
+  string linkSource = 7;
+  bool hasSubscribedUpdates = 8;
+}
+
+message UpdateUserProfileResponse {
+  string email = 1;
+  string name = 2;
+  string role = 3;
+  string usage = 4;
+  string intention = 5;
+  string companyName = 6;
+  string linkSource = 7;
+  bool hasSubscribedUpdates = 8;
 }
 
 message ListBudgetsRequest {
@@ -3308,6 +3348,8 @@ message CreateProfilingRequest {
   string intention = 4;
   string companyName = 5;
   string emailAddress = 6;
+  string linkSource = 7;
+  bool hasSubscribedUpdates = 8;
 }
 
 message CreateProfilingResponse {}
