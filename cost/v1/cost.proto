@@ -15,6 +15,7 @@ import "api/aws/reduction.proto";
 import "api/gcp/cost.proto";
 import "api/azure/cost.proto";
 import "api/ripple/payer.proto";
+import "api/ripple/v1/dashboard.proto";
 import "api/wave/budget.proto";
 import "api/costtag.proto";
 import "protos/operation.proto";
@@ -547,6 +548,30 @@ service Cost {
   rpc ReadInvoiceIds (ReadInvoiceIdsRequest) returns (stream ReadInvoiceIdsResponse) {
     option (google.api.http) = {
       post: "/v1/{vendor}/invoiceids:read"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Read the invoice overviews. Only available in Ripple.
+  rpc ReadInvoiceOverViews (ReadInvoiceOverviewsRequest) returns (stream api.ripple.v1.OverViewSection) {
+    option (google.api.http) = {
+      post: "/v1/invoiceoverviews:read"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Read the invoice costs. Only available in Ripple.
+  rpc ReadInvoiceCosts (ReadInvoiceCostsRequest) returns (stream api.ripple.v1.TotalSection) {
+    option (google.api.http) = {
+      post: "/v1/invoicecosts:read"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Read the invoice group costs. Only available in Ripple.
+  rpc ReadInvoiceGroupCosts (ReadInvoiceGroupCostsRequest) returns (stream api.ripple.v1.BillingGroupSection) {
+    option (google.api.http) = {
+      post: "/v1/invoicegroupcosts:read"
       body: "*"
     };
   }
@@ -2175,4 +2200,43 @@ message ReadInvoiceIdsRequest {
 message ReadInvoiceIdsResponse {
   // The invoice id
   string id = 1;
+}
+
+// Request message for the ReadInvoiceOverviews rpc.
+message ReadInvoiceOverviewsRequest {
+  // Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20240101`.
+  string startTime = 1;
+
+  // Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`.
+  string endTime = 2;
+
+  // Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which case, it will use the latest exchange rates provided by https://fixer.io. If you prefer a custom exchange rate, you can append the rate to the currency's three-letter symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate should be against the US dollar (USD).
+  string toCurrency = 3;
+}
+
+// Request message for the ReadInvoiceCosts rpc.
+message ReadInvoiceCostsRequest {
+  // Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20240101`.
+  string startTime = 1;
+
+  // Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`.
+  string endTime = 2;
+
+  // Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which case, it will use the latest exchange rates provided by https://fixer.io. If you prefer a custom exchange rate, you can append the rate to the currency's three-letter symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate should be against the US dollar (USD).
+  string toCurrency = 3;
+}
+
+// Request message for the ReadInvoiceGroupCosts rpc.
+message ReadInvoiceGroupCostsRequest {
+  // Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20240101`.
+  string startTime = 1;
+
+  // Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`.
+  string endTime = 2;
+
+  // Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which case, it will use the latest exchange rates provided by https://fixer.io. If you prefer a custom exchange rate, you can append the rate to the currency's three-letter symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate should be against the US dollar (USD).
+  string toCurrency = 3;
+
+  // Optional. Number of acquisitions. default:10.
+  int32 limit = 4;
 }

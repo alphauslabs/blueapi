@@ -1,0 +1,154 @@
+syntax = "proto3";
+
+package blueapi.api.ripple.v1;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/ripple";
+option java_package = "cloud.alphaus.blueapi.api.ripple";
+option java_outer_classname = "ApiRippleDashboardProto";
+
+
+message OverViewSection {
+  string id = 1;
+
+  string name = 2;
+
+  string currency = 3;
+
+  double invoiceCost = 4;
+
+  double procurementCost = 5;
+
+  double profitCost = 6;
+
+  OverViewOptionSection options = 7;
+
+  periodOverPeriodSection periodOverPeriod = 8;
+
+  VendorOverViewSection awsSection = 9;
+
+  VendorOverViewSection azureSection = 10;
+
+  VendorOverViewSection gcpSection = 11;
+}
+
+message periodOverPeriodSection {
+  double invoiceCost = 1;
+
+  double procurementCost = 2;
+
+  double profitCost = 3;
+
+  double invoiceCostPoP = 4;
+
+  double procurementCostPoP = 5;
+
+  double profitCostPoP = 6;
+
+  periodOverPeriodOptionSection options = 7;
+}
+
+message OverViewOptionSection {
+  double sppDiscountCost = 1;
+}
+
+message periodOverPeriodOptionSection {
+  double sppDiscountCost = 1;
+
+  double sppDiscountCostPoP = 2;
+}
+
+message VendorOverViewSection {
+  string id = 1;
+
+  string name = 2;
+
+  string currency = 3;
+
+  double invoiceCost = 4;
+
+  double procurementCost = 5;
+
+  double profitCost = 6;
+
+  OverViewOptionSection options = 7;
+
+  periodOverPeriodSection periodOverPeriod = 8;
+}
+
+message TotalSection {
+  string id = 1;
+
+  string name = 2;
+
+  string currency = 3;
+
+  string yearMonth = 4;
+
+  double invoiceCost = 5;
+
+  double procurementCost = 6;
+
+  double profitCost = 7;
+
+  TotalDetailSection totalDeital = 8;
+
+  repeated ThirdProfitItemSection thirdProfitItem = 9;
+
+  VendorTotalSection awsSection = 10;
+
+  VendorTotalSection azureSection = 11;
+
+  VendorTotalSection gcpSection = 12;
+}
+
+message VendorTotalSection {
+  string id = 1;
+
+  string name = 2;
+
+  string currency = 3;
+
+  string yearMonth = 4;
+
+  double invoiceCost = 5;
+
+  double procurementCost = 6;
+
+  double profitCost = 7;
+
+  TotalDetailSection totalDeital = 8;
+
+  repeated ThirdProfitItemSection thirdProfitItem = 9;
+}
+
+message TotalDetailSection { 
+  double TrueUnblended = 1;
+
+  double sppDiscount = 2;
+
+  double thirdProfitItem = 3;
+}
+
+message ThirdProfitItemSection {
+  string id = 1;
+
+  string name = 2;
+
+  double profit = 3;
+}
+
+message BillingGroupSection {
+  string id = 1;
+
+  string name = 2;
+
+  string yearMonth = 3;
+
+  string currency = 4;
+
+  double invocieCost = 5;
+
+  double procurementCost = 6;
+
+  double profitCost  = 7;
+}
