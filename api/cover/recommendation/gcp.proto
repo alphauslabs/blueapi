@@ -7,5 +7,16 @@ option java_package = "cloud.alphaus.blueapi.api.cover.recommendation";
 option java_outer_classname = "ApiCoverGcpRecommendationProto";
 
 message GCPRecommendations {
+    RecommendationHubRecommendations recommendationHubRecommendations = 1;
+}
 
+message RecommendationHubRecommendations {
+    repeated Insights insights = 1;
+    string recommendedAction = 2;
+    string resource = 3;
+    string priorityLevel = 4;
+    message Insights {
+        string type = 1;
+        string description = 2;
+    }
 }
