@@ -472,6 +472,19 @@ service Billing {
       delete: "/v1/freeformat/{id}"
     };
   }
+
+  rpc GetTagsAddingSetting(GetTagsAddingSettingRequest) returns (stream TagsAddingSetting) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/tagsaddingsetting/{groupId}"
+    };
+  }
+
+  rpc UpdateTagsAddingSetting(UpdateTagsAddingSettingRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/{vendor}/tagsaddingsetting/{groupId}"
+      body: "*"
+    };
+  }
 }
 
 message BillingGroup {
@@ -1500,4 +1513,22 @@ message FreeFormItem {
 message DeleteFreeFormatRequest {
   string id = 1;
   string vendor = 2;
+}
+
+// BillingGroup tags adding setting
+message UpdateTagsAddingSettingRequest {
+  string vendor = 1;
+  string groupId = 2;
+  repeated TagsAddingSetting items = 3;
+}
+
+message GetTagsAddingSettingRequest {
+  string vendor = 1;
+  string groupId = 2;
+}
+
+message TagsAddingSetting {
+  string groupId = 1;
+  string customerId = 2;
+  repeated string tagKeys = 3;
 }
