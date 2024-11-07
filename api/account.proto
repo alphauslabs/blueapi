@@ -27,3 +27,27 @@ message Account {
   // The attributes (key/value pair) of the account.
   repeated KeyValue metadata = 3;
 }
+
+// AccountOriginalResource resource definition.
+message AccountOriginalResource {
+  // The id is associated with CostUsage or BillingReport.
+  // Vendor positioning is
+  // AWS: `lineItem/UsageAccountId`
+  // GoogleCloud: `projectId`
+  // Azure: `???`
+  string id = 1;
+
+  // The name is associated with CostUsage or BillingReport.
+  // Basically the same as id.
+  string name = 2;
+
+  // The payerId associated with CostUsage or BillingReport.
+  // It will be the organization Id associated with the id.
+  string payerId = 3;
+
+  // The vendor. supported by `aws`,`gcp`,`azure`
+  string vendor = 4;
+
+  // The ProductRegistered indicates whether it is linked to a product(Ripple or Wave(Pro)).
+  bool productRegistered = 5;
+}

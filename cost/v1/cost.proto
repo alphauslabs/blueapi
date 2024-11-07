@@ -147,6 +147,14 @@ service Cost {
     };
   }
 
+  // WORK-IN-PROGRESS: Reads all vendor account-original-resources.
+  rpc ReadAccountOriginalResources(ReadAccountOriginalResourcesRequest) returns (stream api.AccountOriginalResource) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/aors:read"
+      body: "*"
+    };
+  }
+
   // Lists all vendor tags.
   rpc ListTags(ListTagsRequest) returns (stream api.CostTag) {
     option (google.api.http) = {
@@ -2239,4 +2247,10 @@ message ReadInvoiceGroupCostsRequest {
 
   // Optional. Number of acquisitions. default:10.
   int32 limit = 4;
+}
+
+// Request message for the ReadAccountOriginalResources rpc.
+message ReadAccountOriginalResourcesRequest {
+  // Required. At the moment, only `aws`.`gcp`,`azure` is supported.
+  string vendor = 1; 
 }
