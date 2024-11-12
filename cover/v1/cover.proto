@@ -1232,6 +1232,24 @@ service Cover {
       delete: "/v1/unitcost/{id}"
     };
   }
+
+  rpc VerifyAPIAccess(VerifyAPIAccessRequest) returns (VerifyAPIAccessResponse) {
+    option (google.api.http) = {
+      get: "/v1/apiaccess/verify"
+    };
+  }
+}
+
+// Only supports gcp for now.
+message VerifyAPIAccessRequest {
+  // Required: gcp
+  string vendor = 1;
+  // Required: projectId
+  string target = 2;
+}
+
+message VerifyAPIAccessResponse {
+  bool result = 1;
 }
 
 message GetRecommendationV2Request {
