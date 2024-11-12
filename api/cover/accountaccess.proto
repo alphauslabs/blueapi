@@ -22,14 +22,33 @@ message TagData {
 }
 
 message GcpOptions {
-    string accountName = 1;
-    
+    // V2
+    message BillingOption {
+        string accountName = 1;
+        string projectId = 2;
+        string datasetId = 3;
+        string datasetRegion = 4;
+        bool bigQueryStatus = 5;
+    }
+    message ProjectOption {
+        bool apiAccess = 1;
+        string projectName = 2;
+        string projectNumber = 3;
+        string billingAccountId = 4;
+    }
+
+    oneof Entity {
+        BillingOption billingOption = 1;
+        ProjectOption projectOption = 2;
+    }
+
+    // We'll keep this to avoid crash in production. 
+    // We will remove this after this changes released to prod
+    string accountName = 3;
     // where dataset is stored
-    string projectId = 2;
-
-    string datasetId = 3;
-
-    string datasetRegion = 4;
+    string projectId = 4;
+    string datasetId = 5;
+    string datasetRegion = 6;
 }
 
 message AzureOptions {
