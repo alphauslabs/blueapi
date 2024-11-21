@@ -473,6 +473,13 @@ service Billing {
     };
   }
 
+  // Get billing group free format item (miscellaneous)
+  rpc GetFreeFormat(GetFreeFormatRequest) returns (stream GetFreeFormatResponse) {
+    option (google.api.http) = {
+      get: "/v1/freeformat/{id}"
+    };
+  }
+
   rpc GetTagsAddingSetting(GetTagsAddingSettingRequest) returns (stream TagsAddingSetting) {
     option (google.api.http) = {
       get: "/v1/{vendor}/tagsaddingsetting/{groupId}"
@@ -1525,6 +1532,15 @@ message FreeFormItem {
 message DeleteFreeFormatRequest {
   string id = 1;
   string vendor = 2;
+}
+
+message GetFreeFormatRequest {
+  string id = 1;
+}
+
+message GetFreeFormatResponse {
+  string vendor = 1;
+  FreeFormItem freeFormat = 2;
 }
 
 // BillingGroup tags adding setting

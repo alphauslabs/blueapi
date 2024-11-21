@@ -6302,7 +6302,7 @@
     },
     "/v1/customfield": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Creates new customfield",
+        "summary": "Creates new customfield",
         "operationId": "Billing_CreateCustomField",
         "responses": {
           "200": {
@@ -6335,7 +6335,7 @@
     },
     "/v1/customfield/{id}": {
       "delete": {
-        "summary": "WORK-IN-PROGRESS: Deletes the customfield",
+        "summary": "Deletes the customfield",
         "operationId": "Billing_DeleteCustomField",
         "responses": {
           "200": {
@@ -6365,7 +6365,7 @@
         ]
       },
       "put": {
-        "summary": "WORK-IN-PROGRESS: Update the `customField` specified id, modifying its key and description",
+        "summary": "Update the `customField` specified id, modifying its key and description",
         "operationId": "Billing_UpdateCustomField",
         "responses": {
           "200": {
@@ -6404,7 +6404,7 @@
     },
     "/v1/customfield:read": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Returns all registered customfields",
+        "summary": "Returns all registered customfields",
         "operationId": "Billing_ListCustomField",
         "responses": {
           "200": {
@@ -6654,7 +6654,7 @@
     },
     "/v1/freeformat": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Creates new billing group free format item (miscellaneous)",
+        "summary": "Creates new billing group free format item (miscellaneous)",
         "operationId": "Billing_CreateFreeFormat",
         "responses": {
           "200": {
@@ -6691,8 +6691,46 @@
       }
     },
     "/v1/freeformat/{id}": {
+      "get": {
+        "summary": "Get billing group free format item (miscellaneous)",
+        "operationId": "Billing_GetFreeFormat",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1GetFreeFormatResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1GetFreeFormatResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
       "delete": {
-        "summary": "WORK-IN-PROGRESS: Delete billing group free format item (miscellaneous)",
+        "summary": "Delete billing group free format item (miscellaneous)",
         "operationId": "Billing_DeleteFreeFormat",
         "responses": {
           "200": {
@@ -9545,7 +9583,7 @@
     },
     "/v1/tags": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Returns the customer details and its tags. \nPort for: m/ripple/tags/vendor/{vendor}?type={type}",
+        "summary": "Returns the customer details and its tags. \nPort for: m/ripple/tags/vendor/{vendor}?type={type}",
         "operationId": "Billing_GetTags",
         "responses": {
           "200": {
@@ -23643,6 +23681,10 @@
         "account": {
           "type": "string",
           "description": "Account id."
+        },
+        "serviceDiscounts": {
+          "$ref": "#/definitions/apiripplev1InvoiceServiceDiscounts",
+          "description": "service discount infomation."
         }
       },
       "description": "Streaming response message for the AccountInvoiceServiceDiscounts rpc."
@@ -26981,6 +27023,17 @@
         }
       },
       "description": "Response message for GetForecasts per billing group."
+    },
+    "v1GetFreeFormatResponse": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string"
+        },
+        "freeFormat": {
+          "$ref": "#/definitions/v1FreeFormItem"
+        }
+      }
     },
     "v1GetInfoResponse": {
       "type": "object",
