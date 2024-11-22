@@ -138,6 +138,13 @@ service Billing {
     };
   }
 
+    // Lists Invoice Template. Only available in Ripple.
+    rpc ListInvoiceTemplate(ListInvoiceTemplateRequest) returns (stream ListInvoiceTemplateResponse) {
+    option (google.api.http) = {
+      get: "/v1/invoice/template"
+    };
+  }
+
   // WORK-IN-PROGRESS: Reads the service relate to the service discounts. Only available in Ripple.
   rpc ReadServiceDiscountsServices(ReadServiceDiscountsServicesRequest) returns (stream api.ripple.v1.Service) {
     option (google.api.http) = {
@@ -927,6 +934,39 @@ message InvoiceServiceDiscounts {
 
   // update timestamp.
   string updated = 5;
+}
+// Request message for ListInvoiceTemplate rpc.
+message ListInvoiceTemplateRequest {}
+
+// Response message for ListInvoiceTemplate rpc.
+message ListInvoiceTemplateResponse {
+
+  string id = 1;
+
+  string name = 2;
+
+  string description = 3;
+
+  string created = 4;
+
+  string updated = 5;
+
+  int32 numberOfConnected = 6;
+
+  repeated InvoiceConnectedBillingGroups connectedBillingGroup = 7;
+
+  BillingGroupVendoredInvoiceSetting invoices = 8;
+  
+}
+
+// Response message to be used for ListInvoiceTemplateResponse
+message InvoiceConnectedBillingGroups {
+  string billingInternalId = 1;
+
+  string billingGroupId = 2;
+
+  string billingGroupName = 3;
+
 }
 
 // Request message for the ListAccountInvoiceServiceDiscounts rpc.
