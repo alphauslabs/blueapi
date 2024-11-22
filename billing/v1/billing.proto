@@ -421,7 +421,7 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Returns the customer details and its tags. 
+  // Returns the customer details and its tags. 
   // Port for: m/ripple/tags/vendor/{vendor}?type={type}
   rpc GetTags(GetTagsRequest) returns (stream TagData) {
     option (google.api.http) = {
@@ -429,7 +429,7 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Creates new customfield
+  // Creates new customfield
   rpc CreateCustomField(CreateCustomFieldRequest) returns (CustomField) {
     option (google.api.http) = {
       post: "/v1/customfield"
@@ -437,14 +437,14 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Returns all registered customfields
+  // Returns all registered customfields
   rpc ListCustomField(ListCustomFieldRequest) returns (stream CustomField) {
     option (google.api.http) = {
       post: "/v1/customfield:read"
     };
   }
 
-  // WORK-IN-PROGRESS: Update the `customField` specified id, modifying its key and description
+  // Update the `customField` specified id, modifying its key and description
   rpc UpdateCustomField(UpdateCustomFieldRequest) returns (CustomField) {
     option (google.api.http) = {
       put: "/v1/customfield/{id}"
@@ -452,24 +452,31 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Deletes the customfield
+  // Deletes the customfield
   rpc DeleteCustomField(DeleteCustomFieldRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/customfield/{id}"
     };
   }
 
-  // WORK-IN-PROGRESS: Creates new billing group free format item (miscellaneous)
+  // Creates new billing group free format item (miscellaneous)
   rpc CreateFreeFormat(CreateFreeFormatRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/v1/freeformat"
     };
   }
 
-  // WORK-IN-PROGRESS: Delete billing group free format item (miscellaneous)
+  // Delete billing group free format item (miscellaneous)
   rpc DeleteFreeFormat(DeleteFreeFormatRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/freeformat/{id}"
+    };
+  }
+
+  // Get billing group free format item (miscellaneous)
+  rpc GetFreeFormat(GetFreeFormatRequest) returns (stream GetFreeFormatResponse) {
+    option (google.api.http) = {
+      get: "/v1/freeformat/{id}"
     };
   }
 
@@ -1525,6 +1532,15 @@ message FreeFormItem {
 message DeleteFreeFormatRequest {
   string id = 1;
   string vendor = 2;
+}
+
+message GetFreeFormatRequest {
+  string id = 1;
+}
+
+message GetFreeFormatResponse {
+  string vendor = 1;
+  FreeFormItem freeFormat = 2;
 }
 
 // BillingGroup tags adding setting
