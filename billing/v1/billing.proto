@@ -469,14 +469,14 @@ service Billing {
   // Delete billing group free format item (miscellaneous)
   rpc DeleteFreeFormat(DeleteFreeFormatRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1/freeformat/{id}"
+      delete: "/v1/freeformat/{groupId}"
     };
   }
 
   // Get billing group free format item (miscellaneous)
   rpc GetFreeFormat(GetFreeFormatRequest) returns (stream GetFreeFormatResponse) {
     option (google.api.http) = {
-      get: "/v1/freeformat/{id}"
+      get: "/v1/freeformat/{groupId}"
     };
   }
 
@@ -1517,7 +1517,7 @@ message ListCustomFieldRequest {
 
 // BillingGroup FreeFormat: Also known as miscellaneous
 message CreateFreeFormatRequest {
-  string id = 1;
+  string groupId = 1;
   string vendor = 2;
   repeated FreeFormItem items = 3;
 }
@@ -1530,12 +1530,12 @@ message FreeFormItem {
 }
 
 message DeleteFreeFormatRequest {
-  string id = 1;
+  string groupId = 1;
   string vendor = 2;
 }
 
 message GetFreeFormatRequest {
-  string id = 1;
+  string groupId = 1;
 }
 
 message GetFreeFormatResponse {
