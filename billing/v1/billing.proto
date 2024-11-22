@@ -184,6 +184,14 @@ service Billing {
     };
   }
 
+  // WORK-IN-PROGRESS: Exports service discounts. Only available in Ripple.
+  rpc ExportServiceDiscounts(ExportServiceDiscountsRequest) returns (api.ripple.v1.ServiceDiscountsExport) {
+    option (google.api.http) = {
+      post: "/v1/servicediscounts:export"
+      body: "*"
+    };
+  }
+
   // Reads the account invoice service discounts. Only available in Ripple.
   rpc ListAccountInvoiceServiceDiscounts(ListAccountInvoiceServiceDiscountsRequest) returns (stream AccountInvoiceServiceDiscounts) {
     option (google.api.http) = {
@@ -220,6 +228,22 @@ service Billing {
   rpc DeleteAccountInvoiceServiceDiscounts(DeleteAccountInvoiceServiceDiscountsRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/servicediscounts/{groupId}/account"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Exports service discounts for account in billing group. Only available in Ripple.
+  rpc ExportAccountInvoiceServiceDiscounts(ExportAccountInvoiceServiceDiscountsRequest) returns (api.ripple.v1.AccountServiceDiscountsExport) {
+    option (google.api.http) = {
+      post: "/v1/servicediscounts/account:export"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Exports service discounts for billing group. Only available in Ripple.
+  rpc ExportBillingGroupInvoiceServiceDiscounts(ExportBillingGroupInvoiceServiceDiscountsRequest) returns (api.ripple.v1.GroupServiceDiscountsExport) {
+    option (google.api.http) = {
+      post: "/v1/servicediscounts/billinggroup:export"
+      body: "*"
     };
   }
 
@@ -1559,4 +1583,25 @@ message TagsAddingSetting {
   string groupId = 1;
   string customerId = 2;
   repeated string tagKeys = 3;
+}
+
+// Request message for the ExportServiceDiscounts rpc.
+message ExportServiceDiscountsRequest {
+  // Required. At the moment, `CSV` is supported.
+  string format = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required.
+  // repeated string serviceDiscountsIds = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Request message for the ExportAccountInvoiceServiceDiscounts rpc.
+message ExportAccountInvoiceServiceDiscountsRequest {
+  // Required. At the moment, `CSV` is supported.
+  string format = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request message for the ExportBillingGroupInvoiceServiceDiscounts rpc.
+message ExportBillingGroupInvoiceServiceDiscountsRequest {
+  // Required. At the moment, `CSV` is supported.
+  string format = 1 [(google.api.field_behavior) = REQUIRED];
 }
