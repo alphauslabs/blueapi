@@ -9184,7 +9184,7 @@
     },
     "/v1/servicediscounts/account:export": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Exports service discounts for account in billing group. Only available in Ripple.",
+        "summary": "Exports service discounts for account in billing group. Only available in Ripple.",
         "operationId": "Billing_ExportAccountInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -9218,7 +9218,7 @@
     },
     "/v1/servicediscounts/billinggroup:export": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Exports service discounts for billing group. Only available in Ripple.",
+        "summary": "Exports service discounts for billing group. Only available in Ripple.",
         "operationId": "Billing_ExportBillingGroupInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -23858,12 +23858,10 @@
       "type": "object",
       "properties": {
         "data": {
-          "$ref": "#/definitions/v1ExportData",
-          "description": "content. Base64 encoded value.\nFor example, content :``\nDecoding this value, get ``.\n\ndownloadedRows. Downloaded content lines.\n\ntotalRows.Total of content lines.",
-          "title": "data is [blueapi.api.ripple.v1.ExportData]"
+          "$ref": "#/definitions/v1ExportData"
         }
       },
-      "description": "AccountServiceDiscountsExport resource definition."
+      "description": "AccountServiceDiscountsExport resource definition.\n\ndata is [blueapi.api.ripple.v1.ExportData]\n\ncontent. Base64 encoded value.\nFor example,\ncontent :`YmlsbGluZ0dyb3VwSWQsYmlsbGluZ0dyb3VwTmFtZSxWZW5kb3IsQWNjb3VudElkLEFjY291bnROYW1lLFNlcnZpY2UgUHJlbWl1bXMmRGlzY291bnRzDQo=`\nDecoding this value by en, get `billingGroupId,billingGroupName,Vendor,AccountId,AccountName,Service Premiums\u0026Discounts`.\ncontent :`6KuL5rGC44Kw44Or44O844OXSUQs6KuL5rGC44Kw44Or44O844OX5ZCNLOODmeODs+ODgOODvCzjgqLjgqvjgqbjg7Pjg4hJRCzjgqLjgqvjgqbjg7Pjg4jlkI0s44K144O844OT44K55Ymy5byV44O75Ymy5aKX6Kit5a6aDQo=`\nDecoding this value by ja, get `請求グループID,請求グループ名,ベンダー,アカウントID,アカウント名,サービス割引・割増設定`.\n\ndownloadedRows. Downloaded content lines.\n\ntotalRows.Total of content lines."
     },
     "v1AccountUsageDetails": {
       "type": "object",
@@ -26283,6 +26281,10 @@
         "format": {
           "type": "string",
           "description": "Required. At the moment, `CSV` is supported."
+        },
+        "language": {
+          "type": "string",
+          "description": "Optional. At the moment, `ja`,`en` is supported.\n\nUsually the language of the user information is used, \nbut it may be a different language due to cahce.\nIn that case, you can use this option to change the language of CSV."
         }
       },
       "description": "Request message for the ExportAccountInvoiceServiceDiscounts rpc.",
@@ -26314,6 +26316,10 @@
         "format": {
           "type": "string",
           "description": "Required. At the moment, `CSV` is supported."
+        },
+        "language": {
+          "type": "string",
+          "description": "Optional. At the moment, `ja`,`en` is supported.\n\nUsually the language of the user information is used, \nbut it may be a different language due to cahce.\nIn that case, you can use this option to change the language of CSV."
         }
       },
       "description": "Request message for the ExportBillingGroupInvoiceServiceDiscounts rpc.",
@@ -26367,6 +26373,10 @@
         "format": {
           "type": "string",
           "description": "Required. At the moment, `CSV` is supported."
+        },
+        "language": {
+          "type": "string",
+          "description": "Optional. At the moment, `ja`,`en` is supported.\n\nUsually the language of the user information is used, \nbut it may be a different language due to cahce.\nIn that case, you can use this option to change the language of CSV."
         }
       },
       "description": "Request message for the ExportServiceDiscounts rpc.",
@@ -27706,12 +27716,10 @@
       "type": "object",
       "properties": {
         "data": {
-          "$ref": "#/definitions/v1ExportData",
-          "description": "content. Base64 encoded value.\nFor example, content :``\nDecoding this value, get ``.\n\ndownloadedRows. Downloaded content lines.\n\ntotalRows.Total of content lines.",
-          "title": "data is [blueapi.api.ripple.v1.ExportData]"
+          "$ref": "#/definitions/v1ExportData"
         }
       },
-      "description": "GroupServiceDiscountsExport resource definition.\n`Group` refer to `BillingGroup`."
+      "description": "GroupServiceDiscountsExport resource definition.\n`Group` refer to `BillingGroup`.\n\ndata is [blueapi.api.ripple.v1.ExportData]\n\ncontent. Base64 encoded value.\nFor example,\ncontent :`YmlsbGluZ0dyb3VwSWQsYmlsbGluZ0dyb3VwTmFtZSxTZXJ2aWNlIFByZW1pdW1zJkRpc2NvdW50cw0K`\nDecoding this value by en, get `billingGroupId,billingGroupName,Service Premiums\u0026Discounts`.\ncontent :`6KuL5rGC44Kw44Or44O844OXSUQs6KuL5rGC44Kw44Or44O844OX5ZCNLOOCteODvOODk+OCueWJsuW8leODu+WJsuWil+ioreWumg0K`\nDecoding this value by ja, get `請求グループID,請求グループ名,サービス割引・割増設定`.\n\ndownloadedRows. Downloaded content lines.\n\ntotalRows.Total of content lines."
     },
     "v1ImportCurFilesRequest": {
       "type": "object",
@@ -27760,7 +27768,7 @@
     "v1InvoiceConnectedBillingGroups": {
       "type": "object",
       "properties": {
-        "companyId": {
+        "billingInternalId": {
           "type": "string"
         },
         "billingGroupId": {
@@ -28113,7 +28121,7 @@
           }
         },
         "invoices": {
-          "$ref": "#/definitions/v1BillingGroupVendoredInvoiceSetting"
+          "$ref": "#/definitions/v1BillingGroupInvoiceSettings"
         }
       },
       "description": "Response message for ListInvoiceTemplate rpc."
