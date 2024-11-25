@@ -238,7 +238,7 @@ service Billing {
     };
   }
 
-  // Exports service discounts for account in billing group. Only available in Ripple.
+  // WORK-IN-PROGRESS: Exports service discounts for account in billing group. Only available in Ripple.
   rpc ExportAccountInvoiceServiceDiscounts(ExportAccountInvoiceServiceDiscountsRequest) returns (api.ripple.v1.AccountServiceDiscountsExport) {
     option (google.api.http) = {
       post: "/v1/servicediscounts/account:export"
@@ -246,7 +246,7 @@ service Billing {
     };
   }
 
-  // Exports service discounts for billing group. Only available in Ripple.
+  // WORK-IN-PROGRESS: Exports service discounts for billing group. Only available in Ripple.
   rpc ExportBillingGroupInvoiceServiceDiscounts(ExportBillingGroupInvoiceServiceDiscountsRequest) returns (api.ripple.v1.GroupServiceDiscountsExport) {
     option (google.api.http) = {
       post: "/v1/servicediscounts/billinggroup:export"
@@ -954,8 +954,8 @@ message ListInvoiceTemplateResponse {
   int32 numberOfConnected = 6;
 
   repeated InvoiceConnectedBillingGroups connectedBillingGroup = 7;
-
-  BillingGroupVendoredInvoiceSetting invoices = 8;
+  
+  BillingGroupInvoiceSettings invoices = 8;
   
 }
 
@@ -1630,13 +1630,6 @@ message ExportServiceDiscountsRequest {
   // Required. At the moment, `CSV` is supported.
   string format = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // Optional. At the moment, `ja`,`en` is supported.
-  //
-  // Usually the language of the user information is used, 
-  // but it may be a different language due to cahce.
-  // In that case, you can use this option to change the language of CSV.
-  string language = 2 [(google.api.field_behavior) = OPTIONAL];
-
   // Required.
   // repeated string serviceDiscountsIds = 2 [(google.api.field_behavior) = OPTIONAL];
 }
@@ -1645,24 +1638,10 @@ message ExportServiceDiscountsRequest {
 message ExportAccountInvoiceServiceDiscountsRequest {
   // Required. At the moment, `CSV` is supported.
   string format = 1 [(google.api.field_behavior) = REQUIRED];
-
-  // Optional. At the moment, `ja`,`en` is supported.
-  //
-  // Usually the language of the user information is used, 
-  // but it may be a different language due to cahce.
-  // In that case, you can use this option to change the language of CSV.
-  string language = 2 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Request message for the ExportBillingGroupInvoiceServiceDiscounts rpc.
 message ExportBillingGroupInvoiceServiceDiscountsRequest {
   // Required. At the moment, `CSV` is supported.
   string format = 1 [(google.api.field_behavior) = REQUIRED];
-
-  // Optional. At the moment, `ja`,`en` is supported.
-  //
-  // Usually the language of the user information is used, 
-  // but it may be a different language due to cahce.
-  // In that case, you can use this option to change the language of CSV.
-  string language = 2 [(google.api.field_behavior) = OPTIONAL];
 }
