@@ -145,6 +145,14 @@ service Billing {
     };
   }
 
+  // Creates/Updates a billing group's invoice template. Only available in Ripple.
+  rpc UpdateBillingGroupInvoiceTemplate(UpdateBillingGroupInvoiceTemplateRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups/{id}/invoicetemplate"
+      body: "*"
+    };
+  }
+
   // WORK-IN-PROGRESS: Reads the service relate to the service discounts. Only available in Ripple.
   rpc ReadServiceDiscountsServices(ReadServiceDiscountsServicesRequest) returns (stream api.ripple.v1.Service) {
     option (google.api.http) = {
@@ -959,6 +967,15 @@ message InvoiceServiceDiscounts {
 }
 // Request message for ListInvoiceTemplate rpc.
 message ListInvoiceTemplateRequest {}
+
+// Request a message to update/create a billing group's invoice template
+message UpdateBillingGroupInvoiceTemplateRequest {
+  // Required. The billing internal ID
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
+  
+  // Required. The invoice template ID to associate with the billing group
+  string invoiceTemplateId = 2 [(google.api.field_behavior) = REQUIRED];
+}
 
 // Response message for ListInvoiceTemplate rpc.
 message ListInvoiceTemplateResponse {
