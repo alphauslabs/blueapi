@@ -1689,6 +1689,7 @@ message CreateFreeFormatRequest {
 message FreeFormItem {
   string label = 1;
   int64 unitCost = 2;
+  int64 total = 5;
   uint32 quantity = 3;
   bool enabled = 4;
 }
@@ -1699,12 +1700,17 @@ message DeleteFreeFormatRequest {
 }
 
 message GetFreeFormatRequest {
+  // set empty to get all the freeformat of the MSP
   string groupId = 1;
+
+  // this setting is ignored if groupId is not empty
+  // set true to return only the free format associated to a BG
+  bool isAssociated = 2;
 }
 
 message GetFreeFormatResponse {
   string vendor = 1;
-  FreeFormItem freeFormat = 2;
+  repeated FreeFormItem freeFormat = 2;
 }
 
 // BillingGroup tags adding setting
