@@ -2853,8 +2853,13 @@ message GetCostGroupAttributeRequest {
 
   string costGroupId = 3;
 
-  //When present, the api will return all attributes except the combination in this item.
+  //Optional, This is for Unit Cost. When present, the api will return all attributes except the combination in this item.
   repeated api.cover.Combinations existingCombinations = 4;
+  //Optional, This is for Unit Cost. 
+  // When present, the currentCombination field represents a combination that is not yet finalized. 
+  // This field is used to compare with existingCombinations to analyze both sets 
+  // and determine the appropriate attributes to return.
+  api.cover.Combinations currentCombination = 5;
 }
 
 // Response message for GetCostGroupAttribute
