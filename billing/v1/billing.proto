@@ -553,6 +553,12 @@ service Billing {
       body: "*"
     };
   }
+
+  rpc ExportBillingGroupCsv(ExportBillingGroupCsvRequest) returns (stream ExportBillingGroupCsvResponse) {
+    option (google.api.http) = {
+      get: "/v1/exportcsv/billing-group"
+    };
+  }
 }
 
 message BillingGroup {
@@ -1772,4 +1778,14 @@ message ExportBillingGroupInvoiceServiceDiscountsRequest {
   // but it may be a different language due to cahce.
   // In that case, you can use this option to change the language of CSV.
   string language = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Request message for the ExportBillingGroupCsv rpc.
+// port from m/ripple/exportcsv/billing-group
+message ExportBillingGroupCsvRequest {}
+
+
+// Response message for the ExportBillingGroupCsv rpc.
+message ExportBillingGroupCsvResponse {
+  string row = 1;
 }
