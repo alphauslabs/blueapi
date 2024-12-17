@@ -6825,6 +6825,37 @@
         ]
       }
     },
+    "/v1/exportcsv/billing-group": {
+      "get": {
+        "operationId": "Billing_ExportBillingGroupCsv",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1ExportBillingGroupCsvResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1ExportBillingGroupCsvResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/freeformat": {
       "post": {
         "summary": "Creates new billing group free format item (miscellaneous)",
@@ -26554,6 +26585,15 @@
         }
       },
       "description": "Request message for the ExportAuditLogs rpc."
+    },
+    "v1ExportBillingGroupCsvResponse": {
+      "type": "object",
+      "properties": {
+        "row": {
+          "type": "string"
+        }
+      },
+      "description": "Response message for the ExportBillingGroupCsv rpc."
     },
     "v1ExportBillingGroupInvoiceServiceDiscountsRequest": {
       "type": "object",
