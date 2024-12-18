@@ -708,6 +708,13 @@ service Cover {
     };
   }
 
+  // Get all available attributes for the charges
+  rpc GetAllocationAttributes(GetAllocationAttributesRequest) returns (GetAllocationAttributesResponse) {
+    option (google.api.http) = {
+      get: "/v1/allocators/attribute"
+    };
+  }
+
   // WORK-IN-PROGRESS: Updates a cost allocator item
   rpc UpdateAllocator(CostAllocatorRequest) returns (CostAllocatorDetails) {
     option (google.api.http) = {
@@ -2572,6 +2579,8 @@ message CostAllocatorDetails {
   repeated Allocator allocator = 7;
   string createTime = 8;
   string updateTime = 9;
+  string name = 10;
+  string description = 11;
 }
 
 message CostAllocatorRequest {
@@ -2602,6 +2611,20 @@ message CreateAllocatorRequest {
   // Required. Criteria for the adjustment to be applied.
   repeated Criteria criteria = 5;
   repeated Allocator allocator = 6;
+  string name = 7;
+  string description = 8;
+}
+
+// Request message for the GetAllocationAttributes rpc.
+message GetAllocationAttributesRequest {}
+
+// Response message for the GetAllocationAttributes rpc.
+message GetAllocationAttributesResponse {
+  message AllocationAttribute {
+    string type = 1;
+    repeated string service = 2;
+  }
+  repeated AllocationAttribute attribute = 1;
 }
 
 // Request message for the DeleteAllocator rpc.
