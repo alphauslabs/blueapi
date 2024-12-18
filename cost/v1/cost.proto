@@ -100,6 +100,15 @@ service Cost {
     };
   }
 
+  // WORK-IN-PROGRES: Registers a vendor payer account with their basics details such as accountId and accountName.
+  rpc RegisterPayerAccount(RegisterPayerAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/payers/basicdetails"
+      body: "*"
+    };
+  }
+
+
   // Deletes a vendor payer account.
   rpc DeletePayerAccount(DeletePayerAccountRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -2254,4 +2263,20 @@ message ReadInvoiceGroupCostsRequest {
 message ReadAccountOriginalResourcesRequest {
   // Required. At the moment, only `aws`.`gcp`,`azure` is supported.
   string vendor = 1; 
+}
+
+// Request message for the RegisterPayerAccountRequest rpc.
+message RegisterPayerAccountRequest {
+  // Required. At the moment, only `aws`, `gcp`, `azure` is supported.
+  string vendor = 1;
+
+  // Required. The Payer/Management account Id.
+  string id = 2;
+
+  // Optional. Preferred account name, defaults to id if not provided.
+  string name = 3;
+
+  // Optional. Valid values are `legacy` and `2.0` for now. Defaults to `legacy` if not provided.
+  // Only applicable if vendor is set to `aws`. Do not provide if `gcp` or `azure`.
+  string curType = 4;
 }
