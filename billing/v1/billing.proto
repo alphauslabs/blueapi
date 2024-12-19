@@ -559,6 +559,13 @@ service Billing {
       get: "/v1/exportcsv/billing-group"
     };
   }
+
+  rpc ExportInvoiceSettingCsv(ExportInvoiceSettingCsvRequest) returns (stream FileChunk) {
+    option (google.api.http) = {
+      get: "/v1/exportcsv/invoice-setting"
+    };
+  }
+
 }
 
 message BillingGroup {
@@ -1788,4 +1795,11 @@ message ExportBillingGroupCsvRequest {}
 // Response message for the ExportBillingGroupCsv rpc.
 message ExportBillingGroupCsvResponse {
   string row = 1;
+}
+
+// port from m/ripple/exportcsv/billing-group-setting
+message ExportInvoiceSettingCsvRequest {}
+
+message FileChunk {
+  bytes content = 1;
 }
