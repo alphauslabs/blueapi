@@ -6879,6 +6879,37 @@
         ]
       }
     },
+    "/v1/exportcsv/invoice-setting": {
+      "get": {
+        "operationId": "Billing_ExportInvoiceSettingCsv",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1FileChunk"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1FileChunk"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/freeformat": {
       "post": {
         "summary": "Creates new billing group free format item (miscellaneous)",
@@ -26813,6 +26844,15 @@
         }
       },
       "description": "Response message wrapper for cost group fees."
+    },
+    "v1FileChunk": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
     },
     "v1FreeFormItem": {
       "type": "object",
