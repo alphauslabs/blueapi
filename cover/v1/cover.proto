@@ -1129,8 +1129,15 @@ service Cover {
   // Executes optimization based on a recommendation.
   rpc ExecuteOptimization(ExecuteOptimizationRequest) returns (ExecuteOptimizationResponse) {
     option (google.api.http) = {
-      post: "/v1/recommendations/optimization/{recommendationId}"
+      post: "/v1/recommendations/execute"
       body: "*"
+    };
+  }
+
+  // Get Execution status of a recommendation.
+  rpc GetExecutionStatus(GetExecutionStatusRequest) returns (stream GetExecutionStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/recommendations/execute/status"
     };
   }
 
@@ -1245,6 +1252,14 @@ service Cover {
       get: "/v1/apiaccess/verify"
     };
   }
+}
+
+message GetExecutionStatusRequest {}
+
+message GetExecutionStatusResponse {
+  string recommendationId = 1;
+  string status = 2;
+  string message = 3;
 }
 
 // Only supports gcp for now.
@@ -3542,10 +3557,24 @@ message GetRecommendationResponse{
 }
 
 message ExecuteOptimizationRequest {
-    string recommendationId = 1;
+  string recommendationId = 1;
+  string type = 2;
 }
 
 message ExecuteOptimizationResponse{
+  message AWSOption {
+    string approveTemplateUrl = 1;
+    string recommendationId = 2;
+    string currentStatus = 3;
+  }
+  message GCPOption {}
+  message AzureCSPOption {}
+
+  oneof Vendor {
+    AWSOption awsOption = 1;
+    GCPOption gcpOption = 2;
+    AzureCSPOption azureCspOption = 3;
+  }
 }
 
 message MarkAsExecutedRequest{
