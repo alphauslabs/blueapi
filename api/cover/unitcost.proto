@@ -13,21 +13,29 @@ message UnitCostData{
     string unitName = 2;
     string description = 3;
     repeated UnitItem unitItems = 4;
-    string createdBy = 5;
-    string createTime = 6;
-    string lastUpdatedAt = 7;
+    SharedResources sharedResources = 5;
+    string createdBy = 6;
+    string createTime = 7;
+    string lastUpdatedAt = 8;
 }
 
 message UnitItem{
     string itemName = 1;
     double distribution = 2;
-    repeated ResourcesFilter dedicatedResourcesCombination = 3;
-    ResourcesCombinations dedicatedResourcesCombinations = 4;
+    ResourcesCombinations dedicatedResourcesCombinations = 3;
 }
 
-message ResourcesFilter{
-    map<string, string> andFilters = 1;
+message SharedResources {
+    // Expected values: general-level or resource-level.
+    string splittingMethod = 1;
+
+    // Service for now, since we are currently working on service level only. Empty if Splitting method is general-level.
+    string service = 2;
+
+    // List the unit items and their corresponding percentages.
+    map<string, double> distribution = 3;
 }
+
 
 message ResourcesCombinations {
     // Optional. Valid only for the `aws` vendor. AWS-specific options.
