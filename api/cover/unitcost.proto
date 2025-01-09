@@ -29,9 +29,12 @@ message SharedResources {
     // Expected values: general-level or resource-level.
     string splittingMethod = 1;
 
-    // Service for now, since we are currently working on service level only. Empty if Splitting method is general-level.
-    string service = 2;
+    repeated SharedResourcesCombination sharedResourcesCombinations = 2;
+}
 
+message SharedResourcesCombination{
+    string combinationName = 1;
+    ResourcesCombinations sharedResourcesCombinations = 2;
     // List the unit items and their corresponding percentages.
     map<string, double> distribution = 3;
 }
