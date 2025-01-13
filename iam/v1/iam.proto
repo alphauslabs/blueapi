@@ -261,6 +261,13 @@ service Iam {
     };
   }
 
+  // WORK-IN-PROGRESS: Get Sub User Metadata for login user's organization based on user identity
+  rpc GetSubUserMetadata(GetSubUserRequest) returns (api.SubUser) {
+    option (google.api.http) = {
+      get: "/iam/v1/metadata/{id}"
+    };
+  }
+
   // WORK-IN-PROGRESS: Validate reset password link and proceed to update password
   rpc ValidateResetPasswordLinkAndChangePassword(ValidateResetPasswordLinkAndChangePasswordRequest) returns (ValidateResetPasswordLinkAndChangePasswordResponse) {
     option(google.api.http) = {
@@ -618,4 +625,13 @@ message MFAUser {
 // Response message for the MFAUsersInfoResponse rpc.
 message MFAUsersInfoResponse {
   repeated MFAUser users = 1;
+}
+
+
+// Request message for the Iam.GetSubUserMetadata rpc.
+message GetSubUserRequest {
+  // Required. The parent ID
+  string id = 1; 
+  // Optional. The sub-user ID
+  string subId = 2;
 }
