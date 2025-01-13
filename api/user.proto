@@ -19,3 +19,29 @@ message User {
   // for the list of supported attributes.
   map<string, string> metadata = 3;
 }
+
+message SubUser {
+  // Sub-user's unique id.
+  string id = 1;
+
+  // The id of the parent user. If this is empty, the sub-user is invalid.
+  string parentId = 2;
+
+  // Attributes specific to the sub-user.
+  map<string, string> metadata = 3;
+
+  // Role details for the sub-user, if applicable.
+  repeated SubUserRole roles = 4;
+}
+
+message SubUserRole {
+  // Role ID assigned to the sub-user.
+  string roleId = 1;
+
+  // Permissions granted to the sub-user for this role.
+  repeated string permissions = 2;
+
+  // Temporary: Tracks the sub-user ID to verify the role is assigned to the correct user.
+  // This field will be removed after testing is complete.
+  string subUserId = 3;
+}
