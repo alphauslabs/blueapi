@@ -566,6 +566,12 @@ service Billing {
     };
   }
 
+  rpc RippleV2InvoiceListing(RippleV2InvoiceListingRequest) returns (stream RippleV2InvoiceListingResponse) {
+    option (google.api.http) = {
+      get: "/v1/ripplev2/invoicing/invoice-listing"
+    };
+  }
+
 }
 
 message BillingGroup {
@@ -1813,3 +1819,20 @@ message ExportInvoiceSettingCsvRequest {
 message FileChunk {
   bytes content = 1;
 }
+
+
+message RippleV2InvoiceListingRequest {
+  string yymmDate = 1;
+}
+
+message RippleV2InvoiceListingResponse {
+  string invoiceName = 1;
+  string invoiceId = 2;
+  string company = 3;
+  string status = 4;
+  string waveStatus = 5;
+  string billingAmountAws = 6;
+  string billingAmmountAzure = 7;
+  string billingAmountGcp = 8;
+}
+
