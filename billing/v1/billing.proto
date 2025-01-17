@@ -262,6 +262,13 @@ service Billing {
     };
   }
 
+ // Returns the service discount associated with the billing group id
+ rpc GetBillingGroupInvoiceServiceDiscounts(GetBillingGroupInvoiceServiceDiscountsRequest) returns (GetBillingGroupInvoiceServiceDiscountsResponse) {
+    option (google.api.http) = {
+      get: "/v1/servicediscounts/{groupId}/billinggroup"
+    };
+  }
+
   // Registers the reseller account. Only available in Ripple.
   rpc CreateReseller(CreateResellerRequest) returns (api.ripple.Reseller) {
     option (google.api.http) = {
@@ -1836,3 +1843,11 @@ message RippleV2InvoiceListingResponse {
   string billingAmountGcp = 8;
 }
 
+message GetBillingGroupInvoiceServiceDiscountsRequest {
+  string groupId = 1;
+}
+
+message GetBillingGroupInvoiceServiceDiscountsResponse {
+  // Service discount id
+  string id = 1;
+}
