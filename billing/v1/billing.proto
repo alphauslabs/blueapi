@@ -1369,8 +1369,8 @@ message DeleteAccessGroupRequest {
 
 // Request message for the ListInvoice rpc.
 message ListInvoiceRequest {
-  // Optional. billing internal id. If empty will list all the invoice status
-  string groupId = 1;
+  // YYYYMM format (e.g 202412, 202501)
+  string date = 1;
 }
 
 
@@ -1385,8 +1385,10 @@ message ListInvoiceResponse {
   // The billing group name. Used as invoice name on ripple v2
   string billingGroupName = 3;
 
-  // The date.
-  string date = 4;
+  string companyName = 4;
+
+  // currency for the billing amount
+  string currency = 8;
 
   // Created || Not Created
   string invoiceStatus = 5;
@@ -1394,6 +1396,12 @@ message ListInvoiceResponse {
   string finalizationStatus = 6;
   // Published || Not published
   string waveStatus = 7;
+
+  // Formated in $8,000.12
+  string billingAmountAws = 9;
+  string billingAmountAzure = 10;
+  string billingAmountGcp = 11;
+  string billingAmountTotal = 12;
 }
 
 // request message for ListAbcBillingGroups
