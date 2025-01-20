@@ -9837,6 +9837,37 @@
         ]
       }
     },
+    "/v1/servicediscounts/{groupId}/billinggroup": {
+      "get": {
+        "summary": "Returns the service discount associated with the billing group id",
+        "operationId": "Billing_GetBillingGroupInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBillingGroupInvoiceServiceDiscountsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/servicediscounts/{id}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Gets the invoice service discounts. Only available in Ripple.",
@@ -27241,6 +27272,15 @@
         "recommendationSummary": {
           "type": "string",
           "title": "Format: JSON String"
+        }
+      }
+    },
+    "v1GetBillingGroupInvoiceServiceDiscountsResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Service discount id"
         }
       }
     },
