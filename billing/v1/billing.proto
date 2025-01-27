@@ -1371,6 +1371,11 @@ message DeleteAccessGroupRequest {
 message ListInvoiceRequest {
   // YYYYMM format (e.g 202412, 202501)
   string date = 1;
+ 
+  // OPTIONAL: refer to the ListInvoiceRequest for the key
+  // e.g {"filter": {"vendor": "aws", "billingInternalId":"asdf"}}
+  // invalid key will be ignored
+  map<string, string> filters = 2;
 }
 
 
@@ -1397,6 +1402,8 @@ message ListInvoiceResponse {
   // Published || Not published
   string waveStatus = 7;
 
+  // aws, azure, gcp
+  string vendor = 13;
   // Formated in $8,000.12
   string billingAmountAws = 9;
   string billingAmountAzure = 10;
