@@ -5130,6 +5130,46 @@
         ]
       }
     },
+    "/v1/billinggroup/customfield:read": {
+      "post": {
+        "operationId": "Billing_ListBillingGroupCustomField",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1BillingGroupCustomField"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1BillingGroupCustomField"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "groupId",
+            "description": "billing group InternalID\nleave empty to get all group id custom field",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups": {
       "get": {
         "summary": "Lists all billing groups.",
@@ -25013,6 +25053,24 @@
         }
       },
       "description": "Additional items for a billing group."
+    },
+    "v1BillingGroupCustomField": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string"
+        },
+        "customFieldName": {
+          "type": "string"
+        },
+        "customField": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1CustomField"
+          }
+        }
+      }
     },
     "v1BillingGroupInvoiceSettings": {
       "type": "object",

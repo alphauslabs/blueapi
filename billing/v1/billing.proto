@@ -512,6 +512,12 @@ service Billing {
     };
   }
 
+  rpc ListBillingGroupCustomField(ListBillingGroupCustomFieldRequest) returns (stream BillingGroupCustomField) {
+    option (google.api.http) = {
+      post: "/v1/billinggroup/customfield:read"
+    };
+  }
+
   // Update the `customField` specified id, modifying its key and description
   rpc UpdateCustomField(UpdateCustomFieldRequest) returns (CustomField) {
     option (google.api.http) = {
@@ -1700,6 +1706,18 @@ message CustomField {
 
   // Detailed description of the custom field
   string description = 3;
+}
+
+message BillingGroupCustomField {
+  string groupId = 1;
+  string customFieldName = 2;
+  repeated CustomField customField = 3;
+}
+
+message ListBillingGroupCustomFieldRequest {
+  // billing group InternalID
+  // leave empty to get all group id custom field
+  string groupId = 1;
 }
 
 message CreateCustomFieldRequest {
