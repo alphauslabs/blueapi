@@ -1247,6 +1247,14 @@ service Cover {
     };
   }
 
+  // List Suggested Unit Types
+  rpc ListSuggestedUnits(ListSuggestedUnitsRequest) returns (ListSuggestedUnitsResponse) {
+    option (google.api.http) = {
+      get: "/v1/unitcost/autosuggest"
+    };
+  }
+  
+
   rpc VerifyAPIAccess(VerifyAPIAccessRequest) returns (VerifyAPIAccessResponse) {
     option (google.api.http) = {
       get: "/v1/apiaccess/verify"
@@ -3747,4 +3755,11 @@ message DeleteUnitTypeRequest{
 
 message DeleteUnitTypeResponse{
   string id = 1;
+}
+
+message ListSuggestedUnitsRequest{
+}
+
+message ListSuggestedUnitsResponse{
+  repeated api.cover.SuggestedUnit suggestedUnits = 1;
 }
