@@ -512,6 +512,14 @@ service Billing {
     };
   }
 
+
+  rpc AddBillingGroupCustomField(AddBillingGroupCustomFieldRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/billinggroup/customfield"
+    };
+  }
+
+
   rpc ListBillingGroupCustomField(ListBillingGroupCustomFieldRequest) returns (stream BillingGroupCustomField) {
     option (google.api.http) = {
       post: "/v1/billinggroup/customfield:read"
@@ -1868,4 +1876,11 @@ message GetBillingGroupInvoiceServiceDiscountsRequest {
 message GetBillingGroupInvoiceServiceDiscountsResponse {
   // Service discount id
   string id = 1;
+}
+
+message AddBillingGroupCustomFieldRequest {
+  string groupId = 1;
+ 
+  // map of customField key to custom field id
+  map<string, string> keyToId = 2;
 }
