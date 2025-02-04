@@ -5150,17 +5150,12 @@
         },
         "parameters": [
           {
-            "name": "groupId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "idToKey",
-            "description": "map of customField id to it's key (description)\n\nThis is a request variable of the map type. The query format is \"map_name[key]=value\", e.g. If the map name is Age, the key type is string, and the value type is integer, the query parameter is expressed as Age[\"bob\"]=18",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddBillingGroupCustomFieldRequest"
+            }
           }
         ],
         "tags": [
@@ -5196,11 +5191,12 @@
         },
         "parameters": [
           {
-            "name": "groupId",
-            "description": "billing group InternalID\nleave empty to get all group id custom field",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListBillingGroupCustomFieldRequest"
+            }
           }
         ],
         "tags": [
@@ -6610,6 +6606,16 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListCustomFieldRequest"
+            }
+          }
+        ],
         "tags": [
           "Billing"
         ]
@@ -24754,6 +24760,21 @@
       },
       "title": "Response message for ActivateUser"
     },
+    "v1AddBillingGroupCustomFieldRequest": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string"
+        },
+        "idToKey": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "map of customField id to it's key (description)"
+        }
+      }
+    },
     "v1AddFavoriteRequest": {
       "type": "object",
       "properties": {
@@ -28843,6 +28864,15 @@
       },
       "description": "Request message for the Billing.ListAwsCalculationHistory rpc."
     },
+    "v1ListBillingGroupCustomFieldRequest": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "title": "billing group InternalID\nleave empty to get all group id custom field"
+        }
+      }
+    },
     "v1ListBudgetsRequest": {
       "type": "object",
       "properties": {
@@ -28921,6 +28951,9 @@
         }
       },
       "description": "Response message for the ListCostFilters rpc."
+    },
+    "v1ListCustomFieldRequest": {
+      "type": "object"
     },
     "v1ListFeesRequest": {
       "type": "object",
