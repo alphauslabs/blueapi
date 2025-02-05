@@ -522,7 +522,7 @@ service Billing {
   }
 
 
-  rpc ListBillingGroupCustomField(ListBillingGroupCustomFieldRequest) returns (stream BillingGroupCustomField) {
+  rpc ListBillingGroupCustomField(ListBillingGroupCustomFieldRequest) returns (stream ListBillingGroupCustomFieldResponse) {
     option (google.api.http) = {
       post: "/v1/billinggroup/customfield:read"
       body: "*"
@@ -1726,16 +1726,19 @@ message CustomField {
 }
 
 message BillingGroupCustomField {
-  string groupId = 1;
-
-  // map of customfield name to customfield
-  map<string, CustomField> customField = 2;
+  string value = 1;
+  CustomField customField = 2;
 }
 
 message ListBillingGroupCustomFieldRequest {
   // billing group InternalID
   // leave empty to get all group id custom field
   string groupId = 1;
+}
+
+message ListBillingGroupCustomFieldResponse {
+  string groupId = 1;
+  repeated BillingGroupCustomField billingGroupCustomFields = 2;
 }
 
 message CreateCustomFieldRequest {
