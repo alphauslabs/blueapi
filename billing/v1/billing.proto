@@ -529,6 +529,12 @@ service Billing {
     };
   }
 
+  rpc DeleteBillingGroupCustomField(DeleteBillingGroupCustomFieldRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/billinggroup/customfield/{groupId}/{customFieldId}"
+    };
+  }
+
   // Update the `customField` specified id, modifying its key and description
   rpc UpdateCustomField(UpdateCustomFieldRequest) returns (CustomField) {
     option (google.api.http) = {
@@ -1721,8 +1727,9 @@ message CustomField {
 
 message BillingGroupCustomField {
   string groupId = 1;
-  string customFieldName = 2;
-  repeated CustomField customField = 3;
+
+  // map of customfield name to customfield
+  map<string, CustomField> customField = 2;
 }
 
 message ListBillingGroupCustomFieldRequest {
@@ -1886,4 +1893,10 @@ message AddBillingGroupCustomFieldRequest {
  
   // map of customField id to it's key (description)
   map<string, string> idToKey = 2;
+}
+
+message DeleteBillingGroupCustomFieldRequest {
+  // REQUIRED. Billing group internal Id
+  string groupId = 1;
+  string customFieldId = 2;
 }
