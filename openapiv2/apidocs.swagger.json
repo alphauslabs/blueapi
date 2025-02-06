@@ -71,6 +71,14 @@
       }
     },
     {
+      "name": "Flow",
+      "description": "(ALPHA) Flow API. Base URL: https://api.alphaus.cloud/m/blue/flow",
+      "externalDocs": {
+        "description": "Service definition",
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/flow/"
+      }
+    },
+    {
       "name": "Preferences",
       "description": "(BETA) Preferences API. Base URL: https://api.alphaus.cloud/m/blue",
       "externalDocs": {
@@ -2525,7 +2533,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetInfoResponse"
+              "$ref": "#/definitions/blueapipricingv1GetInfoResponse"
             }
           },
           "default": {
@@ -6664,7 +6672,7 @@
     },
     "/v1/customizedbillingservices": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Creates the customized billing service. Only available in Ripple.",
+        "summary": "Creates the customized billing service. Only available in Ripple.",
         "operationId": "Billing_CreateCustomizedBillingService",
         "responses": {
           "200": {
@@ -6698,7 +6706,7 @@
     },
     "/v1/customizedbillingservices/billinggroup/{groupId}/{vendor}": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Gets the customized billing service in billing group. Only available in Ripple.",
+        "summary": "Gets the customized billing service in billing group. Only available in Ripple.",
         "operationId": "Billing_GetCustomizedBillingServiceBillingGroup",
         "responses": {
           "200": {
@@ -6744,7 +6752,7 @@
         ]
       },
       "delete": {
-        "summary": "WORK-IN-PROGRESS: Deletes the customized billing service in billing group. Only available in Ripple.",
+        "summary": "Deletes the customized billing service in billing group. Only available in Ripple.",
         "operationId": "Billing_DeleteCustomizedBillingServiceBillingGroup",
         "responses": {
           "200": {
@@ -6782,7 +6790,7 @@
         ]
       },
       "post": {
-        "summary": "WORK-IN-PROGRESS: Sets the customized billing service in billing group. Only available in Ripple.",
+        "summary": "Sets the customized billing service in billing group. Only available in Ripple.",
         "operationId": "Billing_SetCustomizedBillingServiceBillingGroup",
         "responses": {
           "200": {
@@ -6830,7 +6838,7 @@
     },
     "/v1/customizedbillingservices/{id}": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Gets the customized billing service. Only available in Ripple.",
+        "summary": "Gets the customized billing service. Only available in Ripple.",
         "operationId": "Billing_GetCustomizedBillingService",
         "responses": {
           "200": {
@@ -6867,7 +6875,7 @@
         ]
       },
       "delete": {
-        "summary": "WORK-IN-PROGRESS: Deletes the customized billing service. Only available in Ripple.",
+        "summary": "Deletes the customized billing service. Only available in Ripple.",
         "operationId": "Billing_DeleteCustomizedBillingService",
         "responses": {
           "200": {
@@ -6898,7 +6906,7 @@
         ]
       },
       "put": {
-        "summary": "WORK-IN-PROGRESS: Updates the customized billing service by updating the fields specified in the update mask. Only available in Ripple.",
+        "summary": "Updates the customized billing service by updating the fields specified in the update mask. Only available in Ripple.",
         "operationId": "Billing_UpdateCustomizedBillingService",
         "responses": {
           "200": {
@@ -6938,7 +6946,7 @@
     },
     "/v1/customizedbillingservices:read": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Reads the customized billing service. Only available in Ripple.",
+        "summary": "Reads the customized billing service. Only available in Ripple.",
         "operationId": "Billing_ReadCustomizedBillingServices",
         "responses": {
           "200": {
@@ -7213,6 +7221,29 @@
         ],
         "tags": [
           "Billing"
+        ]
+      }
+    },
+    "/v1/info": {
+      "get": {
+        "summary": "Test endpoint only.",
+        "operationId": "Flow_GetInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/blueapiflowv1GetInfoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Flow"
         ]
       }
     },
@@ -20673,6 +20704,24 @@
       },
       "title": "Response message for ListExchangeRates"
     },
+    "blueapiflowv1GetInfoResponse": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "string"
+        }
+      },
+      "description": "Response message for the Flow.GetInfo rpc."
+    },
+    "blueapipricingv1GetInfoResponse": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "string"
+        }
+      },
+      "description": "Response message for the Pricing.GetInfo rpc."
+    },
     "costv1CostAttribute": {
       "type": "object",
       "properties": {
@@ -28194,15 +28243,6 @@
           }
         }
       }
-    },
-    "v1GetInfoResponse": {
-      "type": "object",
-      "properties": {
-        "response": {
-          "type": "string"
-        }
-      },
-      "description": "Response message for the Pricing.GetInfo rpc."
     },
     "v1GetMSPDefaultMetaResponse": {
       "type": "object",
