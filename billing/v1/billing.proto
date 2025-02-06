@@ -114,7 +114,7 @@ service Billing {
     };
   }
 
-  // Reads list of the invoice.
+  // WORK-IN-PROGRESS: Reads list of the invoice.
   rpc ListInvoice(ListInvoiceRequest) returns (stream ListInvoiceResponse) {
     option (google.api.http) = {
       post: "/v1/invoice:read"
@@ -514,6 +514,7 @@ service Billing {
   }
 
 
+  // Add  a custom field into a billing group
   rpc AddBillingGroupCustomField(AddBillingGroupCustomFieldRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/v1/billinggroup/customfield"
@@ -521,7 +522,7 @@ service Billing {
     };
   }
 
-
+  // Show all the billing groups custom fields
   rpc ListBillingGroupCustomField(ListBillingGroupCustomFieldRequest) returns (stream ListBillingGroupCustomFieldResponse) {
     option (google.api.http) = {
       post: "/v1/billinggroup/customfield:read"
@@ -529,6 +530,7 @@ service Billing {
     };
   }
 
+  // Remove a custom field from a billing group
   rpc DeleteBillingGroupCustomField(DeleteBillingGroupCustomFieldRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/billinggroup/customfield/{groupId}/{customFieldId}"
@@ -584,12 +586,14 @@ service Billing {
     };
   }
 
+  // Export the billing groups into csv format
   rpc ExportBillingGroupCsv(ExportBillingGroupCsvRequest) returns (stream ExportBillingGroupCsvResponse) {
     option (google.api.http) = {
       get: "/v1/exportcsv/billing-group"
     };
   }
 
+  // Exports the invoice settings into csv format
   rpc ExportInvoiceSettingCsv(ExportInvoiceSettingCsvRequest) returns (stream FileChunk) {
     option (google.api.http) = {
       get: "/v1/exportcsv/invoice-setting"
