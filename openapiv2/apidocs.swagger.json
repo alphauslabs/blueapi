@@ -7123,16 +7123,12 @@
         },
         "parameters": [
           {
-            "name": "groupId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "vendor",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateFreeFormatRequest"
+            }
           }
         ],
         "tags": [
@@ -26401,6 +26397,25 @@
         }
       },
       "title": "Request message for CreateDiscountExpirationAlert"
+    },
+    "v1CreateFreeFormatRequest": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1FreeFormItem"
+          }
+        }
+      },
+      "title": "BillingGroup FreeFormat: Also known as miscellaneous"
     },
     "v1CreateGroupRootUserRequest": {
       "type": "object",
