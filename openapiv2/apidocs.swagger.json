@@ -7026,18 +7026,9 @@
         "operationId": "Billing_ExportBillingGroupCsv",
         "responses": {
           "200": {
-            "description": "A successful response.(streaming responses)",
+            "description": "A successful response.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1ExportBillingGroupCsvResponse"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1ExportBillingGroupCsvResponse"
+              "$ref": "#/definitions/v1ExportBillingGroupCsvResponse"
             }
           },
           "default": {
@@ -7067,18 +7058,9 @@
         "operationId": "Billing_ExportInvoiceSettingCsv",
         "responses": {
           "200": {
-            "description": "A successful response.(streaming responses)",
+            "description": "A successful response.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1FileChunk"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1FileChunk"
+              "$ref": "#/definitions/v1ExportInvoiceSettingCsvResponse"
             }
           },
           "default": {
@@ -27226,8 +27208,9 @@
     "v1ExportBillingGroupCsvResponse": {
       "type": "object",
       "properties": {
-        "row": {
-          "type": "string"
+        "downloadLink": {
+          "type": "string",
+          "title": "csv direct download link\nexpires in 10 minutes"
         }
       },
       "description": "Response message for the ExportBillingGroupCsv rpc."
@@ -27289,6 +27272,16 @@
       },
       "description": "Response message for the ExportInvoiceFile rpc."
     },
+    "v1ExportInvoiceSettingCsvResponse": {
+      "type": "object",
+      "properties": {
+        "downloadLink": {
+          "type": "string",
+          "title": "csv direct download link\nexpires in 10 minutes"
+        }
+      },
+      "description": "Response message for the ExportBillingGroupCsv rpc."
+    },
     "v1ExportServiceDiscountsRequest": {
       "type": "object",
       "properties": {
@@ -27342,15 +27335,6 @@
         }
       },
       "description": "Response message wrapper for cost group fees."
-    },
-    "v1FileChunk": {
-      "type": "object",
-      "properties": {
-        "content": {
-          "type": "string",
-          "format": "byte"
-        }
-      }
     },
     "v1FreeFormItem": {
       "type": "object",

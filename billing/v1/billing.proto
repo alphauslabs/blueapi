@@ -588,14 +588,14 @@ service Billing {
   }
 
   // Export the billing groups into csv format
-  rpc ExportBillingGroupCsv(ExportBillingGroupCsvRequest) returns (stream ExportBillingGroupCsvResponse) {
+  rpc ExportBillingGroupCsv(ExportBillingGroupCsvRequest) returns (ExportBillingGroupCsvResponse) {
     option (google.api.http) = {
       get: "/v1/exportcsv/billing-group"
     };
   }
 
   // Exports the invoice settings into csv format
-  rpc ExportInvoiceSettingCsv(ExportInvoiceSettingCsvRequest) returns (stream FileChunk) {
+  rpc ExportInvoiceSettingCsv(ExportInvoiceSettingCsvRequest) returns (ExportInvoiceSettingCsvResponse) {
     option (google.api.http) = {
       get: "/v1/exportcsv/invoice-setting"
     };
@@ -1872,7 +1872,9 @@ message ExportBillingGroupCsvRequest {
 
 // Response message for the ExportBillingGroupCsv rpc.
 message ExportBillingGroupCsvResponse {
-  string row = 1;
+  // csv direct download link
+  // expires in 10 minutes
+  string downloadLink = 1;
 }
 
 // port from m/ripple/exportcsv/billing-group-setting
@@ -1883,8 +1885,11 @@ message ExportInvoiceSettingCsvRequest {
   string language = 2 [(google.api.field_behavior) = OPTIONAL];
 }
 
-message FileChunk {
-  bytes content = 1;
+// Response message for the ExportBillingGroupCsv rpc.
+message ExportInvoiceSettingCsvResponse {
+  // csv direct download link
+  // expires in 10 minutes
+  string downloadLink = 1;
 }
 
 message GetBillingGroupInvoiceServiceDiscountsRequest {
