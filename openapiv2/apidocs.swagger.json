@@ -5146,6 +5146,40 @@
         ]
       }
     },
+    "/v1/billinggroup/account": {
+      "post": {
+        "summary": "Add a vendor account to a billing group.",
+        "operationId": "Billing_AddAccountToBillingGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddAccountToBillingGroupRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroup/customfield": {
       "post": {
         "summary": "Add  a custom field into a billing group",
@@ -5202,13 +5236,14 @@
         "parameters": [
           {
             "name": "groupId",
-            "description": "REQUIRED. Billing group internal Id",
+            "description": "Required. Billing group internal Id",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "customFieldId",
+            "description": "Required. The id of customfield from get customfield",
             "in": "path",
             "required": true,
             "type": "string"
@@ -24841,11 +24876,41 @@
       },
       "title": "Response message for ActivateUser"
     },
+    "v1AddAccountToBillingGroupRequest": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "title": "Required. BillingGroupInternalId"
+        },
+        "vendor": {
+          "type": "string",
+          "title": "Required. (aws, azure, gcp)"
+        },
+        "customerId": {
+          "type": "string",
+          "title": "Required. account id of the customer"
+        },
+        "accountId": {
+          "type": "string",
+          "title": "Required. Payer account id"
+        },
+        "name": {
+          "type": "string",
+          "title": "Required. Descriptive name"
+        },
+        "note": {
+          "type": "string",
+          "title": "Optional. Addition description or notes"
+        }
+      }
+    },
     "v1AddBillingGroupCustomFieldRequest": {
       "type": "object",
       "properties": {
         "groupId": {
-          "type": "string"
+          "type": "string",
+          "title": "Required. BillingGroupInternalId"
         },
         "idToKey": {
           "type": "object",
