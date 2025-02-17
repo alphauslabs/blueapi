@@ -99,6 +99,14 @@ service Billing {
     };
   }
 
+  // WORK-IN-PROGRESS: Generate a single invoice based on ripple v2 ui inputs
+  rpc GenerateSingleInvoice(GenerateSingleInvoiceRequest) returns (api.InvoiceMessage) {
+    option (google.api.http) = {
+      post: "/v1/ripplev2/invoicing/generate/single"
+      body: "*"
+    };
+  }
+
   // Gets an invoice. Only available in Ripple.
   rpc GetInvoiceStatus(GetInvoiceStatusRequest) returns (api.InvoiceMessage) {
     option (google.api.http) = {
@@ -1943,4 +1951,68 @@ message AddAccountToBillingGroupRequest {
 
   // Optional. Addition description or notes
   string note = 6;
+}
+
+message GenerateSingleInvoiceRequest {
+  // Required. Billing group billingInternalId
+  string groupId = 1;
+
+  // Required. Invoice date (e.g. 202412)
+  string yyyymmDate = 2;
+ 
+  // Map of vendor to InvoiceSettings
+  map<string, InvoiceSettings> vendorToInvoiceSettings = 3;
+}
+
+message InvoiceSettings {
+  InvoiceBasicSettings basic = 1;
+  InvoiceDiscountSettings discount = 2;
+  InvoiceSupportFeeSettings supportFee = 3;
+  InvoiceAgencyFeeSettings agencyFee = 4;
+  InvoiceExchangeRateSettings exchangerate = 5;
+}
+
+message InvoiceBasicSettings {
+  double taxRate = 1;
+}
+
+message InvoiceDiscountSettings {
+  enum UsageSubject {
+    CLOUD_PAY_ONLY = 0;
+    CLOUD_PAY_WITH_MAINTENANCE = 1;
+  }
+  UsageSubject usageSubject = 1;
+  double discountRate = 2;
+}
+
+message InvoiceSupportFeeSettings {
+  enum CalculationMethod {
+    PERCENT = 0;
+    FIX = 1;
+    AWS_DEVELOPER = 2;
+    AWS_BUSINESS = 3;
+    AWS_ENTERPRISE = 4;
+  }
+  CalculationMethod calculationMethod = 1;
+  double supportFee = 2;
+}
+
+message InvoiceAgencyFeeSettings {
+  // WORK-IN-PROGRESS: still finding the other possible values
+  enum CalculationMethod {
+    PERCENTTOUSAGE = 0;
+  }
+  CalculationMethod calculationMethod = 1;
+  double fee = 2;
+
+  enum UsageSubject {
+    CLOUD_PAY_ONLY = 0;
+    CLOUD_PAY_WITH_MAINTENANCE = 1;
+  }
+  UsageSubject usageSubject = 3;
+}
+
+message InvoiceExchangeRateSettings {
+  // Represents how much of the currency is equivalent to 1 USD.
+  map<string, double> ratePerUsd = 1;
 }
