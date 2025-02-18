@@ -538,6 +538,14 @@ service Billing {
     };
   }
 
+  // Show 
+  rpc AddTagsToBillingGroup (AddTagsToBillingGroupRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/billinggroup/tags"
+      body: "*"
+    };
+  }
+
   // Remove a custom field from a billing group
   rpc DeleteBillingGroupCustomField(DeleteBillingGroupCustomFieldRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -1943,4 +1951,60 @@ message AddAccountToBillingGroupRequest {
 
   // Optional. Addition description or notes
   string note = 6;
+}
+
+message AddTagsToBillingGroupRequest {
+  // Required. Billing group internal Id
+  string groupId = 1;
+  
+  // Required. Vendor (aws, azure, gcp)
+  string vendor = 2;
+  
+  // Tag settings for different customer accounts
+  repeated TagSetting settings = 3;
+  
+  // Non-tag settings for the billing group
+  NonTagSetting nonTagSetting = 4;
+}
+
+// Settings for a specific customer account for AddTagsToBillingGroup
+message TagSetting {
+  // Customer ID
+  string customerId = 1;
+  
+  // Tags associated with this customer
+  repeated Tag tags = 2;
+}
+
+// Individual tag definition for AddTagsToBillingGroup
+message Tag {
+  // Tag key
+  string key = 1;
+  
+  // Tag value
+  string value = 2;
+  
+  // Assignment percentage (only used for non-tag assignments)
+  int32 assign = 3;
+}
+
+// Non-tag settings for a billing group for AddTagsToBillingGroup
+message NonTagSetting {
+  // Whether non-tag settings are included
+  bool include = 1;
+  
+  // Type of non-tag setting ("percentage" or "fixed")
+  string type = 2;
+  
+  // Amount value (percentage or fixed amount)
+  double amount = 3;
+}
+
+// Response message for tag invoice setting operation for AddTagsToBillingGroup
+message SaveTagInvoiceSettingResponse {
+  // Status of the operation
+  string status = 1;
+  
+  // Optional error message if operation failed
+  string error = 2;
 }
