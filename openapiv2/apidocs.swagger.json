@@ -5296,6 +5296,40 @@
         ]
       }
     },
+    "/v1/billinggroup/tags": {
+      "post": {
+        "summary": "Add Tags to the billing group",
+        "operationId": "Billing_AddTagsToBillingGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddTagsToBillingGroupRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups": {
       "get": {
         "summary": "Lists all billing groups.",
@@ -20418,6 +20452,25 @@
         }
       }
     },
+    "billingv1Tag": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "title": "Tag key"
+        },
+        "value": {
+          "type": "string",
+          "title": "Tag value"
+        },
+        "assign": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Assignment percentage (only used for non-tag assignments)"
+        }
+      },
+      "title": "Individual tag definition for AddTagsToBillingGroup"
+    },
     "billingv1InvoiceSettings": {
       "type": "object",
       "properties": {
@@ -25119,6 +25172,31 @@
       },
       "title": "Response message for AddSideMenuFavorite"
     },
+    "v1AddTagsToBillingGroupRequest": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "title": "Required. Billing group internal Id"
+        },
+        "vendor": {
+          "type": "string",
+          "title": "Required. Vendor (aws, azure, gcp)"
+        },
+        "settings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1TagSetting"
+          },
+          "title": "Tag settings for different customer accounts"
+        },
+        "nonTagSetting": {
+          "$ref": "#/definitions/v1NonTagSetting",
+          "title": "Non-tag settings for the billing group"
+        }
+      }
+    },
     "v1AllocationItem": {
       "type": "object",
       "properties": {
@@ -29657,6 +29735,25 @@
       },
       "title": "Response message for ModifyResourceType"
     },
+    "v1NonTagSetting": {
+      "type": "object",
+      "properties": {
+        "include": {
+          "type": "boolean",
+          "title": "Whether non-tag settings are included"
+        },
+        "type": {
+          "type": "string",
+          "title": "Type of non-tag setting (\"percentage\" or \"fixed\")"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "title": "Amount value (percentage or fixed amount)"
+        }
+      },
+      "title": "Non-tag settings for a billing group for AddTagsToBillingGroup"
+    },
     "v1OnboardOrgRequest": {
       "type": "object",
       "properties": {
@@ -30797,6 +30894,24 @@
           "description": "Array of column names that can be used to specify what columns should `/{vendor}/pricing` return.\nFor usage information, visit https://labs.alphaus.cloud/blueapidocs/#/Pricing/Pricing_GetPricing."
         }
       }
+    },
+    "v1TagSetting": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "title": "Customer ID"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/billingv1Tag"
+          },
+          "title": "Tags associated with this customer"
+        }
+      },
+      "title": "Settings for a specific customer account for AddTagsToBillingGroup"
     },
     "v1Tags": {
       "type": "object",
