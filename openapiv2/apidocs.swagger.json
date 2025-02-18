@@ -7576,6 +7576,47 @@
         ]
       }
     },
+    "/v1/invoice/{date}:savesettings": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Save invoice settings for the month",
+        "operationId": "Billing_SaveInvoiceSettings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "date",
+            "description": "Required. Invoice date YYYYMM (e.g. 202412)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingSaveInvoiceSettingsBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/invoice:read": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Reads list of the invoice.",
@@ -14856,6 +14897,18 @@
         }
       }
     },
+    "BillingSaveInvoiceSettingsBody": {
+      "type": "object",
+      "properties": {
+        "grouIdToInvoiceSettings": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/billingv1InvoiceSettings"
+          },
+          "title": "Map of billing group Id to InvoiceSettings"
+        }
+      }
+    },
     "BillingSetCustomizedBillingServiceBillingGroupBody": {
       "type": "object",
       "properties": {
@@ -18182,59 +18235,6 @@
       },
       "description": "InvoiceMessage resource definition."
     },
-    "apiInvoiceSettings": {
-      "type": "object",
-      "properties": {
-        "address": {
-          "type": "string"
-        },
-        "groupId": {
-          "type": "string"
-        },
-        "groupName": {
-          "type": "string"
-        },
-        "contact": {
-          "type": "string"
-        },
-        "currency": {
-          "type": "string"
-        },
-        "dueDate": {
-          "type": "string"
-        },
-        "dueDateCustomDay": {
-          "type": "number",
-          "format": "double"
-        },
-        "dueDateDay": {
-          "type": "string"
-        },
-        "dueDateMonth": {
-          "type": "string"
-        },
-        "exchangeRate": {
-          "type": "number",
-          "format": "double"
-        },
-        "invoiceNo": {
-          "type": "string"
-        },
-        "language": {
-          "type": "string"
-        },
-        "phone": {
-          "type": "string"
-        },
-        "postal": {
-          "type": "string"
-        },
-        "title": {
-          "type": "string"
-        }
-      },
-      "description": "InvoiceSettings resource definition."
-    },
     "apiInvoiceTotal": {
       "type": "object",
       "properties": {
@@ -18756,7 +18756,7 @@
           "title": "total: Includes data on billing totals"
         },
         "settings": {
-          "$ref": "#/definitions/apiInvoiceSettings",
+          "$ref": "#/definitions/blueapiapiInvoiceSettings",
           "title": "settings: Includes settings related to billing"
         }
       },
@@ -20471,6 +20471,84 @@
       },
       "title": "Individual tag definition for AddTagsToBillingGroup"
     },
+    "billingv1InvoiceSettings": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string"
+        },
+        "invoiceNo": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "discountRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "discountTargetUsage": {
+          "type": "string"
+        },
+        "discountCalcLogic": {
+          "type": "string"
+        },
+        "taxRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "supportFee": {
+          "type": "string"
+        },
+        "supportRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "supportFeeCalcTarget": {
+          "type": "string"
+        },
+        "supportFix": {
+          "type": "number",
+          "format": "float"
+        },
+        "substitutionFee": {
+          "type": "string"
+        },
+        "substitutionRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "substitutionFix": {
+          "type": "number",
+          "format": "float"
+        },
+        "substitutionFeeCalcTarget": {
+          "type": "string"
+        },
+        "substitutionFeeTargetUsage": {
+          "type": "string"
+        },
+        "substitutionFeeCalcType": {
+          "type": "string"
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "memo": {
+          "type": "string"
+        },
+        "calcType": {
+          "type": "string"
+        },
+        "searchId": {
+          "type": "string"
+        },
+        "additionalItems": {
+          "type": "string"
+        }
+      }
+    },
     "billingv1TagData": {
       "type": "object",
       "properties": {
@@ -20587,6 +20665,59 @@
         }
       },
       "description": "FeeDetails resource definition."
+    },
+    "blueapiapiInvoiceSettings": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "groupId": {
+          "type": "string"
+        },
+        "groupName": {
+          "type": "string"
+        },
+        "contact": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "dueDate": {
+          "type": "string"
+        },
+        "dueDateCustomDay": {
+          "type": "number",
+          "format": "double"
+        },
+        "dueDateDay": {
+          "type": "string"
+        },
+        "dueDateMonth": {
+          "type": "string"
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "invoiceNo": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "postal": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "description": "InvoiceSettings resource definition."
     },
     "blueapiapiNotification": {
       "type": "object",

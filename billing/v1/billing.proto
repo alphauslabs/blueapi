@@ -99,6 +99,14 @@ service Billing {
     };
   }
 
+  // WORK-IN-PROGRESS: Save invoice settings for the month
+  rpc SaveInvoiceSettings(SaveInvoiceSettingsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/invoice/{date}:savesettings"
+      body: "*"
+    };
+  }
+
   // Gets an invoice. Only available in Ripple.
   rpc GetInvoiceStatus(GetInvoiceStatusRequest) returns (api.InvoiceMessage) {
     option (google.api.http) = {
@@ -1953,6 +1961,7 @@ message AddAccountToBillingGroupRequest {
   string note = 6;
 }
 
+
 message AddTagsToBillingGroupRequest {
   // Required. Billing group internal Id
   string groupId = 1;
@@ -2007,4 +2016,36 @@ message SaveTagInvoiceSettingResponse {
   
   // Optional error message if operation failed
   string error = 2;
+  
+message SaveInvoiceSettingsRequest {
+  // Required. Invoice date YYYYMM (e.g. 202412)
+  string date = 2;
+ 
+  // Map of billing group Id to InvoiceSettings
+  map<string, InvoiceSettings> grouIdToInvoiceSettings = 3;
+}
+
+message InvoiceSettings {
+  string vendor = 1;
+  string invoiceNo = 2;
+  string currency = 3;
+  float discountRate = 4;
+  string discountTargetUsage = 5;
+  string discountCalcLogic = 6;
+  float taxRate = 7;
+  string supportFee = 8;
+  float supportRate = 9;
+  string supportFeeCalcTarget = 10;
+  float supportFix = 11;
+  string substitutionFee = 12;
+  float substitutionRate = 13;
+  float substitutionFix = 14;
+  string substitutionFeeCalcTarget = 15;
+  string substitutionFeeTargetUsage = 16;
+  string substitutionFeeCalcType = 17;
+  float exchangeRate = 18;
+  string memo = 19;
+  string calcType = 20;
+  string searchId = 21;
+  string additionalItems = 22;
 }
