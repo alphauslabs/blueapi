@@ -5431,6 +5431,40 @@
         ]
       }
     },
+    "/v1/billinggroups/basicinformation": {
+      "put": {
+        "summary": "Update billing group basic information",
+        "operationId": "Billing_UpdateBillingGroupBasicInformation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateBillingGroupBasicInformationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups/billingconductor/{id}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Gets all Billing Groups in AWS Billing Conductor(ABC) for specific payer id.",
@@ -9753,7 +9787,7 @@
     },
     "/v1/servicediscounts": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Creates the invoice service discounts. Only available in Ripple.",
+        "summary": "Creates the invoice service discounts. Only available in Ripple.",
         "operationId": "Billing_CreateInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -10081,11 +10115,118 @@
         "tags": [
           "Billing"
         ]
+      },
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Deletes the billing group invoice service discounts. Only available in Ripple.",
+        "operationId": "Billing_DeleteBillingGroupInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "groupId",
+            "description": "Required.\n\nFor Ripple, only billing internal ids are supported at the moment. You can set it to a single group\n\nImplied as the parent billing group for Wave(Pro) users.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Registers the billing group invoice service discounts. Only available in Ripple.",
+        "operationId": "Billing_CreateBillingGroupInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateBillingGroupInvoiceServiceDiscountsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "groupId",
+            "description": "Required.\n\nFor Ripple, only billing internal ids are supported at the moment. You can set it to a single group\n\nImplied as the parent billing group for Wave(Pro) users.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingCreateBillingGroupInvoiceServiceDiscountsBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Updates the billing group invoice service discounts. Only available in Ripple.",
+        "operationId": "Billing_UpdateBillingGroupInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateBillingGroupInvoiceServiceDiscountsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "groupId",
+            "description": "Required.\n\nFor Ripple, only billing internal ids are supported at the moment. You can set it to a single group\n\nImplied as the parent billing group for Wave(Pro) users.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingUpdateBillingGroupInvoiceServiceDiscountsBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
       }
     },
     "/v1/servicediscounts/{id}": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Gets the invoice service discounts. Only available in Ripple.",
+        "summary": "Gets the invoice service discounts. Only available in Ripple.",
         "operationId": "Billing_GetInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -10122,7 +10263,7 @@
         ]
       },
       "delete": {
-        "summary": "WORK-IN-PROGRESS: Deletes the invoice service discounts. Only available in Ripple.",
+        "summary": "Deletes the invoice service discounts. Only available in Ripple.",
         "operationId": "Billing_DeleteInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -10153,7 +10294,7 @@
         ]
       },
       "put": {
-        "summary": "WORK-IN-PROGRESS: Updates the invoice service discounts. Only available in Ripple.",
+        "summary": "Updates the invoice service discounts. Only available in Ripple.",
         "operationId": "Billing_UpdateInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -10193,7 +10334,7 @@
     },
     "/v1/servicediscounts/{vendor}/services:read": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Reads the service relate to the service discounts. Only available in Ripple.",
+        "summary": "Reads the service relate to the service discounts. Only available in Ripple.",
         "operationId": "Billing_ReadServiceDiscountsServices",
         "responses": {
           "200": {
@@ -14789,6 +14930,16 @@
       },
       "description": "Request message for the Billing.CreateAdjustmentConfig rpc."
     },
+    "BillingCreateBillingGroupInvoiceServiceDiscountsBody": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Required.\n\nService discount id."
+        }
+      },
+      "description": "Request message for the CreateBillingGroupInvoiceServiceDiscounts rpc."
+    },
     "BillingCreateInvoiceBody": {
       "type": "object",
       "properties": {
@@ -14982,6 +15133,16 @@
         }
       },
       "description": "Request message for the Billing.UpdateAdjustmentConfig rpc."
+    },
+    "BillingUpdateBillingGroupInvoiceServiceDiscountsBody": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Required.\n\nService discount id."
+        }
+      },
+      "description": "Request message for the UpdateBillingGroupInvoiceServiceDiscounts rpc."
     },
     "BillingUpdateBillingGroupInvoiceTemplateBody": {
       "type": "object",
@@ -25419,6 +25580,41 @@
         }
       }
     },
+    "v1BasicInformation": {
+      "type": "object",
+      "properties": {
+        "billingGroupName": {
+          "type": "string"
+        },
+        "billingGroupId": {
+          "type": "string"
+        },
+        "companyName": {
+          "type": "string"
+        },
+        "addressee": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "addressLine1": {
+          "type": "string"
+        },
+        "addressLine2": {
+          "type": "string"
+        }
+      }
+    },
     "v1BillingAccountRequest": {
       "type": "object",
       "properties": {
@@ -25570,11 +25766,11 @@
       "properties": {
         "id": {
           "type": "string",
-          "title": "The id. id:billing internald id"
+          "title": "The id. billing group id"
         },
         "name": {
           "type": "string",
-          "title": "The id. name:billing name"
+          "title": "The name. billing group name"
         },
         "yearMonth": {
           "type": "string",
@@ -26273,6 +26469,16 @@
         }
       },
       "description": "Request message for the Iam.CreateApiClient rpc."
+    },
+    "v1CreateBillingGroupInvoiceServiceDiscountsResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Service discount id."
+        }
+      },
+      "description": "Response message for the CreateBillingGroupInvoiceServiceDiscounts rpc."
     },
     "v1CreateBillingGroupRequest": {
       "type": "object",
@@ -27224,6 +27430,17 @@
         "description": {
           "type": "string",
           "title": "Detailed description of the custom field"
+        }
+      }
+    },
+    "v1CustomFields": {
+      "type": "object",
+      "properties": {
+        "idToKey": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       }
     },
@@ -30312,7 +30529,7 @@
         "limit": {
           "type": "integer",
           "format": "int32",
-          "description": "Optional. Number of acquisitions. default:10."
+          "description": "Optional. Number of acquisitions. default:10０."
         }
       },
       "description": "Request message for the ReadInvoiceGroupCosts rpc."
@@ -30981,10 +31198,10 @@
     "v1TotalDetailSection": {
       "type": "object",
       "properties": {
-        "TrueUnblended": {
+        "totalCost": {
           "type": "number",
           "format": "double",
-          "description": "The true unblended cost."
+          "description": "Cost(True unblended or Unblended) used for invoicing."
         },
         "sppDiscount": {
           "type": "number",
@@ -31103,6 +31320,30 @@
         }
       },
       "title": "Response message for UpdateAlertDetails"
+    },
+    "v1UpdateBillingGroupBasicInformationRequest": {
+      "type": "object",
+      "properties": {
+        "billingInternalId": {
+          "type": "string"
+        },
+        "basicInformation": {
+          "$ref": "#/definitions/v1BasicInformation"
+        },
+        "customFields": {
+          "$ref": "#/definitions/v1CustomFields"
+        }
+      }
+    },
+    "v1UpdateBillingGroupInvoiceServiceDiscountsResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Service discount id."
+        }
+      },
+      "description": "Response message for the UpdateBillingGroupInvoiceServiceDiscounts rpc."
     },
     "v1UpdateBudgetResponse": {
       "type": "object",
