@@ -651,11 +651,10 @@ service Billing {
   // Update billing group basic information
   rpc UpdateBillingGroupBasicInformation(UpdateBillingGroupBasicInformationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/v1/billinggroup"
+      put: "/v1/billinggroup/{id}:basinInfo"
       body: "*"
     };
   }
-
 }
 
 message BillingGroup {
@@ -2147,12 +2146,7 @@ message BasicInformation {
   string addressLine2 = 11;
 }
 
-message CustomFields {
-  map<string, string> idToKey = 2;
-}
-
 message UpdateBillingGroupBasicInformationRequest {
-  string billingInternalId = 1;
+  string id = 1;
   optional BasicInformation basicInformation = 2;
-  optional CustomFields customFields = 3;
 }
