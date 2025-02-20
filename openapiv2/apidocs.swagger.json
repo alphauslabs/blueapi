@@ -5330,6 +5330,54 @@
         ]
       }
     },
+    "/v1/billinggroup/{id}/{vendor}/untaggedgroups": {
+      "post": {
+        "summary": "Sets non-tag group settings for a billing group.",
+        "operationId": "Billing_UpdateNonTagGroupToBillingGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. The billing group's internal id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "vendor",
+            "description": "Required. The vendor (aws, azure, etc)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingUpdateNonTagGroupToBillingGroupBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroup/{id}:basinInfo": {
       "put": {
         "summary": "Update billing group basic information",
@@ -15238,6 +15286,20 @@
         "invoiceServiceDiscounts",
         "updateMask"
       ]
+    },
+    "BillingUpdateNonTagGroupToBillingGroupBody": {
+      "type": "object",
+      "properties": {
+        "settings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1NonTagGroupSetting"
+          },
+          "title": "Required. The settings to update"
+        }
+      },
+      "title": "Request message for updating non-tag group settings for a billing group for UpdateNonTagGroupToBillingGroup"
     },
     "BillingUpdateResellerBody": {
       "type": "object",
@@ -29973,6 +30035,25 @@
         }
       },
       "title": "Response message for ModifyResourceType"
+    },
+    "v1NonTagGroupSetting": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Required. The non-tag group ID"
+        },
+        "type": {
+          "type": "string",
+          "title": "Required. The type of setting (percentage or fixed)"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "title": "Required. The amount value for either percentage or fixed amount"
+        }
+      },
+      "title": "Individual non-tag group setting for UpdateNonTagGroupToBillingGroup"
     },
     "v1NonTagSetting": {
       "type": "object",
