@@ -577,6 +577,14 @@ service Billing {
     };
   }
 
+   // Sets non-tag group settings for a billing group.
+  rpc UpdateNonTagGroupToBillingGroup(UpdateNonTagGroupToBillingGroupRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/billinggroup/vendor/untaggedgroups"
+      body: "*"
+    };
+  }
+
   // Remove a custom field from a billing group
   rpc DeleteBillingGroupCustomField(DeleteBillingGroupCustomFieldRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -2098,6 +2106,30 @@ message SaveTagInvoiceSettingResponse {
   
   // Optional error message if operation failed
   string error = 2;
+}
+
+// Request message for updating non-tag group settings for a billing group for UpdateNonTagGroupToBillingGroup
+message UpdateNonTagGroupToBillingGroupRequest {
+  // Required. The billing group's internal id
+  string companyId = 1;
+  
+  // Required. The vendor (aws, azure, etc)
+  string vendor = 2;
+  
+  // Required. The settings to update
+  repeated NonTagGroupSetting settings = 3;
+}
+
+// Individual non-tag group setting for UpdateNonTagGroupToBillingGroup
+message NonTagGroupSetting {
+  // Required. The non-tag group ID
+  string id = 1;
+  
+  // Required. The type of setting (percentage or fixed)
+  string type = 2;
+  
+  // Required. The amount value for either percentage or fixed amount
+  double amount = 3;
 }
 
 message SaveInvoiceSettingsRequest {
