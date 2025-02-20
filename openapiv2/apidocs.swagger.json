@@ -5330,7 +5330,7 @@
         ]
       }
     },
-    "/v1/billinggroup/vendor/untaggedgroups": {
+    "/v1/billinggroup/{id}/vendor/{vendor}/untaggedgroups": {
       "post": {
         "summary": "Sets non-tag group settings for a billing group.",
         "operationId": "Billing_UpdateNonTagGroupToBillingGroup",
@@ -5351,11 +5351,25 @@
         },
         "parameters": [
           {
+            "name": "id",
+            "description": "Required. The billing group's internal id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "vendor",
+            "description": "Required. The vendor (aws, azure, etc)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1UpdateNonTagGroupToBillingGroupRequest"
+              "$ref": "#/definitions/BillingUpdateNonTagGroupToBillingGroupBody"
             }
           }
         ],
@@ -15272,6 +15286,20 @@
         "invoiceServiceDiscounts",
         "updateMask"
       ]
+    },
+    "BillingUpdateNonTagGroupToBillingGroupBody": {
+      "type": "object",
+      "properties": {
+        "settings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1NonTagGroupSetting"
+          },
+          "title": "Required. The settings to update"
+        }
+      },
+      "title": "Request message for updating non-tag group settings for a billing group for UpdateNonTagGroupToBillingGroup"
     },
     "BillingUpdateResellerBody": {
       "type": "object",
@@ -31537,28 +31565,6 @@
         }
       },
       "description": "Request message for the Organization.UpdateMetadata rpc."
-    },
-    "v1UpdateNonTagGroupToBillingGroupRequest": {
-      "type": "object",
-      "properties": {
-        "companyId": {
-          "type": "string",
-          "title": "Required. The billing group's internal id"
-        },
-        "vendor": {
-          "type": "string",
-          "title": "Required. The vendor (aws, azure, etc)"
-        },
-        "settings": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1NonTagGroupSetting"
-          },
-          "title": "Required. The settings to update"
-        }
-      },
-      "title": "Request message for updating non-tag group settings for a billing group for UpdateNonTagGroupToBillingGroup"
     },
     "v1UpdatePasswordRequest": {
       "type": "object",

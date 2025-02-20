@@ -580,7 +580,7 @@ service Billing {
    // Sets non-tag group settings for a billing group.
   rpc UpdateNonTagGroupToBillingGroup(UpdateNonTagGroupToBillingGroupRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/v1/billinggroup/vendor/untaggedgroups"
+      post: "/v1/billinggroup/{id}/vendor/{vendor}/untaggedgroups"
       body: "*"
     };
   }
@@ -2111,11 +2111,11 @@ message SaveTagInvoiceSettingResponse {
 // Request message for updating non-tag group settings for a billing group for UpdateNonTagGroupToBillingGroup
 message UpdateNonTagGroupToBillingGroupRequest {
   // Required. The billing group's internal id
-  string companyId = 1;
-  
+  string id = 1;
+
   // Required. The vendor (aws, azure, etc)
   string vendor = 2;
-  
+
   // Required. The settings to update
   repeated NonTagGroupSetting settings = 3;
 }
