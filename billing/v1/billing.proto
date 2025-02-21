@@ -663,6 +663,16 @@ service Billing {
       body: "*"
     };
   }
+
+  // Update billing group basic information
+  rpc UpdateBillingGroupCustomFields(UpdateBillingGroupCustomFieldsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/billinggroup/{id}:customFields"
+      body: "*"
+    };
+  }
+
+  
 }
 
 message BillingGroup {
@@ -2187,4 +2197,9 @@ message BasicInformation {
 message UpdateBillingGroupBasicInformationRequest {
   string id = 1;
   BasicInformation basicInformation = 2;
+}
+
+message UpdateBillingGroupCustomFieldsRequest {
+  string id = 1;
+  map<string, string> idToKey = 2;
 }
