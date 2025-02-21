@@ -577,14 +577,6 @@ service Billing {
     };
   }
 
-   // Sets non-tag group settings for a billing group.
-  rpc UpdateNonTagGroupToBillingGroup(UpdateNonTagGroupToBillingGroupRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      post: "/v1/billinggroup/{id}/{vendor}/untaggedgroups"
-      body: "*"
-    };
-  }
-
   // Remove a custom field from a billing group
   rpc DeleteBillingGroupCustomField(DeleteBillingGroupCustomFieldRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -660,6 +652,14 @@ service Billing {
   rpc UpdateBillingGroupBasicInformation(UpdateBillingGroupBasicInformationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/v1/billinggroup/{id}:basinInfo"
+      body: "*"
+    };
+  }
+
+  // Update billing group custom field
+  rpc UpdateBillingGroupCustomField(UpdateBillingGroupCustomFieldRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/billinggroup/{id}:customField"
       body: "*"
     };
   }
@@ -2108,30 +2108,6 @@ message SaveTagInvoiceSettingResponse {
   string error = 2;
 }
 
-// Request message for updating non-tag group settings for a billing group for UpdateNonTagGroupToBillingGroup
-message UpdateNonTagGroupToBillingGroupRequest {
-  // Required. The billing group's internal id
-  string id = 1;
-
-  // Required. The vendor (aws, azure, etc)
-  string vendor = 2;
-
-  // Required. The settings to update
-  repeated NonTagGroupSetting settings = 3;
-}
-
-// Individual non-tag group setting for UpdateNonTagGroupToBillingGroup
-message NonTagGroupSetting {
-  // Required. The non-tag group ID
-  string id = 1;
-  
-  // Required. The type of setting (percentage or fixed)
-  string type = 2;
-  
-  // Required. The amount value for either percentage or fixed amount
-  double amount = 3;
-}
-
 message SaveInvoiceSettingsRequest {
   // Required. Invoice date YYYYMM (e.g. 202412)
   string date = 2;
@@ -2161,12 +2137,8 @@ message InvoiceSettings {
   float exchangeRate = 18;
   string memo = 19;
   string calcType = 20;
-  repeated InvoiceAdditionalItems additionalItems = 21;
-}
-
-message InvoiceAdditionalItems {
-  string name = 1;
-  float price = 2;
+  string searchId = 21;
+  string additionalItems = 22;
 }
 
 message BasicInformation {
@@ -2187,4 +2159,12 @@ message BasicInformation {
 message UpdateBillingGroupBasicInformationRequest {
   string id = 1;
   BasicInformation basicInformation = 2;
+}
+
+message UpdateBillingGroupCustomFieldRequest {
+  // Required. BillingGroupInternalId
+  string id = 1;
+ 
+  // map of customField id to it's key (description)
+  map<string, string> idToKey = 2;
 }
