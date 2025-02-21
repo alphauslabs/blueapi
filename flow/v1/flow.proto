@@ -25,13 +25,57 @@ service Flow {
       get: "/v1/info"
     };
   }
+
+  // Creates a new settings configuration for the user.
+  rpc CreateSettings(CreateSettingsRequest) returns (CreateSettingsResponse) {
+    option (google.api.http) = {
+      post: "/v1/settings:create"
+      body: "*";
+    };
+  }
 }
 
 
 // Request message for the Flow.GetInfo rpc.
 message GetInfoRequest {}
 
+// Request message for the Flow.CreateSettings rpc.
+message CreateSettingsRequest {
+  // Required. The id of the payer.
+  string id = 1;
+
+  // Required. Customization setting for SP.
+  string customization = 2;
+
+  // Required. Term of the SP.
+  string planTerm = 3;
+
+  // Required. Payment option for the SP.
+  string paymentOption = 4;
+
+  // Required. Lookback period for recommendation.
+  string lookBackPeriod = 5;
+
+  // Optional. If EC2 Instance SP is selected in Customization, request will include list/s of instance family
+  string instanceFamily = 6;
+
+  // Required. Annual budget input for SP.
+  string annualBudget = 7;
+
+  // Required. Monthly budget is automatically generated from the annual budget.
+  string monthlyBudget = 8;
+
+  // Required. Purchase approval from the payer for the SP.
+  bool approval = 9;
+}
+
 // Response message for the Flow.GetInfo rpc.
 message GetInfoResponse {
+  string response = 1;
+}
+
+// Response message for the Flow.CreateSettings rpc.
+message CreateSettingsResponse {
+  // 
   string response = 1;
 }
