@@ -2156,25 +2156,51 @@ message SaveInvoiceSettingsRequest {
 }
 
 message InvoiceSettings {
+  // e.g., aws, azure, gcp
   string vendor = 1;
   string invoiceNo = 2;
-  string currency = 3;
   float discountRate = 4;
+
+  // e.g., cloudpaywithfee, ...
   string discountTargetUsage = 5;
+
+  // e.g., usageamount, ... 
   string discountCalcLogic = 6;
   float taxRate = 7;
+
+  // e.g., percent, fix, aws_developer, aws_business, aws_enterprise
   string supportFee = 8;
   float supportRate = 9;
+
+  // e.g., nondiscount, ...
   string supportFeeCalcTarget = 10;
   float supportFix = 11;
+
+  // e.g., percent, fix, automatic, usagetable
   string substitutionFee = 12;
   float substitutionRate = 13;
+
   float substitutionFix = 14;
+
+  // e.g., nondiscount, ...
   string substitutionFeeCalcTarget = 15;
+
+  // e.g., cloudpayonly, cloudpaywithfee
   string substitutionFeeTargetUsage = 16;
+
+  // e.g., allsum, account 
   string substitutionFeeCalcType = 17;
+
+  // Currency used for the invoice (e.g., "jpy", "inr")
+  string currency = 3;
+
+  // Exchange rate from USD to the invoice currency
+  // Example: If the invoice currency is "jpy" and 1 USD = 150 jpy, exchangeRate = 150
   float exchangeRate = 18;
+
   string memo = 19;
+
+  // e.g., account, tag
   string calcType = 20;
   repeated InvoiceAdditionalItems additionalItems = 21;
 }
