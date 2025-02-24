@@ -2048,19 +2048,24 @@ message AddAccountToBillingGroupRequest {
   // Required. (aws, azure, gcp)
   string vendor = 2;
 
-  // Required. account id of the customer
-  string customerId = 3;
-
-  // Required. Payer account id
-  string accountId = 4;
-
-  // Required. Descriptive name
-  string name = 5;
-
-  // Optional. Addition description or notes
-  string note = 6;
+  // Required. List of accounts to be added to the billing group
+  repeated AccountToAdd accounts = 3;
 }
 
+// New message for account details
+message AccountToAdd {
+  // Required. account id of the customer
+  string customerId = 1;
+
+  // Required. Payer account id
+  string accountId = 2;
+
+  // Required. Descriptive name
+  string name = 3;
+
+  // Optional. Addition description or notes
+  string note = 4;
+}
 
 message AddTagsToBillingGroupRequest {
   // Required. Billing group internal Id
