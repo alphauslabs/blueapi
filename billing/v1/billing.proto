@@ -53,6 +53,13 @@ service Billing {
     };
   }
 
+  // Delete a billing group.
+  rpc DeleteBillinGroup(DeleteBillingGroupRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/billinggroup/{id}"
+    };
+  }
+
   // Add a vendor account to a billing group.
   rpc AddAccountToBillingGroup(AddAccountToBillingGroupRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -2233,4 +2240,8 @@ message UpdateBillingGroupBasicInformationRequest {
 message UpdateBillingGroupCustomFieldsRequest {
   string id = 1;
   map<string, string> idToKey = 2;
+}
+
+message DeleteBillingGroupRequest {
+  string id = 1;
 }
