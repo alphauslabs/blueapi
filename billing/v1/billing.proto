@@ -53,6 +53,14 @@ service Billing {
     };
   }
 
+  // Registers a billing group with Merged Endpoints. Only available in Ripple. WORK IN PROGRESS
+rpc CreateBillingGroupMerged(CreateBillingGroupMergedRequest) returns (BillingGroup) {
+  option (google.api.http) = {
+    post: "/v1/billinggroups/merged"
+    body: "*"
+  };
+}
+
   // Delete a billing group.
   rpc DeleteBillinGroup(DeleteBillingGroupRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -880,6 +888,103 @@ message RegisterAccounts {
 
   // Optional. AccountId to be used for registration into the billing group.
   string accountId = 2;
+}
+
+// Optional. Vendor accounts to add to the billing group
+message VendorAccounts {
+  // Required. (aws, azure, gcp)
+  string vendor = 1;
+
+  // Required. List of accounts to be added to the billing group
+  repeated AccountToAdd accounts = 2;
+}
+
+// Optional. Azure-specific options
+message AzureOptions {
+  // Whether to use resource groups
+  bool resourceGroup = 1;
+  
+  // Whether to apply partner-earned credit
+  bool applyPcEarnedCredit = 2;
+  
+  // Whether to apply campaign pricing
+  bool applyCampaignPricing = 3;
+}
+
+// Request message for the CreateBillingGroupMerged rpc.
+message CreateBillingGroupMergedRequest {
+  // Required. The billing group's id.
+  string billingGroupId = 1;
+
+  // Required. The billing group's name.
+  string billingGroupName = 2;
+
+  // Required. Company's name
+  string companyName = 3;
+
+  // Optional. The title of the billing
+  string billingTitle = 4;
+
+  // Optional. Company's phone number
+  string phoneNumber = 5;
+
+  // Optional. Company's postal code
+  string postalCode = 6;
+
+  // Optional. Company's address
+  string address = 7;
+
+  // Optional. Addressee
+  string personal = 8;
+
+  // Optional. Any remarks about the billing group
+  string remarks = 9;
+
+  // Optional. Project code
+  string projectId = 10;
+
+  // Optional. Invoice language
+  string language = 11;
+
+  // Optional. Calculation type, true unblended or unblended
+  string displayCost = 12;
+
+  // Optional. Exchange rate type, payer or billing group
+  string exchangeRateType = 13;
+
+  // Optional. Account options.
+  AccountOptions accountOptions = 15;
+
+  // Invoice settings
+  CreateBillingGroupRequestInvoice invoices = 14;
+
+  // Optional. AWS-specific options
+  AwsOptions awsOptions = 16;
+
+  // Optional. Company's city
+  string city = 17;
+
+  // Optional. Company's prefecture
+  string prefecture = 18;
+
+  // Optional. Company's country
+  string country = 19;
+
+  // Optional. Invoice template ID to associate with the billing group
+  string invoiceTemplateId = 20;
+
+  // Optional. Tag settings for the billing group
+  repeated TagSetting tagSettings = 21;
+
+  // Optional. Non-tag setting for the billing group
+  NonTagSetting nonTagSetting = 22;
+
+  repeated VendorAccounts vendorAccounts = 23;
+
+  // Optional. Custom fields to add to the billing group
+  map<string, string> customFields = 24;
+
+  AzureOptions azureOptions = 25;
 }
 
 // Vendor invoice setttings
