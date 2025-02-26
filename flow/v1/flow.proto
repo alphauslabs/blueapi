@@ -44,28 +44,28 @@ message CreateSettingsRequest {
   // Required. The id of the payer.
   string id = 1;
 
-  // Required. Customization setting for SP.
-  string customization = 2;
+  // Required. Account scope determines if the account is payer or linked account. Valid values are `payer` or `linked`.
+  string accountScope = 2;
 
-  // Required. Term of the SP.
-  string planTerm = 3;
+  // Required. Customization setting for SP. Valid values are `compute sp` or `ec2 instance sp`.
+  string customization = 3;
 
-  // Required. Payment option for the SP.
-  string paymentOption = 4;
+  // Required. Term of the SP. Valid values are `1 year` or `3 years`.
+  string planTerm = 4;
 
-  // Required. Lookback period for recommendation.
-  string lookBackPeriod = 5;
+  // Required. Payment option for the SP. Valid values are `all upfront`, `partial upfront`, or `no upfront`.
+  string paymentOption = 5;
 
-  // Optional. If EC2 Instance SP is selected in Customization, request will include list/s of instance family
-  string instanceFamily = 6;
+  // Required. Lookback period for recommendation. Valid values are `7 days`, `30 days`, or `60 days`.
+  string lookBackPeriod = 6;
 
-  // Required. Annual budget input for SP.
-  string annualBudget = 7;
+  // Optional. If EC2 Instance SP is selected in Customization, request will include list of instance family
+  string instanceFamily = 7;
 
-  // Required. Monthly budget is automatically generated from the annual budget.
-  string monthlyBudget = 8;
+  // Optional. Annual budget input for SP.
+  double annualBudget = 8;
 
-  // Required. Purchase approval from the payer for the SP.
+  // Optional. Purchase approval from the payer for the SP.
   bool approval = 9;
 }
 
