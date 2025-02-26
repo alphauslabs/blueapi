@@ -3,6 +3,7 @@ syntax = "proto3";
 package blueapi.flow.v1;
 
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/flow";
@@ -59,14 +60,17 @@ message CreateSettingsRequest {
   // Optional. If EC2 Instance SP is selected in Customization, request will include list/s of instance family
   string instanceFamily = 6;
 
-  // Required. Annual budget input for SP.
+  // Optional. Annual budget input for SP.
   string annualBudget = 7;
 
-  // Required. Monthly budget is automatically generated from the annual budget.
+  // Monthly budget is automatically generated from the annual budget.
   string monthlyBudget = 8;
 
-  // Required. Purchase approval from the payer for the SP.
+  // Optional. Purchase approval from the payer for the SP.
   bool approval = 9;
+
+  // Auto-generated timestamp when the row is created.
+  google.protobuf.Timestamp createdAt = 10;
 }
 
 // Response message for the Flow.GetInfo rpc.
