@@ -3,7 +3,6 @@ syntax = "proto3";
 package blueapi.flow.v1;
 
 import "google/api/annotations.proto";
-import "google/protobuf/timestamp.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/flow";
@@ -48,7 +47,7 @@ message CreateSettingsRequest {
   // Required. Account scope determines if the account is payer or linked account. Valid values are `payer` or `linked`.
   string accountScope = 2;
 
-  // Required. Customization setting for SP. Valid values are `compute sp`, `ec2 instance sp`, or `sagemaker sp`.
+  // Required. Customization setting for SP. Valid values are `compute sp` or `ec2 instance sp`.
   string customization = 3;
 
   // Required. Term of the SP. Valid values are `1 year` or `3 years`.
@@ -68,9 +67,6 @@ message CreateSettingsRequest {
 
   // Optional. Purchase approval from the payer for the SP.
   bool approval = 9;
-
-  // Auto-generated timestamp when the row is created.
-  google.protobuf.Timestamp createdAt = 10;
 }
 
 // Response message for the Flow.GetInfo rpc.
