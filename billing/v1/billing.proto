@@ -2260,16 +2260,26 @@ message NonTagGroupSetting {
 }
 
 message SaveInvoiceSettingsRequest {
-  // Required. Invoice date YYYYMM (e.g. 202412)
-  string date = 2;
- 
-  // Map of billing group Id to InvoiceSettings
-  map<string, InvoiceSettings> grouIdToInvoiceSettings = 3;
+  // Required. Invoice month. Format: `yyyymm`.
+  string date = 1;
+  
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 2;
+
+  // Optional. You can set all billing groups.
+  //
+  // If true the setting would be apply to all group.
+  bool allGroups = 3;
+
+  // Optional. groups to apply the invoices setting
+  // this is ignored if allGroups is true.
+  repeated string groups = 4;
+
+  // Required. Invoice setting.
+  InvoiceSettings invoiceSetting = 5;
 }
 
 message InvoiceSettings {
-  // e.g., aws, azure, gcp
-  string vendor = 1;
   string invoiceNo = 2;
   float discountRate = 4;
 
