@@ -1395,6 +1395,14 @@ message CreateInvoiceRequest {
 
   // Optional. You can set it to a list of billing internal group id
   repeated string groups = 3;
+
+  // Required. if true the invoiceSetting in the request would be ignored
+  // and use the billing group settings to generate invoice
+  bool useBillingGroupSetting = 5;
+
+  // Required. Configuration settings for the invoice
+  // if value is empty or invalid billing group setting would be use
+  BillingGroupVendoredInvoiceSetting invoiceSetting = 6;
 }
 
 // Request message for the GetInvoiceStatus rpc.
