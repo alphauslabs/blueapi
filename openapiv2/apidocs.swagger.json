@@ -10805,6 +10805,160 @@
         ]
       }
     },
+    "/v1/unitcost/sharedresources": {
+      "get": {
+        "summary": "List all Shared Resources",
+        "operationId": "Cover_ListSharedResources",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListSharedResourcesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      },
+      "post": {
+        "summary": "Create Shared Resource",
+        "operationId": "Cover_CreateSharedResource",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateSharedResourcesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateSharedResourcesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/unitcost/sharedresources/{id}": {
+      "get": {
+        "summary": "Get Specific Shared Resource",
+        "operationId": "Cover_GetSharedResource",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetSharedResourcesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. Shared Resource Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "delete": {
+        "summary": "Delete Specific Shared Resource",
+        "operationId": "Cover_DeleteSharedResource",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteSharedResourcesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. Shared Resource Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
+      "put": {
+        "summary": "Update Specific Shared Resource",
+        "operationId": "Cover_UpdateSharedResource",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateSharedResourcesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. Shared Resource Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CoverUpdateSharedResourceBody"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/unitcost/{id}": {
       "get": {
         "summary": "Get Specific Unit Type",
@@ -16634,6 +16788,41 @@
         }
       },
       "title": "Request message for UpdateMemberPermission"
+    },
+    "CoverUpdateSharedResourceBody": {
+      "type": "object",
+      "properties": {
+        "sharedResourceName": {
+          "type": "string",
+          "title": "Optional"
+        },
+        "sharedResourcesCombinations": {
+          "$ref": "#/definitions/coverResourcesCombinations",
+          "title": "Optional"
+        },
+        "distribution": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
+          },
+          "title": "Optional"
+        },
+        "allocated": {
+          "type": "number",
+          "format": "double",
+          "title": "Optional"
+        },
+        "unallocated": {
+          "type": "number",
+          "format": "double",
+          "title": "Optional"
+        },
+        "description": {
+          "type": "string",
+          "title": "Optional"
+        }
+      }
     },
     "CoverUpdateSideMenuStateBody": {
       "type": "object",
@@ -23424,6 +23613,9 @@
     "coverSharedResourcesCombination": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "combinationName": {
           "type": "string"
         },
@@ -23652,6 +23844,12 @@
             "$ref": "#/definitions/coverUnitItem"
           }
         },
+        "vendors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "sharedResources": {
           "type": "array",
           "items": {
@@ -23682,6 +23880,12 @@
         },
         "dedicatedResourcesCombinations": {
           "$ref": "#/definitions/coverResourcesCombinations"
+        },
+        "vendors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -27747,6 +27951,44 @@
       },
       "description": "Response message for the Flow.CreateSettings rpc."
     },
+    "v1CreateSharedResourcesRequest": {
+      "type": "object",
+      "properties": {
+        "sharedResourceName": {
+          "type": "string"
+        },
+        "sharedResourcesCombinations": {
+          "$ref": "#/definitions/coverResourcesCombinations"
+        },
+        "distribution": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
+          },
+          "description": "List the unit items and their corresponding percentages."
+        },
+        "allocated": {
+          "type": "number",
+          "format": "double"
+        },
+        "unallocated": {
+          "type": "number",
+          "format": "double"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreateSharedResourcesResponse": {
+      "type": "object",
+      "properties": {
+        "sharedResources": {
+          "$ref": "#/definitions/coverSharedResourcesCombination"
+        }
+      }
+    },
     "v1CreateUnitTypeRequest": {
       "type": "object",
       "properties": {
@@ -28033,6 +28275,14 @@
         }
       },
       "title": "Response message for DeleteMember"
+    },
+    "v1DeleteSharedResourcesResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
     },
     "v1DeleteUnitTypeResponse": {
       "type": "object",
@@ -29549,6 +29799,14 @@
       },
       "title": "Response message for GetServices"
     },
+    "v1GetSharedResourcesResponse": {
+      "type": "object",
+      "properties": {
+        "sharedResources": {
+          "$ref": "#/definitions/coverSharedResourcesCombination"
+        }
+      }
+    },
     "v1GetSupportedServicesResponse": {
       "type": "object",
       "properties": {
@@ -30321,6 +30579,18 @@
         }
       },
       "description": "Response message for the Iam.ListRoles rpc."
+    },
+    "v1ListSharedResourcesResponse": {
+      "type": "object",
+      "properties": {
+        "sharedResources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverSharedResourcesCombination"
+          }
+        }
+      }
     },
     "v1ListSuggestedUnitsResponse": {
       "type": "object",
@@ -31976,6 +32246,14 @@
         }
       },
       "description": "Request message for the Organization.UpdatePassword rpc."
+    },
+    "v1UpdateSharedResourcesResponse": {
+      "type": "object",
+      "properties": {
+        "sharedResources": {
+          "$ref": "#/definitions/coverSharedResourcesCombination"
+        }
+      }
     },
     "v1UpdateSideMenuStateResponse": {
       "type": "object",

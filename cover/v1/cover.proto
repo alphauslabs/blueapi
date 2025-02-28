@@ -1254,6 +1254,42 @@ service Cover {
     };
   }
   
+  // List all Shared Resources
+  rpc ListSharedResources(ListSharedResourcesRequest) returns (ListSharedResourcesResponse) {
+    option (google.api.http) = {
+      get: "/v1/unitcost/sharedresources"
+    };
+  }
+
+  // Create Shared Resource
+  rpc CreateSharedResource(CreateSharedResourcesRequest) returns (CreateSharedResourcesResponse) {
+    option (google.api.http) = {
+      post: "/v1/unitcost/sharedresources"
+      body: "*"
+    };
+  }
+
+  // Get Specific Shared Resource
+  rpc GetSharedResource(GetSharedResourcesRequest) returns (GetSharedResourcesResponse) {
+    option (google.api.http) = {
+      get: "/v1/unitcost/sharedresources/{id}"
+    };
+  }
+
+  // Update Specific Shared Resource
+  rpc UpdateSharedResource(UpdateSharedResourcesRequest) returns (UpdateSharedResourcesResponse) {
+    option (google.api.http) = {
+      put: "/v1/unitcost/sharedresources/{id}"
+      body: "*"
+    };
+  }
+
+  // Delete Specific Shared Resource
+  rpc DeleteSharedResource(DeleteSharedResourcesRequest) returns (DeleteSharedResourcesResponse) {
+    option (google.api.http) = {
+      delete: "/v1/unitcost/sharedresources/{id}"
+    };
+  }
 
   rpc VerifyAPIAccess(VerifyAPIAccessRequest) returns (VerifyAPIAccessResponse) {
     option (google.api.http) = {
@@ -3765,4 +3801,70 @@ message ListSuggestedUnitsRequest{
 
 message ListSuggestedUnitsResponse{
   repeated api.cover.SuggestedUnit suggestedUnits = 1;
+}
+
+message ListSharedResourcesRequest{
+}
+
+message ListSharedResourcesResponse{
+  repeated api.cover.SharedResourcesCombination sharedResources = 1;
+}
+
+message CreateSharedResourcesRequest{
+  string sharedResourceName = 1;
+  api.cover.ResourcesCombinations sharedResourcesCombinations = 2;
+  // List the unit items and their corresponding percentages.
+  map<string, double> distribution = 3;
+  double allocated = 4;
+  double unallocated = 5;
+  string description = 6;
+}
+
+message CreateSharedResourcesResponse{
+  api.cover.SharedResourcesCombination sharedResources = 1;
+}
+
+message GetSharedResourcesRequest{
+  //Required. Shared Resource Id
+  string id = 1;
+}
+
+message GetSharedResourcesResponse{
+  api.cover.SharedResourcesCombination sharedResources = 1;
+}
+
+message UpdateSharedResourcesRequest{
+  //Required. Shared Resource Id
+  string id = 1;
+
+  //Optional
+  string sharedResourceName = 2;
+
+  //Optional
+  api.cover.ResourcesCombinations sharedResourcesCombinations = 3;
+
+  //Optional
+  map<string, double> distribution = 4;
+
+  //Optional
+  double allocated = 5;
+
+  //Optional
+  double unallocated = 6;
+
+  //Optional
+  string description = 7;
+}
+
+message UpdateSharedResourcesResponse{
+  api.cover.SharedResourcesCombination sharedResources = 1;
+}
+
+message DeleteSharedResourcesRequest{
+  //Required. Shared Resource Id
+  string id = 1;
+}
+
+message DeleteSharedResourcesResponse{
+  string id = 1;
 }
