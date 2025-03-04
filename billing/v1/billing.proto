@@ -114,6 +114,14 @@ rpc CreateBillingGroupMerged(CreateBillingGroupMergedRequest) returns (BillingGr
     };
   }
 
+  // Creates an invoice and add settings. Only available in Ripple.
+  rpc CreateInvoiceWithSettings(SaveInvoiceSettingsRequest) returns (api.InvoiceMessage) {
+    option (google.api.http) = {
+      post: "/v1/invoice/{date}:create&savesettings"
+      body: "*"
+    };
+  }
+
   // WORK-IN-PROGRESS: Save invoice settings for the month
   rpc SaveInvoiceSettings(SaveInvoiceSettingsRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
