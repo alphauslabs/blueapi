@@ -703,6 +703,15 @@ rpc CreateBillingGroupMerged(CreateBillingGroupMergedRequest) returns (BillingGr
     };
   }
 
+    // Update billing group invoice setting
+  rpc UpdateBillingGroupInvoiceSettings(UpdateBillingGroupInvoiceSettingsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/billinggroup/{id}:invoiceSettings"
+      body: "*"
+    };
+  }
+
+
   
 }
 
@@ -2425,4 +2434,14 @@ message UpdateBillingGroupCustomFieldsRequest {
 
 message DeleteBillingGroupRequest {
   string id = 1;
+}
+
+message UpdateBillingGroupInvoiceSettingsRequest {
+  string id = 1;
+  string language = 2;
+  string displayCost = 3;
+  string exchangeRateType = 4;
+  string currency = 5;
+  string billingTitle = 6;
+  optional map<string, InvoiceSettings> settings = 7;
 }
