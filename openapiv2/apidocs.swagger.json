@@ -7649,6 +7649,46 @@
         ]
       }
     },
+    "/v1/invoice/{date}:create\u0026savesettings": {
+      "post": {
+        "summary": "Creates an invoice and add settings. Only available in Ripple.",
+        "operationId": "Billing_CreateInvoiceWithSettings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiInvoiceMessage"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "date",
+            "description": "Required. Invoice month. Format: `yyyymm`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingCreateInvoiceWithSettingsBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/invoice/{date}:export": {
       "post": {
         "summary": "Exports an invoice.",
@@ -15405,6 +15445,30 @@
         }
       },
       "description": "Request message for the CreateInvoice rpc."
+    },
+    "BillingCreateInvoiceWithSettingsBody": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "allGroups": {
+          "type": "boolean",
+          "description": "Optional. You can set all billing groups.\n\nIf true the setting would be apply to all group."
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. groups to apply the invoices setting\nthis is ignored if allGroups is true."
+        },
+        "invoiceSetting": {
+          "$ref": "#/definitions/billingv1InvoiceSettings",
+          "description": "Required. Invoice setting."
+        }
+      }
     },
     "BillingExportInvoiceFileBody": {
       "type": "object",
