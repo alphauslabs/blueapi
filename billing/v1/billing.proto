@@ -432,6 +432,14 @@ rpc CreateBillingGroupMerged(CreateBillingGroupMergedRequest) returns (BillingGr
     };
   }
 
+  // WORK-IN-PROGRESS: Applies the adjustment entry item. Only available in Ripple.
+  rpc ApplyInvoiceAdjustments(ApplyInvoiceAdjustmentsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/invoiceadjustments:apply"
+      body: "*"
+    };
+  }
+
   // WORK-IN-PROGRESS: Returns all registered accounts that are not associated to any billing groups and accounts found in CUR for the specified month. For Ripple only
   rpc ListAccountResources(ListAccountResourcesRequest) returns (stream ResourceAccount) {
     option (google.api.http) = {
@@ -1730,6 +1738,45 @@ message ReadInvoiceAdjustmentsRequest {
   // Optional. If empty, defaults to all fee type. At the moment, only `Fee`,`Refund`,`Credit`,`SppDiscount`,`EdpDiscount`,`BundledDiscount` is supported.
   string feeType = 4;
 }
+
+// Request message for the Billing.ApplyInvoiceAdjustments rpc.
+message ApplyInvoiceAdjustmentsRequest {
+
+  // AdjustmentSetting
+  message AdjustmentSetting {
+    // Required. apply. if apply is true, the adjustment will be applied to the invoice.
+    // if apply is false, the adjustment will be removed from the invoice.
+    bool apply = 1;
+
+    // apply to month. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, June 2021 will be `202106`.
+    string month = 2;
+
+    // Optional. tax free setting.
+    bool taxFree = 3;
+
+    // Optional. exchange rate.
+    float exchangeRate = 4;
+
+    // Optional. apply to billing internal id.
+    string billingInternalId = 5;
+  } 
+
+  // AdjustmentSetting. root setting.
+  AdjustmentSetting setting = 1;
+
+  // AdjustmentEntry. target ids
+  message AdjustmentEntry {
+    // Required. id. adjustment entry id
+    string id = 1;
+
+    // Optional. AdjustmentSetting. If this setting is configured, it will take precedence.
+    AdjustmentSetting setting = 2;
+  }
+
+  // Required. AdjustmentEntry
+  repeated AdjustmentEntry entries = 2;
+}
+
 
 //Request message for the Billing.ListAccountResources rpc.
 message ListAccountResourcesRequest {
