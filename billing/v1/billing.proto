@@ -16,6 +16,7 @@ import "api/ripple/exchangerate.proto";
 import "api/ripple/untaggedgroup.proto";
 import "api/ripple/customizedbillingservice.proto";
 import "api/ripple/v1/invoiceservicediscounts.proto";
+import "api/ripple/v1/accountsupportplan.proto";
 import "api/adjustment.proto";
 import "api/wave/adjustment.proto";
 import "google/api/annotations.proto";
@@ -703,7 +704,20 @@ service Billing {
     };
   }
 
-  
+  // WORK-IN-PROGRESS: Gets the account support plan in billing group. Only available in Ripple.
+  rpc GetBillingGroupAccountSupportPlan(GetBillingGroupAccountSupportPlanRequest) returns (stream api.ripple.v1.BillingGroupAccountSupportPlan) {
+    option (google.api.http) = {
+      get: "/v1/billinggroup/{id}/{vendor}/supportplan"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Updates the account support plan in billing group. Only available in Ripple.
+  rpc UpdateBillingGroupAccountSupportPlan(UpdateBillingGroupAccountSupportPlanRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/billinggroup/{id}/{vendor}/supportplan"
+      body: "*"
+    };
+  }
 }
 
 message BillingGroup {
@@ -2425,4 +2439,33 @@ message UpdateBillingGroupCustomFieldsRequest {
 
 message DeleteBillingGroupRequest {
   string id = 1;
+}
+
+// Request message for the GetBillingGroupAccountSupportPlan rpc.
+message GetBillingGroupAccountSupportPlanRequest {
+  // Required. The billing internal id.
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. At the moment, `aws` is supported.
+  string vendor = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request message for the UpdateBillingGroupAccountSupportPlan rpc.
+message UpdateBillingGroupAccountSupportPlanRequest {
+  // Required. The billing internal id.
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. At the moment, `aws` is supported.
+  string vendor = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. The enabled indicates whether the account support plan is enabled or disabled.
+  bool enabled = 3 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. The support plan setting. [blueapi.api.ripple.v1.BillingGroupAccountSupportPlan].
+  repeated api.ripple.v1.BillingGroupAccountSupportPlan setting = 4 [(google.api.field_behavior) = OPTIONAL];
+  
+  // Required.
+  // If the `enabled` is set, only the `enabled` will be updated. If you want to update all values, please set both `enabled` and `setting`.
+  google.protobuf.FieldMask updateMask = 5
+      [(google.api.field_behavior) = REQUIRED];
 }

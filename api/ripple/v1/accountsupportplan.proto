@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package blueapi.api.ripple.v1;
+
+import "google/api/field_behavior.proto";
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/ripple/v1";
+option java_package = "cloud.alphaus.blueapi.api.ripple.v1";
+option java_outer_classname = "ApiRippleAccountSupportPlanProto";
+
+// Billing Group Account Support Plan resource definition.
+message BillingGroupAccountSupportPlan {
+  // The account id.
+  string id = 1;
+
+  // The account name.
+  string name = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The support plan.
+  SupportPlan plan = 3;
+}
+
+// Describes the overall config of a [blueapi.api.ripple.v1.SupportPlan].
+enum SupportPlan {
+  // no_support
+  NO_SUPPORT = 0;
+
+  // aws_developer
+  AWS_DEVELOPER = 1;
+
+  // aws_business
+  AWS_BUSINESS = 2;
+
+  // aws_enterprise
+  AWS_ENTERPRISE = 3;
+
+  // aws_enterprise_on_ramp
+  AWS_ENTERPRISE_ON_RAMP = 4;
+}
