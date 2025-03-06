@@ -705,7 +705,7 @@ service Billing {
   }
 
   // WORK-IN-PROGRESS: Gets the account support plan in billing group. Only available in Ripple.
-  rpc GetBillingGroupAccountSupportPlan(GetBillingGroupAccountSupportPlanRequest) returns (stream api.ripple.v1.BillingGroupAccountSupportPlan) {
+  rpc GetBillingGroupAccountSupportPlan(GetBillingGroupAccountSupportPlanRequest) returns (GetBillingGroupAccountSupportPlanResponse) {
     option (google.api.http) = {
       get: "/v1/billinggroup/{id}/{vendor}/supportplan"
     };
@@ -1189,7 +1189,6 @@ message ExportInvoiceFileResponse {
   string url = 1;
 }
 
-
 // Request message for the ReadServiceDiscountsServices rpc.
 message ReadServiceDiscountsServicesRequest {
   // Required. At the moment, only `aws`,`azure`,`gcp` is supported.
@@ -1544,7 +1543,6 @@ message UpdateResellerRequest {
       [(google.api.field_behavior) = REQUIRED];
 }
 
-
 // Request message for the DeleteReseller rpc.
 message DeleteResellerRequest {
   // Required. reseller id.
@@ -1603,7 +1601,6 @@ message ListExchangeRatesResponse {
   // The payer exchange rate.
   api.ripple.VendorPayerExchangeRate payer = 4;
 }
-
 
 // Request message for the ListAccessGroups rpc.
 message ListAccessGroupsRequest {
@@ -1667,9 +1664,8 @@ message ListInvoiceRequest {
   string date = 1;
  
   // OPTIONAL: vendor (aws, azure, gcp)
-  string vendor = 2; 
+  string vendor = 2;
 }
-
 
 // Response message for the ListInvoice rpc.
 message ListInvoiceResponse {
@@ -1744,6 +1740,7 @@ message AbcAccount {
   string accountName = 2;
 
 }
+
 // Request message for the Billing.ReadInvoiceAdjustments rpc.
 message ReadInvoiceAdjustmentsRequest {
   // Required. At the moment, only `aws`,`azure`,`gcp` is supported.
@@ -1797,7 +1794,6 @@ message ApplyInvoiceAdjustmentsRequest {
   // Required. AdjustmentEntry
   repeated AdjustmentEntry entries = 2;
 }
-
 
 //Request message for the Billing.ListAccountResources rpc.
 message ListAccountResourcesRequest {
@@ -2183,7 +2179,6 @@ message ExportBillingGroupCsvRequest {
   string language = 2 [(google.api.field_behavior) = OPTIONAL];
 }
 
-
 // Response message for the ExportBillingGroupCsv rpc.
 message ExportBillingGroupCsvResponse {
   // csv direct download link
@@ -2446,6 +2441,21 @@ message GetBillingGroupAccountSupportPlanRequest {
 
   // Required. At the moment, `aws` is supported.
   string vendor = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response message for the GetBillingGroupAccountSupportPlan rpc.
+message GetBillingGroupAccountSupportPlanResponse {
+  // The billing internal id.
+  string id = 1;
+
+  // At the moment, `aws` is supported.
+  string vendor = 2;
+
+  // The enabled indicates whether the account support plan is enabled or disabled.
+  bool enabled = 3;
+
+  // The support plan setting. [blueapi.api.ripple.v1.BillingGroupAccountSupportPlan].
+  repeated api.ripple.v1.BillingGroupAccountSupportPlan setting = 4;
 }
 
 // Request message for the UpdateBillingGroupAccountSupportPlan rpc.
