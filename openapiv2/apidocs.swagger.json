@@ -12254,6 +12254,233 @@
         ]
       }
     },
+    "/v1/{vendor}/adjustmententries/{id}/allocate": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Allocates the adjustment entry item. Only available in Ripple.",
+        "operationId": "Billing_AllocateAdjustmentEntry",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws`,`azure`,`gcp` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. AdjustmentEntry ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingAllocateAdjustmentEntryBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/{vendor}/adjustmententries/{id}/split": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Splits the adjustment entry item. Only available in Ripple.",
+        "operationId": "Billing_SplitAdjustmentEntry",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws`,`azure`,`gcp` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. AdjustmentEntry ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingSplitAdjustmentEntryBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/{vendor}/adjustmententries:apply": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Applies the adjustment entry item. Only available in Ripple.",
+        "operationId": "Billing_ApplyAdjustmentEntry",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws`,`azure`,`gcp` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingApplyAdjustmentEntryBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/{vendor}/adjustmententries:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Reads the adjustment entries. Only available in Ripple.",
+        "operationId": "Billing_ReadAdjustmentEntries",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/ripplev1AdjustmentEntry"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of ripplev1AdjustmentEntry"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws`,`azure`,`gcp` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingReadAdjustmentEntriesBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/{vendor}/adjustmententries:restore": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Restores the adjustment entry item. Only available in Ripple.",
+        "operationId": "Billing_RestoreAdjustmentEntry",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws`,`azure`,`gcp` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingRestoreAdjustmentEntryBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/{vendor}/adjustments:read": {
       "post": {
         "summary": "Reads the non-usage-based details of an organization (Ripple) or billing group (Wave[Pro]).",
@@ -13893,46 +14120,6 @@
         ]
       }
     },
-    "/v1/{vendor}/invoiceadjustments:apply": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Applies the adjustment entry item. Only available in Ripple.",
-        "operationId": "Billing_ApplyInvoiceAdjustments",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/BillingApplyInvoiceAdjustmentsBody"
-            }
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
-      }
-    },
     "/v1/{vendor}/invoiceadjustments:read": {
       "post": {
         "summary": "Reads the adjustment details involved in invoicing of an organization billing group (Wave).",
@@ -15405,30 +15592,12 @@
       },
       "description": "Request message for the Admin.UpdateNotificationChannel rpc."
     },
-    "ApplyInvoiceAdjustmentsRequestAdjustmentEntry": {
+    "ApplyAdjustmentEntryRequestApplySetting": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "title": "Required. id. adjustment entry id"
-        },
-        "setting": {
-          "$ref": "#/definitions/ApplyInvoiceAdjustmentsRequestAdjustmentSetting",
-          "description": "Optional. AdjustmentSetting. If this setting is configured, it will take precedence."
-        }
-      },
-      "title": "AdjustmentEntry. target ids"
-    },
-    "ApplyInvoiceAdjustmentsRequestAdjustmentSetting": {
-      "type": "object",
-      "properties": {
-        "apply": {
-          "type": "boolean",
-          "description": "Required. apply. if apply is true, the adjustment will be applied to the invoice.\nif apply is false, the adjustment will be removed from the invoice."
-        },
         "month": {
           "type": "string",
-          "description": "apply to month. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, June 2021 will be `202106`."
+          "description": "Optional. apply to month. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, June 2021 will be `202106`."
         },
         "taxFree": {
           "type": "boolean",
@@ -15436,33 +15605,41 @@
         },
         "exchangeRate": {
           "type": "number",
-          "format": "float",
+          "format": "double",
           "description": "Optional. exchange rate."
         },
         "billingInternalId": {
           "type": "string",
-          "description": "Optional. apply to billing internal id."
+          "description": "Optional. apply to billing internal ID."
         }
       },
       "title": "AdjustmentSetting"
     },
-    "BillingApplyInvoiceAdjustmentsBody": {
+    "BillingAllocateAdjustmentEntryBody": {
+      "type": "object",
+      "description": "Request message for the Billing.AllocateAdjustmentEntry rpc."
+    },
+    "BillingApplyAdjustmentEntryBody": {
       "type": "object",
       "properties": {
         "setting": {
-          "$ref": "#/definitions/ApplyInvoiceAdjustmentsRequestAdjustmentSetting",
-          "description": "AdjustmentSetting. root setting."
+          "$ref": "#/definitions/ApplyAdjustmentEntryRequestApplySetting",
+          "description": "Required. ApplySetting. root setting."
         },
         "entries": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/ApplyInvoiceAdjustmentsRequestAdjustmentEntry"
+            "$ref": "#/definitions/v1ApplyAdjustmentEntryRequestAdjustmentEntry"
           },
-          "title": "Required. AdjustmentEntry"
+          "description": "Required. List of AdjustmentEntry."
         }
       },
-      "description": "Request message for the Billing.ApplyInvoiceAdjustments rpc."
+      "description": "Request message for the Billing.ApplyAdjustmentEntry rpc.",
+      "required": [
+        "setting",
+        "entries"
+      ]
     },
     "BillingCreateAccountInvoiceServiceDiscountsBody": {
       "type": "object",
@@ -15597,6 +15774,16 @@
       },
       "description": "Request message for the Billing.ListUsageCostsDrift rpc."
     },
+    "BillingReadAdjustmentEntriesBody": {
+      "type": "object",
+      "properties": {
+        "month": {
+          "type": "string",
+          "description": "Optional. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, June 2021 will be `202106`."
+        }
+      },
+      "description": "Request message for the Billing.ReadAdjustmentEntries rpc."
+    },
     "BillingReadInvoiceAdjustmentsBody": {
       "type": "object",
       "properties": {
@@ -15642,6 +15829,22 @@
         }
       }
     },
+    "BillingRestoreAdjustmentEntryBody": {
+      "type": "object",
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required. List of AdjustmentEntry IDs."
+        }
+      },
+      "description": "Request message for the Billing.RestoreAdjustmentEntry rpc.",
+      "required": [
+        "entries"
+      ]
+    },
     "BillingSaveInvoiceSettingsBody": {
       "type": "object",
       "properties": {
@@ -15681,6 +15884,19 @@
       "description": "Request message for the Billing.SetCustomizedBillingServiceBillingGroup rpc.",
       "required": [
         "setting"
+      ]
+    },
+    "BillingSplitAdjustmentEntryBody": {
+      "type": "object",
+      "properties": {
+        "startMonth": {
+          "type": "string",
+          "description": "Required. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, June 2021 will be `202106`."
+        }
+      },
+      "description": "Request message for the Billing.SplitAdjustmentEntry rpc.",
+      "required": [
+        "startMonth"
       ]
     },
     "BillingUpdateAccessGroupBody": {
@@ -24159,6 +24375,12 @@
           "items": {
             "type": "string"
           }
+        },
+        "createTime": {
+          "type": "string"
+        },
+        "lastUpdatedAt": {
+          "type": "string"
         }
       }
     },
@@ -25672,6 +25894,32 @@
       },
       "description": "WORK-IN-PROGRESS: totalInvoiceLayout resource definition."
     },
+    "ripplev1AdjustmentEntry": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The adjustment entry ID."
+        },
+        "name": {
+          "type": "string",
+          "description": "The adjustment entry name."
+        },
+        "account": {
+          "$ref": "#/definitions/v1AdjustmentEntryAccountInfo",
+          "description": "Account info."
+        },
+        "entry": {
+          "$ref": "#/definitions/v1AdjustmentEntryInfo",
+          "description": "Adjustment entry info."
+        },
+        "setting": {
+          "$ref": "#/definitions/v1AdjustmentEntrySetting",
+          "description": "Adjustment entry setting."
+        }
+      },
+      "description": "AdjustmentEntry resource definition."
+    },
     "v1AbcAccount": {
       "type": "object",
       "properties": {
@@ -26129,6 +26377,113 @@
         }
       }
     },
+    "v1AdjustmentEntryAccountInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The account ID."
+        },
+        "name": {
+          "type": "string",
+          "description": "The account name."
+        },
+        "vendor": {
+          "type": "string",
+          "description": "The vendor."
+        },
+        "billingInternalId": {
+          "type": "string",
+          "description": "The billing internal ID."
+        },
+        "billingGroupId": {
+          "type": "string",
+          "description": "The billing group ID."
+        },
+        "billingGroupName": {
+          "type": "string",
+          "description": "The billing group name."
+        },
+        "currency": {
+          "type": "string",
+          "description": "The billing group currency."
+        }
+      },
+      "description": "AdjustmentEntryAccountInfo resource definition."
+    },
+    "v1AdjustmentEntryInfo": {
+      "type": "object",
+      "properties": {
+        "calculationType": {
+          "type": "string",
+          "description": "The calculation type."
+        },
+        "adjustmentEntryType": {
+          "type": "string",
+          "description": "The adjustment entry type."
+        },
+        "description": {
+          "type": "string",
+          "description": "The adjustment entry description."
+        },
+        "productCode": {
+          "type": "string",
+          "description": "The product code."
+        },
+        "productName": {
+          "type": "string",
+          "description": "The product name."
+        },
+        "currency": {
+          "type": "string",
+          "description": "The currency."
+        },
+        "amount": {
+          "type": "string",
+          "description": "The amount."
+        },
+        "timeInterval": {
+          "type": "string",
+          "description": "The time interval."
+        },
+        "usageStart": {
+          "type": "string",
+          "description": "The usage start."
+        }
+      },
+      "description": "AdjustmentEntryInfo resource definition."
+    },
+    "v1AdjustmentEntrySetting": {
+      "type": "object",
+      "properties": {
+        "apply": {
+          "type": "boolean",
+          "description": "Applied to the billing."
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double",
+          "description": "The exchange rate applied to the billing."
+        },
+        "taxFree": {
+          "type": "boolean",
+          "description": "The tax free applied to the billing."
+        },
+        "allocateType": {
+          "type": "string",
+          "description": "The allocate type indicates the type to which an entry has been allocated."
+        },
+        "splitType": {
+          "type": "string",
+          "description": "The split type indicates the type to which an entry has been splitted."
+        },
+        "originalId": {
+          "type": "string",
+          "description": "The original ID represents the originally allocated or splitted ID."
+        }
+      },
+      "description": "AdjustmentEntrySetting resource definition."
+    },
     "v1AllocationItem": {
       "type": "object",
       "properties": {
@@ -26250,6 +26605,23 @@
         }
       },
       "title": "Message response for anomaly detection"
+    },
+    "v1ApplyAdjustmentEntryRequestAdjustmentEntry": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Required. adjustment entry ID."
+        },
+        "setting": {
+          "$ref": "#/definitions/ApplyAdjustmentEntryRequestApplySetting",
+          "description": "Optional. ApplySetting. If this setting is configured, it will take precedence."
+        }
+      },
+      "title": "AdjustmentEntry. target IDs",
+      "required": [
+        "id"
+      ]
     },
     "v1AssetsSummary": {
       "type": "object",
