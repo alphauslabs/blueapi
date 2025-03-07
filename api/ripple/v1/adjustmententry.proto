@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package blueapi.api.ripple.v1;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/ripple/v1";
+option java_package = "cloud.alphaus.blueapi.api.ripple.v1";
+option java_outer_classname = "ApiRippleAdjustmentEntryProto";
+
+// AdjustmentEntry resource definition.
+message AdjustmentEntry {
+  // The adjustment entry ID.
+  string id = 1;
+
+  // The adjustment entry name.
+  string name = 2;
+
+  // Account info.
+  AdjustmentEntryAccountInfo account = 3;
+
+  // Adjustment entry info.
+  AdjustmentEntryInfo entry = 4;
+
+  // Adjustment entry setting.
+  AdjustmentEntrySetting setting = 5;
+}
+
+// AdjustmentEntryAccountInfo resource definition.
+message AdjustmentEntryAccountInfo {
+  // The account ID.
+  string id = 1;
+
+  // The account name.
+  string name = 2;
+
+  // The vendor.
+  string vendor = 3;
+
+  // The billing internal ID.
+  string billingInternalId = 4;
+
+  // The billing group ID.
+  string billingGroupId = 5;
+
+  // The billing group name.
+  string billingGroupName = 6;
+
+  // The billing group currency.
+  string currency = 7;
+}
+
+// AdjustmentEntryInfo resource definition.
+message AdjustmentEntryInfo {
+  // The calculation type.
+  string calculationType = 1;
+
+  // The adjustment entry type.
+  string adjustmentEntryType = 2;
+
+  // The adjustment entry description.
+  string description = 3;
+
+  // The product code.
+  string productCode = 4;
+
+  // The product name.
+  string productName = 5;
+
+  // The currency.
+  string currency = 6;
+
+  // The amount.
+  string amount = 7;
+
+  // The time interval.
+  string timeInterval = 8;
+
+  // The usage start.
+  string usageStart = 9;
+}
+
+// AdjustmentEntrySetting resource definition.
+message AdjustmentEntrySetting {
+  // Applied to the billing.
+  bool apply = 1;
+
+  // The exchange rate applied to the billing.
+  double exchangeRate = 2;
+
+  // The tax free applied to the billing.
+  bool taxFree = 3;
+
+  // The allocate type indicates the type to which an entry has been allocated.
+  string allocateType = 4;
+
+  // The split type indicates the type to which an entry has been splitted.
+  string splitType = 5;
+
+  // The original ID represents the originally allocated or splitted ID.
+  string originalId = 6;
+}

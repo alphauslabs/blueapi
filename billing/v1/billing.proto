@@ -17,6 +17,7 @@ import "api/ripple/untaggedgroup.proto";
 import "api/ripple/customizedbillingservice.proto";
 import "api/ripple/v1/invoiceservicediscounts.proto";
 import "api/ripple/v1/accountsupportplan.proto";
+import "api/ripple/v1/adjustmententry.proto";
 import "api/adjustment.proto";
 import "api/wave/adjustment.proto";
 import "google/api/annotations.proto";
@@ -441,10 +442,42 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Applies the adjustment entry item. Only available in Ripple.
-  rpc ApplyInvoiceAdjustments(ApplyInvoiceAdjustmentsRequest) returns (google.protobuf.Empty) {
+  // WORK-IN-PROGRESS: Reads the adjustment entries. Only available in Ripple.
+  rpc ReadAdjustmentEntries(ReadAdjustmentEntriesRequest) returns (stream api.ripple.v1.AdjustmentEntry) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/invoiceadjustments:apply"
+      post: "/v1/{vendor}/adjustmententries:read"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Applies the adjustment entry item. Only available in Ripple.
+  rpc ApplyAdjustmentEntry(ApplyAdjustmentEntryRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/adjustmententries:apply"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Restores the adjustment entry item. Only available in Ripple.
+  rpc RestoreAdjustmentEntry(RestoreAdjustmentEntryRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/adjustmententries:restore"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Splits the adjustment entry item. Only available in Ripple.
+  rpc SplitAdjustmentEntry(SplitAdjustmentEntryRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/adjustmententries/{id}/split"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Allocates the adjustment entry item. Only available in Ripple.
+  rpc AllocateAdjustmentEntry(AllocateAdjustmentEntryRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/adjustmententries/{id}/allocate"
       body: "*"
     };
   }
@@ -1760,43 +1793,80 @@ message ReadInvoiceAdjustmentsRequest {
   string feeType = 4;
 }
 
-// Request message for the Billing.ApplyInvoiceAdjustments rpc.
-message ApplyInvoiceAdjustmentsRequest {
-  string vendor = 3;
+// Request message for the Billing.ReadAdjustmentEntries rpc.
+message ReadAdjustmentEntriesRequest {
+  // Required. At the moment, only `aws`,`azure`,`gcp` is supported.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, June 2021 will be `202106`.
+  string month = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Request message for the Billing.ApplyAdjustmentEntry rpc.
+message ApplyAdjustmentEntryRequest {
+  // Required. At the moment, only `aws`,`azure`,`gcp` is supported.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
 
   // AdjustmentSetting
-  message AdjustmentSetting {
-    // Required. apply. if apply is true, the adjustment will be applied to the invoice.
-    // if apply is false, the adjustment will be removed from the invoice.
-    bool apply = 1;
-
-    // apply to month. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, June 2021 will be `202106`.
-    string month = 2;
+  message ApplySetting {
+    // Optional. apply to month. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, June 2021 will be `202106`.
+    string month = 1 [(google.api.field_behavior) = OPTIONAL];
 
     // Optional. tax free setting.
-    bool taxFree = 3;
+    bool taxFree = 2 [(google.api.field_behavior) = OPTIONAL];
 
     // Optional. exchange rate.
-    float exchangeRate = 4;
+    double exchangeRate = 3 [(google.api.field_behavior) = OPTIONAL];
 
-    // Optional. apply to billing internal id.
-    string billingInternalId = 5;
+    // Optional. apply to billing internal ID.
+    string billingInternalId = 4 [(google.api.field_behavior) = OPTIONAL];
   } 
 
-  // AdjustmentSetting. root setting.
-  AdjustmentSetting setting = 1;
+  // Required. ApplySetting. root setting.
+  ApplySetting setting = 2 [(google.api.field_behavior) = REQUIRED];
 
-  // AdjustmentEntry. target ids
+  // AdjustmentEntry. target IDs
   message AdjustmentEntry {
-    // Required. id. adjustment entry id
-    string id = 1;
+    // Required. adjustment entry ID.
+    string id = 1 [(google.api.field_behavior) = REQUIRED];
 
-    // Optional. AdjustmentSetting. If this setting is configured, it will take precedence.
-    AdjustmentSetting setting = 2;
+    // Optional. ApplySetting. If this setting is configured, it will take precedence.
+    ApplySetting setting = 2 [(google.api.field_behavior) = OPTIONAL];
   }
 
-  // Required. AdjustmentEntry
-  repeated AdjustmentEntry entries = 2;
+  // Required. List of AdjustmentEntry.
+  repeated AdjustmentEntry entries = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request message for the Billing.RestoreAdjustmentEntry rpc.
+message RestoreAdjustmentEntryRequest {
+  // Required. At the moment, only `aws`,`azure`,`gcp` is supported.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. List of AdjustmentEntry IDs.
+  repeated string entries = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+
+// Request message for the Billing.SplitAdjustmentEntry rpc.
+message SplitAdjustmentEntryRequest {
+  // Required. At the moment, only `aws`,`azure`,`gcp` is supported.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. AdjustmentEntry ID.
+  string id = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, June 2021 will be `202106`.
+  string startMonth = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request message for the Billing.AllocateAdjustmentEntry rpc.
+message AllocateAdjustmentEntryRequest {
+  // Required. At the moment, only `aws`,`azure`,`gcp` is supported.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. AdjustmentEntry ID.
+  string id = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 //Request message for the Billing.ListAccountResources rpc.
