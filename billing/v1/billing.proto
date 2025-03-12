@@ -450,6 +450,13 @@ service Billing {
     };
   }
 
+  // WORK-IN-PROGRESS: Gets the adjustment entry. Only available in Ripple.
+  rpc GetAdjustmentEntry(GetAdjustmentEntryRequest) returns (api.ripple.v1.AdjustmentEntry) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/adjustmententries/{id}"
+    };
+  }
+
   // WORK-IN-PROGRESS: Applies the adjustment entry item. Only available in Ripple.
   rpc ApplyAdjustmentEntry(ApplyAdjustmentEntryRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -1806,6 +1813,15 @@ message ReadAdjustmentEntriesRequest {
     bool sppDiscount = 1;
     bool edpDiscount = 2;
   }
+}
+
+// Request message for the Billing.GetAdjustmentEntryRequest rpc.
+message GetAdjustmentEntryRequest {
+  // Required. At the moment, only `aws`,`azure`,`gcp` is supported.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. The adjustment entry id. [blueapi.api.ripple.v1.AdjustmentEntry.id]
+  string id = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 // Request message for the Billing.ApplyAdjustmentEntry rpc.
