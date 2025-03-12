@@ -1291,6 +1291,43 @@ service Cover {
     };
   }
 
+  // List all Unit Metrics
+  rpc ListUnitMetrics(ListUnitMetricsRequest) returns (ListUnitMetricsResponse) {
+    option (google.api.http) = {
+      get: "/v1/unitcost/metrics"
+    };
+  }
+
+  // Create Unit Metric
+  rpc CreateUnitMetric(CreateUnitMetricRequest) returns (CreateUnitMetricResponse) {
+    option (google.api.http) = {
+      post: "/v1/unitcost/metrics"
+      body: "*"
+    };
+  }
+
+  // Get Specific Unit Metric
+  rpc GetUnitMetric(GetUnitMetricRequest) returns (GetUnitMetricResponse) {
+    option (google.api.http) = {
+      get: "/v1/unitcost/metrics/{id}"
+    };
+  }
+
+  // Update Specific Unit Metric
+  rpc UpdateUnitMetric(UpdateUnitMetricRequest) returns (UpdateUnitMetricResponse) {
+    option (google.api.http) = {
+      put: "/v1/unitcost/metrics/{id}"
+      body: "*"
+    };
+  }
+
+  // Delete Specific Unit Metric
+  rpc DeleteUnitMetric(DeleteUnitMetricRequest) returns (DeleteUnitMetricResponse) {
+    option (google.api.http) = {
+      delete: "/v1/unitcost/metrics/{id}"
+    };
+  }
+
   rpc VerifyAPIAccess(VerifyAPIAccessRequest) returns (VerifyAPIAccessResponse) {
     option (google.api.http) = {
       get: "/v1/apiaccess/verify"
@@ -3866,5 +3903,78 @@ message DeleteSharedResourcesRequest{
 }
 
 message DeleteSharedResourcesResponse{
+  string id = 1;
+}
+
+message ListUnitMetricsRequest{
+  // Optional. Filter by aggregation method.
+  string aggregationMethod = 1;
+
+  // Optional. Filter by data source.
+  string dataSource = 2;
+
+  // Optional. Filter by status.
+  string status = 3;
+}
+
+message ListUnitMetricsResponse{
+  repeated api.cover.UnitMetric unitMetrics = 1;
+}
+
+message CreateUnitMetricRequest{
+  string metricName = 1;
+  string aggregationMethod = 2;
+  string dataSource = 3;
+  string description = 4;
+  string costgroupId = 5;
+  api.cover.CsvInfo csvInfo = 6;
+}
+
+message CreateUnitMetricResponse{
+  api.cover.UnitMetric unitMetric = 1;
+}
+
+message GetUnitMetricRequest{
+  //Required. Unit Metric Id
+  string id = 1;
+}
+
+message GetUnitMetricResponse{
+  api.cover.UnitMetric unitMetric = 1;
+}
+
+message UpdateUnitMetricRequest{
+  //Required. Unit Metric Id
+  string id = 1;
+
+  //Optional
+  string metricName = 2;
+
+  //Optional
+  string aggregationMethod = 3;
+
+  //Optional
+  string dataSource = 4;
+
+  //Optional
+  string description = 5;
+
+  //Optional
+  string costgroupId = 6;
+
+  //Optional
+  api.cover.CsvInfo csvInfo = 7;
+}
+
+message UpdateUnitMetricResponse{
+  api.cover.UnitMetric unitMetric = 1;
+}
+
+message DeleteUnitMetricRequest{
+  //Required. Unit Metric Id
+  string id = 1;
+}
+
+message DeleteUnitMetricResponse{
   string id = 1;
 }
