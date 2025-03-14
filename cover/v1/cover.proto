@@ -1253,6 +1253,22 @@ service Cover {
       get: "/v1/unitcost/autosuggest"
     };
   }
+
+  // Merge Suggested Units
+  rpc MergeSuggestedUnits(MergeSuggestedUnitsRequest) returns (MergeSuggestedUnitsResponse) {
+    option (google.api.http) = {
+      post: "/v1/unitcost/autosuggest/merge"
+      body: "*"
+    };
+  }
+
+  // Create Unit from Suggested Units
+  rpc CreateUnitFromSuggested(CreateUnitFromSuggestedRequest) returns (CreateUnitFromSuggestedResponse) {
+    option (google.api.http) = {
+      post: "/v1/unitcost/autosuggest/create"
+      body: "*"
+    };
+  }
   
   // List all Shared Resources
   rpc ListSharedResources(ListSharedResourcesRequest) returns (ListSharedResourcesResponse) {
@@ -2428,6 +2444,8 @@ message CostItem {
   string category = 13;
   // Indicates whether the item is tagged (true) or not (false).
   bool tagged = 14;
+  // Containes the unit cost metric. Only used when feature flag for unit cost metric is enabled.
+  map<string, double> unitcostmetric = 15;
 }
 
 // Request message for GetRightSizingRecommendation
@@ -3838,6 +3856,23 @@ message ListSuggestedUnitsRequest{
 
 message ListSuggestedUnitsResponse{
   repeated api.cover.SuggestedUnit suggestedUnits = 1;
+}
+
+message MergeSuggestedUnitsRequest{
+  repeated string suggestedUnitIds = 1;
+  repeated string unitItemIds = 2;
+}
+
+message MergeSuggestedUnitsResponse{
+ api.cover.SuggestedUnit mergedSuggestedUnits = 1;
+}
+
+message CreateUnitFromSuggestedRequest{
+  repeated string suggestedUnitIds = 1;
+}
+
+message CreateUnitFromSuggestedResponse{
+  api.cover.UnitCostData unitCostData = 1;
 }
 
 message ListSharedResourcesRequest{
