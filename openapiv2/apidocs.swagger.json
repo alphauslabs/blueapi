@@ -7376,6 +7376,54 @@
         ]
       }
     },
+    "/v1/exchangerate/global/{vendor}/{month}": {
+      "post": {
+        "summary": "Set global exchangerate. Only available in Ripple.",
+        "operationId": "Billing_SetGlobalExchangeRate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "month",
+            "description": "Required. month. Format: `yyyymm`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingSetGlobalExchangeRateBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/exportcsv/billing-group": {
       "get": {
         "summary": "Export the billing groups into csv format",
@@ -16167,6 +16215,21 @@
       "required": [
         "setting"
       ]
+    },
+    "BillingSetGlobalExchangeRateBody": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string",
+          "title": "Required. currency. (e.g. usd, jpy, myr, idr)"
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double",
+          "title": "Required. exchangerate. the value of 1 usd per currency above\nExample: If the invoice currency is \"jpy\" and 1 USD = 150 jpy, exchangeRate = 150"
+        }
+      },
+      "description": "Request message for SetGlobalExchangeRate rpc."
     },
     "BillingSplitAdjustmentEntryBody": {
       "type": "object",

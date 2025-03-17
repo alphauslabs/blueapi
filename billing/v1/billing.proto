@@ -390,6 +390,14 @@ service Billing {
     };
   }
 
+   // Set global exchangerate. Only available in Ripple.
+  rpc SetGlobalExchangeRate(SetGlobalExchangeRateRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/exchangerate/global/{vendor}/{month}"
+      body: "*"
+    };
+  } 
+
   // Lists access group. Only available in Ripple.
   rpc ListAccessGroups(ListAccessGroupsRequest) returns (stream api.ripple.AccessGroup) {
     option (google.api.http) = {
@@ -1625,6 +1633,22 @@ message ListExchangeRatesRequest {
 
   // Required. month. Format: `yyyymm`.
   string month = 2;
+}
+
+// Request message for SetGlobalExchangeRate rpc.
+message SetGlobalExchangeRateRequest {
+  // Required. vendor.
+  string vendor = 1;
+
+  // Required. month. Format: `yyyymm`.
+  string month = 2;
+
+  // Required. currency. (e.g. usd, jpy, myr, idr)
+  string currency = 3;
+
+  // Required. exchangerate. the value of 1 usd per currency above
+  // Example: If the invoice currency is "jpy" and 1 USD = 150 jpy, exchangeRate = 150
+  double exchangeRate = 4;
 }
 
 // Response message for the ListExchangeRates rpc.
