@@ -2869,6 +2869,29 @@
         ]
       }
     },
+    "/v1/account/unregistered:read": {
+      "post": {
+        "summary": "Lists unregistered linked accounts",
+        "operationId": "Cover_ListUnregisteredAccounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListUnregisteredAccountsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/account/{target}": {
       "get": {
         "summary": "Gets the current account. For GCP and Azure.",
@@ -31841,6 +31864,28 @@
           }
         }
       }
+    },
+    "v1ListUnregisteredAccountsResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Id of the unregistered account."
+        },
+        "payerId": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "lastUpdate": {
+          "type": "string"
+        }
+      },
+      "title": "Response message for ListUnregisteredAccounts"
     },
     "v1ListUserRoleMappingsResponse": {
       "type": "object",

@@ -564,6 +564,13 @@ service Cover {
     };
   }
 
+  // Lists unregistered linked accounts
+  rpc ListUnregisteredAccounts(ListUnregisteredAccountsRequest) returns (ListUnregisteredAccountsResponse) {
+    option (google.api.http) = {
+      post: "/v1/account/unregistered:read"
+    };
+  }
+
   // Update GCP/Azure account info
   rpc UpdateDataAccess(UpdateDataAccessRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -2939,6 +2946,19 @@ message UpdateDataAccessRequest {
 
 // Request message for ListDataAccess
 message ListDataAccessRequest {}
+
+// Request message for ListUnregisteredAccounts
+message ListUnregisteredAccountsRequest {}
+
+// Response message for ListUnregisteredAccounts
+message ListUnregisteredAccountsResponse {
+  // Id of the unregistered account.
+  string id = 1;
+  string payerId = 2;
+  string orgId = 3;
+  string status = 4;
+  string lastUpdate = 5;
+}
 
 // Request message for AddBillingAccount
 message BillingAccountRequest {
