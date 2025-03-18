@@ -398,6 +398,15 @@ service Billing {
     };
   } 
 
+   // Set payer exchangerate. Only available in Ripple.
+  rpc SetPayerExchangeRate(SetPayerExchangeRateRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/exchangerate/payer/{month}"
+      body: "*"
+    };
+  } 
+
+
   // Lists access group. Only available in Ripple.
   rpc ListAccessGroups(ListAccessGroupsRequest) returns (stream api.ripple.AccessGroup) {
     option (google.api.http) = {
@@ -1649,6 +1658,25 @@ message SetGlobalExchangeRateRequest {
   // Required. exchangerate. the value of 1 usd per currency above
   // Example: If the invoice currency is "jpy" and 1 USD = 150 jpy, exchangeRate = 150
   double exchangeRate = 4;
+}
+
+// Request message for SetPayerExchangeRate rpc.
+message SetPayerExchangeRateRequest {
+  // Required. vendor.
+  string vendor = 1;
+
+  // Required. account(payer) id.
+  string accountId = 2;
+
+  // Required. month. Format: `yyyymm`.
+  string month = 3;
+
+  // Required. currency. (e.g. usd, jpy, myr, idr)
+  string currency = 4;
+
+  // Required. exchangerate. the value of 1 usd per currency above
+  // Example: If the invoice currency is "jpy" and 1 USD = 150 jpy, exchangeRate = 150
+  double exchangeRate = 5;
 }
 
 // Response message for the ListExchangeRates rpc.
