@@ -7399,6 +7399,47 @@
         ]
       }
     },
+    "/v1/exchangerate/billinggroup/{month}": {
+      "post": {
+        "summary": "Set billing group exchangerate. Only available in Ripple.",
+        "operationId": "Billing_SetBillingGroupExchangeRate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "month",
+            "description": "Required. month. Format: `yyyymm`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingSetBillingGroupExchangeRateBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/exchangerate/global/{vendor}/{month}": {
       "post": {
         "summary": "Set global exchangerate. Only available in Ripple.",
@@ -7439,6 +7480,47 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/BillingSetGlobalExchangeRateBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/exchangerate/payer/{month}": {
+      "post": {
+        "summary": "Set payer exchangerate. Only available in Ripple.",
+        "operationId": "Billing_SetPayerExchangeRate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "month",
+            "description": "Required. month. Format: `yyyymm`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingSetPayerExchangeRateBody"
             }
           }
         ],
@@ -12576,7 +12658,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/ripplev1AdjustmentEntry"
+              "$ref": "#/definitions/v1AdjustmentEntry"
             }
           },
           "default": {
@@ -12755,13 +12837,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/ripplev1AdjustmentEntry"
+                  "$ref": "#/definitions/v1AdjustmentEntry"
                 },
                 "error": {
                   "$ref": "#/definitions/googlerpcStatus"
                 }
               },
-              "title": "Stream result of ripplev1AdjustmentEntry"
+              "title": "Stream result of v1AdjustmentEntry"
             }
           },
           "default": {
@@ -15982,10 +16064,9 @@
         "entries": {
           "type": "array",
           "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1ApplyAdjustmentEntryRequestAdjustmentEntry"
+            "type": "string"
           },
-          "description": "Required. List of AdjustmentEntry."
+          "description": "Required. List of id.\n\nRegarding entries that can be included.\n- Regular entry\n- Splitted entry\n- Allocated entry\nRegarding entries that cannot be included.\n- Original entry before being split\n- Original entry before being allocate"
         }
       },
       "description": "Request message for the Billing.ApplyAdjustmentEntry rpc.",
@@ -16222,6 +16303,25 @@
         }
       }
     },
+    "BillingSetBillingGroupExchangeRateBody": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "description": "Required. account(payer) id."
+        },
+        "currency": {
+          "type": "string",
+          "title": "Required. currency. (e.g. usd, jpy, myr, idr)"
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double",
+          "title": "Required. exchangerate. the value of 1 usd per currency above\nExample: If the invoice currency is \"jpy\" and 1 USD = 150 jpy, exchangeRate = 150"
+        }
+      },
+      "description": "Request message for SetBillingGroupExchangeRate rpc."
+    },
     "BillingSetCustomizedBillingServiceBillingGroupBody": {
       "type": "object",
       "properties": {
@@ -16253,6 +16353,29 @@
         }
       },
       "description": "Request message for SetGlobalExchangeRate rpc."
+    },
+    "BillingSetPayerExchangeRateBody": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. vendor."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Required. account(payer) id."
+        },
+        "currency": {
+          "type": "string",
+          "title": "Required. currency. (e.g. usd, jpy, myr, idr)"
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double",
+          "title": "Required. exchangerate. the value of 1 usd per currency above\nExample: If the invoice currency is \"jpy\" and 1 USD = 150 jpy, exchangeRate = 150"
+        }
+      },
+      "description": "Request message for SetPayerExchangeRate rpc."
     },
     "BillingSplitAdjustmentEntryBody": {
       "type": "object",
@@ -26351,32 +26474,6 @@
       },
       "description": "WORK-IN-PROGRESS: totalInvoiceLayout resource definition."
     },
-    "ripplev1AdjustmentEntry": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The adjustment entry ID."
-        },
-        "name": {
-          "type": "string",
-          "description": "The adjustment entry name."
-        },
-        "account": {
-          "$ref": "#/definitions/v1AdjustmentEntryAccountInfo",
-          "description": "Account info."
-        },
-        "entry": {
-          "$ref": "#/definitions/v1AdjustmentEntryInfo",
-          "description": "Adjustment entry info."
-        },
-        "setting": {
-          "$ref": "#/definitions/v1AdjustmentEntrySetting",
-          "description": "Adjustment entry setting."
-        }
-      },
-      "description": "AdjustmentEntry resource definition."
-    },
     "v1AbcAccount": {
       "type": "object",
       "properties": {
@@ -26834,6 +26931,32 @@
         }
       }
     },
+    "v1AdjustmentEntry": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The adjustment entry ID."
+        },
+        "name": {
+          "type": "string",
+          "description": "The adjustment entry name."
+        },
+        "account": {
+          "$ref": "#/definitions/v1AdjustmentEntryAccountInfo",
+          "description": "Account info."
+        },
+        "entry": {
+          "$ref": "#/definitions/v1AdjustmentEntryInfo",
+          "description": "Adjustment entry info."
+        },
+        "setting": {
+          "$ref": "#/definitions/v1AdjustmentEntrySetting",
+          "description": "Adjustment entry setting."
+        }
+      },
+      "description": "AdjustmentEntry resource definition."
+    },
     "v1AdjustmentEntryAccountInfo": {
       "type": "object",
       "properties": {
@@ -27072,23 +27195,6 @@
         }
       },
       "title": "Message response for anomaly detection"
-    },
-    "v1ApplyAdjustmentEntryRequestAdjustmentEntry": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Required. adjustment entry ID."
-        },
-        "setting": {
-          "$ref": "#/definitions/ApplyAdjustmentEntryRequestApplySetting",
-          "description": "Optional. ApplySetting. If this setting is configured, it will take precedence."
-        }
-      },
-      "title": "AdjustmentEntry. target IDs",
-      "required": [
-        "id"
-      ]
     },
     "v1AssetsSummary": {
       "type": "object",
