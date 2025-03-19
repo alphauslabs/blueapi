@@ -1912,8 +1912,10 @@ message ApplyAdjustmentEntryRequest {
     // Optional. tax free setting.
     bool taxFree = 2 [(google.api.field_behavior) = OPTIONAL];
 
-    // Optional. exchange rate.
-    double exchangeRate = 3 [(google.api.field_behavior) = OPTIONAL];
+    // Optional. exchange rate. At the moment, only `jpy`,`idr`,`myr`,`sgd`,`inr` is supported.
+    // It will be configured according to the currency type of the billing group associated with the account.
+    // For example: {"jpy":150.01, "idr":16580,"myr":4.4,"sgd":1.33,"inr":85.3}
+    map<string, double> exchangeRate = 3 [(google.api.field_behavior) = OPTIONAL];
 
     // Optional. apply to billing internal ID.
     // When you specify billing internal ID, the invoicing will be applied to the target Billing Group.
