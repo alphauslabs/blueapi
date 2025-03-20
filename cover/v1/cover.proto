@@ -1254,6 +1254,13 @@ service Cover {
     };
   }
 
+  // Merge Existing Unit Types
+  rpc MergeUnits(MergeUnitsRequest) returns (MergeUnitsResponse) {
+    option (google.api.http) = {
+      post: "/v1/unitcost/merge"
+      body: "*"
+    };
+  }
   // List Suggested Unit Types
   rpc ListSuggestedUnits(ListSuggestedUnitsRequest) returns (ListSuggestedUnitsResponse) {
     option (google.api.http) = {
@@ -3875,6 +3882,16 @@ message DeleteUnitTypeResponse{
   string id = 1;
 }
 
+message MergeUnitsRequest{
+  repeated string unitCostIds = 1;
+  string unitName = 2;
+  string description = 3;
+}
+
+message MergeUnitsResponse{
+  api.cover.UnitCostData mergedUnitCost = 1;
+}
+
 message ListSuggestedUnitsRequest{
 }
 
@@ -3898,7 +3915,7 @@ message CreateUnitFromSuggestedRequest{
 }
 
 message CreateUnitFromSuggestedResponse{
-  api.cover.UnitCostData unitCostData = 1;
+  repeated string unitCostIds = 1;
 }
 
 message ListSharedResourcesRequest{
@@ -3989,6 +4006,7 @@ message CreateUnitMetricRequest{
   string description = 4;
   string costgroupId = 5;
   api.cover.CsvInfo csvInfo = 6;
+  api.cover.RequiredColumns requiredColumns = 7;
 }
 
 message CreateUnitMetricResponse{
