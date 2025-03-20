@@ -11149,6 +11149,39 @@
         ]
       }
     },
+    "/v1/unitcost/merge": {
+      "post": {
+        "summary": "Merge Existing Unit Types",
+        "operationId": "Cover_MergeUnits",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1MergeUnitsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1MergeUnitsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/unitcost/metrics": {
       "get": {
         "summary": "List all Unit Metrics",
@@ -16039,9 +16072,12 @@
           "description": "Optional. tax free setting."
         },
         "exchangeRate": {
-          "type": "number",
-          "format": "double",
-          "description": "Optional. exchange rate."
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
+          },
+          "description": "Optional. exchange rate. \n\nAt the moment, only `jpy`,`idr`,`myr`,`sgd`,`inr` is supported.\nIt will be configured according to the currency type of the billing group associated with the account.\nFor example: {\"jpy\":150.01, \"idr\":16580,\"myr\":4.4,\"sgd\":1.33,\"inr\":85.3}"
         },
         "billingInternalId": {
           "type": "string",
@@ -24294,6 +24330,17 @@
         }
       }
     },
+    "coverRequiredColumns": {
+      "type": "object",
+      "properties": {
+        "dateColumn": {
+          "type": "string"
+        },
+        "amountColumn": {
+          "type": "string"
+        }
+      }
+    },
     "coverResourceData": {
       "type": "object",
       "properties": {
@@ -24952,6 +24999,9 @@
         },
         "csvInfo": {
           "$ref": "#/definitions/coverCsvInfo"
+        },
+        "requiredColumns": {
+          "$ref": "#/definitions/coverRequiredColumns"
         },
         "createdBy": {
           "type": "string"
@@ -29244,8 +29294,11 @@
     "v1CreateUnitFromSuggestedResponse": {
       "type": "object",
       "properties": {
-        "unitCostData": {
-          "$ref": "#/definitions/coverUnitCostData"
+        "unitCostIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -29269,6 +29322,9 @@
         },
         "csvInfo": {
           "$ref": "#/definitions/coverCsvInfo"
+        },
+        "requiredColumns": {
+          "$ref": "#/definitions/coverRequiredColumns"
         }
       }
     },
@@ -32086,6 +32142,31 @@
       "properties": {
         "mergedSuggestedUnits": {
           "$ref": "#/definitions/coverSuggestedUnit"
+        }
+      }
+    },
+    "v1MergeUnitsRequest": {
+      "type": "object",
+      "properties": {
+        "unitCostIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unitName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "v1MergeUnitsResponse": {
+      "type": "object",
+      "properties": {
+        "mergedUnitCost": {
+          "$ref": "#/definitions/coverUnitCostData"
         }
       }
     },
