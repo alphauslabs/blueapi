@@ -243,7 +243,7 @@ service Cost {
     };
   }
 
-  // Lists the schedules of your monthly calculations. Only available in Ripple.
+  // Lists the s of your monthly calculations. Only available in Ripple.
   rpc ListCalculationsSchedules(ListCalculationsSchedulesRequest) returns (ListCalculationsSchedulesResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/calculations/schedules"
@@ -2279,4 +2279,13 @@ message RegisterPayerAccountRequest {
   // Optional. Valid values are `legacy` and `2.0` for now. Defaults to `legacy` if not provided.
   // Only applicable if vendor is set to `aws`. Do not provide if `gcp` or `azure`.
   string curType = 4;
+}
+
+// Get CUR invoice id list
+message GetInvoiceId{
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+  
+  // Required. Account Id
+  string month = 2;
 }

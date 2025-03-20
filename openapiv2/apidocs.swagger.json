@@ -15725,6 +15725,45 @@
           "Cost"
         ]
       }
+    },
+    "/v1/{vendor}/invoiceid/{month}": {
+      "get" : {
+        "summary": "Get invoice id for a month",
+        "operationId": "Cost_GetInvoiceId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetInvoiceIdResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Cloud vendor.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "month",
+            "description": "Required. Month in format yyyy-mm.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
     }
   },
   "definitions": {
@@ -34333,6 +34372,18 @@
         }
       },
       "description": "Adjustment resource definition."
+    },
+    "v1GetInvoiceIdResponse" : {
+      "type" : "object",
+      "properties" : {
+        "invoiceId" : {
+          "type" : "string"
+        },
+        "exchangeRate" : {
+          "type" : "number",
+          "format" : "double"
+        }
+      }
     }
   }
 }
