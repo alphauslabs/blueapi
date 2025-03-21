@@ -186,6 +186,13 @@ service Billing {
     };
   }
 
+  // WORK-IN-PROGRESS: Gets the invoice display settings for invoice-ui
+  rpc GetInvoiceDisplaySettings(GetInvoiceDisplaySettingsRequest) returns (GetInvoiceDisplaySettingsResponse) {
+    option (google.api.http) = {
+      get: "/v1/invoice/displaysettings"
+    };
+  }
+
   // Creates/Updates a billing group's invoice template. Only available in Ripple.
   rpc UpdateBillingGroupInvoiceTemplate(UpdateBillingGroupInvoiceTemplateRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -1321,6 +1328,13 @@ message ListInvoiceTemplateResponse {
   
   BillingGroupInvoiceSettings invoices = 8;
   
+}
+
+message GetInvoiceDisplaySettingsRequest {}
+
+// Response message for GetInvoiceDisplaySettings rpc.
+message GetInvoiceDisplaySettingsResponse {
+  bool showRISPUpfrontTimeInterval = 1;
 }
 
 // Response message to be used for ListInvoiceTemplateResponse

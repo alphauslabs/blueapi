@@ -7734,6 +7734,29 @@
         ]
       }
     },
+    "/v1/invoice/displaysettings": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets the invoice display settings for invoice-ui",
+        "operationId": "Billing_GetInvoiceDisplaySettings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetInvoiceDisplaySettingsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/invoice/status/{date}:read": {
       "post": {
         "summary": "Reads an invoice status. Only available in Ripple.",
@@ -30839,6 +30862,15 @@
           }
         }
       }
+    },
+    "v1GetInvoiceDisplaySettingsResponse": {
+      "type": "object",
+      "properties": {
+        "showRISPUpfrontTimeInterval": {
+          "type": "boolean"
+        }
+      },
+      "description": "Response message for GetInvoiceDisplaySettings rpc."
     },
     "v1GetMSPDefaultMetaResponse": {
       "type": "object",
