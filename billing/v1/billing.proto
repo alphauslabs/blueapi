@@ -520,6 +520,22 @@ service Billing {
     };
   }
 
+  // WORK-IN-PROGRESS: Restores the splitted adjustment entry item. Only available in Ripple.
+  rpc RestoreSplitAdjustmentEntry(RestoreSplitAdjustmentEntryRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/adjustmententries/{id}/split:restore"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Restores the allocate adjustment entry item. Only available in Ripple.
+  rpc RestoreAllocateAdjustmentEntry(RestoreAllocateAdjustmentEntryRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/adjustmententries/{id}/allocate:restore"
+      body: "*"
+    };
+  }
+
   // WORK-IN-PROGRESS: Returns all registered accounts that are not associated to any billing groups and accounts found in CUR for the specified month. For Ripple only
   rpc ListAccountResources(ListAccountResourcesRequest) returns (stream ResourceAccount) {
     option (google.api.http) = {
@@ -1972,7 +1988,7 @@ message SplitAdjustmentEntryRequest {
   // Required. AdjustmentEntry ID.
   string id = 2 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, June 2021 will be `202106`.
+  // Required. The UTC month to query. If empty, defaults to current month. Format is `yyyymmdd`. For example, June 2021 will be `20210601`.
   string startMonth = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
@@ -1998,6 +2014,24 @@ message AllocateAdjustmentEntryRequest {
 
   // Required. accountId
   string accountForRemaining = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request message for the Billing.RestoreSplitAdjustmentEntry rpc.
+message RestoreSplitAdjustmentEntryRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. AdjustmentEntry ID.
+  string id = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request message for the Billing.RestoreAllocateAdjustmentEntry rpc.
+message RestoreAllocateAdjustmentEntryRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. AdjustmentEntry ID.
+  string id = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 //Request message for the Billing.ListAccountResources rpc.
