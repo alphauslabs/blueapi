@@ -13482,6 +13482,45 @@
         ]
       }
     },
+    "/v1/{vendor}/calculation/prerequisites/{month}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Get invoice id for a month",
+        "operationId": "Cost_GetCalculationPrerequisites",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCalculationPrerequisitesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "month",
+            "description": "Required. Month in format yyyy-mm.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/{vendor}/calculations/history": {
       "get": {
         "summary": "Lists vendor costs calculations history and statuses.",
@@ -15781,45 +15820,6 @@
           "Cost"
         ]
       }
-    },
-    "/v1/{vendor}/calculation/prerequisites/{month}": {
-      "get" : {
-      "summary": "WORK-IN-PROGRESS: Get invoice prerequisites for a month",
-      "operationId": "Cost_GetCalculationPrerequisites",
-      "responses": {
-        "200": {
-        "description": "A successful response.",
-        "schema": {
-          "$ref": "#/definitions/v1GetCalculationPrerequisitesResponse"
-        }
-        },
-        "default": {
-        "description": "An unexpected error response.",
-        "schema": {
-          "$ref": "#/definitions/googlerpcStatus"
-        }
-        }
-      },
-      "parameters": [
-        {
-        "name": "vendor",
-        "description": "Required. At the moment, only `aws` is supported.",
-        "in": "path",
-        "required": true,
-        "type": "string"
-        },
-        {
-        "name": "month",
-        "description": "Required. Month in format yyyy-mm.",
-        "in": "path",
-        "required": true,
-        "type": "string"
-        }
-      ],
-      "tags": [
-        "Cost"
-      ]
-      }
     }
   },
   "definitions": {
@@ -16122,6 +16122,25 @@
       },
       "description": "Request message for the Admin.UpdateNotificationChannel rpc."
     },
+    "AllocateAdjustmentEntryRequestAccountConfig": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Required. accountId"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "description": "Required."
+        }
+      },
+      "title": "AccountConfig",
+      "required": [
+        "id",
+        "amount"
+      ]
+    },
     "ApplyAdjustmentEntryRequestApplySetting": {
       "type": "object",
       "properties": {
@@ -16150,7 +16169,25 @@
     },
     "BillingAllocateAdjustmentEntryBody": {
       "type": "object",
-      "description": "Request message for the Billing.AllocateAdjustmentEntry rpc."
+      "properties": {
+        "config": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/AllocateAdjustmentEntryRequestAccountConfig"
+          },
+          "description": "Required."
+        },
+        "accountForRemaining": {
+          "type": "string",
+          "title": "Required. accountId"
+        }
+      },
+      "description": "Request message for the Billing.AllocateAdjustmentEntry rpc.",
+      "required": [
+        "config",
+        "accountForRemaining"
+      ]
     },
     "BillingApplyAdjustmentEntryBody": {
       "type": "object",
@@ -22611,11 +22648,11 @@
           "type": "boolean",
           "description": "Indicates whether the item is tagged (true) or not (false)."
         },
-        "unitcostmetric": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "number",
-            "format": "double"
+        "unitCostMetrics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverUnitCostMetric"
           },
           "description": "Contains the unit cost metric. Only used when feature flag for unit cost metric is enabled."
         }
@@ -25005,6 +25042,21 @@
         },
         "lastUpdatedAt": {
           "type": "string"
+        }
+      }
+    },
+    "coverUnitCostMetric": {
+      "type": "object",
+      "properties": {
+        "unitcostName": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
         }
       }
     },
@@ -30219,6 +30271,29 @@
         }
       }
     },
+    "v1GetCalculationPrerequisitesResponse": {
+      "type": "object",
+      "properties": {
+        "invoiceId": {
+          "type": "string",
+          "description": "The invoice id."
+        },
+        "payerId": {
+          "type": "string",
+          "description": "The payer account id."
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double",
+          "description": "The exchange rate."
+        },
+        "unblendedCostInCur": {
+          "type": "number",
+          "format": "double",
+          "description": "The unblended cost in CUR."
+        }
+      }
+    },
     "v1GetCalculatorConfigResponse": {
       "type": "object",
       "properties": {
@@ -34482,30 +34557,6 @@
         }
       },
       "description": "Adjustment resource definition."
-    },
-    "v1GetCalculationPrerequisitesResponse": {
-      "type": "object",
-      "properties": {
-        "invoiceId": {
-          "type": "string",
-          "description": "The invoice id."
-        },
-        "payerId": {
-          "type": "string",
-          "description": "The payer account id."
-        },
-        "exchangeRate": {
-          "type": "number",
-          "format": "double",
-          "description": "The exchange rate."
-        },
-        "unblendedCostInCur": {
-          "type": "number",
-          "format": "double",
-          "description": "The unblended cost in CUR."
-        }
-      },
-      "title": "(WIP): Response message for GetInvoiceId"
     }
   }
 }
