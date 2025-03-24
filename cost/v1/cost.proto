@@ -593,8 +593,15 @@ service Cost {
       body: "*"
     };
   }
-}
 
+  // WORK-IN-PROGRESS: Get invoice id for a month
+  rpc GetCalculationPrerequisites (GetCalculationPrerequisitesRequest) returns (GetCalculationPrerequisitesResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/calculation/prerequisites/{month}"
+    };
+  }
+  
+}
 // Request message for the Cost.ListPayerAccounts rpc.
 message ListPayerAccountsRequest {
   // Required. At the moment, only `aws` is supported.
@@ -2279,4 +2286,27 @@ message RegisterPayerAccountRequest {
   // Optional. Valid values are `legacy` and `2.0` for now. Defaults to `legacy` if not provided.
   // Only applicable if vendor is set to `aws`. Do not provide if `gcp` or `azure`.
   string curType = 4;
+}
+
+ // WORK-IN-PROGRESS: Get CUR invoice id list
+message GetCalculationPrerequisitesRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+  
+  // Required. Month in format yyyy-mm.
+  string month = 2;
+}
+
+message GetCalculationPrerequisitesResponse {
+    // The invoice id.
+    string invoice_id = 1;
+    
+    // The payer account id.
+    string payer_id = 2;
+    
+    // The exchange rate.
+    double exchange_rate = 3;
+    
+    // The unblended cost in CUR.
+    double unblended_cost_in_cur = 4;
 }
