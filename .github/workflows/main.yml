@@ -33,7 +33,10 @@ jobs:
         echo 'Go environment:' && go env
         curl -LO https://github.com/grpc/grpc-go/releases/download/cmd%2Fprotoc-gen-go-grpc%2Fv1.4.0/protoc-gen-go-grpc.v1.4.0.linux.amd64.tar.gz
         tar xvzf protoc-gen-go-grpc.v1.4.0.linux.amd64.tar.gz && cp protoc-gen-go-grpc $HOME/.local/bin/
-        go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+        # NOTE: Since an error occurs during the service build, 
+        # I will revert to the previous version and monitor the situation.
+        # go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+        go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.5
         go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest \
           github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
         go install github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@latest
