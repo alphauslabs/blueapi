@@ -193,6 +193,14 @@ service Billing {
     };
   }
 
+  // Creates/Updates an invoice display settings. Only available in Ripple.
+  rpc UpdateInvoiceDisplaySettings(UpdateInvoiceDisplaySettingsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/invoice/displaysettings"
+      body: "*"
+    };
+  }
+
   // Creates/Updates a billing group's invoice template. Only available in Ripple.
   rpc UpdateBillingGroupInvoiceTemplate(UpdateBillingGroupInvoiceTemplateRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -1351,6 +1359,11 @@ message GetInvoiceDisplaySettingsRequest {}
 // Response message for GetInvoiceDisplaySettings rpc.
 message GetInvoiceDisplaySettingsResponse {
   bool showRISPUpfrontTimeInterval = 1;
+}
+
+// Request message for UpdateInvoiceDisplaySettings rpc.
+message UpdateInvoiceDisplaySettingsRequest {
+  map<string, bool> settings = 1;
 }
 
 // Response message to be used for ListInvoiceTemplateResponse
