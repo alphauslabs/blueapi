@@ -12826,6 +12826,54 @@
         ]
       }
     },
+    "/v1/{vendor}/adjustmententries/{id}/allocate:restore": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Restores the allocate adjustment entry item. Only available in Ripple.",
+        "operationId": "Billing_RestoreAllocateAdjustmentEntry",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. AdjustmentEntry ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingRestoreAllocateAdjustmentEntryBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/{vendor}/adjustmententries/{id}/split": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Splits the adjustment entry item. Only available in Ripple.",
@@ -12866,6 +12914,54 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/BillingSplitAdjustmentEntryBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/{vendor}/adjustmententries/{id}/split:restore": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Restores the splitted adjustment entry item. Only available in Ripple.",
+        "operationId": "Billing_RestoreSplitAdjustmentEntry",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. AdjustmentEntry ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingRestoreSplitAdjustmentEntryBody"
             }
           }
         ],
@@ -16447,6 +16543,14 @@
         "entries"
       ]
     },
+    "BillingRestoreAllocateAdjustmentEntryBody": {
+      "type": "object",
+      "description": "Request message for the Billing.RestoreAllocateAdjustmentEntry rpc."
+    },
+    "BillingRestoreSplitAdjustmentEntryBody": {
+      "type": "object",
+      "description": "Request message for the Billing.RestoreSplitAdjustmentEntry rpc."
+    },
     "BillingSaveInvoiceSettingsBody": {
       "type": "object",
       "properties": {
@@ -16550,7 +16654,7 @@
       "properties": {
         "startMonth": {
           "type": "string",
-          "description": "Required. The UTC month to query. If empty, defaults to current month. Format is `yyyymm`. For example, June 2021 will be `202106`."
+          "description": "Required. The UTC month to query. If empty, defaults to current month. Format is `yyyymmdd`. For example, June 2021 will be `20210601`."
         }
       },
       "description": "Request message for the Billing.SplitAdjustmentEntry rpc.",
