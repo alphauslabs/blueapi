@@ -33,6 +33,21 @@ service Flow {
       body: "*";
     };
   }
+
+  // Update the settings configuration for a user.
+  rpc UpdateSettings(UpdateSettingsRequest) returns (UpdateSettingsResponse) {
+    option (google.api.http) = {
+      put: "/v1/settings/{id}"
+      body: "*";
+    };
+  }
+
+  // Fetch previous settings for a user
+  rpc GetSettings(GetSettingsRequest) returns (GetSettingsResponse) {
+    option (google.api.http) = {
+      get: "/v1/settings/{id}"
+    };
+  }
 }
 
 
@@ -69,6 +84,42 @@ message CreateSettingsRequest {
   bool approval = 9;
 }
 
+// Request message for the Flow.UpdateSettings rpc.
+message UpdateSettingsRequest {
+  // Required. The id of the payer to update.
+  string id = 1;
+
+  // Optional. Update account scope (payer or linked).
+  optional string accountScope = 2;
+
+  // Optional. Update customization setting.
+  optional string customization = 3;
+
+  // Optional. Update term of the SP.
+  optional string planTerm = 4;
+
+  // Optional. Update payment option.
+  optional string paymentOption = 5;
+
+  // Optional. Update lookback period.
+  optional string lookBackPeriod = 6;
+
+  // Optional. Update list of instance families.
+  optional string instanceFamily = 7;
+
+  // Optional. Update annual budget.
+  optional double annualBudget = 8;
+
+  // Optional. Update purchase approval.
+  optional bool approval = 9;
+}
+
+// Request message for fetching previous settings configuration of a user.
+message GetSettingsRequest {
+  // Required. The id of the payer to fetch settings for.
+  string id = 1;
+}
+
 // Response message for the Flow.GetInfo rpc.
 message GetInfoResponse {
   string response = 1;
@@ -77,4 +128,22 @@ message GetInfoResponse {
 // Response message for the Flow.CreateSettings rpc.
 message CreateSettingsResponse {
   string response = 1;
+}
+
+message UpdateSettingsResponse {
+  string response = 1;
+}
+
+// Response message for fetching previous settings configuration of a user.
+message GetSettingsResponse {
+  string id = 1;
+  string accountScope = 2;
+  string customization = 3;
+  string planTerm = 4;
+  string paymentOption = 5;
+  string lookBackPeriod = 6;
+  string instanceFamily = 7;
+  double annualBudget = 8;
+  bool approval = 9;
+  string lastUpdated = 10;
 }
