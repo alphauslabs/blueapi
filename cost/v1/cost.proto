@@ -594,8 +594,8 @@ service Cost {
     };
   }
 
-  // WORK-IN-PROGRESS: Get invoice id for a month
-  rpc GetCalculationPrerequisites (GetCalculationPrerequisitesRequest) returns (GetCalculationPrerequisitesResponse) {
+  // WORK-IN-PROGRESS: List the prerequisites for cost calculations.
+  rpc ListCalculationPrerequisites (ListCalculationPrerequisitesRequest) returns (ListCalculationPrerequisitesResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/calculation/prerequisites/{month}"
     };
@@ -2288,8 +2288,8 @@ message RegisterPayerAccountRequest {
   string curType = 4;
 }
 
- // WORK-IN-PROGRESS: Get CUR invoice id list
-message GetCalculationPrerequisitesRequest {
+// WORK-IN-PROGRESS: List the prerequisites for cost calculations.
+message ListCalculationPrerequisitesRequest {
   // Required. At the moment, only `aws` is supported.
   string vendor = 1;
   
@@ -2297,16 +2297,21 @@ message GetCalculationPrerequisitesRequest {
   string month = 2;
 }
 
-message GetCalculationPrerequisitesResponse {
-    // The invoice id.
-    string invoice_id = 1;
-    
-    // The payer account id.
-    string payer_id = 2;
-    
-    // The exchange rate.
-    double exchange_rate = 3;
-    
-    // The unblended cost in CUR.
-    double unblended_cost_in_cur = 4;
+message CalculationPrerequisite {
+  // The invoice id.
+  string invoice_id = 1;
+  
+  // The payer account id.
+  string payer_id = 2;
+  
+  // The exchange rate.
+  double exchange_rate = 3;
+  
+  // The unblended cost in CUR.
+  double unblended_cost_in_cur = 4;
+}
+
+message ListCalculationPrerequisitesResponse {
+  // Repeated list of calculation prerequisites.
+  repeated CalculationPrerequisite prerequisites = 1;
 }
