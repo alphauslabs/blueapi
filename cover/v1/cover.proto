@@ -4002,12 +4002,13 @@ message ListUnitMetricsResponse{
 }
 
 message CreateUnitMetricRequest{
+  //Required. Unit Metric Name
   string metricName = 1;
   string aggregationMethod = 2;
   string dataSource = 3;
   string description = 4;
-  string costgroupId = 5;
-  api.cover.CsvInfo csvInfo = 6;
+  repeated string costgroupId = 5;
+  api.cover.SourceInfo sourceInfo = 6;
 }
 
 message CreateUnitMetricResponse{
@@ -4040,7 +4041,7 @@ message UpdateUnitMetricRequest{
   string description = 5;
 
   //Optional
-  string costgroupId = 6;
+  repeated string costgroupId = 6;
 
   //Optional
   api.cover.CsvInfo csvInfo = 7;

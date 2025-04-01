@@ -9,89 +9,113 @@ option java_package = "cloud.alphaus.blueapi.api.cover";
 option java_outer_classname = "ApiUnitCostProto";
 
 message UnitCostData{
-    string id = 1;
-    string unitName = 2;
-    string description = 3;
-    repeated UnitItem unitItems = 4;
-    repeated string vendors = 5;
-    repeated SharedResourcesCombination sharedResources = 6;
-    string createdBy = 7;
-    string createTime = 8;
-    string lastUpdatedAt = 9;
+  string id = 1;
+  string unitName = 2;
+  string description = 3;
+  repeated UnitItem unitItems = 4;
+  repeated string vendors = 5;
+  repeated SharedResourcesCombination sharedResources = 6;
+  string createdBy = 7;
+  string createTime = 8;
+  string lastUpdatedAt = 9;
 }
 
 message UnitItem{
-    string itemName = 1;
-    double distribution = 2;
-    ResourcesCombinations dedicatedResourcesCombinations = 3;
-    repeated string vendors = 4;
-    string createTime = 5;
-    string lastUpdatedAt = 6;
+  string itemName = 1;
+  double distribution = 2;
+  ResourcesCombinations dedicatedResourcesCombinations = 3;
+  repeated string vendors = 4;
+  string createTime = 5;
+  string lastUpdatedAt = 6;
 }
 
 message SharedResourcesCombination{
-    string id = 1;
-    string combinationName = 2;
-    ResourcesCombinations sharedResourcesCombinations = 3;
-    // List the unit items and their corresponding percentages.
-    map<string, double> distribution = 4;
-    double allocated = 5;
-    double unallocated = 6;
+  string id = 1;
+  string combinationName = 2;
+  ResourcesCombinations sharedResourcesCombinations = 3;
+  // List the unit items and their corresponding percentages.
+  map<string, double> distribution = 4;
+  double allocated = 5;
+  double unallocated = 6;
 }
 
 
 message ResourcesCombinations {
-    // Optional. Valid only for the `aws` vendor. AWS-specific options.
-    api.cover.CostGroupAwsOptions awsOptions = 1;
-  
-    // Optional. Valid only for the `azure` vendor. Azure-specific options.
-    api.cover.CostGroupAzureOptions azureOptions = 2;
-  
-    // Optional. Valid only for the `gcp` vendor. GCP-specific options.
-    api.cover.CostGroupGcpOptions gcpOptions = 3;
-  
-    // Optional. Valid only for the `azurecsp` vendor. AzureCSP-specific options.
-    api.cover.CostGroupAzureCspOptions azurecspOptions = 4;
-  
-  }
+  // Optional. Valid only for the `aws` vendor. AWS-specific options.
+  api.cover.CostGroupAwsOptions awsOptions = 1;
 
-  message SuggestedUnit {
-    string id = 1;
-    string vendor = 2;
-    string potentialUnitName = 3;
-    repeated PotentialUnitItem potentialUnitItems = 4;
-  }
+  // Optional. Valid only for the `azure` vendor. Azure-specific options.
+  api.cover.CostGroupAzureOptions azureOptions = 2;
 
-  message PotentialUnitItem {
-    string id = 1;
-    string itemName = 2;
-    string vendor = 3;
-    map<string, string> tag = 4;
-  }
+  // Optional. Valid only for the `gcp` vendor. GCP-specific options.
+  api.cover.CostGroupGcpOptions gcpOptions = 3;
 
-  message UnitMetric {
-    string id = 1;
-    string orgId = 2;
-    string metricName = 3;
-    string description = 4;
-    string aggregationMethod = 5;
-    string dataSource   = 6;
-    string status = 7;
-    string costgroupId = 8;
-    CsvInfo csvInfo = 9;
-    string createdBy = 10;
-    string createTime = 11;
-    string lastUpdatedAt = 12;
-  }
+  // Optional. Valid only for the `azurecsp` vendor. AzureCSP-specific options.
+  api.cover.CostGroupAzureCspOptions azurecspOptions = 4;
+}
 
-  message CsvInfo {
-    string s3key = 1;
-    string s3url = 2;
-    RequiredColumns requiredColumns = 3;
-  }
+message SuggestedUnit {
+  string id = 1;
+  string vendor = 2;
+  string potentialUnitName = 3;
+  repeated PotentialUnitItem potentialUnitItems = 4;
+}
 
-  message RequiredColumns {
-    string dateColumn = 1;
-    string amountColumn = 2;
+message PotentialUnitItem {
+  string id = 1;
+  string itemName = 2;
+  string vendor = 3;
+  map<string, string> tag = 4;
+}
+
+message UnitMetric {
+  string id = 1;
+  string orgId = 2;
+  string metricName = 3;
+  string description = 4;
+  string aggregationMethod = 5;
+  string dataSource   = 6;
+  string status = 7;
+  repeated string costgroupId = 8;
+  SourceInfo sourceInfo = 9;
+  string createdBy = 10;
+  string createTime = 11;
+  string lastUpdatedAt = 12;
+}
+
+message SourceInfo {
+  oneof source {
+    CsvInfo csv = 1;
+    GoogleSheetInfo googleSheet = 2;
+    CloudWatchInfo cloudWatch = 3;
+    TelemetryInfo telemetry = 4;
   }
+}
+
+message CsvInfo {
+  string s3key = 1;
+  string s3url = 2;
+  RequiredColumns requiredColumns = 3;
+}
+
+message GoogleSheetInfo {
+  // The ID of the Google Sheet.
+  string sheetId = 1;
+  // The URL of the Google Sheet.
+  string sheetUrl = 2;
+  // The name of the sheet within the Google Sheet
+  string sheetName = 3;
+  RequiredColumns requiredColumns = 4;
+}
+
+message CloudWatchInfo {
+}
+
+message TelemetryInfo {
+}
+
+message RequiredColumns {
+  string dateColumn = 1;
+  string amountColumn = 2;
+}
 
