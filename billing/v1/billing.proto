@@ -786,15 +786,23 @@ service Billing {
   // Update billing group basic information
   rpc UpdateBillingGroupBasicInformation(UpdateBillingGroupBasicInformationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      put: "/v1/billinggroup/{id}:basinInfo"
+      put: "/v1/billinggroup/{id}:basicInfo"
       body: "*"
     };
   }
 
-  // Update billing group basic information
+  // WORK-IN-PROGRESS: Update billing group custom fields information
   rpc UpdateBillingGroupCustomFields(UpdateBillingGroupCustomFieldsRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/v1/billinggroup/{id}:customFields"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Update billing group custom fields information
+  rpc UpdateBillingGroupFreeFormat(UpdateBillingGroupFreeFormatRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/billinggroup/{id}:freeFormat"
       body: "*"
     };
   }
@@ -2680,6 +2688,12 @@ message UpdateBillingGroupBasicInformationRequest {
 message UpdateBillingGroupCustomFieldsRequest {
   string id = 1;
   map<string, string> idToKey = 2;
+}
+
+message UpdateBillingGroupFreeFormatRequest {
+  string id = 1;
+  string vendor = 2;
+  repeated FreeFormItem items = 3;
 }
 
 message DeleteBillingGroupRequest {

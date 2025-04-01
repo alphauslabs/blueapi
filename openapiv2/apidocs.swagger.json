@@ -5518,7 +5518,7 @@
         ]
       }
     },
-    "/v1/billinggroup/{id}:basinInfo": {
+    "/v1/billinggroup/{id}:basicInfo": {
       "put": {
         "summary": "Update billing group basic information",
         "operationId": "Billing_UpdateBillingGroupBasicInformation",
@@ -5560,7 +5560,7 @@
     },
     "/v1/billinggroup/{id}:customFields": {
       "put": {
-        "summary": "Update billing group basic information",
+        "summary": "WORK-IN-PROGRESS: Update billing group custom fields information",
         "operationId": "Billing_UpdateBillingGroupCustomFields",
         "responses": {
           "200": {
@@ -5590,6 +5590,46 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/BillingUpdateBillingGroupCustomFieldsBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/billinggroup/{id}:freeFormat": {
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Update billing group custom fields information",
+        "operationId": "Billing_UpdateBillingGroupFreeFormat",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingUpdateBillingGroupFreeFormatBody"
             }
           }
         ],
@@ -16829,6 +16869,21 @@
           "type": "object",
           "additionalProperties": {
             "type": "string"
+          }
+        }
+      }
+    },
+    "BillingUpdateBillingGroupFreeFormatBody": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1FreeFormItem"
           }
         }
       }
