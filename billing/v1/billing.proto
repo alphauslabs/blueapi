@@ -815,7 +815,7 @@ service Billing {
   }
 
   // WORK-IN-PROGRESS: Gets the announcement list.
-  rpc GetAnnouncement(GetAnnouncementRequest) returns (GetAnnouncementResponse) {
+  rpc GetAnnouncements(GetAnnouncementsRequest) returns (stream GetAnnouncementsResponse) {
     option (google.api.http) = {
       get: "/v1/reseller/announcements/{id}"
     };
@@ -2737,11 +2737,11 @@ message UpdateBillingGroupAccountSupportPlanRequest {
       [(google.api.field_behavior) = REQUIRED];
 }
 
-message GetAnnouncementRequest {
+message GetAnnouncementsRequest {
   // Announcement id. Empty returns all announcement
   string id = 1;
 }
-message GetAnnouncementResponse {
+message GetAnnouncementsResponse {
   string id = 1;
   string label = 2;
   string type = 3;
