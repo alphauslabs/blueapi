@@ -10060,12 +10060,21 @@
     "/v1/reseller/announcements/{id}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Gets the announcement list.",
-        "operationId": "Billing_GetAnnouncement",
+        "operationId": "Billing_GetAnnouncements",
         "responses": {
           "200": {
-            "description": "A successful response.",
+            "description": "A successful response.(streaming responses)",
             "schema": {
-              "$ref": "#/definitions/v1GetAnnouncementResponse"
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1GetAnnouncementsResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1GetAnnouncementsResponse"
             }
           },
           "default": {
@@ -30538,7 +30547,7 @@
       },
       "description": "Response message for the GetAllocationAttributes rpc."
     },
-    "v1GetAnnouncementResponse": {
+    "v1GetAnnouncementsResponse": {
       "type": "object",
       "properties": {
         "id": {
