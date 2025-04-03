@@ -10057,6 +10057,38 @@
         ]
       }
     },
+    "/v1/reseller/announcements/{id}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets the announcement list.",
+        "operationId": "Billing_GetAnnouncement",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAnnouncementResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Announcement id. Empty returns all announcement",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/resellers": {
       "get": {
         "summary": "ListResellers",
@@ -30505,6 +30537,50 @@
         }
       },
       "description": "Response message for the GetAllocationAttributes rpc."
+    },
+    "v1GetAnnouncementResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "billingGroups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "start": {
+          "type": "string"
+        },
+        "end": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "userStatus": {
+          "type": "string"
+        },
+        "created": {
+          "type": "string"
+        },
+        "updated": {
+          "type": "string"
+        }
+      }
     },
     "v1GetAnomalyinCostGroupRequest": {
       "type": "object",

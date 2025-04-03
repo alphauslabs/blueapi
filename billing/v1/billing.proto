@@ -821,6 +821,13 @@ service Billing {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Gets the announcement list.
+  rpc GetAnnouncement(GetAnnouncementRequest) returns (GetAnnouncementResponse) {
+    option (google.api.http) = {
+      get: "/v1/reseller/announcements/{id}"
+    };
+  }
 }
 
 message BillingGroup {
@@ -2742,4 +2749,23 @@ message UpdateBillingGroupAccountSupportPlanRequest {
   // If the `enabled` is set, only the `enabled` will be updated. If you want to update all values, please set both `enabled` and `setting`.
   google.protobuf.FieldMask updateMask = 5
       [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetAnnouncementRequest {
+  // Announcement id. Empty returns all announcement
+  string id = 1;
+}
+message GetAnnouncementResponse {
+  string id = 1;
+  string label = 2;
+  string type = 3;
+  string message = 4;
+  repeated string billingGroups = 5;
+  string start = 6;
+  string end = 7;
+  string date = 8;
+  string status = 9;
+  string userStatus = 10;
+  string created = 11;
+  string updated = 12;
 }
