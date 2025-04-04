@@ -5319,6 +5319,38 @@
         ]
       }
     },
+    "/v1/billinggroup/reseller/announcements": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets the announcement list for billing group",
+        "operationId": "Billing_GetBillingGroupAnnouncements",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1GetBillingGroupAnnouncementsResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1GetBillingGroupAnnouncementsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroup/tags": {
       "post": {
         "summary": "Add Tags to the billing group",
@@ -30652,6 +30684,23 @@
         }
       },
       "description": "Response message for the GetBillingGroupAccountSupportPlan rpc."
+    },
+    "v1GetBillingGroupAnnouncementsResponse": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string"
+        },
+        "groupName": {
+          "type": "string"
+        },
+        "companyId": {
+          "type": "string"
+        },
+        "announcements": {
+          "type": "string"
+        }
+      }
     },
     "v1GetBillingGroupInvoiceServiceDiscountsResponse": {
       "type": "object",
