@@ -823,7 +823,7 @@ service Billing {
   }
 
   // WORK-IN-PROGRESS: Gets the announcement list.
-  rpc GetAnnouncements(GetAnnouncementsRequest) returns (stream GetAnnouncementsResponse) {
+  rpc GetAnnouncements(GetAnnouncementsRequest) returns (stream Announcement) {
     option (google.api.http) = {
       get: "/v1/reseller/announcements/{announcementId}"
     };
@@ -2778,10 +2778,6 @@ message Announcement {
   string userStatus = 10;
   string created = 11;
   string updated = 12;
-}
-
-message GetAnnouncementsResponse {
-  Announcement announcement = 1;
 }
 
 message GetBillingGroupAnnouncementsRequest{
