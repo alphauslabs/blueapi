@@ -825,14 +825,14 @@ service Billing {
   // WORK-IN-PROGRESS: Gets the announcement list.
   rpc GetAnnouncements(GetAnnouncementsRequest) returns (stream GetAnnouncementsResponse) {
     option (google.api.http) = {
-      get: "/v1/reseller/announcements/{id}"
+      get: "/v1/reseller/announcements/{announcementId}"
     };
   }
 
   // WORK-IN-PROGRESS: Gets the announcement list for billing group
   rpc GetBillingGroupAnnouncements(GetBillingGroupAnnouncementsRequest) returns (stream GetBillingGroupAnnouncementsResponse) {
     option (google.api.http) = {
-      get: "/v1/billinggroup/reseller/announcements"
+      get: "/v1/billinggroup/reseller/announcements/{groupId}"
     };
   }
   
@@ -2760,8 +2760,8 @@ message UpdateBillingGroupAccountSupportPlanRequest {
 }
 
 message GetAnnouncementsRequest {
-  // Announcement id. Empty returns all announcement
-  string id = 1;
+  // Set empty to return all
+  string announcementId = 1;
 }
 
 message Announcement {
@@ -2784,7 +2784,10 @@ message GetAnnouncementsResponse {
   Announcement announcement = 1;
 }
 
-message GetBillingGroupAnnouncementsRequest{}
+message GetBillingGroupAnnouncementsRequest{
+  // Set empty to return all
+  string groupId = 1;
+}
 
 message GetBillingGroupAnnouncementsResponse {
   string groupId = 1;
