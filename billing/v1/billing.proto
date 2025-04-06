@@ -2755,12 +2755,14 @@ message GetAnnouncementsRequest {
   // Announcement id. Empty returns all announcement
   string id = 1;
 }
-message GetAnnouncementsResponse {
+
+message Announcement {
   string id = 1;
   string label = 2;
   string type = 3;
   string message = 4;
   repeated string billingGroups = 5;
+  bool allBillingGroups = 13;
   string start = 6;
   string end = 7;
   string date = 8;
@@ -2769,3 +2771,8 @@ message GetAnnouncementsResponse {
   string created = 11;
   string updated = 12;
 }
+
+message GetAnnouncementsResponse {
+  Announcement announcement = 1;
+}
+
