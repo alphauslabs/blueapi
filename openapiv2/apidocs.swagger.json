@@ -6986,6 +6986,38 @@
         ]
       }
     },
+    "/v1/credits": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets the credits",
+        "operationId": "Billing_GetCredits",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1Credit"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1Credit"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/customfield": {
       "post": {
         "summary": "Creates new customfield",
@@ -30083,6 +30115,44 @@
         }
       },
       "title": "Response message for CreateView"
+    },
+    "v1Credit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "customerId": {
+          "type": "string"
+        },
+        "customerName": {
+          "type": "string"
+        },
+        "creditAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "term": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "created": {
+          "type": "string"
+        },
+        "initialFee": {
+          "type": "number",
+          "format": "double"
+        },
+        "creditBalance": {
+          "type": "number",
+          "format": "double"
+        },
+        "applied": {
+          "type": "boolean"
+        }
+      }
     },
     "v1CustomField": {
       "type": "object",
