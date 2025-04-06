@@ -828,6 +828,14 @@ service Billing {
       get: "/v1/reseller/announcements/{id}"
     };
   }
+
+  // WORK-IN-PROGRESS: Gets the announcement list for billing group
+  rpc GetBillingGroupAnnouncements(GetBillingGroupAnnouncementsRequest) returns (stream GetBillingGroupAnnouncementsResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroup/reseller/announcements"
+    };
+  }
+  
 }
 
 message BillingGroup {
@@ -2776,3 +2784,11 @@ message GetAnnouncementsResponse {
   Announcement announcement = 1;
 }
 
+message GetBillingGroupAnnouncementsRequest{}
+
+message GetBillingGroupAnnouncementsResponse {
+  string groupId = 1;
+  string groupName = 2;
+  string companyId = 3;
+  Announcement announcement = 4;
+}
