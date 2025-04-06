@@ -7018,6 +7018,38 @@
         ]
       }
     },
+    "/v1/csvsettings": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Gets the csv column settings",
+        "operationId": "Billing_GetCsvSettings",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1CsvSetting"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1CsvSetting"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/customfield": {
       "post": {
         "summary": "Creates new customfield",
@@ -18486,6 +18518,23 @@
         }
       },
       "title": "Request message for UpdateViewWidget"
+    },
+    "CsvSettingColumn": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        }
+      }
     },
     "CurrentEC2DetailsOtherDetails": {
       "type": "object",
@@ -30151,6 +30200,24 @@
         },
         "applied": {
           "type": "boolean"
+        }
+      }
+    },
+    "v1CsvSetting": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "col": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/CsvSettingColumn"
+          }
         }
       }
     },

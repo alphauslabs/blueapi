@@ -842,6 +842,13 @@ service Billing {
       get: "/v1/credits"
     };
   }
+
+  // WORK-IN-PROGRESS: Gets the csv column settings
+  rpc GetCsvSettings(GetCsvSettingsRequest) returns (stream CsvSetting) {
+    option (google.api.http) = {
+      get: "/v1/csvsettings"
+    };
+  }
 }
 
 message BillingGroup {
@@ -2811,4 +2818,19 @@ message Credit {
   double initialFee = 8;
   double creditBalance = 9;
   bool applied = 10;
+}
+
+message GetCsvSettingsRequest{}
+
+message CsvSetting {
+  string id = 1;
+  string name = 2;
+
+  message Column {
+    string name = 1;
+    string id = 2;
+    string description = 3;
+    bool enabled = 4;
+  }
+  repeated Column col = 3;
 }
