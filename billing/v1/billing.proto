@@ -823,9 +823,30 @@ service Billing {
   }
 
   // WORK-IN-PROGRESS: Gets the announcement list.
-  rpc GetAnnouncements(GetAnnouncementsRequest) returns (stream GetAnnouncementsResponse) {
+  rpc GetAnnouncements(GetAnnouncementsRequest) returns (stream Announcement) {
     option (google.api.http) = {
-      get: "/v1/reseller/announcements/{id}"
+      get: "/v1/reseller/announcements/{announcementId}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Gets the announcement list for billing group
+  rpc GetBillingGroupAnnouncements(GetBillingGroupAnnouncementsRequest) returns (stream GetBillingGroupAnnouncementsResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroup/reseller/announcements/{groupId}"
+    };
+  }
+  
+ // WORK-IN-PROGRESS: Gets the credits
+  rpc GetCredits(GetCreditsRequest) returns (stream Credit) {
+    option (google.api.http) = {
+      get: "/v1/credits"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Gets the csv column settings
+  rpc GetCsvSettings(GetCsvSettingsRequest) returns (stream CsvSetting) {
+    option (google.api.http) = {
+      get: "/v1/csvsettings"
     };
   }
 }
@@ -2752,15 +2773,17 @@ message UpdateBillingGroupAccountSupportPlanRequest {
 }
 
 message GetAnnouncementsRequest {
-  // Announcement id. Empty returns all announcement
-  string id = 1;
+  // Set empty to return all
+  string announcementId = 1;
 }
-message GetAnnouncementsResponse {
+
+message Announcement {
   string id = 1;
   string label = 2;
   string type = 3;
   string message = 4;
   repeated string billingGroups = 5;
+  bool allBillingGroups = 13;
   string start = 6;
   string end = 7;
   string date = 8;
@@ -2768,4 +2791,46 @@ message GetAnnouncementsResponse {
   string userStatus = 10;
   string created = 11;
   string updated = 12;
+}
+
+message GetBillingGroupAnnouncementsRequest{
+  // Set empty to return all
+  string groupId = 1;
+}
+
+message GetBillingGroupAnnouncementsResponse {
+  string groupId = 1;
+  string groupName = 2;
+  string companyId = 3;
+  Announcement announcement = 4;
+}
+
+message GetCreditsRequest{}
+
+message Credit {
+  string id = 1;
+  string customerId = 2;
+  string customerName = 3;
+  double creditAmount = 4;
+  string term = 5;
+  string description = 6;
+  string created = 7;
+  double initialFee = 8;
+  double creditBalance = 9;
+  bool applied = 10;
+}
+
+message GetCsvSettingsRequest{}
+
+message CsvSetting {
+  string id = 1;
+  string name = 2;
+
+  message Column {
+    string name = 1;
+    string id = 2;
+    string description = 3;
+    bool enabled = 4;
+  }
+  repeated Column col = 3;
 }
