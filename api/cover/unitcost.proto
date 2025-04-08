@@ -94,22 +94,50 @@ message SourceInfo {
 }
 
 message CsvInfo {
+  // The S3 key of the CSV file.
+  // For example, "path/to/file.csv"
   string s3key = 1;
+  // The URL of the CSV file.
+  // For example, "https://s3.amazonaws.com/bucket/path/to/file.csv"
   string s3url = 2;
   RequiredColumns requiredColumns = 3;
 }
 
 message GoogleSheetInfo {
   // The ID of the Google Sheet.
+  // For example, "1BxiMVs0XRA5nFMd29P8v4g"
   string sheetId = 1;
   // The URL of the Google Sheet.
+  // For example, "https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMd29P8v4g/edit"
   string sheetUrl = 2;
   // The name of the sheet within the Google Sheet
+  // For example, "Sheet1" 
   string sheetName = 3;
-  RequiredColumns requiredColumns = 4;
+  // The range of cells to read from the sheet.
+  // For example, "A1:D10" to read cells A1 to D10
+  string sheetRange = 4;
+  // The required columns in the Google Sheet.
+  RequiredColumns requiredColumns = 5;
 }
 
 message CloudWatchInfo {
+  // The AWS region where the CloudWatch metric is located.
+  string region = 1;
+  // The account ID of the AWS account where the CloudWatch metric is located
+  string accountId = 2;
+  // The namespace of the CloudWatch metric.
+  // For example, "AWS/EC2" for EC2 metrics.
+  string namespace = 3;
+  // The name of the CloudWatch metric.
+  // For example, "CPUUtilization" for EC2 CPU utilization
+  string metricName = 4;
+  // The dimensions of the CloudWatch metric.
+  // For example, "InstanceId" for EC2 instance metrics.
+  // The dimensions are represented as key-value pairs.
+  // For example, {"InstanceId": "i-1234567890abcdef0"} for a specific EC2 instance.
+  map<string, string> dimensions = 5;
+  // The aggregation method to use for the CloudWatch metric
+  string aggregationMethod = 6;
 }
 
 message TelemetryInfo {
