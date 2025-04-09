@@ -5321,7 +5321,7 @@
     },
     "/v1/billinggroup/reseller/announcements/{groupId}": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Gets the announcement list for billing group",
+        "summary": "Gets the announcement list for billing group",
         "operationId": "Billing_GetBillingGroupAnnouncements",
         "responses": {
           "200": {
@@ -6988,7 +6988,7 @@
     },
     "/v1/credits": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Gets the credits",
+        "summary": "Gets the credits",
         "operationId": "Billing_GetCredits",
         "responses": {
           "200": {
@@ -7020,7 +7020,7 @@
     },
     "/v1/csvsettings": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Gets the csv column settings",
+        "summary": "Gets the csv column settings",
         "operationId": "Billing_GetCsvSettings",
         "responses": {
           "200": {
@@ -10162,9 +10162,43 @@
         ]
       }
     },
+    "/v1/reseller/announcement": {
+      "post": {
+        "summary": "Creates new announcement for wave users",
+        "operationId": "Billing_CreateAnnouncement",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateAnnouncementRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/reseller/announcements/{announcementId}": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Gets the announcement list.",
+        "summary": "Gets the announcement list.",
         "operationId": "Billing_GetAnnouncements",
         "responses": {
           "200": {
@@ -28950,6 +28984,44 @@
         }
       },
       "description": "Request message for the CreateAllocator rpc."
+    },
+    "v1CreateAnnouncementRequest": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "title": "Optional. Label description for the announcement"
+        },
+        "type": {
+          "type": "string",
+          "title": "Required. Announcement type (eg. \"info\", \"urgent\")"
+        },
+        "contents": {
+          "type": "string",
+          "title": "Required. Announcement message (HTML format)"
+        },
+        "billingGroups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Optional. Group Id that the announcement will apply"
+        },
+        "allBillingGroups": {
+          "type": "boolean",
+          "title": "Optional. Apply the announcement to all billing groups"
+        },
+        "start": {
+          "type": "string",
+          "format": "int64",
+          "title": "Required. Start time for the announcement (epoch time)"
+        },
+        "end": {
+          "type": "string",
+          "format": "int64",
+          "title": "Required. End time for the announcement (epoch time)"
+        }
+      }
     },
     "v1CreateAnomalyAlertRequest": {
       "type": "object",

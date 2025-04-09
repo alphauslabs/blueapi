@@ -822,7 +822,15 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Gets the announcement list.
+   // Creates new announcement for wave users
+  rpc CreateAnnouncement(CreateAnnouncementRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/reseller/announcement"
+      body: "*"
+    };
+  }
+
+  // Gets the announcement list.
   rpc GetAnnouncements(GetAnnouncementsRequest) returns (stream Announcement) {
     option (google.api.http) = {
       get: "/v1/reseller/announcements/{announcementId}"
@@ -2775,6 +2783,29 @@ message UpdateBillingGroupAccountSupportPlanRequest {
 message GetAnnouncementsRequest {
   // Optional. Set empty to return all
   string announcementId = 1;
+}
+
+message CreateAnnouncementRequest {
+  // Optional. Label description for the announcement
+  string label = 1;
+
+  // Required. Announcement type (eg. "info", "urgent")
+  string type = 2;
+
+  // Required. Announcement message (HTML format)
+  string contents = 3;
+
+  // Optional. Group Id that the announcement will apply
+  repeated string billingGroups = 4;
+
+  // Optional. Apply the announcement to all billing groups
+  bool allBillingGroups = 5;
+
+  // Required. Start time for the announcement (epoch time)
+  int64 start = 6;
+
+  // Required. End time for the announcement (epoch time)
+  int64 end = 7;
 }
 
 message Announcement {
