@@ -10196,6 +10196,47 @@
         ]
       }
     },
+    "/v1/reseller/announcement/{announcementId}": {
+      "put": {
+        "summary": "Full update existing announcement",
+        "operationId": "Billing_UpdateAnnouncement",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "announcementId",
+            "description": "Required",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingUpdateAnnouncementBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/reseller/announcements/{announcementId}": {
       "get": {
         "summary": "Gets the announcement list.",
@@ -17008,6 +17049,14 @@
         }
       },
       "description": "Request message for the Billing.UpdateAdjustmentConfig rpc."
+    },
+    "BillingUpdateAnnouncementBody": {
+      "type": "object",
+      "properties": {
+        "announcement": {
+          "$ref": "#/definitions/v1CreateAnnouncementRequest"
+        }
+      }
     },
     "BillingUpdateBillingGroupAccountSupportPlanBody": {
       "type": "object",

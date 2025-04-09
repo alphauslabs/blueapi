@@ -830,6 +830,14 @@ service Billing {
     };
   }
 
+  // Full update existing announcement 
+  rpc UpdateAnnouncement(UpdateAnnouncementRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/reseller/announcement/{announcementId}"
+      body: "*"
+    };
+  }
+
   // Gets the announcement list.
   rpc GetAnnouncements(GetAnnouncementsRequest) returns (stream Announcement) {
     option (google.api.http) = {
@@ -2806,6 +2814,12 @@ message CreateAnnouncementRequest {
 
   // Required. End time for the announcement (epoch time)
   int64 end = 7;
+}
+
+message UpdateAnnouncementRequest {
+  // Required
+  string announcementId = 1;
+  CreateAnnouncementRequest announcement = 2;
 }
 
 message Announcement {
