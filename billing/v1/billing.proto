@@ -838,6 +838,12 @@ service Billing {
     };
   }
 
+  rpc DeleteAnnouncement(DeleteAnnouncementRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/reseller/announcement/{announcementId}"
+    };
+  }
+
   // Gets the announcement list.
   rpc GetAnnouncements(GetAnnouncementsRequest) returns (stream Announcement) {
     option (google.api.http) = {
@@ -2820,6 +2826,11 @@ message UpdateAnnouncementRequest {
   // Required
   string announcementId = 1;
   CreateAnnouncementRequest announcement = 2;
+}
+
+message DeleteAnnouncementRequest {
+  // Required
+  string announcementId = 1;
 }
 
 message Announcement {
