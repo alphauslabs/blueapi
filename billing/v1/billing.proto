@@ -822,28 +822,66 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Gets the announcement list.
+   // Creates new announcement for wave users
+  rpc CreateAnnouncement(CreateAnnouncementRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/reseller/announcement"
+      body: "*"
+    };
+  }
+
+  // Full update existing announcement 
+  rpc UpdateAnnouncement(UpdateAnnouncementRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/reseller/announcement/{announcementId}"
+      body: "*"
+    };
+  }
+
+  // Update multiple announcements status 
+  rpc UpdateAnnouncementsStatus(UpdateAnnouncementsStatusRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      patch: "/v1/reseller/announcements/bulk/status"
+      body: "*"
+    };
+  }
+
+  // Update announcement date
+  rpc UpdateAnnouncementDate(UpdateAnnouncementDateRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      patch: "/v1/reseller/announcements/{announcementId}/date"
+      body: "*"
+    };
+  }
+
+  rpc DeleteAnnouncement(DeleteAnnouncementRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/reseller/announcement/{announcementId}"
+    };
+  }
+
+  // Gets the announcement list.
   rpc GetAnnouncements(GetAnnouncementsRequest) returns (stream Announcement) {
     option (google.api.http) = {
       get: "/v1/reseller/announcements/{announcementId}"
     };
   }
 
-  // WORK-IN-PROGRESS: Gets the announcement list for billing group
+  // Gets the announcement list for billing group
   rpc GetBillingGroupAnnouncements(GetBillingGroupAnnouncementsRequest) returns (stream GetBillingGroupAnnouncementsResponse) {
     option (google.api.http) = {
       get: "/v1/billinggroup/reseller/announcements/{groupId}"
     };
   }
   
- // WORK-IN-PROGRESS: Gets the credits
+ // Gets the credits
   rpc GetCredits(GetCreditsRequest) returns (stream Credit) {
     option (google.api.http) = {
       get: "/v1/credits"
     };
   }
 
-  // WORK-IN-PROGRESS: Gets the csv column settings
+  // Gets the csv column settings
   rpc GetCsvSettings(GetCsvSettingsRequest) returns (stream CsvSetting) {
     option (google.api.http) = {
       get: "/v1/csvsettings"
@@ -2774,6 +2812,54 @@ message UpdateBillingGroupAccountSupportPlanRequest {
 
 message GetAnnouncementsRequest {
   // Optional. Set empty to return all
+  string announcementId = 1;
+}
+
+message CreateAnnouncementRequest {
+  // Optional. Label description for the announcement
+  string label = 1;
+
+  // Required. Announcement type (eg. "info", "urgent")
+  string type = 2;
+
+  // Required. Announcement message (HTML format)
+  string contents = 3;
+
+  // Optional. Group Id that the announcement will apply
+  repeated string billingGroups = 4;
+
+  // Optional. Apply the announcement to all billing groups
+  bool allBillingGroups = 5;
+
+  // Required. Start time for the announcement (epoch time)
+  int64 start = 6;
+
+  // Required. End time for the announcement (epoch time)
+  int64 end = 7;
+
+  // Required. Announcement status ("enabled", "disabled")
+  string status = 8;
+}
+
+message UpdateAnnouncementRequest {
+  // Required
+  string announcementId = 1;
+  CreateAnnouncementRequest announcement = 2;
+}
+
+message UpdateAnnouncementsStatusRequest {
+  repeated string announcementId = 1;
+  string status = 2;
+}
+
+message UpdateAnnouncementDateRequest {
+  repeated string announcementId = 1;
+  // Required. Announcement date (epoch time)
+  int64 date = 2;
+}
+
+message DeleteAnnouncementRequest {
+  // Required
   string announcementId = 1;
 }
 
