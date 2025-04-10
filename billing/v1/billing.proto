@@ -838,6 +838,14 @@ service Billing {
     };
   }
 
+  // Update multiple announcements status 
+  rpc UpdateAnnouncementsStatus(UpdateAnnouncementsStatusRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      patch: "/v1/reseller/announcements/bulk/status"
+      body: "*"
+    };
+  }
+
   rpc DeleteAnnouncement(DeleteAnnouncementRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/reseller/announcement/{announcementId}"
@@ -2820,12 +2828,20 @@ message CreateAnnouncementRequest {
 
   // Required. End time for the announcement (epoch time)
   int64 end = 7;
+
+  // Required. Announcement status ("enabled", "disabled")
+  string status = 8;
 }
 
 message UpdateAnnouncementRequest {
   // Required
   string announcementId = 1;
   CreateAnnouncementRequest announcement = 2;
+}
+
+message UpdateAnnouncementsStatusRequest {
+  repeated string announcementId = 1;
+  string status = 2;
 }
 
 message DeleteAnnouncementRequest {
