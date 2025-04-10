@@ -846,6 +846,14 @@ service Billing {
     };
   }
 
+  // Update announcement date
+  rpc UpdateAnnouncementDate(UpdateAnnouncementDateRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      patch: "/v1/reseller/announcements/{announcementId}/date"
+      body: "*"
+    };
+  }
+
   rpc DeleteAnnouncement(DeleteAnnouncementRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/reseller/announcement/{announcementId}"
@@ -2842,6 +2850,12 @@ message UpdateAnnouncementRequest {
 message UpdateAnnouncementsStatusRequest {
   repeated string announcementId = 1;
   string status = 2;
+}
+
+message UpdateAnnouncementDateRequest {
+  repeated string announcementId = 1;
+  // Required. Announcement date (epoch time)
+  int64 date = 2;
 }
 
 message DeleteAnnouncementRequest {
