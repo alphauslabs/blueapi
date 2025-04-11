@@ -5679,6 +5679,86 @@
         ]
       }
     },
+    "/v1/billinggroup/{id}:invoiceSettings": {
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Update linked resources for a billing group",
+        "operationId": "Billing_UpdateBillingGroupInvoiceSettings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingUpdateBillingGroupInvoiceSettingsBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/billinggroup/{id}:resources": {
+      "put": {
+        "summary": "WORK-IN-PROGRESS: Update linked resources for a billing group",
+        "operationId": "Billing_UpdateBillingGroupLinkedResources",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingUpdateBillingGroupLinkedResourcesBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups": {
       "get": {
         "summary": "Lists all billing groups.",
@@ -17246,6 +17326,23 @@
       },
       "description": "Request message for the UpdateBillingGroupInvoiceServiceDiscounts rpc."
     },
+    "BillingUpdateBillingGroupInvoiceSettingsBody": {
+      "type": "object",
+      "properties": {
+        "language": {
+          "type": "string"
+        },
+        "rateReference": {
+          "type": "string"
+        },
+        "diplayCost": {
+          "type": "string"
+        },
+        "calculationType": {
+          "type": "string"
+        }
+      }
+    },
     "BillingUpdateBillingGroupInvoiceTemplateBody": {
       "type": "object",
       "properties": {
@@ -17258,6 +17355,37 @@
       "required": [
         "invoiceTemplateId"
       ]
+    },
+    "BillingUpdateBillingGroupLinkedResourcesBody": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string"
+        },
+        "selectionMethod": {
+          "type": "string"
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1AccountToAdd"
+          },
+          "title": "Account settings"
+        },
+        "settings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1TagSetting"
+          },
+          "title": "Tag settings for different customer accounts"
+        },
+        "nonTagSetting": {
+          "$ref": "#/definitions/v1NonTagSetting",
+          "title": "Non-tag settings for the billing group"
+        }
+      }
     },
     "BillingUpdateCustomFieldBody": {
       "type": "object",

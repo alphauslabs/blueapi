@@ -807,6 +807,23 @@ service Billing {
     };
   }
 
+  // WORK-IN-PROGRESS: Update linked resources for a billing group
+  rpc UpdateBillingGroupLinkedResources(UpdateBillingGroupLinkedResourcesRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/billinggroup/{id}:resources"
+      body: "*"
+    };
+  } 
+
+    // WORK-IN-PROGRESS: Update linked resources for a billing group
+  rpc UpdateBillingGroupInvoiceSettings(UpdateBillingGroupInvoiceSettingsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/billinggroup/{id}:invoiceSettings"
+      body: "*"
+    };
+  } 
+
+
   // WORK-IN-PROGRESS: Gets the account support plan in billing group. Only available in Ripple.
   rpc GetBillingGroupAccountSupportPlan(GetBillingGroupAccountSupportPlanRequest) returns (GetBillingGroupAccountSupportPlanResponse) {
     option (google.api.http) = {
@@ -2760,6 +2777,29 @@ message UpdateBillingGroupFreeFormatRequest {
   string id = 1;
   string vendor = 2;
   repeated FreeFormItem items = 3;
+}
+
+message UpdateBillingGroupLinkedResourcesRequest {
+  string id = 1;
+  string vendor = 2;
+  string selectionMethod = 3;
+
+    // Account settings
+  optional repeated AccountToAdd accounts = 4;
+
+    // Tag settings for different customer accounts
+  optional repeated TagSetting settings = 5;
+  
+  // Non-tag settings for the billing group
+  optional NonTagSetting nonTagSetting = 6;
+}
+
+message UpdateBillingGroupInvoiceSettingsRequest {
+  string id = 1;
+  optional string language = 2;
+  optional string rateReference = 3;
+  optional string diplayCost = 4;
+  optional string calculationType = 5;
 }
 
 message DeleteBillingGroupRequest {
