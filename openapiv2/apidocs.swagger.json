@@ -11835,6 +11835,39 @@
         ]
       }
     },
+    "/v1/unitcost/metrics/preview/googlesheet": {
+      "post": {
+        "summary": "Preview Google Sheet Data",
+        "operationId": "Cover_PreviewGoogleSheet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PreviewGoogleSheetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1PreviewGoogleSheetRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/unitcost/metrics/{id}": {
       "get": {
         "summary": "Get Specific Unit Metric",
@@ -25531,6 +25564,17 @@
         }
       }
     },
+    "coverRowData": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "coverS3IncompleteMultiPartUploadAbortConfiguration": {
       "type": "object",
       "properties": {
@@ -33652,6 +33696,43 @@
     },
     "v1Preference": {
       "type": "object"
+    },
+    "v1PreviewGoogleSheetRequest": {
+      "type": "object",
+      "properties": {
+        "sheetUrl": {
+          "type": "string",
+          "title": "Required. The URL of the Google Sheet.\nExample: \"https://docs.google.com/spreadsheets/d/1A2B3C4D5E6F7G8H9I0J/edit\""
+        },
+        "sheetName": {
+          "type": "string",
+          "title": "Required. The name of the sheet within the Google Sheet.\nExample: \"Sheet1\""
+        },
+        "range": {
+          "type": "string",
+          "title": "Required. The range of cells to preview. \nExample: \"A1:Z100\""
+        }
+      }
+    },
+    "v1PreviewGoogleSheetResponse": {
+      "type": "object",
+      "properties": {
+        "header": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Contains the column headers of the Google Sheet."
+        },
+        "rowData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverRowData"
+          },
+          "description": "Contains the data rows of the Google Sheet."
+        }
+      }
     },
     "v1ProcessAuth0UserRequest": {
       "type": "object",
