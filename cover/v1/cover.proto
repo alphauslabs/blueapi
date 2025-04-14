@@ -1358,6 +1358,15 @@ service Cover {
     };
   }
 
+  // Preview Google Sheet Data
+  rpc PreviewGoogleSheet(PreviewGoogleSheetRequest) returns (PreviewGoogleSheetResponse) {
+    option (google.api.http) = {
+      post: "/v1/unitcost/metrics/preview/googlesheet"
+      body: "*"
+    };
+  }
+
+
   rpc VerifyAPIAccess(VerifyAPIAccessRequest) returns (VerifyAPIAccessResponse) {
     option (google.api.http) = {
       get: "/v1/apiaccess/verify"
@@ -4059,4 +4068,23 @@ message DeleteUnitMetricRequest{
 
 message DeleteUnitMetricResponse{
   string id = 1;
+}
+
+message PreviewGoogleSheetRequest{
+  // Required. The URL of the Google Sheet.
+  // Example: "https://docs.google.com/spreadsheets/d/1A2B3C4D5E6F7G8H9I0J/edit"
+  string sheetUrl = 1;
+  // Required. The name of the sheet within the Google Sheet.
+  // Example: "Sheet1"
+  string sheetName = 2;
+  // Required. The range of cells to preview. 
+  // Example: "A1:Z100"
+  string range = 3;
+}
+
+message PreviewGoogleSheetResponse{
+  //Contains the column headers of the Google Sheet.
+  repeated string header = 1;
+  //Contains the data rows of the Google Sheet.
+  repeated api.cover.RowData rowData = 2;
 }
