@@ -7818,6 +7818,39 @@
         ]
       }
     },
+    "/v1/exportcsv/payers:export": {
+      "post": {
+        "summary": "Exports RI and SP for all payers.",
+        "operationId": "Cost_GetExportRISP",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetExportRISPResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetExportRISPRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/freeformat": {
       "post": {
         "summary": "Creates new billing group free format item (miscellaneous)",
@@ -32041,6 +32074,25 @@
           "type": "string"
         }
       }
+    },
+    "v1GetExportRISPRequest": {
+      "type": "object",
+      "properties": {
+        "language": {
+          "type": "string",
+          "description": "Usually the language of the user information is used, \nbut it may be a different language due to cahce.\nIn that case, you can use this option to change the language of CSV."
+        }
+      }
+    },
+    "v1GetExportRISPResponse": {
+      "type": "object",
+      "properties": {
+        "downloadLink": {
+          "type": "string",
+          "title": "csv direct download link\nexpires in 10 minutes"
+        }
+      },
+      "description": "Request message for the ExportBillingGroupInvoiceServiceDiscounts rpc."
     },
     "v1GetFavoriteViewsResponse": {
       "type": "object",

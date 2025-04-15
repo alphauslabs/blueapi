@@ -20,6 +20,7 @@ import "api/wave/budget.proto";
 import "api/costtag.proto";
 import "protos/operation.proto";
 import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/protobuf/field_mask.proto";
@@ -520,6 +521,14 @@ service Cost {
   rpc GetCostReduction(GetCostReductionRequest) returns (GetCostReductionResponse) {
     option (google.api.http) = {
       post: "/v1/{vendor}/reduction/{orgId}:read"
+      body: "*"
+    };
+  }
+
+  // Exports RI and SP for all payers. 
+  rpc GetExportRISP(GetExportRISPRequest) returns (GetExportRISPResponse) {
+    option (google.api.http) = {
+      post: "/v1/exportcsv/payers:export"
       body: "*"
     };
   }
@@ -1729,6 +1738,20 @@ message GetCostReductionRequest {
 message GetCostReductionResponse {
   string orgId = 1;
   api.aws.AwsCostReductions awsCostReductions = 2;
+}
+
+message GetExportRISPRequest {  
+  // Usually the language of the user information is used, 
+  // but it may be a different language due to cahce.
+  // In that case, you can use this option to change the language of CSV.
+  string language = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Request message for the ExportBillingGroupInvoiceServiceDiscounts rpc.
+message GetExportRISPResponse {
+  // csv direct download link
+  // expires in 10 minutes
+  string downloadLink = 1;
 }
 
 // Request message for GetUtilization
