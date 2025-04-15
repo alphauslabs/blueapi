@@ -1358,10 +1358,18 @@ service Cover {
     };
   }
 
+  // Confirm Google Sheet Access
+  rpc ConfirmGoogleSheetAccess(ConfirmGoogleSheetAccessRequest) returns (ConfirmGoogleSheetAccessResponse) {
+    option (google.api.http) = {
+      post: "/v1/unitcost/metrics/googlesheet/confirm"
+      body: "*"
+    };
+  }
+
   // Preview Google Sheet Data
   rpc PreviewGoogleSheet(PreviewGoogleSheetRequest) returns (PreviewGoogleSheetResponse) {
     option (google.api.http) = {
-      post: "/v1/unitcost/metrics/preview/googlesheet"
+      post: "/v1/unitcost/metrics/googlesheet/preview"
       body: "*"
     };
   }
@@ -4071,15 +4079,18 @@ message DeleteUnitMetricResponse{
 }
 
 message PreviewGoogleSheetRequest{
-  // Required. The URL of the Google Sheet.
+  // Required. The id of the Google Sheet.
+  // Example: "1A2B3C4D5E6F7G8H9I0J"
+  string googleSheetId = 1;
   // Example: "https://docs.google.com/spreadsheets/d/1A2B3C4D5E6F7G8H9I0J/edit"
-  string sheetUrl = 1;
+  // Optional. The URL of the Google Sheet. 
+  string sheetUrl = 2;
   // Required. The name of the sheet within the Google Sheet.
   // Example: "Sheet1"
-  string sheetName = 2;
+  string sheetName = 3;
   // Required. The range of cells to preview. 
   // Example: "A1:Z100"
-  string range = 3;
+  string range = 4;
 }
 
 message PreviewGoogleSheetResponse{
@@ -4087,4 +4098,19 @@ message PreviewGoogleSheetResponse{
   repeated string header = 1;
   //Contains the data rows of the Google Sheet.
   repeated api.cover.RowData rowData = 2;
+}
+
+message ConfirmGoogleSheetAccessRequest{
+  // Required. The URL of the Google Sheet.
+  // Example: "https://docs.google.com/spreadsheets/d/1A2B3C4D5E6F7G8H9I0J/edit"
+  string sheetUrl = 1;
+}
+
+message ConfirmGoogleSheetAccessResponse{
+  // The extracted id from the Google Sheet URL.
+  // Example: "1A2B3C4D5E6F7G8H9I0J"
+  string sheerId = 1;
+  // The name of the sheet within the Google Sheet.
+  // Example: "Sheet1"
+  repeated string sheetNames = 2;
 }
