@@ -3200,6 +3200,38 @@
         ]
       }
     },
+    "/v1/ai/costusage": {
+      "post": {
+        "operationId": "Cover_GetAICostAndUsage",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAICostAndUsageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetAICostAndUsageRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/alerts": {
       "post": {
         "summary": "CreateBudgetAlerts",
@@ -19193,6 +19225,15 @@
     "ExecuteOptimizationResponseGCPOption": {
       "type": "object"
     },
+    "FilterOperator": {
+      "type": "string",
+      "enum": [
+        "OPERATOR_UNSPECIFIED",
+        "EQUAL",
+        "NOT_EQUAL"
+      ],
+      "default": "OPERATOR_UNSPECIFIED"
+    },
     "FlowUpdateSettingsBody": {
       "type": "object",
       "properties": {
@@ -19271,6 +19312,55 @@
         },
         "billingAccountId": {
           "type": "string"
+        }
+      }
+    },
+    "GetAICostAndUsageRequestFilter": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "operator": {
+          "$ref": "#/definitions/FilterOperator"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "GetAICostAndUsageRequestGranularity": {
+      "type": "string",
+      "enum": [
+        "GRANULARITY_UNSPECIFIED",
+        "DAILY",
+        "MONTHLY"
+      ],
+      "default": "GRANULARITY_UNSPECIFIED"
+    },
+    "GetAICostAndUsageResponseMetric": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "cost": {
+          "$ref": "#/definitions/v1GetAICostAndUsageResponseCost"
+        },
+        "usage": {
+          "$ref": "#/definitions/GetAICostAndUsageResponseUsage"
+        }
+      }
+    },
+    "GetAICostAndUsageResponseUsage": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
         }
       }
     },
@@ -22055,6 +22145,17 @@
           "type": "string"
         },
         "family": {
+          "type": "string"
+        }
+      }
+    },
+    "apicoverResult": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
           "type": "string"
         }
       }
@@ -25510,17 +25611,6 @@
         "azurecspOptions": {
           "$ref": "#/definitions/coverCostGroupAzureCspOptions",
           "description": "Optional. Valid only for the `azurecsp` vendor. AzureCSP-specific options."
-        }
-      }
-    },
-    "coverResult": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
         }
       }
     },
@@ -31239,6 +31329,93 @@
         }
       }
     },
+    "v1GetAICostAndUsageRequest": {
+      "type": "object",
+      "properties": {
+        "costGroupId": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/v1GetAICostAndUsageRequestType"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": "string"
+        },
+        "granularity": {
+          "$ref": "#/definitions/GetAICostAndUsageRequestGranularity"
+        },
+        "groupBys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/GetAICostAndUsageRequestFilter"
+          }
+        }
+      }
+    },
+    "v1GetAICostAndUsageRequestType": {
+      "type": "string",
+      "enum": [
+        "TYPE_UNSPECIFIED",
+        "COST",
+        "USAGE"
+      ],
+      "default": "TYPE_UNSPECIFIED"
+    },
+    "v1GetAICostAndUsageResponse": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GetAICostAndUsageResponseResult"
+          }
+        }
+      }
+    },
+    "v1GetAICostAndUsageResponseCost": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "currency": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetAICostAndUsageResponseResult": {
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "metrics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/GetAICostAndUsageResponseMetric"
+          }
+        }
+      }
+    },
     "v1GetAccessGroupResponse": {
       "type": "object",
       "properties": {
@@ -31629,7 +31806,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/coverResult"
+            "$ref": "#/definitions/apicoverResult"
           }
         },
         "tagData": {
