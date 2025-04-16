@@ -1380,6 +1380,75 @@ service Cover {
       get: "/v1/apiaccess/verify"
     };
   }
+
+  rpc GetAICostAndUsage(GetAICostAndUsageRequest) returns (GetAICostAndUsageResponse) {
+    option (google.api.http) = {
+      post: "/v1/costusage/ai"
+      body: "*"
+    };
+  }
+}
+
+message GetAICostAndUsageRequest {
+  enum Granularity {
+    GRANULARITY_UNSPECIFIED = 0;
+    DAILY = 1;
+    MONTHLY = 2;
+  }
+
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    COST = 1;
+    USAGE = 2;
+  }
+
+  message Filter {
+    enum Operator {
+      OPERATOR_UNSPECIFIED = 0;
+      EQUAL = 1;
+      NOT_EQUAL = 2;
+    }
+
+    string key = 1;
+    Operator operator = 2;
+    string value = 3;
+  }
+
+  string costGroupId = 1;
+  string vendor = 2;
+  Type type = 3;
+  string startTime = 4;
+  string endTime = 5;
+  Granularity granularity = 6;
+  repeated string groupBys = 7;
+  repeated Filter filters = 8;
+}
+
+message GetAICostAndUsageResponse {
+  message Cost {
+    double amount = 1;
+    string currency = 2;
+  }
+
+  message Usage {
+    string unit = 1;
+    double amount = 2;
+  }
+
+  message Metric {
+    string date = 1;
+    oneof data {
+      Cost cost = 2;
+      Usage usage = 3;
+    }
+  }
+
+  message Result {
+    map<string, string> attributes = 1;
+    repeated Metric metrics = 2;
+  }
+
+  repeated Result results = 1;
 }
 
 message GetExecutionStatusRequest {}
