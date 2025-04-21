@@ -1387,6 +1387,103 @@ service Cover {
       body: "*"
     };
   }
+
+  rpc GetContainerCostUsage(ContainerCostUsageRequest) returns (ContainerCostUsageResponse) {
+    option (google.api.http) = {
+      post: "/v1/container/costusage"
+      body: "*"
+    };
+  }
+}
+
+message ContainerCostUsageRequest {
+  enum TimeGranularity {
+    GRANULARITY_UNSPECIFIED = 0;
+    DAILY = 1;
+    MONTHLY = 2;
+  }
+
+  enum MetricType {
+    METRIC_UNSPECIFIED = 0;
+    COST = 1;
+    USAGE = 2;
+    EFFICIENCY = 3;
+    UNUSED_COST = 4;
+  }
+
+  enum ServiceType {
+    SERVICE_UNSPECIFIED = 0;
+    ECS = 1;
+    EKS = 2;
+  }
+
+  message FilterCriteria {
+    enum FilterOperator {
+      OPERATOR_UNSPECIFIED = 0;
+      EQUAL = 1;
+      NOT_EQUAL = 2;
+    }
+
+    string key = 1;
+    FilterOperator operator = 2;
+    string value = 3;
+  }
+
+  string costGroupId = 1;
+  string vendor = 2;
+  MetricType metricType = 3;
+  string startTime = 4;
+  string endTime = 5;
+  TimeGranularity granularity = 6;
+  repeated string groupBys = 7;
+  repeated FilterCriteria filters = 8;
+  ServiceType serviceType = 9;
+}
+
+message ContainerCostUsageResponse {
+  message CostMetric {
+    double amount = 1;
+    string currency = 2;
+    double unusedAmount = 3;
+  }
+
+  message UsageMetric {
+    string unit = 1;
+    double reservedAmount = 2;
+    double actualAmount = 3;
+    double efficiency = 4;
+  }
+
+  message MetricDataPoint {
+    string date = 1;
+    oneof metricData {
+      CostMetric cost = 2;
+      UsageMetric usage = 3;
+    }
+  }
+
+  message ResourceHighlight {
+    string resourceId = 1;
+    string resourceName = 2;
+    double value = 3;
+  }
+
+  message ResourceHighlights {
+    ResourceHighlight highestClusterCost = 1;
+    ResourceHighlight highestUnusedCost = 2;
+    ResourceHighlight highestWorkloadCost = 3;
+    ResourceHighlight highestComputeCost = 4;
+  }
+
+  message GroupedResult {
+    map<string, string> attributes = 1;
+    repeated MetricDataPoint metricDataPoints = 2;
+  }
+
+  repeated GroupedResult results = 1;
+  ResourceHighlights highlights = 2;
+  double totalCost = 3;
+  double avgEfficiency = 4;
 }
 
 message GetAICostAndUsageRequest {
