@@ -815,14 +815,29 @@ service Billing {
     };
   } 
 
-    // WORK-IN-PROGRESS: Update linked resources for a billing group
+  // WORK-IN-PROGRESS: Update invoice settings for a billing group
   rpc UpdateBillingGroupInvoiceSettings(UpdateBillingGroupInvoiceSettingsRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/v1/billinggroup/{id}:invoiceSettings"
       body: "*"
     };
-  } 
+  }
 
+  // WORK-IN-PROGRESS: Update reseller charges for a billing group
+  rpc UpdateBillingGroupResellerCharges(UpdateBillingGroupResellerChargesRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/billinggroup/{id}:resellerCharges"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Update  additonal charges for a billing group
+  rpc UpdateBillingGroupAdditionalCharges(UpdateBillingGroupAdditionalChargesRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/billinggroup/{id}:additionalCharges"
+      body: "*"
+    };
+  }
 
   // WORK-IN-PROGRESS: Gets the account support plan in billing group. Only available in Ripple.
   rpc GetBillingGroupAccountSupportPlan(GetBillingGroupAccountSupportPlanRequest) returns (GetBillingGroupAccountSupportPlanResponse) {
@@ -2796,10 +2811,37 @@ message UpdateBillingGroupLinkedResourcesRequest {
 
 message UpdateBillingGroupInvoiceSettingsRequest {
   string id = 1;
-  optional string language = 2;
-  optional string rateReference = 3;
-  optional string diplayCost = 4;
-  optional string calculationType = 5;
+  optional string billingTitle = 2;
+  optional string calculationType = 3;
+}
+
+message UpdateBillingGroupResellerChargesRequest {
+  string id = 1;
+  optional string invoiceTemplate = 2;
+  CreateBillingGroupRequestInvoice invoice = 3;
+}
+
+message UpdateBillingGroupAdditionalChargesRequest {
+  string id = 1;
+
+  // CustomizedBillingServiceBillingSetting
+  message CustomizedBillingServiceBillingSetting {
+    // Required. [blueapi.api.ripple.CustomizedBillingService.id]
+    string id = 1 [(google.api.field_behavior) = REQUIRED];
+
+    // Required. [blueapi.api.ripple.ChargingTarget]
+    api.ripple.ChargingTarget chargingTarget = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // Optional. if chargingTarget is BILLINGGROUP, `accounts` is set emptty.
+    //
+    // Specify the accountIds. For example: [`accountId1`,`accountId2`,`accountId3`]
+    repeated string accounts = 3 [(google.api.field_behavior) = OPTIONAL];
+  }
+
+  // Required. customized billing service setting.
+  repeated CustomizedBillingServiceBillingSetting aws = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated CustomizedBillingServiceBillingSetting azure = 3 [(google.api.field_behavior) = REQUIRED];
+  repeated CustomizedBillingServiceBillingSetting gcp = 4 [(google.api.field_behavior) = REQUIRED];
 }
 
 message DeleteBillingGroupRequest {
