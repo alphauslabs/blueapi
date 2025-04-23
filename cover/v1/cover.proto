@@ -1374,6 +1374,12 @@ service Cover {
     };
   }
 
+  // Get Cloudwatch Metadata
+  rpc GetCloudwatchMetadata(GetCloudwatchMetadataRequest) returns (GetCloudwatchMetadataResponse) {
+    option (google.api.http) = {
+      get: "/v1/unitcost/metrics/cloudwatch/metadata"
+    };
+  }
 
   rpc VerifyAPIAccess(VerifyAPIAccessRequest) returns (VerifyAPIAccessResponse) {
     option (google.api.http) = {
@@ -4279,4 +4285,40 @@ message ConfirmGoogleSheetAccessResponse{
   // The name of the sheet within the Google Sheet.
   // Example: "Sheet1"
   repeated string sheetNames = 2;
+}
+
+message GetCloudwatchMetadataRequest {
+  // Required. The AWS account ID to assume when querying CloudWatch.
+  string accountId = 1;
+
+  // Required. The AWS region where the metrics should be queried (e.g., "us-east-1").
+  string region = 2;
+
+  // Required. The type of metadata to retrieve.
+  // Valid values: "namespace", "metric", or "dimension".
+  string type = 3;
+
+  // Conditionally required.
+  // Must be provided when `type` is "metric" or "dimension".
+  // Example: "AWS/EC2", "AWS/Lambda", or a custom namespace like "MyApp/BusinessMetrics".
+  string namespace = 4;
+
+  // Conditionally required.
+  // Must be provided when `type` is "dimension".
+  // Example: "CPUUtilization", "Invocations", etc.
+  string metricName = 5;
+}
+
+
+
+message GetCloudwatchMetadataResponse {
+  repeated string namespaces = 1;
+  repeated string metrics = 2;
+
+  message Dimension {
+    string name = 1;
+    repeated string values = 2;
+  }
+
+  repeated Dimension dimensions = 3;
 }
