@@ -48,9 +48,16 @@ service Flow {
       get: "/v1/settings/{id}"
     };
   }
+
+  // Fetch user savings plan details
+  rpc GetRecommendationDetails(GetRecommendationDetailsRequest) returns (GetRecommendationDetailsResponse) {
+    option (google.api.http) = {
+      get: "/v1/settings/recommendations/{id}"
+    };
+  }
 }
 
-
+// ##################################### REQUESTS #####################################
 // Request message for the Flow.GetInfo rpc.
 message GetInfoRequest {}
 
@@ -126,6 +133,12 @@ message GetSettingsRequest {
   string id = 1;
 }
 
+message GetRecommendationDetailsRequest {
+  // Required. The id of the payer to fetch recommendation details for.
+  string id = 1;
+}
+
+// ##################################### RESPONSES #####################################
 // Response message for the Flow.GetInfo rpc.
 message GetInfoResponse {
   string response = 1;
@@ -153,4 +166,54 @@ message GetSettingsResponse {
   bool approval = 9;
   string lastUpdated = 10;
   string payerId = 11;
+}
+
+message GetRecommendationDetailsResponse {
+  // Unique ID of the recommendation details entry
+  string id = 1;
+
+  // Suggested hourly commitment to purchase in USD
+  double hourlyCommitment = 2;
+
+  // Current Savings Plan commitment applied
+  double currentSPCommitment = 3;
+
+  // Estimated daily on-demand cost without any Savings Plans
+  double estimatedOnDemandCost = 4;
+
+  // Total current daily cost from usage, before applying any SP recommendation
+  double totalDailyCost = 5;
+
+  // Projected monthly savings from the recommended SP
+  double estimatedMonthlySavings = 6;
+
+  // Percentage of potential savings from SP
+  double estimatedSavings = 7;
+
+  // Customization setting for SP
+  string recommendationLevel = 8;
+
+  // Type of Savings Plan
+  string planType = 9;
+
+  // SP term duration in years
+  string planTerm = 10;
+
+  // Payment option for the SP
+  string paymentOption = 11;
+
+  // Historical lookback period used for analysis
+  string lookBackPeriod = 12;
+
+  // Estimated Return on Investment for the SP
+  double estimatedROI = 13;
+
+  // Total projected SP cost over the term
+  double estimatedSPCost = 14;
+
+  // Estimated total cost including SP and on-demand
+  double estimatedTotalCost = 15;
+
+  // Timestamp of the last update
+  string lastUpdated = 16;
 }
