@@ -171,49 +171,58 @@ message GetSettingsResponse {
 message GetRecommendationDetailsResponse {
   // Unique ID of the recommendation details entry
   string id = 1;
-
-  // Suggested hourly commitment to purchase in USD
-  double hourlyCommitment = 2;
-
-  // Current Savings Plan commitment applied
-  double currentSPCommitment = 3;
-
-  // Estimated daily on-demand cost without any Savings Plans
-  double estimatedOnDemandCost = 4;
-
-  // Total current daily cost from usage, before applying any SP recommendation
+  
+  // Projected monthly on-demand spend without Savings Plans, normalized from lookback period
+  double currentMonthlyOnDemandSpend = 2;
+  
+  // Projected total monthly spend after applying the recommended Savings Plan, normalized
+  double estimatedMonthlySpend = 3;
+  
+  // Difference between on-demand and post-SP spend, computed from normalized values
+  double estimatedMonthlySavingsDerived = 4;
+  
+  // Total current daily cost from usage, before applying any SP recommendation (Derived)
   double totalDailyCost = 5;
-
-  // Projected monthly savings from the recommended SP
-  double estimatedMonthlySavings = 6;
-
-  // Percentage of potential savings from SP
-  double estimatedSavings = 7;
-
-  // Customization setting for SP
-  string recommendationLevel = 8;
-
-  // Type of Savings Plan
-  string planType = 9;
-
-  // SP term duration in years
-  string planTerm = 10;
-
-  // Payment option for the SP
-  string paymentOption = 11;
-
-  // Historical lookback period used for analysis
-  string lookBackPeriod = 12;
-
-  // Estimated Return on Investment for the SP
-  double estimatedROI = 13;
-
-  // Total projected SP cost over the term
-  double estimatedSPCost = 14;
-
-  // Estimated total cost including SP and on-demand
-  double estimatedTotalCost = 15;
-
-  // Timestamp of the last update
-  string lastUpdated = 16;
-}
+  
+  // Current Savings Plan commitment applied 
+  double currentSPCommitment = 6;
+  
+  // Estimated daily on-demand cost without any Savings Plans
+  double estimatedOnDemandCost = 7;
+  
+  // Suggested hourly commitment to purchase in USD
+  double hourlyCommitment = 8;
+  
+  // Projected monthly savings from the recommended savings plan
+  double estimatedMonthlySavings = 9;
+  
+  // Percentage of potential savings from savings plan
+  double estimatedSavings = 10;
+  
+  // Customization setting for savings plan
+  string recommendationLevel = 11;
+  
+  // Savings plan type.
+  string planType = 12;
+  
+  // Savings plan duration.
+  string planTerm = 13;
+  
+  // Savings plan payment option.
+  string paymentOption = 14;
+  
+  // Savings plan lookback period used for analysis.
+  string lookBackPeriod = 15;
+  
+  // Savings plan estimated return on investment.
+  double estimatedROI = 16;
+  
+  // Savings plan total projected cost over the term.
+  double estimatedSPCost = 17;
+  
+  // Savings plan estimated total cost and including on-demand.
+  double estimatedTotalCost = 18;
+  
+  // Savings plan last updated
+  string lastUpdated = 19;
+ }
