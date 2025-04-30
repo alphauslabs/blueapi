@@ -1501,12 +1501,6 @@ message GetAICostAndUsageRequest {
     MONTHLY = 2;
   }
 
-  enum Type {
-    TYPE_UNSPECIFIED = 0;
-    COST = 1;
-    USAGE = 2;
-  }
-
   message Filter {
     enum Operator {
       OPERATOR_UNSPECIFIED = 0;
@@ -1521,12 +1515,11 @@ message GetAICostAndUsageRequest {
 
   string costGroupId = 1;
   string vendor = 2;
-  Type type = 3;
-  string startTime = 4;
-  string endTime = 5;
-  Granularity granularity = 6;
-  repeated string groupBys = 7;
-  repeated Filter filters = 8;
+  string startTime = 3;
+  string endTime = 4;
+  Granularity granularity = 5;
+  repeated string groupBys = 6;
+  repeated Filter filters = 7;
 }
 
 message GetAICostAndUsageResponse {
@@ -1542,10 +1535,9 @@ message GetAICostAndUsageResponse {
 
   message Metric {
     string date = 1;
-    oneof data {
-      Cost cost = 2;
-      Usage usage = 3;
-    }
+    Cost cost = 2;
+    Usage usage = 3;
+    
   }
 
   message Result {
