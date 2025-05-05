@@ -1021,6 +1021,47 @@
         ]
       }
     },
+    "/billing/v1/reseller/announcements/{announcementId}": {
+      "get": {
+        "summary": "Gets the announcement list.",
+        "operationId": "Billing_GetAnnouncements",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1Announcement"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1Announcement"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "announcementId",
+            "description": "Optional. Set empty to return all",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/iam/v1/apiclients": {
       "get": {
         "summary": "Lists all API clients belonging to the caller.",
@@ -10551,47 +10592,6 @@
             "schema": {
               "$ref": "#/definitions/v1UpdateAnnouncementsStatusRequest"
             }
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
-      }
-    },
-    "/v1/reseller/announcements/{announcementId}": {
-      "get": {
-        "summary": "Gets the announcement list.",
-        "operationId": "Billing_GetAnnouncements",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1Announcement"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1Announcement"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "announcementId",
-            "description": "Optional. Set empty to return all",
-            "in": "path",
-            "required": true,
-            "type": "string"
           }
         ],
         "tags": [
