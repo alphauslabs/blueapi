@@ -201,6 +201,14 @@ service Billing {
     };
   }
 
+  // Update invoice exchangerate for the month 
+  rpc UpdateInvoiceExchangeRate(UpdateInvoiceExchangeRateRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/invoice/exchangerate/{month}"
+      body: "*"
+    };
+  }
+
   // Creates/Updates a billing group's invoice template. Only available in Ripple.
   rpc UpdateBillingGroupInvoiceTemplate(UpdateBillingGroupInvoiceTemplateRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -3001,4 +3009,19 @@ message CsvSetting {
     bool enabled = 4;
   }
   repeated Column col = 3;
+}
+
+message UpdateInvoiceExchangeRateRequest {
+  // Required. Format: yyyymm.
+  string month = 1;
+
+  // Required. vendor (aws, gcp, or azure)
+  string vendor = 2;
+
+  // Required. Map of currency code to exchange rate value per USD
+  // ex. jpy:100 
+  map<string, double> exchangeRate = 3;
+
+  // Required. Billing group id to apply
+  repeated string groupIds = 4;
 }
