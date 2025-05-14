@@ -8233,6 +8233,47 @@
         ]
       }
     },
+    "/v1/invoice/exchangerate/{month}": {
+      "put": {
+        "summary": "Update invoice exchangerate for the month",
+        "operationId": "Billing_UpdateInvoiceExchangeRate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "month",
+            "description": "Required. Format: yyyymm.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingUpdateInvoiceExchangeRateBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/invoice/status/{date}:read": {
       "post": {
         "summary": "Reads an invoice status. Only available in Ripple.",
@@ -17787,6 +17828,30 @@
         "customizedBillingService",
         "updateMask"
       ]
+    },
+    "BillingUpdateInvoiceExchangeRateBody": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "title": "Required. vendor (aws, gcp, or azure)"
+        },
+        "exchangeRate": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
+          },
+          "title": "Required. Map of currency code to exchange rate value per USD\nex. jpy:100"
+        },
+        "groupIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Required. Billing group id to apply"
+        }
+      }
     },
     "BillingUpdateInvoicePreviewsBody": {
       "type": "object",
