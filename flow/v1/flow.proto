@@ -62,6 +62,13 @@ service Flow {
       get: "/v1/aws/xacct/cea"
     };
   }
+
+  // Gets the settings configuration history for a user.
+  rpc GetSettingsHistory(GetSettingsHistoryRequest) returns (GetSettingsHistoryResponse) {
+    option (google.api.http) = {
+      get: "/v1/settings/history/{id}"
+    };
+  }
 }
 
 // ##################################### REQUESTS #####################################
@@ -150,6 +157,11 @@ message GetRecommendationDetailsRequest {
 // This endpoint only supports the 'apionly' template type.
 message GetCostExplorerAccessTemplateUrlRequest {}
 
+// Request message for the Flow.GetSettingsHistory rpc.
+message GetSettingsHistoryRequest {
+  // Required. The id of the payer to fetch settings history for.
+  string id = 1;
+}
 
 // ##################################### RESPONSES #####################################
 
@@ -239,7 +251,7 @@ message GetRecommendationDetailsResponse {
   
   // Savings plan last updated
   string lastUpdated = 19;
- }
+}
 
 // Response message for the Flow.GetCostExplorerAccessTemplateUrl rpc.
 message GetCostExplorerAccessTemplateUrlResponse {
@@ -259,4 +271,21 @@ message GetCostExplorerAccessTemplateUrlResponse {
   string externalId = 5;
 }
 
+// Settings history message.
+message SettingsHistory {
+  string id = 1;
+  string accountScope = 2;
+  string customization = 3;
+  string planTerm = 4;
+  string paymentOption = 5;
+  string lookBackPeriod = 6;
+  string instanceFamily = 7;
+  double annualBudget = 8;
+  bool approval = 9;
+  string lastUpdated = 10;
+}
 
+// Response message for the Flow.GetSettingsHistory rpc.
+message GetSettingsHistoryResponse {
+  repeated SettingsHistory settingsHistory = 1;
+}

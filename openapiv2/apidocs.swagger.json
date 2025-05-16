@@ -11707,6 +11707,38 @@
         ]
       }
     },
+    "/v1/settings/history/{id}": {
+      "get": {
+        "summary": "Gets the settings configuration history for a user.",
+        "operationId": "Flow_GetSettingsHistory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetSettingsHistoryResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. The id of the payer to fetch settings history for.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Flow"
+        ]
+      }
+    },
     "/v1/settings/recommendations/{id}": {
       "get": {
         "summary": "Fetch user savings plan details",
@@ -33400,6 +33432,19 @@
       },
       "title": "Response message for GetServices"
     },
+    "v1GetSettingsHistoryResponse": {
+      "type": "object",
+      "properties": {
+        "settingsHistory": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1SettingsHistory"
+          }
+        }
+      },
+      "description": "Response message for the Flow.GetSettingsHistory rpc."
+    },
     "v1GetSettingsResponse": {
       "type": "object",
       "properties": {
@@ -35674,6 +35719,43 @@
           "format": "int64"
         }
       }
+    },
+    "v1SettingsHistory": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "accountScope": {
+          "type": "string"
+        },
+        "customization": {
+          "type": "string"
+        },
+        "planTerm": {
+          "type": "string"
+        },
+        "paymentOption": {
+          "type": "string"
+        },
+        "lookBackPeriod": {
+          "type": "string"
+        },
+        "instanceFamily": {
+          "type": "string"
+        },
+        "annualBudget": {
+          "type": "number",
+          "format": "double"
+        },
+        "approval": {
+          "type": "boolean"
+        },
+        "lastUpdated": {
+          "type": "string"
+        }
+      },
+      "description": "Settings history message."
     },
     "v1SupportPlan": {
       "type": "string",
