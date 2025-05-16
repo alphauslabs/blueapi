@@ -55,9 +55,17 @@ service Flow {
       get: "/v1/settings/recommendations/{id}"
     };
   }
+
+  // Gets a CloudFormation launch URL for enabling read-only cross-account access to cost explorer information (API only).
+  rpc GetCostExplorerAccessTemplateUrl(GetCostExplorerAccessTemplateUrlRequest) returns (GetCostExplorerAccessTemplateUrlResponse) {
+    option (google.api.http) = {
+      get: "/flow/v1/aws/xacct/cea"
+    };
+  }
 }
 
 // ##################################### REQUESTS #####################################
+
 // Request message for the Flow.GetInfo rpc.
 message GetInfoRequest {}
 
@@ -138,7 +146,13 @@ message GetRecommendationDetailsRequest {
   string id = 1;
 }
 
+// Request message for the Flow.GetCostExplorerAccessTemplateUrl rpc.
+// This endpoint only supports the 'apionly' template type.
+message GetCostExplorerAccessTemplateUrlRequest {}
+
+
 // ##################################### RESPONSES #####################################
+
 // Response message for the Flow.GetInfo rpc.
 message GetInfoResponse {
   string response = 1;
@@ -226,3 +240,23 @@ message GetRecommendationDetailsResponse {
   // Savings plan last updated
   string lastUpdated = 19;
  }
+
+// Response message for the Flow.GetCostExplorerAccessTemplateUrl rpc.
+message GetCostExplorerAccessTemplateUrlResponse {
+  // The CloudFormation launch url. Open it in your browser.
+  string launchUrl = 1;
+
+  // The latest CloudFormation template. The version is included in the filename.
+  string templateUrl = 2;
+
+  // The default stack name used. Can be modified.
+  string stackName = 3;
+
+  // The AWS account that will receive the access. Do not change.
+  string principal = 4;
+
+  // The external id for this role. Do not change.
+  string externalId = 5;
+}
+
+
