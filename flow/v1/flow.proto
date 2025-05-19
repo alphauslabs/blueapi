@@ -69,6 +69,14 @@ service Flow {
       get: "/v1/settings/history/{id}"
     };
   }
+
+  // Creates a default cross-account access role for cost explorer (API only).
+  rpc CreateCostExplorerAccess(CreateCostExplorerAccessRequest) returns (CreateCostExplorerAccessResponse) {
+    option (google.api.http) = {
+      post: "/v1/aws/xacct/cea"
+      body: "*"
+    };
+  }
 }
 
 // ##################################### REQUESTS #####################################
@@ -161,6 +169,13 @@ message GetCostExplorerAccessTemplateUrlRequest {}
 message GetSettingsHistoryRequest {
   // Required. The id of the payer to fetch settings history for.
   string id = 1;
+}
+
+// Request message for the Flow.CreateCostExplorerAccess rpc.
+// This endpoint only supports the 'apionly' template type.
+message CreateCostExplorerAccessRequest {
+  // Required. The target AWS account to validate.
+  string target = 1;
 }
 
 // ##################################### RESPONSES #####################################
@@ -288,4 +303,31 @@ message SettingsHistory {
 // Response message for the Flow.GetSettingsHistory rpc.
 message GetSettingsHistoryResponse {
   repeated SettingsHistory settingsHistory = 1;
+}
+
+// Response message for the Flow.CreateCostExplorerAccess rpc.
+message CreateCostExplorerAccessResponse {
+  // The queried target account.
+  string target = 1;
+
+  // The role ARN that provides the cross-account access permissions.
+  string roleArn = 2;
+
+  // The external id for this role.
+  string externalId = 3;
+
+  // The id of the CloudFormation stack deployed in the target account.
+  string stackId = 4;
+
+  // The region where the stack is deployed.
+  string stackRegion = 5;
+
+  // The latest template used to deploy the stack.
+  string templateUrl = 6;
+
+  // This can be `latest`, `outdated`, or some error information.
+  string status = 7;
+
+  // The last updated timestamp, RFC3339 UTC.
+  string lastUpdated = 8;
 }

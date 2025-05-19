@@ -5138,6 +5138,38 @@
         "tags": [
           "Flow"
         ]
+      },
+      "post": {
+        "summary": "Creates a default cross-account access role for cost explorer (API only).",
+        "operationId": "Flow_CreateCostExplorerAccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateCostExplorerAccessResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the Flow.CreateCostExplorerAccess rpc.\nThis endpoint only supports the 'apionly' template type.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateCostExplorerAccessRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flow"
+        ]
       }
     },
     "/v1/azure/credentials/mpn": {
@@ -30567,6 +30599,54 @@
         }
       },
       "description": "Request message for the Admin.CreateCloudWatchMetricsStream rpc."
+    },
+    "v1CreateCostExplorerAccessRequest": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "Required. The target AWS account to validate."
+        }
+      },
+      "description": "Request message for the Flow.CreateCostExplorerAccess rpc.\nThis endpoint only supports the 'apionly' template type."
+    },
+    "v1CreateCostExplorerAccessResponse": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "The queried target account."
+        },
+        "roleArn": {
+          "type": "string",
+          "description": "The role ARN that provides the cross-account access permissions."
+        },
+        "externalId": {
+          "type": "string",
+          "description": "The external id for this role."
+        },
+        "stackId": {
+          "type": "string",
+          "description": "The id of the CloudFormation stack deployed in the target account."
+        },
+        "stackRegion": {
+          "type": "string",
+          "description": "The region where the stack is deployed."
+        },
+        "templateUrl": {
+          "type": "string",
+          "description": "The latest template used to deploy the stack."
+        },
+        "status": {
+          "type": "string",
+          "description": "This can be `latest`, `outdated`, or some error information."
+        },
+        "lastUpdated": {
+          "type": "string",
+          "description": "The last updated timestamp, RFC3339 UTC."
+        }
+      },
+      "description": "Response message for the Flow.CreateCostExplorerAccess rpc."
     },
     "v1CreateCostFiltersResponse": {
       "type": "object",
