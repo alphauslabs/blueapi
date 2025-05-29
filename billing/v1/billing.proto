@@ -132,6 +132,14 @@ service Billing {
     };
   }
 
+ // WORK-IN-PROGRESS: Convert invoice to pdf 
+  rpc ConvertInvoiceToPdf(ConvertInvoiceToPdfRequest) returns (ConvertInvoiceToPdfResponse) {
+    option (google.api.http) = {
+      post: "/v1/invoice/{date}:converttopdf"
+      body: "*"
+    };
+  }
+
   // Gets an invoice. Only available in Ripple.
   rpc GetInvoiceStatus(GetInvoiceStatusRequest) returns (api.InvoiceMessage) {
     option (google.api.http) = {
@@ -3024,4 +3032,25 @@ message UpdateInvoiceExchangeRateRequest {
 
   // Required. Billing group id to apply
   repeated string groupIds = 4;
+}
+
+message ConvertInvoiceToPdfRequest{
+  // Required. Format: yyyymm.
+  string date = 1;
+
+  // billingInternalId of invoice to download
+  // ignored if allBillingGroups is set to true
+  repeated string billinggroups = 2;
+
+  // If true, download all created invoice
+  bool allBillingGroups = 3;
+
+}
+
+message ConvertInvoiceToPdfResponse {
+  int32 percentProgress = 1;
+
+  // returns "" when not ready
+  // returns the direct download link
+  string downloadUrl = 2;
 }
