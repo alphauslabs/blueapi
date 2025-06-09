@@ -282,6 +282,14 @@ service Iam {
       get: "/iam/v1/mfausers"
     };
   }  
+
+  // WORK-IN-PROGRESS: Reset ripple password account.
+  rpc ResetRipplePassword(ResetRipplePasswordRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/iam/v1/ripple/password:reset"
+      body: "*"
+    };
+  } 
 }
 
 // Request message for the Iam.WhoAmI rpc.
@@ -634,4 +642,10 @@ message GetSubUserRequest {
   string id = 1; 
   // Optional. The sub-user ID
   string subId = 2;
+}
+
+// Request message for ripple account password recovery
+message ResetRipplePasswordRequest {
+  // Required. Ripple account email address
+  string email = 1;
 }
