@@ -283,7 +283,15 @@ service Iam {
     };
   }  
 
-  // WORK-IN-PROGRESS: Reset ripple password account.
+  // WORK-IN-PROGRESS: Send an email reset code
+  rpc SendRipplePasswordResetCode(SendRipplePasswordResetCodeRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/iam/v1/ripple/password:requestresetcode"
+      body: "*"
+    };
+  } 
+
+  // WORK-IN-PROGRESS: Reset ripple password using code from email
   rpc ResetRipplePassword(ResetRipplePasswordRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/iam/v1/ripple/password:reset"
@@ -645,7 +653,16 @@ message GetSubUserRequest {
 }
 
 // Request message for ripple account password recovery
-message ResetRipplePasswordRequest {
+message SendRipplePasswordResetCodeRequest {
   // Required. Ripple account email address
   string email = 1;
+}
+
+// Request message for resetting ripple password
+message ResetRipplePasswordRequest {
+  // Required. Reset code from email 
+  string resetCode = 1;
+
+  // Required. Atleast 8 characters
+  string newPassword = 2;
 }
