@@ -10092,6 +10092,145 @@
         ]
       }
     },
+    "/v1/project": {
+      "post": {
+        "summary": "WIP: Creates a new project.",
+        "operationId": "Prism_CreateProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateProjectRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
+    "/v1/project/all:read": {
+      "post": {
+        "summary": "WIP: Lists all projects",
+        "operationId": "Prism_ListProjects",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1Project"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1Project"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListProjectsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
+    "/v1/project/{id}": {
+      "get": {
+        "summary": "WIP: Gets information about a project by ID.",
+        "operationId": "Prism_GetProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetProjectResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required project ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      },
+      "delete": {
+        "summary": "WIP: Deletes a project by ID.",
+        "operationId": "Prism_DeleteProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required project ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
     "/v1/recommendations/all:read": {
       "post": {
         "summary": "Lists recommendations based on specified criteria.",
@@ -31305,6 +31444,14 @@
       },
       "title": "Request message for Admin.CreateProformaCur rpc"
     },
+    "v1CreateProjectRequest": {
+      "type": "object",
+      "properties": {
+        "project": {
+          "$ref": "#/definitions/v1Project"
+        }
+      }
+    },
     "v1CreateResellerRequest": {
       "type": "object",
       "properties": {
@@ -33457,6 +33604,27 @@
       },
       "description": "Response message for Pricing.GetPricing rpc."
     },
+    "v1GetProjectResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Member"
+          }
+        }
+      }
+    },
     "v1GetRecommendationDetailsResponse": {
       "type": "object",
       "properties": {
@@ -34434,6 +34602,9 @@
       },
       "description": "Response message for the Iam.ListPermissions rpc."
     },
+    "v1ListProjectsRequest": {
+      "type": "object"
+    },
     "v1ListRecommendationResponse": {
       "type": "object",
       "properties": {
@@ -34689,6 +34860,20 @@
     },
     "v1MarkAsExecutedResponse": {
       "type": "object"
+    },
+    "v1Member": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
     },
     "v1MergeSuggestedUnitsRequest": {
       "type": "object",
@@ -35096,6 +35281,27 @@
         "roleArn": {
           "type": "string",
           "title": "role arn"
+        }
+      }
+    },
+    "v1Project": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Member"
+          }
         }
       }
     },

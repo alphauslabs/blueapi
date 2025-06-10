@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package blueapi.prism.v1;
 
+import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -25,6 +26,38 @@ service Prism {
       get: "/v1/test"
     };
   }
+
+  // WIP: Creates a new project.
+  rpc CreateProject(CreateProjectRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/project"
+      body: "*"
+    };
+  }
+
+
+  // WIP: Gets information about a project by ID.
+  rpc GetProject(GetProjectRequest) returns (GetProjectResponse) {
+    option (google.api.http) = {
+      get: "/v1/project/{id}"
+    };
+  }
+
+
+  // WIP: Deletes a project by ID.
+  rpc DeleteProject(DeleteProjectRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/project/{id}"
+    };
+  }
+
+  // WIP: Lists all projects 
+  rpc ListProjects(ListProjectsRequest) returns (stream Project) {
+    option (google.api.http) = {
+      post: "/v1/project/all:read"
+      body: "*"
+    };
+  }
 }
 
 message TestRequest {}
@@ -32,3 +65,39 @@ message TestRequest {}
 message TestResponse {
   string response = 1;
 }
+
+message Member {
+  string name = 1;
+  string email = 2;
+  string role = 3;
+}
+
+message Project {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  repeated Member members = 4;
+}
+
+message CreateProjectRequest {
+  Project project = 1; 
+}
+
+message GetProjectRequest {
+  // Required project ID.
+  string id = 1; 
+}
+
+message GetProjectResponse {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  repeated Member members = 4;
+}
+
+message DeleteProjectRequest {
+  // Required project ID.
+  string id = 1;
+}
+
+message ListProjectsRequest {}
