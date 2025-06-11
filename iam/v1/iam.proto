@@ -292,7 +292,7 @@ service Iam {
   } 
 
   // WORK-IN-PROGRESS: Reset ripple password using code from email
-  rpc ResetRipplePassword(ResetRipplePasswordRequest) returns (google.protobuf.Empty) {
+  rpc ResetRipplePassword(ResetRipplePasswordRequest) returns (ResetRipplePasswordResponse) {
     option (google.api.http) = {
       post: "/iam/v1/ripple/password:reset"
       body: "*"
@@ -665,4 +665,10 @@ message ResetRipplePasswordRequest {
 
   // Required. Atleast 8 characters
   string newPassword = 2;
+}
+
+message ResetRipplePasswordResponse {
+  // Ripple account information of the reseted password
+  string userName = 1;
+  string email = 2;
 }
