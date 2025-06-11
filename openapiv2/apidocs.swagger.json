@@ -13061,6 +13061,38 @@
         ]
       }
     },
+    "/v1/verify": {
+      "post": {
+        "operationId": "Prism_VerifyUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1VerifyUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1VerifyUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
     "/v1/views": {
       "get": {
         "summary": "Get all the views",
@@ -37488,6 +37520,25 @@
         }
       },
       "description": "Response message for Iam.VerifyUserForResetPassword rpc."
+    },
+    "v1VerifyUserRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "v1VerifyUserResponse": {
+      "type": "object",
+      "properties": {
+        "verified": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
     },
     "v1WaveFeature": {
       "type": "object",

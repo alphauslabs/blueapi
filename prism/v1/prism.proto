@@ -84,6 +84,13 @@ service Prism {
       delete: "/v1/org/{id}"
     };
   }
+
+  rpc VerifyUser(VerifyUserRequest) returns (VerifyUserResponse) {
+    option (google.api.http) = {
+      post: "/v1/verify"
+      body: "*"
+    };
+  }
 }
 
 message TestRequest {}
@@ -154,4 +161,13 @@ message UpdateOrganizationRequest {
 message DeleteOrganizationRequest {
   // Required organization ID.
   string id = 1;
+}
+
+message VerifyUserRequest {
+  string email = 1;
+}
+
+message VerifyUserResponse {
+  bool verified = 1;
+  string message = 2;
 }
