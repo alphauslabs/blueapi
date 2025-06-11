@@ -99,21 +99,8 @@ message TestResponse {
   string response = 1;
 }
 
-message Member {
-  string name = 1;
-  string email = 2;
-  string role = 3;
-}
-
-message Project {
-  string id = 1;
-  string name = 2;
-  string description = 3;
-  repeated Member members = 4;
-}
-
 message CreateProjectRequest {
-  Project project = 1; 
+  string name = 1;
 }
 
 message GetProjectRequest {
@@ -124,8 +111,6 @@ message GetProjectRequest {
 message GetProjectResponse {
   string id = 1;
   string name = 2;
-  string description = 3;
-  repeated Member members = 4;
 }
 
 message DeleteProjectRequest {
@@ -134,6 +119,13 @@ message DeleteProjectRequest {
 }
 
 message ListProjectsRequest {}
+
+message Project {
+  string id = 1;
+  string name = 2;
+  string created_at = 3; 
+  string last_update= 4;
+}
 
 message CreateOrganizationRequest {
   string name = 1; 
@@ -163,11 +155,9 @@ message DeleteOrganizationRequest {
   string id = 1;
 }
 
-message VerifyUserRequest {
-  string email = 1;
-}
+message VerifyUserRequest {}
 
 message VerifyUserResponse {
-  bool verified = 1;
-  string message = 2;
+  string email = 1;
+  string org = 2;
 }
