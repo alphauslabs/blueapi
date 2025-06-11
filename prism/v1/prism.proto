@@ -59,27 +59,27 @@ service Prism {
     };
   }
 
-  rpc CreateOrg(CreateOrgRequest) returns (google.protobuf.Empty) {
+  rpc CreateOrganization(CreateOrganizationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/v1/org"
       body: "*"
     };
   }
 
-  rpc GetOrg(GetOrgRequest) returns (GetOrgResponse) {
+  rpc GetOrg(GetOrganizationRequest) returns (GetOrganizationResponse) {
     option (google.api.http) = {
       get: "/v1/org/{id}"
     };
   }
 
-  rpc UpdateOrg(UpdateOrgRequest) returns (google.protobuf.Empty) {
+  rpc UpdateOrg(UpdateOrganizationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/v1/org/{id}"
       body: "*"
     };
   }
 
-  rpc DeleteOrg(DeleteOrgRequest) returns (google.protobuf.Empty) {
+  rpc DeleteOrg(DeleteOrganizationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/org/{id}"
     };
@@ -128,30 +128,30 @@ message DeleteProjectRequest {
 
 message ListProjectsRequest {}
 
-message CreateOrgRequest {
+message CreateOrganizationRequest {
   string name = 1; 
   string email = 2;
 }
 
-message GetOrgRequest {
+message GetOrganizationRequest {
   // Required organization ID.
-  string id = 1; 
+  string id = 1;
 }
 
-message GetOrgResponse {
+message GetOrganizationResponse {
   string id = 1;
   string name = 2;
   string email = 3;
 }
 
-message UpdateOrgRequest {
+message UpdateOrganizationRequest {
   // Required organization ID.
   string id = 1;
   string name = 2;
   string email = 3;
 }
 
-message DeleteOrgRequest {
+message DeleteOrganizationRequest {
   // Required organization ID.
   string id = 1;
 }

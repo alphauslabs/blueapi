@@ -2483,7 +2483,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/blueapiorgv1CreateOrgRequest"
+              "$ref": "#/definitions/v1CreateOrgRequest"
             }
           }
         ],
@@ -9947,7 +9947,7 @@
     },
     "/v1/org": {
       "post": {
-        "operationId": "Prism_CreateOrg",
+        "operationId": "Prism_CreateOrganization",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -9969,7 +9969,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/blueapiprismv1CreateOrgRequest"
+              "$ref": "#/definitions/v1CreateOrganizationRequest"
             }
           }
         ],
@@ -9985,7 +9985,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetOrgResponse"
+              "$ref": "#/definitions/v1GetOrganizationResponse"
             }
           },
           "default": {
@@ -24681,52 +24681,6 @@
       },
       "description": "Response message for the Flow.GetInfo rpc."
     },
-    "blueapiorgv1CreateOrgRequest": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string",
-          "title": "Required. Organization's email"
-        },
-        "description": {
-          "type": "string",
-          "title": "Required. Organization's description or company name"
-        },
-        "password": {
-          "type": "string",
-          "description": "Optional. User can decide to let the system generates the password."
-        },
-        "name": {
-          "type": "string",
-          "title": "To be used for onboarding profile"
-        },
-        "role": {
-          "type": "string"
-        },
-        "usage": {
-          "type": "string"
-        },
-        "intention": {
-          "type": "string"
-        },
-        "isAuth0Signup": {
-          "type": "boolean"
-        },
-        "customerId": {
-          "type": "string",
-          "title": "Optional. Customer Id from AWS marketplace"
-        },
-        "locale": {
-          "type": "string",
-          "description": "Optional. User locale. Default value is en if not supplied."
-        },
-        "auth0UserId": {
-          "type": "string",
-          "description": "Optional. Auth0 user id for users registering using social login."
-        }
-      },
-      "description": "Request message for the Organization.CreateOrg rpc."
-    },
     "blueapipricingv1GetInfoResponse": {
       "type": "object",
       "properties": {
@@ -24735,17 +24689,6 @@
         }
       },
       "description": "Response message for the Pricing.GetInfo rpc."
-    },
-    "blueapiprismv1CreateOrgRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        }
-      }
     },
     "costv1CostAttribute": {
       "type": "object",
@@ -31493,6 +31436,52 @@
       },
       "description": "Request message for the Admin.CreateNotificationTypeChannels rpc."
     },
+    "v1CreateOrgRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "title": "Required. Organization's email"
+        },
+        "description": {
+          "type": "string",
+          "title": "Required. Organization's description or company name"
+        },
+        "password": {
+          "type": "string",
+          "description": "Optional. User can decide to let the system generates the password."
+        },
+        "name": {
+          "type": "string",
+          "title": "To be used for onboarding profile"
+        },
+        "role": {
+          "type": "string"
+        },
+        "usage": {
+          "type": "string"
+        },
+        "intention": {
+          "type": "string"
+        },
+        "isAuth0Signup": {
+          "type": "boolean"
+        },
+        "customerId": {
+          "type": "string",
+          "title": "Optional. Customer Id from AWS marketplace"
+        },
+        "locale": {
+          "type": "string",
+          "description": "Optional. User locale. Default value is en if not supplied."
+        },
+        "auth0UserId": {
+          "type": "string",
+          "description": "Optional. Auth0 user id for users registering using social login."
+        }
+      },
+      "description": "Request message for the Organization.CreateOrg rpc."
+    },
     "v1CreateOrgResponse": {
       "type": "object",
       "properties": {
@@ -31504,6 +31493,17 @@
         }
       },
       "description": "Response message for the Organization.CreateOrg rpc."
+    },
+    "v1CreateOrganizationRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
     },
     "v1CreatePayerAccountRequestAwsOptions": {
       "type": "object",
@@ -33678,20 +33678,6 @@
         }
       }
     },
-    "v1GetOrgResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        }
-      }
-    },
     "v1GetOrgUpdateCurrencyResponse": {
       "type": "object",
       "properties": {
@@ -33703,6 +33689,20 @@
           "format": "int64"
         },
         "lastUpdate": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetOrganizationResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
           "type": "string"
         }
       }
