@@ -58,6 +58,32 @@ service Prism {
       body: "*"
     };
   }
+
+  rpc CreateOrg(CreateOrgRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/org"
+      body: "*"
+    };
+  }
+
+  rpc GetOrg(GetOrgRequest) returns (GetOrgResponse) {
+    option (google.api.http) = {
+      get: "/v1/org/{id}"
+    };
+  }
+
+  rpc UpdateOrg(UpdateOrgRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/org/{id}"
+      body: "*"
+    };
+  }
+
+  rpc DeleteOrg(DeleteOrgRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/org/{id}"
+    };
+  }
 }
 
 message TestRequest {}
@@ -101,3 +127,31 @@ message DeleteProjectRequest {
 }
 
 message ListProjectsRequest {}
+
+message CreateOrgRequest {
+  string name = 1; 
+  string email = 2;
+}
+
+message GetOrgRequest {
+  // Required organization ID.
+  string id = 1; 
+}
+
+message GetOrgResponse {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message UpdateOrgRequest {
+  // Required organization ID.
+  string id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message DeleteOrgRequest {
+  // Required organization ID.
+  string id = 1;
+}
