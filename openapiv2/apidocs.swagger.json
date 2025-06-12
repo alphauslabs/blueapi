@@ -9423,6 +9423,47 @@
         ]
       }
     },
+    "/v1/member/all:read": {
+      "post": {
+        "operationId": "Prism_ListTeamMembers",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1Member"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1Member"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListTeamMembersRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
     "/v1/members": {
       "get": {
         "summary": "Get all the members/subusers of the company",
@@ -12302,6 +12343,78 @@
         ],
         "tags": [
           "Billing"
+        ]
+      }
+    },
+    "/v1/team/all:read": {
+      "post": {
+        "operationId": "Prism_ListTeams",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1Team"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1Team"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListTeamsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
+    "/v1/team/{id}": {
+      "get": {
+        "operationId": "Prism_GetTeam",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetTeamResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required team ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Prism"
         ]
       }
     },
@@ -34135,6 +34248,17 @@
       },
       "title": "Response message for GetTags"
     },
+    "v1GetTeamResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
     "v1GetUnitMetricResponse": {
       "type": "object",
       "properties": {
@@ -34939,6 +35063,12 @@
         }
       }
     },
+    "v1ListTeamMembersRequest": {
+      "type": "object"
+    },
+    "v1ListTeamsRequest": {
+      "type": "object"
+    },
     "v1ListUnitMetricsResponse": {
       "type": "object",
       "properties": {
@@ -35049,6 +35179,32 @@
     },
     "v1MarkAsExecutedResponse": {
       "type": "object"
+    },
+    "v1Member": {
+      "type": "object",
+      "properties": {
+        "org": {
+          "type": "string"
+        },
+        "team": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "lastUpdate": {
+          "type": "string"
+        }
+      }
     },
     "v1MergeSuggestedUnitsRequest": {
       "type": "object",
@@ -36517,6 +36673,26 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "v1Team": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "org": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "lastUpdate": {
+          "type": "string"
         }
       }
     },

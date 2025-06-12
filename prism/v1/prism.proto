@@ -91,6 +91,26 @@ service Prism {
       body: "*"
     };
   }
+
+  rpc GetTeam(GetTeamRequest) returns (GetTeamResponse) {
+    option (google.api.http) = {
+      get: "/v1/team/{id}"
+    };
+  }
+
+  rpc ListTeams(ListTeamsRequest) returns (stream Team) {
+    option (google.api.http) = {
+      post: "/v1/team/all:read"
+      body: "*"
+    };
+  }
+
+  rpc ListTeamMembers(ListTeamMembersRequest) returns (stream Member) {
+    option (google.api.http) = {
+      post: "/v1/member/all:read"
+      body: "*"
+    };
+  }
 }
 
 message TestRequest {}
@@ -160,4 +180,36 @@ message VerifyUserRequest {}
 message VerifyUserResponse {
   string email = 1;
   string org = 2;
+}
+
+message GetTeamRequest {
+  // Required team ID.
+  string id = 1;
+}
+message GetTeamResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message ListTeamsRequest {}
+
+
+message Team {
+  string id = 1;
+  string name = 2;
+  string org = 3;
+  string created_at = 4;
+  string last_update = 5;
+}
+
+message ListTeamMembersRequest {}
+
+message Member {
+  string org = 1;
+  string team = 2;
+  string id = 3;
+  string email = 4;
+  string name = 5;
+  string created_at = 6;
+  string last_update = 7;
 }
