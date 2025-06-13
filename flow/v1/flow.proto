@@ -75,6 +75,14 @@ service Flow {
     option (google.api.http) = {
       post: "/v1/aws/xacct/cea"
       body: "*"
+    };  
+  }
+
+  // Gets the data for the Flow Dashboard.
+  rpc GetPurchasedSavingsPlanDetials (GetPurchasedSavingsPlanDetialsRequest) returns (GetPurchasedSavingsPlanDetialsResponse) {
+    option (google.api.http) = {
+      post: "/v1/savingsplan/details"
+      body: "*"
     };
   }
 }
@@ -176,6 +184,18 @@ message GetSettingsHistoryRequest {
 message CreateCostExplorerAccessRequest {
   // Required. The target AWS account to validate.
   string target = 1;
+}
+
+// Request message for the Flow.GetPurchasedSavingsPlanDetials rpc.
+message GetPurchasedSavingsPlanDetialsRequest {
+  // Required. The id of the payer to fetch savings plan details for.
+  string payerId = 1;
+
+  // Required. The start date of the range for the savings plan details.
+  string startDate = 2;
+
+  //  Required. The end date of the range for the savings plan details.
+  string endDate = 3;
 }
 
 // ##################################### RESPONSES #####################################
@@ -330,4 +350,58 @@ message CreateCostExplorerAccessResponse {
 
   // The last updated timestamp, RFC3339 UTC.
   string lastUpdated = 8;
+}
+
+// Savings Plan Chart Data.
+message SavingsPlanDetails {
+  // The specific date this entry represents, corresponding to one day within the requested date range.
+  string currentDate = 1;
+
+  // Total On-Demand usage in hours for the date.
+  double ondemandUsage = 2;
+
+  // Total On-Demand cost in USD for the date.
+  double ondemandCost = 3;
+
+  // Total Reserved Instance usage in hours for the date.
+  double reservedUsage = 4;
+
+  // Total Reserved Instance cost in USD for the date.
+  double reservedCost = 5;
+
+  // Total Savings Plan usage in hours for the date.
+  double savingsPlanUsage = 6;
+
+  // Total Savings Plan cost in USD for the date.
+  double savingsPlanCost = 7;
+
+  // Total Spot Instance usage in hours for the date.
+  double spotUsage = 8;
+
+  // Total Spot Instance cost in USD for the date.
+  double spotCost = 9;
+}
+
+// Response message for the Flow.GetPurchasedSavingsPlanDetials rpc.
+message GetPurchasedSavingsPlanDetialsResponse {
+  // The payer account ID for which the savings plan details are fetched.
+  string payerId = 1;
+
+  // Actual monthly on-demand cost for the payer account.
+  double monthlyOnDemandCost = 2;
+
+  // Actual monthly effective cost after applying Savings Plans.
+  double monthlyEffectiveCost = 3;
+
+  // Actual total monthly savings from Savings Plan usage.
+  double monthlyTotalSavings = 4;
+
+  // Metadata of the purchased Savings Plan.
+  string spTags = 5;
+
+  // Purchaser of the Savings Plan, either the user or Alphaus system.
+  string purchasedBy = 6;
+
+  // Daily Savings Plan usage and cost details
+  repeated SavingsPlanDetails savingsPlanDetails = 7; 
 }
