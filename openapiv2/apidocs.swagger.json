@@ -7906,40 +7906,6 @@
         ]
       }
     },
-    "/v1/dashboard": {
-      "post": {
-        "summary": "Gets the data for the Flow Dashboard.",
-        "operationId": "Flow_GetDashboardData",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetDashboardDataResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the Flow.GetDashboardData rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetDashboardDataRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Flow"
-        ]
-      }
-    },
     "/v1/discount": {
       "post": {
         "summary": "Get the discount recommendations for every account in a cost group",
@@ -10727,6 +10693,40 @@
         ],
         "tags": [
           "Cover"
+        ]
+      }
+    },
+    "/v1/recommendations/purchased": {
+      "post": {
+        "summary": "Gets the data for the Flow Dashboard.",
+        "operationId": "Flow_GetPurchasedRecommendationDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetPurchasedRecommendationDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the Flow.GetPurchasedRecommendationDetails rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetPurchasedRecommendationDetailsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flow"
         ]
       }
     },
@@ -31907,83 +31907,6 @@
         }
       }
     },
-    "v1DashboardData": {
-      "type": "object",
-      "properties": {
-        "payerId": {
-          "type": "string",
-          "description": "The payer account ID associated with the data."
-        },
-        "currentDate": {
-          "type": "string",
-          "description": "The specific date this record summarizes (YYYY-MM-DD)."
-        },
-        "spRecommendation": {
-          "type": "number",
-          "format": "double",
-          "description": "Recommended hourly commitment for Savings Plan in USD."
-        },
-        "estimatedSavings": {
-          "type": "number",
-          "format": "double",
-          "description": "Estimated monthly savings from using Savings Plans in USD."
-        },
-        "estimatedSavingsPercentage": {
-          "type": "number",
-          "format": "double",
-          "description": "Estimated percentage savings compared to On-Demand costs."
-        },
-        "ondemandUsage": {
-          "type": "number",
-          "format": "double",
-          "description": "Total On-Demand usage in hours for the date."
-        },
-        "ondemandCost": {
-          "type": "number",
-          "format": "double",
-          "description": "Total On-Demand cost in USD for the date."
-        },
-        "reservedUsage": {
-          "type": "number",
-          "format": "double",
-          "description": "Total Reserved Instance usage in hours for the date."
-        },
-        "reservedCost": {
-          "type": "number",
-          "format": "double",
-          "description": "Total Reserved Instance cost in USD for the date."
-        },
-        "savingsPlanUsage": {
-          "type": "number",
-          "format": "double",
-          "description": "Total Savings Plan usage in hours for the date."
-        },
-        "savingsPlanCost": {
-          "type": "number",
-          "format": "double",
-          "description": "Total Savings Plan cost in USD for the date."
-        },
-        "spotUsage": {
-          "type": "number",
-          "format": "double",
-          "description": "Total Spot Instance usage in hours for the date."
-        },
-        "spotCost": {
-          "type": "number",
-          "format": "double",
-          "description": "Total Spot Instance cost in USD for the date."
-        },
-        "spTags": {
-          "type": "string",
-          "description": "Raw tags or metadata associated with the applied Savings Plan."
-        },
-        "purchasedBy": {
-          "type": "string",
-          "description": "The user or system that purchased the Savings Plan."
-        }
-      },
-      "description": "Dashboard data message."
-    },
     "v1DataAccess": {
       "type": "object",
       "properties": {
@@ -33364,38 +33287,6 @@
         "chargingTarget"
       ]
     },
-    "v1GetDashboardDataRequest": {
-      "type": "object",
-      "properties": {
-        "payerId": {
-          "type": "string",
-          "description": "The payer account ID to retrieve dashboard data for."
-        },
-        "startDate": {
-          "type": "string",
-          "description": "The start date of the dashboard range in YYYY-MM-DD format."
-        },
-        "endDate": {
-          "type": "string",
-          "description": "The end date of the dashboard range in YYYY-MM-DD format."
-        }
-      },
-      "description": "Request message for the Flow.GetDashboardData rpc."
-    },
-    "v1GetDashboardDataResponse": {
-      "type": "object",
-      "properties": {
-        "dashboardData": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1DashboardData"
-          },
-          "description": "List of daily dashboard data entries within the requested date range."
-        }
-      },
-      "description": "Response message for the Flow.GetDashboardData rpc."
-    },
     "v1GetDefaultCostAccessTemplateUrlResponse": {
       "type": "object",
       "properties": {
@@ -33766,6 +33657,38 @@
           }
         }
       }
+    },
+    "v1GetPurchasedRecommendationDetailsRequest": {
+      "type": "object",
+      "properties": {
+        "payerId": {
+          "type": "string",
+          "description": "The payer account ID to retrieve dashboard data for."
+        },
+        "startDate": {
+          "type": "string",
+          "description": "The start date of the dashboard range in YYYY-MM-DD format."
+        },
+        "endDate": {
+          "type": "string",
+          "description": "The end date of the dashboard range in YYYY-MM-DD format."
+        }
+      },
+      "description": "Request message for the Flow.GetPurchasedRecommendationDetails rpc."
+    },
+    "v1GetPurchasedRecommendationDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "purchasedRecommendationDetails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PurchasedRecommendationDetails"
+          },
+          "description": "List of daily dashboard data entries within the requested date range."
+        }
+      },
+      "description": "Response message for the Flow.GetDashboardData rpc."
     },
     "v1GetRecommendationDetailsResponse": {
       "type": "object",
@@ -35494,6 +35417,83 @@
         }
       },
       "title": "Response message for PublishView"
+    },
+    "v1PurchasedRecommendationDetails": {
+      "type": "object",
+      "properties": {
+        "payerId": {
+          "type": "string",
+          "description": "The payer account ID associated with the data."
+        },
+        "currentDate": {
+          "type": "string",
+          "description": "The specific date this record summarizes (YYYY-MM-DD)."
+        },
+        "spRecommendation": {
+          "type": "number",
+          "format": "double",
+          "description": "Recommended hourly commitment for Savings Plan in USD."
+        },
+        "estimatedSavings": {
+          "type": "number",
+          "format": "double",
+          "description": "Estimated monthly savings from using Savings Plans in USD."
+        },
+        "estimatedSavingsPercentage": {
+          "type": "number",
+          "format": "double",
+          "description": "Estimated percentage savings compared to On-Demand costs."
+        },
+        "ondemandUsage": {
+          "type": "number",
+          "format": "double",
+          "description": "Total On-Demand usage in hours for the date."
+        },
+        "ondemandCost": {
+          "type": "number",
+          "format": "double",
+          "description": "Total On-Demand cost in USD for the date."
+        },
+        "reservedUsage": {
+          "type": "number",
+          "format": "double",
+          "description": "Total Reserved Instance usage in hours for the date."
+        },
+        "reservedCost": {
+          "type": "number",
+          "format": "double",
+          "description": "Total Reserved Instance cost in USD for the date."
+        },
+        "savingsPlanUsage": {
+          "type": "number",
+          "format": "double",
+          "description": "Total Savings Plan usage in hours for the date."
+        },
+        "savingsPlanCost": {
+          "type": "number",
+          "format": "double",
+          "description": "Total Savings Plan cost in USD for the date."
+        },
+        "spotUsage": {
+          "type": "number",
+          "format": "double",
+          "description": "Total Spot Instance usage in hours for the date."
+        },
+        "spotCost": {
+          "type": "number",
+          "format": "double",
+          "description": "Total Spot Instance cost in USD for the date."
+        },
+        "spTags": {
+          "type": "string",
+          "description": "Raw tags or metadata associated with the applied Savings Plan."
+        },
+        "purchasedBy": {
+          "type": "string",
+          "description": "The user or system that purchased the Savings Plan."
+        }
+      },
+      "description": "Dashboard data message."
     },
     "v1ReadAdjustmentsRequestAwsOptions": {
       "type": "object",
