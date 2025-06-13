@@ -352,56 +352,56 @@ message CreateCostExplorerAccessResponse {
   string lastUpdated = 8;
 }
 
-// Dashboard data message.
+// Graph Data.
 message PurchasedRecommendationDetails {
+  // The specific date this record summarizes (YYYY-MM-DD).
+  string currentDate = 1;
+
+  // Total On-Demand usage in hours for the date.
+  double ondemandUsage = 2;
+
+  // Total On-Demand cost in USD for the date.
+  double ondemandCost = 3;
+
+  // Total Reserved Instance usage in hours for the date.
+  double reservedUsage = 4;
+
+  // Total Reserved Instance cost in USD for the date.
+  double reservedCost = 5;
+
+  // Total Savings Plan usage in hours for the date.
+  double savingsPlanUsage = 6;
+
+  // Total Savings Plan cost in USD for the date.
+  double savingsPlanCost = 7;
+
+  // Total Spot Instance usage in hours for the date.
+  double spotUsage = 8;
+
+  // Total Spot Instance cost in USD for the date.
+  double spotCost = 9;
+}
+
+// Response message for the Flow.GetPurchasedRecommendationDetails rpc.
+message GetPurchasedRecommendationDetailsResponse {
   // The payer account ID associated with the data.
   string payerId = 1;
 
-  // The specific date this record summarizes (YYYY-MM-DD).
-  string currentDate = 2;
-
   // Recommended hourly commitment for Savings Plan in USD.
-  double spRecommendation = 3;
+  double spRecommendation = 2;
 
   // Estimated monthly savings from using Savings Plans in USD.
-  double estimatedSavings = 4;
+  double estimatedSavings = 3;
 
   // Estimated percentage savings compared to On-Demand costs.
-  double estimatedSavingsPercentage = 5;
-
-  // Total On-Demand usage in hours for the date.
-  double ondemandUsage = 6;
-
-  // Total On-Demand cost in USD for the date.
-  double ondemandCost = 7;
-  
-  // Total Reserved Instance usage in hours for the date.
-  double reservedUsage = 8;
-
-  // Total Reserved Instance cost in USD for the date.
-  double reservedCost = 9;
-
-  // Total Savings Plan usage in hours for the date.
-  double savingsPlanUsage = 10;
-
-  // Total Savings Plan cost in USD for the date.
-  double savingsPlanCost = 11;
-
-  // Total Spot Instance usage in hours for the date.
-  double spotUsage = 12;
-
-  // Total Spot Instance cost in USD for the date.
-  double spotCost = 13;
+  double estimatedSavingsPercentage = 4;
 
   // Raw tags or metadata associated with the applied Savings Plan.
-  string spTags = 14;
+  string spTags = 5;
 
   // The user or system that purchased the Savings Plan.
-  string purchasedBy = 15;
-}
+  string purchasedBy = 6;
 
-// Response message for the Flow.GetDashboardData rpc.
-message GetPurchasedRecommendationDetailsResponse {
   // List of daily dashboard data entries within the requested date range.
-  repeated PurchasedRecommendationDetails purchasedRecommendationDetails = 1;
+  repeated PurchasedRecommendationDetails purchasedRecommendationDetails = 7;
 }
