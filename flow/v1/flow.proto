@@ -79,9 +79,9 @@ service Flow {
   }
 
   // Gets the data for the Flow Dashboard.
-  rpc GetPurchasedSavingsPlanDetials (GetPurchasedSavingsPlanDetialsRequest) returns (GetPurchasedSavingsPlanDetialsResponse) {
+  rpc GetDailyUsageCostDetails (GetDailyUsageCostDetailsRequest) returns (GetDailyUsageCostDetailsResponse) {
     option (google.api.http) = {
-      post: "/v1/savingsplan/details"
+      post: "/v1/usagecost"
       body: "*"
     };
   }
@@ -187,7 +187,7 @@ message CreateCostExplorerAccessRequest {
 }
 
 // Request message for the Flow.GetPurchasedSavingsPlanDetials rpc.
-message GetPurchasedSavingsPlanDetialsRequest {
+message GetDailyUsageCostDetailsRequest {
   // Required. The id of the payer to fetch savings plan details for.
   string payerId = 1;
 
@@ -353,7 +353,7 @@ message CreateCostExplorerAccessResponse {
 }
 
 // Savings Plan Chart Data.
-message SavingsPlanDetails {
+message UsageCostDetails {
   // The specific date this entry represents, corresponding to one day within the requested date range.
   string currentDate = 1;
 
@@ -383,7 +383,7 @@ message SavingsPlanDetails {
 }
 
 // Response message for the Flow.GetPurchasedSavingsPlanDetials rpc.
-message GetPurchasedSavingsPlanDetialsResponse {
+message GetDailyUsageCostDetailsResponse {
   // The payer account ID for which the savings plan details are fetched.
   string payerId = 1;
 
@@ -396,12 +396,9 @@ message GetPurchasedSavingsPlanDetialsResponse {
   // Actual total monthly savings from Savings Plan usage.
   double monthlyTotalSavings = 4;
 
-  // Metadata of the purchased Savings Plan.
-  string spTags = 5;
-
-  // Purchaser of the Savings Plan, either the user or Alphaus system.
-  string purchasedBy = 6;
+  // Purchased Savings Plan details for the payer account.
+  string spDetails = 5;
 
   // Daily Savings Plan usage and cost details
-  repeated SavingsPlanDetails savingsPlanDetails = 7; 
+  repeated UsageCostDetails usageCostDetails = 6; 
 }

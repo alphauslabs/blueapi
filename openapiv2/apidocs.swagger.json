@@ -11429,40 +11429,6 @@
         ]
       }
     },
-    "/v1/savingsplan/details": {
-      "post": {
-        "summary": "Gets the data for the Flow Dashboard.",
-        "operationId": "Flow_GetPurchasedSavingsPlanDetials",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetPurchasedSavingsPlanDetialsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the Flow.GetPurchasedSavingsPlanDetials rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetPurchasedSavingsPlanDetialsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Flow"
-        ]
-      }
-    },
     "/v1/servicediscounts": {
       "post": {
         "summary": "Creates the invoice service discounts. Only available in Ripple.",
@@ -13205,6 +13171,40 @@
         ],
         "tags": [
           "Cover"
+        ]
+      }
+    },
+    "/v1/usagecost": {
+      "post": {
+        "summary": "Gets the data for the Flow Dashboard.",
+        "operationId": "Flow_GetDailyUsageCostDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetDailyUsageCostDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the Flow.GetPurchasedSavingsPlanDetials rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetDailyUsageCostDetailsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flow"
         ]
       }
     },
@@ -33586,6 +33586,61 @@
         "chargingTarget"
       ]
     },
+    "v1GetDailyUsageCostDetailsRequest": {
+      "type": "object",
+      "properties": {
+        "payerId": {
+          "type": "string",
+          "description": "Required. The id of the payer to fetch savings plan details for."
+        },
+        "startDate": {
+          "type": "string",
+          "description": "Required. The start date of the range for the savings plan details."
+        },
+        "endDate": {
+          "type": "string",
+          "description": "Required. The end date of the range for the savings plan details."
+        }
+      },
+      "description": "Request message for the Flow.GetPurchasedSavingsPlanDetials rpc."
+    },
+    "v1GetDailyUsageCostDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "payerId": {
+          "type": "string",
+          "description": "The payer account ID for which the savings plan details are fetched."
+        },
+        "monthlyOnDemandCost": {
+          "type": "number",
+          "format": "double",
+          "description": "Actual monthly on-demand cost for the payer account."
+        },
+        "monthlyEffectiveCost": {
+          "type": "number",
+          "format": "double",
+          "description": "Actual monthly effective cost after applying Savings Plans."
+        },
+        "monthlyTotalSavings": {
+          "type": "number",
+          "format": "double",
+          "description": "Actual total monthly savings from Savings Plan usage."
+        },
+        "spDetails": {
+          "type": "string",
+          "description": "Purchased Savings Plan details for the payer account."
+        },
+        "usageCostDetails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UsageCostDetails"
+          },
+          "title": "Daily Savings Plan usage and cost details"
+        }
+      },
+      "description": "Response message for the Flow.GetPurchasedSavingsPlanDetials rpc."
+    },
     "v1GetDefaultCostAccessTemplateUrlResponse": {
       "type": "object",
       "properties": {
@@ -33960,65 +34015,6 @@
           "type": "string"
         }
       }
-    },
-    "v1GetPurchasedSavingsPlanDetialsRequest": {
-      "type": "object",
-      "properties": {
-        "payerId": {
-          "type": "string",
-          "description": "Required. The id of the payer to fetch savings plan details for."
-        },
-        "startDate": {
-          "type": "string",
-          "description": "Required. The start date of the range for the savings plan details."
-        },
-        "endDate": {
-          "type": "string",
-          "description": "Required. The end date of the range for the savings plan details."
-        }
-      },
-      "description": "Request message for the Flow.GetPurchasedSavingsPlanDetials rpc."
-    },
-    "v1GetPurchasedSavingsPlanDetialsResponse": {
-      "type": "object",
-      "properties": {
-        "payerId": {
-          "type": "string",
-          "description": "The payer account ID for which the savings plan details are fetched."
-        },
-        "monthlyOnDemandCost": {
-          "type": "number",
-          "format": "double",
-          "description": "Actual monthly on-demand cost for the payer account."
-        },
-        "monthlyEffectiveCost": {
-          "type": "number",
-          "format": "double",
-          "description": "Actual monthly effective cost after applying Savings Plans."
-        },
-        "monthlyTotalSavings": {
-          "type": "number",
-          "format": "double",
-          "description": "Actual total monthly savings from Savings Plan usage."
-        },
-        "spTags": {
-          "type": "string",
-          "description": "Metadata of the purchased Savings Plan."
-        },
-        "purchasedBy": {
-          "type": "string",
-          "description": "Purchaser of the Savings Plan, either the user or Alphaus system."
-        },
-        "savingsPlanDetails": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1SavingsPlanDetails"
-          },
-          "title": "Daily Savings Plan usage and cost details"
-        }
-      },
-      "description": "Response message for the Flow.GetPurchasedSavingsPlanDetials rpc."
     },
     "v1GetRecommendationDetailsResponse": {
       "type": "object",
@@ -36537,56 +36533,6 @@
       },
       "description": "Response message for ListSavings, RestoreSavings, SimulateSavings rpc."
     },
-    "v1SavingsPlanDetails": {
-      "type": "object",
-      "properties": {
-        "currentDate": {
-          "type": "string",
-          "description": "The specific date this entry represents, corresponding to one day within the requested date range."
-        },
-        "ondemandUsage": {
-          "type": "number",
-          "format": "double",
-          "description": "Total On-Demand usage in hours for the date."
-        },
-        "ondemandCost": {
-          "type": "number",
-          "format": "double",
-          "description": "Total On-Demand cost in USD for the date."
-        },
-        "reservedUsage": {
-          "type": "number",
-          "format": "double",
-          "description": "Total Reserved Instance usage in hours for the date."
-        },
-        "reservedCost": {
-          "type": "number",
-          "format": "double",
-          "description": "Total Reserved Instance cost in USD for the date."
-        },
-        "savingsPlanUsage": {
-          "type": "number",
-          "format": "double",
-          "description": "Total Savings Plan usage in hours for the date."
-        },
-        "savingsPlanCost": {
-          "type": "number",
-          "format": "double",
-          "description": "Total Savings Plan cost in USD for the date."
-        },
-        "spotUsage": {
-          "type": "number",
-          "format": "double",
-          "description": "Total Spot Instance usage in hours for the date."
-        },
-        "spotCost": {
-          "type": "number",
-          "format": "double",
-          "description": "Total Spot Instance cost in USD for the date."
-        }
-      },
-      "description": "Savings Plan Chart Data."
-    },
     "v1SendRipplePasswordResetCodeRequest": {
       "type": "object",
       "properties": {
@@ -37645,6 +37591,56 @@
         }
       },
       "title": "(WIP): Response message for Upload Charge Code"
+    },
+    "v1UsageCostDetails": {
+      "type": "object",
+      "properties": {
+        "currentDate": {
+          "type": "string",
+          "description": "The specific date this entry represents, corresponding to one day within the requested date range."
+        },
+        "ondemandUsage": {
+          "type": "number",
+          "format": "double",
+          "description": "Total On-Demand usage in hours for the date."
+        },
+        "ondemandCost": {
+          "type": "number",
+          "format": "double",
+          "description": "Total On-Demand cost in USD for the date."
+        },
+        "reservedUsage": {
+          "type": "number",
+          "format": "double",
+          "description": "Total Reserved Instance usage in hours for the date."
+        },
+        "reservedCost": {
+          "type": "number",
+          "format": "double",
+          "description": "Total Reserved Instance cost in USD for the date."
+        },
+        "savingsPlanUsage": {
+          "type": "number",
+          "format": "double",
+          "description": "Total Savings Plan usage in hours for the date."
+        },
+        "savingsPlanCost": {
+          "type": "number",
+          "format": "double",
+          "description": "Total Savings Plan cost in USD for the date."
+        },
+        "spotUsage": {
+          "type": "number",
+          "format": "double",
+          "description": "Total Spot Instance usage in hours for the date."
+        },
+        "spotCost": {
+          "type": "number",
+          "format": "double",
+          "description": "Total Spot Instance cost in USD for the date."
+        }
+      },
+      "description": "Savings Plan Chart Data."
     },
     "v1UsageCostsDrift": {
       "type": "object",
