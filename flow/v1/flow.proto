@@ -78,7 +78,7 @@ service Flow {
     };  
   }
 
-  // Gets the data for the Flow Dashboard.
+  // Gets the daily cost and usage details.
   rpc GetDailyUsageCostDetails (GetDailyUsageCostDetailsRequest) returns (GetDailyUsageCostDetailsResponse) {
     option (google.api.http) = {
       post: "/v1/usagecost"
@@ -186,7 +186,7 @@ message CreateCostExplorerAccessRequest {
   string target = 1;
 }
 
-// Request message for the Flow.GetPurchasedSavingsPlanDetials rpc.
+// Request message for the Flow.GetDailyUsageCostDetailsRequest rpc.
 message GetDailyUsageCostDetailsRequest {
   // Required. The id of the payer to fetch savings plan details for.
   string payerId = 1;
@@ -352,7 +352,7 @@ message CreateCostExplorerAccessResponse {
   string lastUpdated = 8;
 }
 
-// Savings Plan Chart Data.
+// Usage and Cost Details to be used in the GetDailyUsageCostDetailsResponse.
 message UsageCostDetails {
   // The specific date this entry represents, corresponding to one day within the requested date range.
   string currentDate = 1;
@@ -382,7 +382,7 @@ message UsageCostDetails {
   double spotCost = 9;
 }
 
-// Response message for the Flow.GetPurchasedSavingsPlanDetials rpc.
+// Response message for the Flow.GetDailyUsageCostDetailsResponse rpc.
 message GetDailyUsageCostDetailsResponse {
   // The payer account ID for which the savings plan details are fetched.
   string payerId = 1;
