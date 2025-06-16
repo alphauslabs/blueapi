@@ -10403,6 +10403,47 @@
         ]
       }
     },
+    "/v1/projecttoteam/all:read": {
+      "post": {
+        "operationId": "Prism_ListProjectToTeam",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1ListProjectToTeamResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1ListProjectToTeamResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListProjectToTeamRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
     "/v1/recommendations/all:read": {
       "post": {
         "summary": "Lists recommendations based on specified criteria.",
@@ -11761,7 +11802,7 @@
         ]
       },
       "delete": {
-        "summary": "WORK-IN-PROGRESS: Deletes the billing group invoice service discounts. Only available in Ripple.",
+        "summary": "Deletes the billing group invoice service discounts. Only available in Ripple.",
         "operationId": "Billing_DeleteBillingGroupInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -11792,7 +11833,7 @@
         ]
       },
       "post": {
-        "summary": "WORK-IN-PROGRESS: Registers the billing group invoice service discounts. Only available in Ripple.",
+        "summary": "Registers the billing group invoice service discounts. Only available in Ripple.",
         "operationId": "Billing_CreateBillingGroupInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -11830,7 +11871,7 @@
         ]
       },
       "put": {
-        "summary": "WORK-IN-PROGRESS: Updates the billing group invoice service discounts. Only available in Ripple.",
+        "summary": "Updates the billing group invoice service discounts. Only available in Ripple.",
         "operationId": "Billing_UpdateBillingGroupInvoiceServiceDiscounts",
         "responses": {
           "200": {
@@ -12027,7 +12068,7 @@
     },
     "/v1/servicediscounts:export": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Exports service discounts. Only available in Ripple.",
+        "summary": "Exports service discounts. Only available in Ripple.",
         "operationId": "Billing_ExportServiceDiscounts",
         "responses": {
           "200": {
@@ -14278,7 +14319,7 @@
     },
     "/v1/{vendor}/adjustmententries/{id}": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Gets the adjustment entry. Only available in Ripple.",
+        "summary": "Gets the adjustment entry. Only available in Ripple.",
         "operationId": "Billing_GetAdjustmentEntry",
         "responses": {
           "200": {
@@ -17303,7 +17344,7 @@
     },
     "/v1/{vendor}/untaggedgroups:read": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Reads the untagged group. Only available in Ripple.",
+        "summary": "Reads the untagged group. Only available in Ripple.",
         "operationId": "Billing_ReadUntaggedGroups",
         "responses": {
           "200": {
@@ -34915,6 +34956,26 @@
       },
       "description": "Response message for the Iam.ListPermissions rpc."
     },
+    "v1ListProjectToTeamRequest": {
+      "type": "object"
+    },
+    "v1ListProjectToTeamResponse": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "string"
+        },
+        "projectName": {
+          "type": "string"
+        },
+        "teamId": {
+          "type": "string"
+        },
+        "teamName": {
+          "type": "string"
+        }
+      }
+    },
     "v1ListProjectsRequest": {
       "type": "object"
     },
@@ -35364,6 +35425,11 @@
           "type": "number",
           "format": "double",
           "description": "The spp discount cost."
+        },
+        "edpDiscountCost": {
+          "type": "number",
+          "format": "double",
+          "description": "The edp discount cost."
         }
       },
       "description": "OverViewOptionSection resource definition."
@@ -35441,6 +35507,16 @@
           "type": "number",
           "format": "double",
           "title": "The spp discount cost Period-over-Period.\nRepresents a comparison of costs over a specified period of time.\ncurrently, supported `Month-over-Month`"
+        },
+        "edpDiscountCost": {
+          "type": "number",
+          "format": "double",
+          "description": "The edp discount cost."
+        },
+        "edpDiscountCostPoP": {
+          "type": "number",
+          "format": "double",
+          "title": "The edp discount cost Period-over-Period.\nRepresents a comparison of costs over a specified period of time.\ncurrently, supported `Month-over-Month`"
         }
       },
       "description": "PeriodOverPeriodOptionSection resource definition."

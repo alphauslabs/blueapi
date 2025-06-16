@@ -111,6 +111,13 @@ service Prism {
       body: "*"
     };
   }
+
+  rpc ListProjectToTeam(ListProjectToTeamRequest) returns (stream ListProjectToTeamResponse) {
+    option (google.api.http) = {
+      post: "/v1/projecttoteam/all:read"
+      body: "*"
+    };
+  }
 }
 
 message TestRequest {}
@@ -213,3 +220,13 @@ message Member {
   string created_at = 6;
   string last_update = 7;
 }
+
+message ListProjectToTeamRequest {}
+
+message ListProjectToTeamResponse {
+  string project_id = 1;
+  string project_name = 2;
+  string team_id = 3;
+  string team_name = 4;
+}
+
