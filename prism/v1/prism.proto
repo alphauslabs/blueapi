@@ -92,6 +92,13 @@ service Prism {
     };
   }
 
+  rpc CreateTeam(CreateTeamRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/team"
+      body: "*"
+    };
+  }
+
   rpc GetTeam(GetTeamRequest) returns (GetTeamResponse) {
     option (google.api.http) = {
       get: "/v1/team/{id}"
@@ -257,6 +264,11 @@ message Product {
 }
 
 message CreateProductRequest {
+  string name = 1;
+  string email = 2;
+}
+
+message CreateTeamRequest {
   string name = 1;
   string email = 2;
 }
