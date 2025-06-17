@@ -119,9 +119,16 @@ service Prism {
     };
   }
 
-   rpc ListProducts(ListProductsRequest) returns (stream Product) {
+  rpc ListProducts(ListProductsRequest) returns (stream Product) {
     option (google.api.http) = {
       post: "/v1/product/all:read"
+      body: "*"
+    };
+  }
+
+  rpc CreateProduct(CreateProductRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/product"
       body: "*"
     };
   }
@@ -135,6 +142,7 @@ message TestResponse {
 
 message CreateProjectRequest {
   string name = 1;
+  string email = 2;
 }
 
 message GetProjectRequest {
@@ -246,4 +254,9 @@ message Product {
   string email = 3;
   string created_at = 4;
   string last_update = 5;
+}
+
+message CreateProductRequest {
+  string name = 1;
+  string email = 2;
 }

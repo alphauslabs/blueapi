@@ -10264,6 +10264,39 @@
         ]
       }
     },
+    "/v1/product": {
+      "post": {
+        "operationId": "Prism_CreateProduct",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateProductRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
     "/v1/product/all:read": {
       "post": {
         "operationId": "Prism_ListProducts",
@@ -31796,6 +31829,17 @@
       },
       "description": "See [https://help.alphaus.cloud/en/articles/3612555-ripple-aws-things-you-need-to-prepare-before-starting] for more information.\n\nSee [https://docs.aws.amazon.com/cur/latest/userguide/cur-create.html] for more information. Requirements include: Additional report details = 'Include Resource IDS' enabled, Prefix = non-empty (recommendation only), Time granularity = 'Hourly', File format = 'text/csv'."
     },
+    "v1CreateProductRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
     "v1CreateProfilingRequest": {
       "type": "object",
       "properties": {
@@ -31862,6 +31906,9 @@
       "type": "object",
       "properties": {
         "name": {
+          "type": "string"
+        },
+        "email": {
           "type": "string"
         }
       }
