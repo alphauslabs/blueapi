@@ -118,6 +118,13 @@ service Prism {
       body: "*"
     };
   }
+
+   rpc ListProducts(ListProductsRequest) returns (stream Product) {
+    option (google.api.http) = {
+      post: "/v1/product/all:read"
+      body: "*"
+    };
+  }
 }
 
 message TestRequest {}
@@ -231,3 +238,12 @@ message ListProjectToTeamResponse {
   string team_name = 4;
 }
 
+message ListProductsRequest {}
+
+message Product {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string created_at = 4;
+  string last_update = 5;
+}
