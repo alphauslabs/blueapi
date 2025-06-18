@@ -152,6 +152,12 @@ service Prism {
       body: "*"
     };
   }
+
+  rpc DeleteTeam(DeleteTeamRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/team/{id}"
+    };
+  }
 }
 
 message TestRequest {}
@@ -317,4 +323,9 @@ message AssignProjectToTeamResponse {
 
   // Comma-separated list of project names that were assigned.
   string project_names = 4;
+}
+
+message DeleteTeamRequest {
+  // Required team ID.
+  string id = 1;
 }
