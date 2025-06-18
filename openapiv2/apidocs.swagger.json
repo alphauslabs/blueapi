@@ -10338,6 +10338,38 @@
         ]
       }
     },
+    "/v1/product/{id}": {
+      "delete": {
+        "operationId": "Prism_DeleteProduct",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required product ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
     "/v1/project": {
       "post": {
         "summary": "WIP: Creates a new project.",
@@ -10510,6 +10542,38 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1ListProjectToTeamRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
+    "/v1/projecttoteam/assign": {
+      "post": {
+        "operationId": "Prism_AssignProjectToTeam",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AssignProjectToTeamResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AssignProjectToTeamRequest"
             }
           }
         ],
@@ -29860,6 +29924,49 @@
       },
       "title": "Response message for AssignPayer"
     },
+    "v1AssignProjectToTeamRequest": {
+      "type": "object",
+      "properties": {
+        "teamId": {
+          "type": "string"
+        },
+        "projectIds": {
+          "type": "string",
+          "description": "Required. Comma-separated list of project IDs to assign to the team."
+        }
+      }
+    },
+    "v1AssignProjectToTeamResponse": {
+      "type": "object",
+      "properties": {
+        "createNew": {
+          "type": "boolean",
+          "description": "Indicates whether a new project was created as part of the assignment."
+        },
+        "projectEmail": {
+          "type": "string",
+          "description": "Should not be empty if create_new is true."
+        },
+        "projectName": {
+          "type": "string",
+          "description": "Should not be empty if create_new is true."
+        },
+        "teamId": {
+          "type": "string"
+        },
+        "teamName": {
+          "type": "string"
+        },
+        "projectIds": {
+          "type": "string",
+          "description": "Comma-separated list of project IDs that were assigned."
+        },
+        "projectNames": {
+          "type": "string",
+          "description": "Comma-separated list of project names that were assigned."
+        }
+      }
+    },
     "v1Attribute": {
       "type": "object",
       "properties": {
@@ -37015,6 +37122,9 @@
           "type": "string"
         },
         "lastUpdate": {
+          "type": "string"
+        },
+        "email": {
           "type": "string"
         }
       }

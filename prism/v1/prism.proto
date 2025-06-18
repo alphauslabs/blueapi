@@ -139,6 +139,19 @@ service Prism {
       body: "*"
     };
   }
+
+  rpc DeleteProduct(DeleteProductRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/product/{id}"
+    };
+  }
+
+  rpc AssignProjectToTeam(AssignProjectToTeamRequest) returns (AssignProjectToTeamResponse) {
+    option (google.api.http) = {
+      post: "/v1/projecttoteam/assign"
+      body: "*"
+    };
+  }
 }
 
 message TestRequest {}
@@ -230,6 +243,7 @@ message Team {
   string org = 3;
   string created_at = 4;
   string last_update = 5;
+  string email = 6;
 }
 
 message ListTeamMembersRequest {}
@@ -271,4 +285,34 @@ message CreateProductRequest {
 message CreateTeamRequest {
   string name = 1;
   string email = 2;
+}
+
+message DeleteProductRequest {
+  // Required product ID.
+  string id = 1;
+}
+
+message AssignProjectToTeamRequest {
+  string team_id = 1;
+  // Required. Comma-separated list of project IDs to assign to the team.
+  string project_ids = 2;
+}
+
+message AssignProjectToTeamResponse {
+  // Indicates whether a new project was created as part of the assignment.
+  bool create_new = 1;
+
+  // Should not be empty if create_new is true.
+  string project_email = 2;
+  
+  // Should not be empty if create_new is true.
+  string project_name = 3;
+  string team_id = 4;
+  string team_name = 5;
+
+  // Comma-separated list of project IDs that were assigned.
+  string project_ids = 6; 
+
+  // Comma-separated list of project names that were assigned.
+  string project_names = 7;
 }
