@@ -308,15 +308,34 @@ message GetCostExplorerAccessTemplateUrlResponse {
 
 // Settings history message.
 message SettingsHistory {
+  // Payer account ID.
   string id = 1;
+
+  // Account scope determines if the account is payer or linked account.
   string accountScope = 2;
+
+  // Customization setting for SP.
   string customization = 3;
+
+  // Term of the SP.
   string planTerm = 4;
+
+  // Payment option for the SP.
   string paymentOption = 5;
+
+  // Lookback period for recommendation.
   string lookBackPeriod = 6;
+
+  // If EC2 Instance SP is selected in Customization, request will include list of instance family
   string instanceFamily = 7;
+
+  // Annual budget input for SP.
   double annualBudget = 8;
+  
+  // Purchase approval from the payer for the SP.
   bool approval = 9;
+  
+  // Last updated timestamp of the settings configuration.
   string lastUpdated = 10;
 }
 
@@ -351,6 +370,55 @@ message CreateCostExplorerAccessResponse {
   // The last updated timestamp, RFC3339 UTC.
   string lastUpdated = 8;
 }
+
+// Savings Plan Details to be used in the GetDailyUsageCostDetailsResponse.
+message SpDetails {
+  // The payer account ID for which the savings plan details are fetched.
+  string payerId = 1;
+
+  // The savings plan type, e.g., `Compute`, `Ec2`.
+  string savingsPlanType = 2;
+
+  // The current state of the savings plan, e.g., `ACTIVE`, `EXPIRED`, `PENDING`.
+  string state = 3;
+
+  // The start time of the savings plan.
+  string startTime = 4;
+
+  // The end time of the savings plan.
+  string endTime = 5;
+
+  // The date until which the savings plan is returnable, if applicable.
+  string returnableUntil = 6;
+
+  // The currency in which the savings plan is priced, e.g., `USD`.
+  string currency = 7;
+
+  // The commitment amount per hour for the savings plan in USD.
+  double commitment = 8;
+
+  // A description of the savings plan, including details like the instance family and payment option.
+  string description = 9;
+
+  // The payment option for the savings plan, e.g., `All Upfront`, `Partial Upfront`, `No Upfront`.
+  string paymentOption = 10;
+
+  // The product types covered by the savings plan, e.g., `EC2`, `Lambda`.
+  repeated string productTypes = 11;
+
+  // The EC2 instance families covered by the savings plan, e.g., `m5`, `c5`.
+  repeated string ec2InstanceFamily = 12;
+
+  // The periodic (usually monthly) charge to pay over the term of the plan.
+  double recurringPaymentAmount = 13;
+
+  // The total amount paid at the start of the Savings Plan, if applicable.
+  double upfrontPaymentAmount = 14;
+
+  // The tag that refers to the one who purchased the Savings Plan.
+  string tags = 15;
+}
+
 
 // Usage and Cost Details to be used in the GetDailyUsageCostDetailsResponse.
 message UsageCostDetails {
@@ -406,7 +474,7 @@ message GetDailyUsageCostDetailsResponse {
   double monthlyTotalSavings = 4;
 
   // Purchased Savings Plan details for the payer account.
-  string spDetails = 5;
+  SpDetails spDetails = 5;
 
   // Daily Savings Plan usage and cost details
   repeated UsageCostDetails usageCostDetails = 6; 
