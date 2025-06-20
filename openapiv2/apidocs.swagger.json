@@ -8307,6 +8307,28 @@
         ]
       }
     },
+    "/v1/integration/status": {
+      "get": {
+        "operationId": "Prism_GetIntegrationStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetIntegrationStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
     "/v1/invoice/displaysettings": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Gets the invoice display settings for invoice-ui",
@@ -34105,6 +34127,18 @@
         }
       }
     },
+    "v1GetIntegrationStatusResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1IntegrationStatus"
+          }
+        }
+      }
+    },
     "v1GetInvoiceDisplaySettingsResponse": {
       "type": "object",
       "properties": {
@@ -34792,6 +34826,17 @@
         }
       },
       "description": "Request message for the Cost.ImportCurFiles rpc."
+    },
+    "v1IntegrationStatus": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
     },
     "v1InviteMemberRequest": {
       "type": "object",

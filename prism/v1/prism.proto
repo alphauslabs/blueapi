@@ -158,6 +158,12 @@ service Prism {
       delete: "/v1/team/{id}"
     };
   }
+
+  rpc GetIntegrationStatus(google.protobuf.Empty) returns (GetIntegrationStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/integration/status"
+    };
+  }
 }
 
 message TestRequest {}
@@ -331,4 +337,13 @@ message AssignProjectToTeamResponse {
 message DeleteTeamRequest {
   // Required team ID.
   string id = 1;
+}
+
+message IntegrationStatus {
+  string type = 1; 
+  string status = 2; 
+}
+
+message GetIntegrationStatusResponse {
+  repeated IntegrationStatus status = 1;
 }
