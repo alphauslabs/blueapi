@@ -11184,6 +11184,47 @@
         ]
       }
     },
+    "/v1/reportschedule/all:read": {
+      "post": {
+        "operationId": "Prism_ListReportSchedules",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1ReportSchedule"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1ReportSchedule"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListReportSchedulesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
     "/v1/reseller/announcement": {
       "post": {
         "summary": "Creates new announcement for wave users",
@@ -35503,6 +35544,9 @@
         }
       }
     },
+    "v1ListReportSchedulesRequest": {
+      "type": "object"
+    },
     "v1ListRolesResponse": {
       "type": "object",
       "properties": {
@@ -36679,6 +36723,33 @@
         }
       },
       "title": "Response message for RemoveSideMenuFavorite"
+    },
+    "v1ReportSchedule": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "schedule": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "title": "Supported values: \"on\", \"off\""
+        },
+        "scheduleCron": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "lastUpdate": {
+          "type": "string"
+        }
+      }
     },
     "v1ResetPasswordRequest": {
       "type": "object",

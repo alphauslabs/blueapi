@@ -164,6 +164,13 @@ service Prism {
       get: "/v1/integration/status"
     };
   }
+
+  rpc ListReportSchedules(ListReportSchedulesRequest) returns (stream ReportSchedule) {
+    option (google.api.http) = {
+      post: "/v1/reportschedule/all:read"
+      body: "*"
+    };
+  }
 }
 
 message TestRequest {}
@@ -346,4 +353,18 @@ message IntegrationStatus {
 
 message GetIntegrationStatusResponse {
   repeated IntegrationStatus status = 1;
+}
+
+message ListReportSchedulesRequest {}
+
+message ReportSchedule {
+  string id = 1;
+  string name = 2;
+  string schedule = 3;
+
+  // Supported values: "on", "off"
+  string status = 4;
+  string schedule_cron = 5;
+  string created_at = 6;
+  string last_update = 7;
 }
