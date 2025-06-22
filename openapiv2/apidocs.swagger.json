@@ -11225,6 +11225,45 @@
         ]
       }
     },
+    "/v1/reportschedule/{id}": {
+      "put": {
+        "operationId": "Prism_UpdateReportSchedule",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PrismUpdateReportScheduleBody"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
     "/v1/reseller/announcement": {
       "post": {
         "summary": "Creates new announcement for wave users",
@@ -21167,6 +21206,30 @@
           "type": "string"
         },
         "email": {
+          "type": "string"
+        }
+      }
+    },
+    "PrismUpdateReportScheduleBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "schedule": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "title": "Supported values: \"on\", \"off\""
+        },
+        "scheduleCron": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "lastUpdate": {
           "type": "string"
         }
       }
