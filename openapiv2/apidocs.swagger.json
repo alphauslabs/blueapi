@@ -8329,6 +8329,47 @@
         ]
       }
     },
+    "/v1/integration/status/all:read": {
+      "post": {
+        "operationId": "Prism_ListIntegrationStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1IntegrationStatus"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1IntegrationStatus"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListIntegrationStatusRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
     "/v1/invoice/displaysettings": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Gets the invoice display settings for invoice-ui",
@@ -35023,9 +35064,20 @@
       "type": "object",
       "properties": {
         "type": {
-          "type": "string"
+          "type": "string",
+          "title": "\"github\", \"slack\""
         },
         "status": {
+          "type": "string",
+          "title": "\"on\", \"off\""
+        },
+        "id": {
+          "type": "string"
+        },
+        "teamName": {
+          "type": "string"
+        },
+        "lastUpdate": {
           "type": "string"
         }
       }
@@ -35401,6 +35453,9 @@
         }
       },
       "description": "Response message for the Iam.ListIdentityProviders rpc."
+    },
+    "v1ListIntegrationStatusRequest": {
+      "type": "object"
     },
     "v1ListInvoiceRequest": {
       "type": "object",

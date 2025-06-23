@@ -192,6 +192,13 @@ service Prism {
       body: "*"
     };
   }
+
+  rpc ListIntegrationStatus(ListIntegrationStatusRequest) returns (stream IntegrationStatus) {
+    option (google.api.http) = {
+      post: "/v1/integration/status/all:read"
+      body: "*"
+    };
+  }
 }
 
 message TestRequest {}
@@ -371,8 +378,17 @@ message DeleteTeamRequest {
 }
 
 message IntegrationStatus {
+  // "github", "slack"
   string type = 1; 
+
+  // "on", "off"
   string status = 2; 
+
+  string id = 3;
+
+  string teamName = 4;
+
+  string last_update = 5;
 }
 
 message GetIntegrationStatusResponse {
@@ -400,3 +416,5 @@ message UpdateOrgTimezoneRequest {
   // Timezone in IANA format, e.g., "Asia/Kuala_Lumpur".
   string timezone = 2;
 }
+
+message ListIntegrationStatusRequest {}
