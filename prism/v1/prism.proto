@@ -185,6 +185,13 @@ service Prism {
       body: "*"
     };
   }
+
+  rpc UpdateOrgTimezone(UpdateOrgTimezoneRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/org/{id}/timezone"
+      body: "*"
+    };
+  }
 }
 
 message TestRequest {}
@@ -381,4 +388,12 @@ message ReportSchedule {
   string schedule_cron = 5;
   string created_at = 6;
   string last_update = 7;
+}
+
+message UpdateOrgTimezoneRequest {
+  // Required organization ID.
+  string id = 1;
+
+  // Timezone in IANA format, e.g., "Asia/Kuala_Lumpur".
+  string timezone = 2;
 }
