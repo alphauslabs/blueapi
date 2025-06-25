@@ -14259,6 +14259,87 @@
         ]
       }
     },
+    "/v1/workflow/all:read": {
+      "post": {
+        "operationId": "Prism_ListWorkflows",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1Workflow"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1Workflow"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListWorkflowsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
+    "/v1/workflow/{name}": {
+      "put": {
+        "operationId": "Prism_UpdateWorkflow",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Required workflow name.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PrismUpdateWorkflowBody"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
     "/v1/x/pcc": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Do not use.",
@@ -21354,6 +21435,15 @@
         },
         "lastUpdate": {
           "type": "string"
+        }
+      }
+    },
+    "PrismUpdateWorkflowBody": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "Allowed values are \"on\" and \"off\"."
         }
       }
     },
@@ -35854,6 +35944,9 @@
       },
       "description": "Response message for the Iam.ListUserRoleMappings rpc."
     },
+    "v1ListWorkflowsRequest": {
+      "type": "object"
+    },
     "v1MFAUser": {
       "type": "object",
       "properties": {
@@ -38672,6 +38765,18 @@
         }
       },
       "title": "for wave features settings data maping"
+    },
+    "v1Workflow": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "Allowed values are \"on\" and \"off\"."
+        }
+      }
     },
     "waveAdjustment": {
       "type": "object",

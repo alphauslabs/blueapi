@@ -199,6 +199,20 @@ service Prism {
       body: "*"
     };
   }
+
+  rpc UpdateWorkflow(UpdateWorkflowRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/workflow/{name}"
+      body: "*"
+    };
+  }
+
+  rpc ListWorkflows(ListWorkflowsRequest) returns (stream Workflow) {
+    option (google.api.http) = {
+      post: "/v1/workflow/all:read"
+      body: "*"
+    };
+  }
 }
 
 message TestRequest {}
@@ -418,3 +432,21 @@ message UpdateOrgTimezoneRequest {
 }
 
 message ListIntegrationStatusRequest {}
+
+message UpdateWorkflowRequest {
+  // Required workflow name.
+  string name = 1;
+
+  // Allowed values are "on" and "off".
+  string status = 2;
+}
+
+message ListWorkflowsRequest {}
+
+
+message Workflow {
+  string name = 1;
+
+  // Allowed values are "on" and "off".
+  string status = 2;
+}
