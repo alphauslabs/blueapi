@@ -2290,7 +2290,12 @@ message ReadInvoiceGroupCostsRequest {
   string toCurrency = 3;
 
   // Optional. Number of acquisitions. default:10０.
-  int32 limit = 4;
+  uint32 limit = 4;
+  
+  // Optional. If set true, billing group would be merged by id
+  // Response will be sorted by profit
+  // limit is used on response, no limit for data query. Response limit default:10
+  bool topProfitMode = 5;
 }
 
 // Request message for the ReadAccountOriginalResources rpc.
