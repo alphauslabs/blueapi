@@ -10123,6 +10123,39 @@
         ]
       }
     },
+    "/v1/org/join": {
+      "post": {
+        "operationId": "Prism_JoinOrganization",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1JoinOrganizationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
     "/v1/org/{id}": {
       "get": {
         "operationId": "Prism_GetOrganization",
@@ -35368,6 +35401,27 @@
         "value": {
           "type": "string",
           "description": "The IP filter value. Should be in CIDR format."
+        }
+      }
+    },
+    "v1JoinOrganizationRequest": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Required."
+        },
+        "email": {
+          "type": "string",
+          "description": "Required user email."
+        },
+        "name": {
+          "type": "string",
+          "description": "Optional user name."
+        },
+        "social": {
+          "type": "string",
+          "title": "Optional \"google\", \"github\""
         }
       }
     },

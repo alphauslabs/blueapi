@@ -220,6 +220,13 @@ service Prism {
       body: "*"
     };
   }
+
+  rpc JoinOrganization(JoinOrganizationRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/org/join"
+      body: "*"
+    };
+  }
 }
 
 message TestRequest {}
@@ -464,4 +471,18 @@ message Activity {
   string id = 1;
   string type = 2;
   string created_at = 3;
+}
+
+message JoinOrganizationRequest {
+  // Required.
+  string code = 1;
+
+  // Required user email.
+  string email = 2;
+
+  // Optional user name.
+  string name = 3;
+
+  // Optional "google", "github"
+  string social = 4;
 }
