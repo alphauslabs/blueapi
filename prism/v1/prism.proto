@@ -213,6 +213,13 @@ service Prism {
       body: "*"
     };
   }
+
+  rpc ListActivities(ListActivitiesRequest) returns (stream Activity) {
+    option (google.api.http) = {
+      post: "/v1/activity/all:read"
+      body: "*"
+    };
+  }
 }
 
 message TestRequest {}
@@ -449,4 +456,12 @@ message Workflow {
 
   // Allowed values are "on" and "off".
   string status = 2;
+}
+
+message ListActivitiesRequest {}
+
+message Activity {
+  string id = 1;
+  string type = 2;
+  string created_at = 3;
 }

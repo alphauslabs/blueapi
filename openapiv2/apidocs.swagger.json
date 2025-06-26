@@ -3176,6 +3176,47 @@
         ]
       }
     },
+    "/v1/activity/all:read": {
+      "post": {
+        "operationId": "Prism_ListActivities",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1Activity"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1Activity"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListActivitiesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
     "/v1/adjustmentconfig/{vendor}": {
       "get": {
         "summary": "Gets adjustment config",
@@ -29813,6 +29854,20 @@
       },
       "title": "Response message for ActivateUser"
     },
+    "v1Activity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        }
+      }
+    },
     "v1AddAccountToBillingGroupRequest": {
       "type": "object",
       "properties": {
@@ -35344,6 +35399,9 @@
         }
       },
       "description": "Request message for the RestoreAccountUsage rpc."
+    },
+    "v1ListActivitiesRequest": {
+      "type": "object"
     },
     "v1ListAssetsFilters": {
       "type": "object",
