@@ -227,6 +227,13 @@ service Prism {
       body: "*"
     };
   }
+
+  rpc GenerateOrganizationCode(GenerateOrganizationCodeRequest) returns (GenerateOrganizationCodeResponse) {
+    option (google.api.http) = {
+      post: "/v1/org/code"
+      body: "*"
+    };
+  }
 }
 
 message TestRequest {}
@@ -486,4 +493,11 @@ message JoinOrganizationRequest {
 
   // Optional "google", "github"
   string social = 4;
+}
+
+
+message GenerateOrganizationCodeRequest {}
+
+message GenerateOrganizationCodeResponse {
+  string code = 1;
 }

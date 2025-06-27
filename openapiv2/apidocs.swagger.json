@@ -10123,6 +10123,38 @@
         ]
       }
     },
+    "/v1/org/code": {
+      "post": {
+        "operationId": "Prism_GenerateOrganizationCode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GenerateOrganizationCodeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GenerateOrganizationCodeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Prism"
+        ]
+      }
+    },
     "/v1/org/join": {
       "post": {
         "operationId": "Prism_JoinOrganization",
@@ -33396,6 +33428,17 @@
         },
         "enabled": {
           "type": "boolean"
+        }
+      }
+    },
+    "v1GenerateOrganizationCodeRequest": {
+      "type": "object"
+    },
+    "v1GenerateOrganizationCodeResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
         }
       }
     },
