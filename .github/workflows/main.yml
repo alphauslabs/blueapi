@@ -43,7 +43,7 @@ jobs:
         export PATH="$PATH:$HOME/.local/bin:$(go env GOPATH)/bin"
         echo 'Build tool versions:' && protoc --version && protoc-gen-go --version
         # Hack: I don't know how to setup go_package properly when importing protos via submodule so resort to good old sed:
-        grep -rl 'tobereplaced"' | xargs sed -i -e 's/tobereplaced"/protos"/g'
+        grep -rl 'tobereplaced"' | xargs sed -i -e 's/tobereplaced"/blueprotos"/g'
         # Start build:
         mkdir -p generated/py && chmod +x ./build.sh && ./build.sh
         if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
@@ -52,7 +52,7 @@ jobs:
         # Update blue-sdk-go:
         WORKSPACE_ROOT=$PWD
         # Hack: I don't know how to setup go_package properly when importing protos via submodule so resort to good old sed:
-        grep -rl 'alphauslabs/protos' generated/go/ | xargs sed -i -e 's/alphauslabs\/protos/alphauslabs\/blue-sdk-go\/protos/g'
+        grep -rl 'alphauslabs/blueprotos' generated/go/ | xargs sed -i -e 's/alphauslabs\/blueprotos/alphauslabs\/blue-sdk-go\/blueprotos/g'
         cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-go && cd blue-sdk-go/
         cp -rv $WORKSPACE_ROOT/generated/index.html docs/
         cp -rv $WORKSPACE_ROOT/generated/go/* . && git status

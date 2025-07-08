@@ -457,7 +457,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/protosOperation"
+              "$ref": "#/definitions/blueprotosOperation"
             }
           },
           "default": {
@@ -2267,13 +2267,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/protosOperation"
+                  "$ref": "#/definitions/blueprotosOperation"
                 },
                 "error": {
                   "$ref": "#/definitions/googlerpcStatus"
                 }
               },
-              "title": "Stream result of protosOperation"
+              "title": "Stream result of blueprotosOperation"
             }
           },
           "default": {
@@ -2319,7 +2319,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/protosOperation"
+              "$ref": "#/definitions/blueprotosOperation"
             }
           },
           "default": {
@@ -5131,7 +5131,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/protosOperation"
+              "$ref": "#/definitions/blueprotosOperation"
             }
           },
           "default": {
@@ -5164,7 +5164,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/protosOperation"
+              "$ref": "#/definitions/blueprotosOperation"
             }
           },
           "default": {
@@ -16546,7 +16546,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/protosOperation"
+              "$ref": "#/definitions/blueprotosOperation"
             }
           },
           "default": {
@@ -25564,6 +25564,32 @@
       },
       "description": "Response message for the Pricing.GetInfo rpc."
     },
+    "blueprotosOperation": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The server-assigned name."
+        },
+        "metadata": {
+          "$ref": "#/definitions/protobufAny",
+          "description": "Service-specific metadata associated with the operation. It typically\ncontains progress information and common metadata such as create time.\nSome services might not provide such metadata. Any method that returns a\nlong-running operation should document the metadata type, if any."
+        },
+        "done": {
+          "type": "boolean",
+          "description": "If the value is `false`, it means the operation is still in progress.\nIf `true`, the operation is completed, and either `error` or `response` is\navailable."
+        },
+        "error": {
+          "$ref": "#/definitions/googlerpcStatus",
+          "description": "The error result of the operation in case of failure or cancellation."
+        },
+        "response": {
+          "$ref": "#/definitions/protobufAny",
+          "description": "The normal response of the operation in case of success. If the original method returns\nno data on success, such as `Delete`, the response is `google.protobuf.Empty`. If the\noriginal method is standard `Get`/`Create`/`Update`, the response should be the\nresource. For other methods, the response should have the type `XxxResponse`, where\n`Xxx` is the original method name. For example, if the original method name is\n`TakeSnapshot()`, the inferred response type is `TakeSnapshotResponse`."
+        }
+      },
+      "description": "This resource represents a long-running operation that is the result of a\nnetwork API call."
+    },
     "costv1CostAttribute": {
       "type": "object",
       "properties": {
@@ -28556,32 +28582,6 @@
       ],
       "default": "NULL_VALUE",
       "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\nThe JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
-    },
-    "protosOperation": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "The server-assigned name."
-        },
-        "metadata": {
-          "$ref": "#/definitions/protobufAny",
-          "description": "Service-specific metadata associated with the operation. It typically\ncontains progress information and common metadata such as create time.\nSome services might not provide such metadata. Any method that returns a\nlong-running operation should document the metadata type, if any."
-        },
-        "done": {
-          "type": "boolean",
-          "description": "If the value is `false`, it means the operation is still in progress.\nIf `true`, the operation is completed, and either `error` or `response` is\navailable."
-        },
-        "error": {
-          "$ref": "#/definitions/googlerpcStatus",
-          "description": "The error result of the operation in case of failure or cancellation."
-        },
-        "response": {
-          "$ref": "#/definitions/protobufAny",
-          "description": "The normal response of the operation in case of success. If the original method returns\nno data on success, such as `Delete`, the response is `google.protobuf.Empty`. If the\noriginal method is standard `Get`/`Create`/`Update`, the response should be the\nresource. For other methods, the response should have the type `XxxResponse`, where\n`Xxx` is the original method name. For example, if the original method name is\n`TakeSnapshot()`, the inferred response type is `TakeSnapshotResponse`."
-        }
-      },
-      "description": "This resource represents a long-running operation that is the result of a\nnetwork API call."
     },
     "recommendationOCTOGeneratedRecommendations": {
       "type": "object",
@@ -35628,7 +35628,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/protosOperation"
+            "$ref": "#/definitions/blueprotosOperation"
           }
         }
       },

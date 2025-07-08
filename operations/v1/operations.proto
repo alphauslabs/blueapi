@@ -4,7 +4,7 @@ syntax = "proto3";
 
 package blueapi.operations.v1;
 
-import "protos/operation.proto";
+import "blueprotos/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
@@ -33,7 +33,7 @@ service Operations {
   };
 
   // Lists long-running operations.
-  rpc ListOperations(ListOperationsRequest) returns (stream protos.Operation) {
+  rpc ListOperations(ListOperationsRequest) returns (stream blueprotos.Operation) {
     option (google.api.http) = {
       get: "/ops/v1"
     };
@@ -41,7 +41,7 @@ service Operations {
 
   // Gets the latest state of a long-running operation. You can use this method to
   // poll the operation result at intervals.
-  rpc GetOperation(GetOperationRequest) returns (protos.Operation) {
+  rpc GetOperation(GetOperationRequest) returns (blueprotos.Operation) {
     option (google.api.http) = {
       get: "/ops/v1/{name}"
     };
@@ -77,7 +77,7 @@ service Operations {
   // state before the specified timeout (including immediately), meaning, even an
   // immediate response is no guarantee that the operation is done.
   // At the moment, Blue's default RPC timeout is around one hour.
-  rpc WaitOperation(WaitOperationRequest) returns (protos.Operation) {
+  rpc WaitOperation(WaitOperationRequest) returns (blueprotos.Operation) {
   }
 }
 
