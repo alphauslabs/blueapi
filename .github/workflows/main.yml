@@ -52,7 +52,9 @@ jobs:
         # Update blue-sdk-go:
         WORKSPACE_ROOT=$PWD
         # Hack: I don't know how to setup go_package properly when importing protos via submodule so resort to good old sed:
-        grep -rl 'alphauslabs/protos' generated/go/ | xargs sed -i -e 's/alphauslabs\/protos/alphauslabs\/blue-sdk-go\/protos/g'
+        # To fix double proto register error with minimal change we use the blue-interal-proto since they are they same
+        # This will only work if both blue-internal-go and blue-sdk-go was imported 
+        grep -rl 'alphauslabs/protos' generated/go/ | xargs sed -i -e 's/alphauslabs\/protos/alphauslabs\/blue-internal-go\/protos/g'
         cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-go && cd blue-sdk-go/
         cp -rv $WORKSPACE_ROOT/generated/index.html docs/
         cp -rv $WORKSPACE_ROOT/generated/go/* . && git status
