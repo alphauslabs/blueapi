@@ -85,6 +85,15 @@ service Flow {
       body: "*"
     };
   }
+
+ // Returns all the aws accounts and its payer of the msp id
+ rpc GetAwsAccounts (GetAwsAccountsRequest) returns (GetAwsAccountsResponse) {
+    option (google.api.http) = {
+      post: "/v1/aws/{billingInternalId}/accounts"
+      body: "*"
+    };
+  }
+
 }
 
 // ##################################### REQUESTS #####################################
@@ -469,4 +478,21 @@ message GetDailyUsageCostDetailsResponse {
 
   // Daily Savings Plan usage and cost details
   repeated UsageCostDetails usageCostDetails = 6; 
+}
+
+// Response message for the Flow.GetAwsAccounts rpc.
+message GetAwsAccountsRequest {
+  string billingInternalId = 1;
+}
+
+// Response message for the Flow.GetAwsAccounts rpc.
+message GetAwsAccountsResponse {
+  string groupId = 1;
+  string groupName = 2;
+  
+  // all payers registered on billing group
+  repeated string payerAccounts = 3;
+
+  // map of aws accountid to its payer id
+  map<string, string> linkedAccountToPayerId = 4;
 }
