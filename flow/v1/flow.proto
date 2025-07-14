@@ -380,54 +380,65 @@ message CreateCostExplorerAccessResponse {
   string lastUpdated = 8;
 }
 
+// Summary of monthly cost values associated with a single Savings Plan.
+message MonthlyCosts {
+  // Actual monthly on-demand cost for the payer account.
+  double monthlyOnDemandCost = 1;
+
+  // Actual monthly effective cost after applying Savings Plans.
+  double monthlyEffectiveCost = 2;
+
+  // Actual total monthly savings from Savings Plan usage.
+  double monthlyTotalSavings = 3;
+}
+
 // Savings Plan Details to be used in the GetDailyUsageCostDetailsResponse.
 message SpDetails {
-  // The payer account ID for which the savings plan details are fetched.
-  string payerId = 1;
-
   // The savings plan type, e.g., `Compute`, `Ec2`.
-  string savingsPlanType = 2;
+  string savingsPlanType = 1;
 
   // The current state of the savings plan, e.g., `ACTIVE`, `EXPIRED`, `PENDING`.
-  string state = 3;
+  string state = 2;
 
   // The start time of the savings plan.
-  string startTime = 4;
+  string startTime = 3;
 
   // The end time of the savings plan.
-  string endTime = 5;
+  string endTime = 4;
 
   // The date until which the savings plan is returnable, if applicable.
-  string returnableUntil = 6;
+  string returnableUntil = 5;
+
+  // The commitment amount per hour for the savings plan in USD.
+  double commitment = 6;
 
   // The currency in which the savings plan is priced, e.g., `USD`.
   string currency = 7;
 
-  // The commitment amount per hour for the savings plan in USD.
-  double commitment = 8;
-
-  // A description of the savings plan, including details like the instance family and payment option.
-  string description = 9;
+  // The duration of the plan term, e.g., `1 year`, `3 years`.
+  string planTerm = 8;
 
   // The payment option for the savings plan, e.g., `All Upfront`, `Partial Upfront`, `No Upfront`.
-  string paymentOption = 10;
+  string paymentOption = 9;
 
   // The product types covered by the savings plan, e.g., `EC2`, `Lambda`.
-  repeated string productTypes = 11;
-
-  // The EC2 instance families covered by the savings plan, e.g., `m5`, `c5`.
-  repeated string ec2InstanceFamily = 12;
-
-  // The periodic (usually monthly) charge to pay over the term of the plan.
-  double recurringPaymentAmount = 13;
+  repeated string productTypes = 10;
 
   // The total amount paid at the start of the Savings Plan, if applicable.
-  double upfrontPaymentAmount = 14;
+  double upfrontPaymentAmount = 11;
+
+  // The periodic (usually monthly) charge to pay over the term of the plan.
+  double recurringPaymentAmount = 12;
+
+  // The EC2 instance families covered by the savings plan, e.g., `m5`, `c5`.
+  repeated string ec2InstanceFamily = 13;
 
   // The tag that refers to the one who purchased the Savings Plan.
-  string tags = 15;
-}
+  string tags = 14;
 
+  // The user or Flow that purchased the Savings Plan.
+  string purchasedBy = 15;
+}
 
 // Usage and Cost Details to be used in the GetDailyUsageCostDetailsResponse.
 message UsageCostDetails {
@@ -459,25 +470,24 @@ message UsageCostDetails {
   double utilizationPercentage = 9;
 }
 
-// Response message for the Flow.GetDailyUsageCostDetailsResponse rpc.
+// A single entry containing Savings Plan, monthly cost summary, and usage breakdown.
 message GetDailyUsageCostDetailsResponse {
   // The payer account ID for which the savings plan details are fetched.
   string payerId = 1;
 
-  // Actual monthly on-demand cost for the payer account.
-  double monthlyOnDemandCost = 2;
-
-  // Actual monthly effective cost after applying Savings Plans.
-  double monthlyEffectiveCost = 3;
-
-  // Actual total monthly savings from Savings Plan usage.
-  double monthlyTotalSavings = 4;
-
   // Purchased Savings Plan details for the payer account.
-  SpDetails spDetails = 5;
+  SpDetails spDetails = 2;
 
-  // Daily Savings Plan usage and cost details
-  repeated UsageCostDetails usageCostDetails = 6; 
+  // Monthly aggregated cost summary for the Savings Plan.
+  MonthlyCosts monthlyCosts = 3;
+
+  // Daily Savings Plan usage and cost details.
+  repeated UsageCostDetails usageCostDetails = 4;
+}
+
+// Response message for the Flow.GetDailyUsageCostDetails rpc.
+message GetDailyUsageCostDetailsResponses {
+  repeated GetDailyUsageCostDetailsResponse responses = 1;
 }
 
 // Response message for the Flow.GetAwsAccounts rpc.
