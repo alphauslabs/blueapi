@@ -5288,6 +5288,60 @@
         ]
       }
     },
+    "/v1/aws/xacct/spa": {
+      "get": {
+        "summary": "Gets a CloudFormation launch URL for Savings Plan purchase capabilities",
+        "operationId": "Flow_GetSPPurchaseAccessTemplateUrl",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetSPPurchaseAccessTemplateUrlResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Flow"
+        ]
+      },
+      "post": {
+        "operationId": "Flow_CreateSPPurchaseAccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateSPPurchaseAccessResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the Flow.CreateSPPurchaseAccess rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateSPPurchaseAccessRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flow"
+        ]
+      }
+    },
     "/v1/aws/{billingInternalId}/accounts": {
       "post": {
         "summary": "Returns all the aws accounts and its payer of the msp id",
@@ -32110,6 +32164,10 @@
         "lastUpdated": {
           "type": "string",
           "description": "The last updated timestamp, RFC3339 UTC."
+        },
+        "access": {
+          "type": "string",
+          "title": "The access type- partial access: \"cloud_explorer_access\""
         }
       },
       "description": "Response message for the Flow.CreateCostExplorerAccess rpc."
@@ -32694,6 +32752,58 @@
         }
       },
       "description": "Request message for the Iam.CreateRole rpc."
+    },
+    "v1CreateSPPurchaseAccessRequest": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "Required. The target AWS account to validate."
+        }
+      },
+      "description": "Request message for the Flow.CreateSPPurchaseAccess rpc."
+    },
+    "v1CreateSPPurchaseAccessResponse": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "The queried target account."
+        },
+        "roleArn": {
+          "type": "string",
+          "description": "The role ARN that provides the cross-account access permissions."
+        },
+        "externalId": {
+          "type": "string",
+          "description": "The external id for this role."
+        },
+        "stackId": {
+          "type": "string",
+          "description": "The id of the CloudFormation stack deployed in the target account."
+        },
+        "stackRegion": {
+          "type": "string",
+          "description": "The region where the stack is deployed."
+        },
+        "templateUrl": {
+          "type": "string",
+          "description": "The latest template used to deploy the stack."
+        },
+        "status": {
+          "type": "string",
+          "description": "This can be `latest`, `outdated`, or some error information."
+        },
+        "lastUpdated": {
+          "type": "string",
+          "description": "The last updated timestamp, RFC3339 UTC."
+        },
+        "access": {
+          "type": "string",
+          "title": "The access type- full access: \"savings_plan_access\""
+        }
+      },
+      "description": "Response message for the Flow.CreateSPPurchaseAccess rpc."
     },
     "v1CreateSettingsRequest": {
       "type": "object",
@@ -35140,6 +35250,32 @@
         }
       },
       "title": "Response message for GetRightSizingRecommendation"
+    },
+    "v1GetSPPurchaseAccessTemplateUrlResponse": {
+      "type": "object",
+      "properties": {
+        "launchUrl": {
+          "type": "string",
+          "description": "The CloudFormation launch url. Open it in your browser."
+        },
+        "templateUrl": {
+          "type": "string",
+          "description": "The latest CloudFormation template. The version is included in the filename."
+        },
+        "stackName": {
+          "type": "string",
+          "description": "The default stack name used. Can be modified."
+        },
+        "principal": {
+          "type": "string",
+          "description": "The AWS account that will receive the access. Do not change."
+        },
+        "externalId": {
+          "type": "string",
+          "description": "The external id for this role. Do not change."
+        }
+      },
+      "description": "Response message for the Flow.GetSPPurchaseAccessTemplateUrl rpc."
     },
     "v1GetServicesResponse": {
       "type": "object",
