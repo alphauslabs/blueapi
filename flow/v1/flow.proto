@@ -94,6 +94,20 @@ service Flow {
     };
   }
 
+  // Gets a CloudFormation launch URL for Savings Plan purchase capabilities
+  rpc GetSPPurchaseAccessTemplateUrl(GetSPPurchaseAccessTemplateUrlRequest) returns (GetSPPurchaseAccessTemplateUrlResponse) {
+    option (google.api.http) = {
+      get: "/v1/aws/xacct/spa"
+    };
+  }
+
+  rpc CreateSPPurchaseAccess(CreateSPPurchaseAccessRequest) returns (CreateSPPurchaseAccessResponse) {
+    option (google.api.http) = {
+      post: "/v1/aws/xacct/spa"
+      body: "*"
+    };
+  }
+
 }
 
 // ##################################### REQUESTS #####################################
@@ -205,6 +219,15 @@ message GetDailyUsageCostDetailsRequest {
 
   //  Required. The end date of the range for the savings plan details.
   string endDate = 3;
+}
+
+// Request message for the Flow.GetSPPurchaseAccessTemplateUrl rpc.
+message GetSPPurchaseAccessTemplateUrlRequest {}
+
+// Request message for the Flow.CreateSPPurchaseAccess rpc.
+message CreateSPPurchaseAccessRequest {
+  // Required. The target AWS account to validate.
+  string target = 1;
 }
 
 // ##################################### RESPONSES #####################################
@@ -378,6 +401,9 @@ message CreateCostExplorerAccessResponse {
 
   // The last updated timestamp, RFC3339 UTC.
   string lastUpdated = 8;
+
+  // The access type- partial access to view simulation only: "cloud_explorer_access"
+   string access = 9;
 }
 
 // Summary of monthly cost values associated with a single Savings Plan.
@@ -505,4 +531,52 @@ message GetAwsAccountsResponse {
 
   // map of aws accountid to its payer id
   map<string, string> linkedAccountToPayerId = 4;
+}
+
+// Response message for the Flow.GetSPPurchaseAccessTemplateUrl rpc.
+message GetSPPurchaseAccessTemplateUrlResponse {
+  // The CloudFormation launch url. Open it in your browser.
+  string launchUrl = 1;
+
+  // The latest CloudFormation template. The version is included in the filename.
+  string templateUrl = 2;
+
+  // The default stack name used. Can be modified.
+  string stackName = 3;
+
+  // The AWS account that will receive the access. Do not change.
+  string principal = 4;
+
+  // The external id for this role. Do not change.
+  string externalId = 5;
+}
+
+// Response message for the Flow.CreateSPPurchaseAccess rpc.
+message CreateSPPurchaseAccessResponse {
+  // The queried target account.
+  string target = 1;
+
+  // The role ARN that provides the cross-account access permissions.
+  string roleArn = 2;
+
+  // The external id for this role.
+  string externalId = 3;
+
+  // The id of the CloudFormation stack deployed in the target account.
+  string stackId = 4;
+
+  // The region where the stack is deployed.
+  string stackRegion = 5;
+
+  // The latest template used to deploy the stack.
+  string templateUrl = 6;
+
+  // This can be `latest`, `outdated`, or some error information.
+  string status = 7;
+
+  // The last updated timestamp, RFC3339 UTC.
+  string lastUpdated = 8;
+
+  // The access type- full access to view simulation and purchase saving plan: "savings_plan_access"
+   string access = 9;
 }
