@@ -13873,7 +13873,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetDailyUsageCostDetailsResponses"
+              "$ref": "#/definitions/v1GetDailyUsageCostDetailsResponse"
             }
           },
           "default": {
@@ -34622,13 +34622,17 @@
           "type": "string",
           "description": "The payer account ID for which the savings plan details are fetched."
         },
-        "spDetails": {
-          "$ref": "#/definitions/v1SpDetails",
-          "description": "Purchased Savings Plan details for the payer account."
-        },
         "monthlyCosts": {
           "$ref": "#/definitions/v1MonthlyCosts",
           "description": "Monthly aggregated cost summary for the Savings Plan."
+        },
+        "spDetails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1SpDetails"
+          },
+          "description": "Purchased Savings Plan details for the payer account."
         },
         "usageCostDetails": {
           "type": "array",
@@ -34640,19 +34644,6 @@
         }
       },
       "description": "A single entry containing Savings Plan, monthly cost summary, and usage breakdown."
-    },
-    "v1GetDailyUsageCostDetailsResponses": {
-      "type": "object",
-      "properties": {
-        "responses": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1GetDailyUsageCostDetailsResponse"
-          }
-        }
-      },
-      "description": "Response message for the Flow.GetDailyUsageCostDetails rpc."
     },
     "v1GetDefaultCostAccessTemplateUrlResponse": {
       "type": "object",

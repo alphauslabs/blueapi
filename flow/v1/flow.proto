@@ -79,7 +79,7 @@ service Flow {
   }
 
   // Gets the daily cost and usage details.
-  rpc GetDailyUsageCostDetails (GetDailyUsageCostDetailsRequest) returns (GetDailyUsageCostDetailsResponses) {
+  rpc GetDailyUsageCostDetails (GetDailyUsageCostDetailsRequest) returns (GetDailyUsageCostDetailsResponse) {
     option (google.api.http) = {
       post: "/v1/usagecost"
       body: "*"
@@ -502,19 +502,14 @@ message GetDailyUsageCostDetailsResponse {
   // The payer account ID for which the savings plan details are fetched.
   string payerId = 1;
 
-  // Purchased Savings Plan details for the payer account.
-  SpDetails spDetails = 2;
-
   // Monthly aggregated cost summary for the Savings Plan.
-  MonthlyCosts monthlyCosts = 3;
+  MonthlyCosts monthlyCosts = 2;
+
+  // Purchased Savings Plan details for the payer account.
+  repeated SpDetails spDetails = 3;
 
   // Daily Savings Plan usage and cost details.
   repeated UsageCostDetails usageCostDetails = 4;
-}
-
-// Response message for the Flow.GetDailyUsageCostDetails rpc.
-message GetDailyUsageCostDetailsResponses {
-  repeated GetDailyUsageCostDetailsResponse responses = 1;
 }
 
 // Response message for the Flow.GetAwsAccounts rpc.
