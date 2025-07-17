@@ -1400,7 +1400,28 @@ service Cover {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Populate demo data 
+  rpc PopulateDemoData(PopulateDemoDataRequest) returns (PopulateDemoDataResponse) {
+    option (google.api.http) = {
+      post: "/v1/demo/populate"
+      body: "*"
+    };
+   }
+
+   // WORK-IN-PROGRESS: Reset demo data
+   rpc ResetDemoData(ResetDemoDataRequest) returns (ResetDemoDataResponse) {
+    option (google.api.http) = {
+      post: "/v1/demo/reset"
+      body: "*"
+    };
+  }
 }
+
+message PopulateDemoDataRequest{}
+message PopulateDemoDataResponse {}
+message ResetDemoDataRequest {}
+message ResetDemoDataResponse {}
 
 message ContainerCostUsageRequest {
   enum TimeGranularity {
