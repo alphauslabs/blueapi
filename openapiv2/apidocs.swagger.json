@@ -20340,6 +20340,10 @@
         "monthly": {
           "$ref": "#/definitions/apiMonthlyBudgetAlert",
           "description": "Optional."
+        },
+        "customPeriod": {
+          "$ref": "#/definitions/apiCustomPeriodBudgetAlert",
+          "description": "Optional."
         }
       },
       "description": "Request message for the UpdateBudgetAlerts rpc."
@@ -22655,6 +22659,31 @@
       },
       "description": "CustomDetails resource definition."
     },
+    "apiCustomPeriodBudgetAlert": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number",
+          "format": "double",
+          "title": "Required. threshold in budget alerts"
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Required. notification enable/disable \nIf disabled, no alert is sent."
+        },
+        "startDay": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Required. start date in budget alerts"
+        },
+        "endDay": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Required. end date in budget alerts"
+        }
+      },
+      "description": "CustomPeriodBudgetAlert resource definition."
+    },
     "apiDailyBudgetAlert": {
       "type": "object",
       "properties": {
@@ -24384,7 +24413,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "title": "budget id\n`previousDay` / `daily` / `monthly`"
+          "title": "budget id\n`previousDay` / `daily` / `monthly` / `customPeriod`"
         },
         "value": {
           "type": "number",
@@ -31057,6 +31086,10 @@
         "monthly": {
           "$ref": "#/definitions/apiMonthlyBudgetAlert",
           "description": "Monthly setting for budget alert."
+        },
+        "customPeriod": {
+          "$ref": "#/definitions/apiCustomPeriodBudgetAlert",
+          "description": "Custom Period setting for budget alert."
         }
       },
       "description": "Request message for the BudgetAlerts rpc."
@@ -32112,6 +32145,10 @@
         },
         "monthly": {
           "$ref": "#/definitions/apiMonthlyBudgetAlert",
+          "description": "Optional."
+        },
+        "customPeriod": {
+          "$ref": "#/definitions/apiCustomPeriodBudgetAlert",
           "description": "Optional."
         }
       },
