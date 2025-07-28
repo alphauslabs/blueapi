@@ -492,9 +492,15 @@ message UsageCostDetails {
 
   // Percentage of Savings Plan coverage for the date.
   double coveragePercentage = 8;
+}
 
-  // Percentage of Savings Plan utilization for the date.
-  double utilizationPercentage = 9;
+// Utilization details for Savings Plans, including ARN and utilization percentage.
+message UtilizationDetails {
+  // The ARN of each of the Savings Plan for which utilization is reported.
+  string arn = 1;
+
+  // The percentage of utilization for each of the Savings Plan
+  double utilizationPercentage = 2;
 }
 
 // A single entry containing Savings Plan, monthly cost summary, and usage breakdown.
@@ -510,6 +516,9 @@ message GetDailyUsageCostDetailsResponse {
 
   // Daily Savings Plan usage and cost details.
   repeated UsageCostDetails usageCostDetails = 4;
+
+  // Percentage of Savings Plan utilization per ARN.
+  repeated UtilizationDetails utilizationDetails = 5;
 }
 
 // Response message for the Flow.GetAwsAccounts rpc.
