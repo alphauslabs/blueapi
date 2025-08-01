@@ -36083,51 +36083,62 @@
         "companyName": {
           "type": "string"
         },
-        "invoiceStatus": {
-          "type": "string",
-          "title": "Created || Not Created"
-        },
         "finalizationStatus": {
-          "type": "string",
-          "title": "In progress || Done"
+          "type": "string"
         },
-        "waveStatus": {
-          "type": "string",
-          "title": "Published || Not published"
+        "isCreated": {
+          "type": "boolean",
+          "title": "invoice creation status"
         },
-        "vendor": {
-          "type": "string",
-          "title": "aws, azure, gcp"
+        "isSettingModified": {
+          "type": "boolean"
+        },
+        "createdDate": {
+          "type": "string"
+        },
+        "updatedDate": {
+          "type": "string"
+        },
+        "createdVendors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "isPublished": {
+          "type": "boolean",
+          "title": "wave publish status"
+        },
+        "vendorBillingAmount": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "map of vendor to billingAmount Formated in $8,000.12"
+        },
+        "billingAmountTotal": {
+          "type": "string"
         },
         "currency": {
           "type": "string",
           "title": "The currency of the invoice (usd, jpy, ...)"
         },
-        "billingAmountAws": {
-          "type": "string",
-          "title": "Formated in $8,000.12"
-        },
-        "billingAmountAzure": {
-          "type": "string"
-        },
-        "billingAmountGcp": {
-          "type": "string"
-        },
-        "billingAmountTotal": {
-          "type": "string"
-        },
         "urlId": {
           "type": "string"
         },
-        "invoiceSettingsAws": {
-          "$ref": "#/definitions/billingv1InvoiceSettings",
-          "title": "returns null if no settings is saved for the month"
+        "createdVendorInvoiceSetting": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/billingv1InvoiceSettings"
+          },
+          "title": "setting used in invoice creation"
         },
-        "invoiceSettingsAzure": {
-          "$ref": "#/definitions/billingv1InvoiceSettings"
-        },
-        "invoiceSettingsGcp": {
-          "$ref": "#/definitions/billingv1InvoiceSettings"
+        "defaultVendorInvoiceSetting": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/billingv1InvoiceSettings"
+          },
+          "title": "default invoice setting"
         }
       },
       "description": "Response message for the ListInvoice rpc."

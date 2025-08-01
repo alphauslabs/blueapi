@@ -1960,31 +1960,34 @@ message ListInvoiceResponse {
 
   string companyName = 4;
 
-  // Created || Not Created
-  string invoiceStatus = 5;
-  // In progress || Done
-  string finalizationStatus = 6;
-  // Published || Not published
-  string waveStatus = 7;
+  string finalizationStatus = 5;
+  // invoice creation status 
+  bool isCreated = 6;
+  bool isSettingModified = 7;
+  string createdDate = 8;
+  string updatedDate = 9;
 
-  // aws, azure, gcp
-  string vendor = 13;
+  repeated string createdVendors = 10;
+
+  // wave publish status
+  bool isPublished = 11;
+
+  // In progress || Done
+  
+  // map of vendor to billingAmount Formated in $8,000.12
+  map <string, string> vendorBillingAmount = 12;
+  string billingAmountTotal = 13;
 
   // The currency of the invoice (usd, jpy, ...)
-  string currency = 8;
+  string currency = 14;
 
-  // Formated in $8,000.12
-  string billingAmountAws = 9;
-  string billingAmountAzure = 10;
-  string billingAmountGcp = 11;
-  string billingAmountTotal = 12;
+  string urlId = 15;
 
-  string urlId = 17;
-
-  // returns null if no settings is saved for the month
-  InvoiceSettings invoiceSettingsAws = 14;
-  InvoiceSettings invoiceSettingsAzure = 15;
-  InvoiceSettings invoiceSettingsGcp = 16;
+  // setting used in invoice creation
+  map<string, InvoiceSettings> createdVendorInvoiceSetting = 16;
+ 
+  // default invoice setting
+  map<string, InvoiceSettings> defaultVendorInvoiceSetting = 17;
 }
 
 // request message for ListAbcBillingGroups
