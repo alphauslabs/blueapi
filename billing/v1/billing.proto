@@ -1986,8 +1986,11 @@ message ListInvoiceResponse {
   // setting used in invoice creation
   map<string, InvoiceSettings> createdVendorInvoiceSetting = 16;
  
-  // default invoice setting
-  map<string, InvoiceSettings> defaultVendorInvoiceSetting = 17;
+  // saved invoice setting for the month
+  map<string, InvoiceSettings> savedVendorInvoiceSetting = 17;
+
+  // billinggroup's default invoice setting
+  map<string, InvoiceSettings> defaultVendorInvoiceSetting = 18;
 }
 
 // request message for ListAbcBillingGroups
@@ -2731,28 +2734,28 @@ message SaveInvoiceSettingsRequest {
 
 message InvoiceSettings {
   string invoiceNo = 2;
-  float discountRate = 4;
+  double discountRate = 4;
 
   // e.g., cloudpaywithfee, ...
   string discountTargetUsage = 5;
 
   // e.g., usageamount, ... 
   string discountCalcLogic = 6;
-  float taxRate = 7;
+  double taxRate = 7;
 
   // e.g., percent, fix, aws_developer, aws_business, aws_enterprise
   string supportFee = 8;
-  float supportRate = 9;
+  double supportRate = 9;
 
   // e.g., nondiscount, ...
   string supportFeeCalcTarget = 10;
-  float supportFix = 11;
+  double supportFix = 11;
 
   // e.g., percent, fix, automatic, usagetable
   string substitutionFee = 12;
-  float substitutionRate = 13;
+  double substitutionRate = 13;
 
-  float substitutionFix = 14;
+  double substitutionFix = 14;
 
   // e.g., nondiscount, ...
   string substitutionFeeCalcTarget = 15;
@@ -2768,18 +2771,13 @@ message InvoiceSettings {
 
   // Exchange rate from USD to the invoice currency
   // Example: If the invoice currency is "jpy" and 1 USD = 150 jpy, exchangeRate = 150
-  float exchangeRate = 18;
+  double exchangeRate = 18;
 
   string memo = 19;
 
   // e.g., account, tag
   string calcType = 20;
-  repeated InvoiceAdditionalItems additionalItems = 21;
-}
-
-message InvoiceAdditionalItems {
-  string name = 1;
-  float price = 2;
+  repeated FreeFormItem additionalItems = 21;
 }
 
 message BasicInformation {
