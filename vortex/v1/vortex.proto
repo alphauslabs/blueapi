@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package blueapi.vortex.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/vortex";
+option java_package = "cloud.alphaus.api.vortex";
+option java_outer_classname = "VortexProto";
+
+// Vortex service definition.
+service Vortex {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "(Alpha) Vortex API. Base URL: https://api.alphaus.cloud/m/blue/vortex"
+    external_docs: {
+      url: "https://github.com/alphauslabs/blueapi/tree/main/vortex/";
+      description: "Service definition";
+    }
+  };
+
+  // Test endpoint only.
+  rpc Test(google.protobuf.Empty) returns (TestResponse) {
+    option (google.api.http) = {
+      get: "/v1/test"
+    };
+  }
+}
+ 
+message TestResponse {
+  string message = 1;
+}
