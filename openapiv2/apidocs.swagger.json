@@ -25294,7 +25294,7 @@
         },
         "discountRate": {
           "type": "number",
-          "format": "float"
+          "format": "double"
         },
         "discountTargetUsage": {
           "type": "string",
@@ -25306,7 +25306,7 @@
         },
         "taxRate": {
           "type": "number",
-          "format": "float"
+          "format": "double"
         },
         "supportFee": {
           "type": "string",
@@ -25314,7 +25314,7 @@
         },
         "supportRate": {
           "type": "number",
-          "format": "float"
+          "format": "double"
         },
         "supportFeeCalcTarget": {
           "type": "string",
@@ -25322,7 +25322,7 @@
         },
         "supportFix": {
           "type": "number",
-          "format": "float"
+          "format": "double"
         },
         "substitutionFee": {
           "type": "string",
@@ -25330,11 +25330,11 @@
         },
         "substitutionRate": {
           "type": "number",
-          "format": "float"
+          "format": "double"
         },
         "substitutionFix": {
           "type": "number",
-          "format": "float"
+          "format": "double"
         },
         "substitutionFeeCalcTarget": {
           "type": "string",
@@ -25354,7 +25354,7 @@
         },
         "exchangeRate": {
           "type": "number",
-          "format": "float",
+          "format": "double",
           "title": "Exchange rate from USD to the invoice currency\nExample: If the invoice currency is \"jpy\" and 1 USD = 150 jpy, exchangeRate = 150"
         },
         "memo": {
@@ -25368,7 +25368,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1InvoiceAdditionalItems"
+            "$ref": "#/definitions/v1FreeFormItem"
           }
         }
       }
@@ -35682,18 +35682,6 @@
       },
       "title": "Response message for InviteMember"
     },
-    "v1InvoiceAdditionalItems": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "price": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
     "v1InvoiceConnectedBillingGroups": {
       "type": "object",
       "properties": {
@@ -36133,12 +36121,19 @@
           },
           "title": "setting used in invoice creation"
         },
+        "savedVendorInvoiceSetting": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/billingv1InvoiceSettings"
+          },
+          "title": "saved invoice setting for the month"
+        },
         "defaultVendorInvoiceSetting": {
           "type": "object",
           "additionalProperties": {
             "$ref": "#/definitions/billingv1InvoiceSettings"
           },
-          "title": "default invoice setting"
+          "title": "billinggroup's default invoice setting"
         }
       },
       "description": "Response message for the ListInvoice rpc."
