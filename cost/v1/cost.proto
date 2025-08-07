@@ -2263,6 +2263,20 @@ message ReadInvoiceIdsResponse {
   string id = 1;
 }
 
+message PeriodRange {
+  enum Unit {
+    UNIT_UNSPECIFIED = 0;
+    MONTH = 1;
+    QUARTER = 2;
+    YEAR = 3;
+  }
+
+  Unit unit = 1;           // Time unit of the range
+  uint32 year = 2;         // Year (e.g., 2025)
+  uint32 starting = 3;     // Start month/quarter (1-based), ignored if YEAR
+  uint32 duration = 4;     // Length in units of unit
+}
+
 // Request message for the ReadInvoiceOverviews rpc.
 message ReadInvoiceOverviewsRequest {
   // Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20240101`.
@@ -2270,6 +2284,12 @@ message ReadInvoiceOverviewsRequest {
 
   // Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`.
   string endTime = 2;
+
+  // Set true to use period range as date input, startTime and endTime would be ignored
+  bool usePeriodRange = 4;
+
+  // Use when usePeriodRange range is true
+  PeriodRange periodRange = 5;
 
   // Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which case, it will use the latest exchange rates provided by https://fixer.io. If you prefer a custom exchange rate, you can append the rate to the currency's three-letter symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate should be against the US dollar (USD).
   string toCurrency = 3;
