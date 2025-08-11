@@ -34,6 +34,12 @@ service Vortex {
       body: "*"
     };
   }
+
+  rpc GetUser(GetUserRequest) returns (GetUserResponse) {
+    option (google.api.http) = {
+      get: "/v1/user/{email}"
+    };
+  }
 }
  
 message TestResponse {
@@ -49,4 +55,15 @@ message CreateOrgResponse {
   string orgId = 1;
   string name = 2;
   string email = 3;
+}
+
+message GetUserRequest {
+  string email = 1;
+}
+
+message GetUserResponse {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  string orgId = 4;
 }

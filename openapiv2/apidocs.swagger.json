@@ -14029,6 +14029,36 @@
         ]
       }
     },
+    "/v1/user/{email}": {
+      "get": {
+        "operationId": "Vortex_GetUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Vortex"
+        ]
+      }
+    },
     "/v1/verify": {
       "post": {
         "operationId": "Prism_VerifyUser",
@@ -35677,6 +35707,23 @@
         },
         "hasSubscribedUpdates": {
           "type": "boolean"
+        }
+      }
+    },
+    "v1GetUserResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
         }
       }
     },
