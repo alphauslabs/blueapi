@@ -23,11 +23,24 @@ service Vortex {
   // Test endpoint only
   rpc Test(google.protobuf.Empty) returns (TestResponse) {
     option (google.api.http) = {
-      get: "/v1/test"
+      get: "/v1/testing"
+    };
+  }
+
+  // Create an org in Vortex
+  rpc CreateOrg(CreateOrgRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/organizations"
+      body: "*"
     };
   }
 }
  
 message TestResponse {
   string message = 1;
+}
+
+message CreateOrgRequest {
+  string name = 1;
+  string email = 2;
 }

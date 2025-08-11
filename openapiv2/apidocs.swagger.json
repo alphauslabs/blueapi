@@ -87,6 +87,14 @@
       }
     },
     {
+      "name": "Vortex",
+      "description": "(Alpha) Vortex API. Base URL: https://api.alphaus.cloud/m/blue/vortex",
+      "externalDocs": {
+        "description": "Service definition",
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/vortex/"
+      }
+    },
+    {
       "name": "Preferences",
       "description": "(BETA) Preferences API. Base URL: https://api.alphaus.cloud/m/blue",
       "externalDocs": {
@@ -2483,7 +2491,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1CreateOrgRequest"
+              "$ref": "#/definitions/blueapiorgv1CreateOrgRequest"
             }
           }
         ],
@@ -10520,6 +10528,40 @@
         ]
       }
     },
+    "/v1/organizations": {
+      "post": {
+        "summary": "Create an org in Vortex",
+        "operationId": "Vortex_CreateOrg",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/blueapivortexv1CreateOrgRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Vortex"
+        ]
+      }
+    },
     "/v1/organizations/currency": {
       "get": {
         "summary": "Get Org's reference of currency exchange rate",
@@ -13183,7 +13225,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1TestResponse"
+              "$ref": "#/definitions/blueapiprismv1TestResponse"
             }
           },
           "default": {
@@ -13195,6 +13237,29 @@
         },
         "tags": [
           "Prism"
+        ]
+      }
+    },
+    "/v1/testing": {
+      "get": {
+        "summary": "Test endpoint only",
+        "operationId": "Vortex_Test",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/blueapivortexv1TestResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Vortex"
         ]
       }
     },
@@ -25792,6 +25857,52 @@
       },
       "description": "Response message for the Flow.GetInfo rpc."
     },
+    "blueapiorgv1CreateOrgRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "title": "Required. Organization's email"
+        },
+        "description": {
+          "type": "string",
+          "title": "Required. Organization's description or company name"
+        },
+        "password": {
+          "type": "string",
+          "description": "Optional. User can decide to let the system generates the password."
+        },
+        "name": {
+          "type": "string",
+          "title": "To be used for onboarding profile"
+        },
+        "role": {
+          "type": "string"
+        },
+        "usage": {
+          "type": "string"
+        },
+        "intention": {
+          "type": "string"
+        },
+        "isAuth0Signup": {
+          "type": "boolean"
+        },
+        "customerId": {
+          "type": "string",
+          "title": "Optional. Customer Id from AWS marketplace"
+        },
+        "locale": {
+          "type": "string",
+          "description": "Optional. User locale. Default value is en if not supplied."
+        },
+        "auth0UserId": {
+          "type": "string",
+          "description": "Optional. Auth0 user id for users registering using social login."
+        }
+      },
+      "description": "Request message for the Organization.CreateOrg rpc."
+    },
     "blueapipricingv1GetInfoResponse": {
       "type": "object",
       "properties": {
@@ -25800,6 +25911,33 @@
         }
       },
       "description": "Response message for the Pricing.GetInfo rpc."
+    },
+    "blueapiprismv1TestResponse": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "string"
+        }
+      }
+    },
+    "blueapivortexv1CreateOrgRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "blueapivortexv1TestResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
     },
     "costv1CostAttribute": {
       "type": "object",
@@ -32619,52 +32757,6 @@
       },
       "description": "Request message for the Admin.CreateNotificationTypeChannels rpc."
     },
-    "v1CreateOrgRequest": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string",
-          "title": "Required. Organization's email"
-        },
-        "description": {
-          "type": "string",
-          "title": "Required. Organization's description or company name"
-        },
-        "password": {
-          "type": "string",
-          "description": "Optional. User can decide to let the system generates the password."
-        },
-        "name": {
-          "type": "string",
-          "title": "To be used for onboarding profile"
-        },
-        "role": {
-          "type": "string"
-        },
-        "usage": {
-          "type": "string"
-        },
-        "intention": {
-          "type": "string"
-        },
-        "isAuth0Signup": {
-          "type": "boolean"
-        },
-        "customerId": {
-          "type": "string",
-          "title": "Optional. Customer Id from AWS marketplace"
-        },
-        "locale": {
-          "type": "string",
-          "description": "Optional. User locale. Default value is en if not supplied."
-        },
-        "auth0UserId": {
-          "type": "string",
-          "description": "Optional. Auth0 user id for users registering using social login."
-        }
-      },
-      "description": "Request message for the Organization.CreateOrg rpc."
-    },
     "v1CreateOrgResponse": {
       "type": "object",
       "properties": {
@@ -38290,14 +38382,6 @@
         }
       },
       "title": "Response message for TerminateResource"
-    },
-    "v1TestResponse": {
-      "type": "object",
-      "properties": {
-        "response": {
-          "type": "string"
-        }
-      }
     },
     "v1ThirdProfitItemSection": {
       "type": "object",
