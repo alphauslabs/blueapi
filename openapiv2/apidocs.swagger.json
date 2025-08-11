@@ -2474,7 +2474,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CreateOrgResponse"
+              "$ref": "#/definitions/blueapiorgv1CreateOrgResponse"
             }
           },
           "default": {
@@ -10536,8 +10536,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "type": "object",
-              "properties": {}
+              "$ref": "#/definitions/blueapivortexv1CreateOrgResponse"
             }
           },
           "default": {
@@ -25903,6 +25902,18 @@
       },
       "description": "Request message for the Organization.CreateOrg rpc."
     },
+    "blueapiorgv1CreateOrgResponse": {
+      "type": "object",
+      "properties": {
+        "org": {
+          "$ref": "#/definitions/rippleOrg"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "description": "Response message for the Organization.CreateOrg rpc."
+    },
     "blueapipricingv1GetInfoResponse": {
       "type": "object",
       "properties": {
@@ -25923,6 +25934,20 @@
     "blueapivortexv1CreateOrgRequest": {
       "type": "object",
       "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "blueapivortexv1CreateOrgResponse": {
+      "type": "object",
+      "properties": {
+        "orgId": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
@@ -32756,18 +32781,6 @@
         }
       },
       "description": "Request message for the Admin.CreateNotificationTypeChannels rpc."
-    },
-    "v1CreateOrgResponse": {
-      "type": "object",
-      "properties": {
-        "org": {
-          "$ref": "#/definitions/rippleOrg"
-        },
-        "password": {
-          "type": "string"
-        }
-      },
-      "description": "Response message for the Organization.CreateOrg rpc."
     },
     "v1CreateOrganizationRequest": {
       "type": "object",

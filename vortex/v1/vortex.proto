@@ -28,7 +28,7 @@ service Vortex {
   }
 
   // Create an org in Vortex
-  rpc CreateOrg(CreateOrgRequest) returns (google.protobuf.Empty) {
+  rpc CreateOrg(CreateOrgRequest) returns (CreateOrgResponse) {
     option (google.api.http) = {
       post: "/v1/organizations"
       body: "*"
@@ -43,4 +43,10 @@ message TestResponse {
 message CreateOrgRequest {
   string name = 1;
   string email = 2;
+}
+
+message CreateOrgResponse {
+  string orgId = 1;
+  string name = 2;
+  string email = 3;
 }
