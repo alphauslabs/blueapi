@@ -722,6 +722,13 @@ service Cover {
     };
   }
 
+  // Get all values of the allocation source
+  rpc GetAllocationSources(GetAllocationSourcesRequest) returns (GetAllocationSourcesResponse) {
+    option (google.api.http) = {
+      get: "/v1/allocators/source"
+    };
+  }
+
   // WORK-IN-PROGRESS: Updates a cost allocator item
   rpc UpdateAllocator(CostAllocatorRequest) returns (CostAllocatorDetails) {
     option (google.api.http) = {
@@ -2972,6 +2979,23 @@ message GetAllocationAttributesResponse {
     repeated string service = 2;
   }
   repeated AllocationAttribute attribute = 1;
+}
+
+// Request message for the GetAllocationSources rpc.
+message GetAllocationSourcesRequest {
+  string type = 1;
+}
+
+// Response message for the GetAllocationSources rpc.
+message GetAllocationSourcesResponse {
+  message AllocationSources {
+    string accountName = 1;
+    string service = 2;
+    string tagName = 3;
+    string tagValue = 4;
+    string costGroup = 5;
+  }
+  repeated AllocationSources source = 1;
 }
 
 // Request message for the DeleteAllocator rpc.

@@ -4647,6 +4647,37 @@
         ]
       }
     },
+    "/v1/allocators/source": {
+      "get": {
+        "summary": "Get all values of the allocation source",
+        "operationId": "Cover_GetAllocationSources",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAllocationSourcesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/allocators/{id}": {
       "delete": {
         "summary": "WORK-IN-PROGRESS: Deletes a cost allocator",
@@ -21485,6 +21516,26 @@
         }
       }
     },
+    "GetAllocationSourcesResponseAllocationSources": {
+      "type": "object",
+      "properties": {
+        "accountName": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "tagName": {
+          "type": "string"
+        },
+        "tagValue": {
+          "type": "string"
+        },
+        "costGroup": {
+          "type": "string"
+        }
+      }
+    },
     "GetCloudwatchMetadataResponseDimension": {
       "type": "object",
       "properties": {
@@ -34051,6 +34102,19 @@
         }
       },
       "description": "Response message for the GetAllocationAttributes rpc."
+    },
+    "v1GetAllocationSourcesResponse": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/GetAllocationSourcesResponseAllocationSources"
+          }
+        }
+      },
+      "description": "Response message for the GetAllocationSources rpc."
     },
     "v1GetAnomalyinCostGroupRequest": {
       "type": "object",
