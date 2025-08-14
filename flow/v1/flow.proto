@@ -494,16 +494,25 @@ message UsageCostDetails {
   double coveragePercentage = 8;
 }
 
-// Utilization details for Savings Plans, including ARN and utilization percentage.
-message UtilizationDetails {
-  // The current date for which the utilization details are reported.
+// Daily utilization data for a specific date range.
+message DailyUtilization {
+  // The current date for which the utilization is reported.
   string currentDate = 1;
 
-  // The ARN of each of the Savings Plan for which utilization is reported.
-  string arn = 2;
+  // The percentage of utilization for this specific date
+  double utilizationPercentage = 2;
+}
 
-  // The percentage of utilization for each of the Savings Plan
-  double utilizationPercentage = 3;
+// Utilization details for Savings Plans, including ARN and utilization percentage.
+message UtilizationDetails {
+  // Descriptive name of the Savings Plan
+  string savingsPlanName = 1;
+
+  // The ARN of the Savings Plan
+  string savingsPlanArn = 2;
+
+  // Array of daily utilization data for this Savings Plan
+  repeated DailyUtilization perDayUtilization = 3;
 }
 
 // A single entry containing Savings Plan, monthly cost summary, and usage breakdown.
