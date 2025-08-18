@@ -109,6 +109,14 @@ service Flow {
     };
   }
 
+  
+  // Returns the activated cross-account access role for Savings Plan (API only).
+  rpc GetCrossAccountAccessDetails(GetCrossAccountAccessDetailsRequest) returns (GetCrossAccountAccessDetailsResponse) {
+    option (google.api.http) = {
+      get: "/v1/aws/xacct"
+    };
+  }
+
 }
 
 // ##################################### REQUESTS #####################################
@@ -227,6 +235,12 @@ message GetSPPurchaseAccessTemplateUrlRequest {}
 
 // Request message for the Flow.CreateSPPurchaseAccess rpc.
 message CreateSPPurchaseAccessRequest {
+  // Required. The target AWS account to validate.
+  string target = 1;
+}
+
+// Request message for the Flow.GetCrossAccountAccessDetails rpc.
+message GetCrossAccountAccessDetailsRequest {
   // Required. The target AWS account to validate.
   string target = 1;
 }
@@ -596,4 +610,43 @@ message CreateSPPurchaseAccessResponse {
 
   // The access type- full access to view simulation and purchase saving plan: "savings_plan_access"
    string access = 9;
+}
+
+// Response message for the Flow.GetCrossAccountAccessDetails rpc.
+message GetCrossAccountAccessDetailsResponse {
+  // The queried target account.
+  string target = 1;
+
+  // List of cross-access details for the target account.
+  repeated CrossAccountAccessDetail details = 2;
+}
+
+// Individual cross-access detail record.
+message CrossAccountAccessDetail {
+  // The role ARN that provides the cross-account access permissions.
+  string roleArn = 1;
+
+  // The external id for this role.
+  string externalId = 2;
+
+  // The id of the CloudFormation stack deployed in the target account.
+  string stackId = 3;
+
+  // The region where the stack is deployed.
+  string stackRegion = 4;
+
+  // The latest template used to deploy the stack.
+  string templateUrl = 5;
+
+  // This can be `latest`, `outdated`, or some error information.
+  string status = 6;
+
+  // The last updated timestamp, RFC3339 UTC.
+  string lastUpdated = 7;
+
+  // The access type- full access to view simulation and purchase saving plan: "savings_plan_access"
+  string access = 8;
+
+  // The parent identifier for hierarchical relationships.
+  string parent = 9;
 }
