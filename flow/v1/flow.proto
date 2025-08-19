@@ -113,7 +113,7 @@ service Flow {
   // Returns the activated cross-account access role for Savings Plan (API only).
   rpc GetCrossAccountAccessDetails(GetCrossAccountAccessDetailsRequest) returns (GetCrossAccountAccessDetailsResponse) {
     option (google.api.http) = {
-      get: "/v1/aws/xacct"
+      get: "/v1/aws/xacct/{payerId}"
     };
   }
 
@@ -241,8 +241,8 @@ message CreateSPPurchaseAccessRequest {
 
 // Request message for the Flow.GetCrossAccountAccessDetails rpc.
 message GetCrossAccountAccessDetailsRequest {
-  // Required. The target AWS account to be checked.
-  string target = 1;
+  // Required. The target payerId of the AWS account to be checked.
+  string payerId = 1;
 }
 
 // ##################################### RESPONSES #####################################
