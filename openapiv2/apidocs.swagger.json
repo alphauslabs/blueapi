@@ -5272,38 +5272,6 @@
         ]
       }
     },
-    "/v1/aws/xacct": {
-      "get": {
-        "summary": "Returns the activated cross-account access role for Savings Plan (API only).",
-        "operationId": "Flow_GetCrossAccountAccessDetails",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetCrossAccountAccessDetailsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "target",
-            "description": "Required. The target AWS account to be checked.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Flow"
-        ]
-      }
-    },
     "/v1/aws/xacct/cea": {
       "get": {
         "summary": "Gets a CloudFormation launch URL for enabling read-only cross-account access to cost explorer information (API only).",
@@ -5407,6 +5375,38 @@
             "schema": {
               "$ref": "#/definitions/v1CreateSPPurchaseAccessRequest"
             }
+          }
+        ],
+        "tags": [
+          "Flow"
+        ]
+      }
+    },
+    "/v1/aws/xacct/{payerId}": {
+      "get": {
+        "summary": "Returns the activated cross-account access role for Savings Plan (API only).",
+        "operationId": "Flow_GetCrossAccountAccessDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCrossAccountAccessDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "payerId",
+            "description": "Required. The target payerId of the AWS account to be checked.",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
