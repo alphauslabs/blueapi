@@ -12930,38 +12930,6 @@
         "tags": [
           "Billing"
         ]
-      },
-      "post": {
-        "summary": "Creates a new settings configuration for the user.",
-        "operationId": "Flow_CreateSettings",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CreateSettingsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the Flow.CreateSettings rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateSettingsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Flow"
-        ]
       }
     },
     "/v1/settings/history/{id}": {
@@ -13060,13 +13028,13 @@
         ]
       },
       "put": {
-        "summary": "Update the settings configuration for a user.",
-        "operationId": "Flow_UpdateSettings",
+        "summary": "Creates or Updates the settings configuration for recommendation.",
+        "operationId": "Flow_SetSettings",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UpdateSettingsResponse"
+              "$ref": "#/definitions/v1SetSettingsResponse"
             }
           },
           "default": {
@@ -13079,7 +13047,7 @@
         "parameters": [
           {
             "name": "id",
-            "description": "Required. The id of the payer to update.",
+            "description": "Required. The id of the payer.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -13089,7 +13057,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/FlowUpdateSettingsBody"
+              "$ref": "#/definitions/FlowSetSettingsBody"
             }
           }
         ],
@@ -21401,48 +21369,48 @@
       "type": "object",
       "description": "Response message for the Flow.GetAwsAccounts rpc."
     },
-    "FlowUpdateSettingsBody": {
+    "FlowSetSettingsBody": {
       "type": "object",
       "properties": {
         "accountScope": {
           "type": "string",
-          "description": "Optional. Update account scope (payer or linked)."
+          "description": "Required. Account scope determines if the account is payer or linked account. Valid values are `payer` or `linked`."
         },
         "customization": {
           "type": "string",
-          "description": "Optional. Update customization setting."
+          "description": "Required. Customization setting for SP. Valid values are `COMPUTE_SP` or `EC2_INSTANCE_SP`."
         },
         "planTerm": {
           "type": "string",
-          "description": "Optional. Update term of the SP."
+          "description": "Required. Term of the SP. Valid values are `ONE_YEAR` or `THREE_YEARS`."
         },
         "paymentOption": {
           "type": "string",
-          "description": "Optional. Update payment option."
+          "description": "Required. Payment option for the SP. Valid values are `ALL_UPFRONT`, `PARTIAL_UPFRONT`, or `NO_UPFRONT`."
         },
         "lookBackPeriod": {
           "type": "string",
-          "description": "Optional. Update lookback period."
+          "description": "Required. Lookback period for recommendation. Valid values are `SEVEN_DAYS`, `THIRTY_DAYS`, or `SIXTY_DAYS`."
         },
         "instanceFamily": {
           "type": "string",
-          "description": "Optional. Update list of instance families."
+          "title": "Optional. If EC2 Instance SP is selected in Customization, request will include list of instance family"
         },
         "annualBudget": {
           "type": "number",
           "format": "double",
-          "description": "Optional. Update annual budget."
+          "description": "Optional. Annual budget input for SP."
         },
         "approval": {
           "type": "boolean",
-          "description": "Optional. Update purchase approval."
+          "description": "Optional. Purchase approval from the payer for the SP. Default value is `false`."
         },
         "payerId": {
           "type": "string",
-          "description": "Optional. Update used payerId."
+          "title": "Required. Payer account ID"
         }
       },
-      "description": "Request message for the Flow.UpdateSettings rpc."
+      "description": "Request message for the Flow.CreateSettings rpc."
     },
     "GcpOptionsBillingOption": {
       "type": "object",
@@ -33172,62 +33140,6 @@
       },
       "description": "Response message for the Flow.CreateSPPurchaseAccess rpc."
     },
-    "v1CreateSettingsRequest": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Required. The id of the payer."
-        },
-        "accountScope": {
-          "type": "string",
-          "description": "Required. Account scope determines if the account is payer or linked account. Valid values are `payer` or `linked`."
-        },
-        "customization": {
-          "type": "string",
-          "description": "Required. Customization setting for SP. Valid values are `COMPUTE_SP` or `EC2_INSTANCE_SP`."
-        },
-        "planTerm": {
-          "type": "string",
-          "description": "Required. Term of the SP. Valid values are `ONE_YEAR` or `THREE_YEARS`."
-        },
-        "paymentOption": {
-          "type": "string",
-          "description": "Required. Payment option for the SP. Valid values are `ALL_UPFRONT`, `PARTIAL_UPFRONT`, or `NO_UPFRONT`."
-        },
-        "lookBackPeriod": {
-          "type": "string",
-          "description": "Required. Lookback period for recommendation. Valid values are `SEVEN_DAYS`, `THIRTY_DAYS`, or `SIXTY_DAYS`."
-        },
-        "instanceFamily": {
-          "type": "string",
-          "title": "Optional. If EC2 Instance SP is selected in Customization, request will include list of instance family"
-        },
-        "annualBudget": {
-          "type": "number",
-          "format": "double",
-          "description": "Optional. Annual budget input for SP."
-        },
-        "approval": {
-          "type": "boolean",
-          "description": "Optional. Purchase approval from the payer for the SP. Default value is `false`."
-        },
-        "payerId": {
-          "type": "string",
-          "title": "Required. Payer account ID"
-        }
-      },
-      "description": "Request message for the Flow.CreateSettings rpc."
-    },
-    "v1CreateSettingsResponse": {
-      "type": "object",
-      "properties": {
-        "response": {
-          "type": "string"
-        }
-      },
-      "description": "Response message for the Flow.CreateSettings rpc."
-    },
     "v1CreateSharedResourcesRequest": {
       "type": "object",
       "properties": {
@@ -38377,6 +38289,15 @@
         }
       }
     },
+    "v1SetSettingsResponse": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "string"
+        }
+      },
+      "description": "Response message for the Flow.CreateSettings rpc."
+    },
     "v1SettingsHistory": {
       "type": "object",
       "properties": {
@@ -39014,14 +38935,6 @@
         }
       },
       "description": "Request message for the Organization.UpdatePassword rpc."
-    },
-    "v1UpdateSettingsResponse": {
-      "type": "object",
-      "properties": {
-        "response": {
-          "type": "string"
-        }
-      }
     },
     "v1UpdateSharedResourcesResponse": {
       "type": "object",

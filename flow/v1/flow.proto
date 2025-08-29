@@ -26,16 +26,8 @@ service Flow {
     };
   }
 
-  // Creates a new settings configuration for the user.
-  rpc CreateSettings(CreateSettingsRequest) returns (CreateSettingsResponse) {
-    option (google.api.http) = {
-      post: "/v1/settings"
-      body: "*";
-    };
-  }
-
-  // Update the settings configuration for a user.
-  rpc UpdateSettings(UpdateSettingsRequest) returns (UpdateSettingsResponse) {
+  // Creates or Updates the settings configuration for recommendation.
+  rpc SetSettings(SetSettingsRequest) returns (SetSettingsResponse) {
     option (google.api.http) = {
       put: "/v1/settings/{id}"
       body: "*";
@@ -125,7 +117,7 @@ service Flow {
 message GetInfoRequest {}
 
 // Request message for the Flow.CreateSettings rpc.
-message CreateSettingsRequest {
+message SetSettingsRequest {
   // Required. The id of the payer.
   string id = 1;
 
@@ -155,39 +147,6 @@ message CreateSettingsRequest {
 
   // Required. Payer account ID
   string payerId = 10;
-}
-
-// Request message for the Flow.UpdateSettings rpc.
-message UpdateSettingsRequest {
-  // Required. The id of the payer to update.
-  string id = 1;
-
-  // Optional. Update account scope (payer or linked).
-  optional string accountScope = 2;
-
-  // Optional. Update customization setting.
-  optional string customization = 3;
-
-  // Optional. Update term of the SP.
-  optional string planTerm = 4;
-
-  // Optional. Update payment option.
-  optional string paymentOption = 5;
-
-  // Optional. Update lookback period.
-  optional string lookBackPeriod = 6;
-
-  // Optional. Update list of instance families.
-  optional string instanceFamily = 7;
-
-  // Optional. Update annual budget.
-  optional double annualBudget = 8;
-
-  // Optional. Update purchase approval.
-  optional bool approval = 9;
-
-  // Optional. Update used payerId.
-  optional string payerId = 10;
 }
 
 // Request message for fetching previous settings configuration of a user.
@@ -253,11 +212,7 @@ message GetInfoResponse {
 }
 
 // Response message for the Flow.CreateSettings rpc.
-message CreateSettingsResponse {
-  string response = 1;
-}
-
-message UpdateSettingsResponse {
+message SetSettingsResponse {
   string response = 1;
 }
 
