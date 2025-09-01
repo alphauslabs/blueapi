@@ -11,6 +11,7 @@ import "api/cover/unitcost.proto";
 import "api/cover/costgroup.proto";
 import "api/cover/accountaccess.proto";
 import "api/cover/costforecast.proto";
+import "api/cover/discountplan.proto";
 import "api/cover/discountrecommendation.proto";
 import "api/cover/rightsizingrecommendation.proto";
 import "api/cover/alert.proto";
@@ -1423,6 +1424,14 @@ service Cover {
       body: "*"
     };
   }
+
+  // Get discount plan details for an organization (or MSP).
+  rpc GetDiscountPlan(GetDiscountPlanRequest) returns (GetDiscountPlanResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/discountplan/{orgId}:read"
+      body: "*"
+    };
+  }
 }
 
 message PopulateDemoDataRequest{}
@@ -2681,6 +2690,8 @@ message CostItem {
   double numberOfUnits = 18;
   // Contains the unit cost metric. Only used when feature flag for unit cost metric is enabled.
   map<string, double> unitcostmetric = 15;
+  // Indicates the allocation category. "target" or "source". For target, allocated cost from other account while source is the cost allocated to other account.
+  string allocationCategory = 19;
 }
 
 // Request message for GetRightSizingRecommendation
@@ -3104,6 +3115,7 @@ message AllocationItem {
   string account = 4;
   string type = 5;
   double cost = 6;
+  string costGroup = 7;
 }
 
 // Request message for AddUserFromAuth0asRoot rpc
@@ -4367,4 +4379,49 @@ message GetCloudwatchMetadataResponse {
   }
 
   repeated Dimension dimensions = 3;
+}
+
+// Request message for GetDiscountPlan
+message GetDiscountPlanRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Organization Id.
+  string orgId = 2;
+
+  // Required. Valid values: 'all', 'reservation', 'savingsplan'
+  string reductionDisplay = 3;
+
+  // Optional. If set to "true", details of the RI or SP list is returned. Default: false.
+	bool includeDetails = 4;
+
+  // Optional. The start date of the displayed data. If not set, the first day of the current month will be used. Format: yyyy-mm-dd.
+  string fromDate = 5;
+
+  // Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd.
+  string toDate = 6;
+
+  // Optional. Payer Id.
+  string payerId = 7;
+
+  // Optional. Billing group Id.
+  string billingInternalId = 8;
+
+  // Optional. Account group Id.
+  string groupId = 9;
+
+  // Optional. Cost Group Id used in octo.
+  string costGroupId = 10;
+
+  // Optional. List of Account Ids.
+  repeated string accounts = 11;
+
+  // Optional. List of services.
+  repeated string services = 12;
+}
+
+// Response message for GetDiscountPlan
+message GetDiscountPlanResponse {
+  string orgId = 1;
+  api.cover.AwsDiscountPlans awsDiscountPlans = 2;
 }

@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package blueapi.api.cover;
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/cover";
+option java_package = "cloud.alphaus.blueapi.api.cover";
+option java_outer_classname = "ApiCoverDiscountPlanProto";
+
+message AwsDiscountPlans {
+    DiscountPlanSummary summary = 1;
+    repeated RiDiscountPlan riDiscountPlans = 2;
+    repeated SpDiscountPlan spDiscountPlans = 3;
+}
+
+message RiDiscountPlan {
+    string id = 1;
+    string arn = 2;
+    string customerId = 3;
+    string customerName = 4;
+    string billingInternalId = 5;
+    string billingGroupId = 6;
+    string billingGroupName = 7;
+    string destCustomerId = 8;
+    string start = 9;
+    string end = 10;
+    string service = 11;
+    string instanceType = 12;
+    string modificationStatus = 13;
+    int64 number = 14;
+    string offerClass = 15;
+    string deploymentOption = 35;
+    string paidBy = 16;
+    string paymentOption = 17;
+    string operation = 36;
+    string platform = 18;
+    string region = 19;
+    bool remove = 20;
+    string scope = 21;
+    string tenancy = 22;
+    string termLength = 23;
+    string usageType = 24;
+    string vendor = 25;
+    string zone = 26;
+    bool disabled = 27;
+    double normalizationFactor = 28;
+    double unblendedRate = 29;
+    double upfrontValue = 30;
+    double ondemandCost = 31;
+    double effectiveCost = 32;
+    double savings = 33;
+    // for break even point date
+    string breakEven = 34;
+    string allocationCategory = 37;
+    string sourceCostGroup = 38;
+    string targetCostGroup = 39;
+}
+
+message SpDiscountPlan {
+    string id = 1;
+    string arn = 2;
+    string customerId = 3;
+    string customerName = 4;
+    string billingGroupId = 5;
+    string billingGroupName = 6;
+    string currency = 7;
+    string service = 8;
+    string savingsPlan = 9;
+    string start = 10;
+    string end = 11;
+    string region = 12;
+    string instanceFamily = 13;
+    string termLength = 14;
+    string paymentOption = 15;
+    double commitment = 16;
+    double upfrontFee = 17;
+    double recurringFee = 18;
+    double ondemandCost = 19;
+    double effectiveCost = 20;
+    double savings = 21;
+    // for break even point date
+    string breakEven = 22;
+    string allocationCategory = 23;
+    string sourceCostGroup = 24;
+    string targetCostGroup = 25;
+}
+
+message DiscountPlanSummary {
+    double totalOnDemandCost = 1;
+    double totalEffectiveCost = 2;
+    double totalSavings = 3;
+    double totalRiOnDemandCost = 4;
+    double totalRiEffectiveCost = 5;
+    double totalRiSavings = 6;
+    double totalSpOnDemandCost = 7;
+    double totalSpEffectiveCost = 8;
+    double totalSpSavings = 9;
+    double totalAllocatedSavings = 10;
+}
