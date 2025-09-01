@@ -17040,6 +17040,53 @@
         ]
       }
     },
+    "/v1/{vendor}/discountplan/{orgId}:read": {
+      "post": {
+        "summary": "Get cost reduction details for an organization (or MSP).",
+        "operationId": "Cover_GetDiscountPlan",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetDiscountPlanResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "orgId",
+            "description": "Required. Organization Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CoverGetDiscountPlanBody"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/{vendor}/exchangerate/{month}": {
       "get": {
         "summary": "ListExchangeRates",
@@ -20531,6 +20578,58 @@
         }
       },
       "title": "Request message for AssignPayer"
+    },
+    "CoverGetDiscountPlanBody": {
+      "type": "object",
+      "properties": {
+        "reductionDisplay": {
+          "type": "string",
+          "title": "Required. Valid values: 'all', 'reservation', 'savingsplan'"
+        },
+        "includeDetails": {
+          "type": "boolean",
+          "description": "Optional. If set to \"true\", details of the RI or SP list is returned. Default: false."
+        },
+        "fromDate": {
+          "type": "string",
+          "description": "Optional. The start date of the displayed data. If not set, the first day of the current month will be used. Format: yyyy-mm-dd."
+        },
+        "toDate": {
+          "type": "string",
+          "description": "Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd."
+        },
+        "payerId": {
+          "type": "string",
+          "description": "Optional. Payer Id."
+        },
+        "billingInternalId": {
+          "type": "string",
+          "description": "Optional. Billing group Id."
+        },
+        "groupId": {
+          "type": "string",
+          "description": "Optional. Account group Id."
+        },
+        "costGroupId": {
+          "type": "string",
+          "description": "Optional. Cost Group Id used in octo."
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. List of Account Ids."
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. List of services."
+        }
+      },
+      "title": "Request message for GetDiscountPlan"
     },
     "CoverModifyResourceTypeBody": {
       "type": "object",
@@ -25931,6 +26030,10 @@
             "format": "double"
           },
           "description": "Contains the unit cost metric. Only used when feature flag for unit cost metric is enabled."
+        },
+        "allocationCategory": {
+          "type": "string",
+          "description": "Indicates the allocation category. \"target\" or \"source\". For target, allocated cost from other account while source is the cost allocated to other account."
         }
       },
       "description": "Response message wrapper for cloud costs."
@@ -26260,6 +26363,28 @@
         "unblendedUpperBound": {
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "coverAwsDiscountPlans": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "$ref": "#/definitions/coverDiscountPlanSummary"
+        },
+        "riDiscountPlans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverRiDiscountPlan"
+          }
+        },
+        "spDiscountPlans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverSpDiscountPlan"
+          }
         }
       }
     },
@@ -26828,6 +26953,51 @@
         },
         "status": {
           "type": "string"
+        }
+      }
+    },
+    "coverDiscountPlanSummary": {
+      "type": "object",
+      "properties": {
+        "totalOnDemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalEffectiveCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalRiOnDemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalRiEffectiveCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalRiSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalSpOnDemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalSpEffectiveCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalSpSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalAllocatedSavings": {
+          "type": "number",
+          "format": "double"
         }
       }
     },
@@ -27987,6 +28157,136 @@
         }
       }
     },
+    "coverRiDiscountPlan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "arn": {
+          "type": "string"
+        },
+        "customerId": {
+          "type": "string"
+        },
+        "customerName": {
+          "type": "string"
+        },
+        "billingInternalId": {
+          "type": "string"
+        },
+        "billingGroupId": {
+          "type": "string"
+        },
+        "billingGroupName": {
+          "type": "string"
+        },
+        "destCustomerId": {
+          "type": "string"
+        },
+        "start": {
+          "type": "string"
+        },
+        "end": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "instanceType": {
+          "type": "string"
+        },
+        "modificationStatus": {
+          "type": "string"
+        },
+        "number": {
+          "type": "string",
+          "format": "int64"
+        },
+        "offerClass": {
+          "type": "string"
+        },
+        "deploymentOption": {
+          "type": "string"
+        },
+        "paidBy": {
+          "type": "string"
+        },
+        "paymentOption": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "remove": {
+          "type": "boolean"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "tenancy": {
+          "type": "string"
+        },
+        "termLength": {
+          "type": "string"
+        },
+        "usageType": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string"
+        },
+        "zone": {
+          "type": "string"
+        },
+        "disabled": {
+          "type": "boolean"
+        },
+        "normalizationFactor": {
+          "type": "number",
+          "format": "double"
+        },
+        "unblendedRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "upfrontValue": {
+          "type": "number",
+          "format": "double"
+        },
+        "ondemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "effectiveCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "savings": {
+          "type": "number",
+          "format": "double"
+        },
+        "breakEven": {
+          "type": "string",
+          "title": "for break even point date"
+        },
+        "allocationCategory": {
+          "type": "string"
+        },
+        "sourceCostGroup": {
+          "type": "string"
+        },
+        "targetCostGroup": {
+          "type": "string"
+        }
+      }
+    },
     "coverRiRecommendationDetails": {
       "type": "object",
       "properties": {
@@ -28311,6 +28611,93 @@
         },
         "telemetry": {
           "$ref": "#/definitions/coverTelemetryInfo"
+        }
+      }
+    },
+    "coverSpDiscountPlan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "arn": {
+          "type": "string"
+        },
+        "customerId": {
+          "type": "string"
+        },
+        "customerName": {
+          "type": "string"
+        },
+        "billingGroupId": {
+          "type": "string"
+        },
+        "billingGroupName": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "savingsPlan": {
+          "type": "string"
+        },
+        "start": {
+          "type": "string"
+        },
+        "end": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "instanceFamily": {
+          "type": "string"
+        },
+        "termLength": {
+          "type": "string"
+        },
+        "paymentOption": {
+          "type": "string"
+        },
+        "commitment": {
+          "type": "number",
+          "format": "double"
+        },
+        "upfrontFee": {
+          "type": "number",
+          "format": "double"
+        },
+        "recurringFee": {
+          "type": "number",
+          "format": "double"
+        },
+        "ondemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "effectiveCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "savings": {
+          "type": "number",
+          "format": "double"
+        },
+        "breakEven": {
+          "type": "string",
+          "title": "for break even point date"
+        },
+        "allocationCategory": {
+          "type": "string"
+        },
+        "sourceCostGroup": {
+          "type": "string"
+        },
+        "targetCostGroup": {
+          "type": "string"
         }
       }
     },
@@ -29050,11 +29437,11 @@
       "properties": {
         "@type": {
           "type": "string",
-          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com. As of May 2023, there are no widely used type server\nimplementations and no plans to implement one.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
         }
       },
       "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\nExample 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\nExample 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "protobufNullValue": {
       "type": "string",
@@ -29062,7 +29449,7 @@
         "NULL_VALUE"
       ],
       "default": "NULL_VALUE",
-      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
+      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\nThe JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
     },
     "protosOperation": {
       "type": "object",
@@ -30733,6 +31120,9 @@
         "cost": {
           "type": "number",
           "format": "double"
+        },
+        "costGroup": {
+          "type": "string"
         }
       },
       "description": "Response message wrapper for cost group allocations."
@@ -35036,6 +35426,18 @@
         }
       },
       "description": "Response message for the Admin.GetDefaultCostAccessTemplateUrl rpc."
+    },
+    "v1GetDiscountPlanResponse": {
+      "type": "object",
+      "properties": {
+        "orgId": {
+          "type": "string"
+        },
+        "awsDiscountPlans": {
+          "$ref": "#/definitions/coverAwsDiscountPlans"
+        }
+      },
+      "title": "Response message for GetDiscountPlan"
     },
     "v1GetDiscountRecommendationsRequest": {
       "type": "object",
