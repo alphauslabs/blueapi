@@ -40,6 +40,13 @@ service Vortex {
       get: "/v1/user/{email}"
     };
   }
+
+  rpc ListPrompts(ListPromptsRequest) returns (ListPromptsResponse) {
+    option (google.api.http) = {
+      post: "/v1/prompts:read"
+      body: "*"
+    };
+  }
 }
  
 message TestResponse {
@@ -66,4 +73,16 @@ message GetUserResponse {
   string email = 2;
   string name = 3;
   string orgId = 4;
+}
+
+message Prompt {
+  string content = 1;
+  string fromContainerName = 2;
+  string riskLevel = 3;
+}
+
+message ListPromptsRequest {}
+
+message ListPromptsResponse {
+  repeated Prompt prompts = 1;
 }
