@@ -41,7 +41,7 @@ service Vortex {
     };
   }
 
-  rpc ListPrompts(ListPromptsRequest) returns (stream ListPromptsResponse) {
+  rpc ListPrompts(ListPromptsRequest) returns (stream Prompt) {
     option (google.api.http) = {
       post: "/v1/prompts:read"
       body: "*"
@@ -83,6 +83,4 @@ message Prompt {
 
 message ListPromptsRequest {}
 
-message ListPromptsResponse {
-  Prompt prompts = 1;
-}
+
