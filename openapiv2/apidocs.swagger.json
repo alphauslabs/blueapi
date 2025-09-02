@@ -11088,6 +11088,38 @@
         ]
       }
     },
+    "/v1/prompts:read": {
+      "post": {
+        "operationId": "Vortex_ListPrompts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListPromptsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListPromptsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Vortex"
+        ]
+      }
+    },
     "/v1/recommendations/all:read": {
       "post": {
         "summary": "Lists recommendations based on specified criteria.",
@@ -17042,7 +17074,7 @@
     },
     "/v1/{vendor}/discountplan/{orgId}:read": {
       "post": {
-        "summary": "Get cost reduction details for an organization (or MSP).",
+        "summary": "Get discount plan details for an organization (or MSP).",
         "operationId": "Cover_GetDiscountPlan",
         "responses": {
           "200": {
@@ -36915,6 +36947,21 @@
     "v1ListProjectsRequest": {
       "type": "object"
     },
+    "v1ListPromptsRequest": {
+      "type": "object"
+    },
+    "v1ListPromptsResponse": {
+      "type": "object",
+      "properties": {
+        "prompts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Prompt"
+          }
+        }
+      }
+    },
     "v1ListRecommendationResponse": {
       "type": "object",
       "properties": {
@@ -37728,6 +37775,20 @@
           "type": "string"
         },
         "email": {
+          "type": "string"
+        }
+      }
+    },
+    "v1Prompt": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "fromContainerName": {
+          "type": "string"
+        },
+        "riskLevel": {
           "type": "string"
         }
       }
