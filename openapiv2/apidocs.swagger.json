@@ -8675,6 +8675,39 @@
         ]
       }
     },
+    "/v1/invite": {
+      "post": {
+        "operationId": "Vortex_InviteUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1InviteUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Vortex"
+        ]
+      }
+    },
     "/v1/invoice/displaysettings": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Gets the invoice display settings for invoice-ui",
@@ -36395,6 +36428,14 @@
         }
       },
       "title": "Response message for InviteMember"
+    },
+    "v1InviteUserRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      }
     },
     "v1InvoiceConnectedBillingGroups": {
       "type": "object",

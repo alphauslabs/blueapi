@@ -47,6 +47,13 @@ service Vortex {
       body: "*"
     };
   }
+
+  rpc InviteUser(InviteUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/invite"
+      body: "*"
+    };
+  }
 }
  
 message TestResponse {
@@ -82,5 +89,9 @@ message Prompt {
 }
 
 message ListPromptsRequest {}
+
+message InviteUserRequest {
+  string email = 1;
+}
 
 
