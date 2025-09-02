@@ -54,6 +54,13 @@ service Vortex {
       body: "*"
     };
   }
+
+  rpc VerifyInvitedUser(VerifyInvitedUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/invite/verify"
+      body: "*"
+    };
+  }
 }
  
 message TestResponse {
@@ -94,4 +101,8 @@ message InviteUserRequest {
   string email = 1;
 }
 
+message VerifyInvitedUserRequest {
+  string email = 1;
+  string code = 2;
+}
 
