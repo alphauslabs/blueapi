@@ -78,8 +78,8 @@ service Flow {
     };
   }
 
- // Returns all the aws accounts and its payer of the msp id
- rpc GetAwsAccounts (GetAwsAccountsRequest) returns (GetAwsAccountsResponse) {
+  // Returns all the aws accounts and its payer of the msp id
+  rpc GetAwsAccounts (GetAwsAccountsRequest) returns (GetAwsAccountsResponse) {
     option (google.api.http) = {
       post: "/v1/aws/{billingInternalId}/accounts"
       body: "*"
@@ -106,6 +106,14 @@ service Flow {
   rpc GetCrossAccountAccessDetails(GetCrossAccountAccessDetailsRequest) returns (GetCrossAccountAccessDetailsResponse) {
     option (google.api.http) = {
       get: "/v1/aws/xacct/{payerId}/access"
+    };
+  }
+
+  // Sends configuration and recommendation to a Slack channel
+  rpc CreateMessageToSlack(CreateMessageToSlackRequest) returns (CreateMessageToSlackResponse) {
+    option (google.api.http) = {
+      post: "/v1/notification/slack"
+      body: "*";
     };
   }
 
@@ -202,6 +210,48 @@ message CreateSPPurchaseAccessRequest {
 message GetCrossAccountAccessDetailsRequest {
   // Required. The target payerId of the AWS account to be checked.
   string payerId = 1;
+}
+
+// Configuration and recommendation details to send to Slack
+message CreateMessageToSlackRequest {
+  // Configurations for the Savings Plan
+  message Configurations {
+    string account_scope = 1;
+    string customization = 2;
+    string plan_term = 3;
+    string payment_option = 4;
+    string look_back_period = 5;
+    string instance_family = 6;
+    double annual_budget = 7;
+    bool approval = 8;
+    string payer_id = 9;
+  }
+
+  // Recommendation details for the Savings Plan
+  message Recommendation {
+    string id = 1;
+    double current_monthly_on_demand_spend = 2;
+    double estimated_monthly_spend = 3;
+    double estimated_monthly_savings_derived = 4;
+    double total_daily_cost = 5;
+    double current_sp_commitment = 6;
+    double estimated_on_demand_cost = 7;
+    double hourly_commitment = 8;
+    double estimated_monthly_savings = 9;
+    double estimated_savings = 10;
+    string recommendation_level = 11;
+    string plan_type = 12;
+    string plan_term = 13;
+    string payment_option = 14;
+    string look_back_period = 15;
+    double estimated_roi = 16;
+    double estimated_sp_cost = 17;
+    double estimated_total_cost = 18;
+    string last_updated = 19;
+  }
+
+  Configurations configurations = 1;
+  Recommendation recommendation = 2;
 }
 
 // ##################################### RESPONSES #####################################
@@ -599,4 +649,10 @@ message CrossAccountAccessDetail {
   // The access type:  "savings_plan_access" or "cost_explorer_access"
   string access = 7;
 
+}
+
+// Response after sending to Slack
+message CreateMessageToSlackResponse {
+  string message = 1;
+  bool success = 2;
 }
