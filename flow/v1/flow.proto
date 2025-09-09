@@ -117,6 +117,13 @@ service Flow {
     };
   }
 
+  // Get savings plan purchase details.
+  rpc GetSPPurchaseDetails(GetSPPurchaseDetailsRequest) returns (GetSPPurchaseDetailsResponse) {
+    option (google.api.http) = {
+      get: "/v1/sp/purchase/details/{payer_id}"
+    };
+  }
+
 }
 
 // ##################################### REQUESTS #####################################
@@ -252,6 +259,12 @@ message CreateMessageToSlackRequest {
 
   Configurations configurations = 1;
   Recommendation recommendation = 2;
+}
+
+// Request message for the Flow.GetSPPurchaseDetails rpc.
+message GetSPPurchaseDetailsRequest {
+   // Required. The id of the payer account.
+  string payer_id = 1;
 }
 
 // ##################################### RESPONSES #####################################
@@ -655,4 +668,52 @@ message CrossAccountAccessDetail {
 message CreateMessageToSlackResponse {
   string message = 1;
   bool success = 2;
+}
+
+// Response message for the Flow.GetSPPurchaseDetails rpc.
+message GetSPPurchaseDetailsResponse {
+  // Recommendation details
+  SavingsPlanRecommendation recommendation = 1;
+  
+  // List of purchase items
+  repeated SavingsPlanPurchaseItem purchases = 2;
+}
+
+// Savings plan recommendation details
+message SavingsPlanRecommendation {
+  string payer_id = 1;
+  string linked_accounts = 2;
+  string account_scope = 3;
+  string savings_plan_type = 4;
+  int32 term = 5;
+  string region = 6;
+  string instance_family = 7;
+  double recommended_hourly_commitment = 8;
+  double purchased_hourly_commitment = 9;
+  string payment_option = 10;
+  double upfront_cost = 11;
+  double monthly_cost = 12;
+  double total_cost = 13;
+  string status = 14;
+  string date_purchased = 15;
+}
+
+// Savings plan purchase item
+message SavingsPlanPurchaseItem {
+  string purchase_name = 1;
+  string payer_id = 2;
+  string linked_accounts = 3;
+  string account_scope = 4;
+  string savings_plan_type = 5;
+  int32 term = 6;
+  string region = 7;
+  string instance_family = 8;
+  double recommended_hourly_commitment = 9;
+  double purchased_hourly_commitment = 10;
+  string payment_option = 11;
+  double upfront_cost = 12;
+  double monthly_cost = 13;
+  double total_cost = 14;
+  string status = 15;
+  string date_purchased = 16;
 }
