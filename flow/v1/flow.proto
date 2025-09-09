@@ -117,8 +117,8 @@ service Flow {
     };
   }
 
-  // Get savings plan purchase details.
-  rpc GetSPPurchaseDetails(GetSPPurchaseDetailsRequest) returns (GetSPPurchaseDetailsResponse) {
+  // Get savings plan details to be purchased .
+  rpc GetSPToPurchaseDetails(GetSPToPurchaseDetailsRequest) returns (GetSPToPurchaseDetailsResponse) {
     option (google.api.http) = {
       get: "/v1/sp/purchase/details/{payer_id}"
     };
@@ -261,8 +261,8 @@ message CreateMessageToSlackRequest {
   Recommendation recommendation = 2;
 }
 
-// Request message for the Flow.GetSPPurchaseDetails rpc.
-message GetSPPurchaseDetailsRequest {
+// Request message for the Flow.GetSPToPurchaseDetails rpc.
+message GetSPToPurchaseDetailsRequest {
    // Required. The id of the payer account.
   string payer_id = 1;
 }
@@ -670,8 +670,8 @@ message CreateMessageToSlackResponse {
   bool success = 2;
 }
 
-// Response message for the Flow.GetSPPurchaseDetails rpc.
-message GetSPPurchaseDetailsResponse {
+// Response message for the Flow.GetSPToPurchaseDetails rpc.
+message GetSPToPurchaseDetailsResponse {
   // Recommendation details
   SavingsPlanRecommendation recommendation = 1;
   
