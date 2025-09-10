@@ -120,7 +120,7 @@ service Flow {
   // Get savings plan details to be purchased .
   rpc GetSPToPurchaseDetails(GetSPToPurchaseDetailsRequest) returns (GetSPToPurchaseDetailsResponse) {
     option (google.api.http) = {
-      get: "/v1/sp/purchase/details/{payer_id}"
+      get: "/v1/sp/purchase/details/{payerId}"
     };
   }
 
@@ -223,38 +223,38 @@ message GetCrossAccountAccessDetailsRequest {
 message CreateMessageToSlackRequest {
   // Configurations for the Savings Plan
   message Configurations {
-    string account_scope = 1;
+    string accountScope = 1;
     string customization = 2;
-    string plan_term = 3;
-    string payment_option = 4;
-    string look_back_period = 5;
-    string instance_family = 6;
-    double annual_budget = 7;
+    string planTerm = 3;
+    string paymentOption = 4;
+    string lookBackPeriod = 5;
+    string instanceFamily = 6;
+    double annualBudget = 7;
     bool approval = 8;
-    string payer_id = 9;
+    string payerId = 9;
   }
 
   // Recommendation details for the Savings Plan
   message Recommendation {
     string id = 1;
-    double current_monthly_on_demand_spend = 2;
-    double estimated_monthly_spend = 3;
-    double estimated_monthly_savings_derived = 4;
-    double total_daily_cost = 5;
-    double current_sp_commitment = 6;
-    double estimated_on_demand_cost = 7;
-    double hourly_commitment = 8;
-    double estimated_monthly_savings = 9;
-    double estimated_savings = 10;
-    string recommendation_level = 11;
-    string plan_type = 12;
-    string plan_term = 13;
-    string payment_option = 14;
-    string look_back_period = 15;
-    double estimated_roi = 16;
-    double estimated_sp_cost = 17;
-    double estimated_total_cost = 18;
-    string last_updated = 19;
+    double currentMonthlyOnDemandSpend = 2;
+    double estimatedMonthlySpend = 3;
+    double estimatedMonthlySavingsDerived = 4;
+    double totalDailyCost = 5;
+    double currentSPCommitment = 6;
+    double estimatedOnDemandCost = 7;
+    double hourlyCommitment = 8;
+    double estimatedMonthlySavings = 9;
+    double estimatedSavings = 10;
+    string recommendationLevel = 11;
+    string planType = 12;
+    string planTerm = 13;
+    string paymentOption = 14;
+    string lookBackPeriod = 15;
+    double estimatedROI = 16;
+    double estimatedSPCost = 17;
+    double estimatedTotalCost = 18;
+    string lastUpdated = 19;
   }
 
   Configurations configurations = 1;
@@ -264,7 +264,7 @@ message CreateMessageToSlackRequest {
 // Request message for the Flow.GetSPToPurchaseDetails rpc.
 message GetSPToPurchaseDetailsRequest {
    // Required. The id of the payer account.
-  string payer_id = 1;
+  string payerId = 1;
 }
 
 // ##################################### RESPONSES #####################################
@@ -681,39 +681,41 @@ message GetSPToPurchaseDetailsResponse {
 
 // Savings plan recommendation details
 message SavingsPlanRecommendation {
-  string payer_id = 1;
-  string linked_accounts = 2;
-  string account_scope = 3;
-  string savings_plan_type = 4;
+  string payerId = 1;
+  string linkedAccounts = 2;
+  string accountScope = 3;
+  string savingsPlanType = 4;
   int32 term = 5;
   string region = 6;
-  string instance_family = 7;
-  double recommended_hourly_commitment = 8;
-  double purchased_hourly_commitment = 9;
-  string payment_option = 10;
-  double upfront_cost = 11;
-  double monthly_cost = 12;
-  double total_cost = 13;
+  string instanceFamily = 7;
+  double recommendedHourlyCommitment = 8;
+  double purchasedHourlyCommitment = 9;
+  string paymentOption = 10;
+  double upfrontCost = 11;
+  double monthlyCost = 12;
+  double totalCost = 13;
   string status = 14;
-  string date_purchased = 15;
+  string datePurchased = 15;
+  string expiryDate = 16;
 }
 
 // Savings plan purchase item
 message SavingsPlanPurchaseItem {
-  string purchase_name = 1;
-  string payer_id = 2;
-  string linked_accounts = 3;
-  string account_scope = 4;
-  string savings_plan_type = 5;
+  string purchaseName = 1;
+  string payerId = 2;
+  string linkedAccounts = 3;
+  string accountScope = 4;
+  string savingsPlanType = 5;
   int32 term = 6;
   string region = 7;
-  string instance_family = 8;
-  double recommended_hourly_commitment = 9;
-  double purchased_hourly_commitment = 10;
-  string payment_option = 11;
-  double upfront_cost = 12;
-  double monthly_cost = 13;
-  double total_cost = 14;
+  string instanceFamily = 8;
+  double recommendedHourlyCommitment = 9;
+  double purchasedHourlyCommitment = 10;
+  string paymentOption = 11;
+  double upfrontCost = 12;
+  double monthlyCost = 13;
+  double totalCost = 14;
   string status = 15;
-  string date_purchased = 16;
+  string datePurchased = 16;
+  string expiryDate = 17;
 }
