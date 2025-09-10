@@ -117,6 +117,13 @@ service Flow {
     };
   }
 
+  // Get savings plan details to be purchased .
+  rpc GetSPToPurchaseDetails(GetSPToPurchaseDetailsRequest) returns (GetSPToPurchaseDetailsResponse) {
+    option (google.api.http) = {
+      get: "/v1/sp/purchase/details/{payerId}"
+    };
+  }
+
 }
 
 // ##################################### REQUESTS #####################################
@@ -216,42 +223,48 @@ message GetCrossAccountAccessDetailsRequest {
 message CreateMessageToSlackRequest {
   // Configurations for the Savings Plan
   message Configurations {
-    string account_scope = 1;
+    string accountScope = 1;
     string customization = 2;
-    string plan_term = 3;
-    string payment_option = 4;
-    string look_back_period = 5;
-    string instance_family = 6;
-    double annual_budget = 7;
+    string planTerm = 3;
+    string paymentOption = 4;
+    string lookBackPeriod = 5;
+    string instanceFamily = 6;
+    double annualBudget = 7;
     bool approval = 8;
-    string payer_id = 9;
+    string payerId = 9;
   }
 
   // Recommendation details for the Savings Plan
   message Recommendation {
     string id = 1;
-    double current_monthly_on_demand_spend = 2;
-    double estimated_monthly_spend = 3;
-    double estimated_monthly_savings_derived = 4;
-    double total_daily_cost = 5;
-    double current_sp_commitment = 6;
-    double estimated_on_demand_cost = 7;
-    double hourly_commitment = 8;
-    double estimated_monthly_savings = 9;
-    double estimated_savings = 10;
-    string recommendation_level = 11;
-    string plan_type = 12;
-    string plan_term = 13;
-    string payment_option = 14;
-    string look_back_period = 15;
-    double estimated_roi = 16;
-    double estimated_sp_cost = 17;
-    double estimated_total_cost = 18;
-    string last_updated = 19;
+    double currentMonthlyOnDemandSpend = 2;
+    double estimatedMonthlySpend = 3;
+    double estimatedMonthlySavingsDerived = 4;
+    double totalDailyCost = 5;
+    double currentSPCommitment = 6;
+    double estimatedOnDemandCost = 7;
+    double hourlyCommitment = 8;
+    double estimatedMonthlySavings = 9;
+    double estimatedSavings = 10;
+    string recommendationLevel = 11;
+    string planType = 12;
+    string planTerm = 13;
+    string paymentOption = 14;
+    string lookBackPeriod = 15;
+    double estimatedROI = 16;
+    double estimatedSPCost = 17;
+    double estimatedTotalCost = 18;
+    string lastUpdated = 19;
   }
 
   Configurations configurations = 1;
   Recommendation recommendation = 2;
+}
+
+// Request message for the Flow.GetSPToPurchaseDetails rpc.
+message GetSPToPurchaseDetailsRequest {
+   // Required. The id of the payer account.
+  string payerId = 1;
 }
 
 // ##################################### RESPONSES #####################################
@@ -655,4 +668,47 @@ message CrossAccountAccessDetail {
 message CreateMessageToSlackResponse {
   string message = 1;
   bool success = 2;
+}
+
+// Response message for the Flow.GetSPToPurchaseDetails rpc.
+message GetSPToPurchaseDetailsResponse {
+  // Recommendation details
+  SavingsPlanRecommendation recommendation = 1;
+  
+  // List of purchase items
+  repeated SavingsPlanDetailsPurchase purchases = 2;
+}
+
+// Savings plan recommendation details
+message SavingsPlanRecommendation {
+  string payerId = 1;
+  string linkedAccounts = 2;
+  string accountScope = 3;
+  string savingsPlanType = 4;
+  int32 term = 5;
+  string region = 6;
+  string instanceFamily = 7;
+  double recommendedHourlyCommitment = 8;
+  string paymentOption = 9;
+  double upfrontCost = 10;
+  double monthlyCost = 11;
+  double totalCost = 12;
+  string expiryDate = 13;
+}
+
+// Savings plan details to be purchased
+message SavingsPlanDetailsPurchase {
+  string payerId = 1;
+  string linkedAccounts = 2;
+  string accountScope = 3;
+  string savingsPlanType = 4;
+  int32 term = 5;
+  string region = 6;
+  string instanceFamily = 7;
+  double recommendedHourlyCommitment = 8;
+  string paymentOption = 9;
+  double upfrontCost = 10;
+  double monthlyCost = 11;
+  double totalCost = 12;
+  string expiryDate = 13;
 }
