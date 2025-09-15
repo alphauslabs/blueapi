@@ -1432,6 +1432,45 @@ service Cover {
       body: "*"
     };
   }
+  
+  rpc GetCostUsageV2(GetCostUsageV2Request) returns (stream GetCostUsageV2Response) {
+    option (google.api.http) = {
+      post: "/v1/costusage"
+      body: "*"
+    };
+  }
+}
+
+message GetCostUsageV2Response {
+  double value = 1;
+  string date = 2;
+  string vendor = 3;
+  google.protobuf.Struct details = 4;
+}
+
+message GetCostUsageV2Request {
+  enum Granularity {
+    GRANULARITY_UNSPECIFIED = 0;
+    DAILY = 1;
+    MONTHLY = 2;
+  }
+
+  enum Category {
+    Category_UNSPECIFIED = 0;
+    COST = 1;
+    USAGE = 2;
+  }
+
+  string costGroupId = 1;
+  string startTime = 2;
+  string endTime = 3;
+  Granularity granularity = 4;
+  repeated string groupBys = 5;
+  Category category = 6;
+  string currency = 7;
+  api.cover.CostGroupAwsOptions awsOptions = 8;
+  api.cover.CostGroupAzureCspOptions azurecspOptions = 9;
+  api.cover.CostGroupGcpOptions gcpOptions = 10;
 }
 
 message PopulateDemoDataRequest{}

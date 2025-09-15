@@ -87,14 +87,6 @@
       }
     },
     {
-      "name": "Vortex",
-      "description": "(Alpha) Vortex API. Base URL: https://api.alphaus.cloud/m/blue/vortex",
-      "externalDocs": {
-        "description": "Service definition",
-        "url": "https://github.com/alphauslabs/blueapi/tree/main/vortex/"
-      }
-    },
-    {
       "name": "Preferences",
       "description": "(BETA) Preferences API. Base URL: https://api.alphaus.cloud/m/blue",
       "externalDocs": {
@@ -2474,7 +2466,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/blueapiorgv1CreateOrgResponse"
+              "$ref": "#/definitions/v1CreateOrgResponse"
             }
           },
           "default": {
@@ -2491,7 +2483,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/blueapiorgv1CreateOrgRequest"
+              "$ref": "#/definitions/v1CreateOrgRequest"
             }
           }
         ],
@@ -7545,6 +7537,47 @@
         ]
       }
     },
+    "/v1/costusage": {
+      "post": {
+        "operationId": "Cover_GetCostUsageV2",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1GetCostUsageV2Response"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1GetCostUsageV2Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetCostUsageV2Request"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/costusage:read": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Get usage and usage-based costs for the specified costgroup",
@@ -8672,72 +8705,6 @@
         ],
         "tags": [
           "Prism"
-        ]
-      }
-    },
-    "/v1/invite": {
-      "post": {
-        "operationId": "Vortex_InviteUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1InviteUserRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Vortex"
-        ]
-      }
-    },
-    "/v1/invite/verify": {
-      "post": {
-        "operationId": "Vortex_VerifyInvitedUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1VerifyInvitedUserRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Vortex"
         ]
       }
     },
@@ -10690,39 +10657,6 @@
         ]
       }
     },
-    "/v1/organizations": {
-      "post": {
-        "summary": "Create an org in Vortex",
-        "operationId": "Vortex_CreateOrg",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/blueapivortexv1CreateOrgResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/blueapivortexv1CreateOrgRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Vortex"
-        ]
-      }
-    },
     "/v1/organizations/currency": {
       "get": {
         "summary": "Get Org's reference of currency exchange rate",
@@ -11184,47 +11118,6 @@
         ],
         "tags": [
           "Prism"
-        ]
-      }
-    },
-    "/v1/prompts:read": {
-      "post": {
-        "operationId": "Vortex_ListPrompts",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1Prompt"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1Prompt"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ListPromptsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Vortex"
         ]
       }
     },
@@ -13434,7 +13327,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/blueapiprismv1TestResponse"
+              "$ref": "#/definitions/v1TestResponse"
             }
           },
           "default": {
@@ -13446,29 +13339,6 @@
         },
         "tags": [
           "Prism"
-        ]
-      }
-    },
-    "/v1/testing": {
-      "get": {
-        "summary": "Test endpoint only",
-        "operationId": "Vortex_Test",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/blueapivortexv1TestResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Vortex"
         ]
       }
     },
@@ -14236,36 +14106,6 @@
         ],
         "tags": [
           "Flow"
-        ]
-      }
-    },
-    "/v1/user/{email}": {
-      "get": {
-        "operationId": "Vortex_GetUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetUserResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "email",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Vortex"
         ]
       }
     },
@@ -21858,15 +21698,6 @@
         }
       }
     },
-    "GetAICostAndUsageRequestGranularity": {
-      "type": "string",
-      "enum": [
-        "GRANULARITY_UNSPECIFIED",
-        "DAILY",
-        "MONTHLY"
-      ],
-      "default": "GRANULARITY_UNSPECIFIED"
-    },
     "GetAICostAndUsageResponseMetric": {
       "type": "object",
       "properties": {
@@ -24683,6 +24514,17 @@
         }
       }
     },
+    "apicoverCategory": {
+      "type": "object",
+      "properties": {
+        "display": {
+          "type": "string"
+        },
+        "query": {
+          "type": "string"
+        }
+      }
+    },
     "apicoverCostCalculation": {
       "type": "object",
       "properties": {
@@ -26351,64 +26193,6 @@
       },
       "description": "Response message for the Flow.GetInfo rpc."
     },
-    "blueapiorgv1CreateOrgRequest": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string",
-          "title": "Required. Organization's email"
-        },
-        "description": {
-          "type": "string",
-          "title": "Required. Organization's description or company name"
-        },
-        "password": {
-          "type": "string",
-          "description": "Optional. User can decide to let the system generates the password."
-        },
-        "name": {
-          "type": "string",
-          "title": "To be used for onboarding profile"
-        },
-        "role": {
-          "type": "string"
-        },
-        "usage": {
-          "type": "string"
-        },
-        "intention": {
-          "type": "string"
-        },
-        "isAuth0Signup": {
-          "type": "boolean"
-        },
-        "customerId": {
-          "type": "string",
-          "title": "Optional. Customer Id from AWS marketplace"
-        },
-        "locale": {
-          "type": "string",
-          "description": "Optional. User locale. Default value is en if not supplied."
-        },
-        "auth0UserId": {
-          "type": "string",
-          "description": "Optional. Auth0 user id for users registering using social login."
-        }
-      },
-      "description": "Request message for the Organization.CreateOrg rpc."
-    },
-    "blueapiorgv1CreateOrgResponse": {
-      "type": "object",
-      "properties": {
-        "org": {
-          "$ref": "#/definitions/rippleOrg"
-        },
-        "password": {
-          "type": "string"
-        }
-      },
-      "description": "Response message for the Organization.CreateOrg rpc."
-    },
     "blueapipricingv1GetInfoResponse": {
       "type": "object",
       "properties": {
@@ -26417,48 +26201,6 @@
         }
       },
       "description": "Response message for the Pricing.GetInfo rpc."
-    },
-    "blueapiprismv1TestResponse": {
-      "type": "object",
-      "properties": {
-        "response": {
-          "type": "string"
-        }
-      }
-    },
-    "blueapivortexv1CreateOrgRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        }
-      }
-    },
-    "blueapivortexv1CreateOrgResponse": {
-      "type": "object",
-      "properties": {
-        "orgId": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        }
-      }
-    },
-    "blueapivortexv1TestResponse": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string"
-        }
-      },
-      "title": "Test only"
     },
     "costv1CostAttribute": {
       "type": "object",
@@ -26810,17 +26552,6 @@
           "type": "number",
           "format": "float",
           "title": "total accumulated spending within the budget period"
-        }
-      }
-    },
-    "coverCategory": {
-      "type": "object",
-      "properties": {
-        "display": {
-          "type": "string"
-        },
-        "query": {
-          "type": "string"
         }
       }
     },
@@ -29729,11 +29460,11 @@
       "properties": {
         "@type": {
           "type": "string",
-          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com. As of May 2023, there are no widely used type server\nimplementations and no plans to implement one.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
         }
       },
       "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\nExample 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\nExample 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "protobufNullValue": {
       "type": "string",
@@ -29741,7 +29472,7 @@
         "NULL_VALUE"
       ],
       "default": "NULL_VALUE",
-      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
+      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\nThe JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
     },
     "protosOperation": {
       "type": "object",
@@ -33608,6 +33339,64 @@
       },
       "description": "Request message for the Admin.CreateNotificationTypeChannels rpc."
     },
+    "v1CreateOrgRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "title": "Required. Organization's email"
+        },
+        "description": {
+          "type": "string",
+          "title": "Required. Organization's description or company name"
+        },
+        "password": {
+          "type": "string",
+          "description": "Optional. User can decide to let the system generates the password."
+        },
+        "name": {
+          "type": "string",
+          "title": "To be used for onboarding profile"
+        },
+        "role": {
+          "type": "string"
+        },
+        "usage": {
+          "type": "string"
+        },
+        "intention": {
+          "type": "string"
+        },
+        "isAuth0Signup": {
+          "type": "boolean"
+        },
+        "customerId": {
+          "type": "string",
+          "title": "Optional. Customer Id from AWS marketplace"
+        },
+        "locale": {
+          "type": "string",
+          "description": "Optional. User locale. Default value is en if not supplied."
+        },
+        "auth0UserId": {
+          "type": "string",
+          "description": "Optional. Auth0 user id for users registering using social login."
+        }
+      },
+      "description": "Request message for the Organization.CreateOrg rpc."
+    },
+    "v1CreateOrgResponse": {
+      "type": "object",
+      "properties": {
+        "org": {
+          "$ref": "#/definitions/rippleOrg"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "description": "Response message for the Organization.CreateOrg rpc."
+    },
     "v1CreateOrganizationRequest": {
       "type": "object",
       "properties": {
@@ -34686,7 +34475,7 @@
           "type": "string"
         },
         "granularity": {
-          "$ref": "#/definitions/GetAICostAndUsageRequestGranularity"
+          "$ref": "#/definitions/v1GetAICostAndUsageRequestGranularity"
         },
         "groupBys": {
           "type": "array",
@@ -34702,6 +34491,15 @@
           }
         }
       }
+    },
+    "v1GetAICostAndUsageRequestGranularity": {
+      "type": "string",
+      "enum": [
+        "GRANULARITY_UNSPECIFIED",
+        "DAILY",
+        "MONTHLY"
+      ],
+      "default": "GRANULARITY_UNSPECIFIED"
     },
     "v1GetAICostAndUsageResponse": {
       "type": "object",
@@ -35051,7 +34849,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/coverCategory"
+            "$ref": "#/definitions/apicoverCategory"
           }
         }
       }
@@ -35539,6 +35337,80 @@
         "tagKey": {
           "type": "string",
           "description": "Optional. Tag key, only used when groupBy is set to `tag`."
+        }
+      }
+    },
+    "v1GetCostUsageV2Request": {
+      "type": "object",
+      "properties": {
+        "costGroupId": {
+          "type": "string"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": "string"
+        },
+        "granularity": {
+          "$ref": "#/definitions/v1GetCostUsageV2RequestGranularity"
+        },
+        "groupBys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "category": {
+          "$ref": "#/definitions/v1GetCostUsageV2RequestCategory"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/coverCostGroupAwsOptions"
+        },
+        "azurecspOptions": {
+          "$ref": "#/definitions/coverCostGroupAzureCspOptions"
+        },
+        "gcpOptions": {
+          "$ref": "#/definitions/coverCostGroupGcpOptions"
+        }
+      }
+    },
+    "v1GetCostUsageV2RequestCategory": {
+      "type": "string",
+      "enum": [
+        "Category_UNSPECIFIED",
+        "COST",
+        "USAGE"
+      ],
+      "default": "Category_UNSPECIFIED"
+    },
+    "v1GetCostUsageV2RequestGranularity": {
+      "type": "string",
+      "enum": [
+        "GRANULARITY_UNSPECIFIED",
+        "DAILY",
+        "MONTHLY"
+      ],
+      "default": "GRANULARITY_UNSPECIFIED"
+    },
+    "v1GetCostUsageV2Response": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number",
+          "format": "double"
+        },
+        "date": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string"
+        },
+        "details": {
+          "type": "object"
         }
       }
     },
@@ -36560,23 +36432,6 @@
         }
       }
     },
-    "v1GetUserResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "orgId": {
-          "type": "string"
-        }
-      }
-    },
     "v1GetUtilizationResponse": {
       "type": "object",
       "properties": {
@@ -36696,14 +36551,6 @@
         }
       },
       "title": "Response message for InviteMember"
-    },
-    "v1InviteUserRequest": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string"
-        }
-      }
     },
     "v1InvoiceConnectedBillingGroups": {
       "type": "object",
@@ -37263,9 +37110,6 @@
       }
     },
     "v1ListProjectsRequest": {
-      "type": "object"
-    },
-    "v1ListPromptsRequest": {
       "type": "object"
     },
     "v1ListRecommendationResponse": {
@@ -38081,20 +37925,6 @@
           "type": "string"
         },
         "email": {
-          "type": "string"
-        }
-      }
-    },
-    "v1Prompt": {
-      "type": "object",
-      "properties": {
-        "content": {
-          "type": "string"
-        },
-        "fromContainerName": {
-          "type": "string"
-        },
-        "riskLevel": {
           "type": "string"
         }
       }
@@ -39427,6 +39257,14 @@
       },
       "title": "Response message for TerminateResource"
     },
+    "v1TestResponse": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "string"
+        }
+      }
+    },
     "v1ThirdProfitItemSection": {
       "type": "object",
       "properties": {
@@ -40433,20 +40271,6 @@
       "properties": {
         "result": {
           "type": "boolean"
-        }
-      }
-    },
-    "v1VerifyInvitedUserRequest": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string"
-        },
-        "orgId": {
-          "type": "string"
-        },
-        "code": {
-          "type": "string"
         }
       }
     },
