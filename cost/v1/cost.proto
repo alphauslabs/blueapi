@@ -109,6 +109,14 @@ service Cost {
     };
   }
 
+  // WORK-IN-PROGRES: Updates a vendor payer account's basics details.
+  rpc UpdatePayerAccount(UpdatePayerAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/{vendor}/payers/basicdetails/{id}"
+      body: "*"
+    };
+  }
+
 
   // Deletes a vendor payer account.
   rpc DeletePayerAccount(DeletePayerAccountRequest) returns (google.protobuf.Empty) {
@@ -2351,6 +2359,27 @@ message RegisterPayerAccountRequest {
   // Optional. Valid values are `legacy` and `2.0` for now. Defaults to `legacy` if not provided.
   // Only applicable if vendor is set to `aws`. Do not provide if `gcp` or `azure`.
   string curType = 4;
+
+  // Optional. If set to true, TU profit from this payer will be calculated. Default is false.
+  bool calculateTUProfit = 5;
+}
+
+message UpdatePayerAccountRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. The Payer/Management account Id to update.
+  string id = 2;
+
+  // Optional. Preferred account name, defaults to id if not provided.
+  string name = 3;
+
+  // Optional. Valid values are `legacy` and `2.0` for now. Defaults to `legacy` if not provided.
+  // Only applicable if vendor is set to `aws`. Do not provide if `gcp` or `azure`.
+  string curType = 4;
+
+  // Optional. If set to true, TU profit from this payer will be calculated. Default is false.
+  bool calculateTUProfit = 5;
 }
 
 // WORK-IN-PROGRESS: List the prerequisites for cost calculations.
