@@ -124,10 +124,25 @@ service Flow {
     };
   }
 
-    // Sends savings plan details to be purchased to a Slack channel
+  // Sends savings plan details to be purchased to a Slack channel
   rpc SendSPToPurchaseDetailsNotification(SendSPToPurchaseDetailsNotificationsRequest) returns (SendSPToPurchaseDetailsNotificationsResponse) {
     option (google.api.http) = {
       post: "/v1/sp/purchaseDetails/notification"
+    };
+  }
+
+  // Create or Update the user account settings.
+  rpc SetUserAccountSettings (SetUserAccountSettingsRequest) returns (SetUserAccountSettingsResponse) {
+    option (google.api.http) = {
+      put: "/v1/user/settings"
+      body: "*"
+    };
+  }
+
+  // Gets the user account settings.
+  rpc GetUserAccountSettings (GetUserAccountSettingsRequest) returns (GetUserAccountSettingsResponse) {
+    option (google.api.http) = {
+      get: "/v1/user/settings"
     };
   }
 }
@@ -308,14 +323,33 @@ message SavingsPlanDetailsPurchase {
   repeated SavingsPlanDetailsPurchase purchases = 3;
 }
 
-
-
 // Request message for the Flow.GetSPToPurchaseDetails rpc.
 message GetSPToPurchaseDetailsRequest {
    // Required. The id of the payer account.
   string payerId = 1;
   // Required. The year and month  for which the savings plan details are requested, formatted as "YYYYMM".
   string yearMonth  = 2;
+}
+
+// Request message for the Flow.SetUserAccountSettings rpc.
+message SetUserAccountSettingsRequest {
+  // Required. The payer ID of the user.
+  string id = 1;
+
+  // Required. List of email addresses to send notifications to.
+  repeated string emails = 2;
+
+  // Required. User interface preferences.
+  string theme = 3;
+
+  // Required. Preferred language for the user interface.
+  string language = 4;
+}
+
+// Request message for the Flow.GetUserAccountSettings rpc.
+message GetUserAccountSettingsRequest {
+  // Required. The payer ID of the user.
+  string id = 1;
 }
 
 // ##################################### RESPONSES #####################################
@@ -768,4 +802,24 @@ message SavingsPlanDetailsPurchase {
 message SendSPToPurchaseDetailsNotificationsResponse {
   string message = 1;
   bool success = 2;
+}
+
+// Response message for the Flow.SetUserAccountSettings rpc.
+message SetUserAccountSettingsResponse {
+  string response = 1;
+}
+
+// Response message for the Flow.GetUserAccountSettings rpc.
+message GetUserAccountSettingsResponse {
+  // The payer ID of the user.
+  string id = 1;
+
+  // List of email addresses to send notifications to.
+  repeated string emails = 2;
+
+  // User interface preferences.
+  string theme = 3;
+
+  // Preferred language for the user interface.
+  string language = 4;
 }
