@@ -10461,39 +10461,6 @@
         ]
       }
     },
-    "/v1/notification/slack": {
-      "post": {
-        "summary": "Sends configuration and recommendation to a Slack channel",
-        "operationId": "Flow_CreateMessageToSlack",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CreateMessageToSlackResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateMessageToSlackRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Flow"
-        ]
-      }
-    },
     "/v1/org": {
       "post": {
         "operationId": "Prism_CreateOrganization",
@@ -13247,15 +13214,15 @@
         ]
       }
     },
-    "/v1/sp/purchaseDetails/slack": {
+    "/v1/sp/purchaseDetails/notification": {
       "post": {
         "summary": "Sends savings plan details to be purchased to a Slack channel",
-        "operationId": "Flow_SendSPToPurchaseDetails",
+        "operationId": "Flow_SendSPToPurchaseDetailsNotification",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1SendSPToPurchaseDetailsResponse"
+              "$ref": "#/definitions/v1SendSPToPurchaseDetailsNotificationsResponse"
             }
           },
           "default": {
@@ -13393,6 +13360,39 @@
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Flow"
+        ]
+      }
+    },
+    "/v1/sp/recommendation/notification": {
+      "post": {
+        "summary": "Sends configuration and recommendation to a Slack channel",
+        "operationId": "Flow_CreateSPRecommendationNotification",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateSPRecommendationNotificationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateSPRecommendationNotificationRequest"
+            }
           }
         ],
         "tags": [
@@ -21604,7 +21604,7 @@
       },
       "title": "Request message for UpdateViewWidget"
     },
-    "CreateMessageToSlackRequestConfigurations": {
+    "CreateSPRecommendationNotificationRequestConfigurations": {
       "type": "object",
       "properties": {
         "accountScope": {
@@ -21638,7 +21638,7 @@
       },
       "title": "Configurations for the Savings Plan"
     },
-    "CreateMessageToSlackRequestRecommendation": {
+    "CreateSPRecommendationNotificationRequestRecommendation": {
       "type": "object",
       "properties": {
         "id": {
@@ -33844,30 +33844,6 @@
       },
       "title": "Response message for CreateMember"
     },
-    "v1CreateMessageToSlackRequest": {
-      "type": "object",
-      "properties": {
-        "configurations": {
-          "$ref": "#/definitions/CreateMessageToSlackRequestConfigurations"
-        },
-        "recommendation": {
-          "$ref": "#/definitions/CreateMessageToSlackRequestRecommendation"
-        }
-      },
-      "title": "Configuration and recommendation details to send to Slack"
-    },
-    "v1CreateMessageToSlackResponse": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string"
-        },
-        "success": {
-          "type": "boolean"
-        }
-      },
-      "title": "Response after sending to Slack"
-    },
     "v1CreateNotificationChannelRequest": {
       "type": "object",
       "properties": {
@@ -34168,6 +34144,30 @@
         }
       },
       "description": "Response message for the Flow.CreateSPPurchaseAccess rpc."
+    },
+    "v1CreateSPRecommendationNotificationRequest": {
+      "type": "object",
+      "properties": {
+        "configurations": {
+          "$ref": "#/definitions/CreateSPRecommendationNotificationRequestConfigurations"
+        },
+        "recommendation": {
+          "$ref": "#/definitions/CreateSPRecommendationNotificationRequestRecommendation"
+        }
+      },
+      "title": "Configuration and recommendation details to send to Slack"
+    },
+    "v1CreateSPRecommendationNotificationResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        }
+      },
+      "title": "Response after sending to Slack"
     },
     "v1CreateSharedResourcesRequest": {
       "type": "object",
@@ -39348,7 +39348,7 @@
       },
       "title": "Request message for ripple account password recovery"
     },
-    "v1SendSPToPurchaseDetailsRequestSavingsPlanDetailsPurchase": {
+    "v1SendSPToPurchaseDetailsNotificationsRequestSavingsPlanDetailsPurchase": {
       "type": "object",
       "properties": {
         "payerId": {
@@ -39398,7 +39398,7 @@
       },
       "title": "Savings plan details to be purchased"
     },
-    "v1SendSPToPurchaseDetailsRequestSavingsPlanRecommendation": {
+    "v1SendSPToPurchaseDetailsNotificationsRequestSavingsPlanRecommendation": {
       "type": "object",
       "properties": {
         "payerId": {
@@ -39448,7 +39448,7 @@
       },
       "title": "Savings plan recommendation details"
     },
-    "v1SendSPToPurchaseDetailsResponse": {
+    "v1SendSPToPurchaseDetailsNotificationsResponse": {
       "type": "object",
       "properties": {
         "message": {
@@ -39458,7 +39458,7 @@
           "type": "boolean"
         }
       },
-      "title": "Response after sending SendSPToPurchaseDetails to Slack"
+      "title": "Response after sending SendSPToPurchaseDetailsNotifications to Slack"
     },
     "v1Service": {
       "type": "object",

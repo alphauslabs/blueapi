@@ -110,9 +110,9 @@ service Flow {
   }
 
   // Sends configuration and recommendation to a Slack channel
-  rpc CreateMessageToSlack(CreateMessageToSlackRequest) returns (CreateMessageToSlackResponse) {
+  rpc CreateSPRecommendationNotification(CreateSPRecommendationNotificationRequest) returns (CreateSPRecommendationNotificationResponse) {
     option (google.api.http) = {
-      post: "/v1/notification/slack"
+      post: "/v1/sp/recommendation/notification"
       body: "*";
     };
   }
@@ -125,9 +125,9 @@ service Flow {
   }
 
     // Sends savings plan details to be purchased to a Slack channel
-  rpc SendSPToPurchaseDetails(SendSPToPurchaseDetailsRequest) returns (SendSPToPurchaseDetailsResponse) {
+  rpc SendSPToPurchaseDetailsNotification(SendSPToPurchaseDetailsNotificationsRequest) returns (SendSPToPurchaseDetailsNotificationsResponse) {
     option (google.api.http) = {
-      post: "/v1/sp/purchaseDetails/slack"
+      post: "/v1/sp/purchaseDetails/notification"
     };
   }
 }
@@ -226,7 +226,7 @@ message GetCrossAccountAccessDetailsRequest {
 }
 
 // Configuration and recommendation details to send to Slack
-message CreateMessageToSlackRequest {
+message CreateSPRecommendationNotificationRequest {
   // Configurations for the Savings Plan
   message Configurations {
     string accountScope = 1;
@@ -268,7 +268,7 @@ message CreateMessageToSlackRequest {
 }
 
 // Response message for the Flow.GetSPToPurchaseDetails rpc.
-message SendSPToPurchaseDetailsRequest {
+message SendSPToPurchaseDetailsNotificationsRequest {
 
   // Savings plan recommendation details
 message SavingsPlanRecommendation {
@@ -716,7 +716,7 @@ message CrossAccountAccessDetail {
 }
 
 // Response after sending to Slack
-message CreateMessageToSlackResponse {
+message CreateSPRecommendationNotificationResponse {
   string message = 1;
   bool success = 2;
 }
@@ -764,8 +764,8 @@ message SavingsPlanDetailsPurchase {
   string expiryDate = 13;
 }
 
-// Response after sending SendSPToPurchaseDetails to Slack
-message SendSPToPurchaseDetailsResponse {
+// Response after sending SendSPToPurchaseDetailsNotifications to Slack
+message SendSPToPurchaseDetailsNotificationsResponse {
   string message = 1;
   bool success = 2;
 }
