@@ -124,6 +124,12 @@ service Flow {
     };
   }
 
+    // Sends savings plan details to be purchased to a Slack channel
+  rpc SendSPToPurchaseDetails(SendSPToPurchaseDetailsRequest) returns (SendSPToPurchaseDetailsResponse) {
+    option (google.api.http) = {
+      post: "/v1/sp/purchaseDetails/slack"
+    };
+  }
 }
 
 // ##################################### REQUESTS #####################################
@@ -260,6 +266,49 @@ message CreateMessageToSlackRequest {
   Configurations configurations = 1;
   Recommendation recommendation = 2;
 }
+
+// Response message for the Flow.GetSPToPurchaseDetails rpc.
+message SendSPToPurchaseDetailsRequest {
+
+  // Savings plan recommendation details
+message SavingsPlanRecommendation {
+  string payerId = 1;
+  string linkedAccounts = 2;
+  string accountScope = 3;
+  string savingsPlanType = 4;
+  int32 term = 5;
+  string region = 6;
+  string instanceFamily = 7;
+  double recommendedHourlyCommitment = 8;
+  string paymentOption = 9;
+  double upfrontCost = 10;
+  double monthlyCost = 11;
+  double totalCost = 12;
+  string expiryDate = 13;
+}
+
+// Savings plan details to be purchased
+message SavingsPlanDetailsPurchase {
+  string payerId = 1;
+  string linkedAccounts = 2;
+  string accountScope = 3;
+  string savingsPlanType = 4;
+  int32 term = 5;
+  string region = 6;
+  string instanceFamily = 7;
+  double recommendedHourlyCommitment = 8;
+  string paymentOption = 9;
+  double upfrontCost = 10;
+  double monthlyCost = 11;
+  double totalCost = 12;
+  string expiryDate = 13;
+}
+  string approval = 1;
+  SavingsPlanRecommendation recommendation = 2;
+  repeated SavingsPlanDetailsPurchase purchases = 3;
+}
+
+
 
 // Request message for the Flow.GetSPToPurchaseDetails rpc.
 message GetSPToPurchaseDetailsRequest {
@@ -713,4 +762,10 @@ message SavingsPlanDetailsPurchase {
   double monthlyCost = 11;
   double totalCost = 12;
   string expiryDate = 13;
+}
+
+// Response after sending SendSPToPurchaseDetails to Slack
+message SendSPToPurchaseDetailsResponse {
+  string message = 1;
+  bool success = 2;
 }
