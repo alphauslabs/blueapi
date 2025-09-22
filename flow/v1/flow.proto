@@ -124,7 +124,7 @@ service Flow {
     };
   }
 
-  // Sends savings plan details to be purchased to a Slack channel
+  // Sends savings plan details to be purchased to a Slack channel or user email
   rpc SendSPToPurchaseDetailsNotification(SendSPToPurchaseDetailsNotificationsRequest) returns (SendSPToPurchaseDetailsNotificationsResponse) {
     option (google.api.http) = {
       post: "/v1/sp/purchaseDetails/notification"
@@ -144,14 +144,6 @@ service Flow {
   rpc GetUserAccountSettings (GetUserAccountSettingsRequest) returns (GetUserAccountSettingsResponse) {
     option (google.api.http) = {
       get: "/v1/user/settings"
-    };
-  }
-
-  // Sends an email notification to users with savings plan purchase details
-  rpc SendSavingsPlanNotification(SendSavingsPlanNotificationRequest) returns (SendSavingsPlanNotificationResponse) {
-    option (google.api.http) = {
-      post: "/v1/sp/purchaseDetails/email/notification"
-      body: "*"
     };
   }
 }
@@ -330,6 +322,15 @@ message SavingsPlanDetailsPurchase {
   string approval = 1;
   SavingsPlanRecommendation recommendation = 2;
   repeated SavingsPlanDetailsPurchase purchases = 3;
+  string mode = 4; // "slack" or "email"
+  string userEmail = 5;
+  string companyName = 6; 
+  string ondemandCostBefore = 7; // On-demand cost before savings plan
+  string ondemandCostAfter = 8; // On-demand cost after savings plan
+  string reductionRate = 9; // Cost reduction percentage
+  string approvalLink = 10; // Link for approval action
+  string language = 11; // Language code (en or ja)
+
 }
 
 // Request message for the Flow.GetSPToPurchaseDetails rpc.
@@ -359,20 +360,6 @@ message SetUserAccountSettingsRequest {
 message GetUserAccountSettingsRequest {
   // Required. The payer ID of the user.
   string id = 1;
-}
-
-// SendSavingsPlanNotificationRequest represents the request to send an email
-message SendSavingsPlanNotificationRequest {
-  string userEmail = 1; // Email recipient
-  string payerID = 2; // AWS Payer ID
-  string companyName = 3; // Company name
-  string ondemandCostBefore = 4; // On-demand cost before savings plan
-  string ondemandCostAfter = 5; // On-demand cost after savings plan
-  string reductionRate = 6; // Cost reduction percentage
-  string totalSPCost = 7; // Total savings plan cost
-  string monthlySPCost = 8; // Monthly savings plan cost
-  string approvalLink = 9; // Link for approval action
-  string language = 10; // Language code (en or ja)
 }
 
 // ##################################### RESPONSES #####################################
@@ -845,11 +832,4 @@ message GetUserAccountSettingsResponse {
 
   // Preferred language for the user interface.
   string language = 4;
-}
-
-// SendSavingsPlanNotificationResponse represents the response from sending an email
-message SendSavingsPlanNotificationResponse {
-  string message = 1; // Response message
-  bool success = 2; // Whether the email was sent successfully
-  string messageID = 3; // AWS SES message ID
 }

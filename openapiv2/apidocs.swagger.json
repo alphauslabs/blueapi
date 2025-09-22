@@ -13214,42 +13214,9 @@
         ]
       }
     },
-    "/v1/sp/purchaseDetails/email/notification": {
-      "post": {
-        "summary": "Sends an email notification to users with savings plan purchase details",
-        "operationId": "Flow_SendSavingsPlanNotification",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1SendSavingsPlanNotificationResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1SendSavingsPlanNotificationRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Flow"
-        ]
-      }
-    },
     "/v1/sp/purchaseDetails/notification": {
       "post": {
-        "summary": "Sends savings plan details to be purchased to a Slack channel",
+        "summary": "Sends savings plan details to be purchased to a Slack channel or user email",
         "operationId": "Flow_SendSPToPurchaseDetailsNotification",
         "responses": {
           "200": {
@@ -39414,6 +39381,36 @@
             "type": "object",
             "$ref": "#/definitions/v1SendSPToPurchaseDetailsNotificationsRequestSavingsPlanDetailsPurchase"
           }
+        },
+        "mode": {
+          "type": "string",
+          "title": "\"slack\" or \"email\""
+        },
+        "userEmail": {
+          "type": "string"
+        },
+        "companyName": {
+          "type": "string"
+        },
+        "ondemandCostBefore": {
+          "type": "string",
+          "title": "On-demand cost before savings plan"
+        },
+        "ondemandCostAfter": {
+          "type": "string",
+          "title": "On-demand cost after savings plan"
+        },
+        "reductionRate": {
+          "type": "string",
+          "title": "Cost reduction percentage"
+        },
+        "approvalLink": {
+          "type": "string",
+          "title": "Link for approval action"
+        },
+        "language": {
+          "type": "string",
+          "title": "Language code (en or ja)"
         }
       },
       "description": "Response message for the Flow.GetSPToPurchaseDetails rpc."
@@ -39529,70 +39526,6 @@
         }
       },
       "title": "Response after sending SendSPToPurchaseDetailsNotifications to Slack"
-    },
-    "v1SendSavingsPlanNotificationRequest": {
-      "type": "object",
-      "properties": {
-        "userEmail": {
-          "type": "string",
-          "title": "Email recipient"
-        },
-        "payerID": {
-          "type": "string",
-          "title": "AWS Payer ID"
-        },
-        "companyName": {
-          "type": "string",
-          "title": "Company name"
-        },
-        "ondemandCostBefore": {
-          "type": "string",
-          "title": "On-demand cost before savings plan"
-        },
-        "ondemandCostAfter": {
-          "type": "string",
-          "title": "On-demand cost after savings plan"
-        },
-        "reductionRate": {
-          "type": "string",
-          "title": "Cost reduction percentage"
-        },
-        "totalSPCost": {
-          "type": "string",
-          "title": "Total savings plan cost"
-        },
-        "monthlySPCost": {
-          "type": "string",
-          "title": "Monthly savings plan cost"
-        },
-        "approvalLink": {
-          "type": "string",
-          "title": "Link for approval action"
-        },
-        "language": {
-          "type": "string",
-          "title": "Language code (en or ja)"
-        }
-      },
-      "title": "SendSavingsPlanNotificationRequest represents the request to send an email"
-    },
-    "v1SendSavingsPlanNotificationResponse": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string",
-          "title": "Response message"
-        },
-        "success": {
-          "type": "boolean",
-          "title": "Whether the email was sent successfully"
-        },
-        "messageID": {
-          "type": "string",
-          "title": "AWS SES message ID"
-        }
-      },
-      "title": "SendSavingsPlanNotificationResponse represents the response from sending an email"
     },
     "v1Service": {
       "type": "object",
