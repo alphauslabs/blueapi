@@ -146,6 +146,14 @@ service Flow {
       get: "/v1/user/settings"
     };
   }
+
+   // Sends an email notification to users with savings plan purchase details
+  rpc SendSavingsPlanNotification(SendSavingsPlanNotificationRequest) returns (SendSavingsPlanNotificationResponse) {
+    option (google.api.http) = {
+      post: "/v1/sp/email/notification"
+      body: "*"
+    };
+  }
 }
 
 // ##################################### REQUESTS #####################################
@@ -351,6 +359,20 @@ message SetUserAccountSettingsRequest {
 message GetUserAccountSettingsRequest {
   // Required. The payer ID of the user.
   string id = 1;
+}
+
+// SendSavingsPlanNotificationRequest represents the request to send an email
+message SendSavingsPlanNotificationRequest {
+  string userEmail = 1; // Email recipient
+  string payerID= 2; // AWS Payer ID
+  string companyName = 3; // Company name
+  string ondemandCostBefore = 4; // On-demand cost before savings plan
+  string ondemandCostAfter = 5; // On-demand cost after savings plan
+  string reductionRate = 6; // Cost reduction percentage
+  string totalSPCost = 7; // Total savings plan cost
+  string monthlySPCost = 8; // Monthly savings plan cost
+  string approvalLink = 9; // Link for approval action
+  string language = 10; // Language code (en or ja)
 }
 
 // ##################################### RESPONSES #####################################
@@ -823,4 +845,11 @@ message GetUserAccountSettingsResponse {
 
   // Preferred language for the user interface.
   string language = 4;
+}
+
+// SendSavingsPlanNotificationResponse represents the response from sending an email
+message SendSavingsPlanNotificationResponse {
+  string message = 1; // Response message
+  bool success = 2; // Whether the email was sent successfully
+  string messageID = 3; // AWS SES message ID
 }
