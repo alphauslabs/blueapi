@@ -124,7 +124,7 @@ service Flow {
     };
   }
 
-  // Sends savings plan details to be purchased to a Slack channel
+  // Sends savings plan details to be purchased to a Slack channel or user email
   rpc SendSPToPurchaseDetailsNotification(SendSPToPurchaseDetailsNotificationsRequest) returns (SendSPToPurchaseDetailsNotificationsResponse) {
     option (google.api.http) = {
       post: "/v1/sp/purchaseDetails/notification"
@@ -322,6 +322,15 @@ message SavingsPlanDetailsPurchase {
   string approval = 1;
   SavingsPlanRecommendation recommendation = 2;
   repeated SavingsPlanDetailsPurchase purchases = 3;
+  string mode = 4; // "slack" or "email"
+  string userEmail = 5;
+  string companyName = 6; 
+  string ondemandCostBefore = 7; // On-demand cost before savings plan
+  string ondemandCostAfter = 8; // On-demand cost after savings plan
+  string reductionRate = 9; // Cost reduction percentage
+  string approvalLink = 10; // Link for approval action
+  string language = 11; // Language code (en or ja)
+
 }
 
 // Request message for the Flow.GetSPToPurchaseDetails rpc.
