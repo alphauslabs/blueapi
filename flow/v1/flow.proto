@@ -135,7 +135,7 @@ service Flow {
   // Create or Update the user account settings.
   rpc SetUserAccountSettings (SetUserAccountSettingsRequest) returns (SetUserAccountSettingsResponse) {
     option (google.api.http) = {
-      put: "/v1/user/settings"
+      put: "/v1/user/settings/{payerId}"
       body: "*"
     };
   }
@@ -143,7 +143,7 @@ service Flow {
   // Gets the user account settings.
   rpc GetUserAccountSettings (GetUserAccountSettingsRequest) returns (GetUserAccountSettingsResponse) {
     option (google.api.http) = {
-      get: "/v1/user/settings"
+      get: "/v1/user/settings/{payerId}"
     };
   }
 }
@@ -344,7 +344,7 @@ message GetSPToPurchaseDetailsRequest {
 // Request message for the Flow.SetUserAccountSettings rpc.
 message SetUserAccountSettingsRequest {
   // Required. The payer ID of the user.
-  string id = 1;
+  string payerId = 1;
 
   // Required. List of email addresses to send notifications to.
   repeated string emails = 2;
@@ -359,7 +359,7 @@ message SetUserAccountSettingsRequest {
 // Request message for the Flow.GetUserAccountSettings rpc.
 message GetUserAccountSettingsRequest {
   // Required. The payer ID of the user.
-  string id = 1;
+  string payerId = 1;
 }
 
 // ##################################### RESPONSES #####################################
