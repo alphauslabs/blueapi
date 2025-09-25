@@ -14314,7 +14314,7 @@
         ]
       }
     },
-    "/v1/user/settings": {
+    "/v1/user/settings/{id}": {
       "get": {
         "summary": "Gets the user account settings.",
         "operationId": "Flow_GetUserAccountSettings",
@@ -14335,9 +14335,9 @@
         "parameters": [
           {
             "name": "id",
-            "description": "Required. The payer ID of the user.",
-            "in": "query",
-            "required": false,
+            "description": "Required. The user ID of the user.",
+            "in": "path",
+            "required": true,
             "type": "string"
           }
         ],
@@ -14364,12 +14364,18 @@
         },
         "parameters": [
           {
+            "name": "id",
+            "description": "Required. The user ID of the user.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "body",
-            "description": "Request message for the Flow.SetUserAccountSettings rpc.",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1SetUserAccountSettingsRequest"
+              "$ref": "#/definitions/FlowSetUserAccountSettingsBody"
             }
           }
         ],
@@ -22009,6 +22015,27 @@
         }
       },
       "description": "Request message for the Flow.CreateSettings rpc."
+    },
+    "FlowSetUserAccountSettingsBody": {
+      "type": "object",
+      "properties": {
+        "emails": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required. List of email addresses to send notifications to."
+        },
+        "theme": {
+          "type": "string",
+          "description": "Required. User interface preferences."
+        },
+        "language": {
+          "type": "string",
+          "description": "Required. Preferred language for the user interface."
+        }
+      },
+      "description": "Request message for the Flow.SetUserAccountSettings rpc."
     },
     "GcpOptionsBillingOption": {
       "type": "object",
@@ -39643,31 +39670,6 @@
         }
       },
       "description": "Response message for the Flow.CreateSettings rpc."
-    },
-    "v1SetUserAccountSettingsRequest": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Required. The payer ID of the user."
-        },
-        "emails": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Required. List of email addresses to send notifications to."
-        },
-        "theme": {
-          "type": "string",
-          "description": "Required. User interface preferences."
-        },
-        "language": {
-          "type": "string",
-          "description": "Required. Preferred language for the user interface."
-        }
-      },
-      "description": "Request message for the Flow.SetUserAccountSettings rpc."
     },
     "v1SetUserAccountSettingsResponse": {
       "type": "object",
