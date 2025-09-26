@@ -1,13 +1,16 @@
-version: v1beta1
+version: v2
 plugins:
-- name: go
-  out: generated/go
-  opt: paths=source_relative
-- name: go-grpc
-  out: generated/go
-  opt: paths=source_relative
-- name: grpc-gateway
-  out: generated/go
-  opt: paths=source_relative
-- name: java
-  out: generated/java
+  - local: protoc-gen-go
+    out: generated/go
+    opt: paths=source_relative
+  - local: protoc-gen-go-grpc
+    out: generated/go
+    opt: paths=source_relative
+  - local: protoc-gen-grpc-gateway
+    out: generated/go
+    opt: paths=source_relative
+  - protoc_builtin: java
+    out: generated/java
+  - remote: buf.build/bufbuild/es:v2.7.0
+    out: generated/ts
+    opt: target=ts
