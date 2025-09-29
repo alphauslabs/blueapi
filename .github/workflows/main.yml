@@ -15,6 +15,13 @@ jobs:
       uses: actions/setup-go@v5
       with:
         go-version: '^1.20'
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        registry-url: "https://npm.pkg.github.com"
+        scope: "@alphauslabs"
 
     - name: Build all
       env:
@@ -62,6 +69,15 @@ jobs:
         git config user.name "mobingideployer"
         git add . && git commit -am "$GITHUB_REF $GITHUB_SHA" || true
         git remote add origin-tmp https://$DEPLOYER_TOKEN@github.com/alphauslabs/blue-sdk-go.git > /dev/null 2>&1
+        git push --set-upstream origin-tmp
+        # Update blue-sdk-ts:
+        cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-ts && cd blue-sdk-ts/
+        npm install && npm run build
+        cp -rv $WORKSPACE_ROOT/generated/ts/* . && git status
+        git config user.email "dev@mobingi.com"
+        git config user.name "mobingideployer"
+        git add . && git commit -am "$GITHUB_REF $GITHUB_SHA" || true
+        git remote add origin-tmp https://$DEPLOYER_TOKEN@github.com/alphauslabs/blue-sdk-ts.git > /dev/null 2>&1
         git push --set-upstream origin-tmp
         # Update blue-sdk-python:
         cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-python && cd blue-sdk-python
