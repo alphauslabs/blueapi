@@ -8,22 +8,19 @@ jobs:
     if: "!contains(github.event.commits[0].message, 'ci skip')"
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-    - name: Setup golang v1.x
-      uses: actions/setup-go@v5
+    - uses: actions/setup-go@v5
       with:
         go-version: '^1.20'
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
+
+    - uses: actions/setup-node@v4
       with:
         node-version: '20'
         registry-url: "https://npm.pkg.github.com"
         scope: "@alphauslabs"
 
-    - name: Build all
+    - name: 'Build all'
       env:
         DEPLOYER_TOKEN: ${{secrets.GH_TOKEN}}
       run: |
@@ -40,7 +37,7 @@ jobs:
         echo 'Go environment:' && go env
         curl -LO https://github.com/grpc/grpc-go/releases/download/cmd%2Fprotoc-gen-go-grpc%2Fv1.4.0/protoc-gen-go-grpc.v1.4.0.linux.amd64.tar.gz
         tar xvzf protoc-gen-go-grpc.v1.4.0.linux.amd64.tar.gz && cp protoc-gen-go-grpc $HOME/.local/bin/
-        # NOTE: Since an error occurs during the service build, 
+        # NOTE: Since an error occurs during the service build,
         # I will revert to the previous version and monitor the situation.
         # go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
         go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.5
@@ -60,7 +57,7 @@ jobs:
         WORKSPACE_ROOT=$PWD
         # Hack: I don't know how to setup go_package properly when importing protos via submodule so resort to good old sed:
         # To fix double proto register error with minimal change we use the blue-interal-proto since they are they same
-        # This will only work if both blue-internal-go and blue-sdk-go was imported 
+        # This will only work if both blue-internal-go and blue-sdk-go was imported.
         grep -rl 'alphauslabs/protos' generated/go/ | xargs sed -i -e 's/alphauslabs\/protos/alphauslabs\/blue-internal-go\/protos/g'
         cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-go && cd blue-sdk-go/
         cp -rv $WORKSPACE_ROOT/generated/index.html docs/
