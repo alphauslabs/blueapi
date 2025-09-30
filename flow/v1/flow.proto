@@ -146,6 +146,14 @@ service Flow {
       get: "/v1/user/settings/{id}"
     };
   }
+
+   // Sends savings plan details to be purchased to a Slack channel or user email
+  rpc CheckSPToPurchaseDetailsLinkExpiry(CheckSPToPurchaseDetailsLinkExpiryRequest) returns (CheckSPToPurchaseDetailsLinkExpiryResponse) {
+    option (google.api.http) = {
+      get: "/v1/sp/purchaseDetails/notification/link/expiry"
+    };
+  }
+  
 }
 
 // ##################################### REQUESTS #####################################
@@ -330,6 +338,7 @@ message SavingsPlanDetailsPurchase {
   string reductionRate = 9; // Cost reduction percentage
   string approvalLink = 10; // Link for approval action
   string language = 11; // Language code (en or ja)
+  string linkExpiryDate = 12; // ISO8601 formatted date when the approval link expires (3 days from sending)
 
 }
 
@@ -360,6 +369,11 @@ message SetUserAccountSettingsRequest {
 message GetUserAccountSettingsRequest {
   // Required. The user ID of the user.
   string id = 1;
+}
+
+// Request message for the Flow.CheckSPToPurchaseDetailsLinkExpiryRequest RPC
+message CheckSPToPurchaseDetailsLinkExpiryRequest {
+  string url = 1; // The URL to check for expiration
 }
 
 // ##################################### RESPONSES #####################################
@@ -841,4 +855,12 @@ message GetUserAccountSettingsResponse {
 
   // Preferred language for the user interface.
   string language = 4;
+}
+
+// Response message for the Flow.CheckSPToPurchaseDetailsLinkExpiryRequest RPC
+message CheckSPToPurchaseDetailsLinkExpiryResponse {
+  bool isExpired = 1;          // Whether the link has expired
+  string expiryDate = 2;       // The raw expiry date from the URL (ISO8601 format)
+  string formattedDate = 3;    // User-friendly formatted date
+  string message = 4;           // Human readable status message
 }
