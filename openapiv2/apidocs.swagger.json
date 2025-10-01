@@ -13280,6 +13280,38 @@
         ]
       }
     },
+    "/v1/sp/purchaseDetails/notification/link/expiry": {
+      "get": {
+        "summary": "Checks the expiry of the link in the SP to purchase details notification",
+        "operationId": "Flow_CheckSPToPurchaseDetailsLinkExpiry",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CheckSPToPurchaseDetailsLinkExpiryResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "url",
+            "description": "Required. The URL containing the expiry information to check.\n\nThe URL to check for expiration",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Flow"
+        ]
+      }
+    },
     "/v1/sp/purchaseDetails/{payerId}/{yearMonth}": {
       "get": {
         "summary": "Get savings plan details to be purchased .",
@@ -32734,6 +32766,28 @@
         }
       }
     },
+    "v1CheckSPToPurchaseDetailsLinkExpiryResponse": {
+      "type": "object",
+      "properties": {
+        "isExpired": {
+          "type": "boolean",
+          "title": "Whether the link has expired"
+        },
+        "expiryDate": {
+          "type": "string",
+          "title": "The raw expiry date from the URL (ISO8601 format)"
+        },
+        "formattedDate": {
+          "type": "string",
+          "title": "User-friendly formatted date"
+        },
+        "message": {
+          "type": "string",
+          "title": "Human readable status message"
+        }
+      },
+      "title": "Response message for the Flow.CheckSPToPurchaseDetailsLinkExpiryRequest RPC"
+    },
     "v1CloudWatchMetricsStream": {
       "type": "object",
       "properties": {
@@ -39540,6 +39594,10 @@
         "language": {
           "type": "string",
           "title": "Language code (en or ja)"
+        },
+        "linkExpiryDate": {
+          "type": "string",
+          "title": "ISO8601 formatted date when the approval link expires (3 days from sending)"
         }
       },
       "description": "Request message for the Flow.SendSPToPurchaseDetailsNotifications rpc."
