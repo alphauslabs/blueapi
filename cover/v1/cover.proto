@@ -1439,6 +1439,13 @@ service Cover {
       body: "*"
     };
   }
+
+  rpc ListNonperformingRate(ListNonperformingRateRequest) returns (ListNonperformingRateResponse) {
+    option (google.api.http) = {
+      post: "/v1/reports/rate/nonperforming:read"
+      body: "*"
+    };
+  }
 }
 
 message GetCostUsageV2Response {
@@ -4463,4 +4470,30 @@ message GetDiscountPlanRequest {
 message GetDiscountPlanResponse {
   string orgId = 1;
   api.cover.AwsDiscountPlans awsDiscountPlans = 2;
+}
+
+// Request message for ListNonperformingRate
+message ListNonperformingRateRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Cost Group Id.
+  string costGroupId = 2;
+
+  // Optional. The start date of the displayed data. If not set, the first day of the current month will be used. Format: yyyy-mm-dd.
+  string fromDate = 3;
+
+  // Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd.
+  string toDate = 4;
+
+  // Optional. The type of optimization; `ri`, `sp`, or `all`.
+  string type = 5;
+}
+
+// Response message for ListNonperformingRate
+message ListNonperformingRateResponse {
+  string type = 1;
+  string account = 2;
+  double utilization = 3;
+  double waste = 4;
 }
