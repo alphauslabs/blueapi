@@ -22348,6 +22348,25 @@
         }
       }
     },
+    "ListNonperformingRateResponseNonperforming": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "account": {
+          "type": "string"
+        },
+        "utilization": {
+          "type": "number",
+          "format": "double"
+        },
+        "waste": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
     "ListRecommendationResponsePurchaseOption": {
       "type": "object",
       "properties": {
@@ -37716,19 +37735,12 @@
     "v1ListNonperformingRateResponse": {
       "type": "object",
       "properties": {
-        "type": {
-          "type": "string"
-        },
-        "account": {
-          "type": "string"
-        },
-        "utilization": {
-          "type": "number",
-          "format": "double"
-        },
-        "waste": {
-          "type": "number",
-          "format": "double"
+        "nonperforming": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ListNonperformingRateResponseNonperforming"
+          }
         }
       },
       "title": "Response message for ListNonperformingRate"

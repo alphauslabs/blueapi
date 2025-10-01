@@ -4492,8 +4492,11 @@ message ListNonperformingRateRequest {
 
 // Response message for ListNonperformingRate
 message ListNonperformingRateResponse {
-  string type = 1;
-  string account = 2;
-  double utilization = 3;
-  double waste = 4;
+  message Nonperforming {
+    string type = 1;
+    string account = 2;
+    double utilization = 3;
+    double waste = 4;
+  }
+  repeated Nonperforming nonperforming = 1;
 }
