@@ -3041,6 +3041,7 @@ message GetAllocationAttributesResponse {
 // Request message for the GetAllocationSources rpc.
 message GetAllocationSourcesRequest {
   string type = 1;
+  string accountId = 2;
 }
 
 // Response message for the GetAllocationSources rpc.
@@ -3048,11 +3049,10 @@ message GetAllocationSourcesResponse {
   message AllocationSources {
     string accountName = 1;
     string service = 2;
-    string tagName = 3;
-    string tagValue = 4;
-    string costGroup = 5;
+    string costGroup = 3;
   }
   repeated AllocationSources source = 1;
+  repeated api.cover.TagData tagData = 2;
 }
 
 // Request message for the DeleteAllocator rpc.
