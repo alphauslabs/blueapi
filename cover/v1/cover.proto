@@ -1446,6 +1446,136 @@ service Cover {
       body: "*"
     };
   }
+
+  rpc ListForecasts(ListForecastsRequest) returns (ListForecastsResponse) {
+    option (google.api.http) = {
+      post: "/v1/forecast:read"
+      body: "*"
+    };
+  }
+  
+  rpc CreateCostForecast(CreateCostForecastRequest) returns (CreateCostForecastResponse) {
+    option (google.api.http) = {
+      post: "/v1/forecast"
+      body: "*"
+    };
+  }
+  
+  rpc GetCostForecast(GetCostForecastRequest) returns (GetCostForecastResponse) {
+    option (google.api.http) = {
+      get: "/v1/forecast/{id}"
+    };
+  }
+  
+  rpc UpdateCostForecast(UpdateCostForecastRequest) returns (UpdateCostForecastResponse) {
+    option (google.api.http) = {
+      put: "/v1/forecast/{id}"
+      body: "*"
+    };
+  }
+  
+  rpc DeleteCostForecast(DeleteCostForecastRequest) returns (DeleteCostForecastResponse) {
+    option (google.api.http) = {
+      delete: "/v1/forecast/{id}"
+    };
+  }
+  
+}
+
+message ListForecastsRequest {}
+
+message ListForecastsResponse {
+  repeated api.cover.CostForecastDetails costForecastDetails = 1;
+}
+
+message CreateCostForecastRequest {
+  // Required. Name of the forecast
+  string forecastName = 1;
+  // Optional. Description of the forecast
+  string description = 2;
+  // Required. Cost Group Id and Name
+  api.cover.CostGroup costGroup = 3;
+
+  // Required. The range of past actual cost to be used in forecasting. Valid values are: '1', '3', '6', and '12' (in months)
+  int64 pastActualCostRange = 4;
+  // Required. The number of months to look forward in the forecast. Valid values are: '1', '3', '6', and '12' (in months)
+  int64 lookForwardPeriod = 5;
+
+  // Optional.
+  repeated api.cover.ExternalAdjustment externalAdjustments = 6;
+}
+
+message CreateCostForecastResponse {
+  string id = 1;
+  string forecastName = 2;
+  string description = 3;
+  api.cover.CostGroup costGroup = 4;
+  int64 pastActualCostRange = 5;
+  int64 lookForwardPeriod = 6;
+  repeated api.cover.ExternalAdjustment externalAdjustments = 7;
+}
+
+message GetCostForecastRequest {
+  // Required. Forecast Id
+  string id = 1;
+}
+
+message GetCostForecastResponse {
+  string id = 1;
+  string forecastName = 2;
+  string description = 3;
+  api.cover.CostGroup costGroup = 4;
+  int64 pastActualCostRange = 5;
+  int64 lookForwardPeriod = 6;
+  repeated api.cover.ExternalAdjustment externalAdjustments = 7;
+  string createdBy = 8;
+  string creationDate = 9;
+  string lastUpdatedDate = 10;
+}
+
+message UpdateCostForecastRequest {
+  // Required. Forecast Id
+  string id = 1;
+
+  // Optional. Name of the forecast
+  string forecastName = 2;
+
+  // Optional. Description of the forecast
+  string description = 3;
+
+  // Optional. Cost Group Id and Name
+  api.cover.CostGroup costGroup = 4;
+
+  // Optional. The range of past actual cost to be used in forecasting. Valid values are: '1', '3', '6', and '12' (in months)
+  int64 pastActualCostRange = 5;
+
+  // Optional. The number of months to look forward in the forecast. Valid values are: '1', '3', '6', and '12' (in months)
+  int64 lookForwardPeriod = 6;
+
+  // Optional.
+  repeated api.cover.ExternalAdjustment externalAdjustments = 7;
+}
+
+message UpdateCostForecastResponse {
+  string id = 1;
+  string forecastName = 2;
+  string description = 3;
+  api.cover.CostGroup costGroup = 4;
+  int64 pastActualCostRange = 5;
+  int64 lookForwardPeriod = 6;
+  repeated api.cover.ExternalAdjustment externalAdjustments = 7;
+  string createdBy = 8;
+  string creationDate = 9;
+  string lastUpdatedDate = 10;
+}
+
+message DeleteCostForecastRequest {
+  // Required. Forecast Id
+  string id = 1;
+}
+
+message DeleteCostForecastResponse {
+  string id = 1;
 }
 
 message GetCostUsageV2Response {
