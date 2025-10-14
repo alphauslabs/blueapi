@@ -56,7 +56,7 @@
     },
     {
       "name": "Cover",
-      "description": "(ALPHA) Cover API. Base URL: https://api.alphaus.cloud/m/blue/cover",
+      "description": "(BETA) Cover API. Base URL: https://api.alphaus.cloud/m/blue/cover",
       "externalDocs": {
         "description": "Service definition",
         "url": "https://github.com/alphauslabs/blueapi/tree/main/cover/"
@@ -12017,6 +12017,38 @@
         ]
       }
     },
+    "/v1/reports/resources/untagged:read": {
+      "post": {
+        "operationId": "Cover_ListUntaggedResources",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListUntaggedResourcesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListUntaggedResourcesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/reportschedule": {
       "post": {
         "operationId": "Prism_CreateReportSchedule",
@@ -22655,6 +22687,24 @@
         },
         "vendor": {
           "type": "string"
+        }
+      }
+    },
+    "ListUntaggedResourcesResponseUntaggedResources": {
+      "type": "object",
+      "properties": {
+        "resource": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "account": {
+          "type": "string"
+        },
+        "cost": {
+          "type": "number",
+          "format": "double"
         }
       }
     },
@@ -38475,6 +38525,41 @@
         }
       },
       "title": "Response message for ListUnregisteredAccounts"
+    },
+    "v1ListUntaggedResourcesRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. At the moment, only `aws` is supported."
+        },
+        "costGroupId": {
+          "type": "string",
+          "description": "Required. Cost Group Id."
+        },
+        "fromDate": {
+          "type": "string",
+          "description": "Optional. The start date of the displayed data. If not set, the first day of the current month will be used. Format: yyyy-mm-dd."
+        },
+        "toDate": {
+          "type": "string",
+          "description": "Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd."
+        }
+      },
+      "title": "Request message for ListUntaggedResources"
+    },
+    "v1ListUntaggedResourcesResponse": {
+      "type": "object",
+      "properties": {
+        "untaggedResources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ListUntaggedResourcesResponseUntaggedResources"
+          }
+        }
+      },
+      "title": "Response message for ListUntaggedResources"
     },
     "v1ListUserRoleMappingsResponse": {
       "type": "object",

@@ -30,7 +30,7 @@ option java_outer_classname = "CoverProto";
 // Cover service definition.
 service Cover {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
-    description: "(ALPHA) Cover API. Base URL: https://api.alphaus.cloud/m/blue/cover"
+    description: "(BETA) Cover API. Base URL: https://api.alphaus.cloud/m/blue/cover"
     external_docs: {
       url: "https://github.com/alphauslabs/blueapi/tree/main/cover/";
       description: "Service definition";
@@ -1443,6 +1443,13 @@ service Cover {
   rpc ListNonperformingRate(ListNonperformingRateRequest) returns (ListNonperformingRateResponse) {
     option (google.api.http) = {
       post: "/v1/reports/rate/nonperforming:read"
+      body: "*"
+    };
+  }
+
+  rpc ListUntaggedResources(ListUntaggedResourcesRequest) returns (ListUntaggedResourcesResponse) {
+    option (google.api.http) = {
+      post: "/v1/reports/resources/untagged:read"
       body: "*"
     };
   }
@@ -4629,4 +4636,30 @@ message ListNonperformingRateResponse {
     double waste = 4;
   }
   repeated Nonperforming nonperforming = 1;
+}
+
+// Request message for ListUntaggedResources
+message ListUntaggedResourcesRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Cost Group Id.
+  string costGroupId = 2;
+
+  // Optional. The start date of the displayed data. If not set, the first day of the current month will be used. Format: yyyy-mm-dd.
+  string fromDate = 3;
+
+  // Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd.
+  string toDate = 4;
+}
+
+// Response message for ListUntaggedResources
+message ListUntaggedResourcesResponse {
+  message UntaggedResources {
+    string resource = 1;
+    string service = 2;
+    string account = 3;
+    double cost = 4;
+  }
+  repeated UntaggedResources untaggedResources = 1;
 }
