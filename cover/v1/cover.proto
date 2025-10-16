@@ -4640,7 +4640,7 @@ message ListNonperformingRateResponse {
 
 // Request message for ListUntaggedResources
 message ListUntaggedResourcesRequest {
-  // Required. At the moment, only `aws` is supported.
+  // Required. 
   string vendor = 1;
 
   // Required. Cost Group Id.
@@ -4651,6 +4651,9 @@ message ListUntaggedResourcesRequest {
 
   // Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd.
   string toDate = 4;
+
+  // Optional. The number of top untagged resources to be displayed. If not set, top 10 untagged resources are returned.
+  int64 limit = 5;
 }
 
 // Response message for ListUntaggedResources
@@ -4658,8 +4661,10 @@ message ListUntaggedResourcesResponse {
   message UntaggedResources {
     string resource = 1;
     string service = 2;
-    string account = 3;
-    double cost = 4;
+    string accountId = 3;
+    string costGroup = 4;
+    double cost = 5;
+    string vendor = 6;
   }
   repeated UntaggedResources untaggedResources = 1;
 }

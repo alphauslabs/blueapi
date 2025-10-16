@@ -22699,12 +22699,18 @@
         "service": {
           "type": "string"
         },
-        "account": {
+        "accountId": {
+          "type": "string"
+        },
+        "costGroup": {
           "type": "string"
         },
         "cost": {
           "type": "number",
           "format": "double"
+        },
+        "vendor": {
+          "type": "string"
         }
       }
     },
@@ -38531,7 +38537,7 @@
       "properties": {
         "vendor": {
           "type": "string",
-          "description": "Required. At the moment, only `aws` is supported."
+          "description": "Required."
         },
         "costGroupId": {
           "type": "string",
@@ -38544,6 +38550,11 @@
         "toDate": {
           "type": "string",
           "description": "Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd."
+        },
+        "limit": {
+          "type": "string",
+          "format": "int64",
+          "description": "Optional. The number of top untagged resources to be displayed. If not set, top 10 untagged resources are returned."
         }
       },
       "title": "Request message for ListUntaggedResources"
