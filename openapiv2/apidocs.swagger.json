@@ -8517,6 +8517,47 @@
         ]
       }
     },
+    "/v1/forecasts/data:read": {
+      "post": {
+        "operationId": "Cover_GetCostForecastsData",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1GetCostForecastsDataResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1GetCostForecastsDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetCostForecastsDataRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/forecasts/{id}": {
       "get": {
         "operationId": "Cover_GetCostForecast",
@@ -36072,6 +36113,55 @@
         },
         "lastUpdatedDate": {
           "type": "string"
+        }
+      }
+    },
+    "v1GetCostForecastsDataRequest": {
+      "type": "object",
+      "properties": {
+        "costGroupId": {
+          "type": "string",
+          "title": "Required. Cost Group Id"
+        },
+        "startTime": {
+          "type": "string",
+          "title": "Required. Start Time in 2006-01-02 format"
+        },
+        "endTime": {
+          "type": "string",
+          "title": "Required. End Time in 2006-01-02 format"
+        },
+        "granularity": {
+          "$ref": "#/definitions/v1GetCostForecastsDataRequestGranularity"
+        }
+      }
+    },
+    "v1GetCostForecastsDataRequestGranularity": {
+      "type": "string",
+      "enum": [
+        "GRANULARITY_UNSPECIFIED",
+        "DAILY",
+        "MONTHLY"
+      ],
+      "default": "GRANULARITY_UNSPECIFIED"
+    },
+    "v1GetCostForecastsDataResponse": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "forecastCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "upperBound": {
+          "type": "number",
+          "format": "double"
+        },
+        "lowerBound": {
+          "type": "number",
+          "format": "double"
         }
       }
     },
