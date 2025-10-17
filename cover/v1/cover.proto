@@ -1486,7 +1486,36 @@ service Cover {
       delete: "/v1/forecasts/{id}"
     };
   }
-  
+
+  rpc GetCostForecastsData(GetCostForecastsDataRequest) returns (stream GetCostForecastsDataResponse) {
+    option (google.api.http) = {
+      post: "/v1/forecasts/data:read"
+      body: "*"
+    };
+  }
+}
+
+message GetCostForecastsDataRequest {
+  enum Granularity {
+    GRANULARITY_UNSPECIFIED = 0;
+    DAILY = 1;
+    MONTHLY = 2;
+  }
+
+  // Required. Cost Group Id
+  string costGroupId = 1;
+  // Required. Start Time in 2006-01-02 format
+  string startTime = 2;
+  // Required. End Time in 2006-01-02 format
+  string endTime = 3; 
+  Granularity granularity = 4; 
+}
+
+message GetCostForecastsDataResponse {
+    string date = 1;
+    double forecastCost = 2;
+    double upperBound = 3;
+    double lowerBound = 4;
 }
 
 message ListForecastsRequest {}
