@@ -40,10 +40,17 @@ service Billing {
     }
   };
 
-  // Lists all billing groups.
+  // Lists all billing groups (streamed).
   rpc ListBillingGroups(ListBillingGroupsRequest) returns (stream BillingGroup) {
     option (google.api.http) = {
       get: "/v1/billinggroups"
+    };
+  }
+
+  // Lists all billing groups with pagination support.
+  rpc ListBillingGroupsPaginated(ListBillingGroupsPaginatedRequest) returns (ListBillingGroupsPaginatedResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/paginated"
     };
   }
 
@@ -3057,4 +3064,78 @@ message ConvertInvoiceToPdfResponse {
   // returns "" when not ready
   // returns the direct download link
   string downloadUrl = 2;
+}
+
+// ============================================================================
+// Paginated Billing Groups API Messages
+// ============================================================================
+
+// Request message for the Billing.ListBillingGroupsPaginated rpc.
+message ListBillingGroupsPaginatedRequest {
+  // Optional. Get only the value that set fieldMask.
+  //
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask field_mask = 1;
+
+  // Optional. Filter vendor accounts included in BillingGroup. Format: vendors=vendor1,vendor2,vendor3.
+  // For example, When Aws and Gcp to be filtered vendors=aws,gcp
+  // If you want to get all vendors, not set parameter.
+  string vendors = 2;
+
+  // Optional. Filter by calcType. Format: calType=account
+  // Valid values: account, tag
+  string calcType = 3;
+
+  // Optional. Filter by displayCost. Format: displayCost=unblended_cost
+  // valid values: unblended_cost, true_unblended_cost
+  string displayCost = 4;
+    
+  // Optional. For aws only, filter will be ignored for other vendors.
+  // Valid values: default, imported
+  string bgType = 5;
+
+  // Optional. Filter by company name.
+  string companyName = 6;
+
+  // Optional. Filter by billing group name.
+  string billingGroupName = 7;
+
+  // Optional. Filter by billing group id.
+  string billingGroupId = 8;
+
+  // Optional. Page size for pagination. Default is 50, maximum is 1000.
+  int32 pageSize = 9;
+
+  // Optional. Page token for pagination. Use the next_page_token from the previous response.
+  string pageToken = 10;
+}
+
+// Response message for the Billing.ListBillingGroupsPaginated rpc.
+message ListBillingGroupsPaginatedResponse {
+  // List of billing groups.
+  repeated BillingGroup billingGroups = 1;
+
+  // Total count of billing groups matching the filters.
+  int32 totalCount = 2;
+
+  // Current page size.
+  int32 pageSize = 3;
+
+  // Links for pagination navigation.
+  PaginationLinks links = 4;
+}
+
+// Pagination links for navigation.
+message PaginationLinks {
+  // URL for the next page. Empty if no more pages.
+  string next = 1;
+
+  // URL for the previous page. Empty if on the first page.
+  string prev = 2;
+
+  // URL for the first page.
+  string first = 3;
+
+  // URL for the last page.
+  string last = 4;
 }
