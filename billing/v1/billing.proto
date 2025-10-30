@@ -3106,8 +3106,8 @@ message ListBillingGroupsPaginatedRequest {
   // Optional. Page size for pagination. Default is 50, maximum is 1000.
   int32 pageSize = 9;
 
-  // Optional. Page token for pagination. Use the next_page_token from the previous response.
-  string pageToken = 10;
+  // Optional. Page number for pagination. Starts from 1. Default is 1.
+  int32 pageNumber = 10;
 }
 
 // Response message for the Billing.ListBillingGroupsPaginated rpc.
@@ -3118,24 +3118,12 @@ message ListBillingGroupsPaginatedResponse {
   // Total count of billing groups matching the filters.
   int32 totalCount = 2;
 
+  // Current page number (1-based).
+  int32 currentPage = 3;
+
   // Current page size.
-  int32 pageSize = 3;
+  int32 pageSize = 4;
 
-  // Links for pagination navigation.
-  PaginationLinks links = 4;
-}
-
-// Pagination links for navigation.
-message PaginationLinks {
-  // URL for the next page. Empty if no more pages.
-  string next = 1;
-
-  // URL for the previous page. Empty if on the first page.
-  string prev = 2;
-
-  // URL for the first page.
-  string first = 3;
-
-  // URL for the last page.
-  string last = 4;
+  // Total number of pages.
+  int32 totalPages = 5;
 }
