@@ -32727,6 +32727,85 @@
         }
       }
     },
+    "v1BillingListBillingGroupsPaginatedResponse": {
+      "type": "object",
+      "properties": {
+        "billingGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1BillingBillingGroupListItem"
+          },
+          "description": "Flattened rows for the billing groups table."
+        },
+        "totalCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total count of billing groups matching the filters."
+        },
+        "currentPage": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Current page number (1-based)."
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Current page size."
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total number of pages."
+        }
+      }
+    },
+    "v1BillingBillingGroupListItem": {
+      "type": "object",
+      "properties": {
+        "billingGroupName": {
+          "type": "string",
+          "description": "Billing group display name."
+        },
+        "billingGroupId": {
+          "type": "string",
+          "description": "Billing group internal identifier."
+        },
+        "billingInternalId": {
+          "type": "string",
+          "description": "Billing group's internal id reference."
+        },
+        "companyName": {
+          "type": "string",
+          "description": "Company name tied to the billing group."
+        },
+        "billingGroupType": {
+          "type": "string",
+          "description": "Billing group classification (e.g., ACCOUNT, TAG)."
+        },
+        "vendors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1BillingBillingGroupVendor"
+          },
+          "description": "Per-vendor availability list."
+        }
+      },
+      "description": "Response row for paginated billing groups table."
+    },
+    "v1BillingBillingGroupVendor": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Vendor identifier, e.g., aws, azure, gcp."
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Indicates whether the billing group has this vendor active."
+        }
+      },
+      "description": "Vendor availability entry."
+    },
     "v1BillingGroupAccountSupportPlan": {
       "type": "object",
       "properties": {

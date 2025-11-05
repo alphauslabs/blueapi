@@ -3110,10 +3110,40 @@ message ListBillingGroupsPaginatedRequest {
   int32 pageNumber = 10;
 }
 
+// Response row for paginated billing groups table.
+message BillingGroupListItem {
+  // Billing group display name.
+  string billingGroupName = 1;
+
+  // Billing group internal identifier.
+  string billingGroupId = 2;
+
+  // Company name tied to the billing group.
+  string companyName = 3;
+
+  // Billing group classification (e.g., ACCOUNT, TAG).
+  string billingGroupType = 4;
+
+  // Vendor availability entries.
+  message BillingGroupVendor {
+    // Vendor identifier, e.g., aws, azure, gcp.
+    string vendor = 1;
+
+    // Indicates whether the billing group has this vendor active.
+    bool enabled = 2;
+  }
+
+  // Per-vendor availability list.
+  repeated BillingGroupVendor vendors = 5;
+
+  // Billing group's internal id reference.
+  string billingInternalId = 6;
+}
+
 // Response message for the Billing.ListBillingGroupsPaginated rpc.
 message ListBillingGroupsPaginatedResponse {
-  // List of billing groups.
-  repeated BillingGroup billingGroups = 1;
+  // Flattened rows for the billing groups table.
+  repeated BillingGroupListItem billingGroups = 1;
 
   // Total count of billing groups matching the filters.
   int32 totalCount = 2;
