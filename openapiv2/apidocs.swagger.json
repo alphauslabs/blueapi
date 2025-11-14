@@ -18411,6 +18411,55 @@
         ]
       }
     },
+    "/v1/{vendor}/payers/extended": {
+      "get": {
+        "summary": "Lists vendor payer accounts with extended information. WORK IN PROGRESS",
+        "description": "This endpoint returns additional fields beyond the standard ListPayerAccounts response.\nFor AWS, these are management accounts (formerly known as master or payer accounts); for Azure, these are subscriptions, for GCP, these are projects.",
+        "operationId": "Cost_ListPayerAccountsExtended",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1PayerAccountExtended"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1PayerAccountExtended"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "fieldMask",
+            "description": "Optional. Get only the value that set fieldMask.\n\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/{vendor}/payers/{id}": {
       "get": {
         "summary": "Gets a vendor payer account.",
@@ -18479,6 +18528,46 @@
           {
             "name": "id",
             "description": "Required. The id of the account.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/payers/{id}/extended": {
+      "get": {
+        "summary": "Gets a vendor payer account with extended information. WORK IN PROGRESS",
+        "description": "This endpoint returns additional fields beyond the standard GetPayerAccount response.\nFor AWS, this means a management account (formerly known as master or payer account); for Azure, this means a subscription, for GCP, this means a project.",
+        "operationId": "Cost_GetPayerAccountExtended",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PayerAccountExtended"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. The id of the account to get.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -19821,6 +19910,20 @@
         }
       },
       "description": "Request message for the Cost.GetInvoiceRequest rpc."
+    },
+    "BillingGroupListItemBillingGroupVendor": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Vendor identifier, e.g., aws, azure, gcp."
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Indicates whether the billing group has this vendor active."
+        }
+      },
+      "description": "Vendor availability entries."
     },
     "BillingListAccountInvoiceServiceDiscountsBody": {
       "type": "object",
@@ -32727,85 +32830,6 @@
         }
       }
     },
-    "v1BillingListBillingGroupsPaginatedResponse": {
-      "type": "object",
-      "properties": {
-        "billingGroups": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1BillingBillingGroupListItem"
-          },
-          "description": "Flattened rows for the billing groups table."
-        },
-        "totalCount": {
-          "type": "integer",
-          "format": "int32",
-          "description": "Total count of billing groups matching the filters."
-        },
-        "currentPage": {
-          "type": "integer",
-          "format": "int32",
-          "description": "Current page number (1-based)."
-        },
-        "pageSize": {
-          "type": "integer",
-          "format": "int32",
-          "description": "Current page size."
-        },
-        "totalPages": {
-          "type": "integer",
-          "format": "int32",
-          "description": "Total number of pages."
-        }
-      }
-    },
-    "v1BillingBillingGroupListItem": {
-      "type": "object",
-      "properties": {
-        "billingGroupName": {
-          "type": "string",
-          "description": "Billing group display name."
-        },
-        "billingGroupId": {
-          "type": "string",
-          "description": "Billing group internal identifier."
-        },
-        "billingInternalId": {
-          "type": "string",
-          "description": "Billing group's internal id reference."
-        },
-        "companyName": {
-          "type": "string",
-          "description": "Company name tied to the billing group."
-        },
-        "billingGroupType": {
-          "type": "string",
-          "description": "Billing group classification (e.g., ACCOUNT, TAG)."
-        },
-        "vendors": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1BillingBillingGroupVendor"
-          },
-          "description": "Per-vendor availability list."
-        }
-      },
-      "description": "Response row for paginated billing groups table."
-    },
-    "v1BillingBillingGroupVendor": {
-      "type": "object",
-      "properties": {
-        "vendor": {
-          "type": "string",
-          "description": "Vendor identifier, e.g., aws, azure, gcp."
-        },
-        "enabled": {
-          "type": "boolean",
-          "description": "Indicates whether the billing group has this vendor active."
-        }
-      },
-      "description": "Vendor availability entry."
-    },
     "v1BillingGroupAccountSupportPlan": {
       "type": "object",
       "properties": {
@@ -32883,6 +32907,40 @@
         }
       },
       "description": "Invoice settings for a billing group."
+    },
+    "v1BillingGroupListItem": {
+      "type": "object",
+      "properties": {
+        "billingGroupName": {
+          "type": "string",
+          "description": "Billing group display name."
+        },
+        "billingGroupId": {
+          "type": "string",
+          "description": "Billing group internal identifier."
+        },
+        "companyName": {
+          "type": "string",
+          "description": "Company name tied to the billing group."
+        },
+        "billingGroupType": {
+          "type": "string",
+          "description": "Billing group classification (e.g., ACCOUNT, TAG)."
+        },
+        "vendors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/BillingGroupListItemBillingGroupVendor"
+          },
+          "description": "Per-vendor availability list."
+        },
+        "billingInternalId": {
+          "type": "string",
+          "description": "Billing group's internal id reference."
+        }
+      },
+      "description": "Response row for paginated billing groups table."
     },
     "v1BillingGroupSection": {
       "type": "object",
@@ -38235,9 +38293,9 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1BillingGroup"
+            "$ref": "#/definitions/v1BillingGroupListItem"
           },
-          "description": "List of billing groups."
+          "description": "Flattened rows for the billing groups table."
         },
         "totalCount": {
           "type": "integer",
@@ -38294,7 +38352,8 @@
           },
           "description": "Repeated list of calculation prerequisites."
         }
-      }
+      },
+      "description": "Response message for the ListCalculationPrerequisites rpc."
     },
     "v1ListCalculationsHistoryAwsResponse": {
       "type": "object",
@@ -39224,6 +39283,68 @@
           "type": "string"
         }
       }
+    },
+    "v1PayerAccountExtended": {
+      "type": "object",
+      "properties": {
+        "payer": {
+          "$ref": "#/definitions/ripplePayer",
+          "title": "Standard payer account information includes: vendor, id, name, orgId, billingInternalId, and metadata array"
+        },
+        "target": {
+          "type": "string",
+          "description": "The target payer account ID (from extended response)."
+        },
+        "roleArn": {
+          "type": "string",
+          "description": "The IAM role ARN for cost access (from payer.metadata or extended response)."
+        },
+        "externalId": {
+          "type": "string",
+          "description": "The external ID used for assuming the role (if applicable)."
+        },
+        "stackId": {
+          "type": "string",
+          "description": "The CloudFormation stack ID (if using stack-based deployment)."
+        },
+        "stackRegion": {
+          "type": "string",
+          "description": "The AWS region where the CloudFormation stack is deployed."
+        },
+        "templateUrl": {
+          "type": "string",
+          "description": "The CloudFormation template URL used for deployment."
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the payer setup. Comma-separated values such as 'curOnly,manualExport', etc."
+        },
+        "lastUpdated": {
+          "type": "string",
+          "description": "The timestamp when the payer configuration was last updated in RFC3339 format."
+        },
+        "bucketName": {
+          "type": "string",
+          "description": "S3 bucket name (from payer.metadata)."
+        },
+        "prefix": {
+          "type": "string",
+          "description": "S3 prefix (from payer.metadata)."
+        },
+        "reportName": {
+          "type": "string",
+          "description": "CUR report name (from payer.metadata)."
+        },
+        "defaultCostAccessRoleArn": {
+          "type": "string",
+          "description": "Default cost access role ARN (from payer.metadata)."
+        },
+        "curType": {
+          "type": "string",
+          "description": "The CUR type for AWS payers. Valid values are `legacy` and `2.0` (from payer.metadata)."
+        }
+      },
+      "description": "Extended payer account information with additional metadata."
     },
     "v1PeriodOverPeriodOptionSection": {
       "type": "object",
