@@ -76,6 +76,26 @@ service Cost {
     };
   }
 
+    // Lists vendor payer accounts with extended information. WORK IN PROGRESS
+  //
+  // This endpoint returns additional fields beyond the standard ListPayerAccounts response.
+  // For AWS, these are management accounts (formerly known as master or payer accounts); for Azure, these are subscriptions, for GCP, these are projects.
+  rpc ListPayerAccountsExtended(ListPayerAccountsRequest) returns (stream PayerAccountExtended) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/payers/extended"
+    };
+  }
+
+  // Gets a vendor payer account with extended information. WORK IN PROGRESS
+  //
+  // This endpoint returns additional fields beyond the standard GetPayerAccount response.
+  // For AWS, this means a management account (formerly known as master or payer account); for Azure, this means a subscription, for GCP, this means a project.
+  rpc GetPayerAccountExtended(GetPayerAccountRequest) returns (PayerAccountExtended) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/payers/{id}/extended"
+    };
+  }
+
   // Gets a payer account's import history.
   //
   // Import history is a list of timestamps our system tracks when the account's data are imported to our system, which in turn, triggers processing. At the moment, this only supports AWS (CUR files). You can also set `{id}` to `*` to return all payers' information under the organization.
@@ -637,6 +657,51 @@ message GetPayerAccountRequest {
 
   // Required. The id of the account to get.
   string id = 2;
+}
+
+// Extended payer account information with additional metadata.
+message PayerAccountExtended {
+  // Standard payer account information includes: vendor, id, name, orgId, billingInternalId, and metadata array
+  api.ripple.Payer payer = 1;
+
+  // The target payer account ID (from extended response).
+  string target = 2;
+
+  // The IAM role ARN for cost access (from payer.metadata or extended response).
+  string roleArn = 3;
+
+  // The external ID used for assuming the role (if applicable).
+  string externalId = 4;
+
+  // The CloudFormation stack ID (if using stack-based deployment).
+  string stackId = 5;
+
+  // The AWS region where the CloudFormation stack is deployed.
+  string stackRegion = 6;
+
+  // The CloudFormation template URL used for deployment.
+  string templateUrl = 7;
+
+  // The current status of the payer setup. Comma-separated values such as 'curOnly,manualExport', etc.
+  string status = 8;
+
+  // The timestamp when the payer configuration was last updated in RFC3339 format.
+  string lastUpdated = 9;
+
+  // S3 bucket name (from payer.metadata).
+  string bucketName = 10;
+
+  // S3 prefix (from payer.metadata).
+  string prefix = 11;
+
+  // CUR report name (from payer.metadata).
+  string reportName = 12;
+
+  // Default cost access role ARN (from payer.metadata).
+  string defaultCostAccessRoleArn = 13;
+
+  // The CUR type for AWS payers. Valid values are `legacy` and `2.0` (from payer.metadata).
+  string curType = 14;
 }
 
 // Request message for the Cost.GetPayerAccountImportHistory rpc.
@@ -2415,6 +2480,7 @@ message CalculationPrerequisite {
   string cur_type = 6;
 }
 
+// Response message for the ListCalculationPrerequisites rpc.
 message ListCalculationPrerequisitesResponse {
   // Repeated list of calculation prerequisites.
   repeated CalculationPrerequisite prerequisites = 1;
