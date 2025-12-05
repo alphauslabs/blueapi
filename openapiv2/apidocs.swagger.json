@@ -18418,55 +18418,6 @@
         ]
       }
     },
-    "/v1/{vendor}/payers/extended": {
-      "get": {
-        "summary": "Lists vendor payer accounts with extended information. WORK IN PROGRESS",
-        "description": "This endpoint returns additional fields beyond the standard ListPayerAccounts response.\nFor AWS, these are management accounts (formerly known as master or payer accounts); for Azure, these are subscriptions, for GCP, these are projects.",
-        "operationId": "Cost_ListPayerAccountsExtended",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1PayerAccountExtended"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1PayerAccountExtended"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "fieldMask",
-            "description": "Optional. Get only the value that set fieldMask.\n\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
     "/v1/{vendor}/payers/{id}": {
       "get": {
         "summary": "Gets a vendor payer account.",
@@ -18535,46 +18486,6 @@
           {
             "name": "id",
             "description": "Required. The id of the account.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
-    "/v1/{vendor}/payers/{id}/extended": {
-      "get": {
-        "summary": "Gets a vendor payer account with extended information. WORK IN PROGRESS",
-        "description": "This endpoint returns additional fields beyond the standard GetPayerAccount response.\nFor AWS, this means a management account (formerly known as master or payer account); for Azure, this means a subscription, for GCP, this means a project.",
-        "operationId": "Cost_GetPayerAccountExtended",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1PayerAccountExtended"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "Required. The id of the account to get.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -18670,6 +18581,95 @@
           {
             "name": "id",
             "description": "Required. The account id to query.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/payersextended": {
+      "get": {
+        "summary": "Lists vendor payer accounts with extended information. WORK IN PROGRESS",
+        "description": "This endpoint returns additional fields beyond the standard ListPayerAccounts response.\nFor AWS, these are management accounts (formerly known as master or payer accounts); for Azure, these are subscriptions, for GCP, these are projects.",
+        "operationId": "Cost_ListPayerAccountsExtended",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1PayerAccountExtended"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1PayerAccountExtended"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "fieldMask",
+            "description": "Optional. Get only the value that set fieldMask.\n\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/payersextended/{id}": {
+      "get": {
+        "summary": "Gets a vendor payer account with extended information. WORK IN PROGRESS",
+        "description": "This endpoint returns additional fields beyond the standard GetPayerAccount response.\nFor AWS, this means a management account (formerly known as master or payer account); for Azure, this means a subscription, for GCP, this means a project.",
+        "operationId": "Cost_GetPayerAccountExtended",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PayerAccountExtended"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. The id of the account to get.",
             "in": "path",
             "required": true,
             "type": "string"
