@@ -1493,6 +1493,79 @@ service Cover {
       body: "*"
     };
   }
+
+  rpc GetRecommendationV3(GetRecommendationV3Request) returns (GetRecommendationV3Response) {
+    option (google.api.http) = {
+      get: "/v1/recommendations"
+    };
+  }
+
+  rpc ListRecommendationsV3(ListRecommendationsV3Request) returns (stream RecommendationSummary) {
+    option (google.api.http) = {
+      post: "/v1/recommendations/summaries"
+      body: "*"
+    };
+  }
+}
+
+message ListRecommendationsV3Request {
+  string costgroupId = 1;
+  optional string dateDetected = 2;
+  optional string dateStart = 3;
+  optional string dateEnd = 4;
+}
+
+message RecommendationSummary {
+  string id = 1;
+  string name = 2;
+  string target = 3;
+  string targetName = 18;
+  string category = 4;
+  string type = 5;
+  string vendor = 13;
+  string code = 14;
+  optional string service = 15;
+  optional string region = 16;
+  optional string resourceId = 17;
+  double estimatedMonthlySavings = 6;
+  double estimatedMonthlyBeforeCost = 7;
+  double estimatedMonthlyAfterCost = 8;
+  optional string risk = 9;
+  optional string effort = 10;
+  string status = 11;
+  google.protobuf.Struct additionalDetails = 12;
+}
+
+message GetRecommendationV3Request {
+  repeated string ids = 1;
+}
+
+message GetRecommendationV3Response {
+  message RecommendationDetail {
+    string id = 1;
+    string name = 9;
+    string vendor = 2;
+    string source = 3;
+    string code = 4;
+    optional string service = 5;
+    string target = 7;
+    string targetName = 8;
+    string dateDetected = 6;
+    optional string region = 10;
+    double estimatedMonthlyBeforeCost = 11;
+    double estimatedMonthlyAfterCost = 12;
+    double estimatedMonthlySavings = 13;
+    optional string resourceId = 14;
+    string category = 15;
+    string type = 16;
+    string lastUpdated = 17;
+    string status = 18;
+    optional string risk = 19;
+    optional string effort = 20;
+    google.protobuf.Struct details = 21;
+  }
+
+  repeated RecommendationDetail recommendations = 1;
 }
 
 message GetCostForecastsDataRequest {

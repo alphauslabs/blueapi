@@ -11550,6 +11550,40 @@
         ]
       }
     },
+    "/v1/recommendations": {
+      "get": {
+        "operationId": "Cover_GetRecommendationV3",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetRecommendationV3Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/recommendations/all:read": {
       "post": {
         "summary": "Lists recommendations based on specified criteria.",
@@ -12009,6 +12043,47 @@
             "in": "query",
             "required": false,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/recommendations/summaries": {
+      "post": {
+        "operationId": "Cover_ListRecommendationsV3",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1RecommendationSummary"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1RecommendationSummary"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListRecommendationsV3Request"
+            }
           }
         ],
         "tags": [
@@ -25598,6 +25673,28 @@
         }
       }
     },
+    "apicoverRecommendationDetail": {
+      "type": "object",
+      "properties": {
+        "recommendation": {
+          "type": "string"
+        },
+        "recommendedResourceType": {
+          "type": "string"
+        },
+        "estimatedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "region": {
+          "type": "string"
+        }
+      }
+    },
     "apicoverRedshiftDetails": {
       "type": "object",
       "properties": {
@@ -29167,28 +29264,6 @@
         }
       }
     },
-    "coverRecommendationDetail": {
-      "type": "object",
-      "properties": {
-        "recommendation": {
-          "type": "string"
-        },
-        "recommendedResourceType": {
-          "type": "string"
-        },
-        "estimatedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "estimatedSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "region": {
-          "type": "string"
-        }
-      }
-    },
     "coverRedshiftOptions": {
       "type": "object",
       "properties": {
@@ -29259,7 +29334,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/coverRecommendationDetail"
+            "$ref": "#/definitions/apicoverRecommendationDetail"
           }
         },
         "currentCost": {
@@ -37542,6 +37617,89 @@
         }
       }
     },
+    "v1GetRecommendationV3Response": {
+      "type": "object",
+      "properties": {
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GetRecommendationV3ResponseRecommendationDetail"
+          }
+        }
+      }
+    },
+    "v1GetRecommendationV3ResponseRecommendationDetail": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "targetName": {
+          "type": "string"
+        },
+        "dateDetected": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "estimatedMonthlyBeforeCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedMonthlyAfterCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedMonthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "resourceId": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "lastUpdated": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "risk": {
+          "type": "string"
+        },
+        "effort": {
+          "type": "string"
+        },
+        "details": {
+          "type": "object"
+        }
+      }
+    },
     "v1GetRecommendationsRequestAwsOptions": {
       "type": "object",
       "properties": {
@@ -38808,6 +38966,23 @@
         }
       }
     },
+    "v1ListRecommendationsV3Request": {
+      "type": "object",
+      "properties": {
+        "costgroupId": {
+          "type": "string"
+        },
+        "dateDetected": {
+          "type": "string"
+        },
+        "dateStart": {
+          "type": "string"
+        },
+        "dateEnd": {
+          "type": "string"
+        }
+      }
+    },
     "v1ListReportSchedulesRequest": {
       "type": "object"
     },
@@ -40051,6 +40226,68 @@
         }
       },
       "description": "A map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
+    },
+    "v1RecommendationSummary": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "targetName": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "resourceId": {
+          "type": "string"
+        },
+        "estimatedMonthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedMonthlyBeforeCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "estimatedMonthlyAfterCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "risk": {
+          "type": "string"
+        },
+        "effort": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "additionalDetails": {
+          "type": "object"
+        }
+      }
     },
     "v1RegisterAccounts": {
       "type": "object",
