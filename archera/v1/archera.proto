@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package blueapi.archera.v1;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/archera";
+option java_package = "cloud.alphaus.api.archera";
+option java_outer_classname = "ArcheraProto";
+
+// Archera service definition.
+service Archera {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "(Alpha) Archera API. Base URL: https://api.alphaus.cloud/m/blue/archera"
+    external_docs: {
+      url: "https://github.com/alphauslabs/blueapi/tree/main/archera/";
+      description: "Service definition";
+    }
+  };
+
+  rpc ListOrgs(ListOrgsRequest) returns (stream Org) {
+    option (google.api.http) = {
+      post: "/v1/organizations:read"
+      body: "*"
+    };
+  }
+}
+
+message Org {
+  string orgId = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message ListOrgsRequest {}
