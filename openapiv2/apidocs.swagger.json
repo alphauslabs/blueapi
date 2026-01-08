@@ -95,6 +95,14 @@
       }
     },
     {
+      "name": "Archera",
+      "description": "(Alpha) Archera API. Base URL: https://api.alphaus.cloud/m/blue/archera",
+      "externalDocs": {
+        "description": "Service definition",
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/archera/"
+      }
+    },
+    {
       "name": "Preferences",
       "description": "(BETA) Preferences API. Base URL: https://api.alphaus.cloud/m/blue",
       "externalDocs": {
@@ -2431,7 +2439,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/rippleOrg"
+              "$ref": "#/definitions/apirippleOrg"
             }
           },
           "default": {
@@ -11188,6 +11196,47 @@
         ],
         "tags": [
           "Cover"
+        ]
+      }
+    },
+    "/v1/organizations:read": {
+      "post": {
+        "operationId": "Archera_ListOrgs",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/archerav1Org"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of archerav1Org"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListOrgsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Archera"
         ]
       }
     },
@@ -25853,6 +25902,27 @@
       },
       "description": "AccessGroup resource definition."
     },
+    "apirippleOrg": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The unique name (or id) of the organization."
+        },
+        "email": {
+          "type": "string",
+          "description": "The registered email of the organization."
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "The metadata (key/value pair) of the organization. If hierarchy is supported, it will be\nseparated by '/', such as 'metakey/subkey=value'. See https://alphauslabs.github.io/blueapi/\nfor the list of supported attributes."
+        }
+      },
+      "description": "Org resource definition."
+    },
     "apiripplev1InvoiceServiceDiscounts": {
       "type": "object",
       "properties": {
@@ -25948,6 +26018,20 @@
         }
       },
       "description": "Notification resource definition."
+    },
+    "archerav1Org": {
+      "type": "object",
+      "properties": {
+        "orgId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
     },
     "awsAWSResourceDetailsEBSDetails": {
       "type": "object",
@@ -27315,7 +27399,7 @@
       "type": "object",
       "properties": {
         "org": {
-          "$ref": "#/definitions/rippleOrg"
+          "$ref": "#/definitions/apirippleOrg"
         },
         "password": {
           "type": "string"
@@ -31296,27 +31380,6 @@
         }
       },
       "description": "MethodConfig resource definition."
-    },
-    "rippleOrg": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "The unique name (or id) of the organization."
-        },
-        "email": {
-          "type": "string",
-          "description": "The registered email of the organization."
-        },
-        "metadata": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "The metadata (key/value pair) of the organization. If hierarchy is supported, it will be\nseparated by '/', such as 'metakey/subkey=value'. See https://alphauslabs.github.io/blueapi/\nfor the list of supported attributes."
-        }
-      },
-      "description": "Org resource definition."
     },
     "ripplePayer": {
       "type": "object",
@@ -38815,6 +38878,9 @@
         }
       },
       "description": "Response message for the Admin.ListNotifications rpc."
+    },
+    "v1ListOrgsRequest": {
+      "type": "object"
     },
     "v1ListPermissionsResponse": {
       "type": "object",
