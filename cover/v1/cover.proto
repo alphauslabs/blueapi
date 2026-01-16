@@ -1506,6 +1506,28 @@ service Cover {
       body: "*"
     };
   }
+
+  rpc ExecuteRecommendationV3(ExecuteRecommendationV3Request) returns (ExecuteRecommendationV3Response) {
+    option (google.api.http) = {
+      post: "/v1/recommendation/execute"
+      body: "*"
+    };
+  }
+}
+
+message ExecuteRecommendationV3Request {
+  enum ExecuteType {
+    DEFAULT = 0;
+    MARK_AS_EXECUTED = 1;
+    UNDO_EXECUTED = 2;
+
+  }
+  repeated string recommendationIds = 1;
+  ExecuteType executeType = 2;
+}
+
+message ExecuteRecommendationV3Response {
+
 }
 
 message ListRecommendationsV3Request {
@@ -1513,6 +1535,7 @@ message ListRecommendationsV3Request {
   optional string dateDetected = 2;
   optional string dateStart = 3;
   optional string dateEnd = 4;
+  repeated string statuses = 5;
 }
 
 message RecommendationSummary {

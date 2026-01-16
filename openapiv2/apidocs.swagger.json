@@ -11599,6 +11599,38 @@
         ]
       }
     },
+    "/v1/recommendation/execute": {
+      "post": {
+        "operationId": "Cover_ExecuteRecommendationV3",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ExecuteRecommendationV3Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ExecuteRecommendationV3Request"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/recommendations": {
       "get": {
         "operationId": "Cover_GetRecommendationV3",
@@ -22614,6 +22646,15 @@
     },
     "ExecuteOptimizationResponseGCPOption": {
       "type": "object"
+    },
+    "ExecuteRecommendationV3RequestExecuteType": {
+      "type": "string",
+      "enum": [
+        "DEFAULT",
+        "MARK_AS_EXECUTED",
+        "UNDO_EXECUTED"
+      ],
+      "default": "DEFAULT"
     },
     "FilterCriteriaFilterOperator": {
       "type": "string",
@@ -35726,6 +35767,23 @@
         }
       }
     },
+    "v1ExecuteRecommendationV3Request": {
+      "type": "object",
+      "properties": {
+        "recommendationIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "executeType": {
+          "$ref": "#/definitions/ExecuteRecommendationV3RequestExecuteType"
+        }
+      }
+    },
+    "v1ExecuteRecommendationV3Response": {
+      "type": "object"
+    },
     "v1ExportAccountInvoiceServiceDiscountsRequest": {
       "type": "object",
       "properties": {
@@ -39046,6 +39104,12 @@
         },
         "dateEnd": {
           "type": "string"
+        },
+        "statuses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
