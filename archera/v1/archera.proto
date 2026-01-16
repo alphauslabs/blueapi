@@ -3,6 +3,7 @@ syntax = "proto3";
 package blueapi.archera.v1;
 
 import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/archera";
@@ -25,7 +26,321 @@ service Archera {
       body: "*"
     };
   }
+  
+  // ####################### COMMITMENT PLANS #######################
+
+  // Retrieves detailed information about a specific commitment plan, including costs, savings projections, and commitment coverage.
+  rpc GetCommitmentPlanDetails(GetCommitmentPlanDetailsRequest) returns (CommitmentPlanDetails) {
+    option (google.api.http) = {
+      get: "/v1/org/{orgId}/commitment-plans/{planId}"
+    };
+  }
+
+  // Executes a commitment purchase plan, initiating the commitment purchase process.
+  rpc CommitmentPlanApply(CommitmentPlanApplyRequest) returns (CommitmentPlanDetails) {
+    option (google.api.http) = {
+      post: "/v1/org/{orgId}/commitment-plans/{planId}/apply"
+      body: "*"
+    };
+  }
+
+  // Retrieves the three default Archera commitment plans (High Savings, Balanced, Recommended) for the specified cloud provider.
+  rpc ListDefaultCommitmentPlans(ListDefaultCommitmentPlansRequest) returns (ListDefaultCommitmentPlansResponse) {
+    option (google.api.http) = {
+      get: "/v1/org/{orgId}/commitment-plans/default"
+    };
+  }
+
+  // Retrieves only the recommended Archera commitment plan for the specified cloud provider.
+  rpc GetRecommendedCommitmentPlan(GetRecommendedCommitmentPlanRequest) returns (CommitmentPlanDetails) {
+    option (google.api.http) = {
+      get: "/v1/org/{orgId}/commitment-plans/recommended"
+    };
+  }
+
+  // Retrieves line items for a specific commitment plan.
+  rpc ListCommitmentPlanLineItems(ListCommitmentPlanLineItemsRequest) returns (ListCommitmentPlanLineItemsResponse) {
+    option (google.api.http) = {
+      get: "/v1/org/{orgId}/commitment-plans/{planId}/line-items"
+    };
+  }
+
+  // Retrieves resource matches for a specific commitment plan.
+  rpc ListCommitmentPlanResourceMatches(ListCommitmentPlanResourceMatchesRequest) returns (ListCommitmentPlanResourceMatchesResponse) {
+    option (google.api.http) = {
+      get: "/v1/org/{orgId}/commitment-plans/{planId}/resource-matches"
+    };
+  }
+
+  // ####################### COMMITMENTS #######################
+
+  // Retrieves a paginated list of commitments for the specified organization and time period.
+  rpc ListCommitments(ListCommitmentsRequest) returns (ListCommitmentsResponse) {
+    option (google.api.http) = {
+      get: "/v1/org/{orgId}/commitments"
+    };
+  }
+
+  // Generates time-series chart data for commitment metrics over the specified time period.
+  rpc GetCommitmentsChart(GetCommitmentsChartRequest) returns (CommitmentsChartResponse) {
+    option (google.api.http) = {
+      get: "/v1/org/{orgId}/commitments/chart"
+    };
+  }
+
+  // ####################### METRICS #######################
+
+  // Retrieves key performance metrics for cloud commitments.
+  rpc GetMetrics(GetMetricsRequest) returns (MetricsResponse) {
+    option (google.api.http) = {
+      get: "/v1/org/{orgId}/metrics"
+    };
+  }
+
+  // ####################### RESOURCES #######################
+
+  // Retrieves a list of infrastructure resources for the organization.
+  rpc ListResources(ListResourcesRequest) returns (ListResourcesResponse) {
+    option (google.api.http) = {
+      get: "/v1/org/{orgId}/resources"
+    };
+  }
+
+  // Retrieves daily usage data for a specific resource within the specified date range.
+  rpc GetResourceDailyUsage(GetResourceDailyUsageRequest) returns (GetResourceDailyUsageResponse) {
+    option (google.api.http) = {
+      get: "/v1/org/{orgId}/resources/{resourceId}/daily-usage"
+    };
+  }
+
+  // ####################### WELL-KNOWN / OAUTH #######################
+
+  // Returns the JSON Web Key Set (JWKS) containing public keys used to verify JWT tokens.
+  rpc GetJWKS(GetJWKSRequest) returns (JWKSResponse) {
+    option (google.api.http) = {
+      get: "/.well-known/jwks.json"
+    };
+  }
+
+  // Returns OAuth 2.0 Authorization Server Metadata.
+  rpc GetOAuthMetadata(GetOAuthMetadataRequest) returns (OAuthMetadataResponse) {
+    option (google.api.http) = {
+      get: "/.well-known/oauth-authorization-server"
+    };
+  }
+
+  // Redirect to React consent page for OAuth authorization.
+  rpc OAuthAuthorizeGet(OAuthAuthorizeGetRequest) returns (OAuthAuthorizeResponse) {
+    option (google.api.http) = {
+      get: "/oauth/authorize"
+    };
+  }
+
+  // Handle user authorization decision from React consent page.
+  rpc OAuthAuthorizePost(OAuthAuthorizePostRequest) returns (OAuthAuthorizeResponse) {
+    option (google.api.http) = {
+      post: "/oauth/authorize"
+      body: "*"
+    };
+  }
+
+  // Issue access tokens.
+  rpc OAuthToken(OAuthTokenRequest) returns (OAuthTokenResponse) {
+    option (google.api.http) = {
+      post: "/oauth/token"
+      body: "*"
+    };
+  }
+  // ####################### SEGMENTS #######################
+
+  // Retrieves all segments for the specified organization and provider.
+  rpc ListSegments(ListSegmentsRequest) returns (ListSegmentsResponse) {
+    option (google.api.http) = {
+      get: "/v2/org/{orgId}/segments/info"
+    };
+  }
+
 }
+
+// ####################### ENUMS #######################
+
+enum Provider {
+  PROVIDER_UNSPECIFIED = 0;
+  AWS = 1;
+  AZURE = 2;
+  GCP = 3;
+  KUBERNETES = 4;
+  UNKNOWN = 5;
+}
+
+enum CommitmentStatus {
+  COMMITMENT_STATUS_UNSPECIFIED = 0;
+  NEW = 1;
+  REVIEWED = 2;
+  SCHEDULED = 3;
+  COMPLETED = 4;
+  DRAFT = 5;
+  NEEDS_REVIEW = 6;
+  IN_PROGRESS = 7;
+}
+
+enum CommitmentInventoryStatus {
+  COMMITMENT_INVENTORY_STATUS_UNSPECIFIED = 0;
+  ACTIVE = 1;
+  RETIRED = 2;
+  PAYMENT_PENDING = 3;
+  PAYMENT_FAILED = 4;
+}
+
+enum Scope {
+  SCOPE_UNSPECIFIED = 0;
+  SHARED = 1;
+  REGIONAL = 2;
+  ZONAL = 3;
+}
+
+enum UsageType {
+  USAGE_TYPE_UNSPECIFIED = 0;
+  RUNNING = 1;
+  STOPPED = 2;
+}
+
+// ####################### REQUEST MESSAGES #######################
+
+message ListOrgsRequest {}
+
+
+
+message GetCommitmentPlanDetailsRequest {
+  string orgId = 1;
+  string planId = 2;
+}
+
+message CommitmentPlanApplyRequest {
+  string orgId = 1;
+  string planId = 2;
+}
+
+message ListDefaultCommitmentPlansRequest {
+  string orgId = 1;
+  Provider provider = 2;
+}
+
+message GetRecommendedCommitmentPlanRequest {
+  string orgId = 1;
+  Provider provider = 2;
+}
+
+message ListCommitmentPlanLineItemsRequest {
+  string orgId = 1;
+  string planId = 2;
+  string orderBy = 3;
+  bool desc = 4;
+  string segmentId = 5;
+  repeated string resourceMatchIds = 6;
+  int32 page = 7;
+  int32 pageSize = 8;
+}
+
+message ListCommitmentPlanResourceMatchesRequest {
+  string orgId = 1;
+  string planId = 2;
+  string orderBy = 3;
+  bool desc = 4;
+  string startDate = 5;
+  string endDate = 6;
+  repeated string lineItemIds = 7;
+  int32 page = 8;
+  int32 pageSize = 9;
+}
+
+message ListCommitmentsRequest {
+  string orgId = 1;
+  string search = 2;
+  google.protobuf.Struct filter = 3;
+  bool desc = 4;
+  string orderBy = 5;
+  Provider provider = 6;
+  string startDate = 7;
+  string endDate = 8;
+  int32 page = 9;
+  int32 pageSize = 10;
+}
+
+message GetCommitmentsChartRequest {
+  string orgId = 1;
+  google.protobuf.Struct filter = 2;
+  Provider provider = 3;
+  string startDate = 4;
+  string endDate = 5;
+}
+
+message GetMetricsRequest {
+  string orgId = 1;
+  Provider provider = 2;
+}
+
+message ListResourcesRequest {
+  string orgId = 1;
+  Provider provider = 2;
+  string segmentId = 3;
+  string search = 4;
+  bool desc = 5;
+  string orderBy = 6;
+  int32 page = 7;
+  int32 pageSize = 8;
+}
+
+message GetResourceDailyUsageRequest {
+  string orgId = 1;
+  string resourceId = 2;
+  string startDate = 3;
+  string endDate = 4;
+  string catalogSkuId = 5;
+  int32 page = 6;
+  int32 pageSize = 7;
+}
+
+message GetJWKSRequest {}
+
+message GetOAuthMetadataRequest {}
+
+message OAuthAuthorizeGetRequest {
+  string clientId = 1;
+  string redirectUri = 2;
+  string responseType = 3;
+  string scope = 4;
+  string state = 5;
+  string codeChallenge = 6;
+  string codeChallengeMethod = 7;
+}
+
+message OAuthAuthorizePostRequest {
+  string clientId = 1;
+  string redirectUri = 2;
+  string responseType = 3;
+  string scope = 4;
+  string state = 5;
+  string codeChallenge = 6;
+  string codeChallengeMethod = 7;
+  string confirm = 8;
+}
+
+message OAuthTokenRequest {
+  string grantType = 1;
+  string code = 2;
+  string redirectUri = 3;
+  string clientId = 4;
+  string codeVerifier = 5;
+  string refreshToken = 6;
+}
+
+message ListSegmentsRequest {
+  string orgId = 1;
+  Provider provider = 2;
+}
+
+// ####################### RESPONSE MESSAGES #######################
 
 message Org {
   string orgId = 1;
@@ -33,4 +348,339 @@ message Org {
   string email = 3;
 }
 
-message ListOrgsRequest {}
+
+
+message ListSegmentsResponse {
+  repeated Segment segments = 1;
+}
+
+message CommitmentPlanDetails {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string orgId = 4;
+  string createdAt = 5;
+  bool isCalculating = 6;
+  string status = 7;
+  string maxTerm = 8;
+  double coveredOndemandCostHourly = 9;
+  double beforeOndemandCostHourly = 10;
+  double beforeReservedCostHourly = 11;
+  double amortizedCostHourly = 12;
+  double recurringCostHourly = 13;
+  double upfrontCostHourly = 14;
+  double beforeCostHourly = 15;
+  double afterCostHourly = 16;
+  double totalCostHourly = 17;
+  double savingsHourly = 18;
+  double feeHourly = 19;
+  double commitmentCoverage = 20;
+  double minimumCommitmentCost = 21;
+  double breakevenHours = 22;
+  double totalSavings = 23;
+  double monthlySavings = 24;
+  double totalMonthlyBeforeCost = 25;
+}
+
+message ListDefaultCommitmentPlansResponse {
+  repeated CommitmentPlanDetails plans = 1;
+}
+
+message CommitmentPlanLineItem {
+  string id = 1;
+  string planId = 2;
+  string offerId = 3;
+  string leaseMenuItemId = 4;
+  string accountId = 5;
+  double recommendedQuantity = 6;
+  double selectedQuantity = 7;
+  double recommendedCommitment = 8;
+  double selectedCommitment = 9;
+  bool isSelected = 10;
+  double afterAmortizedCost = 11;
+  double upfrontCost = 12;
+  double recurringCost = 13;
+  double beforeCost = 14;
+  double beforeOndemandCost = 15;
+  double beforeReservedCost = 16;
+  double coveredOndemandCost = 17;
+  double afterCoveredUnits = 18;
+  double totalCost = 19;
+  double monthlyCost = 20;
+  double savings = 21;
+  double monthlySavings = 22;
+  double totalSavings = 23;
+  double fee = 24;
+  double discountRate = 25;
+  double breakevenHours = 26;
+  string contractTerm = 27;
+  string paymentOption = 28;
+  google.protobuf.Struct contractSpec = 29;
+  google.protobuf.Struct offer = 30;
+}
+
+message ListCommitmentPlanLineItemsResponse {
+  repeated CommitmentPlanLineItem lineItems = 1;
+}
+
+message CommitmentPlanResourceMatch {
+  string id = 1;
+  double totalUnits = 2;
+  double beforeUncoveredUnits = 3;
+  double afterCoveredUnits = 4;
+  double afterUncoveredUnits = 5;
+  double ondemandPrice = 6;
+  double ifAllOndemandCost = 7;
+  double beforeOndemandCost = 8;
+  double afterOndemandCost = 9;
+  double coveredOndemandCost = 10;
+  double beforeReservedCost = 11;
+  double afterReservedCost = 12;
+  double beforeCost = 13;
+  double afterCost = 14;
+  double monthlyBeforeCost = 15;
+  double monthlyAfterCost = 16;
+  double monthlyAfterReservedCost = 17;
+  double monthlyAfterOndemandCost = 18;
+  double averageSavings = 19;
+  double averageMonthlySavings = 20;
+  string usageType = 21;
+  double coverage = 22;
+  google.protobuf.Struct resource = 23;
+}
+
+message ListCommitmentPlanResourceMatchesResponse {
+  repeated CommitmentPlanResourceMatch resourceMatches = 1;
+}
+
+message Lease {
+  string id = 1;
+  string orgId = 2;
+  string providerReservationId = 3;
+  string accountId = 4;
+  string status = 5;
+  string startDate = 6;
+  string endDate = 7;
+  string lockinDate = 8;
+  double upfrontCost = 9;
+  double recurringCost = 10;
+  string createdAt = 11;
+  string updatedAt = 12;
+}
+
+message DailyUtilization {
+  string date = 1;
+  double utilization = 2;
+  double netSavings = 3;
+}
+
+message Commitment {
+  string id = 1;
+  Provider provider = 2;
+  string displayName = 3;
+  string leasedDisplayName = 4;
+  string providerReservationId = 5;
+  string accountId = 6;
+  string masterAccountId = 7;
+  string billingAccountId = 8;
+  string type = 9;
+  string region = 10;
+  int64 durationSeconds = 11;
+  string reservationEnd = 12;
+  string reservationStart = 13;
+  string transferReservationStart = 14;
+  string transferReservationEnd = 15;
+  string startDate = 16;
+  string endDate = 17;
+  string status = 18;
+  bool isLeased = 19;
+  bool isActive = 20;
+  Lease lease = 21;
+  string leaseStart = 22;
+  string leaseLockinDate = 23;
+  double upfrontCost = 24;
+  double recurringCost = 25;
+  bool isFlexible = 26;
+  string paymentOption = 27;
+  string offeringClass = 28;
+  string offeringId = 29;
+  int32 instanceCount = 30;
+  double effectiveInstanceCount = 31;
+  string productDescription = 32;
+  string instanceFamily = 33;
+  string instanceType = 34;
+  string tenancy = 35;
+  string az = 36;
+  bool isMultiAz = 37;
+  string planType = 38;
+  Scope scope = 39;
+  string name = 40;
+  string orderId = 41;
+  string resourceGroup = 42;
+  bool instanceFlexibility = 43;
+  double savings = 44;
+  double monthlySavings = 45;
+  double netSavings = 46;
+  double utilization = 47;
+  double potentialSavings = 48;
+  double runningHours = 49;
+  double amortizedCost = 50;
+  repeated DailyUtilization dailyUtilizations = 51;
+}
+
+message ListCommitmentsResponse {
+  repeated Commitment commitments = 1;
+}
+
+message CommitmentsChartDataPoint {
+  string date = 1;
+  double commitmentSpend = 2;
+  double utilization = 3;
+  double lockedCommitments = 4;
+  double unlockedCommitments = 5;
+  double realizedSavings = 6;
+  bool isProjection = 7;
+}
+
+message CommitmentsChartResponse {
+  repeated CommitmentsChartDataPoint data = 1;
+}
+
+message MetricsResponse {
+  double lifetimeSavings = 1;
+  double mtdSavings = 2;
+  bool purchaseAutomationEnabled = 3;
+  bool buybackAutomationEnabled = 4;
+  bool hasActionedPlan = 5;
+  bool hasPendingActions = 6;
+  string latestExecutionDate = 7;
+  double purchaseMissedSavings = 8;
+  double buybackMissedSavings = 9;
+  double totalDailyMissedSavings = 10;
+  double hourlyMissedSavings = 11;
+  string missedSavingsStartDate = 12;
+  string missedSavingsEndDate = 13;
+  double expiringSavings = 14;
+  double coverage = 15;
+  double utilization = 16;
+}
+
+message Resource {
+  string id = 1;
+  string resourceId = 2;
+  Provider provider = 3;
+  string providerResourceId = 4;
+  bool isSpot = 5;
+  string name = 6;
+  string resourceGroup = 7;
+  string usageEnd = 8;
+  string usageStart = 9;
+  google.protobuf.Struct tags = 10;
+  string createdAt = 11;
+  string updatedAt = 12;
+  string instanceId = 13;
+  string billingAccountId = 14;
+  string subAccountId = 15;
+  string managementAccountId = 16;
+  string ownerAccountId = 17;
+  string skuTitle = 18;
+  string skuName = 19;
+  string availabilityZone = 20;
+  string cacheEngine = 21;
+  string databaseEngine = 22;
+  string description = 23;
+  string family = 24;
+  string fullRegionName = 25;
+  bool hasOndemandTerms = 26;
+  string instanceType = 27;
+  string instanceTypeFamily = 28;
+  bool isReservable = 29;
+  string licenseModel = 30;
+  string locationType = 31;
+  string normalizationSizeFactor = 32;
+  string operatingSystem = 33;
+  string preInstalledSw = 34;
+  string priceCurrency = 35;
+  string providerService = 36;
+  string providerSkuId = 37;
+  string publicationDate = 38;
+  string region = 39;
+  string service = 40;
+  string tenancy = 41;
+  string usageType = 42;
+  string version = 43;
+  bool vpcNetworkingSupport = 44;
+  string ondemandUsageUnit = 45;
+}
+
+message ListResourcesResponse {
+  repeated Resource resources = 1;
+}
+
+message ResourceDailyUsage {
+  string date = 1;
+  string usageAccountId = 2;
+  string subAccountId = 3;
+  double usage = 4;
+  double reservationUsage = 5;
+  double freeTierUsage = 6;
+  double ondemandCost = 7;
+  double reservedCost = 8;
+  double ifAllOndemandCost = 9;
+  double spotCost = 10;
+  double freeTierSavings = 11;
+  string usageType = 12;
+  string commonUsageType = 13;
+  double coveredUsage = 14;
+  double uptime = 15;
+}
+
+message GetResourceDailyUsageResponse {
+  repeated ResourceDailyUsage dailyUsage = 1;
+}
+
+message JWK {
+  string kty = 1;
+  string use = 2;
+  string kid = 3;
+  string alg = 4;
+  string n = 5;
+  string e = 6;
+}
+
+message JWKSResponse {
+  repeated JWK keys = 1;
+}
+
+message OAuthMetadataResponse {
+  string issuer = 1;
+  string authorizationEndpoint = 2;
+  string tokenEndpoint = 3;
+  string jwksUri = 4;
+  repeated string responseTypesSupported = 5;
+  repeated string grantTypesSupported = 6;
+  repeated string codeChallengeMethodsSupported = 7;
+  repeated string tokenEndpointAuthMethodsSupported = 8;
+  repeated string scopesSupported = 9;
+  string serviceDocumentation = 10;
+}
+
+message OAuthAuthorizeResponse {
+  string redirectUrl = 1;
+}
+
+message OAuthTokenResponse {
+  string accessToken = 1;
+  string tokenType = 2;
+  int32 expiresIn = 3;
+  string refreshToken = 4;
+  string scope = 5;
+}
+
+message Segment {
+  string id = 1;
+  string name = 2;
+  Provider provider = 3;
+  bool isDefault = 4;
+  string createdAt = 5;
+}
