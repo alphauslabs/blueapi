@@ -4906,13 +4906,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1Resource"
+                  "$ref": "#/definitions/blueapicoverv1Resource"
                 },
                 "error": {
                   "$ref": "#/definitions/googlerpcStatus"
                 }
               },
-              "title": "Stream result of v1Resource"
+              "title": "Stream result of blueapicoverv1Resource"
             }
           },
           "default": {
@@ -11017,6 +11017,823 @@
         ],
         "tags": [
           "Prism"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/commitment-plans/default": {
+      "get": {
+        "summary": "Retrieves the three default Archera commitment plans (High Savings, Balanced, Recommended) for the specified cloud provider.",
+        "operationId": "Archera_ListDefaultCommitmentPlans",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListDefaultCommitmentPlansResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "PROVIDER_UNSPECIFIED",
+              "AWS",
+              "AZURE",
+              "GCP",
+              "KUBERNETES",
+              "UNKNOWN"
+            ],
+            "default": "PROVIDER_UNSPECIFIED"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/commitment-plans/recommended": {
+      "get": {
+        "summary": "Retrieves only the recommended Archera commitment plan for the specified cloud provider.",
+        "operationId": "Archera_GetRecommendedCommitmentPlan",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CommitmentPlanDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "PROVIDER_UNSPECIFIED",
+              "AWS",
+              "AZURE",
+              "GCP",
+              "KUBERNETES",
+              "UNKNOWN"
+            ],
+            "default": "PROVIDER_UNSPECIFIED"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/commitment-plans/{planId}": {
+      "get": {
+        "summary": "Retrieves detailed information about a specific commitment plan, including costs, savings projections, and commitment coverage.",
+        "operationId": "Archera_GetCommitmentPlanDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CommitmentPlanDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/commitment-plans/{planId}/apply": {
+      "post": {
+        "summary": "Executes a commitment purchase plan, initiating the commitment purchase process.",
+        "operationId": "Archera_CommitmentPlanApply",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CommitmentPlanDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ArcheraCommitmentPlanApplyBody"
+            }
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/commitment-plans/{planId}/line-items": {
+      "get": {
+        "summary": "Retrieves line items for a specific commitment plan.",
+        "operationId": "Archera_ListCommitmentPlanLineItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListCommitmentPlanLineItemsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "desc",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "segmentId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "resourceMatchIds",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/commitment-plans/{planId}/resource-matches": {
+      "get": {
+        "summary": "Retrieves resource matches for a specific commitment plan.",
+        "operationId": "Archera_ListCommitmentPlanResourceMatches",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListCommitmentPlanResourceMatchesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "desc",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "lineItemIds",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/commitments": {
+      "get": {
+        "summary": "Retrieves a paginated list of commitments for the specified organization and time period.",
+        "operationId": "Archera_ListCommitments",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListCommitmentsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "name": "desc",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "PROVIDER_UNSPECIFIED",
+              "AWS",
+              "AZURE",
+              "GCP",
+              "KUBERNETES",
+              "UNKNOWN"
+            ],
+            "default": "PROVIDER_UNSPECIFIED"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/commitments/chart": {
+      "get": {
+        "summary": "Generates time-series chart data for commitment metrics over the specified time period.",
+        "operationId": "Archera_GetCommitmentsChart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CommitmentsChartResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "PROVIDER_UNSPECIFIED",
+              "AWS",
+              "AZURE",
+              "GCP",
+              "KUBERNETES",
+              "UNKNOWN"
+            ],
+            "default": "PROVIDER_UNSPECIFIED"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/metrics": {
+      "get": {
+        "summary": "Retrieves key performance metrics for cloud commitments.",
+        "operationId": "Archera_GetMetrics",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1MetricsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "PROVIDER_UNSPECIFIED",
+              "AWS",
+              "AZURE",
+              "GCP",
+              "KUBERNETES",
+              "UNKNOWN"
+            ],
+            "default": "PROVIDER_UNSPECIFIED"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/purchase-plans-v1/default": {
+      "get": {
+        "summary": "Retrieves default purchase plans for a specific segment.",
+        "operationId": "Archera_ListDefaultPurchasePlans",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListDefaultPurchasePlansResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "segmentId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/resources": {
+      "get": {
+        "summary": "Retrieves a list of infrastructure resources for the organization.",
+        "operationId": "Archera_ListResources",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListResourcesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "PROVIDER_UNSPECIFIED",
+              "AWS",
+              "AZURE",
+              "GCP",
+              "KUBERNETES",
+              "UNKNOWN"
+            ],
+            "default": "PROVIDER_UNSPECIFIED"
+          },
+          {
+            "name": "segmentId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "desc",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/resources/{resourceId}/daily-usage": {
+      "get": {
+        "summary": "Retrieves daily usage data for a specific resource within the specified date range.",
+        "operationId": "Archera_GetResourceDailyUsage",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetResourceDailyUsageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resourceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "catalogSkuId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/segments/info": {
+      "get": {
+        "summary": "Retrieves all segments for the specified organization and provider.",
+        "operationId": "Archera_ListSegments",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListSegmentsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "PROVIDER_UNSPECIFIED",
+              "AWS",
+              "AZURE",
+              "GCP",
+              "KUBERNETES",
+              "UNKNOWN"
+            ],
+            "default": "PROVIDER_UNSPECIFIED"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/segments/{segmentId}": {
+      "get": {
+        "summary": "Retrieves detailed information about a specific segment.",
+        "operationId": "Archera_GetSegmentDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SegmentDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "segmentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Archera"
         ]
       }
     },
@@ -19904,6 +20721,9 @@
       },
       "title": "AdjustmentSetting"
     },
+    "ArcheraCommitmentPlanApplyBody": {
+      "type": "object"
+    },
     "BillingAllocateAdjustmentEntryBody": {
       "type": "object",
       "properties": {
@@ -27215,6 +28035,162 @@
         }
       }
     },
+    "blueapiarcherav1DailyUtilization": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "utilization": {
+          "type": "number",
+          "format": "double"
+        },
+        "netSavings": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "blueapiarcherav1Resource": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "resourceId": {
+          "type": "string"
+        },
+        "provider": {
+          "$ref": "#/definitions/v1Provider"
+        },
+        "providerResourceId": {
+          "type": "string"
+        },
+        "isSpot": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "resourceGroup": {
+          "type": "string"
+        },
+        "usageEnd": {
+          "type": "string"
+        },
+        "usageStart": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "object"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "instanceId": {
+          "type": "string"
+        },
+        "billingAccountId": {
+          "type": "string"
+        },
+        "subAccountId": {
+          "type": "string"
+        },
+        "managementAccountId": {
+          "type": "string"
+        },
+        "ownerAccountId": {
+          "type": "string"
+        },
+        "skuTitle": {
+          "type": "string"
+        },
+        "skuName": {
+          "type": "string"
+        },
+        "availabilityZone": {
+          "type": "string"
+        },
+        "cacheEngine": {
+          "type": "string"
+        },
+        "databaseEngine": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "fullRegionName": {
+          "type": "string"
+        },
+        "hasOndemandTerms": {
+          "type": "boolean"
+        },
+        "instanceType": {
+          "type": "string"
+        },
+        "instanceTypeFamily": {
+          "type": "string"
+        },
+        "isReservable": {
+          "type": "boolean"
+        },
+        "licenseModel": {
+          "type": "string"
+        },
+        "locationType": {
+          "type": "string"
+        },
+        "normalizationSizeFactor": {
+          "type": "string"
+        },
+        "operatingSystem": {
+          "type": "string"
+        },
+        "preInstalledSw": {
+          "type": "string"
+        },
+        "priceCurrency": {
+          "type": "string"
+        },
+        "providerService": {
+          "type": "string"
+        },
+        "providerSkuId": {
+          "type": "string"
+        },
+        "publicationDate": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "tenancy": {
+          "type": "string"
+        },
+        "usageType": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "vpcNetworkingSupport": {
+          "type": "boolean"
+        },
+        "ondemandUsageUnit": {
+          "type": "string"
+        }
+      }
+    },
     "blueapibillingv1InvoiceServiceDiscounts": {
       "type": "object",
       "properties": {
@@ -27380,6 +28356,67 @@
         }
       },
       "title": "Response message for ListExchangeRates"
+    },
+    "blueapicoverv1Resource": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "title": "Format is `yyyy-mm`"
+        },
+        "orgId": {
+          "type": "string",
+          "title": "Organization ID"
+        },
+        "vendor": {
+          "type": "string",
+          "description": "Only `aws` is supported for now."
+        },
+        "account": {
+          "type": "string",
+          "title": "Resource owner account"
+        },
+        "service": {
+          "type": "string",
+          "description": "Only `AmazonEC2` is supported for now."
+        },
+        "resourceId": {
+          "type": "string",
+          "title": "Resource unique identifier"
+        },
+        "resourceType": {
+          "type": "string",
+          "title": "Only `AWS::EC2::Instance` is supported for now"
+        },
+        "cost": {
+          "type": "number",
+          "format": "double",
+          "description": "Cost incurred for the resource on specified month."
+        },
+        "properties": {
+          "type": "string",
+          "title": "Format: JSON String"
+        },
+        "recommendation": {
+          "type": "string",
+          "title": "Format: JSON String"
+        }
+      }
+    },
+    "blueapiflowv1DailyUtilization": {
+      "type": "object",
+      "properties": {
+        "currentDate": {
+          "type": "string",
+          "description": "The current date for which the utilization is reported."
+        },
+        "utilizationPercentage": {
+          "type": "number",
+          "format": "double",
+          "title": "The percentage of utilization for this specific date"
+        }
+      },
+      "description": "Daily utilization data for a specific date range."
     },
     "blueapiflowv1GetInfoResponse": {
       "type": "object",
@@ -30924,11 +31961,11 @@
       "properties": {
         "@type": {
           "type": "string",
-          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com. As of May 2023, there are no widely used type server\nimplementations and no plans to implement one.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
         }
       },
       "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\nExample 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\nExample 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "protobufNullValue": {
       "type": "string",
@@ -30936,7 +31973,7 @@
         "NULL_VALUE"
       ],
       "default": "NULL_VALUE",
-      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\nThe JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
+      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
     },
     "protosOperation": {
       "type": "object",
@@ -32565,6 +33602,25 @@
       },
       "description": "AdjustmentEntrySetting resource definition."
     },
+    "v1AggregateMetrics": {
+      "type": "object",
+      "properties": {
+        "currentCoverage": {
+          "type": "number",
+          "format": "double"
+        },
+        "potentialCoverage": {
+          "type": "number",
+          "format": "double"
+        },
+        "summaries": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/v1ServiceSummary"
+          }
+        }
+      }
+    },
     "v1AllocationItem": {
       "type": "object",
       "properties": {
@@ -33612,6 +34668,529 @@
       },
       "description": "Response message for the Admin.CreateCloudWatchMetricsStream rpc."
     },
+    "v1Commitment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "provider": {
+          "$ref": "#/definitions/v1Provider"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "leasedDisplayName": {
+          "type": "string"
+        },
+        "providerReservationId": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
+        },
+        "masterAccountId": {
+          "type": "string"
+        },
+        "billingAccountId": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "durationSeconds": {
+          "type": "string",
+          "format": "int64"
+        },
+        "reservationEnd": {
+          "type": "string"
+        },
+        "reservationStart": {
+          "type": "string"
+        },
+        "transferReservationStart": {
+          "type": "string"
+        },
+        "transferReservationEnd": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "string"
+        },
+        "endDate": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "isLeased": {
+          "type": "boolean"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "lease": {
+          "$ref": "#/definitions/v1Lease"
+        },
+        "leaseStart": {
+          "type": "string"
+        },
+        "leaseLockinDate": {
+          "type": "string"
+        },
+        "upfrontCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "recurringCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "isFlexible": {
+          "type": "boolean"
+        },
+        "paymentOption": {
+          "type": "string"
+        },
+        "offeringClass": {
+          "type": "string"
+        },
+        "offeringId": {
+          "type": "string"
+        },
+        "instanceCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "effectiveInstanceCount": {
+          "type": "number",
+          "format": "double"
+        },
+        "productDescription": {
+          "type": "string"
+        },
+        "instanceFamily": {
+          "type": "string"
+        },
+        "instanceType": {
+          "type": "string"
+        },
+        "tenancy": {
+          "type": "string"
+        },
+        "az": {
+          "type": "string"
+        },
+        "isMultiAz": {
+          "type": "boolean"
+        },
+        "planType": {
+          "type": "string"
+        },
+        "scope": {
+          "$ref": "#/definitions/v1Scope"
+        },
+        "name": {
+          "type": "string"
+        },
+        "orderId": {
+          "type": "string"
+        },
+        "resourceGroup": {
+          "type": "string"
+        },
+        "instanceFlexibility": {
+          "type": "boolean"
+        },
+        "savings": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "netSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "utilization": {
+          "type": "number",
+          "format": "double"
+        },
+        "potentialSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "runningHours": {
+          "type": "number",
+          "format": "double"
+        },
+        "amortizedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "dailyUtilizations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/blueapiarcherav1DailyUtilization"
+          }
+        }
+      }
+    },
+    "v1CommitmentPlanDetails": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "isCalculating": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string"
+        },
+        "maxTerm": {
+          "type": "string"
+        },
+        "coveredOndemandCostHourly": {
+          "type": "number",
+          "format": "double"
+        },
+        "beforeOndemandCostHourly": {
+          "type": "number",
+          "format": "double"
+        },
+        "beforeReservedCostHourly": {
+          "type": "number",
+          "format": "double"
+        },
+        "amortizedCostHourly": {
+          "type": "number",
+          "format": "double"
+        },
+        "recurringCostHourly": {
+          "type": "number",
+          "format": "double"
+        },
+        "upfrontCostHourly": {
+          "type": "number",
+          "format": "double"
+        },
+        "beforeCostHourly": {
+          "type": "number",
+          "format": "double"
+        },
+        "afterCostHourly": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalCostHourly": {
+          "type": "number",
+          "format": "double"
+        },
+        "savingsHourly": {
+          "type": "number",
+          "format": "double"
+        },
+        "feeHourly": {
+          "type": "number",
+          "format": "double"
+        },
+        "commitmentCoverage": {
+          "type": "number",
+          "format": "double"
+        },
+        "minimumCommitmentCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "breakevenHours": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalMonthlyBeforeCost": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "v1CommitmentPlanLineItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "planId": {
+          "type": "string"
+        },
+        "offerId": {
+          "type": "string"
+        },
+        "leaseMenuItemId": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
+        },
+        "recommendedQuantity": {
+          "type": "number",
+          "format": "double"
+        },
+        "selectedQuantity": {
+          "type": "number",
+          "format": "double"
+        },
+        "recommendedCommitment": {
+          "type": "number",
+          "format": "double"
+        },
+        "selectedCommitment": {
+          "type": "number",
+          "format": "double"
+        },
+        "isSelected": {
+          "type": "boolean"
+        },
+        "afterAmortizedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "upfrontCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "recurringCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "beforeCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "beforeOndemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "beforeReservedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "coveredOndemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "afterCoveredUnits": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "savings": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "fee": {
+          "type": "number",
+          "format": "double"
+        },
+        "discountRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "breakevenHours": {
+          "type": "number",
+          "format": "double"
+        },
+        "contractTerm": {
+          "type": "string"
+        },
+        "paymentOption": {
+          "type": "string"
+        },
+        "contractSpec": {
+          "type": "object"
+        },
+        "offer": {
+          "type": "object"
+        }
+      }
+    },
+    "v1CommitmentPlanResourceMatch": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "totalUnits": {
+          "type": "number",
+          "format": "double"
+        },
+        "beforeUncoveredUnits": {
+          "type": "number",
+          "format": "double"
+        },
+        "afterCoveredUnits": {
+          "type": "number",
+          "format": "double"
+        },
+        "afterUncoveredUnits": {
+          "type": "number",
+          "format": "double"
+        },
+        "ondemandPrice": {
+          "type": "number",
+          "format": "double"
+        },
+        "ifAllOndemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "beforeOndemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "afterOndemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "coveredOndemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "beforeReservedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "afterReservedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "beforeCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "afterCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyBeforeCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyAfterCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyAfterReservedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyAfterOndemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "averageSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "averageMonthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "usageType": {
+          "type": "string"
+        },
+        "coverage": {
+          "type": "number",
+          "format": "double"
+        },
+        "resource": {
+          "type": "object"
+        }
+      }
+    },
+    "v1CommitmentsChartDataPoint": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "commitmentSpend": {
+          "type": "number",
+          "format": "double"
+        },
+        "utilization": {
+          "type": "number",
+          "format": "double"
+        },
+        "lockedCommitments": {
+          "type": "number",
+          "format": "double"
+        },
+        "unlockedCommitments": {
+          "type": "number",
+          "format": "double"
+        },
+        "realizedSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "isProjection": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1CommitmentsChartResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1CommitmentsChartDataPoint"
+          }
+        }
+      }
+    },
     "v1ConfirmGoogleSheetAccessRequest": {
       "type": "object",
       "properties": {
@@ -33696,6 +35275,23 @@
         "avgEfficiency": {
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "v1ContractSpec": {
+      "type": "object",
+      "properties": {
+        "commitmentType": {
+          "type": "string"
+        },
+        "paymentOption": {
+          "type": "string"
+        },
+        "term": {
+          "type": "string"
+        },
+        "properties": {
+          "type": "object"
         }
       }
     },
@@ -35503,21 +37099,6 @@
         }
       }
     },
-    "v1DailyUtilization": {
-      "type": "object",
-      "properties": {
-        "currentDate": {
-          "type": "string",
-          "description": "The current date for which the utilization is reported."
-        },
-        "utilizationPercentage": {
-          "type": "number",
-          "format": "double",
-          "title": "The percentage of utilization for this specific date"
-        }
-      },
-      "description": "Daily utilization data for a specific date range."
-    },
     "v1DataAccess": {
       "type": "object",
       "properties": {
@@ -35595,6 +37176,208 @@
         }
       },
       "description": "Response message for the Admin.GetDefaultCostAccess, Admin.CreateDefaultCostAccess rpc."
+    },
+    "v1DefaultPurchasePlan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "segmentId": {
+          "type": "string"
+        },
+        "segment": {
+          "$ref": "#/definitions/v1Segment"
+        },
+        "status": {
+          "type": "string"
+        },
+        "planType": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "lastModified": {
+          "type": "string"
+        },
+        "createdBy": {},
+        "executionPolicy": {},
+        "isDefault": {
+          "type": "boolean",
+          "title": "Flags"
+        },
+        "isRecommended": {
+          "type": "boolean"
+        },
+        "isRenewal": {
+          "type": "boolean"
+        },
+        "isCalculating": {
+          "type": "boolean"
+        },
+        "isLocked": {
+          "type": "boolean"
+        },
+        "isSaved": {
+          "type": "boolean"
+        },
+        "includedContractSpecs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ContractSpec"
+          },
+          "title": "Contract details"
+        },
+        "includedContractTerms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maxTerm": {
+          "type": "string"
+        },
+        "preferredPaymentOption": {
+          "type": "string"
+        },
+        "maxUpfrontCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "minimumUpfrontInterestRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "recommendWithinCoveredAccounts": {},
+        "startDate": {
+          "type": "string",
+          "title": "Dates"
+        },
+        "endDate": {
+          "type": "string"
+        },
+        "dataSource": {
+          "type": "string"
+        },
+        "beforeCost": {
+          "type": "number",
+          "format": "double",
+          "title": "Cost metrics"
+        },
+        "afterCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "beforeOndemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "beforeReservedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "coveredOndemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "amortizedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "recurringCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "upfrontCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalMonthlyBeforeCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "savings": {
+          "type": "number",
+          "format": "double",
+          "title": "Savings metrics"
+        },
+        "monthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "fee": {
+          "type": "number",
+          "format": "double"
+        },
+        "commitmentCoverage": {
+          "type": "number",
+          "format": "double",
+          "title": "Coverage metrics"
+        },
+        "minimumCommitmentCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "breakevenHours": {
+          "type": "number",
+          "format": "double"
+        },
+        "aggregateMetrics": {
+          "$ref": "#/definitions/v1AggregateMetrics",
+          "title": "Aggregate data"
+        },
+        "summaries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PlanSummary"
+          }
+        },
+        "reservationIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "IDs"
+        },
+        "resourceIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "flaggedActions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "metaPlanId": {
+          "type": "string"
+        },
+        "coverageId": {
+          "type": "string"
+        }
+      }
     },
     "v1DeleteAccountAccessResponse": {
       "type": "object",
@@ -37920,6 +39703,18 @@
         }
       }
     },
+    "v1GetResourceDailyUsageResponse": {
+      "type": "object",
+      "properties": {
+        "dailyUsage": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ResourceDailyUsage"
+          }
+        }
+      }
+    },
     "v1GetRightSizingRecommendationResponse": {
       "type": "object",
       "properties": {
@@ -38445,6 +40240,49 @@
         }
       }
     },
+    "v1Lease": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "providerReservationId": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "string"
+        },
+        "endDate": {
+          "type": "string"
+        },
+        "lockinDate": {
+          "type": "string"
+        },
+        "upfrontCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "recurringCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
     "v1ListAccountAccessRequest": {
       "type": "object",
       "description": "Request message for the ListAccountAccess rpc."
@@ -38678,6 +40516,42 @@
       },
       "description": "Response message for the Cost.ListCalculatorRunningAccounts rpc."
     },
+    "v1ListCommitmentPlanLineItemsResponse": {
+      "type": "object",
+      "properties": {
+        "lineItems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1CommitmentPlanLineItem"
+          }
+        }
+      }
+    },
+    "v1ListCommitmentPlanResourceMatchesResponse": {
+      "type": "object",
+      "properties": {
+        "resourceMatches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1CommitmentPlanResourceMatch"
+          }
+        }
+      }
+    },
+    "v1ListCommitmentsResponse": {
+      "type": "object",
+      "properties": {
+        "commitments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Commitment"
+          }
+        }
+      }
+    },
     "v1ListCostFiltersResponse": {
       "type": "object",
       "properties": {
@@ -38693,6 +40567,30 @@
     },
     "v1ListCustomFieldRequest": {
       "type": "object"
+    },
+    "v1ListDefaultCommitmentPlansResponse": {
+      "type": "object",
+      "properties": {
+        "plans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1CommitmentPlanDetails"
+          }
+        }
+      }
+    },
+    "v1ListDefaultPurchasePlansResponse": {
+      "type": "object",
+      "properties": {
+        "plans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1DefaultPurchasePlan"
+          }
+        }
+      }
     },
     "v1ListFeesRequest": {
       "type": "object",
@@ -39116,6 +41014,18 @@
     "v1ListReportSchedulesRequest": {
       "type": "object"
     },
+    "v1ListResourcesResponse": {
+      "type": "object",
+      "properties": {
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/blueapiarcherav1Resource"
+          }
+        }
+      }
+    },
     "v1ListRolesResponse": {
       "type": "object",
       "properties": {
@@ -39128,6 +41038,18 @@
         }
       },
       "description": "Response message for the Iam.ListRoles rpc."
+    },
+    "v1ListSegmentsResponse": {
+      "type": "object",
+      "properties": {
+        "segments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Segment"
+          }
+        }
+      }
     },
     "v1ListSharedResourcesResponse": {
       "type": "object",
@@ -39392,6 +41314,68 @@
       "properties": {
         "mergedUnitCost": {
           "$ref": "#/definitions/coverUnitCostData"
+        }
+      }
+    },
+    "v1MetricsResponse": {
+      "type": "object",
+      "properties": {
+        "lifetimeSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "mtdSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "purchaseAutomationEnabled": {
+          "type": "boolean"
+        },
+        "buybackAutomationEnabled": {
+          "type": "boolean"
+        },
+        "hasActionedPlan": {
+          "type": "boolean"
+        },
+        "hasPendingActions": {
+          "type": "boolean"
+        },
+        "latestExecutionDate": {
+          "type": "string"
+        },
+        "purchaseMissedSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "buybackMissedSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalDailyMissedSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "hourlyMissedSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "missedSavingsStartDate": {
+          "type": "string"
+        },
+        "missedSavingsEndDate": {
+          "type": "string"
+        },
+        "expiringSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "coverage": {
+          "type": "number",
+          "format": "double"
+        },
+        "utilization": {
+          "type": "number",
+          "format": "double"
         }
       }
     },
@@ -39748,6 +41732,69 @@
         }
       }
     },
+    "v1PlanSummary": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "numCommitments": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "minCommitment": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyCommitment": {
+          "type": "number",
+          "format": "double"
+        },
+        "upfrontCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "minSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "maxSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "minTermHours": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxTermHours": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "griPremiums": {
+          "type": "number",
+          "format": "double"
+        },
+        "beforeOndemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "afterOndemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "ifAllOndemandCost": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
     "v1PopulateDemoDataRequest": {
       "type": "object"
     },
@@ -39938,6 +41985,18 @@
         }
       }
     },
+    "v1Provider": {
+      "type": "string",
+      "enum": [
+        "PROVIDER_UNSPECIFIED",
+        "AWS",
+        "AZURE",
+        "GCP",
+        "KUBERNETES",
+        "UNKNOWN"
+      ],
+      "default": "PROVIDER_UNSPECIFIED"
+    },
     "v1ProxyCreateCompletionRequest": {
       "type": "object",
       "properties": {
@@ -39974,6 +42033,23 @@
         }
       },
       "title": "Response message for PublishView"
+    },
+    "v1PurchasePlan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "isRenewal": {
+          "type": "boolean"
+        }
+      }
     },
     "v1ReadAdjustmentsRequestAwsOptions": {
       "type": "object",
@@ -40684,52 +42760,6 @@
         }
       }
     },
-    "v1Resource": {
-      "type": "object",
-      "properties": {
-        "date": {
-          "type": "string",
-          "title": "Format is `yyyy-mm`"
-        },
-        "orgId": {
-          "type": "string",
-          "title": "Organization ID"
-        },
-        "vendor": {
-          "type": "string",
-          "description": "Only `aws` is supported for now."
-        },
-        "account": {
-          "type": "string",
-          "title": "Resource owner account"
-        },
-        "service": {
-          "type": "string",
-          "description": "Only `AmazonEC2` is supported for now."
-        },
-        "resourceId": {
-          "type": "string",
-          "title": "Resource unique identifier"
-        },
-        "resourceType": {
-          "type": "string",
-          "title": "Only `AWS::EC2::Instance` is supported for now"
-        },
-        "cost": {
-          "type": "number",
-          "format": "double",
-          "description": "Cost incurred for the resource on specified month."
-        },
-        "properties": {
-          "type": "string",
-          "title": "Format: JSON String"
-        },
-        "recommendation": {
-          "type": "string",
-          "title": "Format: JSON String"
-        }
-      }
-    },
     "v1ResourceAccount": {
       "type": "object",
       "properties": {
@@ -40741,6 +42771,66 @@
         },
         "registered": {
           "type": "boolean"
+        }
+      }
+    },
+    "v1ResourceDailyUsage": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "usageAccountId": {
+          "type": "string"
+        },
+        "subAccountId": {
+          "type": "string"
+        },
+        "usage": {
+          "type": "number",
+          "format": "double"
+        },
+        "reservationUsage": {
+          "type": "number",
+          "format": "double"
+        },
+        "freeTierUsage": {
+          "type": "number",
+          "format": "double"
+        },
+        "ondemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "reservedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "ifAllOndemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "spotCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "freeTierSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "usageType": {
+          "type": "string"
+        },
+        "commonUsageType": {
+          "type": "string"
+        },
+        "coveredUsage": {
+          "type": "number",
+          "format": "double"
+        },
+        "uptime": {
+          "type": "number",
+          "format": "double"
         }
       }
     },
@@ -40847,6 +42937,153 @@
         }
       },
       "description": "Response message for ListSavings, RestoreSavings, SimulateSavings rpc."
+    },
+    "v1Scope": {
+      "type": "string",
+      "enum": [
+        "SCOPE_UNSPECIFIED",
+        "SHARED",
+        "REGIONAL",
+        "ZONAL"
+      ],
+      "default": "SCOPE_UNSPECIFIED"
+    },
+    "v1Segment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "provider": {
+          "$ref": "#/definitions/v1Provider"
+        },
+        "isDefault": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string"
+        }
+      }
+    },
+    "v1SegmentCreator": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        }
+      }
+    },
+    "v1SegmentDetails": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "provider": {
+          "$ref": "#/definitions/v1Provider"
+        },
+        "cloudProviders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "isDefault": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "createdBy": {
+          "$ref": "#/definitions/v1SegmentCreator"
+        },
+        "parentId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "segmentClass": {
+          "type": "string"
+        },
+        "params": {
+          "type": "object"
+        },
+        "monthlyCost": {
+          "type": "number",
+          "format": "double",
+          "title": "Cost metrics"
+        },
+        "monthlyNetCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyIfAllOndemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyOndemandCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyReservedCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySpotCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyBudget": {
+          "type": "number",
+          "format": "double"
+        },
+        "coverage": {
+          "type": "number",
+          "format": "double",
+          "title": "Coverage metrics"
+        },
+        "recommendedCoverage": {
+          "type": "number",
+          "format": "double"
+        },
+        "targetCoverage": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyResourceCount": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Resource metrics"
+        },
+        "purchasePlans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PurchasePlan"
+          },
+          "title": "Purchase plans"
+        }
+      }
     },
     "v1SendRipplePasswordResetCodeRequest": {
       "type": "object",
@@ -41047,6 +43284,71 @@
         }
       },
       "description": "ServiceDiscountsExport resource definition."
+    },
+    "v1ServiceSummary": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "serviceName": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "numCommitments": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "currentCoverage": {
+          "type": "number",
+          "format": "double"
+        },
+        "potentialCoverage": {
+          "type": "number",
+          "format": "double"
+        },
+        "minCommitment": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlyCommitment": {
+          "type": "number",
+          "format": "double"
+        },
+        "upfrontCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "minSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "maxSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "monthlySavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "minTermHours": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxTermHours": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "griPremium": {
+          "type": "number",
+          "format": "double"
+        }
+      }
     },
     "v1SetCostGroupAnomalyOptionsResponse": {
       "type": "object",
@@ -42309,7 +44611,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1DailyUtilization"
+            "$ref": "#/definitions/blueapiflowv1DailyUtilization"
           },
           "title": "Array of daily utilization data for this Savings Plan"
         }
