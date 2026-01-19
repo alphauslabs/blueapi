@@ -11564,6 +11564,43 @@
         ]
       }
     },
+    "/v1/org/{orgId}/purchase-plans-v1/default": {
+      "get": {
+        "summary": "Retrieves default purchase plans for a specific segment.",
+        "operationId": "Archera_ListDefaultPurchasePlans",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListDefaultPurchasePlansResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "segmentId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
     "/v1/org/{orgId}/resources": {
       "get": {
         "summary": "Retrieves a list of infrastructure resources for the organization.",
@@ -11710,6 +11747,89 @@
             "required": false,
             "type": "integer",
             "format": "int32"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/segments/info": {
+      "get": {
+        "summary": "Retrieves all segments for the specified organization and provider.",
+        "operationId": "Archera_ListSegments",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListSegmentsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "PROVIDER_UNSPECIFIED",
+              "AWS",
+              "AZURE",
+              "GCP",
+              "KUBERNETES",
+              "UNKNOWN"
+            ],
+            "default": "PROVIDER_UNSPECIFIED"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/org/{orgId}/segments/{segmentId}": {
+      "get": {
+        "summary": "Retrieves detailed information about a specific segment.",
+        "operationId": "Archera_GetSegmentDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SegmentDetails"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "segmentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
@@ -20220,126 +20340,6 @@
         ],
         "tags": [
           "Cost"
-        ]
-      }
-    },
-    "/v2/org/{orgId}/purchase-plans-v2/default": {
-      "get": {
-        "summary": "Retrieves default purchase plans for a specific segment.",
-        "operationId": "Archera_ListDefaultPurchasePlans",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListDefaultPurchasePlansResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "orgId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "segmentId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Archera"
-        ]
-      }
-    },
-    "/v2/org/{orgId}/segments/info": {
-      "get": {
-        "summary": "Retrieves all segments for the specified organization and provider.",
-        "operationId": "Archera_ListSegments",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListSegmentsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "orgId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "provider",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "PROVIDER_UNSPECIFIED",
-              "AWS",
-              "AZURE",
-              "GCP",
-              "KUBERNETES",
-              "UNKNOWN"
-            ],
-            "default": "PROVIDER_UNSPECIFIED"
-          }
-        ],
-        "tags": [
-          "Archera"
-        ]
-      }
-    },
-    "/v2/org/{orgId}/segments/{segmentId}": {
-      "get": {
-        "summary": "Retrieves detailed information about a specific segment.",
-        "operationId": "Archera_GetSegmentDetails",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1SegmentDetails"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "orgId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "segmentId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Archera"
         ]
       }
     }
