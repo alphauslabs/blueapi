@@ -942,6 +942,14 @@ service Billing {
       get: "/v1/csvsettings"
     };
   }
+
+  // Creates a child billing group under a parent billing group
+  rpc CreateChildBillingGroup(CreateChildBillingGroupRequest) returns (CreateChildBillingGroupResponse) {
+    option (google.api.http) = {
+      post: "/v1/billinggroup/child"
+      body: "*"
+    };
+  }
 }
 
 message BillingGroup {
@@ -3160,3 +3168,79 @@ message ListBillingGroupsPaginatedResponse {
   // Total number of pages.
   int32 totalPages = 5;
 }
+
+
+message ChildBillingGroupBasicInformation {
+  // Required. Child billing group id that is created by the client.
+  string id = 1;
+
+  // Required. Parent id.
+  string parentId = 2;
+ 
+  // Required. Child billing group name.
+  string name = 3;
+
+  // Required. Company name.
+  string companyName = 4;
+}
+
+
+message CustomizedBillingServiceBillingGroup {
+  // Required. [blueapi.api.ripple.CustomizedBillingService.id]
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. vendor that applied to the CustomizedBillingService　config.
+  string vendor = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. [blueapi.api.ripple.ChargingTarget]
+  api.ripple.ChargingTarget chargingTarget = 3 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. accounts that applied to the CustomizedBillingService　config.
+  repeated api.Account accounts = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ChildBillingGroup {
+  // Internal Id. Only visible internally.
+  string childBillingGroupInternalId = 1;
+
+  ChildBillingGroupBasicInformation basicInformation = 2;
+  
+  BillingGroupInvoiceSettings invoiceSettings = 3;
+  
+  AccountInvoiceServiceDiscounts serviceDiscounts = 4;
+  
+  CustomizedBillingServiceBillingGroup customizedBillingServices = 5;
+}
+
+message ChildBillingGroupInvoiceSettings {
+  // AWS invoice settings
+  BillingGroupVendoredInvoiceSetting aws = 1;
+  
+  bool accountSupportPlanEnabled = 2;
+
+  // Optional. Only required when accountSupportPlanEnabled is true.
+  repeated api.ripple.v1.BillingGroupAccountSupportPlan accountSupportPlanSettings = 3;
+
+  // Azure invoice settings
+  // BillingGroupVendoredInvoiceSetting azure = 2;
+
+  // GCP invoice settings
+  // BillingGroupVendoredInvoiceSetting gcp = 3;
+}
+
+
+message CreateChildBillingGroupRequest {
+  // Required. Basic information for the child billing group.
+  ChildBillingGroupBasicInformation basicInformation = 1;
+
+  // Required. Invoice settings for the child billing group.
+  ChildBillingGroupInvoiceSettings invoiceSettings = 2;
+  
+  // AccountInvoiceServiceDiscounts serviceDiscounts = 3;
+  // CustomizedBillingServiceBillingGroup customizedBillingServices = 4;
+}
+
+message CreateChildBillingGroupResponse {}
+
+
+
