@@ -10814,6 +10814,195 @@
         ]
       }
     },
+    "/v1/onboarding": {
+      "post": {
+        "summary": "Registers a new child organization under the channel partner.\nCreates the organization, sets up user memberships, and establishes the partnership relationship.",
+        "operationId": "Archera_RegisterOrg",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RegisterOrgResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RegisterOrgRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/onboarding/aws/cloudformation-template": {
+      "get": {
+        "summary": "Generates CloudFormation template for AWS integration.\nCreates the necessary IAM role and policy template for setting up AWS access.",
+        "operationId": "Archera_GetAwsCloudFormationTemplate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAwsCloudFormationTemplateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "mspId",
+            "description": "Ripple context (used for lookup/mapping; not sent to Archera)",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "billingId",
+            "description": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "archeraOrgId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/onboarding/aws/launch-stack-url": {
+      "get": {
+        "summary": "Generates AWS CloudFormation launch stack URL.\nCreates a pre-configured URL to deploy the CloudFormation stack in the AWS console.",
+        "operationId": "Archera_GetAwsLaunchStackUrl",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAwsLaunchStackUrlResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "mspId",
+            "description": "Ripple context (used for lookup/mapping; not sent to Archera)",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "billingId",
+            "description": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "archeraOrgId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/onboarding/aws/start": {
+      "post": {
+        "summary": "Starts the onboarding process for an organization.\nCreates or retrieves an onboarding record and sets the provider to AWS.",
+        "operationId": "Archera_StartAwsOnboarding",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1StartAwsOnboardingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1StartAwsOnboardingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
+    "/v1/onboarding/aws/verify": {
+      "post": {
+        "summary": "Runs AWS onboarding verification process.\nCreates a new CUR or uses an existing CUR and verifies AWS integration setup\nand returns validation status for all required features.",
+        "operationId": "Archera_VerifyAwsOnboarding",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1VerifyAwsOnboardingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1VerifyAwsOnboardingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Archera"
+        ]
+      }
+    },
     "/v1/org": {
       "post": {
         "summary": "Creates a new organization.",
@@ -20757,6 +20946,17 @@
     "ArcheraCommitmentPlanApplyBody": {
       "type": "object"
     },
+    "AwsOnboardingFeatureCheckAwsOnboardingFeatureStatus": {
+      "type": "string",
+      "enum": [
+        "AWS_ONBOARDING_FEATURE_STATUS_UNSPECIFIED",
+        "AWS_ONBOARDING_FEATURE_STATUS_AVAILABLE",
+        "AWS_ONBOARDING_FEATURE_STATUS_WARNING",
+        "AWS_ONBOARDING_FEATURE_STATUS_MISSING",
+        "AWS_ONBOARDING_FEATURE_STATUS_UNKNOWN"
+      ],
+      "default": "AWS_ONBOARDING_FEATURE_STATUS_UNSPECIFIED"
+    },
     "BillingAllocateAdjustmentEntryBody": {
       "type": "object",
       "properties": {
@@ -24669,6 +24869,17 @@
         "estimatedMonthlySavings": {
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "VerifyAwsOnboardingResponseAwsOnboardingFeatureCheck": {
+      "type": "object",
+      "properties": {
+        "feature": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/AwsOnboardingFeatureCheckAwsOnboardingFeatureStatus"
         }
       }
     },
@@ -33492,6 +33703,35 @@
         }
       }
     },
+    "v1Address": {
+      "type": "object",
+      "properties": {
+        "line1": {
+          "type": "string",
+          "title": "required: ex. \"123 Main St\""
+        },
+        "city": {
+          "type": "string",
+          "title": "required: ex. \"Springfield\""
+        },
+        "state": {
+          "type": "string",
+          "title": "required: ex. \"IL\""
+        },
+        "zip": {
+          "type": "string",
+          "title": "required: ex. \"62701\""
+        },
+        "country": {
+          "type": "string",
+          "title": "required: ex. \"USA\""
+        },
+        "line2": {
+          "type": "string",
+          "title": "optional: ex. \"Apt 4B\""
+        }
+      }
+    },
     "v1AdjustmentEntry": {
       "type": "object",
       "properties": {
@@ -33966,6 +34206,28 @@
             "type": "object",
             "$ref": "#/definitions/AccountHistory"
           }
+        }
+      }
+    },
+    "v1AwsExistingCur": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "type": "string",
+          "title": "required if existingCur is provided"
+        },
+        "bucket": {
+          "type": "string",
+          "title": "required if existingCur is provided"
+        },
+        "prefix": {
+          "type": "string",
+          "title": "required if existingCur is provided"
+        },
+        "reportName": {
+          "type": "string",
+          "description": "maps to \"report_name\" conceptually",
+          "title": "required if existingCur is provided"
         }
       }
     },
@@ -38128,6 +38390,23 @@
       },
       "description": "Response message for the Flow.GetAwsAccounts rpc."
     },
+    "v1GetAwsCloudFormationTemplateResponse": {
+      "type": "object",
+      "properties": {
+        "template": {
+          "type": "object",
+          "title": "CloudFormation template JSON object"
+        }
+      }
+    },
+    "v1GetAwsLaunchStackUrlResponse": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        }
+      }
+    },
     "v1GetBillingGroupAccountSupportPlanResponse": {
       "type": "object",
       "properties": {
@@ -41355,6 +41634,17 @@
         }
       }
     },
+    "v1Membership": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
     "v1MergeSuggestedUnitsRequest": {
       "type": "object",
       "properties": {
@@ -41586,6 +41876,17 @@
             "type": "object",
             "$ref": "#/definitions/coverExecutedRecommendationDetails"
           }
+        }
+      }
+    },
+    "v1OrgUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
         }
       }
     },
@@ -42678,6 +42979,84 @@
         }
       }
     },
+    "v1RegisterOrgRequest": {
+      "type": "object",
+      "properties": {
+        "mspId": {
+          "type": "string",
+          "title": "Ripple context (not sent to Archera; used for mapping/persistence)"
+        },
+        "billingId": {
+          "type": "string",
+          "description": "If present =\u003e we're onboarding an MSP customer/org (3rd layer )\nIf empty =\u003e MSP-level org (2nd layer)."
+        },
+        "name": {
+          "type": "string",
+          "title": "required"
+        },
+        "labraSubscriptionId": {
+          "type": "string"
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1OrgUser"
+          },
+          "title": "required"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "primaryAddress": {
+          "$ref": "#/definitions/v1Address",
+          "title": "required"
+        },
+        "awsMarketplaceOfferLink": {
+          "type": "string"
+        },
+        "azureMarketplaceOfferLink": {
+          "type": "string"
+        },
+        "gcpMarketplaceOfferLink": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RegisterOrgResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "memberships": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Membership"
+          },
+          "title": "Archera create-org response fields"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "primaryAddress": {
+          "$ref": "#/definitions/v1Address"
+        },
+        "awsMarketplaceOfferLink": {
+          "type": "string"
+        },
+        "azureMarketplaceOfferLink": {
+          "type": "string"
+        },
+        "gcpMarketplaceOfferLink": {
+          "type": "string"
+        }
+      }
+    },
     "v1RemoveCostGroupMemberResponse": {
       "type": "object",
       "properties": {
@@ -43674,6 +44053,30 @@
         }
       },
       "description": "Savings Plan Details to be used in the GetDailyUsageCostDetailsResponse."
+    },
+    "v1StartAwsOnboardingRequest": {
+      "type": "object",
+      "properties": {
+        "mspId": {
+          "type": "string",
+          "title": "Ripple context (used for lookup/mapping; not sent to Archera)"
+        },
+        "billingId": {
+          "type": "string",
+          "title": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)"
+        },
+        "archeraOrgId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1StartAwsOnboardingResponse": {
+      "type": "object",
+      "properties": {
+        "onboardingId": {
+          "type": "string"
+        }
+      }
     },
     "v1SupportPlan": {
       "type": "string",
@@ -44855,6 +45258,46 @@
       "properties": {
         "result": {
           "type": "boolean"
+        }
+      }
+    },
+    "v1VerifyAwsOnboardingRequest": {
+      "type": "object",
+      "properties": {
+        "mspId": {
+          "type": "string",
+          "title": "Ripple context (used for lookup/mapping; not sent to Archera)"
+        },
+        "billingId": {
+          "type": "string",
+          "title": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)"
+        },
+        "archeraOrgId": {
+          "type": "string"
+        },
+        "onboardingId": {
+          "type": "string",
+          "title": "From /start response"
+        },
+        "accountId": {
+          "type": "string",
+          "title": "AWS account id being onboarded/verified"
+        },
+        "existingCur": {
+          "$ref": "#/definitions/v1AwsExistingCur",
+          "description": "Optional: if set, Archera will use this existing CUR. If omitted, Archera may create a new CUR."
+        }
+      }
+    },
+    "v1VerifyAwsOnboardingResponse": {
+      "type": "object",
+      "properties": {
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/VerifyAwsOnboardingResponseAwsOnboardingFeatureCheck"
+          }
         }
       }
     },

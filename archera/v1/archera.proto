@@ -26,7 +26,7 @@ service Archera {
       body: "*"
     };
   }
-  
+
   // ####################### COMMITMENT PLANS #######################
 
   // Retrieves detailed information about a specific commitment plan, including costs, savings projections, and commitment coverage.
@@ -66,7 +66,8 @@ service Archera {
   }
 
   // Retrieves resource matches for a specific commitment plan.
-  rpc ListCommitmentPlanResourceMatches(ListCommitmentPlanResourceMatchesRequest) returns (ListCommitmentPlanResourceMatchesResponse) {
+  rpc ListCommitmentPlanResourceMatches(ListCommitmentPlanResourceMatchesRequest)
+      returns (ListCommitmentPlanResourceMatchesResponse) {
     option (google.api.http) = {
       get: "/v1/org/{orgId}/commitment-plans/{planId}/resource-matches"
     };
@@ -130,12 +131,57 @@ service Archera {
   }
 
   // Retrieves default purchase plans for a specific segment.
-rpc ListDefaultPurchasePlans(ListDefaultPurchasePlansRequest) returns (ListDefaultPurchasePlansResponse) {
-  option (google.api.http) = {
-    get: "/v1/org/{orgId}/purchase-plans-v1/default"
-  };
-}
+  rpc ListDefaultPurchasePlans(ListDefaultPurchasePlansRequest) returns (ListDefaultPurchasePlansResponse) {
+    option (google.api.http) = {
+      get: "/v1/org/{orgId}/purchase-plans-v1/default"
+    };
+  }
 
+  // ------------------------ ONBOARDING ------------------------
+
+  // Registers a new child organization under the channel partner.
+  // Creates the organization, sets up user memberships, and establishes the partnership relationship.
+  rpc RegisterOrg(RegisterOrgRequest) returns (RegisterOrgResponse) {
+    option (google.api.http) = {
+      post: "/v1/onboarding"
+      body: "*"
+    };
+  }
+
+  // Starts the onboarding process for an organization.
+  // Creates or retrieves an onboarding record and sets the provider to AWS.
+  rpc StartAwsOnboarding(StartAwsOnboardingRequest) returns (StartAwsOnboardingResponse) {
+    option (google.api.http) = {
+      post: "/v1/onboarding/aws/start"
+      body: "*"
+    };
+  }
+
+  // Generates CloudFormation template for AWS integration.
+  // Creates the necessary IAM role and policy template for setting up AWS access.
+  rpc GetAwsCloudFormationTemplate(GetAwsCloudFormationTemplateRequest) returns (GetAwsCloudFormationTemplateResponse) {
+    option (google.api.http) = {
+      get: "/v1/onboarding/aws/cloudformation-template"
+    };
+  }
+
+  // Generates AWS CloudFormation launch stack URL.
+  // Creates a pre-configured URL to deploy the CloudFormation stack in the AWS console.
+  rpc GetAwsLaunchStackUrl(GetAwsLaunchStackUrlRequest) returns (GetAwsLaunchStackUrlResponse) {
+    option (google.api.http) = {
+      get: "/v1/onboarding/aws/launch-stack-url"
+    };
+  }
+
+  // Runs AWS onboarding verification process.
+  // Creates a new CUR or uses an existing CUR and verifies AWS integration setup
+  // and returns validation status for all required features.
+  rpc VerifyAwsOnboarding(VerifyAwsOnboardingRequest) returns (VerifyAwsOnboardingResponse) {
+    option (google.api.http) = {
+      post: "/v1/onboarding/aws/verify"
+      body: "*"
+    };
+  }
 }
 
 // ####################### ENUMS #######################
@@ -184,8 +230,6 @@ enum UsageType {
 // ####################### REQUEST MESSAGES #######################
 
 message ListOrgsRequest {}
-
-
 
 message GetCommitmentPlanDetailsRequest {
   string orgId = 1;
@@ -277,7 +321,6 @@ message GetResourceDailyUsageRequest {
   int32 pageSize = 7;
 }
 
-
 message ListSegmentsRequest {
   string orgId = 1;
   Provider provider = 2;
@@ -291,6 +334,114 @@ message GetSegmentDetailsRequest {
 message ListDefaultPurchasePlansRequest {
   string orgId = 1;
   string segmentId = 2;
+}
+
+// ------------------------ ONBOARDING REQUEST ------------------------
+
+message OrgUser {
+  string email = 1;
+  string role = 2;
+}
+
+message Membership {
+  string role = 1;
+  string username = 2;
+}
+
+message Address {
+  // required: ex. "123 Main St"
+  string line1 = 1;
+  // required: ex. "Springfield"
+  string city = 2;
+  // required: ex. "IL"
+  string state = 3;
+  // required: ex. "62701"
+  string zip = 4;
+  // required: ex. "USA"
+  string country = 5;
+  // optional: ex. "Apt 4B"
+  string line2 = 6;
+}
+
+message AwsExistingCur {
+  // required if existingCur is provided
+  string region = 1;
+  // required if existingCur is provided
+  string bucket = 2;
+  // required if existingCur is provided
+  string prefix = 3;
+  // required if existingCur is provided
+  string reportName = 4; // maps to "report_name" conceptually
+}
+
+message RegisterOrgRequest {
+  // Ripple context (not sent to Archera; used for mapping/persistence)
+  string mspId = 1;
+
+  // If present => we're onboarding an MSP customer/org (3rd layer )
+  // If empty => MSP-level org (2nd layer).
+  string billingId = 2;
+
+  // required
+  string name = 3;
+  string labraSubscriptionId = 4;
+  // required
+  repeated OrgUser users = 5;
+  string domain = 6;
+  // required
+  Address primaryAddress = 7;
+  string awsMarketplaceOfferLink = 8;
+  string azureMarketplaceOfferLink = 9;
+  string gcpMarketplaceOfferLink = 10;
+}
+
+message StartAwsOnboardingRequest {
+  // Ripple context (used for lookup/mapping; not sent to Archera)
+  string mspId = 1;
+
+  // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
+  string billingId = 2;
+
+  string archeraOrgId = 3;
+}
+
+message GetAwsCloudFormationTemplateRequest {
+  // Ripple context (used for lookup/mapping; not sent to Archera)
+  string mspId = 1;
+
+  // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
+  string billingId = 2;
+
+  string archeraOrgId = 3;
+}
+
+message GetAwsLaunchStackUrlRequest {
+  // Ripple context (used for lookup/mapping; not sent to Archera)
+  string mspId = 1;
+
+  // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
+  string billingId = 2;
+
+  string archeraOrgId = 3;
+}
+
+message VerifyAwsOnboardingRequest {
+  // Ripple context (used for lookup/mapping; not sent to Archera)
+  string mspId = 1;
+
+  // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
+  string billingId = 2;
+
+  string archeraOrgId = 3;
+
+  // From /start response
+  string onboardingId = 4;
+
+  // AWS account id being onboarded/verified
+  string accountId = 5;
+
+  // Optional: if set, Archera will use this existing CUR. If omitted, Archera may create a new CUR.
+  AwsExistingCur existingCur = 6;
 }
 
 // ####################### RESPONSE MESSAGES #######################
@@ -586,7 +737,6 @@ message GetResourceDailyUsageResponse {
   repeated ResourceDailyUsage dailyUsage = 1;
 }
 
-
 message Segment {
   string id = 1;
   string name = 2;
@@ -612,9 +762,6 @@ message PurchasePlan {
   bool isRenewal = 4;
 }
 
-
-
-
 message SegmentDetails {
   string id = 1;
   string name = 2;
@@ -628,7 +775,7 @@ message SegmentDetails {
   string status = 10;
   string segmentClass = 11;
   google.protobuf.Struct params = 12;
-  
+
   // Cost metrics
   double monthlyCost = 13;
   double monthlyNetCost = 14;
@@ -638,15 +785,15 @@ message SegmentDetails {
   double monthlySpotCost = 18;
   double monthlySavings = 19;
   double monthlyBudget = 20;
-  
+
   // Coverage metrics
   double coverage = 21;
   double recommendedCoverage = 22;
   double targetCoverage = 23;
-  
+
   // Resource metrics
   int32 monthlyResourceCount = 24;
-  
+
   // Purchase plans
   repeated PurchasePlan purchasePlans = 25;
 }
@@ -714,7 +861,7 @@ message DefaultPurchasePlan {
   string lastModified = 10;
   google.protobuf.Value createdBy = 11;
   google.protobuf.Value executionPolicy = 12;
-  
+
   // Flags
   bool isDefault = 13;
   bool isRecommended = 14;
@@ -722,7 +869,7 @@ message DefaultPurchasePlan {
   bool isCalculating = 16;
   bool isLocked = 17;
   bool isSaved = 18;
-  
+
   // Contract details
   repeated ContractSpec includedContractSpecs = 19;
   repeated string includedContractTerms = 20;
@@ -731,12 +878,12 @@ message DefaultPurchasePlan {
   double maxUpfrontCost = 23;
   double minimumUpfrontInterestRate = 24;
   google.protobuf.Value recommendWithinCoveredAccounts = 25;
-  
+
   // Dates
   string startDate = 26;
   string endDate = 27;
   string dataSource = 28;
-  
+
   // Cost metrics
   double beforeCost = 29;
   double afterCost = 30;
@@ -748,22 +895,22 @@ message DefaultPurchasePlan {
   double upfrontCost = 36;
   double totalCost = 37;
   double totalMonthlyBeforeCost = 38;
-  
+
   // Savings metrics
   double savings = 39;
   double monthlySavings = 40;
   double totalSavings = 41;
   double fee = 42;
-  
+
   // Coverage metrics
   double commitmentCoverage = 43;
   double minimumCommitmentCost = 44;
   double breakevenHours = 45;
-  
+
   // Aggregate data
   AggregateMetrics aggregateMetrics = 46;
   repeated PlanSummary summaries = 47;
-  
+
   // IDs
   repeated string reservationIds = 48;
   repeated string resourceIds = 49;
@@ -774,4 +921,49 @@ message DefaultPurchasePlan {
 
 message ListDefaultPurchasePlansResponse {
   repeated DefaultPurchasePlan plans = 1;
+}
+
+// ------------------------ ONBOARDING RESPONSE ------------------------
+
+message RegisterOrgResponse {
+  string id = 1;
+  string name = 2;
+
+  // Archera create-org response fields
+  repeated Membership memberships = 3;
+  string domain = 4;
+  Address primaryAddress = 5;
+  string awsMarketplaceOfferLink = 6;
+  string azureMarketplaceOfferLink = 7;
+  string gcpMarketplaceOfferLink = 8;
+}
+
+message StartAwsOnboardingResponse {
+  string onboardingId = 1;
+}
+
+message GetAwsCloudFormationTemplateResponse {
+  // CloudFormation template JSON object
+  google.protobuf.Struct template = 1;
+}
+
+message GetAwsLaunchStackUrlResponse {
+  string url = 1;
+}
+
+message VerifyAwsOnboardingResponse {
+  message AwsOnboardingFeatureCheck {
+    enum AwsOnboardingFeatureStatus {
+      AWS_ONBOARDING_FEATURE_STATUS_UNSPECIFIED = 0;
+      AWS_ONBOARDING_FEATURE_STATUS_AVAILABLE = 1;
+      AWS_ONBOARDING_FEATURE_STATUS_WARNING = 2;
+      AWS_ONBOARDING_FEATURE_STATUS_MISSING = 3;
+      AWS_ONBOARDING_FEATURE_STATUS_UNKNOWN = 4;
+    }
+
+    string feature = 1;
+    AwsOnboardingFeatureStatus status = 2;
+  }
+
+  repeated AwsOnboardingFeatureCheck checks = 1;
 }
