@@ -1,21 +1,21 @@
 syntax = "proto3";
 
-package blueapi.archera.v1;
+package blueapi.gc.v1;
 
 import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
-option go_package = "github.com/alphauslabs/blueapi/archera";
-option java_package = "cloud.alphaus.api.archera";
-option java_outer_classname = "ArcheraProto";
+option go_package = "github.com/alphauslabs/blueapi/gc";
+option java_package = "cloud.alphaus.api.gc";
+option java_outer_classname = "GuaranteedCommitmentProto";
 
-// Archera service definition.
-service Archera {
+// GuaranteedCommitment service definition.
+service GuaranteedCommitment {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
-    description: "(Alpha) Archera API. Base URL: https://api.alphaus.cloud/m/blue/archera"
+    description: "(Alpha) GuaranteedCommitment API. Base URL: https://api.alphaus.cloud/m/blue/gc"
     external_docs: {
-      url: "https://github.com/alphauslabs/blueapi/tree/main/archera/";
+      url: "https://github.com/alphauslabs/blueapi/tree/main/gc/";
       description: "Service definition";
     }
   };
@@ -32,36 +32,36 @@ service Archera {
   // Retrieves detailed information about a specific commitment plan, including costs, savings projections, and commitment coverage.
   rpc GetCommitmentPlanDetails(GetCommitmentPlanDetailsRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
-      get: "/v1/org/{orgId}/commitment-plans/{planId}"
+      get: "/v1/commitment-plans/{planId}"
     };
   }
 
   // Executes a commitment purchase plan, initiating the commitment purchase process.
   rpc CommitmentPlanApply(CommitmentPlanApplyRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
-      post: "/v1/org/{orgId}/commitment-plans/{planId}/apply"
+      post: "/v1/commitment-plans/{planId}/apply"
       body: "*"
     };
   }
 
-  // Retrieves the three default Archera commitment plans (High Savings, Balanced, Recommended) for the specified cloud provider.
+  // Retrieves the three default GuaranteedCommitment commitment plans (High Savings, Balanced, Recommended) for the specified cloud provider.
   rpc ListDefaultCommitmentPlans(ListDefaultCommitmentPlansRequest) returns (ListDefaultCommitmentPlansResponse) {
     option (google.api.http) = {
-      get: "/v1/org/{orgId}/commitment-plans/default"
+      get: "/v1/commitment-plans/default"
     };
   }
 
-  // Retrieves only the recommended Archera commitment plan for the specified cloud provider.
+  // Retrieves only the recommended GuaranteedCommitment commitment plan for the specified cloud provider.
   rpc GetRecommendedCommitmentPlan(GetRecommendedCommitmentPlanRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
-      get: "/v1/org/{orgId}/commitment-plans/recommended"
+      get: "/v1/commitment-plans/recommended"
     };
   }
 
   // Retrieves line items for a specific commitment plan.
   rpc ListCommitmentPlanLineItems(ListCommitmentPlanLineItemsRequest) returns (ListCommitmentPlanLineItemsResponse) {
     option (google.api.http) = {
-      get: "/v1/org/{orgId}/commitment-plans/{planId}/line-items"
+      get: "/v1/commitment-plans/{planId}/line-items"
     };
   }
 
@@ -69,7 +69,7 @@ service Archera {
   rpc ListCommitmentPlanResourceMatches(ListCommitmentPlanResourceMatchesRequest)
       returns (ListCommitmentPlanResourceMatchesResponse) {
     option (google.api.http) = {
-      get: "/v1/org/{orgId}/commitment-plans/{planId}/resource-matches"
+      get: "/v1/commitment-plans/{planId}/resource-matches"
     };
   }
 
@@ -78,14 +78,14 @@ service Archera {
   // Retrieves a paginated list of commitments for the specified organization and time period.
   rpc ListCommitments(ListCommitmentsRequest) returns (ListCommitmentsResponse) {
     option (google.api.http) = {
-      get: "/v1/org/{orgId}/commitments"
+      get: "/v1/commitments"
     };
   }
 
   // Generates time-series chart data for commitment metrics over the specified time period.
   rpc GetCommitmentsChart(GetCommitmentsChartRequest) returns (CommitmentsChartResponse) {
     option (google.api.http) = {
-      get: "/v1/org/{orgId}/commitments/chart"
+      get: "/v1/commitments/chart"
     };
   }
 
@@ -94,7 +94,7 @@ service Archera {
   // Retrieves key performance metrics for cloud commitments.
   rpc GetMetrics(GetMetricsRequest) returns (MetricsResponse) {
     option (google.api.http) = {
-      get: "/v1/org/{orgId}/metrics"
+      get: "/v1/metrics"
     };
   }
 
@@ -103,14 +103,14 @@ service Archera {
   // Retrieves a list of infrastructure resources for the organization.
   rpc ListResources(ListResourcesRequest) returns (ListResourcesResponse) {
     option (google.api.http) = {
-      get: "/v1/org/{orgId}/resources"
+      get: "/v1/resources"
     };
   }
 
   // Retrieves daily usage data for a specific resource within the specified date range.
   rpc GetResourceDailyUsage(GetResourceDailyUsageRequest) returns (GetResourceDailyUsageResponse) {
     option (google.api.http) = {
-      get: "/v1/org/{orgId}/resources/{resourceId}/daily-usage"
+      get: "/v1/resources/{resourceId}/daily-usage"
     };
   }
 
@@ -119,21 +119,21 @@ service Archera {
   // Retrieves all segments for the specified organization and provider.
   rpc ListSegments(ListSegmentsRequest) returns (ListSegmentsResponse) {
     option (google.api.http) = {
-      get: "/v1/org/{orgId}/segments/info"
+      get: "/v1/segments/info"
     };
   }
 
   // Retrieves detailed information about a specific segment.
   rpc GetSegmentDetails(GetSegmentDetailsRequest) returns (SegmentDetails) {
     option (google.api.http) = {
-      get: "/v1/org/{orgId}/segments/{segmentId}"
+      get: "/v1/segments/{segmentId}"
     };
   }
 
   // Retrieves default purchase plans for a specific segment.
   rpc ListDefaultPurchasePlans(ListDefaultPurchasePlansRequest) returns (ListDefaultPurchasePlansResponse) {
     option (google.api.http) = {
-      get: "/v1/org/{orgId}/purchase-plans-v1/default"
+      get: "/v1/purchase-plans-v1/default"
     };
   }
 
@@ -375,7 +375,7 @@ message AwsExistingCur {
 }
 
 message RegisterOrgRequest {
-  // Ripple context (not sent to Archera; used for mapping/persistence)
+  // Ripple context (not sent to GuaranteedCommitment; used for mapping/persistence)
   string mspId = 1;
 
   // If present => we're onboarding an MSP customer/org (3rd layer )
@@ -396,43 +396,43 @@ message RegisterOrgRequest {
 }
 
 message StartAwsOnboardingRequest {
-  // Ripple context (used for lookup/mapping; not sent to Archera)
+  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitment)
   string mspId = 1;
 
   // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
   string billingId = 2;
 
-  string archeraOrgId = 3;
+  string gcOrgId = 3;
 }
 
 message GetAwsCloudFormationTemplateRequest {
-  // Ripple context (used for lookup/mapping; not sent to Archera)
+  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitment)
   string mspId = 1;
 
   // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
   string billingId = 2;
 
-  string archeraOrgId = 3;
+  string gcOrgId = 3;
 }
 
 message GetAwsLaunchStackUrlRequest {
-  // Ripple context (used for lookup/mapping; not sent to Archera)
+  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitment)
   string mspId = 1;
 
   // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
   string billingId = 2;
 
-  string archeraOrgId = 3;
+  string gcOrgId = 3;
 }
 
 message VerifyAwsOnboardingRequest {
-  // Ripple context (used for lookup/mapping; not sent to Archera)
+  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitment)
   string mspId = 1;
 
   // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
   string billingId = 2;
 
-  string archeraOrgId = 3;
+  string gcOrgId = 3;
 
   // From /start response
   string onboardingId = 4;
@@ -440,7 +440,7 @@ message VerifyAwsOnboardingRequest {
   // AWS account id being onboarded/verified
   string accountId = 5;
 
-  // Optional: if set, Archera will use this existing CUR. If omitted, Archera may create a new CUR.
+  // Optional: if set, GuaranteedCommitment will use this existing CUR. If omitted, GuaranteedCommitment may create a new CUR.
   AwsExistingCur existingCur = 6;
 }
 
@@ -929,7 +929,7 @@ message RegisterOrgResponse {
   string id = 1;
   string name = 2;
 
-  // Archera create-org response fields
+  // GuaranteedCommitment create-org response fields
   repeated Membership memberships = 3;
   string domain = 4;
   Address primaryAddress = 5;
