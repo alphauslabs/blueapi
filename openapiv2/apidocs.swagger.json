@@ -5627,6 +5627,36 @@
       }
     },
     "/v1/billinggroup/child": {
+      "get": {
+        "summary": "Gets child billing group info",
+        "operationId": "Billing_GetChildBillingGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetChildBillingGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Required. Internal Id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
       "post": {
         "summary": "Creates a child billing group under a parent billing group",
         "operationId": "Billing_CreateChildBillingGroup",
@@ -34929,6 +34959,18 @@
       },
       "title": "Response message for the Flow.CheckSPToPurchaseDetailsLinkExpiryRequest RPC"
     },
+    "v1ChildBillingGroup": {
+      "type": "object",
+      "properties": {
+        "basicInformation": {
+          "$ref": "#/definitions/v1ChildBillingGroupBasicInformation"
+        },
+        "invoiceSettings": {
+          "$ref": "#/definitions/v1ChildBillingGroupInvoiceSettings"
+        }
+      },
+      "description": "Contains basic information and invoice settings related data."
+    },
     "v1ChildBillingGroupBasicInformation": {
       "type": "object",
       "properties": {
@@ -38577,6 +38619,14 @@
         }
       },
       "title": "Response message for GetChannels"
+    },
+    "v1GetChildBillingGroupResponse": {
+      "type": "object",
+      "properties": {
+        "details": {
+          "$ref": "#/definitions/v1ChildBillingGroup"
+        }
+      }
     },
     "v1GetCloudWatchMetricsStreamTemplateUrlResponse": {
       "type": "object",

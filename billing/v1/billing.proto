@@ -950,6 +950,13 @@ service Billing {
       body: "*"
     };
   }
+
+  // Gets child billing group info
+  rpc GetChildBillingGroup(GetChildBillingGroupRequest) returns (GetChildBillingGroupResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroup/child"
+    };
+  }
 }
 
 message BillingGroup {
@@ -3202,17 +3209,16 @@ message CustomizedBillingServiceBillingGroup {
   repeated api.Account accounts = 4 [(google.api.field_behavior) = OPTIONAL];
 }
 
-message ChildBillingGroup {
-  // Internal Id. Only visible internally.
-  string childBillingGroupInternalId = 1;
 
-  ChildBillingGroupBasicInformation basicInformation = 2;
+// Contains basic information and invoice settings related data.
+message ChildBillingGroup {
+  ChildBillingGroupBasicInformation basicInformation = 1;
   
-  BillingGroupInvoiceSettings invoiceSettings = 3;
+  ChildBillingGroupInvoiceSettings invoiceSettings = 2;
   
-  AccountInvoiceServiceDiscounts serviceDiscounts = 4;
+  // AccountInvoiceServiceDiscounts serviceDiscounts = 3;
   
-  CustomizedBillingServiceBillingGroup customizedBillingServices = 5;
+  // CustomizedBillingServiceBillingGroup customizedBillingServices = 4;
 }
 
 message ChildBillingGroupInvoiceSettings {
@@ -3245,5 +3251,14 @@ message CreateChildBillingGroupRequest {
 
 message CreateChildBillingGroupResponse {}
 
+
+message GetChildBillingGroupRequest {
+  // Required. Internal Id
+  string id = 1;
+}
+
+message GetChildBillingGroupResponse {
+  ChildBillingGroup details = 1;
+}
 
 
