@@ -17,7 +17,7 @@ python3 -m grpc_tools.protoc -I . --python_out=./generated/py/alphausblue --grpc
         ./flow/v1/*.proto \
         ./prism/v1/*.proto \
         ./vortex/v1/*.proto \
-        ./archera/v1/*.proto \
+        ./gc/v1/*.proto \
         ./preferences/v1/*.proto
 
 # Compile ./api/* for blue-sdk-python; without grpc.
@@ -47,7 +47,7 @@ protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true --opena
        ./flow/v1/*.proto \
        ./prism/v1/*.proto \
        ./vortex/v1/*.proto \
-       ./archera/v1/*.proto \
+       ./gc/v1/*.proto \
        ./preferences/v1/*.proto
 
 echo "Generating html docs..."
@@ -63,5 +63,5 @@ protoc --doc_out=./generated/ --doc_opt=html,index.html \
        ./flow/v1/*.proto \
        ./prism/v1/*.proto \
        ./vortex/v1/*.proto \
-       ./archera/v1/*.proto \
+       ./gc/v1/*.proto \
        ./preferences/v1/*.proto
