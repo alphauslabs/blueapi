@@ -959,7 +959,7 @@ service Billing {
   }
 
   // Lists child billing groups under a specific filter
-  rpc ListChildBillingGroups(ListChildBillingGroupsRequest) returns (stream ListChildBillingGroupsResponse) {
+  rpc ListChildBillingGroups(ListChildBillingGroupsRequest) returns (stream ChildBillingGroup) {
     option (google.api.http) = {
       post: "/v1/billinggroups/child:read"
       body: "*"
@@ -3291,9 +3291,6 @@ message ListChildBillingGroupsRequest {
   string parentId = 2;
 }
 
-message ListChildBillingGroupsResponse {
-  repeated ChildBillingGroup childBillingGroups = 1;
-}
 
 message BulkCreateBillingGroupRequest {
   // Required. The list of billing group to create.
