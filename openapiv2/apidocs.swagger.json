@@ -23731,6 +23731,15 @@
       ],
       "default": "DEFAULT"
     },
+    "ExecuteRecommendationV3RequestOption": {
+      "type": "string",
+      "enum": [
+        "OPTION_UNSPECIFIED",
+        "SUBMIT_TEMPLATE",
+        "RETRY_EXECUTE"
+      ],
+      "default": "OPTION_UNSPECIFIED"
+    },
     "FilterCriteriaFilterOperator": {
       "type": "string",
       "enum": [
@@ -37951,7 +37960,7 @@
     "v1ExecuteRecommendationV3Request": {
       "type": "object",
       "properties": {
-        "recommendationIds": {
+        "ids": {
           "type": "array",
           "items": {
             "type": "string"
@@ -37959,11 +37968,19 @@
         },
         "executeType": {
           "$ref": "#/definitions/ExecuteRecommendationV3RequestExecuteType"
+        },
+        "option": {
+          "$ref": "#/definitions/ExecuteRecommendationV3RequestOption"
         }
       }
     },
     "v1ExecuteRecommendationV3Response": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "object"
+        }
+      }
     },
     "v1ExportAccountInvoiceServiceDiscountsRequest": {
       "type": "object",
@@ -41417,20 +41434,23 @@
         "costgroupId": {
           "type": "string"
         },
-        "dateDetected": {
-          "type": "string"
-        },
-        "dateStart": {
-          "type": "string"
-        },
-        "dateEnd": {
-          "type": "string"
-        },
         "statuses": {
           "type": "array",
           "items": {
             "type": "string"
           }
+        },
+        "lastDetectedStartDate": {
+          "type": "string"
+        },
+        "lastDetectedEndDate": {
+          "type": "string"
+        },
+        "dateDetectedStartDate": {
+          "type": "string"
+        },
+        "dateDetectedEndDate": {
+          "type": "string"
         }
       }
     },

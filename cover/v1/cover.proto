@@ -1520,22 +1520,29 @@ message ExecuteRecommendationV3Request {
     DEFAULT = 0;
     MARK_AS_EXECUTED = 1;
     UNDO_EXECUTED = 2;
-
   }
-  repeated string recommendationIds = 1;
+  enum Option {
+    OPTION_UNSPECIFIED = 0;
+    SUBMIT_TEMPLATE = 1;
+    RETRY_EXECUTE = 2;
+  }
+  repeated string ids = 1;
   ExecuteType executeType = 2;
+  optional Option option = 3;
 }
 
 message ExecuteRecommendationV3Response {
-
+  google.protobuf.Struct result = 1;
 }
 
 message ListRecommendationsV3Request {
   string costgroupId = 1;
-  optional string dateDetected = 2;
-  optional string dateStart = 3;
-  optional string dateEnd = 4;
-  repeated string statuses = 5;
+  repeated string statuses = 2;
+  optional string lastDetectedStartDate = 3;
+  optional string lastDetectedEndDate = 4;
+  optional string dateDetectedStartDate = 5;
+  optional string dateDetectedEndDate = 6;
+
 }
 
 message RecommendationSummary {
