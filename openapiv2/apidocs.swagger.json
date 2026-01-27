@@ -6515,6 +6515,113 @@
         ]
       }
     },
+    "/v1/billinggroups/child": {
+      "post": {
+        "summary": "Creates a child billing group under a parent billing group",
+        "operationId": "Billing_CreateChildBillingGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateChildBillingGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateChildBillingGroupRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/billinggroups/child/{internalId}": {
+      "get": {
+        "summary": "Gets child billing group info",
+        "operationId": "Billing_GetChildBillingGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetChildBillingGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "internalId",
+            "description": "Required. Internal Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/billinggroups/child:read": {
+      "post": {
+        "summary": "Lists child billing groups under a specific filter",
+        "operationId": "Billing_ListChildBillingGroups",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1ListChildBillingGroupsResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1ListChildBillingGroupsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListChildBillingGroupsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups/merged": {
       "post": {
         "summary": "Registers a billing group with Merged Endpoints. Only available in Ripple. WORK IN PROGRESS",
@@ -41052,6 +41159,31 @@
         }
       },
       "description": "Response message for the Cost.ListCalculatorRunningAccounts rpc."
+    },
+    "v1ListChildBillingGroupsRequest": {
+      "type": "object",
+      "properties": {
+        "rootId": {
+          "type": "string",
+          "description": "Root parent Id. If not empty return all child billing group under the root parent.\nIf both root and parent are empty returns all child billing groups under the MSP."
+        },
+        "parentId": {
+          "type": "string",
+          "description": "Parent Id. If not empty return all child billing group under the parent only, \nIf both root and parent are empty returns all child billing groups under the MSP."
+        }
+      }
+    },
+    "v1ListChildBillingGroupsResponse": {
+      "type": "object",
+      "properties": {
+        "childBillingGroups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ChildBillingGroup"
+          }
+        }
+      }
     },
     "v1ListCommitmentPlanLineItemsResponse": {
       "type": "object",
