@@ -957,6 +957,15 @@ service Billing {
       get: "/v1/billinggroup/child"
     };
   }
+
+  // Registers multiple billing groups in bulk.
+  rpc BulkCreateBillingGroup(BulkCreateBillingGroupRequest) returns (BulkCreateBillingGroupResponse) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups:bulkCreate"
+      body: "*"
+    };
+  }
+
 }
 
 message BillingGroup {
@@ -3260,6 +3269,33 @@ message GetChildBillingGroupRequest {
 
 message GetChildBillingGroupResponse {
   ChildBillingGroup details = 1;
+}
+
+// Request message for BulkCreateBillingGroup.
+message BulkCreateBillingGroupRequest {
+  // Required. The list of billing groups to create.
+  repeated CreateBillingGroupRequest requests = 1;
+}
+
+// Response message for BulkCreateBillingGroup.
+message BulkCreateBillingGroupResponse {
+  // The list of created billing groups.
+  repeated BillingGroup billingGroups = 1;
+
+  // If an error occurs for a specific billing group, it will be included here.
+  repeated BulkCreateBillingGroupError errors = 2;
+}
+
+// Error message for BulkCreateBillingGroup.
+message BulkCreateBillingGroupError {
+  // The index of the request that failed (zero-based).
+  int32 index = 1;
+
+  // The billing group ID that failed to create.
+  string billingGroupId = 2;
+
+  // The error message.
+  string message = 3;
 }
 
 
