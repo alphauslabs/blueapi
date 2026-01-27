@@ -946,7 +946,7 @@ service Billing {
   // Creates a child billing group under a parent billing group
   rpc CreateChildBillingGroup(CreateChildBillingGroupRequest) returns (CreateChildBillingGroupResponse) {
     option (google.api.http) = {
-      post: "/v1/billinggroup/child"
+      post: "/v1/billinggroups/child"
       body: "*"
     };
   }
@@ -954,7 +954,15 @@ service Billing {
   // Gets child billing group info
   rpc GetChildBillingGroup(GetChildBillingGroupRequest) returns (GetChildBillingGroupResponse) {
     option (google.api.http) = {
-      get: "/v1/billinggroup/child"
+      get: "/v1/billinggroups/child/{internalId}"
+    };
+  }
+
+  // Lists child billing groups under a specific filter
+  rpc ListChildBillingGroups(ListChildBillingGroupsRequest) returns (stream ListChildBillingGroupsResponse) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups/child:read"
+      body: "*"
     };
   }
 }
@@ -3258,11 +3266,24 @@ message CreateChildBillingGroupResponse {}
 
 message GetChildBillingGroupRequest {
   // Required. Internal Id
-  string id = 1;
+  string internalId = 1;
 }
 
 message GetChildBillingGroupResponse {
   ChildBillingGroup details = 1;
 }
 
+message ListChildBillingGroupsRequest {
+  // Root parent Id. If not empty return all child billing group under the root parent.
+  // If both root and parent are empty returns all child billing groups under the MSP.
+  string rootId = 1;
+
+  // Parent Id. If not empty return all child billing group under the parent only, 
+  // If both root and parent are empty returns all child billing groups under the MSP.
+  string parentId = 2;
+}
+
+message ListChildBillingGroupsResponse {
+  repeated ChildBillingGroup childBillingGroups = 1;
+}
 
