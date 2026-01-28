@@ -966,10 +966,10 @@ service Billing {
     };
   }
 
-  // Updates child billing group's basic information
-  rpc UpdateChildBillingGroupBasicInformation(UpdateChildBillingGroupBasicInformationRequest) returns (UpdateChildBillingGroupBasicInformationResponse) {
+  // Updates child billing group's basic info
+  rpc UpdateChildBillingGroup(UpdateChildBillingGroupRequest) returns (UpdateChildBillingGroupResponse) {
     option (google.api.http) = {
-      put: "/v1/billinggroups/child"
+      put: "/v1/billinggroups/child/{internalId}"
       body: "*"
     };
   }
@@ -3205,7 +3205,7 @@ message ChildBillingGroupBasicInformation {
   // Required. Child billing group id that is created by the client.
   string id = 1;
 
-  // Required. Child billing group internal Id.
+  // Child billing group internal Id. Required for get and list, optional for create and update.
   string internalId = 6;
 
   // Required. Parent internal Id.
@@ -3299,12 +3299,18 @@ message ListChildBillingGroupsRequest {
   string parentId = 2;
 }
 
-message UpdateChildBillingGroupBasicInformationRequest {
+message UpdateChildBillingGroupRequest {
+  // Required. Internal Id
+  string internalId = 1;
+ 
   // Required. Basic information for the child billing group.
   ChildBillingGroupBasicInformation basicInformation = 2;
+
+  // Required. Billing info for the child billing group.
+  api.ripple.BillingGroupInfo billingInfo = 3;
 }
 
-message UpdateChildBillingGroupBasicInformationResponse {}
+message UpdateChildBillingGroupResponse {}
 
 message BulkCreateBillingGroupRequest {
   // Required. The list of billing group to create.

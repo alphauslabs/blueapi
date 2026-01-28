@@ -6483,37 +6483,6 @@
         "tags": [
           "Billing"
         ]
-      },
-      "put": {
-        "summary": "Updates child billing group's basic information",
-        "operationId": "Billing_UpdateChildBillingGroupBasicInformation",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateChildBillingGroupBasicInformationResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1UpdateChildBillingGroupBasicInformationRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
       }
     },
     "/v1/billinggroups/child/{internalId}": {
@@ -6541,6 +6510,44 @@
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
+      "put": {
+        "summary": "Updates child billing group's basic info",
+        "operationId": "Billing_UpdateChildBillingGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateChildBillingGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "internalId",
+            "description": "Required. Internal Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingUpdateChildBillingGroupBody"
+            }
           }
         ],
         "tags": [
@@ -21740,6 +21747,19 @@
         }
       }
     },
+    "BillingUpdateChildBillingGroupBody": {
+      "type": "object",
+      "properties": {
+        "basicInformation": {
+          "$ref": "#/definitions/v1ChildBillingGroupBasicInformation",
+          "description": "Required. Basic information for the child billing group."
+        },
+        "billingInfo": {
+          "$ref": "#/definitions/rippleBillingGroupInfo",
+          "description": "Required. Billing info for the child billing group."
+        }
+      }
+    },
     "BillingUpdateCustomFieldBody": {
       "type": "object",
       "properties": {
@@ -35162,7 +35182,7 @@
         },
         "internalId": {
           "type": "string",
-          "description": "Required. Child billing group internal Id."
+          "description": "Child billing group internal Id. Required for get and list, optional for create and update."
         },
         "parentId": {
           "type": "string",
@@ -44713,16 +44733,7 @@
       },
       "title": "Response message for UpdateChannelDetails"
     },
-    "v1UpdateChildBillingGroupBasicInformationRequest": {
-      "type": "object",
-      "properties": {
-        "basicInformation": {
-          "$ref": "#/definitions/v1ChildBillingGroupBasicInformation",
-          "description": "Required. Basic information for the child billing group."
-        }
-      }
-    },
-    "v1UpdateChildBillingGroupBasicInformationResponse": {
+    "v1UpdateChildBillingGroupResponse": {
       "type": "object"
     },
     "v1UpdateCostFiltersResponse": {
