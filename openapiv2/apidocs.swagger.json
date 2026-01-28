@@ -95,8 +95,8 @@
       }
     },
     {
-      "name": "GuaranteedCommitment",
-      "description": "(Alpha) GuaranteedCommitment API. Base URL: https://api.alphaus.cloud/m/blue/gc",
+      "name": "GuaranteedCommitments",
+      "description": "(Alpha) GuaranteedCommitments API. Base URL: https://api.alphaus.cloud/m/blue/gc",
       "externalDocs": {
         "description": "Service definition",
         "url": "https://github.com/alphauslabs/blueapi/tree/main/gc/"
@@ -7495,8 +7495,8 @@
     },
     "/v1/commitment-plans/default": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Do not use. Retrieves the three default GuaranteedCommitment commitment plans (High Savings, Balanced, Recommended) for the specified cloud provider.",
-        "operationId": "GuaranteedCommitment_ListDefaultCommitmentPlans",
+        "summary": "WORK-IN-PROGRESS: Do not use. Retrieves the three default GuaranteedCommitments commitment plans (High Savings, Balanced, Recommended) for the specified cloud provider.",
+        "operationId": "GuaranteedCommitments_ListDefaultCommitmentPlans",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -7535,14 +7535,14 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
     "/v1/commitment-plans/recommended": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Do not use. Retrieves only the recommended GuaranteedCommitment commitment plan for the specified cloud provider.",
-        "operationId": "GuaranteedCommitment_GetRecommendedCommitmentPlan",
+        "summary": "WORK-IN-PROGRESS: Do not use. Retrieves only the recommended GuaranteedCommitments commitment plan for the specified cloud provider.",
+        "operationId": "GuaranteedCommitments_GetRecommendedCommitmentPlan",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -7581,14 +7581,14 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
     "/v1/commitment-plans/{planId}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Do not use. Retrieves detailed information about a specific commitment plan, including costs, savings projections, and commitment coverage.",
-        "operationId": "GuaranteedCommitment_GetCommitmentPlanDetails",
+        "operationId": "GuaranteedCommitments_GetCommitmentPlanDetails",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -7618,14 +7618,14 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
     "/v1/commitment-plans/{planId}/apply": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Do not use. Executes a commitment purchase plan, initiating the commitment purchase process.",
-        "operationId": "GuaranteedCommitment_CommitmentPlanApply",
+        "operationId": "GuaranteedCommitments_CommitmentPlanApply",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -7652,19 +7652,19 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GuaranteedCommitmentCommitmentPlanApplyBody"
+              "$ref": "#/definitions/GuaranteedCommitmentsCommitmentPlanApplyBody"
             }
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
     "/v1/commitment-plans/{planId}/line-items": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Do not use. Retrieves line items for a specific commitment plan.",
-        "operationId": "GuaranteedCommitment_ListCommitmentPlanLineItems",
+        "operationId": "GuaranteedCommitments_ListCommitmentPlanLineItems",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -7736,14 +7736,14 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
     "/v1/commitment-plans/{planId}/resource-matches": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Do not use. Retrieves resource matches for a specific commitment plan.",
-        "operationId": "GuaranteedCommitment_ListCommitmentPlanResourceMatches",
+        "operationId": "GuaranteedCommitments_ListCommitmentPlanResourceMatches",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -7821,14 +7821,14 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
     "/v1/commitments": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Do not use. Retrieves a paginated list of commitments for the specified organization and time period.",
-        "operationId": "GuaranteedCommitment_ListCommitments",
+        "summary": "WORK-IN-PROGRESS: Retrieves a list of commitments.",
+        "operationId": "GuaranteedCommitments_ListCommitments",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -7843,88 +7843,15 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "orgId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "filter",
-            "in": "query",
-            "required": false,
-            "type": "object"
-          },
-          {
-            "name": "desc",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "orderBy",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "provider",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "PROVIDER_UNSPECIFIED",
-              "AWS",
-              "AZURE",
-              "GCP",
-              "KUBERNETES",
-              "UNKNOWN"
-            ],
-            "default": "PROVIDER_UNSPECIFIED"
-          },
-          {
-            "name": "startDate",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "endDate",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "pageSize",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          }
-        ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
     "/v1/commitments/chart": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Do not use. Generates time-series chart data for commitment metrics over the specified time period.",
-        "operationId": "GuaranteedCommitment_GetCommitmentsChart",
+        "operationId": "GuaranteedCommitments_GetCommitmentsChart",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -7981,7 +7908,7 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
@@ -11692,7 +11619,7 @@
     "/v1/metrics": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Do not use. Retrieves key performance metrics for cloud commitments.",
-        "operationId": "GuaranteedCommitment_GetMetrics",
+        "operationId": "GuaranteedCommitments_GetMetrics",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -11731,14 +11658,14 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
     "/v1/onboarding": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Registers a new child organization under the channel partner.\nCreates the organization, sets up user memberships, and establishes the partnership relationship.",
-        "operationId": "GuaranteedCommitment_RegisterOrg",
+        "operationId": "GuaranteedCommitments_RegisterOrg",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -11764,14 +11691,14 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
     "/v1/onboarding/aws/cloudformation-template": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Generates CloudFormation template for AWS integration.\nCreates the necessary IAM role and policy template for setting up AWS access.",
-        "operationId": "GuaranteedCommitment_GetAwsCloudFormationTemplate",
+        "operationId": "GuaranteedCommitments_GetAwsCloudFormationTemplate",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -11789,7 +11716,7 @@
         "parameters": [
           {
             "name": "mspId",
-            "description": "Ripple context (used for lookup/mapping; not sent to GuaranteedCommitment)",
+            "description": "Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)",
             "in": "query",
             "required": false,
             "type": "string"
@@ -11809,14 +11736,14 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
     "/v1/onboarding/aws/launch-stack-url": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Generates AWS CloudFormation launch stack URL.\nCreates a pre-configured URL to deploy the CloudFormation stack in the AWS console.",
-        "operationId": "GuaranteedCommitment_GetAwsLaunchStackUrl",
+        "operationId": "GuaranteedCommitments_GetAwsLaunchStackUrl",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -11834,7 +11761,7 @@
         "parameters": [
           {
             "name": "mspId",
-            "description": "Ripple context (used for lookup/mapping; not sent to GuaranteedCommitment)",
+            "description": "Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)",
             "in": "query",
             "required": false,
             "type": "string"
@@ -11854,14 +11781,14 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
     "/v1/onboarding/aws/start": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Starts the onboarding process for an organization.\nCreates or retrieves an onboarding record and sets the provider to AWS.",
-        "operationId": "GuaranteedCommitment_StartAwsOnboarding",
+        "operationId": "GuaranteedCommitments_StartAwsOnboarding",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -11887,14 +11814,14 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
     "/v1/onboarding/aws/verify": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Runs AWS onboarding verification process.\nCreates a new CUR or uses an existing CUR and verifies AWS integration setup\nand returns validation status for all required features.",
-        "operationId": "GuaranteedCommitment_VerifyAwsOnboarding",
+        "operationId": "GuaranteedCommitments_VerifyAwsOnboarding",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -11920,7 +11847,7 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
@@ -12345,7 +12272,7 @@
     "/v1/organizations:read": {
       "post": {
         "summary": "WORK-IN-PROGRESS: List all the registered orgs",
-        "operationId": "GuaranteedCommitment_ListOrgs",
+        "operationId": "GuaranteedCommitments_ListOrgs",
         "responses": {
           "200": {
             "description": "A successful response.(streaming responses)",
@@ -12380,7 +12307,7 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
@@ -12746,7 +12673,7 @@
     "/v1/purchase-plans-v1/default": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Do not use. Retrieves default purchase plans for a specific segment.",
-        "operationId": "GuaranteedCommitment_ListDefaultPurchasePlans",
+        "operationId": "GuaranteedCommitments_ListDefaultPurchasePlans",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -12776,7 +12703,7 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
@@ -14013,7 +13940,7 @@
     "/v1/resources": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Do not use. Retrieves a list of infrastructure resources for the organization.",
-        "operationId": "GuaranteedCommitment_ListResources",
+        "operationId": "GuaranteedCommitments_ListResources",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -14090,7 +14017,7 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
@@ -14145,7 +14072,7 @@
     "/v1/resources/{resourceId}/daily-usage": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Do not use. Retrieves daily usage data for a specific resource within the specified date range.",
-        "operationId": "GuaranteedCommitment_GetResourceDailyUsage",
+        "operationId": "GuaranteedCommitments_GetResourceDailyUsage",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -14207,7 +14134,7 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
@@ -14246,7 +14173,7 @@
     "/v1/segments/info": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Do not use. Retrieves all segments for the specified organization and provider.",
-        "operationId": "GuaranteedCommitment_ListSegments",
+        "operationId": "GuaranteedCommitments_ListSegments",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -14285,14 +14212,14 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
     "/v1/segments/{segmentId}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Retrieves detailed information about a specific segment.",
-        "operationId": "GuaranteedCommitment_GetSegmentDetails",
+        "operationId": "GuaranteedCommitments_GetSegmentDetails",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -14322,7 +14249,7 @@
           }
         ],
         "tags": [
-          "GuaranteedCommitment"
+          "GuaranteedCommitments"
         ]
       }
     },
@@ -24328,7 +24255,7 @@
         }
       }
     },
-    "GuaranteedCommitmentCommitmentPlanApplyBody": {
+    "GuaranteedCommitmentsCommitmentPlanApplyBody": {
       "type": "object",
       "properties": {
         "orgId": {
@@ -28914,22 +28841,6 @@
         }
       },
       "description": "Response message for the Flow.GetInfo rpc."
-    },
-    "blueapigcv1DailyUtilization": {
-      "type": "object",
-      "properties": {
-        "date": {
-          "type": "string"
-        },
-        "utilization": {
-          "type": "number",
-          "format": "double"
-        },
-        "netSavings": {
-          "type": "number",
-          "format": "double"
-        }
-      }
     },
     "blueapigcv1Resource": {
       "type": "object",
@@ -35500,103 +35411,39 @@
         "id": {
           "type": "string"
         },
-        "provider": {
-          "$ref": "#/definitions/v1Provider"
-        },
-        "displayName": {
-          "type": "string"
-        },
-        "leasedDisplayName": {
-          "type": "string"
-        },
-        "providerReservationId": {
-          "type": "string"
-        },
         "accountId": {
           "type": "string"
         },
-        "masterAccountId": {
-          "type": "string"
+        "amortizedCost": {
+          "type": "number",
+          "format": "double"
         },
         "billingAccountId": {
           "type": "string"
         },
-        "type": {
+        "canRebate": {
+          "type": "boolean"
+        },
+        "contractTerm": {
           "type": "string"
         },
-        "region": {
+        "displayName": {
           "type": "string"
         },
         "durationSeconds": {
+          "type": "number",
+          "format": "double"
+        },
+        "effectiveInstanceCount": {
           "type": "string",
           "format": "int64"
-        },
-        "reservationEnd": {
-          "type": "string"
-        },
-        "reservationStart": {
-          "type": "string"
-        },
-        "transferReservationStart": {
-          "type": "string"
-        },
-        "transferReservationEnd": {
-          "type": "string"
-        },
-        "startDate": {
-          "type": "string"
         },
         "endDate": {
           "type": "string"
         },
-        "status": {
-          "type": "string"
-        },
-        "isLeased": {
-          "type": "boolean"
-        },
-        "isActive": {
-          "type": "boolean"
-        },
-        "lease": {
-          "$ref": "#/definitions/v1Lease"
-        },
-        "leaseStart": {
-          "type": "string"
-        },
-        "leaseLockinDate": {
-          "type": "string"
-        },
-        "upfrontCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "recurringCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "isFlexible": {
-          "type": "boolean"
-        },
-        "paymentOption": {
-          "type": "string"
-        },
-        "offeringClass": {
-          "type": "string"
-        },
-        "offeringId": {
-          "type": "string"
-        },
         "instanceCount": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "effectiveInstanceCount": {
-          "type": "number",
-          "format": "double"
-        },
-        "productDescription": {
-          "type": "string"
+          "type": "string",
+          "format": "int64"
         },
         "instanceFamily": {
           "type": "string"
@@ -35604,34 +35451,28 @@
         "instanceType": {
           "type": "string"
         },
-        "tenancy": {
-          "type": "string"
+        "isActive": {
+          "type": "boolean"
         },
-        "az": {
-          "type": "string"
+        "isFlexible": {
+          "type": "boolean"
+        },
+        "isLeased": {
+          "type": "boolean"
         },
         "isMultiAz": {
           "type": "boolean"
         },
-        "planType": {
+        "leaseLockinDate": {
           "type": "string"
         },
-        "scope": {
-          "$ref": "#/definitions/v1Scope"
-        },
-        "name": {
+        "leaseStart": {
           "type": "string"
         },
-        "orderId": {
+        "leasedDisplayName": {
           "type": "string"
         },
-        "resourceGroup": {
-          "type": "string"
-        },
-        "instanceFlexibility": {
-          "type": "boolean"
-        },
-        "savings": {
+        "monthlyCost": {
           "type": "number",
           "format": "double"
         },
@@ -35639,32 +35480,78 @@
           "type": "number",
           "format": "double"
         },
+        "name": {
+          "type": "string"
+        },
         "netSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "offeringId": {
+          "type": "string"
+        },
+        "paymentOption": {
+          "type": "string"
+        },
+        "potentialSavings": {
+          "type": "number",
+          "format": "double"
+        },
+        "productDescription": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "providerReservationId": {
+          "type": "string"
+        },
+        "recurringCost": {
+          "type": "number",
+          "format": "double"
+        },
+        "region": {
+          "type": "string"
+        },
+        "renewalPlan": {
+          "type": "string"
+        },
+        "reservationEnd": {
+          "type": "string"
+        },
+        "reservationStart": {
+          "type": "string"
+        },
+        "runningHours": {
+          "type": "number",
+          "format": "double"
+        },
+        "savings": {
+          "type": "number",
+          "format": "double"
+        },
+        "startDate": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "transferReservationEnd": {
+          "type": "string"
+        },
+        "transferReservationStart": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "upfrontCost": {
           "type": "number",
           "format": "double"
         },
         "utilization": {
           "type": "number",
           "format": "double"
-        },
-        "potentialSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "runningHours": {
-          "type": "number",
-          "format": "double"
-        },
-        "amortizedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "dailyUtilizations": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/blueapigcv1DailyUtilization"
-          }
         }
       }
     },
@@ -41212,49 +41099,6 @@
         }
       }
     },
-    "v1Lease": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "orgId": {
-          "type": "string"
-        },
-        "providerReservationId": {
-          "type": "string"
-        },
-        "accountId": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string"
-        },
-        "startDate": {
-          "type": "string"
-        },
-        "endDate": {
-          "type": "string"
-        },
-        "lockinDate": {
-          "type": "string"
-        },
-        "upfrontCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "recurringCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "createdAt": {
-          "type": "string"
-        },
-        "updatedAt": {
-          "type": "string"
-        }
-      }
-    },
     "v1ListAccountAccessRequest": {
       "type": "object",
       "description": "Request message for the ListAccountAccess rpc."
@@ -43612,7 +43456,7 @@
       "properties": {
         "mspId": {
           "type": "string",
-          "title": "Ripple context (not sent to GuaranteedCommitment; used for mapping/persistence)"
+          "title": "Ripple context (not sent to GuaranteedCommitments; used for mapping/persistence)"
         },
         "billingId": {
           "type": "string",
@@ -43666,7 +43510,7 @@
             "type": "object",
             "$ref": "#/definitions/v1Membership"
           },
-          "title": "GuaranteedCommitment create-org response fields"
+          "title": "GuaranteedCommitments create-org response fields"
         },
         "domain": {
           "type": "string"
@@ -44038,16 +43882,6 @@
         }
       },
       "description": "Response message for ListSavings, RestoreSavings, SimulateSavings rpc."
-    },
-    "v1Scope": {
-      "type": "string",
-      "enum": [
-        "SCOPE_UNSPECIFIED",
-        "SHARED",
-        "REGIONAL",
-        "ZONAL"
-      ],
-      "default": "SCOPE_UNSPECIFIED"
     },
     "v1Segment": {
       "type": "object",
@@ -44687,7 +44521,7 @@
       "properties": {
         "mspId": {
           "type": "string",
-          "title": "Ripple context (used for lookup/mapping; not sent to GuaranteedCommitment)"
+          "title": "Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)"
         },
         "billingId": {
           "type": "string",
@@ -45944,7 +45778,7 @@
       "properties": {
         "mspId": {
           "type": "string",
-          "title": "Ripple context (used for lookup/mapping; not sent to GuaranteedCommitment)"
+          "title": "Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)"
         },
         "billingId": {
           "type": "string",
@@ -45963,7 +45797,7 @@
         },
         "existingCur": {
           "$ref": "#/definitions/v1AwsExistingCur",
-          "description": "Optional: if set, GuaranteedCommitment will use this existing CUR. If omitted, GuaranteedCommitment may create a new CUR."
+          "description": "Optional: if set, GuaranteedCommitments will use this existing CUR. If omitted, GuaranteedCommitments may create a new CUR."
         }
       }
     },

@@ -8,12 +8,12 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/gc";
 option java_package = "cloud.alphaus.api.gc";
-option java_outer_classname = "GuaranteedCommitmentProto";
+option java_outer_classname = "GuaranteedCommitmentsProto";
 
-// GuaranteedCommitment service definition.
-service GuaranteedCommitment {
+// GuaranteedCommitments service definition.
+service GuaranteedCommitments {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
-    description: "(Alpha) GuaranteedCommitment API. Base URL: https://api.alphaus.cloud/m/blue/gc"
+    description: "(Alpha) GuaranteedCommitments API. Base URL: https://api.alphaus.cloud/m/blue/gc"
     external_docs: {
       url: "https://github.com/alphauslabs/blueapi/tree/main/gc/";
       description: "Service definition";
@@ -45,14 +45,14 @@ service GuaranteedCommitment {
     };
   }
 
-  // WORK-IN-PROGRESS: Do not use. Retrieves the three default GuaranteedCommitment commitment plans (High Savings, Balanced, Recommended) for the specified cloud provider.
+  // WORK-IN-PROGRESS: Do not use. Retrieves the three default GuaranteedCommitments commitment plans (High Savings, Balanced, Recommended) for the specified cloud provider.
   rpc ListDefaultCommitmentPlans(ListDefaultCommitmentPlansRequest) returns (ListDefaultCommitmentPlansResponse) {
     option (google.api.http) = {
       get: "/v1/commitment-plans/default"
     };
   }
 
-  // WORK-IN-PROGRESS: Do not use. Retrieves only the recommended GuaranteedCommitment commitment plan for the specified cloud provider.
+  // WORK-IN-PROGRESS: Do not use. Retrieves only the recommended GuaranteedCommitments commitment plan for the specified cloud provider.
   rpc GetRecommendedCommitmentPlan(GetRecommendedCommitmentPlanRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
       get: "/v1/commitment-plans/recommended"
@@ -76,7 +76,7 @@ service GuaranteedCommitment {
 
   // ####################### COMMITMENTS #######################
 
-  // WORK-IN-PROGRESS: Do not use. Retrieves a paginated list of commitments for the specified organization and time period.
+  // WORK-IN-PROGRESS: Retrieves a list of commitments.
   rpc ListCommitments(ListCommitmentsRequest) returns (ListCommitmentsResponse) {
     option (google.api.http) = {
       get: "/v1/commitments"
@@ -275,18 +275,7 @@ message ListCommitmentPlanResourceMatchesRequest {
   int32 pageSize = 9;
 }
 
-message ListCommitmentsRequest {
-  string orgId = 1;
-  string search = 2;
-  google.protobuf.Struct filter = 3;
-  bool desc = 4;
-  string orderBy = 5;
-  Provider provider = 6;
-  string startDate = 7;
-  string endDate = 8;
-  int32 page = 9;
-  int32 pageSize = 10;
-}
+message ListCommitmentsRequest {}
 
 message GetCommitmentsChartRequest {
   string orgId = 1;
@@ -376,7 +365,7 @@ message AwsExistingCur {
 }
 
 message RegisterOrgRequest {
-  // Ripple context (not sent to GuaranteedCommitment; used for mapping/persistence)
+  // Ripple context (not sent to GuaranteedCommitments; used for mapping/persistence)
   string mspId = 1;
 
   // If present => we're onboarding an MSP customer/org (3rd layer )
@@ -397,7 +386,7 @@ message RegisterOrgRequest {
 }
 
 message StartAwsOnboardingRequest {
-  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitment)
+  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)
   string mspId = 1;
 
   // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
@@ -407,7 +396,7 @@ message StartAwsOnboardingRequest {
 }
 
 message GetAwsCloudFormationTemplateRequest {
-  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitment)
+  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)
   string mspId = 1;
 
   // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
@@ -417,7 +406,7 @@ message GetAwsCloudFormationTemplateRequest {
 }
 
 message GetAwsLaunchStackUrlRequest {
-  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitment)
+  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)
   string mspId = 1;
 
   // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
@@ -427,7 +416,7 @@ message GetAwsLaunchStackUrlRequest {
 }
 
 message VerifyAwsOnboardingRequest {
-  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitment)
+  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)
   string mspId = 1;
 
   // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
@@ -441,7 +430,7 @@ message VerifyAwsOnboardingRequest {
   // AWS account id being onboarded/verified
   string accountId = 5;
 
-  // Optional: if set, GuaranteedCommitment will use this existing CUR. If omitted, GuaranteedCommitment may create a new CUR.
+  // Optional: if set, GuaranteedCommitments will use this existing CUR. If omitted, GuaranteedCommitments may create a new CUR.
   AwsExistingCur existingCur = 6;
 }
 
@@ -575,56 +564,49 @@ message DailyUtilization {
 
 message Commitment {
   string id = 1;
-  Provider provider = 2;
-  string displayName = 3;
-  string leasedDisplayName = 4;
-  string providerReservationId = 5;
-  string accountId = 6;
-  string masterAccountId = 7;
-  string billingAccountId = 8;
-  string type = 9;
-  string region = 10;
-  int64 durationSeconds = 11;
-  string reservationEnd = 12;
-  string reservationStart = 13;
-  string transferReservationStart = 14;
-  string transferReservationEnd = 15;
-  string startDate = 16;
-  string endDate = 17;
-  string status = 18;
-  bool isLeased = 19;
-  bool isActive = 20;
-  Lease lease = 21;
-  string leaseStart = 22;
-  string leaseLockinDate = 23;
-  double upfrontCost = 24;
-  double recurringCost = 25;
-  bool isFlexible = 26;
-  string paymentOption = 27;
-  string offeringClass = 28;
-  string offeringId = 29;
-  int32 instanceCount = 30;
-  double effectiveInstanceCount = 31;
-  string productDescription = 32;
-  string instanceFamily = 33;
-  string instanceType = 34;
-  string tenancy = 35;
-  string az = 36;
-  bool isMultiAz = 37;
-  string planType = 38;
-  Scope scope = 39;
-  string name = 40;
-  string orderId = 41;
-  string resourceGroup = 42;
-  bool instanceFlexibility = 43;
-  double savings = 44;
-  double monthlySavings = 45;
-  double netSavings = 46;
-  double utilization = 47;
-  double potentialSavings = 48;
-  double runningHours = 49;
-  double amortizedCost = 50;
-  repeated DailyUtilization dailyUtilizations = 51;
+  string accountId = 2;
+  double amortizedCost = 3;
+  string billingAccountId = 4;
+  bool canRebate = 5;
+  string contractTerm = 6;
+  string displayName = 7;
+  double durationSeconds = 8;
+  int64 effectiveInstanceCount = 9;
+  string endDate = 10;
+  int64 instanceCount = 11;
+  string instanceFamily = 12;
+  string instanceType = 13;
+  bool isActive = 14;
+  bool isFlexible = 15;
+  bool isLeased = 16;
+  bool isMultiAz = 17;
+  string leaseLockinDate = 18;
+  string leaseStart = 19;
+  string leasedDisplayName = 20;
+  double monthlyCost = 21;
+  double monthlySavings = 22;
+  string name = 23;
+  double netSavings = 24;
+  string offeringId = 25;
+  string paymentOption = 26;
+  double potentialSavings = 27;
+  string productDescription = 28;
+  string provider = 29;
+  string providerReservation_id = 30;
+  double recurringCost = 31;
+  string region = 32;
+  string renewalPlan = 33;
+  string reservationEnd = 34;
+  string reservationStart = 35;
+  double runningHours = 36;
+  double savings = 37;
+  string startDate = 38;
+  string status = 39;
+  string transferReservationEnd = 40;
+  string transferReservationStart = 41;
+  string type = 42;
+  double upfrontCost = 43;
+  double utilization = 44;
 }
 
 message ListCommitmentsResponse {
@@ -930,7 +912,7 @@ message RegisterOrgResponse {
   string id = 1;
   string name = 2;
 
-  // GuaranteedCommitment create-org response fields
+  // GuaranteedCommitments create-org response fields
   repeated Membership memberships = 3;
   string domain = 4;
   Address primaryAddress = 5;
