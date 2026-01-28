@@ -6483,6 +6483,37 @@
         "tags": [
           "Billing"
         ]
+      },
+      "put": {
+        "summary": "Updates child billing group's basic information",
+        "operationId": "Billing_UpdateChildBillingGroupBasicInformation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateChildBillingGroupBasicInformationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateChildBillingGroupBasicInformationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
       }
     },
     "/v1/billinggroups/child/{internalId}": {
@@ -44681,6 +44712,18 @@
         }
       },
       "title": "Response message for UpdateChannelDetails"
+    },
+    "v1UpdateChildBillingGroupBasicInformationRequest": {
+      "type": "object",
+      "properties": {
+        "basicInformation": {
+          "$ref": "#/definitions/v1ChildBillingGroupBasicInformation",
+          "description": "Required. Basic information for the child billing group."
+        }
+      }
+    },
+    "v1UpdateChildBillingGroupBasicInformationResponse": {
+      "type": "object"
     },
     "v1UpdateCostFiltersResponse": {
       "type": "object",

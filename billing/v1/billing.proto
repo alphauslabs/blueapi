@@ -966,6 +966,14 @@ service Billing {
     };
   }
 
+  // Updates child billing group's basic information
+  rpc UpdateChildBillingGroupBasicInformation(UpdateChildBillingGroupBasicInformationRequest) returns (UpdateChildBillingGroupBasicInformationResponse) {
+    option (google.api.http) = {
+      put: "/v1/billinggroups/child"
+      body: "*"
+    };
+  }
+
   // Create billing group in bulk
   rpc BulkCreateBillingGroup(BulkCreateBillingGroupRequest) returns (stream BulkCreateBillingGroupResponse) {
     option (google.api.http) = {
@@ -3291,6 +3299,12 @@ message ListChildBillingGroupsRequest {
   string parentId = 2;
 }
 
+message UpdateChildBillingGroupBasicInformationRequest {
+  // Required. Basic information for the child billing group.
+  ChildBillingGroupBasicInformation basicInformation = 2;
+}
+
+message UpdateChildBillingGroupBasicInformationResponse {}
 
 message BulkCreateBillingGroupRequest {
   // Required. The list of billing group to create.
