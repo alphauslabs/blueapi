@@ -996,6 +996,36 @@ service Billing {
       body: "*"
     };
   }
+
+  // Create Exclude Service Entry
+  rpc CreateExcludeServiceEntry(CreateExcludeServiceEntryRequest) returns (CreateExcludeServiceEntryResponse) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups/exclude-service-settings"
+      body: "*"
+    };
+  }
+
+  // Update Exclude Service Entry
+  rpc UpdateExcludeServiceEntry(UpdateExcludeServiceEntryRequest) returns (UpdateExcludeServiceEntryResponse) {
+    option (google.api.http) = {
+      put: "/v1/billinggroups/exclude-service-settings"
+      body: "*"
+    };
+  }
+
+  // Delete Exclude Service Entry
+  rpc DeleteExcludeServiceEntry(DeleteExcludeServiceEntryRequest) returns (DeleteExcludeServiceEntryResponse) {
+    option (google.api.http) = {
+      delete: "/v1/billinggroups/exclude-service-settings"
+    };
+  }
+
+  // List Exclude Service Entries
+  rpc ListExcludeServices(ListExcludeServicesRequest) returns (ListExcludeServicesResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/exclude-service-settings"
+    };
+  }
 }
 
 message BillingGroup {
@@ -3366,4 +3396,87 @@ message BulkCreateBillingGroupError {
 
   // Error message.
   string message = 3;
+}
+
+message ExcludeServiceEntry {
+  // MSP (Managed Service Provider) ID.
+  string msp_id = 1;
+  // Cloud vendor (e.g., "aws", "gcp").
+  string vendor = 2;
+  // Payer/account ID.
+  string payer_id = 3;
+  // Cloud service name.
+  string service = 4;
+  // Product or SKU code.
+  string product = 5;
+  // List of payer IDs excepted from exclusion.
+  repeated string except_payer_id = 6;
+  // Action performed (e.g., "added", "updated", "deleted").
+  string action = 7;
+  // Operation status (e.g., "success", "error").
+  string status = 8;
+  // Optional error message if operation failed.
+  string error_message = 9;
+}
+message CreateExcludeServiceEntryRequest {
+  // MSP (Managed Service Provider) ID. Partition key for the exclude service entry.
+  string msp_id = 1;
+  // Cloud vendor (e.g., "aws", "gcp").
+  string vendor = 2;
+  // Payer/account ID to exclude. Use "all" or "*" to apply to all accounts.
+  string payer_id = 3;
+  // Cloud service name (e.g., "EC2", "BigQuery").
+  string service = 4;
+  // Product or SKU code (used for GCP or detailed exclusions).
+  string product = 5;
+  // List of payer IDs to be excepted from exclusion (used when payer_id is "all").
+  repeated string except_payer_id = 6;
+}
+message CreateExcludeServiceEntryResponse {
+  // The created exclude service entry.
+  ExcludeServiceEntry entry = 1;
+}
+message UpdateExcludeServiceEntryRequest {
+  // MSP (Managed Service Provider) ID. Partition key for the exclude service entry.
+  string msp_id = 1;
+  // Cloud vendor (e.g., "aws", "gcp").
+  string vendor = 2;
+  // Payer/account ID to update. Use "all" or "*" to apply to all accounts.
+  string payer_id = 3;
+  // Cloud service name (e.g., "EC2", "BigQuery").
+  string service = 4;
+  // Product or SKU code (used for GCP or detailed exclusions).
+  string product = 5;
+  // List of payer IDs to be excepted from exclusion (used when payer_id is "all").
+  repeated string except_payer_id = 6;
+}
+message UpdateExcludeServiceEntryResponse {
+  // The updated exclude service entry.
+  ExcludeServiceEntry entry = 1;
+}
+message DeleteExcludeServiceEntryRequest {
+  // MSP (Managed Service Provider) ID. Partition key for the exclude service entry.
+  string msp_id = 1;
+  // Cloud vendor (e.g., "aws", "gcp").
+  string vendor = 2;
+  // Payer/account ID to delete. Use "all" or "*" to apply to all accounts.
+  string payer_id = 3;
+  // Cloud service name (e.g., "EC2", "BigQuery").
+  string service = 4;
+  // Product or SKU code (used for GCP or detailed exclusions).
+  string product = 5;
+}
+message DeleteExcludeServiceEntryResponse {
+  // The deleted exclude service entry (or just status).
+  ExcludeServiceEntry entry = 1;
+}
+message ListExcludeServicesRequest {
+  // MSP (Managed Service Provider) ID. Partition key for the exclude service entries.
+  string msp_id = 1;
+  // Cloud vendor (e.g., "aws", "gcp"). If empty, returns all vendors for the MSP.
+  string vendor = 2;
+}
+message ListExcludeServicesResponse {
+  // List of all exclude service entries for the request.
+  repeated ExcludeServiceEntry entries = 1;
 }
