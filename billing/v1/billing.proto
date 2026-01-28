@@ -974,6 +974,13 @@ service Billing {
     };
   }
 
+  // Deletes all child billing group info
+  rpc DeleteChildBillingGroup(DeleteChildBillingGroupRequest) returns (DeleteChildBillingGroupResponse) {
+    option (google.api.http) = {
+      delete: "/v1/billinggroups/child/{internalId}"
+    };
+  }
+
   // Create billing group in bulk
   rpc BulkCreateBillingGroup(BulkCreateBillingGroupRequest) returns (stream BulkCreateBillingGroupResponse) {
     option (google.api.http) = {
@@ -3311,6 +3318,13 @@ message UpdateChildBillingGroupRequest {
 }
 
 message UpdateChildBillingGroupResponse {}
+
+message DeleteChildBillingGroupRequest {
+  // Required. Child billing group's internal Id
+  string internalId = 1;
+}
+
+message DeleteChildBillingGroupResponse {}
 
 message BulkCreateBillingGroupRequest {
   // Required. The list of billing group to create.
