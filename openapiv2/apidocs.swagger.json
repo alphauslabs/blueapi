@@ -6585,6 +6585,46 @@
         ]
       }
     },
+    "/v1/billinggroups/child/{internalId}/invoiceSettings": {
+      "put": {
+        "summary": "Updates child billing group's invoice settings",
+        "operationId": "Billing_UpdateChildBillingGroupInvoiceSettings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateChildBillingGroupInvoiceSettingsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "internalId",
+            "description": "Required. Internal Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingUpdateChildBillingGroupInvoiceSettingsBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups/child:read": {
       "post": {
         "summary": "Lists child billing groups under a specific filter",
@@ -21787,6 +21827,15 @@
         "billingInfo": {
           "$ref": "#/definitions/rippleBillingGroupInfo",
           "description": "Required. Billing info for the child billing group."
+        }
+      }
+    },
+    "BillingUpdateChildBillingGroupInvoiceSettingsBody": {
+      "type": "object",
+      "properties": {
+        "invoiceSettings": {
+          "$ref": "#/definitions/v1ChildBillingGroupInvoiceSettings",
+          "description": "Required. Invoice settings for the child billing group."
         }
       }
     },
@@ -44765,6 +44814,9 @@
         }
       },
       "title": "Response message for UpdateChannelDetails"
+    },
+    "v1UpdateChildBillingGroupInvoiceSettingsResponse": {
+      "type": "object"
     },
     "v1UpdateChildBillingGroupResponse": {
       "type": "object"

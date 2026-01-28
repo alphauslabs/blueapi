@@ -981,6 +981,14 @@ service Billing {
     };
   }
 
+  // Updates child billing group's invoice settings
+  rpc UpdateChildBillingGroupInvoiceSettings(UpdateChildBillingGroupInvoiceSettingsRequest) returns (UpdateChildBillingGroupInvoiceSettingsResponse) {
+    option (google.api.http) = {
+      put: "/v1/billinggroups/child/{internalId}/invoiceSettings"
+      body: "*"
+    };
+  }
+
   // Create billing group in bulk
   rpc BulkCreateBillingGroup(BulkCreateBillingGroupRequest) returns (stream BulkCreateBillingGroupResponse) {
     option (google.api.http) = {
@@ -3325,6 +3333,16 @@ message DeleteChildBillingGroupRequest {
 }
 
 message DeleteChildBillingGroupResponse {}
+
+message UpdateChildBillingGroupInvoiceSettingsRequest {
+  // Required. Internal Id
+  string internalId = 1;
+
+  // Required. Invoice settings for the child billing group.
+  ChildBillingGroupInvoiceSettings invoiceSettings = 2;
+}
+
+message UpdateChildBillingGroupInvoiceSettingsResponse {}
 
 message BulkCreateBillingGroupRequest {
   // Required. The list of billing group to create.
