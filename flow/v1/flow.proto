@@ -26,16 +26,8 @@ service Flow {
     };
   }
 
-  // Creates a new settings configuration for the user.
-  rpc CreateSettings(CreateSettingsRequest) returns (CreateSettingsResponse) {
-    option (google.api.http) = {
-      post: "/v1/settings"
-      body: "*";
-    };
-  }
-
-  // Update the settings configuration for a user.
-  rpc UpdateSettings(UpdateSettingsRequest) returns (UpdateSettingsResponse) {
+  // Creates or Updates the settings configuration for recommendation.
+  rpc SetSettings(SetSettingsRequest) returns (SetSettingsResponse) {
     option (google.api.http) = {
       put: "/v1/settings/{id}"
       body: "*";
@@ -75,8 +67,93 @@ service Flow {
     option (google.api.http) = {
       post: "/v1/aws/xacct/cea"
       body: "*"
+    };  
+  }
+
+  // Gets the daily cost and usage details.
+  rpc GetDailyUsageCostDetails (GetDailyUsageCostDetailsRequest) returns (GetDailyUsageCostDetailsResponse) {
+    option (google.api.http) = {
+      post: "/v1/usagecost"
+      body: "*"
     };
   }
+
+  // Returns all the aws accounts and its payer of the msp id
+  rpc GetAwsAccounts (GetAwsAccountsRequest) returns (GetAwsAccountsResponse) {
+    option (google.api.http) = {
+      post: "/v1/aws/{billingInternalId}/accounts"
+      body: "*"
+    };
+  }
+
+  // Gets a CloudFormation launch URL for Savings Plan purchase capabilities
+  rpc GetSPPurchaseAccessTemplateUrl(GetSPPurchaseAccessTemplateUrlRequest) returns (GetSPPurchaseAccessTemplateUrlResponse) {
+    option (google.api.http) = {
+      get: "/v1/aws/xacct/spa"
+    };
+  }
+
+  // Creates a default cross-account access role for Savings Plan (API only).
+  rpc CreateSPPurchaseAccess(CreateSPPurchaseAccessRequest) returns (CreateSPPurchaseAccessResponse) {
+    option (google.api.http) = {
+      post: "/v1/aws/xacct/spa"
+      body: "*"
+    };
+  }
+
+  
+  // Returns the activated cross-account access roles of the target payerId.
+  rpc GetCrossAccountAccessDetails(GetCrossAccountAccessDetailsRequest) returns (GetCrossAccountAccessDetailsResponse) {
+    option (google.api.http) = {
+      get: "/v1/aws/xacct/{payerId}/access"
+    };
+  }
+
+  // Sends configuration and recommendation to a Slack channel
+  rpc CreateSPRecommendationNotification(CreateSPRecommendationNotificationRequest) returns (CreateSPRecommendationNotificationResponse) {
+    option (google.api.http) = {
+      post: "/v1/sp/recommendation/notification"
+      body: "*";
+    };
+  }
+
+  // Get savings plan details to be purchased .
+  rpc GetSPToPurchaseDetails(GetSPToPurchaseDetailsRequest) returns (GetSPToPurchaseDetailsResponse) {
+    option (google.api.http) = {
+      get: "/v1/sp/purchaseDetails/{payerId}/{yearMonth}"
+    };
+  }
+
+  // Sends savings plan details to be purchased to a Slack channel or user email
+  rpc SendSPToPurchaseDetailsNotification(SendSPToPurchaseDetailsNotificationsRequest) returns (SendSPToPurchaseDetailsNotificationsResponse) {
+    option (google.api.http) = {
+      post: "/v1/sp/purchaseDetails/notification"
+      body: "*"
+    };
+  }
+
+  // Create or Update the user account settings.
+  rpc SetUserAccountSettings (SetUserAccountSettingsRequest) returns (SetUserAccountSettingsResponse) {
+    option (google.api.http) = {
+      put: "/v1/user/settings/{id}"
+      body: "*"
+    };
+  }
+
+  // Gets the user account settings.
+  rpc GetUserAccountSettings (GetUserAccountSettingsRequest) returns (GetUserAccountSettingsResponse) {
+    option (google.api.http) = {
+      get: "/v1/user/settings/{id}"
+    };
+  }
+
+   // Checks the expiry of the link in the SP to purchase details notification
+  rpc CheckSPToPurchaseDetailsLinkExpiry(CheckSPToPurchaseDetailsLinkExpiryRequest) returns (CheckSPToPurchaseDetailsLinkExpiryResponse) {
+    option (google.api.http) = {
+      get: "/v1/sp/purchaseDetails/notification/link/expiry"
+    };
+  }
+  
 }
 
 // ##################################### REQUESTS #####################################
@@ -85,7 +162,7 @@ service Flow {
 message GetInfoRequest {}
 
 // Request message for the Flow.CreateSettings rpc.
-message CreateSettingsRequest {
+message SetSettingsRequest {
   // Required. The id of the payer.
   string id = 1;
 
@@ -117,39 +194,6 @@ message CreateSettingsRequest {
   string payerId = 10;
 }
 
-// Request message for the Flow.UpdateSettings rpc.
-message UpdateSettingsRequest {
-  // Required. The id of the payer to update.
-  string id = 1;
-
-  // Optional. Update account scope (payer or linked).
-  optional string accountScope = 2;
-
-  // Optional. Update customization setting.
-  optional string customization = 3;
-
-  // Optional. Update term of the SP.
-  optional string planTerm = 4;
-
-  // Optional. Update payment option.
-  optional string paymentOption = 5;
-
-  // Optional. Update lookback period.
-  optional string lookBackPeriod = 6;
-
-  // Optional. Update list of instance families.
-  optional string instanceFamily = 7;
-
-  // Optional. Update annual budget.
-  optional double annualBudget = 8;
-
-  // Optional. Update purchase approval.
-  optional bool approval = 9;
-
-  // Optional. Update used payerId.
-  optional string payerId = 10;
-}
-
 // Request message for fetching previous settings configuration of a user.
 message GetSettingsRequest {
   // Required. The id of the payer to fetch settings for.
@@ -178,6 +222,161 @@ message CreateCostExplorerAccessRequest {
   string target = 1;
 }
 
+// Request message for the Flow.GetDailyUsageCostDetailsRequest rpc.
+message GetDailyUsageCostDetailsRequest {
+  // Required. The id of the payer to fetch savings plan details for.
+  string payerId = 1;
+
+  // Required. The start date of the range for the savings plan details.
+  string startDate = 2;
+
+  //  Required. The end date of the range for the savings plan details.
+  string endDate = 3;
+}
+
+// Request message for the Flow.GetSPPurchaseAccessTemplateUrl rpc.
+message GetSPPurchaseAccessTemplateUrlRequest {}
+
+// Request message for the Flow.CreateSPPurchaseAccess rpc.
+message CreateSPPurchaseAccessRequest {
+  // Required. The target AWS account to validate.
+  string target = 1;
+}
+
+// Request message for the Flow.GetCrossAccountAccessDetails rpc.
+message GetCrossAccountAccessDetailsRequest {
+  // Required. The target payerId of the AWS account to be checked.
+  string payerId = 1;
+}
+
+// Configuration and recommendation details to send to Slack
+message CreateSPRecommendationNotificationRequest {
+  // Configurations for the Savings Plan
+  message Configurations {
+    string accountScope = 1;
+    string customization = 2;
+    string planTerm = 3;
+    string paymentOption = 4;
+    string lookBackPeriod = 5;
+    string instanceFamily = 6;
+    double annualBudget = 7;
+    bool approval = 8;
+    string payerId = 9;
+  }
+
+  // Recommendation details for the Savings Plan
+  message Recommendation {
+    string id = 1;
+    double currentMonthlyOnDemandSpend = 2;
+    double estimatedMonthlySpend = 3;
+    double estimatedMonthlySavingsDerived = 4;
+    double totalDailyCost = 5;
+    double currentSPCommitment = 6;
+    double estimatedOnDemandCost = 7;
+    double hourlyCommitment = 8;
+    double estimatedMonthlySavings = 9;
+    double estimatedSavings = 10;
+    string recommendationLevel = 11;
+    string planType = 12;
+    string planTerm = 13;
+    string paymentOption = 14;
+    string lookBackPeriod = 15;
+    double estimatedROI = 16;
+    double estimatedSPCost = 17;
+    double estimatedTotalCost = 18;
+    string lastUpdated = 19;
+  }
+
+  Configurations configurations = 1;
+  Recommendation recommendation = 2;
+}
+
+// Request message for the Flow.SendSPToPurchaseDetailsNotifications rpc.
+message SendSPToPurchaseDetailsNotificationsRequest {
+
+  // Savings plan recommendation details
+message SavingsPlanRecommendation {
+  string payerId = 1;
+  string linkedAccounts = 2;
+  string accountScope = 3;
+  string savingsPlanType = 4;
+  int32 term = 5;
+  string region = 6;
+  string instanceFamily = 7;
+  double recommendedHourlyCommitment = 8;
+  string paymentOption = 9;
+  double upfrontCost = 10;
+  double monthlyCost = 11;
+  double totalCost = 12;
+  string expiryDate = 13;
+}
+
+// Savings plan details to be purchased
+message SavingsPlanDetailsPurchase {
+  string payerId = 1;
+  string linkedAccounts = 2;
+  string accountScope = 3;
+  string savingsPlanType = 4;
+  int32 term = 5;
+  string region = 6;
+  string instanceFamily = 7;
+  double recommendedHourlyCommitment = 8;
+  string paymentOption = 9;
+  double upfrontCost = 10;
+  double monthlyCost = 11;
+  double totalCost = 12;
+  string expiryDate = 13;
+}
+  string approval = 1;
+  SavingsPlanRecommendation recommendation = 2;
+  repeated SavingsPlanDetailsPurchase purchases = 3;
+  string mode = 4; // "slack" or "email"
+  string userEmail = 5;
+  string companyName = 6; 
+  string ondemandCostBefore = 7; // On-demand cost before savings plan
+  string ondemandCostAfter = 8; // On-demand cost after savings plan
+  string reductionRate = 9; // Cost reduction percentage
+  string approvalLink = 10; // Link for approval action
+  string language = 11; // Language code (en or ja)
+  string linkExpiryDate = 12; // ISO8601 formatted date when the approval link expires (3 days from sending)
+
+}
+
+// Request message for the Flow.GetSPToPurchaseDetails rpc.
+message GetSPToPurchaseDetailsRequest {
+   // Required. The id of the payer account.
+  string payerId = 1;
+  // Required. The year and month  for which the savings plan details are requested, formatted as "YYYYMM".
+  string yearMonth  = 2;
+}
+
+// Request message for the Flow.SetUserAccountSettings rpc.
+message SetUserAccountSettingsRequest {
+  // Required. The user ID of the user.
+  string id = 1;
+
+  // Required. List of email addresses to send notifications to.
+  repeated string emails = 2;
+
+  // Required. User interface preferences.
+  string theme = 3;
+
+  // Required. Preferred language for the user interface.
+  string language = 4;
+}
+
+// Request message for the Flow.GetUserAccountSettings rpc.
+message GetUserAccountSettingsRequest {
+  // Required. The user ID of the user.
+  string id = 1;
+}
+
+// Request message for the Flow.CheckSPToPurchaseDetailsLinkExpiryRequest RPC
+message CheckSPToPurchaseDetailsLinkExpiryRequest {
+  // Required. The URL containing the expiry information to check.
+  string url = 1; // The URL to check for expiration
+}
+
 // ##################################### RESPONSES #####################################
 
 // Response message for the Flow.GetInfo rpc.
@@ -186,11 +385,7 @@ message GetInfoResponse {
 }
 
 // Response message for the Flow.CreateSettings rpc.
-message CreateSettingsResponse {
-  string response = 1;
-}
-
-message UpdateSettingsResponse {
+message SetSettingsResponse {
   string response = 1;
 }
 
@@ -288,15 +483,34 @@ message GetCostExplorerAccessTemplateUrlResponse {
 
 // Settings history message.
 message SettingsHistory {
+  // Payer account ID.
   string id = 1;
+
+  // Account scope determines if the account is payer or linked account.
   string accountScope = 2;
+
+  // Customization setting for SP.
   string customization = 3;
+
+  // Term of the SP.
   string planTerm = 4;
+
+  // Payment option for the SP.
   string paymentOption = 5;
+
+  // Lookback period for recommendation.
   string lookBackPeriod = 6;
+
+  // If EC2 Instance SP is selected in Customization, request will include list of instance family
   string instanceFamily = 7;
+
+  // Annual budget input for SP.
   double annualBudget = 8;
+  
+  // Purchase approval from the payer for the SP.
   bool approval = 9;
+  
+  // Last updated timestamp of the settings configuration.
   string lastUpdated = 10;
 }
 
@@ -330,4 +544,324 @@ message CreateCostExplorerAccessResponse {
 
   // The last updated timestamp, RFC3339 UTC.
   string lastUpdated = 8;
+
+  // The access type- partial access to view simulation only: "cloud_explorer_access"
+   string access = 9;
+}
+
+// Summary of monthly cost values associated with a single Savings Plan.
+message MonthlyCosts {
+  // Actual monthly on-demand cost for the payer account.
+  double monthlyOnDemandCost = 1;
+
+  // Actual monthly effective cost after applying Savings Plans.
+  double monthlyEffectiveCost = 2;
+
+  // Actual total monthly savings from Savings Plan usage.
+  double monthlyTotalSavings = 3;
+}
+
+// Savings Plan Details to be used in the GetDailyUsageCostDetailsResponse.
+message SpDetails {
+  // The savings plan type, e.g., `Compute`, `Ec2`.
+  string savingsPlanType = 1;
+
+  // The current state of the savings plan, e.g., `ACTIVE`, `EXPIRED`, `PENDING`.
+  string state = 2;
+
+  // The start time of the savings plan.
+  string startTime = 3;
+
+  // The end time of the savings plan.
+  string endTime = 4;
+
+  // The date until which the savings plan is returnable, if applicable.
+  string returnableUntil = 5;
+
+  // The commitment amount per hour for the savings plan in USD.
+  double commitment = 6;
+
+  // The currency in which the savings plan is priced, e.g., `USD`.
+  string currency = 7;
+
+  // The duration of the plan term, e.g., `1 year`, `3 years`.
+  string planTerm = 8;
+
+  // The payment option for the savings plan, e.g., `All Upfront`, `Partial Upfront`, `No Upfront`.
+  string paymentOption = 9;
+
+  // The product types covered by the savings plan, e.g., `EC2`, `Lambda`.
+  repeated string productTypes = 10;
+
+  // The total amount paid at the start of the Savings Plan, if applicable.
+  double upfrontPaymentAmount = 11;
+
+  // The periodic (usually monthly) charge to pay over the term of the plan.
+  double recurringPaymentAmount = 12;
+
+  // The EC2 instance families covered by the savings plan, e.g., `m5`, `c5`.
+  repeated string ec2InstanceFamily = 13;
+
+  // The tag that refers to the one who purchased the Savings Plan.
+  string tags = 14;
+
+  // The user or Flow that purchased the Savings Plan.
+  string purchasedBy = 15;
+}
+
+// Usage and Cost Details to be used in the GetDailyUsageCostDetailsResponse.
+message UsageCostDetails {
+  // The specific date this entry represents, corresponding to one day within the requested date range.
+  string currentDate = 1;
+
+  // The product code for which the usage and cost details are provided.
+  string productCode = 2;
+
+  // Total On-Demand cost in USD for the date.
+  double ondemandCost = 3;
+
+  // Total Reserved Instance cost in USD for the date.
+  double reservedCost = 4;
+
+  // Total Savings Plan cost in USD for the date purchased by Flow.
+  double savingsPlanCostByFlow = 5;
+
+  // Total Savings Plan cost in USD for the date purchased by user.
+  double savingsPlanCostByUser = 6;
+
+  // Total Spot Instance cost in USD for the date.
+  double spotCost = 7;
+
+  // Percentage of Savings Plan coverage for the date.
+  double coveragePercentage = 8;
+}
+
+// Daily utilization data for a specific date range.
+message DailyUtilization {
+  // The current date for which the utilization is reported.
+  string currentDate = 1;
+
+  // The percentage of utilization for this specific date
+  double utilizationPercentage = 2;
+}
+
+// Utilization details for Savings Plans, including ARN and utilization percentage.
+message UtilizationDetails {
+  // Descriptive name of the Savings Plan
+  string savingsPlanName = 1;
+
+  // The ARN of the Savings Plan
+  string savingsPlanArn = 2;
+
+  // Array of daily utilization data for this Savings Plan
+  repeated DailyUtilization perDayUtilization = 3;
+}
+
+// A single entry containing Savings Plan, monthly cost summary, and usage breakdown.
+message GetDailyUsageCostDetailsResponse {
+  // The payer account ID for which the savings plan details are fetched.
+  string payerId = 1;
+
+  // Monthly aggregated cost summary for the Savings Plan.
+  MonthlyCosts monthlyCosts = 2;
+
+  // Purchased Savings Plan details for the payer account.
+  repeated SpDetails spDetails = 3;
+
+  // Daily Savings Plan usage and cost details.
+  repeated UsageCostDetails usageCostDetails = 4;
+
+  // Percentage of Savings Plan utilization per ARN.
+  repeated UtilizationDetails utilizationDetails = 5;
+}
+
+// Response message for the Flow.GetAwsAccounts rpc.
+message GetAwsAccountsRequest {
+  string billingInternalId = 1;
+}
+
+// Response message for the Flow.GetAwsAccounts rpc.
+message GetAwsAccountsResponse {
+  string groupId = 1;
+  string groupName = 2;
+  
+  // all payers registered on billing group
+  repeated string payerAccounts = 3;
+
+  // map of aws accountid to its payer id
+  map<string, string> linkedAccountToPayerId = 4;
+}
+
+// Response message for the Flow.GetSPPurchaseAccessTemplateUrl rpc.
+message GetSPPurchaseAccessTemplateUrlResponse {
+  // The CloudFormation launch url. Open it in your browser.
+  string launchUrl = 1;
+
+  // The latest CloudFormation template. The version is included in the filename.
+  string templateUrl = 2;
+
+  // The default stack name used. Can be modified.
+  string stackName = 3;
+
+  // The AWS account that will receive the access. Do not change.
+  string principal = 4;
+
+  // The external id for this role. Do not change.
+  string externalId = 5;
+}
+
+// Response message for the Flow.CreateSPPurchaseAccess rpc.
+message CreateSPPurchaseAccessResponse {
+  // The queried target account.
+  string target = 1;
+
+  // The role ARN that provides the cross-account access permissions.
+  string roleArn = 2;
+
+  // The external id for this role.
+  string externalId = 3;
+
+  // The id of the CloudFormation stack deployed in the target account.
+  string stackId = 4;
+
+  // The region where the stack is deployed.
+  string stackRegion = 5;
+
+  // The latest template used to deploy the stack.
+  string templateUrl = 6;
+
+  // This can be `latest`, `outdated`, or some error information.
+  string status = 7;
+
+  // The last updated timestamp, RFC3339 UTC.
+  string lastUpdated = 8;
+
+  // The access type- full access to view simulation and purchase saving plan: "savings_plan_access"
+   string access = 9;
+}
+
+// Response message for the Flow.GetCrossAccountAccessDetails rpc.
+message GetCrossAccountAccessDetailsResponse {
+  // The queried target account.
+  string target = 1;
+
+  // List of cross-access details for the target account.
+  repeated CrossAccountAccessDetail details = 2;
+}
+
+// Individual cross-access detail record.
+message CrossAccountAccessDetail {
+  // The role ARN that provides the cross-account access permissions.
+  string roleArn = 1;
+
+  // The external id for this role.
+  string externalId = 2;
+
+  // The id of the CloudFormation stack deployed in the target account.
+  string stackId = 3;
+
+  // The region where the stack is deployed.
+  string stackRegion = 4;
+
+  // The latest template used to deploy the stack.
+  string templateUrl = 5;
+
+  // This can be `latest`, `outdated`, or some error information.
+  string status = 6;
+
+  // The access type:  "savings_plan_access" or "cost_explorer_access"
+  string access = 7;
+
+}
+
+// Response after sending to Slack
+message CreateSPRecommendationNotificationResponse {
+  string message = 1;
+  bool success = 2;
+}
+
+// Response message for the Flow.GetSPToPurchaseDetails rpc.
+message GetSPToPurchaseDetailsResponse {
+  // Recommendation details
+  SavingsPlanRecommendation recommendation = 1;
+  
+  // List of purchase items
+  repeated SavingsPlanDetailsPurchase purchases = 2;
+
+  // On-demand cost before savings plan
+  string ondemandCostBefore = 3;
+
+  // On-demand cost after savings plan
+  string ondemandCostAfter = 4;
+
+  // Cost reduction percentage
+  string reductionRate = 5;  
+}
+
+// Savings plan recommendation details
+message SavingsPlanRecommendation {
+  string payerId = 1;
+  string linkedAccounts = 2;
+  string accountScope = 3;
+  string savingsPlanType = 4;
+  int32 term = 5;
+  string region = 6;
+  string instanceFamily = 7;
+  double recommendedHourlyCommitment = 8;
+  string paymentOption = 9;
+  double upfrontCost = 10;
+  double monthlyCost = 11;
+  double totalCost = 12;
+  string expiryDate = 13;
+}
+
+// Savings plan details to be purchased
+message SavingsPlanDetailsPurchase {
+  string payerId = 1;
+  string linkedAccounts = 2;
+  string accountScope = 3;
+  string savingsPlanType = 4;
+  int32 term = 5;
+  string region = 6;
+  string instanceFamily = 7;
+  double recommendedHourlyCommitment = 8;
+  string paymentOption = 9;
+  double upfrontCost = 10;
+  double monthlyCost = 11;
+  double totalCost = 12;
+  string expiryDate = 13;
+}
+
+// Response after sending SendSPToPurchaseDetailsNotifications to Slack
+message SendSPToPurchaseDetailsNotificationsResponse {
+  string message = 1;
+  bool success = 2;
+}
+
+// Response message for the Flow.SetUserAccountSettings rpc.
+message SetUserAccountSettingsResponse {
+  string response = 1;
+}
+
+// Response message for the Flow.GetUserAccountSettings rpc.
+message GetUserAccountSettingsResponse {
+  // The payer ID of the user.
+  string id = 1;
+
+  // List of email addresses to send notifications to.
+  repeated string emails = 2;
+
+  // User interface preferences.
+  string theme = 3;
+
+  // Preferred language for the user interface.
+  string language = 4;
+}
+
+// Response message for the Flow.CheckSPToPurchaseDetailsLinkExpiryRequest RPC
+message CheckSPToPurchaseDetailsLinkExpiryResponse {
+  bool isExpired = 1;          // Whether the link has expired
+  string expiryDate = 2;       // The raw expiry date from the URL (ISO8601 format)
+  string formattedDate = 3;    // User-friendly formatted date
+  string message = 4;           // Human-readable status message
 }

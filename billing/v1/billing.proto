@@ -40,10 +40,17 @@ service Billing {
     }
   };
 
-  // Lists all billing groups.
+  // Lists all billing groups (streamed).
   rpc ListBillingGroups(ListBillingGroupsRequest) returns (stream BillingGroup) {
     option (google.api.http) = {
       get: "/v1/billinggroups"
+    };
+  }
+
+  // Lists all billing groups with pagination support.
+  rpc ListBillingGroupsPaginated(ListBillingGroupsPaginatedRequest) returns (ListBillingGroupsPaginatedResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups:paginated"
     };
   }
 
@@ -163,7 +170,7 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Reads list of the invoice.
+  // Reads list of the invoice.
   rpc ListInvoice(ListInvoiceRequest) returns (stream ListInvoiceResponse) {
     option (google.api.http) = {
       post: "/v1/invoice:read"
@@ -271,7 +278,7 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Exports service discounts. Only available in Ripple.
+  // Exports service discounts. Only available in Ripple.
   rpc ExportServiceDiscounts(ExportServiceDiscountsRequest) returns (api.ripple.v1.ServiceDiscountsExport) {
     option (google.api.http) = {
       post: "/v1/servicediscounts:export"
@@ -279,7 +286,7 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Registers the billing group invoice service discounts. Only available in Ripple.
+  // Registers the billing group invoice service discounts. Only available in Ripple.
   rpc CreateBillingGroupInvoiceServiceDiscounts(CreateBillingGroupInvoiceServiceDiscountsRequest) returns (CreateBillingGroupInvoiceServiceDiscountsResponse) {
     option (google.api.http) = {
       post: "/v1/servicediscounts/{groupId}/billinggroup"
@@ -287,7 +294,7 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Updates the billing group invoice service discounts. Only available in Ripple.
+  // Updates the billing group invoice service discounts. Only available in Ripple.
   rpc UpdateBillingGroupInvoiceServiceDiscounts(UpdateBillingGroupInvoiceServiceDiscountsRequest) returns (UpdateBillingGroupInvoiceServiceDiscountsResponse) {
     option (google.api.http) = {
       put: "/v1/servicediscounts/{groupId}/billinggroup"
@@ -295,7 +302,7 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Deletes the billing group invoice service discounts. Only available in Ripple.
+  // Deletes the billing group invoice service discounts. Only available in Ripple.
   rpc DeleteBillingGroupInvoiceServiceDiscounts(DeleteBillingGroupInvoiceServiceDiscountsRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/servicediscounts/{groupId}/billinggroup"
@@ -505,7 +512,7 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Gets the adjustment entry. Only available in Ripple.
+  // Gets the adjustment entry. Only available in Ripple.
   rpc GetAdjustmentEntry(GetAdjustmentEntryRequest) returns (api.ripple.v1.AdjustmentEntry) {
     option (google.api.http) = {
       get: "/v1/{vendor}/adjustmententries/{id}"
@@ -603,7 +610,7 @@ service Billing {
     };
   }
 
-  // WORK-IN-PROGRESS: Reads the untagged group. Only available in Ripple.
+  // Reads the untagged group. Only available in Ripple.
   rpc ReadUntaggedGroups(ReadUntaggedGroupsRequest) returns (stream api.ripple.UntaggedGroup) {
     option (google.api.http) = {
       post: "/v1/{vendor}/untaggedgroups:read"
@@ -933,6 +940,90 @@ service Billing {
   rpc GetCsvSettings(GetCsvSettingsRequest) returns (stream CsvSetting) {
     option (google.api.http) = {
       get: "/v1/csvsettings"
+    };
+  }
+
+  // Creates a child billing group under a parent billing group
+  rpc CreateChildBillingGroup(CreateChildBillingGroupRequest) returns (CreateChildBillingGroupResponse) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups/child"
+      body: "*"
+    };
+  }
+
+  // Gets child billing group info
+  rpc GetChildBillingGroup(GetChildBillingGroupRequest) returns (GetChildBillingGroupResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/child/{internalId}"
+    };
+  }
+
+  // Lists child billing groups under a specific filter
+  rpc ListChildBillingGroups(ListChildBillingGroupsRequest) returns (stream ChildBillingGroup) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups/child:read"
+      body: "*"
+    };
+  }
+
+  // Updates child billing group's basic info
+  rpc UpdateChildBillingGroup(UpdateChildBillingGroupRequest) returns (UpdateChildBillingGroupResponse) {
+    option (google.api.http) = {
+      put: "/v1/billinggroups/child/{internalId}"
+      body: "*"
+    };
+  }
+
+  // Deletes all child billing group info
+  rpc DeleteChildBillingGroup(DeleteChildBillingGroupRequest) returns (DeleteChildBillingGroupResponse) {
+    option (google.api.http) = {
+      delete: "/v1/billinggroups/child/{internalId}"
+    };
+  }
+
+  // Updates child billing group's invoice settings
+  rpc UpdateChildBillingGroupInvoiceSettings(UpdateChildBillingGroupInvoiceSettingsRequest) returns (UpdateChildBillingGroupInvoiceSettingsResponse) {
+    option (google.api.http) = {
+      put: "/v1/billinggroups/child/{internalId}/invoiceSettings"
+      body: "*"
+    };
+  }
+
+  // Create billing group in bulk
+  rpc BulkCreateBillingGroup(BulkCreateBillingGroupRequest) returns (stream BulkCreateBillingGroupResponse) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups:bulkCreate"
+      body: "*"
+    };
+  }
+
+  // Create Exclude Service Entry
+  rpc CreateExcludeServiceEntry(CreateExcludeServiceEntryRequest) returns (CreateExcludeServiceEntryResponse) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups/exclude-service-settings"
+      body: "*"
+    };
+  }
+
+  // Update Exclude Service Entry
+  rpc UpdateExcludeServiceEntry(UpdateExcludeServiceEntryRequest) returns (UpdateExcludeServiceEntryResponse) {
+    option (google.api.http) = {
+      put: "/v1/billinggroups/exclude-service-settings"
+      body: "*"
+    };
+  }
+
+  // Delete Exclude Service Entry
+  rpc DeleteExcludeServiceEntry(DeleteExcludeServiceEntryRequest) returns (DeleteExcludeServiceEntryResponse) {
+    option (google.api.http) = {
+      delete: "/v1/billinggroups/exclude-service-settings"
+    };
+  }
+
+  // List Exclude Service Entries
+  rpc ListExcludeServices(ListExcludeServicesRequest) returns (ListExcludeServicesResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/exclude-service-settings"
     };
   }
 }
@@ -1960,31 +2051,37 @@ message ListInvoiceResponse {
 
   string companyName = 4;
 
-  // Created || Not Created
-  string invoiceStatus = 5;
-  // In progress || Done
-  string finalizationStatus = 6;
-  // Published || Not published
-  string waveStatus = 7;
+  string finalizationStatus = 5;
+  // invoice creation status 
+  bool isCreated = 6;
+  bool isSettingModified = 7;
+  string createdDate = 8;
+  string updatedDate = 9;
 
-  // aws, azure, gcp
-  string vendor = 13;
+  repeated string createdVendors = 10;
+
+  // wave publish status
+  bool isPublished = 11;
+
+  // In progress || Done
+  
+  // map of vendor to billingAmount Formated in $8,000.12
+  map <string, string> vendorBillingAmount = 12;
+  string billingAmountTotal = 13;
 
   // The currency of the invoice (usd, jpy, ...)
-  string currency = 8;
+  string currency = 14;
 
-  // Formated in $8,000.12
-  string billingAmountAws = 9;
-  string billingAmountAzure = 10;
-  string billingAmountGcp = 11;
-  string billingAmountTotal = 12;
+  string urlId = 15;
 
-  string urlId = 17;
+  // setting used in invoice creation
+  map<string, InvoiceSettings> createdVendorInvoiceSetting = 16;
+ 
+  // saved invoice setting for the month
+  map<string, InvoiceSettings> savedVendorInvoiceSetting = 17;
 
-  // returns null if no settings is saved for the month
-  InvoiceSettings invoiceSettingsAws = 14;
-  InvoiceSettings invoiceSettingsAzure = 15;
-  InvoiceSettings invoiceSettingsGcp = 16;
+  // billinggroup's default invoice setting
+  map<string, InvoiceSettings> defaultVendorInvoiceSetting = 18;
 }
 
 // request message for ListAbcBillingGroups
@@ -2566,6 +2663,9 @@ message ExportInvoiceSettingCsvRequest {
   // but it may be a different language due to cahce.
   // In that case, you can use this option to change the language of CSV.
   string language = 2 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. If true, include miscellaneous items in the settings export.
+  bool includeMiscellaneous = 3 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Response message for the ExportBillingGroupCsv rpc.
@@ -2728,28 +2828,28 @@ message SaveInvoiceSettingsRequest {
 
 message InvoiceSettings {
   string invoiceNo = 2;
-  float discountRate = 4;
+  double discountRate = 4;
 
   // e.g., cloudpaywithfee, ...
   string discountTargetUsage = 5;
 
   // e.g., usageamount, ... 
   string discountCalcLogic = 6;
-  float taxRate = 7;
+  double taxRate = 7;
 
   // e.g., percent, fix, aws_developer, aws_business, aws_enterprise
   string supportFee = 8;
-  float supportRate = 9;
+  double supportRate = 9;
 
   // e.g., nondiscount, ...
   string supportFeeCalcTarget = 10;
-  float supportFix = 11;
+  double supportFix = 11;
 
   // e.g., percent, fix, automatic, usagetable
   string substitutionFee = 12;
-  float substitutionRate = 13;
+  double substitutionRate = 13;
 
-  float substitutionFix = 14;
+  double substitutionFix = 14;
 
   // e.g., nondiscount, ...
   string substitutionFeeCalcTarget = 15;
@@ -2765,18 +2865,13 @@ message InvoiceSettings {
 
   // Exchange rate from USD to the invoice currency
   // Example: If the invoice currency is "jpy" and 1 USD = 150 jpy, exchangeRate = 150
-  float exchangeRate = 18;
+  double exchangeRate = 18;
 
   string memo = 19;
 
   // e.g., account, tag
   string calcType = 20;
-  repeated InvoiceAdditionalItems additionalItems = 21;
-}
-
-message InvoiceAdditionalItems {
-  string name = 1;
-  float price = 2;
+  repeated FreeFormItem additionalItems = 21;
 }
 
 message BasicInformation {
@@ -2784,9 +2879,9 @@ message BasicInformation {
   string billingGroupId = 3;
   string companyName = 4;
   optional string addressee = 5;
-  string country = 6;
-  string postalCode = 7;
-  string city = 8;
+  optional string country = 6;
+  optional string postalCode = 7;
+  optional string city = 8;
   optional string phoneNumber = 9;
   optional string addressLine1 = 10;
   optional string addressLine2 = 11;
@@ -2823,12 +2918,15 @@ message UpdateBillingGroupLinkedResourcesRequest {
   
   // Non-tag settings for the billing group
   optional NonTagSetting nonTagSetting = 6;
+
+  optional AccountOptions accountOptions = 7;
 }
 
 message UpdateBillingGroupInvoiceSettingsRequest {
   string id = 1;
   optional string billingTitle = 2;
   optional string calculationType = 3;
+  optional string language = 4;
 }
 
 message UpdateBillingGroupResellerChargesRequest {
@@ -3053,4 +3151,332 @@ message ConvertInvoiceToPdfResponse {
   // returns "" when not ready
   // returns the direct download link
   string downloadUrl = 2;
+}
+
+// ============================================================================
+// Paginated Billing Groups API Messages
+// ============================================================================
+
+// Request message for the Billing.ListBillingGroupsPaginated rpc.
+message ListBillingGroupsPaginatedRequest {
+  // Optional. Get only the value that set fieldMask.
+  //
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask field_mask = 1;
+
+  // Optional. Filter vendor accounts included in BillingGroup. Format: vendors=vendor1,vendor2,vendor3.
+  // For example, When Aws and Gcp to be filtered vendors=aws,gcp
+  // If you want to get all vendors, not set parameter.
+  string vendors = 2;
+
+  // Optional. Filter by calcType. Format: calType=account
+  // Valid values: account, tag
+  string calcType = 3;
+
+  // Optional. Filter by displayCost. Format: displayCost=unblended_cost
+  // valid values: unblended_cost, true_unblended_cost
+  string displayCost = 4;
+    
+  // Optional. For aws only, filter will be ignored for other vendors.
+  // Valid values: default, imported
+  string bgType = 5;
+
+  // Optional. Filter by company name.
+  string companyName = 6;
+
+  // Optional. Filter by billing group name.
+  string billingGroupName = 7;
+
+  // Optional. Filter by billing group id.
+  string billingGroupId = 8;
+
+  // Optional. Page size for pagination. Default is 50, maximum is 1000.
+  int32 pageSize = 9;
+
+  // Optional. Page number for pagination. Starts from 1. Default is 1.
+  int32 pageNumber = 10;
+}
+
+// Response row for paginated billing groups table.
+message BillingGroupListItem {
+  // Billing group display name.
+  string billingGroupName = 1;
+
+  // Billing group internal identifier.
+  string billingGroupId = 2;
+
+  // Company name tied to the billing group.
+  string companyName = 3;
+
+  // Billing group classification (e.g., ACCOUNT, TAG).
+  string billingGroupType = 4;
+
+  // Vendor availability entries.
+  message BillingGroupVendor {
+    // Vendor identifier, e.g., aws, azure, gcp.
+    string vendor = 1;
+
+    // Indicates whether the billing group has this vendor active.
+    bool enabled = 2;
+  }
+
+  // Per-vendor availability list.
+  repeated BillingGroupVendor vendors = 5;
+
+  // Billing group's internal id reference.
+  string billingInternalId = 6;
+}
+
+// Response message for the Billing.ListBillingGroupsPaginated rpc.
+message ListBillingGroupsPaginatedResponse {
+  // Flattened rows for the billing groups table.
+  repeated BillingGroupListItem billingGroups = 1;
+
+  // Total count of billing groups matching the filters.
+  int32 totalCount = 2;
+
+  // Current page number (1-based).
+  int32 currentPage = 3;
+
+  // Current page size.
+  int32 pageSize = 4;
+
+  // Total number of pages.
+  int32 totalPages = 5;
+}
+
+
+message ChildBillingGroupBasicInformation {
+  // Required. Child billing group id that is created by the client.
+  string id = 1;
+
+  // Child billing group internal Id. Required for get and list, optional for create and update.
+  string internalId = 6;
+
+  // Required. Parent internal Id.
+  string parentId = 2;
+
+  // Required. Root parent internal Id. If parentId and rootParentId are the same, it means this child is the 1st level after root.
+  string rootParentId = 5;
+ 
+  // Required. Child billing group name.
+  string name = 3;
+
+  // Required. Company name.
+  string companyName = 4;
+}
+
+
+message CustomizedBillingServiceBillingGroup {
+  // Required. [blueapi.api.ripple.CustomizedBillingService.id]
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. vendor that applied to the CustomizedBillingService　config.
+  string vendor = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. [blueapi.api.ripple.ChargingTarget]
+  api.ripple.ChargingTarget chargingTarget = 3 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. accounts that applied to the CustomizedBillingService　config.
+  repeated api.Account accounts = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+
+// Contains basic information and invoice settings related data.
+message ChildBillingGroup {
+  ChildBillingGroupBasicInformation basicInformation = 1;
+  
+  ChildBillingGroupInvoiceSettings invoiceSettings = 2;
+
+  api.ripple.BillingGroupInfo billingInfo = 3;
+  // AccountInvoiceServiceDiscounts serviceDiscounts = 3;
+  
+  // CustomizedBillingServiceBillingGroup customizedBillingServices = 4;
+}
+
+message ChildBillingGroupInvoiceSettings {
+  // AWS invoice settings
+  BillingGroupVendoredInvoiceSetting aws = 1;
+  
+  bool accountSupportPlanEnabled = 2;
+
+  // Optional. Only required when accountSupportPlanEnabled is true.
+  repeated api.ripple.v1.BillingGroupAccountSupportPlan accountSupportPlanSettings = 3;
+
+  // Azure invoice settings
+  // BillingGroupVendoredInvoiceSetting azure = 2;
+
+  // GCP invoice settings
+  // BillingGroupVendoredInvoiceSetting gcp = 3;
+}
+
+
+message CreateChildBillingGroupRequest {
+  // Required. Basic information for the child billing group.
+  ChildBillingGroupBasicInformation basicInformation = 1;
+
+  // Required. Invoice settings for the child billing group.
+  ChildBillingGroupInvoiceSettings invoiceSettings = 2;
+  
+  // AccountInvoiceServiceDiscounts serviceDiscounts = 3;
+  // CustomizedBillingServiceBillingGroup customizedBillingServices = 4;
+}
+
+message CreateChildBillingGroupResponse {}
+
+
+message GetChildBillingGroupRequest {
+  // Required. Internal Id
+  string internalId = 1;
+}
+
+message GetChildBillingGroupResponse {
+  ChildBillingGroup details = 1;
+}
+
+message ListChildBillingGroupsRequest {
+  // Root parent Id. If not empty return all child billing group under the root parent.
+  // If both root and parent are empty returns all child billing groups under the MSP.
+  string rootId = 1;
+
+  // Parent Id. If not empty return all child billing group under the parent only, 
+  // If both root and parent are empty returns all child billing groups under the MSP.
+  string parentId = 2;
+}
+
+message UpdateChildBillingGroupRequest {
+  // Required. Internal Id
+  string internalId = 1;
+ 
+  // Required. Basic information for the child billing group.
+  ChildBillingGroupBasicInformation basicInformation = 2;
+
+  // Required. Billing info for the child billing group.
+  api.ripple.BillingGroupInfo billingInfo = 3;
+}
+
+message UpdateChildBillingGroupResponse {}
+
+message DeleteChildBillingGroupRequest {
+  // Required. Child billing group's internal Id
+  string internalId = 1;
+}
+
+message DeleteChildBillingGroupResponse {}
+
+message UpdateChildBillingGroupInvoiceSettingsRequest {
+  // Required. Internal Id
+  string internalId = 1;
+
+  // Required. Invoice settings for the child billing group.
+  ChildBillingGroupInvoiceSettings invoiceSettings = 2;
+}
+
+message UpdateChildBillingGroupInvoiceSettingsResponse {}
+
+message BulkCreateBillingGroupRequest {
+  // Required. The list of billing group to create.
+  repeated CreateBillingGroupRequest request = 1;
+}
+
+message BulkCreateBillingGroupResponse {
+  // List of billing groups created in bulk.
+  repeated BillingGroup billingGroups =1;
+
+  // If an error occurs for a specific billing group, it will be included here.
+  repeated BulkCreateBillingGroupError errors = 2;
+}
+
+message BulkCreateBillingGroupError {
+  // The index of the request failed (zero-based).
+  int32 index = 1;
+
+  //The billing group ID that failed to create.
+  string billingGroupId = 2;
+
+  // Error message.
+  string message = 3;
+}
+
+message ExcludeServiceEntry {
+  // MSP (Managed Service Provider) ID.
+  string msp_id = 1;
+  // Cloud vendor (e.g., "aws", "gcp").
+  string vendor = 2;
+  // Payer/account ID.
+  string payer_id = 3;
+  // Cloud service name.
+  string service = 4;
+  // Product or SKU code.
+  string product = 5;
+  // List of payer IDs excepted from exclusion.
+  repeated string except_payer_id = 6;
+  // Action performed (e.g., "added", "updated", "deleted").
+  string action = 7;
+  // Operation status (e.g., "success", "error").
+  string status = 8;
+  // Optional error message if operation failed.
+  string error_message = 9;
+}
+message CreateExcludeServiceEntryRequest {
+  // MSP (Managed Service Provider) ID. Partition key for the exclude service entry.
+  string msp_id = 1;
+  // Cloud vendor (e.g., "aws", "gcp").
+  string vendor = 2;
+  // Payer/account ID to exclude. Use "all" or "*" to apply to all accounts.
+  string payer_id = 3;
+  // Cloud service name (e.g., "EC2", "BigQuery").
+  string service = 4;
+  // Product or SKU code (used for GCP or detailed exclusions).
+  string product = 5;
+  // List of payer IDs to be excepted from exclusion (used when payer_id is "all").
+  repeated string except_payer_id = 6;
+}
+message CreateExcludeServiceEntryResponse {
+  // The created exclude service entry.
+  ExcludeServiceEntry entry = 1;
+}
+message UpdateExcludeServiceEntryRequest {
+  // MSP (Managed Service Provider) ID. Partition key for the exclude service entry.
+  string msp_id = 1;
+  // Cloud vendor (e.g., "aws", "gcp").
+  string vendor = 2;
+  // Payer/account ID to update. Use "all" or "*" to apply to all accounts.
+  string payer_id = 3;
+  // Cloud service name (e.g., "EC2", "BigQuery").
+  string service = 4;
+  // Product or SKU code (used for GCP or detailed exclusions).
+  string product = 5;
+  // List of payer IDs to be excepted from exclusion (used when payer_id is "all").
+  repeated string except_payer_id = 6;
+}
+message UpdateExcludeServiceEntryResponse {
+  // The updated exclude service entry.
+  ExcludeServiceEntry entry = 1;
+}
+message DeleteExcludeServiceEntryRequest {
+  // MSP (Managed Service Provider) ID. Partition key for the exclude service entry.
+  string msp_id = 1;
+  // Cloud vendor (e.g., "aws", "gcp").
+  string vendor = 2;
+  // Payer/account ID to delete. Use "all" or "*" to apply to all accounts.
+  string payer_id = 3;
+  // Cloud service name (e.g., "EC2", "BigQuery").
+  string service = 4;
+  // Product or SKU code (used for GCP or detailed exclusions).
+  string product = 5;
+}
+message DeleteExcludeServiceEntryResponse {
+  // The deleted exclude service entry (or just status).
+  ExcludeServiceEntry entry = 1;
+}
+message ListExcludeServicesRequest {
+  // MSP (Managed Service Provider) ID. Partition key for the exclude service entries.
+  string msp_id = 1;
+  // Cloud vendor (e.g., "aws", "gcp"). If empty, returns all vendors for the MSP.
+  string vendor = 2;
+}
+message ListExcludeServicesResponse {
+  // List of all exclude service entries for the request.
+  repeated ExcludeServiceEntry entries = 1;
 }

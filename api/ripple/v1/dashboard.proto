@@ -44,6 +44,12 @@ message OverViewSection {
 
 // PeriodOverPeriodSection resource definition.
 message PeriodOverPeriodSection {
+  // returns true if the previous data range is available 
+  bool isDataComplete = 8;
+
+  // a formatted date of the previous data range it was compared
+  string dateRange = 9;
+
   // The invoice cost
   double invoiceCost = 1;
 
@@ -76,6 +82,9 @@ message PeriodOverPeriodSection {
 message OverViewOptionSection {
   // The spp discount cost.
   double sppDiscountCost = 1;
+
+  // The edp discount cost.
+  double edpDiscountCost = 2;
 }
 
 // PeriodOverPeriodOptionSection resource definition.
@@ -87,6 +96,14 @@ message PeriodOverPeriodOptionSection {
   // Represents a comparison of costs over a specified period of time.
   // currently, supported `Month-over-Month`
   double sppDiscountCostPoP = 2;
+
+  // The edp discount cost.
+  double edpDiscountCost = 3;
+
+  // The edp discount cost Period-over-Period.
+  // Represents a comparison of costs over a specified period of time.
+  // currently, supported `Month-over-Month`
+  double edpDiscountCostPoP = 4;
 }
 
 // VendorOverViewSection resource definition.
@@ -195,14 +212,27 @@ message TotalDetailSection {
 
   // The third profit item cost.
   double thirdProfitItem = 3;
+
+  // The profit from RI (True Unblended).
+  double trueUnblendedProfitRi = 4;
+
+  // The profit from SP (True Unblended).
+  double trueUnblendedProfitSp = 5;
 }
 
 // ThirdProfitItemSection resource definition.
 message ThirdProfitItemSection {
   // The id.
+  // 
+  // The currently supported thirdProfit items are as follows:
+  // `Miscellaneous`
+  // `CustomizedService`
+  // `AgencyFee`
+  // `SupportFee`
   string id = 1;
 
   // The name.
+  // A value equivalent to the id will be set.
   string name = 2;
 
   // The profit cost.

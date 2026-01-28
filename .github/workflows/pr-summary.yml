@@ -1,0 +1,92 @@
+name: PR Summary
+
+on:
+  pull_request:
+    types: [labeled] # To be triggered by a 'labeled' event.
+
+jobs:
+  summarize:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Generate summary
+        id: summary
+        env:
+          GOOGLE_GENAI_USE_VERTEXAI: true
+          GOOGLE_CLOUD_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+          GOOGLE_CLOUD_LOCATION: us-east5
+        run: |
+          DIFF=$(git diff ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          echo "$DIFF" > diff.txt
+
+          npm install -g @google/gemini-cli
+          NPM_PATH=$(npm config get prefix)/bin
+          echo "$NPM_PATH" >> $GITHUB_PATH
+          
+          PROMPT=$(cat << 'EOF'
+          You are an expert software engineer. 
+          Analyze the PR diff and generate a summary, strictly following the specified format below. 
+          Aim for a total of approximately 500 tokens, with each section concisely describing the most important points.
+
+          ```Format
+          ## PR Review Summary
+
+          ### Main Purpose
+          {Describe the **most important purpose or goal** of this change, inferred from the diff, in 1-2 sentences.}
+
+          ### Scope
+          {Concisely list the **main file types or functional areas** where changes were made.}
+
+          ### Impact
+          {Describe 1-2 points about the **noteworthy impacts** of this change (e.g., on system behavior, UX, or other features).}
+          ```
+          
+          EOF
+          )
+          SUMMARY=$(cat diff.txt | gemini --model gemini-2.5-flash -p "$PROMPT")
+          
+          echo "summary_text<<EOF" >> $GITHUB_OUTPUT
+          echo "$SUMMARY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const summaryText = ${{ toJSON(steps.summary.outputs.summary_text) }};
+            const body = `${summaryText}`;
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body
+            });

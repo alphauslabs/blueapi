@@ -282,6 +282,22 @@ service Iam {
       get: "/iam/v1/mfausers"
     };
   }  
+
+  // WORK-IN-PROGRESS: Send an email reset code
+  rpc SendRipplePasswordResetCode(SendRipplePasswordResetCodeRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/iam/v1/ripple/password:requestresetcode"
+      body: "*"
+    };
+  } 
+
+  // WORK-IN-PROGRESS: Reset ripple password using code from email
+  rpc ResetRipplePassword(ResetRipplePasswordRequest) returns (ResetRipplePasswordResponse) {
+    option (google.api.http) = {
+      post: "/iam/v1/ripple/password:reset"
+      body: "*"
+    };
+  } 
 }
 
 // Request message for the Iam.WhoAmI rpc.
@@ -634,4 +650,25 @@ message GetSubUserRequest {
   string id = 1; 
   // Optional. The sub-user ID
   string subId = 2;
+}
+
+// Request message for ripple account password recovery
+message SendRipplePasswordResetCodeRequest {
+  // Required. Ripple account email address
+  string email = 1;
+}
+
+// Request message for resetting ripple password
+message ResetRipplePasswordRequest {
+  // Required. Reset code from email 
+  string resetCode = 1;
+
+  // Required. Atleast 8 characters
+  string newPassword = 2;
+}
+
+message ResetRipplePasswordResponse {
+  // Ripple account information of the reseted password
+  string userName = 1;
+  string email = 2;
 }

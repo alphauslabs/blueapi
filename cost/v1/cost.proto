@@ -76,6 +76,26 @@ service Cost {
     };
   }
 
+    // Lists vendor payer accounts with extended information. WORK IN PROGRESS
+  //
+  // This endpoint returns additional fields beyond the standard ListPayerAccounts response.
+  // For AWS, these are management accounts (formerly known as master or payer accounts); for Azure, these are subscriptions, for GCP, these are projects.
+  rpc ListPayerAccountsExtended(ListPayerAccountsRequest) returns (stream PayerAccountExtended) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/payersextended"
+    };
+  }
+
+  // Gets a vendor payer account with extended information. WORK IN PROGRESS
+  //
+  // This endpoint returns additional fields beyond the standard GetPayerAccount response.
+  // For AWS, this means a management account (formerly known as master or payer account); for Azure, this means a subscription, for GCP, this means a project.
+  rpc GetPayerAccountExtended(GetPayerAccountRequest) returns (PayerAccountExtended) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/payersextended/{id}"
+    };
+  }
+
   // Gets a payer account's import history.
   //
   // Import history is a list of timestamps our system tracks when the account's data are imported to our system, which in turn, triggers processing. At the moment, this only supports AWS (CUR files). You can also set `{id}` to `*` to return all payers' information under the organization.
@@ -105,6 +125,14 @@ service Cost {
   rpc RegisterPayerAccount(RegisterPayerAccountRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/v1/{vendor}/payers/basicdetails"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRES: Updates a vendor payer account's basics details.
+  rpc UpdatePayerAccount(UpdatePayerAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/{vendor}/payers/basicdetails/{id}"
       body: "*"
     };
   }
@@ -629,6 +657,51 @@ message GetPayerAccountRequest {
 
   // Required. The id of the account to get.
   string id = 2;
+}
+
+// Extended payer account information with additional metadata.
+message PayerAccountExtended {
+  // Standard payer account information includes: vendor, id, name, orgId, billingInternalId, and metadata array
+  api.ripple.Payer payer = 1;
+
+  // The target payer account ID (from extended response).
+  string target = 2;
+
+  // The IAM role ARN for cost access (from payer.metadata or extended response).
+  string roleArn = 3;
+
+  // The external ID used for assuming the role (if applicable).
+  string externalId = 4;
+
+  // The CloudFormation stack ID (if using stack-based deployment).
+  string stackId = 5;
+
+  // The AWS region where the CloudFormation stack is deployed.
+  string stackRegion = 6;
+
+  // The CloudFormation template URL used for deployment.
+  string templateUrl = 7;
+
+  // The current status of the payer setup. Comma-separated values such as 'curOnly,manualExport', etc.
+  string status = 8;
+
+  // The timestamp when the payer configuration was last updated in RFC3339 format.
+  string lastUpdated = 9;
+
+  // S3 bucket name (from payer.metadata).
+  string bucketName = 10;
+
+  // S3 prefix (from payer.metadata).
+  string prefix = 11;
+
+  // CUR report name (from payer.metadata).
+  string reportName = 12;
+
+  // Default cost access role ARN (from payer.metadata).
+  string defaultCostAccessRoleArn = 13;
+
+  // The CUR type for AWS payers. Valid values are `legacy` and `2.0` (from payer.metadata).
+  string curType = 14;
 }
 
 // Request message for the Cost.GetPayerAccountImportHistory rpc.
@@ -2067,6 +2140,10 @@ message ReadCostsRequestGcpOptions {
 
   // If true, force API to not use cached data.
   bool noCache = 5;
+
+  // Optional. Please note that this feature is currently in BETA and may not work as expected.
+  // You can set it to the desired three-letter currency symbol (i.e. JPY, USD).
+  string toCurrency = 9;
 }
 
 // A map of "key:value" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either "eq:" (equal), "re:" (regular expressions based on https://github.com/google/re2), or "!re:" (reverse "re:"). No prefix is the same as "eq:". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.
@@ -2161,6 +2238,12 @@ message BudgetAlerts {
 
   // Monthly setting for budget alert.
   api.MonthlyBudgetAlert monthly = 6;
+
+  //  Custom Period setting for budget alert.
+  api.CustomPeriodBudgetAlert customPeriod = 8;
+
+  //  Custom Month setting for budget alert.
+  api.CustomMonthBudgetAlert customMonth = 9;
 }
 
 // Request message for the ReadBudgetAlerts rpc.
@@ -2194,6 +2277,12 @@ message CreateBudgetAlertsRequest {
 
   // Optional.
   api.MonthlyBudgetAlert monthly = 5;
+
+  // Optional.
+  api.CustomPeriodBudgetAlert customPeriod = 7;
+
+  // Optional.
+  api.CustomMonthBudgetAlert customMonth = 8;
 }
 
 // Request message for the UpdateBudgetAlerts rpc.
@@ -2218,6 +2307,12 @@ message UpdateBudgetAlertsRequest {
 
   // Optional.
   api.MonthlyBudgetAlert monthly = 6;
+
+  // Optional.
+  api.CustomPeriodBudgetAlert customPeriod = 8;
+
+  // Optional.
+  api.CustomMonthBudgetAlert customMonth = 9;
 }
 
 // Request message for the DeleteBudgetAlerts rpc.
@@ -2254,6 +2349,20 @@ message ReadInvoiceIdsResponse {
   string id = 1;
 }
 
+message PeriodRange {
+  enum Unit {
+    UNIT_UNSPECIFIED = 0;
+    MONTH = 1;
+    QUARTER = 2;
+    YEAR = 3;
+  }
+
+  Unit unit = 1;           // Time unit of the range
+  uint32 year = 2;         // Year (e.g., 2025)
+  uint32 starting = 3;     // Start month/quarter (1-based), ignored if YEAR
+  uint32 duration = 4;     // Length in units of unit
+}
+
 // Request message for the ReadInvoiceOverviews rpc.
 message ReadInvoiceOverviewsRequest {
   // Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20240101`.
@@ -2261,6 +2370,12 @@ message ReadInvoiceOverviewsRequest {
 
   // Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmdd`.
   string endTime = 2;
+
+  // Set true to use period range as date input, startTime and endTime would be ignored
+  bool usePeriodRange = 4;
+
+  // Use when usePeriodRange range is true
+  PeriodRange periodRange = 5;
 
   // Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which case, it will use the latest exchange rates provided by https://fixer.io. If you prefer a custom exchange rate, you can append the rate to the currency's three-letter symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate should be against the US dollar (USD).
   string toCurrency = 3;
@@ -2315,6 +2430,21 @@ message RegisterPayerAccountRequest {
   string curType = 4;
 }
 
+message UpdatePayerAccountRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. The Payer/Management account Id to update.
+  string id = 2;
+
+  // Optional. Preferred account name, defaults to id if not provided.
+  string name = 3;
+
+  // Optional. Valid values are `legacy` and `2.0` for now. Defaults to `legacy` if not provided.
+  // Only applicable if vendor is set to `aws`. Do not provide if `gcp` or `azure`.
+  string curType = 4;
+}
+
 // WORK-IN-PROGRESS: List the prerequisites for cost calculations.
 message ListCalculationPrerequisitesRequest {
   // Required. At the moment, only `aws` is supported.
@@ -2336,8 +2466,15 @@ message CalculationPrerequisite {
   
   // The unblended cost in CUR.
   double unblended_cost_in_cur = 4;
+
+  // The account name.
+  string name = 5;
+
+  // The CUR type, valid values are `legacy` and `2.0`.
+  string cur_type = 6;
 }
 
+// Response message for the ListCalculationPrerequisites rpc.
 message ListCalculationPrerequisitesResponse {
   // Repeated list of calculation prerequisites.
   repeated CalculationPrerequisite prerequisites = 1;

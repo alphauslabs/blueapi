@@ -1,0 +1,517 @@
+syntax = "proto3";
+
+package blueapi.prism.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/prism";
+option java_package = "cloud.alphaus.api.prism";
+option java_outer_classname = "PrismProto";
+
+// Prism service definition.
+service Prism {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "(Alpha) Prism API. Base URL: https://api.alphaus.cloud/m/blue/prism"
+    external_docs: {
+      url: "https://github.com/alphauslabs/blueapi/tree/main/prism/";
+      description: "Service definition";
+    }
+  };
+
+  // Test endpoint only.
+  rpc Test(TestRequest) returns (TestResponse) {
+    option (google.api.http) = {
+      get: "/v1/test"
+    };
+  }
+
+  // WIP: Creates a new project.
+  rpc CreateProject(CreateProjectRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/project"
+      body: "*"
+    };
+  }
+
+
+  // WIP: Gets information about a project by ID.
+  rpc GetProject(GetProjectRequest) returns (GetProjectResponse) {
+    option (google.api.http) = {
+      get: "/v1/project/{id}"
+    };
+  }
+
+
+  // WIP: Deletes a project by ID.
+  rpc DeleteProject(DeleteProjectRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/project/{id}"
+    };
+  }
+
+  // WIP: Lists all projects 
+  rpc ListProjects(ListProjectsRequest) returns (stream Project) {
+    option (google.api.http) = {
+      post: "/v1/project/all:read"
+      body: "*"
+    };
+  }
+
+  // Creates a new organization.
+  rpc CreateOrganization(CreateOrganizationRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/org"
+      body: "*"
+    };
+  }
+ 
+  // Gets information about an organization by ID.
+  rpc GetOrganization(GetOrganizationRequest) returns (GetOrganizationResponse) {
+    option (google.api.http) = {
+      get: "/v1/org/{id}"
+    };
+  }
+
+  rpc UpdateOrganization(UpdateOrganizationRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/org/{id}"
+      body: "*"
+    };
+  }
+
+  rpc DeleteOrganization(DeleteOrganizationRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/org/{id}"
+    };
+  }
+
+  rpc VerifyUser(VerifyUserRequest) returns (VerifyUserResponse) {
+    option (google.api.http) = {
+      post: "/v1/verify"
+      body: "*"
+    };
+  }
+
+  rpc CreateTeam(CreateTeamRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/team"
+      body: "*"
+    };
+  }
+
+  rpc GetTeam(GetTeamRequest) returns (GetTeamResponse) {
+    option (google.api.http) = {
+      get: "/v1/team/{id}"
+    };
+  }
+
+  rpc ListTeams(ListTeamsRequest) returns (stream Team) {
+    option (google.api.http) = {
+      post: "/v1/team/all:read"
+      body: "*"
+    };
+  }
+
+  rpc ListTeamMembers(ListTeamMembersRequest) returns (stream Member) {
+    option (google.api.http) = {
+      post: "/v1/member/all:read"
+      body: "*"
+    };
+  }
+
+  rpc ListProjectToTeam(ListProjectToTeamRequest) returns (stream ListProjectToTeamResponse) {
+    option (google.api.http) = {
+      post: "/v1/projecttoteam/all:read"
+      body: "*"
+    };
+  }
+
+  rpc ListProducts(ListProductsRequest) returns (stream Product) {
+    option (google.api.http) = {
+      post: "/v1/product/all:read"
+      body: "*"
+    };
+  }
+
+  rpc CreateProduct(CreateProductRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/product"
+      body: "*"
+    };
+  }
+
+  rpc DeleteProduct(DeleteProductRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/product/{id}"
+    };
+  }
+
+  rpc AssignProjectToTeam(AssignProjectToTeamRequest) returns (AssignProjectToTeamResponse) {
+    option (google.api.http) = {
+      post: "/v1/projecttoteam/assign"
+      body: "*"
+    };
+  }
+
+  rpc DeleteTeam(DeleteTeamRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/team/{id}"
+    };
+  }
+
+  rpc GetIntegrationStatus(google.protobuf.Empty) returns (GetIntegrationStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/integration/status"
+    };
+  }
+
+  rpc ListReportSchedules(ListReportSchedulesRequest) returns (stream ReportSchedule) {
+    option (google.api.http) = {
+      post: "/v1/reportschedule/all:read"
+      body: "*"
+    };
+  }
+
+  rpc UpdateReportSchedule(ReportSchedule) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/reportschedule/{id}"
+      body: "*"
+    };
+  }
+
+  rpc CreateReportSchedule(ReportSchedule) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/reportschedule"
+      body: "*"
+    };
+  }
+
+  rpc UpdateOrgTimezone(UpdateOrgTimezoneRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/org/{id}/timezone"
+      body: "*"
+    };
+  }
+
+  rpc ListIntegrationStatus(ListIntegrationStatusRequest) returns (stream IntegrationStatus) {
+    option (google.api.http) = {
+      post: "/v1/integration/status/all:read"
+      body: "*"
+    };
+  }
+
+  rpc UpdateWorkflow(UpdateWorkflowRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/workflow/{name}"
+      body: "*"
+    };
+  }
+
+  rpc ListWorkflows(ListWorkflowsRequest) returns (stream Workflow) {
+    option (google.api.http) = {
+      post: "/v1/workflow/all:read"
+      body: "*"
+    };
+  }
+
+  rpc ListActivities(ListActivitiesRequest) returns (stream Activity) {
+    option (google.api.http) = {
+      post: "/v1/activity/all:read"
+      body: "*"
+    };
+  }
+
+  rpc JoinOrganization(JoinOrganizationRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/org/join"
+      body: "*"
+    };
+  }
+
+  rpc GenerateOrganizationCode(GenerateOrganizationCodeRequest) returns (GenerateOrganizationCodeResponse) {
+    option (google.api.http) = {
+      post: "/v1/org/code"
+      body: "*"
+    };
+  }
+
+  rpc ShareGDrive(ShareGDriveRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/gdrive/share"
+      body: "*"
+    };
+  }
+}
+
+message TestRequest {}
+
+message TestResponse {
+  string response = 1;
+}
+
+message CreateProjectRequest {
+  string name = 1;
+  string email = 2;
+}
+
+message GetProjectRequest {
+  // Required project ID.
+  string id = 1; 
+}
+
+message GetProjectResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message DeleteProjectRequest {
+  // Required project ID.
+  string id = 1;
+}
+
+message ListProjectsRequest {}
+
+message Project {
+  string id = 1;
+  string name = 2;
+  string created_at = 3; 
+  string last_update= 4;
+  string email = 5;
+}
+
+message CreateOrganizationRequest {
+  string name = 1; 
+  string email = 2;
+
+  // List of domains associated with the organization.
+  repeated string domains = 3; 
+
+  string timezone = 4; 
+}
+
+message GetOrganizationRequest {
+  // Required organization ID.
+  string id = 1;
+}
+
+message GetOrganizationResponse {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string timezone = 4;
+}
+
+message UpdateOrganizationRequest {
+  // Required organization ID.
+  string id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message DeleteOrganizationRequest {
+  // Required organization ID.
+  string id = 1;
+}
+
+message VerifyUserRequest {}
+
+message VerifyUserResponse {
+  string email = 1;
+  string org = 2;
+  bool isOwner = 3;
+}
+
+message GetTeamRequest {
+  // Required team ID.
+  string id = 1;
+}
+message GetTeamResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message ListTeamsRequest {}
+
+
+message Team {
+  string id = 1;
+  string name = 2;
+  string org = 3;
+  string created_at = 4;
+  string last_update = 5;
+  string email = 6;
+}
+
+message ListTeamMembersRequest {}
+
+message Member {
+  string org = 1;
+  string team = 2;
+  string id = 3;
+  string email = 4;
+  string name = 5;
+  string created_at = 6;
+  string last_update = 7;
+}
+
+message ListProjectToTeamRequest {}
+
+message ListProjectToTeamResponse {
+  string project_id = 1;
+  string project_name = 2;
+  string team_id = 3;
+  string team_name = 4;
+}
+
+message ListProductsRequest {}
+
+message Product {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string created_at = 4;
+  string last_update = 5;
+}
+
+message CreateProductRequest {
+  string name = 1;
+  string email = 2;
+}
+
+message CreateTeamRequest {
+  string name = 1;
+  string email = 2;
+}
+
+message DeleteProductRequest {
+  // Required product ID.
+  string id = 1;
+}
+
+message AssignProjectToTeamRequest {
+  // Indicates whether a new project was created as part of the assignment.
+  bool create_new = 1;
+
+  // Should not be empty if create_new is true.
+  string project_email = 2;
+  
+  // Should not be empty if create_new is true.
+  string project_name = 3;
+
+  string team_id = 4;
+ 
+  // Required. Comma-separated list of project IDs to assign to the team.
+  string project_ids = 5;
+}
+
+message AssignProjectToTeamResponse {
+  string team_id = 1;
+  string team_name = 2;
+
+  // Comma-separated list of project IDs that were assigned.
+  string project_ids = 3; 
+
+  // Comma-separated list of project names that were assigned.
+  string project_names = 4;
+}
+
+message DeleteTeamRequest {
+  // Required team ID.
+  string id = 1;
+}
+
+message IntegrationStatus {
+  // "github", "slack"
+  string type = 1; 
+
+  // "on", "off"
+  string status = 2; 
+
+  string id = 3;
+
+  string teamName = 4;
+
+  string last_update = 5;
+}
+
+message GetIntegrationStatusResponse {
+  repeated IntegrationStatus status = 1;
+}
+
+message ListReportSchedulesRequest {}
+
+message ReportSchedule {
+  string id = 1;
+  string name = 2;
+  string schedule = 3;
+
+  // Supported values: "on", "off"
+  string status = 4;
+  string schedule_cron = 5;
+  string created_at = 6;
+  string last_update = 7;
+  string workflow_id = 8;
+}
+
+message UpdateOrgTimezoneRequest {
+  // Required organization ID.
+  string id = 1;
+
+  // Timezone in IANA format, e.g., "Asia/Kuala_Lumpur".
+  string timezone = 2;
+}
+
+message ListIntegrationStatusRequest {}
+
+message UpdateWorkflowRequest {
+  // Required workflow name.
+  string name = 1;
+
+  // Allowed values are "on" and "off".
+  string status = 2;
+}
+
+message ListWorkflowsRequest {}
+
+
+message Workflow {
+  string name = 1;
+
+  // Allowed values are "on" and "off".
+  string status = 2;
+}
+
+message ListActivitiesRequest {}
+
+message Activity {
+  string id = 1;
+  string type = 2;
+  string created_at = 3;
+}
+
+message JoinOrganizationRequest {
+  // Required.
+  string code = 1;
+
+  // Required user email.
+  string email = 2;
+
+  // Optional user name.
+  string name = 3;
+
+  // Optional "google", "github"
+  string social = 4;
+}
+
+
+message GenerateOrganizationCodeRequest {}
+
+message GenerateOrganizationCodeResponse {
+  string code = 1;
+}
+
+message ShareGDriveRequest {
+  string drivePath = 1;
+}

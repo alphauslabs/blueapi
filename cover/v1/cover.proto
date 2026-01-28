@@ -11,6 +11,7 @@ import "api/cover/unitcost.proto";
 import "api/cover/costgroup.proto";
 import "api/cover/accountaccess.proto";
 import "api/cover/costforecast.proto";
+import "api/cover/discountplan.proto";
 import "api/cover/discountrecommendation.proto";
 import "api/cover/rightsizingrecommendation.proto";
 import "api/cover/alert.proto";
@@ -29,7 +30,7 @@ option java_outer_classname = "CoverProto";
 // Cover service definition.
 service Cover {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
-    description: "(ALPHA) Cover API. Base URL: https://api.alphaus.cloud/m/blue/cover"
+    description: "(BETA) Cover API. Base URL: https://api.alphaus.cloud/m/blue/cover"
     external_docs: {
       url: "https://github.com/alphauslabs/blueapi/tree/main/cover/";
       description: "Service definition";
@@ -722,6 +723,13 @@ service Cover {
     };
   }
 
+  // Get all values of the allocation source
+  rpc GetAllocationSources(GetAllocationSourcesRequest) returns (GetAllocationSourcesResponse) {
+    option (google.api.http) = {
+      get: "/v1/allocators/source"
+    };
+  }
+
   // WORK-IN-PROGRESS: Updates a cost allocator item
   rpc UpdateAllocator(CostAllocatorRequest) returns (CostAllocatorDetails) {
     option (google.api.http) = {
@@ -1400,7 +1408,352 @@ service Cover {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Populate demo data 
+  rpc PopulateDemoData(PopulateDemoDataRequest) returns (PopulateDemoDataResponse) {
+    option (google.api.http) = {
+      post: "/v1/demo/populate"
+      body: "*"
+    };
+   }
+
+   // WORK-IN-PROGRESS: Reset demo data
+   rpc ResetDemoData(ResetDemoDataRequest) returns (ResetDemoDataResponse) {
+    option (google.api.http) = {
+      post: "/v1/demo/reset"
+      body: "*"
+    };
+  }
+
+  // Get discount plan details for an organization (or MSP).
+  rpc GetDiscountPlan(GetDiscountPlanRequest) returns (GetDiscountPlanResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/discountplan/{orgId}:read"
+      body: "*"
+    };
+  }
+  
+  rpc GetCostUsageV2(GetCostUsageV2Request) returns (stream GetCostUsageV2Response) {
+    option (google.api.http) = {
+      post: "/v1/costusage"
+      body: "*"
+    };
+  }
+
+  rpc ListNonperformingRate(ListNonperformingRateRequest) returns (ListNonperformingRateResponse) {
+    option (google.api.http) = {
+      post: "/v1/reports/rate/nonperforming:read"
+      body: "*"
+    };
+  }
+
+  rpc ListUntaggedResources(ListUntaggedResourcesRequest) returns (ListUntaggedResourcesResponse) {
+    option (google.api.http) = {
+      post: "/v1/reports/resources/untagged:read"
+      body: "*"
+    };
+  }
+
+  rpc ListForecasts(ListForecastsRequest) returns (ListForecastsResponse) {
+    option (google.api.http) = {
+      post: "/v1/forecasts:read"
+      body: "*"
+    };
+  }
+  
+  rpc CreateCostForecast(CreateCostForecastRequest) returns (CreateCostForecastResponse) {
+    option (google.api.http) = {
+      post: "/v1/forecasts"
+      body: "*"
+    };
+  }
+  
+  rpc GetCostForecast(GetCostForecastRequest) returns (GetCostForecastResponse) {
+    option (google.api.http) = {
+      get: "/v1/forecasts/{id}"
+    };
+  }
+  
+  rpc UpdateCostForecast(UpdateCostForecastRequest) returns (UpdateCostForecastResponse) {
+    option (google.api.http) = {
+      put: "/v1/forecasts/{id}"
+      body: "*"
+    };
+  }
+  
+  rpc DeleteCostForecast(DeleteCostForecastRequest) returns (DeleteCostForecastResponse) {
+    option (google.api.http) = {
+      delete: "/v1/forecasts/{id}"
+    };
+  }
+
+  rpc GetCostForecastsData(GetCostForecastsDataRequest) returns (stream GetCostForecastsDataResponse) {
+    option (google.api.http) = {
+      post: "/v1/forecasts/data:read"
+      body: "*"
+    };
+  }
+
+  rpc GetRecommendationV3(GetRecommendationV3Request) returns (GetRecommendationV3Response) {
+    option (google.api.http) = {
+      get: "/v1/recommendations"
+    };
+  }
+
+  rpc ListRecommendationsV3(ListRecommendationsV3Request) returns (stream RecommendationSummary) {
+    option (google.api.http) = {
+      post: "/v1/recommendations/summaries"
+      body: "*"
+    };
+  }
+
+  rpc ExecuteRecommendationV3(ExecuteRecommendationV3Request) returns (ExecuteRecommendationV3Response) {
+    option (google.api.http) = {
+      post: "/v1/recommendation/execute"
+      body: "*"
+    };
+  }
 }
+
+message ExecuteRecommendationV3Request {
+  enum ExecuteType {
+    DEFAULT = 0;
+    MARK_AS_EXECUTED = 1;
+    UNDO_EXECUTED = 2;
+  }
+  enum Option {
+    OPTION_UNSPECIFIED = 0;
+    SUBMIT_TEMPLATE = 1;
+    RETRY_EXECUTE = 2;
+  }
+  repeated string ids = 1;
+  ExecuteType executeType = 2;
+  optional Option option = 3;
+}
+
+message ExecuteRecommendationV3Response {
+  google.protobuf.Struct result = 1;
+}
+
+message ListRecommendationsV3Request {
+  string costgroupId = 1;
+  repeated string statuses = 2;
+  optional string lastDetectedStartDate = 3;
+  optional string lastDetectedEndDate = 4;
+  optional string dateDetectedStartDate = 5;
+  optional string dateDetectedEndDate = 6;
+
+}
+
+message RecommendationSummary {
+  string id = 1;
+  string name = 2;
+  string target = 3;
+  string targetName = 18;
+  string category = 4;
+  string type = 5;
+  string vendor = 13;
+  string source = 19;
+  string code = 14;
+  optional string service = 15;
+  optional string region = 16;
+  optional string resourceId = 17;
+  double estimatedMonthlySavings = 6;
+  double estimatedMonthlyBeforeCost = 7;
+  double estimatedMonthlyAfterCost = 8;
+  optional string risk = 9;
+  optional string effort = 10;
+  string status = 11;
+  google.protobuf.Struct additionalDetails = 12;
+}
+
+message GetRecommendationV3Request {
+  repeated string ids = 1;
+}
+
+message GetRecommendationV3Response {
+  message RecommendationDetail {
+    string id = 1;
+    string name = 9;
+    string vendor = 2;
+    string source = 3;
+    string code = 4;
+    optional string service = 5;
+    string target = 7;
+    string targetName = 8;
+    string dateDetected = 6;
+    optional string region = 10;
+    double estimatedMonthlyBeforeCost = 11;
+    double estimatedMonthlyAfterCost = 12;
+    double estimatedMonthlySavings = 13;
+    optional string resourceId = 14;
+    string category = 15;
+    string type = 16;
+    string lastUpdated = 17;
+    string status = 18;
+    optional string risk = 19;
+    optional string effort = 20;
+    google.protobuf.Struct details = 21;
+  }
+
+  repeated RecommendationDetail recommendations = 1;
+}
+
+message GetCostForecastsDataRequest {
+  enum Granularity {
+    GRANULARITY_UNSPECIFIED = 0;
+    DAILY = 1;
+    MONTHLY = 2;
+  }
+
+  // Required. Cost Group Id
+  string costGroupId = 1;
+  // Required. Start Time in 2006-01-02 format
+  string startTime = 2;
+  // Required. End Time in 2006-01-02 format
+  string endTime = 3; 
+  Granularity granularity = 4; 
+}
+
+message GetCostForecastsDataResponse {
+    string date = 1;
+    double forecastCost = 2;
+    double upperBound = 3;
+    double lowerBound = 4;
+}
+
+message ListForecastsRequest {}
+
+message ListForecastsResponse {
+  repeated api.cover.CostForecastDetails costForecastDetails = 1;
+}
+
+message CreateCostForecastRequest {
+  // Required. Name of the forecast
+  string forecastName = 1;
+  // Optional. Description of the forecast
+  string description = 2;
+  // Required. Cost Group Id and Name
+  api.cover.CostGroup costGroup = 3;
+
+  // Required. The range of past actual cost to be used in forecasting. Valid values are: '1', '3', '6', and '12' (in months)
+  int64 pastActualCostRange = 4;
+  // Required. The number of months to look forward in the forecast. Valid values are: '1', '3', '6', and '12' (in months)
+  int64 lookForwardPeriod = 5;
+
+  // Optional.
+  repeated api.cover.ExternalAdjustment externalAdjustments = 6;
+}
+
+message CreateCostForecastResponse {
+  string id = 1;
+  string forecastName = 2;
+  string description = 3;
+  api.cover.CostGroup costGroup = 4;
+  int64 pastActualCostRange = 5;
+  int64 lookForwardPeriod = 6;
+  repeated api.cover.ExternalAdjustment externalAdjustments = 7;
+}
+
+message GetCostForecastRequest {
+  // Required. Forecast Id
+  string id = 1;
+}
+
+message GetCostForecastResponse {
+  string id = 1;
+  string forecastName = 2;
+  string description = 3;
+  api.cover.CostGroup costGroup = 4;
+  int64 pastActualCostRange = 5;
+  int64 lookForwardPeriod = 6;
+  repeated api.cover.ExternalAdjustment externalAdjustments = 7;
+  string createdBy = 8;
+  string creationDate = 9;
+  string lastUpdatedDate = 10;
+}
+
+message UpdateCostForecastRequest {
+  // Required. Forecast Id
+  string id = 1;
+
+  // Optional. Name of the forecast
+  string forecastName = 2;
+
+  // Optional. Description of the forecast
+  string description = 3;
+
+  // Optional. Cost Group Id and Name
+  api.cover.CostGroup costGroup = 4;
+
+  // Optional. The range of past actual cost to be used in forecasting. Valid values are: '1', '3', '6', and '12' (in months)
+  int64 pastActualCostRange = 5;
+
+  // Optional. The number of months to look forward in the forecast. Valid values are: '1', '3', '6', and '12' (in months)
+  int64 lookForwardPeriod = 6;
+
+  // Optional.
+  repeated api.cover.ExternalAdjustment externalAdjustments = 7;
+}
+
+message UpdateCostForecastResponse {
+  string id = 1;
+  string forecastName = 2;
+  string description = 3;
+  api.cover.CostGroup costGroup = 4;
+  int64 pastActualCostRange = 5;
+  int64 lookForwardPeriod = 6;
+  repeated api.cover.ExternalAdjustment externalAdjustments = 7;
+  string createdBy = 8;
+  string creationDate = 9;
+  string lastUpdatedDate = 10;
+}
+
+message DeleteCostForecastRequest {
+  // Required. Forecast Id
+  string id = 1;
+}
+
+message DeleteCostForecastResponse {
+  string id = 1;
+}
+
+message GetCostUsageV2Response {
+  double value = 1;
+  string date = 2;
+  string vendor = 3;
+  google.protobuf.Struct details = 4;
+}
+
+message GetCostUsageV2Request {
+  enum Granularity {
+    GRANULARITY_UNSPECIFIED = 0;
+    DAILY = 1;
+    MONTHLY = 2;
+  }
+
+  enum Category {
+    Category_UNSPECIFIED = 0;
+    COST = 1;
+    USAGE = 2;
+  }
+
+  string costGroupId = 1;
+  string startTime = 2;
+  string endTime = 3;
+  Granularity granularity = 4;
+  repeated string groupBys = 5;
+  Category category = 6;
+  string currency = 7;
+  api.cover.CostGroupAwsOptions awsOptions = 8;
+  api.cover.CostGroupAzureCspOptions azurecspOptions = 9;
+  api.cover.CostGroupGcpOptions gcpOptions = 10;
+}
+
+message PopulateDemoDataRequest{}
+message PopulateDemoDataResponse {}
+message ResetDemoDataRequest {}
+message ResetDemoDataResponse {}
 
 message ContainerCostUsageRequest {
   enum TimeGranularity {
@@ -1510,7 +1863,10 @@ message GetAICostAndUsageRequest {
 
     string key = 1;
     Operator operator = 2;
-    string value = 3;
+    // TEMPORARY. retain the old parameter to avoid errors in UI prod.
+    // Will remove once the latest changes in UI is released.
+    repeated string values = 3;
+    string value = 4;
   }
 
   string costGroupId = 1;
@@ -2646,8 +3002,12 @@ message CostItem {
   string category = 13;
   // Indicates whether the item is tagged (true) or not (false).
   bool tagged = 14;
+  //Contains the number of units for unit metric. Only used when feature flag for unit cost metric is enabled.
+  double numberOfUnits = 18;
   // Contains the unit cost metric. Only used when feature flag for unit cost metric is enabled.
   map<string, double> unitcostmetric = 15;
+  // Indicates the allocation category. "target" or "source". For target, allocated cost from other account while source is the cost allocated to other account.
+  string allocationCategory = 19;
 }
 
 // Request message for GetRightSizingRecommendation
@@ -2948,6 +3308,23 @@ message GetAllocationAttributesResponse {
   repeated AllocationAttribute attribute = 1;
 }
 
+// Request message for the GetAllocationSources rpc.
+message GetAllocationSourcesRequest {
+  string type = 1;
+  string accountId = 2;
+}
+
+// Response message for the GetAllocationSources rpc.
+message GetAllocationSourcesResponse {
+  message AllocationSources {
+    string accountName = 1;
+    string service = 2;
+    string costGroup = 3;
+  }
+  repeated AllocationSources source = 1;
+  repeated api.cover.TagData tagData = 2;
+}
+
 // Request message for the DeleteAllocator rpc.
 message DeleteAllocatorRequest {
   // Required. The id of the allocator to delete.
@@ -3054,6 +3431,7 @@ message AllocationItem {
   string account = 4;
   string type = 5;
   double cost = 6;
+  string costGroup = 7;
 }
 
 // Request message for AddUserFromAuth0asRoot rpc
@@ -4317,4 +4695,109 @@ message GetCloudwatchMetadataResponse {
   }
 
   repeated Dimension dimensions = 3;
+}
+
+// Request message for GetDiscountPlan
+message GetDiscountPlanRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Organization Id.
+  string orgId = 2;
+
+  // Required. Valid values: 'all', 'reservation', 'savingsplan'
+  string reductionDisplay = 3;
+
+  // Optional. If set to "true", details of the RI or SP list is returned. Default: false.
+	bool includeDetails = 4;
+
+  // Optional. The start date of the displayed data. If not set, the first day of the current month will be used. Format: yyyy-mm-dd.
+  string fromDate = 5;
+
+  // Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd.
+  string toDate = 6;
+
+  // Optional. Payer Id.
+  string payerId = 7;
+
+  // Optional. Billing group Id.
+  string billingInternalId = 8;
+
+  // Optional. Account group Id.
+  string groupId = 9;
+
+  // Optional. Cost Group Id used in octo.
+  string costGroupId = 10;
+
+  // Optional. List of Account Ids.
+  repeated string accounts = 11;
+
+  // Optional. List of services.
+  repeated string services = 12;
+}
+
+// Response message for GetDiscountPlan
+message GetDiscountPlanResponse {
+  string orgId = 1;
+  api.cover.AwsDiscountPlans awsDiscountPlans = 2;
+}
+
+// Request message for ListNonperformingRate
+message ListNonperformingRateRequest {
+  // Required. At the moment, only `aws` is supported.
+  string vendor = 1;
+
+  // Required. Cost Group Id.
+  string costGroupId = 2;
+
+  // Optional. The start date of the displayed data. If not set, the first day of the current month will be used. Format: yyyy-mm-dd.
+  string fromDate = 3;
+
+  // Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd.
+  string toDate = 4;
+
+  // Optional. The type of optimization; `ri`, `sp`, or `all`.
+  string type = 5;
+}
+
+// Response message for ListNonperformingRate
+message ListNonperformingRateResponse {
+  message Nonperforming {
+    string type = 1;
+    string account = 2;
+    double utilization = 3;
+    double waste = 4;
+  }
+  repeated Nonperforming nonperforming = 1;
+}
+
+// Request message for ListUntaggedResources
+message ListUntaggedResourcesRequest {
+  // Required. 
+  string vendor = 1;
+
+  // Required. Cost Group Id.
+  string costGroupId = 2;
+
+  // Optional. The start date of the displayed data. If not set, the first day of the current month will be used. Format: yyyy-mm-dd.
+  string fromDate = 3;
+
+  // Optional. The end date of the displayed data. If not set, current date will be used. Format: yyyy-mm-dd.
+  string toDate = 4;
+
+  // Optional. The number of top untagged resources to be displayed. If not set, top 10 untagged resources are returned.
+  int64 limit = 5;
+}
+
+// Response message for ListUntaggedResources
+message ListUntaggedResourcesResponse {
+  message UntaggedResources {
+    string resource = 1;
+    string service = 2;
+    string accountId = 3;
+    string costGroup = 4;
+    double cost = 5;
+    string vendor = 6;
+  }
+  repeated UntaggedResources untaggedResources = 1;
 }

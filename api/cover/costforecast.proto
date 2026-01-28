@@ -26,3 +26,34 @@ message AwsCostForecast {
     double unblendedLowerBound = 8;
     double unblendedUpperBound = 9;
 }
+
+message CostGroup {
+    string id = 1;
+    string name = 2; // cost group name
+  }
+
+  message CostForecastDetails {
+    string id = 1;
+    string forecastName = 2;
+    string description = 3;
+    CostGroup costgroup = 4; 
+    string startDate = 5; 
+    string endDate = 6; 
+    string createdBy = 7;
+    string creationDate = 8; 
+    string lastUpdatedDate = 9; 
+}
+
+message ExternalAdjustment {
+    string id = 1;
+    // Name of the adjustment
+    string name = 2;
+    string description = 3;
+    repeated CostForecastAdjustment adjustments = 4;
+}
+
+message CostForecastAdjustment {
+    // For monthly adjustment, format is yyyy-mm.
+    string month = 1; 
+    double adjustment = 2;
+}

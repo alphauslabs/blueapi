@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+package blueapi.vortex.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/vortex";
+option java_package = "cloud.alphaus.api.vortex";
+option java_outer_classname = "VortexProto";
+
+// Vortex service definition.
+service Vortex {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "(Alpha) Vortex API. Base URL: https://api.alphaus.cloud/m/blue/vortex"
+    external_docs: {
+      url: "https://github.com/alphauslabs/blueapi/tree/main/vortex/";
+      description: "Service definition";
+    }
+  };
+
+  // Test endpoint only
+  rpc Test(google.protobuf.Empty) returns (TestResponse) {
+    option (google.api.http) = {
+      get: "/v1/testing"
+    };
+  }
+
+  // Create an org in Vortex
+  rpc CreateOrg(CreateOrgRequest) returns (CreateOrgResponse) {
+    option (google.api.http) = {
+      post: "/v1/organizations"
+      body: "*"
+    };
+  }
+
+  rpc GetUser(GetUserRequest) returns (GetUserResponse) {
+    option (google.api.http) = {
+      get: "/v1/user/{email}"
+    };
+  }
+
+  rpc ListPrompts(ListPromptsRequest) returns (stream Prompt) {
+    option (google.api.http) = {
+      post: "/v1/prompts:read"
+      body: "*"
+    };
+  }
+
+  rpc InviteUser(InviteUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/invite"
+      body: "*"
+    };
+  }
+
+  rpc VerifyInvitedUser(VerifyInvitedUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/invite/verify"
+      body: "*"
+    };
+  }
+}
+
+// Test only 
+message TestResponse {
+  string message = 1;
+}
+
+message CreateOrgRequest {
+  string name = 1;
+  string email = 2;
+}
+
+message CreateOrgResponse {
+  string orgId = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message GetUserRequest {
+  string email = 1;
+}
+
+message GetUserResponse {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  string orgId = 4;
+}
+
+message Prompt {
+  string content = 1;
+  string fromContainerName = 2;
+  string riskLevel = 3;
+}
+
+message ListPromptsRequest {}
+
+message InviteUserRequest {
+  string email = 1;
+}
+
+message VerifyInvitedUserRequest {
+  string email = 1;
+  string orgId = 2;
+  string code = 3;
+}
+
