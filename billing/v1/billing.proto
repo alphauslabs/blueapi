@@ -1005,7 +1005,7 @@ service Billing {
     };
   }
 
-  // Create billing group in bulk
+  // Create billing group in bulk from CSV file
   rpc BulkCreateBillingGroup(BulkCreateBillingGroupRequest) returns (stream BulkCreateBillingGroupResponse) {
     option (google.api.http) = {
       post: "/v1/billinggroups:bulkCreate"
@@ -3431,8 +3431,14 @@ message SetChildBillingGroupInvoiceServiceDiscountsRequest {
 }
 
 message BulkCreateBillingGroupRequest {
-  // Required. The list of billing group to create.
-  repeated CreateBillingGroupRequest request = 1;
+  // Required. The CSV file content as bytes.
+  bytes csvContent = 1;
+
+  // Optional. The delimiter used in the CSV file. Defaults to comma (,).
+  string delimiter = 2;
+
+  // Optional. Whether the CSV file has a header row. Defaults to true.
+  bool hasHeader = 3;
 }
 
 message BulkCreateBillingGroupResponse {
