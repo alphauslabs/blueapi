@@ -989,6 +989,22 @@ service Billing {
     };
   }
 
+  // Sets the child billing group invoice service discounts. Only available in Ripple.
+  rpc SetChildBillingGroupInvoiceServiceDiscounts(SetChildBillingGroupInvoiceServiceDiscountsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups/child/{internalId}/servicediscounts"
+      body: "*"
+    };
+  }
+
+  // Sets the customized billing service in child billing group. Only available in Ripple.
+  rpc SetChildBillingGroupCustomizedBillingService(SetChildBillingGroupCustomizedBillingServiceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups/child/{internalId}/customizedbillingservice/{vendor}"
+      body: "*"
+    };
+  }
+
   // Create billing group in bulk
   rpc BulkCreateBillingGroup(BulkCreateBillingGroupRequest) returns (stream BulkCreateBillingGroupResponse) {
     option (google.api.http) = {
@@ -3373,6 +3389,43 @@ message UpdateChildBillingGroupInvoiceSettingsRequest {
 }
 
 message UpdateChildBillingGroupInvoiceSettingsResponse {}
+
+
+message SetChildBillingGroupCustomizedBillingServiceRequest {
+  // Required. internal id of the child billing group.
+  string internalId = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. At the moment, `aws` is supported.
+  string vendor = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // CustomizedBillingServiceBillingSetting
+  message CustomizedBillingServiceBillingSetting {
+    // Required. [blueapi.api.ripple.CustomizedBillingService.id]
+    string id = 1 [(google.api.field_behavior) = REQUIRED];
+
+    // Required. [blueapi.api.ripple.ChargingTarget]
+    api.ripple.ChargingTarget chargingTarget = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // Optional. if chargingTarget is BILLINGGROUP, `accounts` is set emptty.
+    //
+    // Specify the accountIds. For example: [`accountId1`,`accountId2`,`accountId3`]
+    repeated string accounts = 3 [(google.api.field_behavior) = OPTIONAL];
+  }
+
+  // Required. customized billing service setting.
+  repeated CustomizedBillingServiceBillingSetting setting = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+
+message SetChildBillingGroupInvoiceServiceDiscountsRequest {
+  // Required. Internal Id of the child billing group.
+  string internalId = 1;
+
+  // Required.
+  //
+  // Service discount id.
+  string id = 2;
+}
 
 message BulkCreateBillingGroupRequest {
   // Required. The list of billing group to create.
