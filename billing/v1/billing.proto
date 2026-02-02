@@ -1013,6 +1013,13 @@ service Billing {
     };
   }
 
+  // Gets the customized billing service in child billing group. Only available in Ripple.
+  rpc GetChildBillingGroupCustomizedBillingService(GetChildBillingGroupCustomizedBillingServiceRequest) returns (stream GetChildBillingGroupCustomizedBillingServiceResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/child/{internalId}/customizedbillingservice/{vendor}"
+    };
+  }
+
   // Create billing group in bulk from CSV file
   rpc BulkCreateBillingGroup(BulkCreateBillingGroupRequest) returns (stream BulkCreateBillingGroupResponse) {
     option (google.api.http) = {
@@ -3445,6 +3452,28 @@ message SetChildBillingGroupAccountInvoiceServiceDiscountsRequest {
 
   // Required.
   repeated AccountServiceDiscounts accounts = 2;
+}
+
+message GetChildBillingGroupCustomizedBillingServiceRequest {
+  // Required. Internal Id
+  string internalId = 1;
+
+  // Required. At the moment, `aws` is supported.
+  string vendor = 2;
+}
+
+message GetChildBillingGroupCustomizedBillingServiceResponse {
+  // Required. [blueapi.api.ripple.CustomizedBillingService.id]
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. vendor that applied to the CustomizedBillingService　config.
+  string vendor = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. [blueapi.api.ripple.ChargingTarget]
+  api.ripple.ChargingTarget chargingTarget = 3 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. accounts that applied to the CustomizedBillingService　config.
+  repeated api.Account accounts = 4 [(google.api.field_behavior) = OPTIONAL];
 }
 
 message BulkCreateBillingGroupRequest {
