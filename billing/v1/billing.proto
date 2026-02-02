@@ -1000,7 +1000,7 @@ service Billing {
   // Sets the child billing group's account invoice service discounts. Only available in Ripple.
   rpc SetChildBillingGroupAccountInvoiceServiceDiscounts(SetChildBillingGroupAccountInvoiceServiceDiscountsRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/v1/billinggroups/child/{internalId}/servicediscounts/account"
+      post: "/v1/billinggroups/child/{internalId}/servicediscounts:account"
       body: "*"
     };
   }
@@ -1017,6 +1017,20 @@ service Billing {
   rpc GetChildBillingGroupCustomizedBillingService(GetChildBillingGroupCustomizedBillingServiceRequest) returns (stream GetChildBillingGroupCustomizedBillingServiceResponse) {
     option (google.api.http) = {
       get: "/v1/billinggroups/child/{internalId}/customizedbillingservice/{vendor}"
+    };
+  }
+
+  // Returns the service discount associated with the billing group id
+  rpc GetChildBillingGroupInvoiceServiceDiscounts(GetChildBillingGroupInvoiceServiceDiscountsRequest) returns (GetChildBillingGroupInvoiceServiceDiscountsResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/child/{internalId}/servicediscounts"
+    };
+  }
+
+  // Returns the account's service discounts associated with the child billing group id
+  rpc ListChildBillingGroupAccountInvoiceServiceDiscounts(ListChildBillingGroupAccountInvoiceServiceDiscountsRequest) returns (stream AccountInvoiceServiceDiscounts) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/child/{internalId}/servicediscounts:account"
     };
   }
 
@@ -3475,6 +3489,22 @@ message GetChildBillingGroupCustomizedBillingServiceResponse {
   // Optional. accounts that applied to the CustomizedBillingService　config.
   repeated api.Account accounts = 4 [(google.api.field_behavior) = OPTIONAL];
 }
+
+message GetChildBillingGroupInvoiceServiceDiscountsRequest {
+  // Required. Child Billing Group Internal Id
+  string internalId = 1;
+}
+
+message GetChildBillingGroupInvoiceServiceDiscountsResponse {
+  // Service discount id
+  string id = 1;
+}
+
+message ListChildBillingGroupAccountInvoiceServiceDiscountsRequest {
+  // Required. Child Billing Group Internal Id
+  string internalId = 1;
+}
+
 
 message BulkCreateBillingGroupRequest {
   // Required. The CSV file content as bytes.
