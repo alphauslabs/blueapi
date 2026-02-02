@@ -31,46 +31,46 @@ service GuaranteedCommitments {
   // ####################### COMMITMENT PLANS #######################
 
   // WORK-IN-PROGRESS: Do not use. Retrieves detailed information about a specific commitment plan, including costs, savings projections, and commitment coverage.
-  rpc GetCommitmentPlanDetails(GetCommitmentPlanDetailsRequest) returns (CommitmentPlanDetails) {
+  rpc GetCommitmentsPlanDetails(GetCommitmentPlanDetailsRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
-      get: "/v1/commitment-plans/{planId}"
+      get: "/v1/commitments/plan/{planId}"
     };
   }
 
   // WORK-IN-PROGRESS: Do not use. Executes a commitment purchase plan, initiating the commitment purchase process.
-  rpc CommitmentPlanApply(CommitmentPlanApplyRequest) returns (CommitmentPlanDetails) {
+  rpc CommitmentsPlanApply(CommitmentPlanApplyRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
-      post: "/v1/commitment-plans/{planId}/apply"
+      post: "/v1/commitments/plan/{planId}/apply"
       body: "*"
     };
   }
 
   // WORK-IN-PROGRESS: Do not use. Retrieves the three default GuaranteedCommitments commitment plans (High Savings, Balanced, Recommended) for the specified cloud provider.
-  rpc ListDefaultCommitmentPlans(ListDefaultCommitmentPlansRequest) returns (ListDefaultCommitmentPlansResponse) {
+  rpc ListDefaultCommitmentsPlan(ListDefaultCommitmentPlansRequest) returns (ListDefaultCommitmentPlansResponse) {
     option (google.api.http) = {
-      get: "/v1/commitment-plans/default"
+      get: "/v1/commitments/plan/default"
     };
   }
 
   // WORK-IN-PROGRESS: Do not use. Retrieves only the recommended GuaranteedCommitments commitment plan for the specified cloud provider.
-  rpc GetRecommendedCommitmentPlan(GetRecommendedCommitmentPlanRequest) returns (CommitmentPlanDetails) {
+  rpc GetRecommendedCommitmentsPlan(GetRecommendedCommitmentPlanRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
-      get: "/v1/commitment-plans/recommended"
+      get: "/v1/commitments/plan/recommended"
     };
   }
 
   // WORK-IN-PROGRESS: Do not use. Retrieves line items for a specific commitment plan.
-  rpc ListCommitmentPlanLineItems(ListCommitmentPlanLineItemsRequest) returns (ListCommitmentPlanLineItemsResponse) {
+  rpc ListCommitmentsPlanLineItems(ListCommitmentPlanLineItemsRequest) returns (ListCommitmentPlanLineItemsResponse) {
     option (google.api.http) = {
-      get: "/v1/commitment-plans/{planId}/line-items"
+      get: "/v1/commitments/plan/{planId}/line-items"
     };
   }
 
   // WORK-IN-PROGRESS: Do not use. Retrieves resource matches for a specific commitment plan.
-  rpc ListCommitmentPlanResourceMatches(ListCommitmentPlanResourceMatchesRequest)
+  rpc ListCommitmentsPlanResourceMatches(ListCommitmentPlanResourceMatchesRequest)
       returns (ListCommitmentPlanResourceMatchesResponse) {
     option (google.api.http) = {
-      get: "/v1/commitment-plans/{planId}/resource-matches"
+      get: "/v1/commitments/plan/{planId}/resource-matches"
     };
   }
 
@@ -131,10 +131,10 @@ service GuaranteedCommitments {
     };
   }
 
-  // WORK-IN-PROGRESS: Do not use. Retrieves default purchase plans for a specific segment.
+  // WORK-IN-PROGRESS: Do not use. Retrieves default purchase plans of a company.
   rpc ListDefaultPurchasePlans(ListDefaultPurchasePlansRequest) returns (ListDefaultPurchasePlansResponse) {
     option (google.api.http) = {
-      get: "/v1/purchase-plans-v1/default"
+      get: "/v1/commitments/purchaseplan/default"
     };
   }
 
@@ -233,97 +233,83 @@ enum UsageType {
 message ListOrgsRequest {}
 
 message GetCommitmentPlanDetailsRequest {
-  string orgId = 1;
-  string planId = 2;
+  string planId = 1;
 }
 
 message CommitmentPlanApplyRequest {
-  string orgId = 1;
-  string planId = 2;
+  string planId = 1;
 }
 
 message ListDefaultCommitmentPlansRequest {
-  string orgId = 1;
-  Provider provider = 2;
+  Provider provider = 1;
 }
 
 message GetRecommendedCommitmentPlanRequest {
-  string orgId = 1;
-  Provider provider = 2;
+  Provider provider = 1;
 }
 
 message ListCommitmentPlanLineItemsRequest {
-  string orgId = 1;
-  string planId = 2;
-  string orderBy = 3;
-  bool desc = 4;
-  string segmentId = 5;
-  repeated string resourceMatchIds = 6;
-  int32 page = 7;
-  int32 pageSize = 8;
+  string planId = 1;
+  string orderBy = 2;
+  bool desc = 3;
+  string segmentId = 4;
+  repeated string resourceMatchIds = 5;
+  int32 page = 6;
+  int32 pageSize = 7;
 }
 
 message ListCommitmentPlanResourceMatchesRequest {
-  string orgId = 1;
-  string planId = 2;
-  string orderBy = 3;
-  bool desc = 4;
-  string startDate = 5;
-  string endDate = 6;
-  repeated string lineItemIds = 7;
-  int32 page = 8;
-  int32 pageSize = 9;
+  string planId = 1;
+  string orderBy = 2;
+  bool desc = 3;
+  string startDate = 4;
+  string endDate = 5;
+  repeated string lineItemIds = 6;
+  int32 page = 7;
+  int32 pageSize = 8;
 }
 
 message ListCommitmentsRequest {}
 
 message GetCommitmentsChartRequest {
-  string orgId = 1;
-  google.protobuf.Struct filter = 2;
-  Provider provider = 3;
-  string startDate = 4;
-  string endDate = 5;
+  google.protobuf.Struct filter = 1;
+  Provider provider = 2;
+  string startDate = 3;
+  string endDate = 4;
 }
 
 message GetMetricsRequest {
-  string orgId = 1;
-  Provider provider = 2;
+  Provider provider = 1;
 }
 
 message ListResourcesRequest {
-  string orgId = 1;
-  Provider provider = 2;
-  string segmentId = 3;
-  string search = 4;
-  bool desc = 5;
-  string orderBy = 6;
-  int32 page = 7;
-  int32 pageSize = 8;
-}
-
-message GetResourceDailyUsageRequest {
-  string orgId = 1;
-  string resourceId = 2;
-  string startDate = 3;
-  string endDate = 4;
-  string catalogSkuId = 5;
+  Provider provider = 1;
+  string segmentId = 2;
+  string search = 3;
+  bool desc = 4;
+  string orderBy = 5;
   int32 page = 6;
   int32 pageSize = 7;
 }
 
+message GetResourceDailyUsageRequest {
+  string resourceId = 1;
+  string startDate = 2;
+  string endDate = 3;
+  string catalogSkuId = 4;
+  int32 page = 5;
+  int32 pageSize = 6;
+}
+
 message ListSegmentsRequest {
-  string orgId = 1;
-  Provider provider = 2;
+  Provider provider = 1;
 }
 
 message GetSegmentDetailsRequest {
-  string orgId = 1;
-  string segmentId = 2;
+  string segmentId = 1;
 }
 
 message ListDefaultPurchasePlansRequest {
-  string orgId = 1;
-  string segmentId = 2;
 }
 
 // ------------------------ ONBOARDING REQUEST ------------------------
