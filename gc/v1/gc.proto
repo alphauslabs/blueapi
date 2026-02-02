@@ -31,14 +31,14 @@ service GuaranteedCommitments {
   // ####################### COMMITMENT PLANS #######################
 
   // WORK-IN-PROGRESS: Do not use. Retrieves detailed information about a specific commitment plan, including costs, savings projections, and commitment coverage.
-  rpc GetCommitmentPlanDetails(GetCommitmentPlanDetailsRequest) returns (CommitmentPlanDetails) {
+  rpc GetCommitmentsPlanDetails(GetCommitmentPlanDetailsRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
       get: "/v1/commitments/plan/{planId}"
     };
   }
 
   // WORK-IN-PROGRESS: Do not use. Executes a commitment purchase plan, initiating the commitment purchase process.
-  rpc CommitmentPlanApply(CommitmentPlanApplyRequest) returns (CommitmentPlanDetails) {
+  rpc CommitmentsPlanApply(CommitmentPlanApplyRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
       post: "/v1/commitments/plan/{planId}/apply"
       body: "*"
@@ -46,28 +46,28 @@ service GuaranteedCommitments {
   }
 
   // WORK-IN-PROGRESS: Do not use. Retrieves the three default GuaranteedCommitments commitment plans (High Savings, Balanced, Recommended) for the specified cloud provider.
-  rpc ListDefaultCommitmentPlans(ListDefaultCommitmentPlansRequest) returns (ListDefaultCommitmentPlansResponse) {
+  rpc ListDefaultCommitmentsPlan(ListDefaultCommitmentPlansRequest) returns (ListDefaultCommitmentPlansResponse) {
     option (google.api.http) = {
       get: "/v1/commitments/plan/default"
     };
   }
 
   // WORK-IN-PROGRESS: Do not use. Retrieves only the recommended GuaranteedCommitments commitment plan for the specified cloud provider.
-  rpc GetRecommendedCommitmentPlan(GetRecommendedCommitmentPlanRequest) returns (CommitmentPlanDetails) {
+  rpc GetRecommendedCommitmentsPlan(GetRecommendedCommitmentPlanRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
       get: "/v1/commitments/plan/recommended"
     };
   }
 
   // WORK-IN-PROGRESS: Do not use. Retrieves line items for a specific commitment plan.
-  rpc ListCommitmentPlanLineItems(ListCommitmentPlanLineItemsRequest) returns (ListCommitmentPlanLineItemsResponse) {
+  rpc ListCommitmentsPlanLineItems(ListCommitmentPlanLineItemsRequest) returns (ListCommitmentPlanLineItemsResponse) {
     option (google.api.http) = {
       get: "/v1/commitments/plan/{planId}/line-items"
     };
   }
 
   // WORK-IN-PROGRESS: Do not use. Retrieves resource matches for a specific commitment plan.
-  rpc ListCommitmentPlanResourceMatches(ListCommitmentPlanResourceMatchesRequest)
+  rpc ListCommitmentsPlanResourceMatches(ListCommitmentPlanResourceMatchesRequest)
       returns (ListCommitmentPlanResourceMatchesResponse) {
     option (google.api.http) = {
       get: "/v1/commitments/plan/{planId}/resource-matches"
