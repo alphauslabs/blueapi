@@ -997,6 +997,14 @@ service Billing {
     };
   }
 
+  // Sets the child billing group's account invoice service discounts. Only available in Ripple.
+  rpc SetChildBillingGroupAccountInvoiceServiceDiscounts(SetChildBillingGroupAccountInvoiceServiceDiscountsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups/child/{internalId}/servicediscounts/account"
+      body: "*"
+    };
+  }
+
   // Sets the customized billing service in child billing group. Only available in Ripple.
   rpc SetChildBillingGroupCustomizedBillingService(SetChildBillingGroupCustomizedBillingServiceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -3428,6 +3436,15 @@ message SetChildBillingGroupInvoiceServiceDiscountsRequest {
   //
   // Service discount id.
   string id = 2;
+}
+
+
+message SetChildBillingGroupAccountInvoiceServiceDiscountsRequest {
+  // Required. child billing group's internal Id.
+  string internalId = 1;
+
+  // Required.
+  repeated AccountServiceDiscounts accounts = 2;
 }
 
 message BulkCreateBillingGroupRequest {

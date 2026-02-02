@@ -6714,6 +6714,47 @@
         ]
       }
     },
+    "/v1/billinggroups/child/{internalId}/servicediscounts/account": {
+      "post": {
+        "summary": "Sets the child billing group's account invoice service discounts. Only available in Ripple.",
+        "operationId": "Billing_SetChildBillingGroupAccountInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "internalId",
+            "description": "Required. child billing group's internal Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingSetChildBillingGroupAccountInvoiceServiceDiscountsBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups/child:read": {
       "post": {
         "summary": "Lists child billing groups under a specific filter",
@@ -7030,7 +7071,7 @@
     },
     "/v1/billinggroups:bulkCreate": {
       "post": {
-        "summary": "Create billing group in bulk",
+        "summary": "Create billing group in bulk from CSV file",
         "operationId": "Billing_BulkCreateBillingGroup",
         "responses": {
           "200": {
@@ -21676,6 +21717,19 @@
       },
       "description": "Request message for SetBillingGroupExchangeRate rpc."
     },
+    "BillingSetChildBillingGroupAccountInvoiceServiceDiscountsBody": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1AccountServiceDiscounts"
+          },
+          "description": "Required."
+        }
+      }
+    },
     "BillingSetChildBillingGroupCustomizedBillingServiceBody": {
       "type": "object",
       "properties": {
@@ -35082,13 +35136,18 @@
     "v1BulkCreateBillingGroupRequest": {
       "type": "object",
       "properties": {
-        "request": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1CreateBillingGroupRequest"
-          },
-          "description": "Required. The list of billing group to create."
+        "csvContent": {
+          "type": "string",
+          "format": "byte",
+          "description": "Required. The CSV file content as bytes."
+        },
+        "delimiter": {
+          "type": "string",
+          "description": "Optional. The delimiter used in the CSV file. Defaults to comma (,)."
+        },
+        "hasHeader": {
+          "type": "boolean",
+          "description": "Optional. Whether the CSV file has a header row. Defaults to true."
         }
       }
     },
