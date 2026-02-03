@@ -162,7 +162,7 @@ service GuaranteedCommitments {
   // Creates the necessary IAM role and policy template for setting up AWS access.
   rpc GetAwsCloudFormationTemplate(GetAwsCloudFormationTemplateRequest) returns (GetAwsCloudFormationTemplateResponse) {
     option (google.api.http) = {
-      get: "/v1/onboarding/aws/cloudformation-template"
+      get: "/v1/onboarding/aws/cloudformation/template"
     };
   }
 
@@ -170,7 +170,7 @@ service GuaranteedCommitments {
   // Creates a pre-configured URL to deploy the CloudFormation stack in the AWS console.
   rpc GetAwsLaunchStackUrl(GetAwsLaunchStackUrlRequest) returns (GetAwsLaunchStackUrlResponse) {
     option (google.api.http) = {
-      get: "/v1/onboarding/aws/launch-stack-url"
+      get: "/v1/onboarding/aws/cloudformation/launchstackurl"
     };
   }
 
@@ -183,6 +183,16 @@ service GuaranteedCommitments {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Retrieves the latest onboarding status for an MSP or a company under an MSP.
+  // Retrieves the latest onboarding status for an MSP or a company under an MSP.
+  rpc GetOnboardingStatus(GetOnboardingStatusRequest) returns (GetOnboardingStatusResponse) {
+    option (google.api.http) = {
+      post: "/v1/onboarding/status:read"
+      body: "*"
+    };
+  }
+
 }
 
 // ####################### ENUMS #######################
@@ -418,6 +428,16 @@ message VerifyAwsOnboardingRequest {
 
   // Optional: if set, GuaranteedCommitments will use this existing CUR. If omitted, GuaranteedCommitments may create a new CUR.
   AwsExistingCur existingCur = 6;
+}
+
+message GetOnboardingStatusRequest {
+  // Ripple context
+  string mspId = 1;
+
+  // Optional:
+  // - empty => MSP-level onboarding row (isMsp = true)
+  // - non-empty => company under MSP (isMsp = false)
+  string billingGroupId = 2;
 }
 
 // ####################### RESPONSE MESSAGES #######################
@@ -935,4 +955,43 @@ message VerifyAwsOnboardingResponse {
   }
 
   repeated AwsOnboardingFeatureCheck checks = 1;
+}
+
+message GetOnboardingStatusResponse {
+  enum OnboardingStatus {
+    ONBOARDING_STATUS_UNSPECIFIED = 0;
+
+    // No row found in archera_users (org not registered yet)
+    ONBOARDING_STATUS_NOT_REGISTERED = 1;
+
+    // Existing statuses you already persist
+    ONBOARDING_STATUS_REGISTERED = 2;
+    ONBOARDING_STATUS_ONBOARDING_STARTED = 3;
+    ONBOARDING_STATUS_VERIFIED = 4;
+    ONBOARDING_STATUS_VERIFY_INCOMPLETE = 5;
+    ONBOARDING_STATUS_VERIFY_FAILED = 6;
+  }
+
+  // Whether we found a corresponding row
+  bool found = 1;
+
+  // Convenience: derived from whether billingId is empty
+  bool isMsp = 2;
+
+  // Vendor saved at registration (aws/azure/gcp). Optional.
+  Provider provider = 3;
+
+  // The org id to use for Archera upstream calls:
+  // - MSP: mspArcheraOrgId
+  // - company: archeraOrgId
+  string gcOrgId = 4;
+
+  // Latest persisted onboarding ID (if any)
+  string onboardingId = 5;
+
+  // Latest persisted onboarding status
+  OnboardingStatus onboardingStatus = 6;
+
+  // Latest persisted AWS account id (if any)
+  string accountId = 7;
 }
