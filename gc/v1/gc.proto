@@ -132,7 +132,7 @@ service GuaranteedCommitments {
   }
 
   // WORK-IN-PROGRESS: Do not use. Retrieves default purchase plans of a company.
-  rpc ListDefaultPurchasePlans(ListDefaultPurchasePlansRequest) returns (ListDefaultPurchasePlansResponse) {
+  rpc ListPurchasePlansBySegment(ListPurchasePlansBySegmentRequest) returns (ListPurchasePlansBySegmentResponse) {
     option (google.api.http) = {
       get: "/v1/commitments/purchaseplan/{segmentId}"
     };
@@ -319,7 +319,7 @@ message GetSegmentDetailsRequest {
   string segmentId = 1;
 }
 
-message ListDefaultPurchasePlansRequest {
+message ListPurchasePlansBySegmentRequest {
   string segmentId = 1;
 }
 
@@ -909,7 +909,7 @@ message DefaultPurchasePlan {
   string coverageId = 52;
 }
 
-message ListDefaultPurchasePlansResponse {
+message ListPurchasePlansBySegmentResponse {
   repeated DefaultPurchasePlan plans = 1;
 }
 
