@@ -22,14 +22,57 @@ service Luster {
     }
   };
 
-  // (ALPHA) Read spaces.
+  // (ALPHA) Reads spaces.
   rpc ReadSpaces(ReadSpacesRequest) returns (stream api.luster.Space) {
     option (google.api.http) = {
-      get: "/v1/spaces"
+      post: "/v1/spaces:read"
+      body: "*"
+    };
+  }
+
+  // (ALPHA) Gets space.
+  rpc GetSpace(GetSpaceRequest) returns (api.luster.Space) {
+    option (google.api.http) = {
+      get: "/v1/spaces/{id}"
+    };
+  }
+
+  // (ALPHA) Creates space.
+  rpc CreateSpace(CreateSpaceRequest) returns (api.luster.Space) {
+    option (google.api.http) = {
+      post: "/v1/spaces"
+      body: "*"
+    };
+  }
+
+  // (ALPHA) Updates space.
+  rpc UpdateSpace(UpdateSpaceRequest) returns (api.luster.Space) {
+    option (google.api.http) = {
+      put: "/v1/spaces/{id}"
+      body: "*"
+    };
+  }
+
+  // (ALPHA) Deletes space.
+  rpc DeleteSpace(DeleteSpaceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/spaces/{id}"
     };
   }
 
 }
 
-// The space read request.
+// Request message for the Luster.ReadSpaces rpc.
 message ReadSpacesRequest {}
+
+// Request message for the Luster.GetSpace rpc.
+message GetSpaceRequest {}
+
+// Request message for the Luster.CreateSpace rpc.
+message CreateSpaceRequest {}
+
+// Request message for the Luster.UpdateSpace rpc.
+message UpdateSpaceRequest {}
+
+// Request message for the Luster.DeleteSpace rpc.
+message DeleteSpaceRequest {}
