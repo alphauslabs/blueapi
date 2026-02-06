@@ -193,6 +193,13 @@ service GuaranteedCommitments {
     };
   }
 
+  // WORK-IN-PROGRESS: Lists payer accounts associated with the organization.
+  // Retrieves all payer accounts linked to the organization, including their status and associated segments.
+  rpc ListPayerAccounts(ListPayerAccountsRequest) returns (ListPayerAccountsResponse) {
+    option (google.api.http) = {
+      get: "/v1/onboarding/accounts"
+    };
+  }
 }
 
 // ####################### ENUMS #######################
@@ -439,6 +446,8 @@ message GetOnboardingStatusRequest {
   // - non-empty => company under MSP (isMsp = false)
   string billingGroupId = 2;
 }
+
+message ListPayerAccountsRequest {}
 
 // ####################### RESPONSE MESSAGES #######################
 
@@ -994,4 +1003,20 @@ message GetOnboardingStatusResponse {
 
   // Latest persisted AWS account id (if any)
   string accountId = 7;
+}
+
+message ListPayerAccountsResponse {
+  enum PayerAccountStatus {
+    PAYER_ACCOUNT_STATUS_UNSPECIFIED = 0;
+    PAYER_ACCOUNT_STATUS_ENABLED = 1;
+    PAYER_ACCOUNT_STATUS_DISABLED = 2;
+  }
+  message PayerAccount {
+    string accountId = 1;
+    string accountName = 2;
+    string billingGroupId = 3;
+    string segmentId = 4;
+    PayerAccountStatus status = 5;
+  }
+  repeated PayerAccount payerAccounts = 1;
 }
