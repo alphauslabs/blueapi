@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package blueapi.luster.v1;
+
+import "api/luster/space.proto";
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/empty.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/luster";
+option java_package = "cloud.alphaus.api.luster";
+option java_outer_classname = "LusterProto";
+
+// Luster service definition.
+service Luster {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "(ALPHA) Luster API. Base URL: https://api.alphaus.cloud/m/blue/luster"
+    external_docs: {
+      url: "https://github.com/alphauslabs/blueapi/tree/main/luster/";
+      description: "Luster is a service that manages user contexts.";
+    }
+  };
+
+  // (ALPHA) Read spaces.
+  rpc ReadSpaces(ReadSpacesRequest) returns (stream api.luster.Space) {
+    option (google.api.http) = {
+      get: "/v1/spaces"
+    };
+  }
+
+}
+
+// The space read request.
+message ReadSpacesRequest {}
