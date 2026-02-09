@@ -31,46 +31,46 @@ service GuaranteedCommitments {
   // ####################### COMMITMENT PLANS #######################
 
   // WORK-IN-PROGRESS: Do not use. Retrieves detailed information about a specific commitment plan, including costs, savings projections, and commitment coverage.
-  rpc GetCommitmentPlanDetails(GetCommitmentPlanDetailsRequest) returns (CommitmentPlanDetails) {
+  rpc GetCommitmentsPlanDetails(GetCommitmentPlanDetailsRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
-      get: "/v1/commitment-plans/{planId}"
+      get: "/v1/commitments/plan/{planId}"
     };
   }
 
   // WORK-IN-PROGRESS: Do not use. Executes a commitment purchase plan, initiating the commitment purchase process.
-  rpc CommitmentPlanApply(CommitmentPlanApplyRequest) returns (CommitmentPlanDetails) {
+  rpc CommitmentsPlanApply(CommitmentPlanApplyRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
-      post: "/v1/commitment-plans/{planId}/apply"
+      post: "/v1/commitments/plan/{planId}/apply"
       body: "*"
     };
   }
 
   // WORK-IN-PROGRESS: Do not use. Retrieves the three default GuaranteedCommitments commitment plans (High Savings, Balanced, Recommended) for the specified cloud provider.
-  rpc ListDefaultCommitmentPlans(ListDefaultCommitmentPlansRequest) returns (ListDefaultCommitmentPlansResponse) {
+  rpc ListDefaultCommitmentsPlan(ListDefaultCommitmentPlansRequest) returns (ListDefaultCommitmentPlansResponse) {
     option (google.api.http) = {
-      get: "/v1/commitment-plans/default"
+      get: "/v1/commitments/plan/default"
     };
   }
 
   // WORK-IN-PROGRESS: Do not use. Retrieves only the recommended GuaranteedCommitments commitment plan for the specified cloud provider.
-  rpc GetRecommendedCommitmentPlan(GetRecommendedCommitmentPlanRequest) returns (CommitmentPlanDetails) {
+  rpc GetRecommendedCommitmentsPlan(GetRecommendedCommitmentPlanRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
-      get: "/v1/commitment-plans/recommended"
+      get: "/v1/commitments/plan/recommended"
     };
   }
 
   // WORK-IN-PROGRESS: Do not use. Retrieves line items for a specific commitment plan.
-  rpc ListCommitmentPlanLineItems(ListCommitmentPlanLineItemsRequest) returns (ListCommitmentPlanLineItemsResponse) {
+  rpc ListCommitmentsPlanLineItems(ListCommitmentPlanLineItemsRequest) returns (ListCommitmentPlanLineItemsResponse) {
     option (google.api.http) = {
-      get: "/v1/commitment-plans/{planId}/line-items"
+      get: "/v1/commitments/plan/{planId}/line-items"
     };
   }
 
   // WORK-IN-PROGRESS: Do not use. Retrieves resource matches for a specific commitment plan.
-  rpc ListCommitmentPlanResourceMatches(ListCommitmentPlanResourceMatchesRequest)
+  rpc ListCommitmentsPlanResourceMatches(ListCommitmentPlanResourceMatchesRequest)
       returns (ListCommitmentPlanResourceMatchesResponse) {
     option (google.api.http) = {
-      get: "/v1/commitment-plans/{planId}/resource-matches"
+      get: "/v1/commitments/plan/{planId}/resource-matches"
     };
   }
 
@@ -131,10 +131,10 @@ service GuaranteedCommitments {
     };
   }
 
-  // WORK-IN-PROGRESS: Do not use. Retrieves default purchase plans for a specific segment.
-  rpc ListDefaultPurchasePlans(ListDefaultPurchasePlansRequest) returns (ListDefaultPurchasePlansResponse) {
+  // WORK-IN-PROGRESS:  Retrieves purchase plan of a company.
+  rpc ListPurchasePlansBySegment(ListPurchasePlansBySegmentRequest) returns (ListPurchasePlansBySegmentResponse) {
     option (google.api.http) = {
-      get: "/v1/purchase-plans-v1/default"
+      get: "/v1/commitments/purchaseplan"
     };
   }
 
@@ -162,7 +162,7 @@ service GuaranteedCommitments {
   // Creates the necessary IAM role and policy template for setting up AWS access.
   rpc GetAwsCloudFormationTemplate(GetAwsCloudFormationTemplateRequest) returns (GetAwsCloudFormationTemplateResponse) {
     option (google.api.http) = {
-      get: "/v1/onboarding/aws/cloudformation-template"
+      get: "/v1/onboarding/aws/cloudformation/template"
     };
   }
 
@@ -170,7 +170,7 @@ service GuaranteedCommitments {
   // Creates a pre-configured URL to deploy the CloudFormation stack in the AWS console.
   rpc GetAwsLaunchStackUrl(GetAwsLaunchStackUrlRequest) returns (GetAwsLaunchStackUrlResponse) {
     option (google.api.http) = {
-      get: "/v1/onboarding/aws/launch-stack-url"
+      get: "/v1/onboarding/aws/cloudformation/launchstackurl"
     };
   }
 
@@ -181,6 +181,23 @@ service GuaranteedCommitments {
     option (google.api.http) = {
       post: "/v1/onboarding/aws/verify"
       body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Retrieves the latest onboarding status for an MSP or a company under an MSP.
+  // Retrieves the latest onboarding status for an MSP or a company under an MSP.
+  rpc GetOnboardingStatus(GetOnboardingStatusRequest) returns (GetOnboardingStatusResponse) {
+    option (google.api.http) = {
+      post: "/v1/onboarding/status:read"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Lists payer accounts associated with the organization.
+  // Retrieves all payer accounts linked to the organization, including their status and associated segments.
+  rpc ListPayerAccounts(ListPayerAccountsRequest) returns (ListPayerAccountsResponse) {
+    option (google.api.http) = {
+      get: "/v1/managements/accounts"
     };
   }
 }
@@ -233,97 +250,83 @@ enum UsageType {
 message ListOrgsRequest {}
 
 message GetCommitmentPlanDetailsRequest {
-  string orgId = 1;
-  string planId = 2;
+  string planId = 1;
 }
 
 message CommitmentPlanApplyRequest {
-  string orgId = 1;
-  string planId = 2;
+  string planId = 1;
 }
 
 message ListDefaultCommitmentPlansRequest {
-  string orgId = 1;
-  Provider provider = 2;
+  Provider provider = 1;
 }
 
 message GetRecommendedCommitmentPlanRequest {
-  string orgId = 1;
-  Provider provider = 2;
+  Provider provider = 1;
 }
 
 message ListCommitmentPlanLineItemsRequest {
-  string orgId = 1;
-  string planId = 2;
-  string orderBy = 3;
-  bool desc = 4;
-  string segmentId = 5;
-  repeated string resourceMatchIds = 6;
-  int32 page = 7;
-  int32 pageSize = 8;
+  string planId = 1;
+  string orderBy = 2;
+  bool desc = 3;
+  string segmentId = 4;
+  repeated string resourceMatchIds = 5;
+  int32 page = 6;
+  int32 pageSize = 7;
 }
 
 message ListCommitmentPlanResourceMatchesRequest {
-  string orgId = 1;
-  string planId = 2;
-  string orderBy = 3;
-  bool desc = 4;
-  string startDate = 5;
-  string endDate = 6;
-  repeated string lineItemIds = 7;
-  int32 page = 8;
-  int32 pageSize = 9;
+  string planId = 1;
+  string orderBy = 2;
+  bool desc = 3;
+  string startDate = 4;
+  string endDate = 5;
+  repeated string lineItemIds = 6;
+  int32 page = 7;
+  int32 pageSize = 8;
 }
 
 message ListCommitmentsRequest {}
 
 message GetCommitmentsChartRequest {
-  string orgId = 1;
-  google.protobuf.Struct filter = 2;
-  Provider provider = 3;
-  string startDate = 4;
-  string endDate = 5;
+  google.protobuf.Struct filter = 1;
+  Provider provider = 2;
+  string startDate = 3;
+  string endDate = 4;
 }
 
 message GetMetricsRequest {
-  string orgId = 1;
-  Provider provider = 2;
+  Provider provider = 1;
 }
 
 message ListResourcesRequest {
-  string orgId = 1;
-  Provider provider = 2;
-  string segmentId = 3;
-  string search = 4;
-  bool desc = 5;
-  string orderBy = 6;
-  int32 page = 7;
-  int32 pageSize = 8;
-}
-
-message GetResourceDailyUsageRequest {
-  string orgId = 1;
-  string resourceId = 2;
-  string startDate = 3;
-  string endDate = 4;
-  string catalogSkuId = 5;
+  Provider provider = 1;
+  string segmentId = 2;
+  string search = 3;
+  bool desc = 4;
+  string orderBy = 5;
   int32 page = 6;
   int32 pageSize = 7;
 }
 
+message GetResourceDailyUsageRequest {
+  string resourceId = 1;
+  string startDate = 2;
+  string endDate = 3;
+  string catalogSkuId = 4;
+  int32 page = 5;
+  int32 pageSize = 6;
+}
+
 message ListSegmentsRequest {
-  string orgId = 1;
-  Provider provider = 2;
+  Provider provider = 1;
 }
 
 message GetSegmentDetailsRequest {
-  string orgId = 1;
-  string segmentId = 2;
+  string segmentId = 1;
 }
 
-message ListDefaultPurchasePlansRequest {
-  string orgId = 1;
-  string segmentId = 2;
+message ListPurchasePlansBySegmentRequest {
 }
 
 // ------------------------ ONBOARDING REQUEST ------------------------
@@ -433,6 +436,18 @@ message VerifyAwsOnboardingRequest {
   // Optional: if set, GuaranteedCommitments will use this existing CUR. If omitted, GuaranteedCommitments may create a new CUR.
   AwsExistingCur existingCur = 6;
 }
+
+message GetOnboardingStatusRequest {
+  // Ripple context
+  string mspId = 1;
+
+  // Optional:
+  // - empty => MSP-level onboarding row (isMsp = true)
+  // - non-empty => company under MSP (isMsp = false)
+  string billingGroupId = 2;
+}
+
+message ListPayerAccountsRequest {}
 
 // ####################### RESPONSE MESSAGES #######################
 
@@ -902,7 +917,7 @@ message DefaultPurchasePlan {
   string coverageId = 52;
 }
 
-message ListDefaultPurchasePlansResponse {
+message ListPurchasePlansBySegmentResponse {
   repeated DefaultPurchasePlan plans = 1;
 }
 
@@ -949,4 +964,59 @@ message VerifyAwsOnboardingResponse {
   }
 
   repeated AwsOnboardingFeatureCheck checks = 1;
+}
+
+message GetOnboardingStatusResponse {
+  enum OnboardingStatus {
+    ONBOARDING_STATUS_UNSPECIFIED = 0;
+
+    // No row found in archera_users (org not registered yet)
+    ONBOARDING_STATUS_NOT_REGISTERED = 1;
+
+    // Existing statuses you already persist
+    ONBOARDING_STATUS_REGISTERED = 2;
+    ONBOARDING_STATUS_ONBOARDING_STARTED = 3;
+    ONBOARDING_STATUS_VERIFIED = 4;
+    ONBOARDING_STATUS_VERIFY_INCOMPLETE = 5;
+    ONBOARDING_STATUS_VERIFY_FAILED = 6;
+  }
+
+  // Whether we found a corresponding row
+  bool found = 1;
+
+  // Convenience: derived from whether billingId is empty
+  bool isMsp = 2;
+
+  // Vendor saved at registration (aws/azure/gcp). Optional.
+  Provider provider = 3;
+
+  // The org id to use for Archera upstream calls:
+  // - MSP: mspArcheraOrgId
+  // - company: archeraOrgId
+  string gcOrgId = 4;
+
+  // Latest persisted onboarding ID (if any)
+  string onboardingId = 5;
+
+  // Latest persisted onboarding status
+  OnboardingStatus onboardingStatus = 6;
+
+  // Latest persisted AWS account id (if any)
+  string accountId = 7;
+}
+
+message ListPayerAccountsResponse {
+  enum PayerAccountStatus {
+    PAYER_ACCOUNT_STATUS_UNSPECIFIED = 0;
+    PAYER_ACCOUNT_STATUS_ENABLED = 1;
+    PAYER_ACCOUNT_STATUS_DISABLED = 2;
+  }
+  message PayerAccount {
+    string accountId = 1;
+    string accountName = 2;
+    string billingGroupId = 3;
+    string segmentId = 4;
+    PayerAccountStatus status = 5;
+  }
+  repeated PayerAccount payerAccounts = 1;
 }

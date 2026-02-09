@@ -103,6 +103,14 @@
       }
     },
     {
+      "name": "Luster",
+      "description": "(ALPHA) Luster API. Base URL: https://api.alphaus.cloud/m/blue/luster",
+      "externalDocs": {
+        "description": "Luster is a service that manages user contexts.",
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/luster/"
+      }
+    },
+    {
       "name": "Preferences",
       "description": "(BETA) Preferences API. Base URL: https://api.alphaus.cloud/m/blue",
       "externalDocs": {
@@ -6585,6 +6593,100 @@
         ]
       }
     },
+    "/v1/billinggroups/child/{internalId}/customizedbillingservice/{vendor}": {
+      "get": {
+        "summary": "Gets the customized billing service in child billing group. Only available in Ripple.",
+        "operationId": "Billing_GetChildBillingGroupCustomizedBillingService",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1GetChildBillingGroupCustomizedBillingServiceResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1GetChildBillingGroupCustomizedBillingServiceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "internalId",
+            "description": "Required. Internal Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
+      "post": {
+        "summary": "Sets the customized billing service in child billing group. Only available in Ripple.",
+        "operationId": "Billing_SetChildBillingGroupCustomizedBillingService",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "internalId",
+            "description": "Required. internal id of the child billing group.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingSetChildBillingGroupCustomizedBillingServiceBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups/child/{internalId}/invoiceSettings": {
       "put": {
         "summary": "Updates child billing group's invoice settings",
@@ -6617,6 +6719,157 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/BillingUpdateChildBillingGroupInvoiceSettingsBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/billinggroups/child/{internalId}/servicediscounts": {
+      "get": {
+        "summary": "Returns the service discount associated with the billing group id",
+        "operationId": "Billing_GetChildBillingGroupInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetChildBillingGroupInvoiceServiceDiscountsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "internalId",
+            "description": "Required. Child Billing Group Internal Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
+      "post": {
+        "summary": "Sets the child billing group invoice service discounts. Only available in Ripple.",
+        "operationId": "Billing_SetChildBillingGroupInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "internalId",
+            "description": "Required. Internal Id of the child billing group.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingSetChildBillingGroupInvoiceServiceDiscountsBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/billinggroups/child/{internalId}/servicediscounts:account": {
+      "get": {
+        "summary": "Returns the account's service discounts associated with the child billing group id",
+        "operationId": "Billing_ListChildBillingGroupAccountInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1AccountInvoiceServiceDiscounts"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1AccountInvoiceServiceDiscounts"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "internalId",
+            "description": "Required. Child Billing Group Internal Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
+      "post": {
+        "summary": "Sets the child billing group's account invoice service discounts. Only available in Ripple.",
+        "operationId": "Billing_SetChildBillingGroupAccountInvoiceServiceDiscounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "internalId",
+            "description": "Required. child billing group's internal Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingSetChildBillingGroupAccountInvoiceServiceDiscountsBody"
             }
           }
         ],
@@ -6941,7 +7194,7 @@
     },
     "/v1/billinggroups:bulkCreate": {
       "post": {
-        "summary": "Create billing group in bulk",
+        "summary": "Create billing group in bulk from CSV file",
         "operationId": "Billing_BulkCreateBillingGroup",
         "responses": {
           "200": {
@@ -7493,10 +7746,91 @@
         ]
       }
     },
-    "/v1/commitment-plans/default": {
+    "/v1/commitments": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Retrieves a list of commitments.",
+        "operationId": "GuaranteedCommitments_ListCommitments",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListCommitmentsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/commitments/chart": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Do not use. Generates time-series chart data for commitment metrics over the specified time period.",
+        "operationId": "GuaranteedCommitments_GetCommitmentsChart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CommitmentsChartResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "PROVIDER_UNSPECIFIED",
+              "AWS",
+              "AZURE",
+              "GCP",
+              "KUBERNETES",
+              "UNKNOWN"
+            ],
+            "default": "PROVIDER_UNSPECIFIED"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/commitments/plan/default": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Do not use. Retrieves the three default GuaranteedCommitments commitment plans (High Savings, Balanced, Recommended) for the specified cloud provider.",
-        "operationId": "GuaranteedCommitments_ListDefaultCommitmentPlans",
+        "operationId": "GuaranteedCommitments_ListDefaultCommitmentsPlan",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -7513,12 +7847,6 @@
         },
         "parameters": [
           {
-            "name": "orgId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "provider",
             "in": "query",
             "required": false,
@@ -7539,10 +7867,10 @@
         ]
       }
     },
-    "/v1/commitment-plans/recommended": {
+    "/v1/commitments/plan/recommended": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Do not use. Retrieves only the recommended GuaranteedCommitments commitment plan for the specified cloud provider.",
-        "operationId": "GuaranteedCommitments_GetRecommendedCommitmentPlan",
+        "operationId": "GuaranteedCommitments_GetRecommendedCommitmentsPlan",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -7559,12 +7887,6 @@
         },
         "parameters": [
           {
-            "name": "orgId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "provider",
             "in": "query",
             "required": false,
@@ -7585,10 +7907,10 @@
         ]
       }
     },
-    "/v1/commitment-plans/{planId}": {
+    "/v1/commitments/plan/{planId}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Do not use. Retrieves detailed information about a specific commitment plan, including costs, savings projections, and commitment coverage.",
-        "operationId": "GuaranteedCommitments_GetCommitmentPlanDetails",
+        "operationId": "GuaranteedCommitments_GetCommitmentsPlanDetails",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -7609,12 +7931,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "orgId",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "tags": [
@@ -7622,10 +7938,10 @@
         ]
       }
     },
-    "/v1/commitment-plans/{planId}/apply": {
+    "/v1/commitments/plan/{planId}/apply": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Do not use. Executes a commitment purchase plan, initiating the commitment purchase process.",
-        "operationId": "GuaranteedCommitments_CommitmentPlanApply",
+        "operationId": "GuaranteedCommitments_CommitmentsPlanApply",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -7652,7 +7968,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GuaranteedCommitmentsCommitmentPlanApplyBody"
+              "$ref": "#/definitions/GuaranteedCommitmentsCommitmentsPlanApplyBody"
             }
           }
         ],
@@ -7661,10 +7977,10 @@
         ]
       }
     },
-    "/v1/commitment-plans/{planId}/line-items": {
+    "/v1/commitments/plan/{planId}/line-items": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Do not use. Retrieves line items for a specific commitment plan.",
-        "operationId": "GuaranteedCommitments_ListCommitmentPlanLineItems",
+        "operationId": "GuaranteedCommitments_ListCommitmentsPlanLineItems",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -7684,12 +8000,6 @@
             "name": "planId",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "orgId",
-            "in": "query",
-            "required": false,
             "type": "string"
           },
           {
@@ -7740,10 +8050,10 @@
         ]
       }
     },
-    "/v1/commitment-plans/{planId}/resource-matches": {
+    "/v1/commitments/plan/{planId}/resource-matches": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Do not use. Retrieves resource matches for a specific commitment plan.",
-        "operationId": "GuaranteedCommitments_ListCommitmentPlanResourceMatches",
+        "operationId": "GuaranteedCommitments_ListCommitmentsPlanResourceMatches",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -7763,12 +8073,6 @@
             "name": "planId",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "orgId",
-            "in": "query",
-            "required": false,
             "type": "string"
           },
           {
@@ -7825,15 +8129,15 @@
         ]
       }
     },
-    "/v1/commitments": {
+    "/v1/commitments/purchaseplan": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Retrieves a list of commitments.",
-        "operationId": "GuaranteedCommitments_ListCommitments",
+        "summary": "WORK-IN-PROGRESS:  Retrieves purchase plan of a company.",
+        "operationId": "GuaranteedCommitments_ListPurchasePlansBySegment",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ListCommitmentsResponse"
+              "$ref": "#/definitions/v1ListPurchasePlansBySegmentResponse"
             }
           },
           "default": {
@@ -7843,70 +8147,6 @@
             }
           }
         },
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/commitments/chart": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Do not use. Generates time-series chart data for commitment metrics over the specified time period.",
-        "operationId": "GuaranteedCommitments_GetCommitmentsChart",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CommitmentsChartResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "orgId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "filter",
-            "in": "query",
-            "required": false,
-            "type": "object"
-          },
-          {
-            "name": "provider",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "PROVIDER_UNSPECIFIED",
-              "AWS",
-              "AZURE",
-              "GCP",
-              "KUBERNETES",
-              "UNKNOWN"
-            ],
-            "default": "PROVIDER_UNSPECIFIED"
-          },
-          {
-            "name": "startDate",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "endDate",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
         "tags": [
           "GuaranteedCommitments"
         ]
@@ -10601,6 +10841,29 @@
         ]
       }
     },
+    "/v1/managements/accounts": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Lists payer accounts associated with the organization.\nRetrieves all payer accounts linked to the organization, including their status and associated segments.",
+        "operationId": "GuaranteedCommitments_ListPayerAccounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListPayerAccountsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/marketplace/info": {
       "post": {
         "summary": "Adding orgId to marketplace customers",
@@ -11636,12 +11899,6 @@
         },
         "parameters": [
           {
-            "name": "orgId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "provider",
             "in": "query",
             "required": false,
@@ -11695,15 +11952,15 @@
         ]
       }
     },
-    "/v1/onboarding/aws/cloudformation-template": {
+    "/v1/onboarding/aws/cloudformation/launchstackurl": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Generates CloudFormation template for AWS integration.\nCreates the necessary IAM role and policy template for setting up AWS access.",
-        "operationId": "GuaranteedCommitments_GetAwsCloudFormationTemplate",
+        "summary": "WORK-IN-PROGRESS: Generates AWS CloudFormation launch stack URL.\nCreates a pre-configured URL to deploy the CloudFormation stack in the AWS console.",
+        "operationId": "GuaranteedCommitments_GetAwsLaunchStackUrl",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetAwsCloudFormationTemplateResponse"
+              "$ref": "#/definitions/v1GetAwsLaunchStackUrlResponse"
             }
           },
           "default": {
@@ -11740,15 +11997,15 @@
         ]
       }
     },
-    "/v1/onboarding/aws/launch-stack-url": {
+    "/v1/onboarding/aws/cloudformation/template": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Generates AWS CloudFormation launch stack URL.\nCreates a pre-configured URL to deploy the CloudFormation stack in the AWS console.",
-        "operationId": "GuaranteedCommitments_GetAwsLaunchStackUrl",
+        "summary": "WORK-IN-PROGRESS: Generates CloudFormation template for AWS integration.\nCreates the necessary IAM role and policy template for setting up AWS access.",
+        "operationId": "GuaranteedCommitments_GetAwsCloudFormationTemplate",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetAwsLaunchStackUrlResponse"
+              "$ref": "#/definitions/v1GetAwsCloudFormationTemplateResponse"
             }
           },
           "default": {
@@ -11843,6 +12100,39 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1VerifyAwsOnboardingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/onboarding/status:read": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Retrieves the latest onboarding status for an MSP or a company under an MSP.\nRetrieves the latest onboarding status for an MSP or a company under an MSP.",
+        "operationId": "GuaranteedCommitments_GetOnboardingStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetOnboardingStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetOnboardingStatusRequest"
             }
           }
         ],
@@ -12667,43 +12957,6 @@
         ],
         "tags": [
           "Vortex"
-        ]
-      }
-    },
-    "/v1/purchase-plans-v1/default": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Do not use. Retrieves default purchase plans for a specific segment.",
-        "operationId": "GuaranteedCommitments_ListDefaultPurchasePlans",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListDefaultPurchasePlansResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "orgId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "segmentId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
         ]
       }
     },
@@ -13957,12 +14210,6 @@
         },
         "parameters": [
           {
-            "name": "orgId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "provider",
             "in": "query",
             "required": false,
@@ -14095,12 +14342,6 @@
             "type": "string"
           },
           {
-            "name": "orgId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "startDate",
             "in": "query",
             "required": false,
@@ -14190,12 +14431,6 @@
         },
         "parameters": [
           {
-            "name": "orgId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "provider",
             "in": "query",
             "required": false,
@@ -14239,12 +14474,6 @@
             "name": "segmentId",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "orgId",
-            "in": "query",
-            "required": false,
             "type": "string"
           }
         ],
@@ -15227,6 +15456,38 @@
         ],
         "tags": [
           "Flow"
+        ]
+      }
+    },
+    "/v1/spaces": {
+      "get": {
+        "summary": "(ALPHA) Read spaces.",
+        "operationId": "Luster_ReadSpaces",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/lusterSpace"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of lusterSpace"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Luster"
         ]
       }
     },
@@ -21587,6 +21848,49 @@
       },
       "description": "Request message for SetBillingGroupExchangeRate rpc."
     },
+    "BillingSetChildBillingGroupAccountInvoiceServiceDiscountsBody": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1AccountServiceDiscounts"
+          },
+          "description": "Required."
+        }
+      }
+    },
+    "BillingSetChildBillingGroupCustomizedBillingServiceBody": {
+      "type": "object",
+      "properties": {
+        "rootId": {
+          "type": "string",
+          "description": "Required. Root parent Id."
+        },
+        "setting": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1SetChildBillingGroupCustomizedBillingServiceRequestCustomizedBillingServiceBillingSetting"
+          },
+          "description": "Required. customized billing service setting."
+        }
+      },
+      "required": [
+        "rootId",
+        "setting"
+      ]
+    },
+    "BillingSetChildBillingGroupInvoiceServiceDiscountsBody": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Required.\n\nService discount id."
+        }
+      }
+    },
     "BillingSetCustomizedBillingServiceBillingGroupBody": {
       "type": "object",
       "properties": {
@@ -24029,18 +24333,11 @@
       "enum": [
         "DEFAULT",
         "MARK_AS_EXECUTED",
-        "UNDO_EXECUTED"
-      ],
-      "default": "DEFAULT"
-    },
-    "ExecuteRecommendationV3RequestOption": {
-      "type": "string",
-      "enum": [
-        "OPTION_UNSPECIFIED",
+        "UNDO_EXECUTED",
         "SUBMIT_TEMPLATE",
         "RETRY_EXECUTE"
       ],
-      "default": "OPTION_UNSPECIFIED"
+      "default": "DEFAULT"
     },
     "FilterCriteriaFilterOperator": {
       "type": "string",
@@ -24255,13 +24552,22 @@
         }
       }
     },
-    "GuaranteedCommitmentsCommitmentPlanApplyBody": {
-      "type": "object",
-      "properties": {
-        "orgId": {
-          "type": "string"
-        }
-      }
+    "GetOnboardingStatusResponseOnboardingStatus": {
+      "type": "string",
+      "enum": [
+        "ONBOARDING_STATUS_UNSPECIFIED",
+        "ONBOARDING_STATUS_NOT_REGISTERED",
+        "ONBOARDING_STATUS_REGISTERED",
+        "ONBOARDING_STATUS_ONBOARDING_STARTED",
+        "ONBOARDING_STATUS_VERIFIED",
+        "ONBOARDING_STATUS_VERIFY_INCOMPLETE",
+        "ONBOARDING_STATUS_VERIFY_FAILED"
+      ],
+      "default": "ONBOARDING_STATUS_UNSPECIFIED",
+      "title": "- ONBOARDING_STATUS_NOT_REGISTERED: No row found in archera_users (org not registered yet)\n - ONBOARDING_STATUS_REGISTERED: Existing statuses you already persist"
+    },
+    "GuaranteedCommitmentsCommitmentsPlanApplyBody": {
+      "type": "object"
     },
     "IamCreatePartnerTokenBody": {
       "type": "object",
@@ -24427,6 +24733,35 @@
           "format": "double"
         }
       }
+    },
+    "ListPayerAccountsResponsePayerAccount": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "accountName": {
+          "type": "string"
+        },
+        "billingGroupId": {
+          "type": "string"
+        },
+        "segmentId": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/ListPayerAccountsResponsePayerAccountStatus"
+        }
+      }
+    },
+    "ListPayerAccountsResponsePayerAccountStatus": {
+      "type": "string",
+      "enum": [
+        "PAYER_ACCOUNT_STATUS_UNSPECIFIED",
+        "PAYER_ACCOUNT_STATUS_ENABLED",
+        "PAYER_ACCOUNT_STATUS_DISABLED"
+      ],
+      "default": "PAYER_ACCOUNT_STATUS_UNSPECIFIED"
     },
     "ListRecommendationResponsePurchaseOption": {
       "type": "object",
@@ -32465,6 +32800,31 @@
       },
       "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors)."
     },
+    "lusterSpace": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The space id."
+        },
+        "name": {
+          "type": "string",
+          "description": "The space name."
+        },
+        "description": {
+          "type": "string",
+          "description": "The space description."
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The members in space."
+        }
+      },
+      "title": "The message defines the space"
+    },
     "octoawsOctoGeneratedAWSRecommendations": {
       "type": "object",
       "properties": {
@@ -34963,13 +35323,22 @@
     "v1BulkCreateBillingGroupRequest": {
       "type": "object",
       "properties": {
-        "request": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1CreateBillingGroupRequest"
-          },
-          "description": "Required. The list of billing group to create."
+        "csvContent": {
+          "type": "string",
+          "format": "byte",
+          "description": "Required. The CSV file content as bytes."
+        },
+        "delimiter": {
+          "type": "string",
+          "description": "Optional. The delimiter used in the CSV file. Defaults to comma (,)."
+        },
+        "hasHeader": {
+          "type": "boolean",
+          "description": "Optional. Whether the CSV file has a header row. Defaults to true."
+        },
+        "dryRun": {
+          "type": "boolean",
+          "description": "Optional. If true, validate the CSV and check for errors without actually creating billing groups.\nUseful for validating CSV format and data before performing the actual bulk creation."
         }
       }
     },
@@ -38387,9 +38756,6 @@
         },
         "executeType": {
           "$ref": "#/definitions/ExecuteRecommendationV3RequestExecuteType"
-        },
-        "option": {
-          "$ref": "#/definitions/ExecuteRecommendationV3RequestOption"
         }
       }
     },
@@ -39055,6 +39421,45 @@
         }
       },
       "title": "Response message for GetChannels"
+    },
+    "v1GetChildBillingGroupCustomizedBillingServiceResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Required. [blueapi.api.ripple.CustomizedBillingService.id]"
+        },
+        "vendor": {
+          "type": "string",
+          "description": "Required. vendor that applied to the CustomizedBillingService　config."
+        },
+        "chargingTarget": {
+          "$ref": "#/definitions/rippleChargingTarget",
+          "title": "Required. [blueapi.api.ripple.ChargingTarget]"
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/blueapiapiAccount"
+          },
+          "description": "Optional. accounts that applied to the CustomizedBillingService　config."
+        }
+      },
+      "required": [
+        "id",
+        "vendor",
+        "chargingTarget"
+      ]
+    },
+    "v1GetChildBillingGroupInvoiceServiceDiscountsResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Service discount id"
+        }
+      }
     },
     "v1GetChildBillingGroupResponse": {
       "type": "object",
@@ -40152,6 +40557,52 @@
         }
       },
       "title": "Response message for GetMonthlyCostForecast"
+    },
+    "v1GetOnboardingStatusRequest": {
+      "type": "object",
+      "properties": {
+        "mspId": {
+          "type": "string",
+          "title": "Ripple context"
+        },
+        "billingGroupId": {
+          "type": "string",
+          "title": "Optional:\n- empty =\u003e MSP-level onboarding row (isMsp = true)\n- non-empty =\u003e company under MSP (isMsp = false)"
+        }
+      }
+    },
+    "v1GetOnboardingStatusResponse": {
+      "type": "object",
+      "properties": {
+        "found": {
+          "type": "boolean",
+          "title": "Whether we found a corresponding row"
+        },
+        "isMsp": {
+          "type": "boolean",
+          "title": "Convenience: derived from whether billingId is empty"
+        },
+        "provider": {
+          "$ref": "#/definitions/v1Provider",
+          "description": "Vendor saved at registration (aws/azure/gcp). Optional."
+        },
+        "gcOrgId": {
+          "type": "string",
+          "title": "The org id to use for Archera upstream calls:\n- MSP: mspArcheraOrgId\n- company: archeraOrgId"
+        },
+        "onboardingId": {
+          "type": "string",
+          "title": "Latest persisted onboarding ID (if any)"
+        },
+        "onboardingStatus": {
+          "$ref": "#/definitions/GetOnboardingStatusResponseOnboardingStatus",
+          "title": "Latest persisted onboarding status"
+        },
+        "accountId": {
+          "type": "string",
+          "title": "Latest persisted AWS account id (if any)"
+        }
+      }
     },
     "v1GetOrgFiscalMonthResponse": {
       "type": "object",
@@ -41409,18 +41860,6 @@
         }
       }
     },
-    "v1ListDefaultPurchasePlansResponse": {
-      "type": "object",
-      "properties": {
-        "plans": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1DefaultPurchasePlan"
-          }
-        }
-      }
-    },
     "v1ListExcludeServicesResponse": {
       "type": "object",
       "properties": {
@@ -41680,6 +42119,18 @@
     "v1ListOrgsRequest": {
       "type": "object"
     },
+    "v1ListPayerAccountsResponse": {
+      "type": "object",
+      "properties": {
+        "payerAccounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ListPayerAccountsResponsePayerAccount"
+          }
+        }
+      }
+    },
     "v1ListPermissionsResponse": {
       "type": "object",
       "properties": {
@@ -41721,6 +42172,18 @@
     },
     "v1ListPromptsRequest": {
       "type": "object"
+    },
+    "v1ListPurchasePlansBySegmentResponse": {
+      "type": "object",
+      "properties": {
+        "plans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1DefaultPurchasePlan"
+          }
+        }
+      }
     },
     "v1ListRecommendationResponse": {
       "type": "object",
@@ -41842,17 +42305,11 @@
             "type": "string"
           }
         },
-        "lastDetectedStartDate": {
-          "type": "string"
-        },
-        "lastDetectedEndDate": {
-          "type": "string"
-        },
-        "dateDetectedStartDate": {
-          "type": "string"
-        },
-        "dateDetectedEndDate": {
-          "type": "string"
+        "filters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       }
     },
@@ -44284,6 +44741,31 @@
           "format": "double"
         }
       }
+    },
+    "v1SetChildBillingGroupCustomizedBillingServiceRequestCustomizedBillingServiceBillingSetting": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Required. [blueapi.api.ripple.CustomizedBillingService.id]"
+        },
+        "chargingTarget": {
+          "$ref": "#/definitions/rippleChargingTarget",
+          "title": "Required. [blueapi.api.ripple.ChargingTarget]"
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. if chargingTarget is BILLINGGROUP, `accounts` is set emptty.\n\nSpecify the accountIds. For example: [`accountId1`,`accountId2`,`accountId3`]"
+        }
+      },
+      "title": "CustomizedBillingServiceBillingSetting",
+      "required": [
+        "id",
+        "chargingTarget"
+      ]
     },
     "v1SetCostGroupAnomalyOptionsResponse": {
       "type": "object",

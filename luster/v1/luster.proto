@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package blueapi.luster.v1;
+
+import "api/luster/space.proto";
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/empty.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/luster";
+option java_package = "cloud.alphaus.api.luster";
+option java_outer_classname = "LusterProto";
+
+// Luster service definition.
+service Luster {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "(ALPHA) Luster API. Base URL: https://api.alphaus.cloud/m/blue/luster"
+    external_docs: {
+      url: "https://github.com/alphauslabs/blueapi/tree/main/luster/";
+      description: "Luster is a service that manages user contexts.";
+    }
+  };
+
+  // (ALPHA) Reads spaces.
+  rpc ReadSpaces(ReadSpacesRequest) returns (stream api.luster.Space) {
+    option (google.api.http) = {
+      post: "/v1/spaces:read"
+      body: "*"
+    };
+  }
+
+  // (ALPHA) Gets space.
+  rpc GetSpace(GetSpaceRequest) returns (api.luster.Space) {
+    option (google.api.http) = {
+      get: "/v1/spaces/{id}"
+    };
+  }
+
+  // (ALPHA) Creates space.
+  rpc CreateSpace(CreateSpaceRequest) returns (api.luster.Space) {
+    option (google.api.http) = {
+      post: "/v1/spaces"
+      body: "*"
+    };
+  }
+
+  // (ALPHA) Updates space.
+  rpc UpdateSpace(UpdateSpaceRequest) returns (api.luster.Space) {
+    option (google.api.http) = {
+      put: "/v1/spaces/{id}"
+      body: "*"
+    };
+  }
+
+  // (ALPHA) Deletes space.
+  rpc DeleteSpace(DeleteSpaceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/spaces/{id}"
+    };
+  }
+
+}
+
+// Request message for the Luster.ReadSpaces rpc.
+message ReadSpacesRequest {}
+
+// Request message for the Luster.GetSpace rpc.
+message GetSpaceRequest {}
+
+// Request message for the Luster.CreateSpace rpc.
+message CreateSpaceRequest {}
+
+// Request message for the Luster.UpdateSpace rpc.
+message UpdateSpaceRequest {}
+
+// Request message for the Luster.DeleteSpace rpc.
+message DeleteSpaceRequest {}

@@ -989,7 +989,52 @@ service Billing {
     };
   }
 
-  // Create billing group in bulk
+  // Sets the child billing group invoice service discounts. Only available in Ripple.
+  rpc SetChildBillingGroupInvoiceServiceDiscounts(SetChildBillingGroupInvoiceServiceDiscountsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups/child/{internalId}/servicediscounts"
+      body: "*"
+    };
+  }
+
+  // Sets the child billing group's account invoice service discounts. Only available in Ripple.
+  rpc SetChildBillingGroupAccountInvoiceServiceDiscounts(SetChildBillingGroupAccountInvoiceServiceDiscountsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups/child/{internalId}/servicediscounts:account"
+      body: "*"
+    };
+  }
+
+  // Sets the customized billing service in child billing group. Only available in Ripple.
+  rpc SetChildBillingGroupCustomizedBillingService(SetChildBillingGroupCustomizedBillingServiceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups/child/{internalId}/customizedbillingservice/{vendor}"
+      body: "*"
+    };
+  }
+
+  // Gets the customized billing service in child billing group. Only available in Ripple.
+  rpc GetChildBillingGroupCustomizedBillingService(GetChildBillingGroupCustomizedBillingServiceRequest) returns (stream GetChildBillingGroupCustomizedBillingServiceResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/child/{internalId}/customizedbillingservice/{vendor}"
+    };
+  }
+
+  // Returns the service discount associated with the billing group id
+  rpc GetChildBillingGroupInvoiceServiceDiscounts(GetChildBillingGroupInvoiceServiceDiscountsRequest) returns (GetChildBillingGroupInvoiceServiceDiscountsResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/child/{internalId}/servicediscounts"
+    };
+  }
+
+  // Returns the account's service discounts associated with the child billing group id
+  rpc ListChildBillingGroupAccountInvoiceServiceDiscounts(ListChildBillingGroupAccountInvoiceServiceDiscountsRequest) returns (stream AccountInvoiceServiceDiscounts) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/child/{internalId}/servicediscounts:account"
+    };
+  }
+
+  // Create billing group in bulk from CSV file
   rpc BulkCreateBillingGroup(BulkCreateBillingGroupRequest) returns (stream BulkCreateBillingGroupResponse) {
     option (google.api.http) = {
       post: "/v1/billinggroups:bulkCreate"
@@ -3374,9 +3419,106 @@ message UpdateChildBillingGroupInvoiceSettingsRequest {
 
 message UpdateChildBillingGroupInvoiceSettingsResponse {}
 
+
+message SetChildBillingGroupCustomizedBillingServiceRequest {
+  // Required. internal id of the child billing group.
+  string internalId = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. At the moment, `aws` is supported.
+  string vendor = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. Root parent Id.
+  string rootId = 3 [(google.api.field_behavior) = REQUIRED];
+
+  // CustomizedBillingServiceBillingSetting
+  message CustomizedBillingServiceBillingSetting {
+    // Required. [blueapi.api.ripple.CustomizedBillingService.id]
+    string id = 1 [(google.api.field_behavior) = REQUIRED];
+
+    // Required. [blueapi.api.ripple.ChargingTarget]
+    api.ripple.ChargingTarget chargingTarget = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // Optional. if chargingTarget is BILLINGGROUP, `accounts` is set emptty.
+    //
+    // Specify the accountIds. For example: [`accountId1`,`accountId2`,`accountId3`]
+    repeated string accounts = 3 [(google.api.field_behavior) = OPTIONAL];
+  }
+
+  // Required. customized billing service setting.
+  repeated CustomizedBillingServiceBillingSetting setting = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+
+message SetChildBillingGroupInvoiceServiceDiscountsRequest {
+  // Required. Internal Id of the child billing group.
+  string internalId = 1;
+
+  // Required.
+  //
+  // Service discount id.
+  string id = 2;
+}
+
+
+message SetChildBillingGroupAccountInvoiceServiceDiscountsRequest {
+  // Required. child billing group's internal Id.
+  string internalId = 1;
+
+  // Required.
+  repeated AccountServiceDiscounts accounts = 2;
+}
+
+message GetChildBillingGroupCustomizedBillingServiceRequest {
+  // Required. Internal Id
+  string internalId = 1;
+
+  // Required. At the moment, `aws` is supported.
+  string vendor = 2;
+}
+
+message GetChildBillingGroupCustomizedBillingServiceResponse {
+  // Required. [blueapi.api.ripple.CustomizedBillingService.id]
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. vendor that applied to the CustomizedBillingService　config.
+  string vendor = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. [blueapi.api.ripple.ChargingTarget]
+  api.ripple.ChargingTarget chargingTarget = 3 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. accounts that applied to the CustomizedBillingService　config.
+  repeated api.Account accounts = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message GetChildBillingGroupInvoiceServiceDiscountsRequest {
+  // Required. Child Billing Group Internal Id
+  string internalId = 1;
+}
+
+message GetChildBillingGroupInvoiceServiceDiscountsResponse {
+  // Service discount id
+  string id = 1;
+}
+
+message ListChildBillingGroupAccountInvoiceServiceDiscountsRequest {
+  // Required. Child Billing Group Internal Id
+  string internalId = 1;
+}
+
+
 message BulkCreateBillingGroupRequest {
-  // Required. The list of billing group to create.
-  repeated CreateBillingGroupRequest request = 1;
+  // Required. The CSV file content as bytes.
+  bytes csvContent = 1;
+
+  // Optional. The delimiter used in the CSV file. Defaults to comma (,).
+  string delimiter = 2;
+
+  // Optional. Whether the CSV file has a header row. Defaults to true.
+  bool hasHeader = 3;
+
+  // Optional. If true, validate the CSV and check for errors without actually creating billing groups.
+  // Useful for validating CSV format and data before performing the actual bulk creation.
+  bool dryRun = 4;
 }
 
 message BulkCreateBillingGroupResponse {
