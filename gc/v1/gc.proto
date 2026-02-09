@@ -83,10 +83,10 @@ service GuaranteedCommitments {
     };
   }
 
-  // WORK-IN-PROGRESS: Do not use. Generates time-series chart data for commitment metrics over the specified time period.
+  // WORK-IN-PROGRESS: Generates time-series chart data for commitment metrics over the specified time period.
   rpc GetCommitmentsChart(GetCommitmentsChartRequest) returns (CommitmentsChartResponse) {
     option (google.api.http) = {
-      get: "/v1/commitments/chart"
+      get: "/v1/commitments/{commitmentId}/chart"
     };
   }
 
@@ -289,8 +289,10 @@ message ListCommitmentPlanResourceMatchesRequest {
 message ListCommitmentsRequest {}
 
 message GetCommitmentsChartRequest {
-  google.protobuf.Struct filter = 1;
-  Provider provider = 2;
+  // Required. The commitment id.
+  string commitmentId = 1;
+  // Required. The group filter. Available filters include `region`, `service`, `instanceType`, `instanceTypeFamily`, `usageType` and `operation`.
+  string groupBy = 2;
   string startDate = 3;
   string endDate = 4;
 }
@@ -628,18 +630,14 @@ message ListCommitmentsResponse {
   repeated Commitment commitments = 1;
 }
 
-message CommitmentsChartDataPoint {
+message CommitmentsChartData {
   string date = 1;
-  double commitmentSpend = 2;
-  double utilization = 3;
-  double lockedCommitments = 4;
-  double unlockedCommitments = 5;
-  double realizedSavings = 6;
-  bool isProjection = 7;
+  string chartKey = 2;
+  double chartValue = 3;
 }
 
 message CommitmentsChartResponse {
-  repeated CommitmentsChartDataPoint data = 1;
+  repeated CommitmentsChartData data = 1;
 }
 
 message MetricsResponse {
