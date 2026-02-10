@@ -103,14 +103,6 @@
       }
     },
     {
-      "name": "Luster",
-      "description": "(ALPHA) Luster API. Base URL: https://api.alphaus.cloud/m/blue/luster",
-      "externalDocs": {
-        "description": "Luster is a service that manages user contexts.",
-        "url": "https://github.com/alphauslabs/blueapi/tree/main/luster/"
-      }
-    },
-    {
       "name": "Preferences",
       "description": "(BETA) Preferences API. Base URL: https://api.alphaus.cloud/m/blue",
       "externalDocs": {
@@ -10857,6 +10849,44 @@
         ]
       }
     },
+    "/v1/managements/accounts/{companyId}": {
+      "post": {
+        "operationId": "GuaranteedCommitments_SetPayerAccountEnabled",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SetPayerAccountEnabledResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GuaranteedCommitmentsSetPayerAccountEnabledBody"
+            }
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/marketplace/info": {
       "post": {
         "summary": "Adding orgId to marketplace customers",
@@ -11965,15 +11995,14 @@
         },
         "parameters": [
           {
-            "name": "mspId",
-            "description": "Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)",
+            "name": "billingGroupId",
+            "description": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "billingId",
-            "description": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)",
+            "name": "companyId",
             "in": "query",
             "required": false,
             "type": "string"
@@ -12010,15 +12039,14 @@
         },
         "parameters": [
           {
-            "name": "mspId",
-            "description": "Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)",
+            "name": "billingGroupId",
+            "description": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "billingId",
-            "description": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)",
+            "name": "companyId",
             "in": "query",
             "required": false,
             "type": "string"
@@ -15378,83 +15406,6 @@
         ],
         "tags": [
           "Flow"
-        ]
-      }
-    },
-    "/v1/spaces": {
-      "post": {
-        "summary": "(ALPHA) Creates space.",
-        "operationId": "Luster_CreateSpace",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/lusterSpace"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the Luster.CreateSpace rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateSpaceRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      }
-    },
-    "/v1/spaces:read": {
-      "post": {
-        "summary": "(ALPHA) Reads spaces.",
-        "operationId": "Luster_ReadSpaces",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/lusterSpace"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of lusterSpace"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the Luster.ReadSpaces rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ReadSpacesRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Luster"
         ]
       }
     },
@@ -24536,6 +24487,14 @@
     "GuaranteedCommitmentsCommitmentsPlanApplyBody": {
       "type": "object"
     },
+    "GuaranteedCommitmentsSetPayerAccountEnabledBody": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
     "IamCreatePartnerTokenBody": {
       "type": "object",
       "description": "Request message for the Iam.CreatePartnerToken rpc."
@@ -24718,6 +24677,9 @@
         },
         "status": {
           "$ref": "#/definitions/ListPayerAccountsResponsePayerAccountStatus"
+        },
+        "companyId": {
+          "type": "string"
         }
       }
     },
@@ -32767,31 +32729,6 @@
       },
       "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors)."
     },
-    "lusterSpace": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The space id."
-        },
-        "name": {
-          "type": "string",
-          "description": "The space name."
-        },
-        "description": {
-          "type": "string",
-          "description": "The space description."
-        },
-        "members": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "The members in space."
-        }
-      },
-      "title": "The message defines the space"
-    },
     "octoawsOctoGeneratedAWSRecommendations": {
       "type": "object",
       "properties": {
@@ -37875,10 +37812,6 @@
         }
       }
     },
-    "v1CreateSpaceRequest": {
-      "type": "object",
-      "description": "Request message for the Luster.CreateSpace rpc."
-    },
     "v1CreateTeamRequest": {
       "type": "object",
       "properties": {
@@ -40516,13 +40449,12 @@
     "v1GetOnboardingStatusRequest": {
       "type": "object",
       "properties": {
-        "mspId": {
-          "type": "string",
-          "title": "Ripple context"
-        },
         "billingGroupId": {
           "type": "string",
           "title": "Optional:\n- empty =\u003e MSP-level onboarding row (isMsp = true)\n- non-empty =\u003e company under MSP (isMsp = false)"
+        },
+        "companyId": {
+          "type": "string"
         }
       }
     },
@@ -40556,6 +40488,12 @@
         "accountId": {
           "type": "string",
           "title": "Latest persisted AWS account id (if any)"
+        },
+        "billingGroupId": {
+          "type": "string"
+        },
+        "companyId": {
+          "type": "string"
         }
       }
     },
@@ -43611,10 +43549,6 @@
       },
       "description": "Request message for the ReadInvoiceOverviews rpc."
     },
-    "v1ReadSpacesRequest": {
-      "type": "object",
-      "description": "Request message for the Luster.ReadSpaces rpc."
-    },
     "v1ReadTagCostsRequestAwsOptions": {
       "type": "object",
       "properties": {
@@ -44663,6 +44597,15 @@
         }
       }
     },
+    "v1SetPayerAccountEnabledResponse": {
+      "type": "object",
+      "properties": {
+        "payerAccount": {
+          "$ref": "#/definitions/ListPayerAccountsResponsePayerAccount",
+          "title": "Updated payer account row (same shape as list)"
+        }
+      }
+    },
     "v1SetSettingsResponse": {
       "type": "object",
       "properties": {
@@ -44814,13 +44757,12 @@
     "v1StartAwsOnboardingRequest": {
       "type": "object",
       "properties": {
-        "mspId": {
-          "type": "string",
-          "title": "Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)"
-        },
-        "billingId": {
+        "billingGroupId": {
           "type": "string",
           "title": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)"
+        },
+        "companyId": {
+          "type": "string"
         },
         "gcOrgId": {
           "type": "string"
@@ -46071,13 +46013,12 @@
     "v1VerifyAwsOnboardingRequest": {
       "type": "object",
       "properties": {
-        "mspId": {
-          "type": "string",
-          "title": "Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)"
-        },
-        "billingId": {
+        "billingGroupId": {
           "type": "string",
           "title": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)"
+        },
+        "companyId": {
+          "type": "string"
         },
         "gcOrgId": {
           "type": "string"
