@@ -200,6 +200,13 @@ service GuaranteedCommitments {
       get: "/v1/managements/accounts"
     };
   }
+
+  rpc SetPayerAccountEnabled(SetPayerAccountEnabledRequest) returns (SetPayerAccountEnabledResponse) {
+    option (google.api.http) = {
+      post: "/v1/managements/accounts/{companyId}"
+      body: "*"
+    };
+  }
 }
 
 // ####################### ENUMS #######################
@@ -391,41 +398,33 @@ message RegisterOrgRequest {
 }
 
 message StartAwsOnboardingRequest {
-  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)
-  string mspId = 1;
-
   // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
-  string billingId = 2;
+  string billingGroupId = 1;
+  string companyId = 2;
 
   string gcOrgId = 3;
 }
 
 message GetAwsCloudFormationTemplateRequest {
-  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)
-  string mspId = 1;
-
   // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
-  string billingId = 2;
+  string billingGroupId = 1;
+  string companyId = 2;
 
   string gcOrgId = 3;
 }
 
 message GetAwsLaunchStackUrlRequest {
-  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)
-  string mspId = 1;
-
   // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
-  string billingId = 2;
+  string billingGroupId = 1;
+  string companyId = 2;
 
   string gcOrgId = 3;
 }
 
 message VerifyAwsOnboardingRequest {
-  // Ripple context (used for lookup/mapping; not sent to GuaranteedCommitments)
-  string mspId = 1;
-
   // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
-  string billingId = 2;
+  string billingGroupId = 1;
+  string companyId = 2;
 
   string gcOrgId = 3;
 
@@ -440,16 +439,20 @@ message VerifyAwsOnboardingRequest {
 }
 
 message GetOnboardingStatusRequest {
-  // Ripple context
-  string mspId = 1;
 
   // Optional:
   // - empty => MSP-level onboarding row (isMsp = true)
   // - non-empty => company under MSP (isMsp = false)
-  string billingGroupId = 2;
+  string billingGroupId = 1;
+  string companyId = 2;
 }
 
 message ListPayerAccountsRequest {}
+
+message SetPayerAccountEnabledRequest {
+  string companyId = 1;
+  bool enabled = 2;
+}
 
 // ####################### RESPONSE MESSAGES #######################
 
@@ -1001,6 +1004,9 @@ message GetOnboardingStatusResponse {
 
   // Latest persisted AWS account id (if any)
   string accountId = 7;
+
+  string billingGroupId = 8;
+  string companyId = 9;
 }
 
 message ListPayerAccountsResponse {
@@ -1015,6 +1021,12 @@ message ListPayerAccountsResponse {
     string billingGroupId = 3;
     string segmentId = 4;
     PayerAccountStatus status = 5;
+    string companyId = 6;
   }
   repeated PayerAccount payerAccounts = 1;
+}
+
+message SetPayerAccountEnabledResponse {
+  // Updated payer account row (same shape as list)
+  ListPayerAccountsResponse.PayerAccount payerAccount = 1;
 }
