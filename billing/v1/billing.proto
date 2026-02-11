@@ -1240,6 +1240,9 @@ message CreateBillingGroupRequest {
 
   // Optional. Company's country
   string country = 19;
+
+  // Optional. If set this means this is a child BG under the parent bg specified in this field.
+  ChildBillingGroupInfo childbginfo = 20;
 }
 
 message AwsOptions {
@@ -3503,6 +3506,11 @@ message GetChildBillingGroupInvoiceServiceDiscountsResponse {
 message ListChildBillingGroupAccountInvoiceServiceDiscountsRequest {
   // Required. Child Billing Group Internal Id
   string internalId = 1;
+}
+
+message ChildBillingGroupInfo {
+  string parentId = 1;
+  string rootParentId = 2;
 }
 
 
