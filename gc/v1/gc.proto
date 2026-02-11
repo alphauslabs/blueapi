@@ -37,7 +37,7 @@ service GuaranteedCommitments {
     };
   }
 
-  // WORK-IN-PROGRESS: Do not use. Executes a commitment purchase plan, initiating the commitment purchase process.
+  // WORK-IN-PROGRESS: Executes a commitment purchase plan, initiating the commitment purchase process.
   rpc CommitmentsPlanApply(CommitmentPlanApplyRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
       post: "/v1/commitments/plan/{planId}/apply"
@@ -62,7 +62,7 @@ service GuaranteedCommitments {
   // WORK-IN-PROGRESS: Do not use. Retrieves line items for a specific commitment plan.
   rpc ListCommitmentsPlanLineItems(ListCommitmentPlanLineItemsRequest) returns (ListCommitmentPlanLineItemsResponse) {
     option (google.api.http) = {
-      get: "/v1/commitments/plan/{planId}/line-items"
+      get: "/v1/commitments/plan/{planId}/lineitems"
     };
   }
 
@@ -70,7 +70,7 @@ service GuaranteedCommitments {
   rpc ListCommitmentsPlanResourceMatches(ListCommitmentPlanResourceMatchesRequest)
       returns (ListCommitmentPlanResourceMatchesResponse) {
     option (google.api.http) = {
-      get: "/v1/commitments/plan/{planId}/resource-matches"
+      get: "/v1/commitments/plan/{planId}/resourcematches"
     };
   }
 
@@ -111,7 +111,7 @@ service GuaranteedCommitments {
   // WORK-IN-PROGRESS: Do not use. Retrieves daily usage data for a specific resource within the specified date range.
   rpc GetResourceDailyUsage(GetResourceDailyUsageRequest) returns (GetResourceDailyUsageResponse) {
     option (google.api.http) = {
-      get: "/v1/resources/{resourceId}/daily-usage"
+      get: "/v1/resources/{resourceId}/dailyusage"
     };
   }
 
@@ -131,13 +131,34 @@ service GuaranteedCommitments {
   //  };
   //}
 
-  // WORK-IN-PROGRESS:  Retrieves purchase plan of a company.
+  // WORK-IN-PROGRESS: Retrieves purchase plan of a company.
   rpc ListPurchasePlansBySegment(ListPurchasePlansBySegmentRequest) returns (ListPurchasePlansBySegmentResponse) {
     option (google.api.http) = {
       get: "/v1/commitments/purchaseplan"
     };
   }
 
+  // WORK-IN-PROGRESS: Saves a commitment purchase plan as draft.
+  rpc SaveCommitmentsPlanAsDraft(SaveCommitmentsPlanAsDraftRequest) returns (DefaultPurchasePlan) {
+    option (google.api.http) = {
+      post: "/v1/commitments/purchaseplan/{planId}/draft"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Retrieves the drafted purchase plans
+  rpc ListDraftPurchasePlans(ListDraftPurchasePlansRequest) returns (ListDraftPurchasePlansResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/purchaseplan/draft"
+    };
+  }
+
+ // WORK-IN-PROGRESS: Deletes a draft purchase plan.
+  rpc DeleteDraftPurchasePlan(DeleteDraftPurchasePlanRequest) returns (DeleteDraftPurchasePlanResponse) {
+    option (google.api.http) = {
+      delete: "/v1/commitments/purchaseplan/{planId}/draft"
+    };
+  }
   // ------------------------ ONBOARDING ------------------------
 
   // WORK-IN-PROGRESS: Registers a new child organization under the channel partner.
@@ -461,6 +482,51 @@ message SetPayerAccountEnabledRequest {
 }
 
 message GetPayerAccountStatusRequest {}
+
+message SaveCommitmentsPlanAsDraftRequest {
+  string planId = 1;
+  repeated string reservationIds = 2;
+  repeated string resourceIds = 3;
+  double maxUpfrontCost = 4;
+  Provider provider = 5;
+  string endDate = 6;
+  string startDate = 7;
+  string segmentId = 8;
+  string status = 9;
+  string description = 10;
+  string name = 11;
+  string preferredPaymentOption = 12;
+  repeated string includedContractTerms = 13;
+  repeated ContractSpec includedContractSpecs = 14;
+  google.protobuf.Value coverageId = 15;
+  string createdAt = 16;
+  google.protobuf.Value createdBy = 17;
+  string dataSource = 18;
+  google.protobuf.Value executionPolicy = 19;
+  repeated string flaggedActions = 20;
+  string id = 21;
+  bool isCalculating = 22;
+  bool isDefault = 23;
+  bool isLocked = 24;
+  bool isRecommended = 25;
+  bool isRenewal = 26;
+  bool isSaved = 27;
+  string lastModified = 28;
+  string metaPlanId = 29;
+  google.protobuf.Value minimumUpfrontInterestRate = 30;
+  string orgId = 31;
+  string planType = 32;
+  google.protobuf.Value recommendWithinCoveredAccounts = 33;
+  Segment segment = 34;
+}
+
+message ListDraftPurchasePlansRequest {
+}
+
+message DeleteDraftPurchasePlanRequest {
+  // Required. The plan ID to delete.
+  string planId = 1;
+}
 
 // ####################### RESPONSE MESSAGES #######################
 
@@ -1041,4 +1107,15 @@ message SetPayerAccountEnabledResponse {
 
 message GetPayerAccountStatusResponse {
   ListPayerAccountsResponse.PayerAccount payerAccount = 1;
+}
+
+message ListDraftPurchasePlansResponse {
+  repeated DefaultPurchasePlan plans = 1;
+}
+
+message DeleteDraftPurchasePlanResponse {
+  // The ID of the deleted plan
+  string planId = 1;
+  // Indicates if the plan was successfully deleted
+  bool success = 2;
 }
