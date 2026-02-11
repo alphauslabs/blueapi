@@ -207,6 +207,12 @@ service GuaranteedCommitments {
       body: "*"
     };
   }
+
+  rpc GetPayerAccountStatus(GetPayerAccountStatusRequest) returns (GetPayerAccountStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/managements/accounts/status"
+    };
+  }
 }
 
 // ####################### ENUMS #######################
@@ -453,6 +459,8 @@ message SetPayerAccountEnabledRequest {
   string companyId = 1;
   bool enabled = 2;
 }
+
+message GetPayerAccountStatusRequest {}
 
 // ####################### RESPONSE MESSAGES #######################
 
@@ -1028,5 +1036,9 @@ message ListPayerAccountsResponse {
 
 message SetPayerAccountEnabledResponse {
   // Updated payer account row (same shape as list)
+  ListPayerAccountsResponse.PayerAccount payerAccount = 1;
+}
+
+message GetPayerAccountStatusResponse {
   ListPayerAccountsResponse.PayerAccount payerAccount = 1;
 }

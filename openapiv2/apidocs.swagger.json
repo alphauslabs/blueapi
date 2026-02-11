@@ -10849,6 +10849,28 @@
         ]
       }
     },
+    "/v1/managements/accounts/status": {
+      "get": {
+        "operationId": "GuaranteedCommitments_GetPayerAccountStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetPayerAccountStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/managements/accounts/{companyId}": {
       "post": {
         "operationId": "GuaranteedCommitments_SetPayerAccountEnabled",
@@ -35624,6 +35646,17 @@
         }
       }
     },
+    "v1ChildBillingGroupInfo": {
+      "type": "object",
+      "properties": {
+        "parentId": {
+          "type": "string"
+        },
+        "rootParentId": {
+          "type": "string"
+        }
+      }
+    },
     "v1ChildBillingGroupInvoiceSettings": {
       "type": "object",
       "properties": {
@@ -36800,6 +36833,10 @@
         "country": {
           "type": "string",
           "title": "Optional. Company's country"
+        },
+        "childbginfo": {
+          "$ref": "#/definitions/v1ChildBillingGroupInfo",
+          "description": "Optional. If set this means this is a child BG under the parent bg specified in this field."
         }
       },
       "description": "Request message for the Billing.CreateBillingGroup rpc."
@@ -40560,6 +40597,14 @@
         }
       },
       "description": "Response message for the Cost.GetPayerAccountImportHistory rpc."
+    },
+    "v1GetPayerAccountStatusResponse": {
+      "type": "object",
+      "properties": {
+        "payerAccount": {
+          "$ref": "#/definitions/ListPayerAccountsResponsePayerAccount"
+        }
+      }
     },
     "v1GetPayerProformaReportsResponse": {
       "type": "object",
