@@ -90,6 +90,13 @@ service GuaranteedCommitments {
     };
   }
 
+  // WORK-IN-PROGRESS: Generates utilization data for commitment over the active period.
+  rpc GetCommitmentsUtilization(GetCommitmentsUtilizationRequest) returns (CommitmentsUtilizationResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/{commitmentId}/utilization"
+    };
+  }
+
   // ####################### METRICS #######################
 
   // WORK-IN-PROGRESS: Do not use. Retrieves key performance metrics for cloud commitments.
@@ -329,6 +336,11 @@ message GetCommitmentsChartRequest {
   string groupBy = 2;
   string startDate = 3;
   string endDate = 4;
+}
+
+message GetCommitmentsUtilizationRequest {
+  // Required. The commitment id.
+  string commitmentId = 1;
 }
 
 message GetMetricsRequest {
@@ -715,6 +727,23 @@ message CommitmentsChartData {
 
 message CommitmentsChartResponse {
   repeated CommitmentsChartData data = 1;
+}
+
+message CommitmentsUtilizationData {
+  string utilizationDate = 1;
+  double cost = 2;
+  double coveredCost = 3;
+  double griFees = 4;
+  double netSavings = 5;
+  double potentialSavings = 6;
+  double reservationUtilization = 7;
+  double runningHours = 8;
+  double savings = 9;
+  double unutilizedCommitment = 10;
+}
+
+message CommitmentsUtilizationResponse {
+  repeated CommitmentsUtilizationData data = 1;
 }
 
 message MetricsResponse {
