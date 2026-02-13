@@ -5,9 +5,8 @@ package blueapi.luster.v1;
 import "api/luster/space.proto";
 import "api/luster/context.proto";
 import "api/luster/comment.proto";
-import "api/luster/label.proto";
+// import "api/luster/label.proto";
 import "google/api/annotations.proto";
-import "google/api/field_behavior.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -143,7 +142,13 @@ message GetSpaceRequest {
 }
 
 // Request message for the Luster.CreateSpace rpc.
-message CreateSpaceRequest {}
+message CreateSpaceRequest {
+  // the space name.
+  string name = 1;
+
+  // the space description.
+  string description = 2;
+}
 
 // Request message for the Luster.UpdateSpace rpc.
 message UpdateSpaceRequest {
@@ -176,7 +181,13 @@ message GetContextResponse  {
 }
 
 // Request message for the Luster.CreateContext rpc.
-message CreateContextRequest {}
+message CreateContextRequest {
+  // The context title.
+  string title = 1;
+
+  // The context content.
+  string content = 2;
+}
 
 // Request message for the Luster.UpdateContext rpc.
 message UpdateContextRequest {
@@ -191,7 +202,10 @@ message DeleteContextRequest {
 }
 
 // Request message for the Luster.CreateContextComment rpc.
-message CreateContextCommentRequest {}
+message CreateContextCommentRequest {
+  // The comment content.
+  string content = 1;
+}
 
 // Request message for the Luster.UpdateContextComment rpc.
 message UpdateContextCommentRequest {
