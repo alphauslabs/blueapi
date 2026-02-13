@@ -3,6 +3,9 @@ syntax = "proto3";
 package blueapi.luster.v1;
 
 import "api/luster/space.proto";
+import "api/luster/context.proto";
+import "api/luster/comment.proto";
+import "api/luster/label.proto";
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
 import "google/protobuf/empty.proto";
@@ -23,6 +26,7 @@ service Luster {
   };
 
   // (ALPHA) Reads spaces.
+  // スペースの読み取り。
   rpc ReadSpaces(ReadSpacesRequest) returns (stream api.luster.Space) {
     option (google.api.http) = {
       post: "/v1/spaces:read"
@@ -31,6 +35,7 @@ service Luster {
   }
 
   // (ALPHA) Gets space.
+  // スペースの取得。
   rpc GetSpace(GetSpaceRequest) returns (api.luster.Space) {
     option (google.api.http) = {
       get: "/v1/spaces/{id}"
@@ -38,6 +43,7 @@ service Luster {
   }
 
   // (ALPHA) Creates space.
+  // スペースの作成。
   rpc CreateSpace(CreateSpaceRequest) returns (api.luster.Space) {
     option (google.api.http) = {
       post: "/v1/spaces"
@@ -46,6 +52,7 @@ service Luster {
   }
 
   // (ALPHA) Updates space.
+  // スペースの更新。
   rpc UpdateSpace(UpdateSpaceRequest) returns (api.luster.Space) {
     option (google.api.http) = {
       put: "/v1/spaces/{id}"
@@ -54,9 +61,73 @@ service Luster {
   }
 
   // (ALPHA) Deletes space.
+  // スペースの削除。 削除する場合はスペース内で作成したコンテクストも削除され閲覧できなくなります。
   rpc DeleteSpace(DeleteSpaceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/spaces/{id}"
+    };
+  }
+
+
+  // (ALPHA) Reads contexts.
+  // スペースの読み取り。
+  rpc ReadContexts(ReadContextsRequest) returns (stream api.luster.Context) {
+    option (google.api.http) = {
+      post: "/v1/contexts:read"
+      body: "*"
+    };
+  }
+
+  // (ALPHA) Gets context.
+  rpc GetContext(GetContextRequest) returns (GetContextResponse) {
+    option (google.api.http) = {
+      get: "/v1/contexts/{id}"
+    };
+  }
+
+  // (ALPHA) Creates context.
+  rpc CreateContext(CreateContextRequest) returns (api.luster.Context) {
+    option (google.api.http) = {
+      post: "/v1/contexts"
+      body: "*"
+    };
+  }
+
+  // (ALPHA) Updates context.
+  rpc UpdateContext(UpdateContextRequest) returns (api.luster.Context) {
+    option (google.api.http) = {
+      put: "/v1/contexts/{id}"
+      body: "*"
+    };
+  }
+
+  // (ALPHA) Deletes context.
+  rpc DeleteContext(DeleteContextRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/contexts/{id}"
+    };
+  }
+
+  // (ALPHA) Creates comment in context.
+  rpc CreateContextComment(CreateContextCommentRequest) returns (api.luster.Comment) {
+    option (google.api.http) = {
+      post: "/v1/contexts/{id}/comment"
+      body: "*"
+    };
+  }
+
+  // (ALPHA) Updates comment in context.
+  rpc UpdateContextComment(UpdateContextCommentRequest) returns (api.luster.Comment) {
+    option (google.api.http) = {
+      put: "/v1/contexts/{id}/comment/{commentId}"
+      body: "*"
+    };
+  }
+
+  // (ALPHA) Deletes comment in context.
+  rpc DeleteContextComment(DeleteContextCommentRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/contexts/{id}/comment/{commentId}"
     };
   }
 
@@ -66,13 +137,76 @@ service Luster {
 message ReadSpacesRequest {}
 
 // Request message for the Luster.GetSpace rpc.
-message GetSpaceRequest {}
+message GetSpaceRequest {
+  // the space id.
+  string id = 1;
+}
 
 // Request message for the Luster.CreateSpace rpc.
 message CreateSpaceRequest {}
 
 // Request message for the Luster.UpdateSpace rpc.
-message UpdateSpaceRequest {}
+message UpdateSpaceRequest {
+  // the space id.
+  string id = 1;
+}
 
 // Request message for the Luster.DeleteSpace rpc.
-message DeleteSpaceRequest {}
+message DeleteSpaceRequest {
+  // the space id.
+  string id = 1;
+}
+
+// Request message for the Luster.ReadContexts rpc.
+message ReadContextsRequest {}
+
+// Request message for the Luster.GetContext rpc.
+message GetContextRequest {
+  // the context id.
+  string id = 1;
+}
+
+// Response message for the Luster.GetContextResponse rpc.
+message GetContextResponse  {
+  api.luster.Space space = 1;
+
+  api.luster.Context context = 2;
+
+  repeated api.luster.Comment comment = 3;
+}
+
+// Request message for the Luster.CreateContext rpc.
+message CreateContextRequest {}
+
+// Request message for the Luster.UpdateContext rpc.
+message UpdateContextRequest {
+  // the context id.
+  string id = 1;
+}
+
+// Request message for the Luster.DeleteContext rpc.
+message DeleteContextRequest {
+  // the context id.
+  string id = 1;
+}
+
+// Request message for the Luster.CreateContextComment rpc.
+message CreateContextCommentRequest {}
+
+// Request message for the Luster.UpdateContextComment rpc.
+message UpdateContextCommentRequest {
+  // the context id.
+  string id = 1;
+
+  // the context comment id.
+  string commentId = 2;
+}
+
+// Request message for the Luster.DeleteContextComment rpc.
+message DeleteContextCommentRequest {
+  // the context id.
+  string id = 1;
+
+  // the context comment id.
+  string commentId = 2;
+}
