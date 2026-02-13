@@ -1042,6 +1042,13 @@ service Billing {
     };
   }
 
+  // Gets the status of a bulk create billing group job.
+  rpc GetBulkCreateBillingGroupJob(GetBulkCreateBillingGroupJobRequest) returns (GetBulkCreateBillingGroupJobResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups:bulkCreate/{jobId}"
+    };
+  }
+
   // Create Exclude Service Entry
   rpc CreateExcludeServiceEntry(CreateExcludeServiceEntryRequest) returns (CreateExcludeServiceEntryResponse) {
     option (google.api.http) = {
@@ -3546,6 +3553,45 @@ message BulkCreateBillingGroupError {
 
   // Error message.
   string message = 3;
+}
+
+// Request message for the GetBulkCreateBillingGroupJob rpc.
+message GetBulkCreateBillingGroupJobRequest {
+  // Required. The job ID returned by BulkCreateBillingGroup.
+  string jobId = 1;
+}
+
+// Response message for the GetBulkCreateBillingGroupJob rpc.
+message GetBulkCreateBillingGroupJobResponse {
+  // The job ID.
+  string jobId = 1;
+
+  // The current status: "pending", "processing", "completed", "partial_failed", "failed".
+  string status = 2;
+
+  // Total number of billing groups to create.
+  int32 totalCount = 3;
+
+  // Number of billing groups processed so far.
+  int32 processedCount = 4;
+
+  // Number of billing groups successfully created.
+  int32 successCount = 5;
+
+  // Number of billing groups that failed.
+  int32 failureCount = 6;
+
+  // Details of failed billing groups (reuses existing BulkCreateBillingGroupError).
+  repeated BulkCreateBillingGroupError errors = 7;
+
+  // Job start timestamp.
+  string startTime = 8;
+
+  // Job end timestamp. Empty if still running.
+  string endTime = 9;
+
+  // Optional status message.
+  string message = 10;
 }
 
 message ExcludeServiceEntry {
