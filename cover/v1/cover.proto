@@ -1079,25 +1079,11 @@ service Cover {
     };
   }
 
-   // Lists recommendations based on specified criteria.
-   rpc ListRecommendations(ListRecommendationRequest) returns (stream ListRecommendationResponse) {
-    option (google.api.http) = {
-      get: "/v1/recommendations/optimization"
-    };
-  }
-
     // Lists recommendations based on specified criteria.
    rpc ListRecommendationsV2(ListRecommendationV2Request) returns (stream ListRecommendationResponse) {
     option (google.api.http) = {
       post: "/v1/recommendations/all:read"
       body: "*"
-    };
-  }
-
-  // Retrieves a specific recommendation by its ID.
-  rpc GetRecommendation(GetRecommendationRequest) returns (GetRecommendationResponse) {
-    option (google.api.http) = {
-      get: "/v1/recommendations/optimization/{id}"
     };
   }
 
@@ -1911,7 +1897,8 @@ message OnboardOrgResponse {
 message InviteMemberRequest {
   repeated string email = 1;
   bool isResend = 2;
-  bool inviteAsAdmin = 3;
+  
+  reserved 3;
 }
 
 // Response message for InviteMember
@@ -4029,39 +4016,6 @@ message GetReportSummaryResponse{
   api.cover.SavingsSummary savingsSummary = 6;
 }
 
-message ListRecommendationRequest{
-  // Required. Cost Group Id.
-  string costgroupId = 1;
-  
-  //Required. Start date of retrieved data. If not set, the default would be today.
-  string dateRangeStart = 2;
-  
-  //Required. End date of retrieved data. If not set, the default would be today.
-  string dateRangeEnd = 3; 
-
-  //Valid inputs are: "all", "aws", "gcp", and  "azure". Default is "all".
-  string vendor = 4;
-
-  // Valid inputs are: "all", "trustedadvisor", "costexplorer", and  "costoptimizationhub". Default is "all".
-  string source = 5;
- 
-  // Valid inputs are: "in-progress", "error", "open","done" and "all"
-  string optimizationStatus = 7;
-
-  // Valid inputs are: "rate", "usage", and "all". If not set, default is "all".
-  string type = 8;
-
-  string spType = 9;
-  string rateModel = 10;
-  string paymentOption = 11;
-  string term = 12;
-  string service = 13;
-  string offeringClass = 14;
-
-  // Optional. If not set, default value is `USD`.
-  string currency = 15;
-}
-
 message ListRecommendationV2Request {
   string costgroupId = 1;
   string dateRangeStart = 2;
@@ -4118,18 +4072,6 @@ message ListRecommendationResponse{
     string serviceType = 8;
     double upfrontCost = 9;
   }
-}
-
-message GetRecommendationRequest{
-  string id = 1;
-  string costGroupId = 2;
-
-  //Valid inputs are: "30days", "60days". and "90days". Default is "30days".
-  string periodOption = 3;
-}
-
-message GetRecommendationResponse{
-  api.cover.AWSRecommendations recommendationData = 1;
 }
 
 message ExecuteOptimizationRequest {
