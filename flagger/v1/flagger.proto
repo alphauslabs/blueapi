@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package blueapi.flagger.v1;
+
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/flagger";
+option java_package = "cloud.alphaus.api.flagger";
+option java_outer_classname = "FlaggerProto";
+
+// Flag service definition.
+service Flagger {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "(ALPHA) Flag API. Base URL: https://api.alphaus.cloud/m/blue/flaggger"
+    external_docs: {
+      url: "https://github.com/alphauslabs/blueapi/tree/main/luster/";
+      description: "Service definition";
+    }
+  };
+
+
+  rpc GetBooleanFlag(GetBooleanFlagRequest) returns (GetBooleanFlagResponse) {
+    option (google.api.http) = {
+      get: "/v1/namespace/{namespace_id}/flags/boolean/{id}"
+    };
+  }
+}
+ 
+message GetBooleanFlagRequest {
+  // Required. The namespace ID for the flag.
+  string namespace_id = 1;
+  
+  // Required. The flag ID.
+  string id = 2;
+}
+
+message GetBooleanFlagResponse {
+  // The boolean value of the flag.
+  bool value = 1;
+}

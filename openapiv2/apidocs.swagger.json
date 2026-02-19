@@ -111,6 +111,14 @@
       }
     },
     {
+      "name": "Flagger",
+      "description": "(ALPHA) Flag API. Base URL: https://api.alphaus.cloud/m/blue/flaggger",
+      "externalDocs": {
+        "description": "Service definition",
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/luster/"
+      }
+    },
+    {
       "name": "Preferences",
       "description": "(BETA) Preferences API. Base URL: https://api.alphaus.cloud/m/blue",
       "externalDocs": {
@@ -12462,6 +12470,44 @@
         ],
         "tags": [
           "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/namespace/{namespaceId}/flags/boolean/{id}": {
+      "get": {
+        "operationId": "Flagger_GetBooleanFlag",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBooleanFlagResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "namespaceId",
+            "description": "Required. The namespace ID for the flag.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. The flag ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Flagger"
         ]
       }
     },
@@ -40362,6 +40408,15 @@
         }
       },
       "description": "Response message for the GetBillingSetting rpc."
+    },
+    "v1GetBooleanFlagResponse": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "boolean",
+          "description": "The boolean value of the flag."
+        }
+      }
     },
     "v1GetBreakevenPointResponse": {
       "type": "object",
