@@ -112,10 +112,10 @@
     },
     {
       "name": "Flagger",
-      "description": "(ALPHA) Flag API. Base URL: https://api.alphaus.cloud/m/blue/flaggger",
+      "description": "(ALPHA) Flag API. Base URL: https://api.alphaus.cloud/m/blue",
       "externalDocs": {
         "description": "Service definition",
-        "url": "https://github.com/alphauslabs/blueapi/tree/main/luster/"
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/flagger"
       }
     },
     {
@@ -1099,6 +1099,44 @@
         ],
         "tags": [
           "Billing"
+        ]
+      }
+    },
+    "/flagger/v1/namespace/{namespaceId}/flags/boolean/{id}": {
+      "get": {
+        "operationId": "Flagger_GetBooleanFlag",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBooleanFlagResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "namespaceId",
+            "description": "Required. The namespaceId that the flag belongs to.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. The flagId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Flagger"
         ]
       }
     },
@@ -12470,44 +12508,6 @@
         ],
         "tags": [
           "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/namespace/{namespaceId}/flags/boolean/{id}": {
-      "get": {
-        "operationId": "Flagger_GetBooleanFlag",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetBooleanFlagResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "namespaceId",
-            "description": "Required. The namespace ID for the flag.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "Required. The flag ID.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Flagger"
         ]
       }
     },
