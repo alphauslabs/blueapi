@@ -1103,14 +1103,14 @@
       }
     },
     "/flagger/v1/namespace/{namespaceId}/flags/boolean/{id}": {
-      "get": {
-        "summary": "GetBooleanFlag returns the boolean value of a flag for a given namespace.",
-        "operationId": "Flagger_GetBooleanFlag",
+      "post": {
+        "summary": "EvaluateBooleanFlag returns the boolean value of a flag for a given namespace.",
+        "operationId": "Flagger_EvaluateBooleanFlag",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetBooleanFlagResponse"
+              "$ref": "#/definitions/v1EvaluateBooleanFlagResponse"
             }
           },
           "default": {
@@ -1136,18 +1136,12 @@
             "type": "string"
           },
           {
-            "name": "segment",
-            "description": "Optional. The segment to evaluate the flag for. If not provided, the default value of the flag will be returned.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "kv",
-            "description": "Optional. Key-value pairs for additional context when evaluating the flag. Must be provided if segment is present.",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FlaggerEvaluateBooleanFlagBody"
+            }
           }
         ],
         "tags": [
@@ -25037,6 +25031,22 @@
       ],
       "default": "OPERATOR_UNSPECIFIED"
     },
+    "FlaggerEvaluateBooleanFlagBody": {
+      "type": "object",
+      "properties": {
+        "segment": {
+          "type": "string",
+          "description": "Optional. The segment to evaluate the flag for. If not provided, the default value of the flag will be returned."
+        },
+        "kv": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional. Key-value pairs for additional context when evaluating the flag. Must be provided if segment is present."
+        }
+      }
+    },
     "FlowGetAwsAccountsBody": {
       "type": "object",
       "description": "Response message for the Flow.GetAwsAccounts rpc."
@@ -39732,6 +39742,15 @@
         }
       }
     },
+    "v1EvaluateBooleanFlagResponse": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "boolean",
+          "description": "The boolean value of the flag."
+        }
+      }
+    },
     "v1ExchangeRates": {
       "type": "object",
       "properties": {
@@ -40423,15 +40442,6 @@
         }
       },
       "description": "Response message for the GetBillingSetting rpc."
-    },
-    "v1GetBooleanFlagResponse": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "boolean",
-          "description": "The boolean value of the flag."
-        }
-      }
     },
     "v1GetBreakevenPointResponse": {
       "type": "object",
