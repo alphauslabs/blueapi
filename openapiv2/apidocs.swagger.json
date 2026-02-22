@@ -1104,6 +1104,7 @@
     },
     "/flagger/v1/namespace/{namespaceId}/flags/boolean/{id}": {
       "get": {
+        "summary": "GetBooleanFlag returns the boolean value of a flag for a given namespace.",
         "operationId": "Flagger_GetBooleanFlag",
         "responses": {
           "200": {
@@ -1132,6 +1133,20 @@
             "description": "Required. The flagId",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "segment",
+            "description": "Optional. The segment to evaluate the flag for. If not provided, the default value of the flag will be returned.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "kv",
+            "description": "Optional. Key-value pairs for additional context when evaluating the flag. Must be provided if segment is present.",
+            "in": "query",
+            "required": false,
             "type": "string"
           }
         ],
