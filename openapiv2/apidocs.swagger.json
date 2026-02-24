@@ -17206,6 +17206,39 @@
         ]
       }
     },
+    "/v1/user/invite": {
+      "post": {
+        "summary": "Invites users to join the organization and assigns them roles.",
+        "operationId": "Cover_InviteUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InviteUsersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1InviteUsersRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/user/settings/{id}": {
       "get": {
         "summary": "Gets the user account settings.",
@@ -17303,6 +17336,138 @@
         ],
         "tags": [
           "Vortex"
+        ]
+      }
+    },
+    "/v1/user/{id}": {
+      "delete": {
+        "summary": "Deletes a user from the organization.",
+        "operationId": "Cover_DeleteUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/user/{id}/reinvite": {
+      "post": {
+        "summary": "Reinvites a user to join the organization. This can be used when the user did not receive or lost the original invitation email.",
+        "operationId": "Cover_ReinviteUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ReinviteUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CoverReinviteUserBody"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/user/{userId}": {
+      "put": {
+        "summary": "Updates a user's role and cost group access.",
+        "operationId": "Cover_UpdateUserRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserRoleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CoverUpdateUserRoleBody"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/users": {
+      "get": {
+        "summary": "Lists all users in the organization",
+        "operationId": "Cover_ListUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListUsersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
         ]
       }
     },
@@ -24126,6 +24291,9 @@
       },
       "description": "Request message for the RegisterAccount rpc."
     },
+    "CoverReinviteUserBody": {
+      "type": "object"
+    },
     "CoverRemoveCostGroupMemberBody": {
       "type": "object",
       "properties": {
@@ -24623,6 +24791,23 @@
         }
       },
       "title": "Request message for UpdateUserProfile"
+    },
+    "CoverUpdateUserRoleBody": {
+      "type": "object",
+      "properties": {
+        "roleIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "costGroupIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "CoverUpdateViewBody": {
       "type": "object",
@@ -25718,6 +25903,29 @@
         },
         "vendor": {
           "type": "string"
+        }
+      }
+    },
+    "ListUsersResponseUserSummary": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "activated": {
+          "type": "boolean"
         }
       }
     },
@@ -39757,6 +39965,9 @@
         }
       }
     },
+    "v1DeleteUserResponse": {
+      "type": "object"
+    },
     "v1DeleteViewResponse": {
       "type": "object",
       "properties": {
@@ -42690,6 +42901,29 @@
         }
       }
     },
+    "v1InviteUsersRequest": {
+      "type": "object",
+      "properties": {
+        "emails": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "roleId": {
+          "type": "string"
+        },
+        "costGroupIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1InviteUsersResponse": {
+      "type": "object"
+    },
     "v1InvoiceConnectedBillingGroups": {
       "type": "object",
       "properties": {
@@ -43733,6 +43967,18 @@
         }
       },
       "description": "Response message for the Iam.ListUserRoleMappings rpc."
+    },
+    "v1ListUsersResponse": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ListUsersResponseUserSummary"
+          }
+        }
+      }
     },
     "v1ListWorkflowsRequest": {
       "type": "object"
@@ -45234,6 +45480,9 @@
           "type": "string"
         }
       }
+    },
+    "v1ReinviteUserResponse": {
+      "type": "object"
     },
     "v1RemoveCostGroupMemberResponse": {
       "type": "object",
@@ -47032,6 +47281,9 @@
         }
       },
       "description": "Response message for the Iam.UpdateUserRoleMapping rpc."
+    },
+    "v1UpdateUserRoleResponse": {
+      "type": "object"
     },
     "v1UpdateUserTimezoneRequest": {
       "type": "object",

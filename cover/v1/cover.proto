@@ -51,6 +51,7 @@ service Cover {
       post: "/v1/members/invite"
       body: "*"
     };
+    option deprecated = true;
   }
 
   // Activate the added user
@@ -74,6 +75,7 @@ service Cover {
     option (google.api.http) = {
       get: "/v1/members"
     };
+    option deprecated = true;
   }
 
   // Get the details of the user
@@ -81,6 +83,7 @@ service Cover {
     option (google.api.http) = {
       get: "/v1/members/{userId}"
     };
+    option deprecated = true;
   }
 
   // Get the cost group to which the member is attached
@@ -88,6 +91,7 @@ service Cover {
     option (google.api.http) = {
       get: "/v1/members/{userId}/costgroup"
     };
+    option deprecated = true;
   }
 
   // Modify member's permission
@@ -96,6 +100,7 @@ service Cover {
       put: "/v1/members/{userId}/isadmin"
       body: "*"
     };
+    option deprecated = true;
   }
 
   // Get the details of the logged-in user
@@ -1513,7 +1518,86 @@ service Cover {
       body: "*"
     };
   }
+
+  // Invites users to join the organization and assigns them roles.
+  rpc InviteUsers(InviteUsersRequest) returns (InviteUsersResponse) {
+    option (google.api.http) = {
+      post: "/v1/user/invite"
+      body: "*"
+    };
+  }
+
+  // Deletes a user from the organization.
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {
+    option (google.api.http) = {
+      delete: "/v1/user/{id}"
+    };
+  }
+
+  // Updates a user's role and cost group access.
+  rpc UpdateUserRole(UpdateUserRoleRequest) returns (UpdateUserRoleResponse) {
+    option (google.api.http) = {
+      put: "/v1/user/{user_id}"
+      body: "*"
+    };
+  }
+
+  // Lists all users in the organization
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
+    option (google.api.http) = {
+      get: "/v1/users"
+    };
+  }
+
+  // Reinvites a user to join the organization. This can be used when the user did not receive or lost the original invitation email.
+  rpc ReinviteUser(ReinviteUserRequest) returns (ReinviteUserResponse) {
+    option (google.api.http) = {
+      post: "/v1/user/{id}/reinvite"
+      body: "*"
+    };
+  }
 }
+
+message ReinviteUserRequest {
+  string id = 1;
+}
+
+message ReinviteUserResponse {}
+
+message ListUsersRequest {}
+
+message ListUsersResponse {
+ message UserSummary {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  repeated string roles = 4;
+  bool activated = 5;
+ }
+ repeated UserSummary users = 1;
+}
+
+message UpdateUserRoleRequest {
+  string user_id = 1;
+  repeated string role_ids = 2;
+  repeated string cost_group_ids = 3;
+}
+
+message UpdateUserRoleResponse {}
+
+message DeleteUserRequest {
+  string id = 1;
+}
+
+message DeleteUserResponse {}
+
+message InviteUsersRequest {
+  repeated string emails = 1;
+  string role_id = 2;
+  repeated string cost_group_ids = 3;
+}
+
+message InviteUsersResponse {}
 
 message ExecuteRecommendationV3Request {
   enum ExecuteType {
