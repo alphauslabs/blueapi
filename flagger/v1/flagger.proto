@@ -28,6 +28,14 @@ service Flagger {
       body: "*"
     };
   }
+
+  // EvaluateVariantFlag returns the variant value of a flag for a given namespace.
+  rpc EvaluateVariantFlag(EvaluateVariantFlagRequest) returns (EvaluateVariantFlagResponse) {
+    option (google.api.http) = {
+      post: "/flagger/v1/namespace/{namespace_id}/flags/variant/{id}"
+      body: "*"
+    };
+  }
 }
  
 message EvaluateBooleanFlagRequest {
@@ -47,4 +55,27 @@ message EvaluateBooleanFlagRequest {
 message EvaluateBooleanFlagResponse {
   // The boolean value of the flag.
   bool value = 1;
+}
+
+
+message EvaluateVariantFlagRequest {
+  // Required. The namespaceId that the flag belongs to.
+  string namespace_id = 1;
+  
+  // Required. The flagId
+  string id = 2;
+
+  // Optional. The segment to evaluate the flag for. If not provided, the default value of the flag will be returned.
+  optional string segment = 3;
+
+  // Optional. Key-value pairs for additional context when evaluating the flag. Must be provided if segment is present.
+  map<string, string> kv = 4;
+}
+
+message EvaluateVariantFlagResponse {
+  // The variant value of the flag.
+  string value = 1;
+
+  // Optional. The attachment attached to the returned variant.
+  map<string, string> attachment = 2;
 }

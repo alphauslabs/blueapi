@@ -1149,6 +1149,53 @@
         ]
       }
     },
+    "/flagger/v1/namespace/{namespaceId}/flags/variant/{id}": {
+      "post": {
+        "summary": "EvaluateVariantFlag returns the variant value of a flag for a given namespace.",
+        "operationId": "Flagger_EvaluateVariantFlag",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1EvaluateVariantFlagResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "namespaceId",
+            "description": "Required. The namespaceId that the flag belongs to.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. The flagId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FlaggerEvaluateVariantFlagBody"
+            }
+          }
+        ],
+        "tags": [
+          "Flagger"
+        ]
+      }
+    },
     "/iam/v1/apiclients": {
       "get": {
         "summary": "Lists all API clients belonging to the caller.",
@@ -25047,6 +25094,22 @@
         }
       }
     },
+    "FlaggerEvaluateVariantFlagBody": {
+      "type": "object",
+      "properties": {
+        "segment": {
+          "type": "string",
+          "description": "Optional. The segment to evaluate the flag for. If not provided, the default value of the flag will be returned."
+        },
+        "kv": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional. Key-value pairs for additional context when evaluating the flag. Must be provided if segment is present."
+        }
+      }
+    },
     "FlowGetAwsAccountsBody": {
       "type": "object",
       "description": "Response message for the Flow.GetAwsAccounts rpc."
@@ -39756,6 +39819,22 @@
         "value": {
           "type": "boolean",
           "description": "The boolean value of the flag."
+        }
+      }
+    },
+    "v1EvaluateVariantFlagResponse": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "The variant value of the flag."
+        },
+        "attachment": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional. The attachment attached to the returned variant."
         }
       }
     },
