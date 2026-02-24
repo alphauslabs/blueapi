@@ -241,6 +241,13 @@ service GuaranteedCommitments {
       get: "/v1/managements/accounts/status"
     };
   }
+
+  rpc ValidateBillingGroup(ValidateBillingGroupRequest) returns (ValidateBillingGroupResponse) {
+  option (google.api.http) = {
+    post: "/v1/onboarding/billinggroup:validate"
+    body: "*"
+    };
+  }
 }
 
 // ####################### ENUMS #######################
@@ -494,6 +501,11 @@ message SetPayerAccountEnabledRequest {
 }
 
 message GetPayerAccountStatusRequest {}
+
+message ValidateBillingGroupRequest {
+  // Required. Company identifier.
+  string companyId = 1;
+}
 
 message SaveCommitmentsPlanAsDraftRequest {
   string planId = 1;
@@ -1148,6 +1160,14 @@ message SetPayerAccountEnabledResponse {
 
 message GetPayerAccountStatusResponse {
   ListPayerAccountsResponse.PayerAccount payerAccount = 1;
+}
+
+message ValidateBillingGroupResponse {
+  // True if the company is allowed to proceed with onboarding; false otherwise.
+  bool ok = 1;
+
+  // Optional human-readable reason when ok=false.
+  string message = 2;
 }
 
 message ListDraftPurchasePlansResponse {
