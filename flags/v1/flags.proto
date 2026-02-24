@@ -1,22 +1,22 @@
 syntax = "proto3";
 
-package blueapi.flagger.v1;
+package blueapi.flags.v1;
 
 
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
-option go_package = "github.com/alphauslabs/blueapi/flagger";
-option java_package = "cloud.alphaus.api.flagger";
-option java_outer_classname = "FlaggerProto";
+option go_package = "github.com/alphauslabs/blueapi/flags";
+option java_package = "cloud.alphaus.api.flags";
+option java_outer_classname = "FlagsProto";
 
-// Flagger service definition.
-service Flagger {
+// Flags service definition.
+service Flags {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
     description: "(ALPHA) Flag API. Base URL: https://api.alphaus.cloud/m/blue"
     external_docs: {
-      url: "https://github.com/alphauslabs/blueapi/tree/main/flagger";
+      url: "https://github.com/alphauslabs/blueapi/tree/main/flags";
       description: "Service definition";
     }
   };
@@ -24,7 +24,7 @@ service Flagger {
   // EvaluateBooleanFlag returns the boolean value of a flag for a given namespace.
   rpc EvaluateBooleanFlag(EvaluateBooleanFlagRequest) returns (EvaluateBooleanFlagResponse) {
     option (google.api.http) = {
-      post: "/flagger/v1/namespace/{namespace_id}/flags/boolean/{id}"
+      post: "/flags/v1/namespace/{namespace_id}/boolean/{id}:eval"
       body: "*"
     };
   }
@@ -32,7 +32,7 @@ service Flagger {
   // EvaluateVariantFlag returns the variant value of a flag for a given namespace.
   rpc EvaluateVariantFlag(EvaluateVariantFlagRequest) returns (EvaluateVariantFlagResponse) {
     option (google.api.http) = {
-      post: "/flagger/v1/namespace/{namespace_id}/flags/variant/{id}"
+      post: "/flags/v1/namespace/{namespace_id}/variant/{id}:eval"
       body: "*"
     };
   }

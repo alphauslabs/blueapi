@@ -31,6 +31,14 @@
       }
     },
     {
+      "name": "Flags",
+      "description": "(ALPHA) Flag API. Base URL: https://api.alphaus.cloud/m/blue",
+      "externalDocs": {
+        "description": "Service definition",
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/flags"
+      }
+    },
+    {
       "name": "Cost",
       "description": "Cost API. Base URL: https://api.alphaus.cloud/m/blue/cost",
       "externalDocs": {
@@ -108,14 +116,6 @@
       "externalDocs": {
         "description": "Luster is a service that manages user contexts.",
         "url": "https://github.com/alphauslabs/blueapi/tree/main/luster/"
-      }
-    },
-    {
-      "name": "Flagger",
-      "description": "(ALPHA) Flag API. Base URL: https://api.alphaus.cloud/m/blue",
-      "externalDocs": {
-        "description": "Service definition",
-        "url": "https://github.com/alphauslabs/blueapi/tree/main/flagger"
       }
     },
     {
@@ -1102,10 +1102,10 @@
         ]
       }
     },
-    "/flagger/v1/namespace/{namespaceId}/flags/boolean/{id}": {
+    "/flags/v1/namespace/{namespaceId}/boolean/{id}:eval": {
       "post": {
         "summary": "EvaluateBooleanFlag returns the boolean value of a flag for a given namespace.",
-        "operationId": "Flagger_EvaluateBooleanFlag",
+        "operationId": "Flags_EvaluateBooleanFlag",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1140,19 +1140,19 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/FlaggerEvaluateBooleanFlagBody"
+              "$ref": "#/definitions/FlagsEvaluateBooleanFlagBody"
             }
           }
         ],
         "tags": [
-          "Flagger"
+          "Flags"
         ]
       }
     },
-    "/flagger/v1/namespace/{namespaceId}/flags/variant/{id}": {
+    "/flags/v1/namespace/{namespaceId}/variant/{id}:eval": {
       "post": {
         "summary": "EvaluateVariantFlag returns the variant value of a flag for a given namespace.",
-        "operationId": "Flagger_EvaluateVariantFlag",
+        "operationId": "Flags_EvaluateVariantFlag",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1187,12 +1187,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/FlaggerEvaluateVariantFlagBody"
+              "$ref": "#/definitions/FlagsEvaluateVariantFlagBody"
             }
           }
         ],
         "tags": [
-          "Flagger"
+          "Flags"
         ]
       }
     },
@@ -25078,7 +25078,7 @@
       ],
       "default": "OPERATOR_UNSPECIFIED"
     },
-    "FlaggerEvaluateBooleanFlagBody": {
+    "FlagsEvaluateBooleanFlagBody": {
       "type": "object",
       "properties": {
         "segment": {
@@ -25094,7 +25094,7 @@
         }
       }
     },
-    "FlaggerEvaluateVariantFlagBody": {
+    "FlagsEvaluateVariantFlagBody": {
       "type": "object",
       "properties": {
         "kv": {
