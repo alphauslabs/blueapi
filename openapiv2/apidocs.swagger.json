@@ -12754,6 +12754,38 @@
         ]
       }
     },
+    "/v1/onboarding/billinggroup:validate": {
+      "post": {
+        "operationId": "GuaranteedCommitments_ValidateBillingGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ValidateBillingGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ValidateBillingGroupRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/onboarding/status:read": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Retrieves the latest onboarding status for an MSP or a company under an MSP.\nRetrieves the latest onboarding status for an MSP or a company under an MSP.",
@@ -47251,6 +47283,28 @@
         }
       },
       "description": "Utilization details for Savings Plans, including ARN and utilization percentage."
+    },
+    "v1ValidateBillingGroupRequest": {
+      "type": "object",
+      "properties": {
+        "companyId": {
+          "type": "string",
+          "description": "Required. Company identifier."
+        }
+      }
+    },
+    "v1ValidateBillingGroupResponse": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "description": "True if the company is allowed to proceed with onboarding; false otherwise."
+        },
+        "message": {
+          "type": "string",
+          "description": "Optional human-readable reason when ok=false."
+        }
+      }
     },
     "v1ValidateResetPasswordLinkAndChangePasswordRequest": {
       "type": "object",
