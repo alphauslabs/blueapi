@@ -5,6 +5,7 @@ package blueapi.flags.v1;
 
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/flags";
@@ -49,7 +50,7 @@ message EvaluateBooleanFlagRequest {
   optional string segment = 3;
 
   // Optional. Key-value pairs for additional context when evaluating the flag. Must be provided if segment is present.
-  map<string, string> kv = 4;
+  google.protobuf.Struct attributes = 4;
 }
 
 message EvaluateBooleanFlagResponse {
@@ -66,7 +67,7 @@ message EvaluateVariantFlagRequest {
   string id = 2;
 
   // Optional. Key-value pairs for additional context when evaluating the flag. 
-  map<string, string> kv = 3;
+  google.protobuf.Struct attributes = 3;
 }
 
 message EvaluateVariantFlagResponse {
@@ -74,5 +75,5 @@ message EvaluateVariantFlagResponse {
   string value = 1;
 
   // Optional. The attachment attached to the returned variant.
-  map<string, string> attachment = 2;
+  google.protobuf.Struct attachment = 2;
 }
