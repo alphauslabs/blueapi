@@ -302,7 +302,7 @@ service Iam {
   // WORK-IN-PROGRESS: Unlocks ripple or wave user account.
   rpc UnlockUserAccount(UnlockUserAccountRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/iam/v1/{domain}/account/{email}:unlock"
+      post: "/iam/v1/{domain}/account:unlock"
       body: "*"
     };
   } 
@@ -691,4 +691,7 @@ message UnlockUserAccountRequest {
   
   // IsRoot is true if Ripple or Wave root user, false if sub user.
   bool is_root = 3;
+  
+  // Required if wave sub user.
+  string user_name = 4;
 }

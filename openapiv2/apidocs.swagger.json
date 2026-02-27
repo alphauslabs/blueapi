@@ -2351,7 +2351,7 @@
         ]
       }
     },
-    "/iam/v1/{domain}/account/{email}:unlock": {
+    "/iam/v1/{domain}/account:unlock": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Unlocks ripple or wave user account.",
         "operationId": "Iam_UnlockUserAccount",
@@ -2374,13 +2374,6 @@
           {
             "name": "domain",
             "description": "Required. Valid values are 'ripple' and 'wave'",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "email",
-            "description": "Required. The email of the user account to unlock.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -25778,9 +25771,17 @@
     "IamUnlockUserAccountBody": {
       "type": "object",
       "properties": {
+        "email": {
+          "type": "string",
+          "description": "Required. The email of the user account to unlock."
+        },
         "isRoot": {
           "type": "boolean",
           "description": "IsRoot is true if Ripple or Wave root user, false if sub user."
+        },
+        "userName": {
+          "type": "string",
+          "description": "Required if wave sub user."
         }
       }
     },
