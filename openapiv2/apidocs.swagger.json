@@ -7416,6 +7416,71 @@
         ]
       }
     },
+    "/v1/billinggroups:bulkLinkAccount": {
+      "post": {
+        "summary": "Link accounts to a billing group in bulk from a CSV file.",
+        "operationId": "Billing_BulkLinkAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1BulkLinkAccountResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1BulkLinkAccountRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/billinggroups:bulkLinkAccount/{jobId}": {
+      "get": {
+        "summary": "Gets the status of a bulk link account job.",
+        "operationId": "Billing_GetBulkLinkAccountJob",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBulkLinkAccountJobResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "jobId",
+            "description": "Required. The job ID returned by BulkLinkAccount.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups:paginated": {
       "get": {
         "summary": "Lists all billing groups with pagination support.",
@@ -36697,6 +36762,63 @@
         }
       }
     },
+    "v1BulkLinkAccountError": {
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The row index of the failed entry in the CSV (zero-based, excluding header)."
+        },
+        "billingGroupId": {
+          "type": "string",
+          "description": "The billing group ID from the failed row."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "The account ID from the failed row."
+        },
+        "message": {
+          "type": "string",
+          "description": "Human-readable error message."
+        }
+      }
+    },
+    "v1BulkLinkAccountRequest": {
+      "type": "object",
+      "properties": {
+        "csvContent": {
+          "type": "string",
+          "format": "byte",
+          "description": "Required. The CSV file content as bytes."
+        },
+        "delimiter": {
+          "type": "string",
+          "description": "Optional. The delimiter used in the CSV file. Defaults to comma (,)."
+        },
+        "hasHeader": {
+          "type": "boolean",
+          "description": "Optional. Whether the CSV file has a header row. Defaults to true."
+        },
+        "dryRun": {
+          "type": "boolean",
+          "description": "Optional. If true, validate the CSV and check for errors without actually linking accounts.\nUseful for validating CSV format and data before performing the actual bulk operation."
+        }
+      }
+    },
+    "v1BulkLinkAccountResponse": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "description": "The job ID for polling status via GetBulkLinkAccountJob."
+        },
+        "status": {
+          "type": "string",
+          "description": "Initial status of the job (\"pending\")."
+        }
+      }
+    },
     "v1CalculateCostsRequestAwsOptions": {
       "type": "object",
       "properties": {
@@ -40906,6 +41028,59 @@
         }
       },
       "description": "Response message for the GetBulkCreateBillingGroupJob rpc."
+    },
+    "v1GetBulkLinkAccountJobResponse": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "description": "The job ID."
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status: \"pending\", \"processing\", \"completed\", \"partial_failed\", \"failed\"."
+        },
+        "totalCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total number of account-link entries to process."
+        },
+        "processedCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of entries processed so far."
+        },
+        "successCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of entries successfully linked."
+        },
+        "failureCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of entries that failed."
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1BulkLinkAccountError"
+          },
+          "description": "Details of failed entries."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Job start timestamp (RFC 3339 / ISO 8601)."
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Job end timestamp. Empty if still running."
+        },
+        "message": {
+          "type": "string",
+          "description": "Optional human-readable status message."
+        }
+      }
     },
     "v1GetCalculatorConfigResponse": {
       "type": "object",
