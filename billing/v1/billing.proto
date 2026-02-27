@@ -1078,6 +1078,21 @@ service Billing {
       get: "/v1/billinggroups/exclude-service-settings"
     };
   }
+
+  // Link accounts to a billing group in bulk from a CSV file.
+  rpc BulkLinkAccount(BulkLinkAccountRequest) returns (BulkLinkAccountResponse) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups:bulkLinkAccount"
+      body: "*"
+    };
+  }
+
+  // Gets the status of a bulk link account job.
+  rpc GetBulkLinkAccountJob(GetBulkLinkAccountJobRequest) returns (GetBulkLinkAccountJobResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups:bulkLinkAccount/{jobId}"
+    };
+  }
 }
 
 message BillingGroup {
@@ -3683,4 +3698,78 @@ message ListExcludeServicesRequest {
 message ListExcludeServicesResponse {
   // List of all exclude service entries for the request.
   repeated ExcludeServiceEntry entries = 1;
+}
+
+message BulkLinkAccountRequest {
+  // Required. The CSV file content as bytes.
+  bytes csvContent = 1;
+
+  // Optional. The delimiter used in the CSV file. Defaults to comma (,).
+  string delimiter = 2;
+
+  // Optional. Whether the CSV file has a header row. Defaults to true.
+  bool hasHeader = 3;
+
+  // Optional. If true, validate the CSV and check for errors without actually linking accounts.
+  // Useful for validating CSV format and data before performing the actual bulk operation.
+  bool dryRun = 4;
+}
+
+message BulkLinkAccountResponse {
+  // The job ID for polling status via GetBulkLinkAccountJob.
+  string jobId = 1;
+
+  // Initial status of the job ("pending").
+  string status = 2;
+}
+
+message BulkLinkAccountError {
+  // The row index of the failed entry in the CSV (zero-based, excluding header).
+  int32 index = 1;
+
+  // The billing group ID from the failed row.
+  string billingGroupId = 2;
+
+  // The account ID from the failed row.
+  string accountId = 3;
+
+  // Human-readable error message.
+  string message = 4;
+}
+
+message GetBulkLinkAccountJobRequest {
+  // Required. The job ID returned by BulkLinkAccount.
+  string jobId = 1;
+}
+
+message GetBulkLinkAccountJobResponse {
+  // The job ID.
+  string jobId = 1;
+
+  // The current status: "pending", "processing", "completed", "partial_failed", "failed".
+  string status = 2;
+
+  // Total number of account-link entries to process.
+  int32 totalCount = 3;
+
+  // Number of entries processed so far.
+  int32 processedCount = 4;
+
+  // Number of entries successfully linked.
+  int32 successCount = 5;
+
+  // Number of entries that failed.
+  int32 failureCount = 6;
+
+  // Details of failed entries.
+  repeated BulkLinkAccountError errors = 7;
+
+  // Job start timestamp (RFC 3339 / ISO 8601).
+  string startTime = 8;
+
+  // Job end timestamp. Empty if still running.
+  string endTime = 9;
+
+  // Optional human-readable status message.
+  string message = 10;
 }
