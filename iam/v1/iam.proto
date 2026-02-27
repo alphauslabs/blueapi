@@ -297,6 +297,14 @@ service Iam {
       post: "/iam/v1/ripple/password:reset"
       body: "*"
     };
+  }
+  
+  // WORK-IN-PROGRESS: Unlocks ripple or wave user account.
+  rpc UnlockUserAccount(UnlockUserAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/iam/v1/{domain}/account/{email}:unlock"
+      body: "*"
+    };
   } 
 }
 
@@ -671,4 +679,16 @@ message ResetRipplePasswordResponse {
   // Ripple account information of the reseted password
   string userName = 1;
   string email = 2;
+}
+
+
+message UnlockUserAccountRequest {
+  // Required. Valid values are 'ripple' and 'wave'
+  string domain = 1;
+
+  // Required. The email of the user account to unlock.
+  string email = 2;
+  
+  // IsRoot is true if Ripple or Wave root user, false if sub user.
+  bool is_root = 3;
 }

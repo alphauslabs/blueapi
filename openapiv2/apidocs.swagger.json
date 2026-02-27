@@ -2351,6 +2351,54 @@
         ]
       }
     },
+    "/iam/v1/{domain}/account/{email}:unlock": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Unlocks ripple or wave user account.",
+        "operationId": "Iam_UnlockUserAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "domain",
+            "description": "Required. Valid values are 'ripple' and 'wave'",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "description": "Required. The email of the user account to unlock.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/IamUnlockUserAccountBody"
+            }
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
     "/iam/v1/{user}/password:verify": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Verify User Input For Reset Password",
@@ -25661,6 +25709,15 @@
         }
       },
       "description": "Request message for the Iam.RefreshPartnerToken rpc."
+    },
+    "IamUnlockUserAccountBody": {
+      "type": "object",
+      "properties": {
+        "isRoot": {
+          "type": "boolean",
+          "description": "IsRoot is true if Ripple or Wave root user, false if sub user."
+        }
+      }
     },
     "IamUpdateFeatureFlagsBody": {
       "type": "object",
