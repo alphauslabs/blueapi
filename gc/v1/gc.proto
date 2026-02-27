@@ -1144,11 +1144,14 @@ message ListPayerAccountsResponse {
     PayerAccountStatus status = 5;
     string companyId = 6;
 
+    // Latest persisted onboarding status for this payer account (if any)
+    GetOnboardingStatusResponse.OnboardingStatus onboardingStatus = 7;
+
     // Detailed AWS verification results (best-effort) returned from the last VerifyAwsOnboarding call.
     // This is used by the UI to "resume" the onboarding flow and show which verification checks
     // passed/failed when a user comes back later (e.g., after stopping at verification).
     // Empty when verification hasn't been attempted yet or when no checks were persisted.
-    repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 7;
+    repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 8;
   }
   repeated PayerAccount payerAccounts = 1;
 }
