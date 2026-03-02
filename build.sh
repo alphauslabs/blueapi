@@ -10,7 +10,7 @@ buf generate --template buf.gen.connect.yaml \
 # Fix import paths in connect-generated files: the go_package option in each .proto
 # points to github.com/alphauslabs/blueapi (not importable), so rewrite to blue-sdk-go.
 # Using perl -pi -e for cross-platform compatibility (macOS + Linux CI).
-find generated/go -name '*.connect.go' | xargs perl -pi -e 's|alphauslabs/blueapi|alphauslabs/blue-sdk-go|g'
+find generated/go -name '*.connect.go' | xargs perl -pi -e 's|alphauslabs/blueapi/(\w+)"|alphauslabs/blue-sdk-go/$1/v1"|g'
 
 # Compile services for blue-sdk-python; with grpc.
 echo "Compiling Python GRPC services..."
