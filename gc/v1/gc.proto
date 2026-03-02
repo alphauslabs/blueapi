@@ -1231,15 +1231,25 @@ message GetGuaranteedCommitmentTemplateUrlResponse {
 }
 
 message CreateGuaranteedCommitmentAccessResponse {
+  // Target environment for the access configuration (for example, AWS account ID or organization).
   string target = 1;
+  // ARN of the Ripple/Alphaus IAM role to be assumed for managing guaranteed commitments.
   string rippleRoleArn = 2;
+  // External ID required to assume the Ripple/Alphaus IAM role.
   string rippleExternalId = 3;
+  // ARN of the customer's IAM role used specifically for guaranteed-commitment operations.
   string guaranteedCommitmentRoleArn = 4;
+  // External ID required to assume the guaranteed-commitment IAM role.
   string guaranteedCommitmentExternalId = 5;
+  // CloudFormation stack ID created or used during the access configuration.
   string stackId = 6;
+  // AWS region where the CloudFormation stack is deployed (for example, "us-east-1").
   string stackRegion = 7;
+  // URL of the CloudFormation template used to create or update the stack.
   string templateUrl = 8;
+  // Current status of the access configuration or underlying CloudFormation stack.
   string status = 9;
+  // Last update time of this configuration, typically as an ISO 8601 timestamp.
   string lastUpdated = 10;
   // Whether the guaranteed commitment role was successfully verified during registration.
   bool guaranteedCommitmentVerified = 11;
