@@ -7,6 +7,11 @@ echo "Compiling gRPC Connect services..."
 buf generate --template buf.gen.connect.yaml \
   --path vortex/v1
 
+# Fix import paths in connect-generated files: the go_package option in each .proto
+# points to github.com/alphauslabs/blueapi (not importable), so rewrite to blue-sdk-go.
+# Using perl -pi -e for cross-platform compatibility (macOS + Linux CI).
+find generated/go -name '*.connect.go' | xargs perl -pi -e 's|alphauslabs/blueapi|alphauslabs/blue-sdk-go|g'
+
 # Compile services for blue-sdk-python; with grpc.
 echo "Compiling Python GRPC services..."
 mkdir -p generated/py/alphausblue
