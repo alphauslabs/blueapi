@@ -4,7 +4,8 @@ echo "Compiling proto files..." && buf generate
 # Compile gRPC Connect services (buf.gen.connect.yaml).
 # To add a new Connect service, append a new --path flag below (e.g. --path mynewservice/v1).
 echo "Compiling gRPC Connect services..."
-buf generate --template buf.gen.connect.yaml
+buf generate --template buf.gen.connect.yaml \
+  --path vortex/v1
 
 # Compile services for blue-sdk-python; with grpc.
 echo "Compiling Python GRPC services..."
