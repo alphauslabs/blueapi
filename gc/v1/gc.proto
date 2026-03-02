@@ -248,6 +248,22 @@ service GuaranteedCommitments {
     body: "*"
     };
   }
+
+    // GetGuaranteedCommitmentTemplateUrl returns a CloudFormation launch URL for deploying
+  // both Alphaus (Ripple) and Archera IAM roles in a single stack.
+  rpc GetGuaranteedCommitmentTemplateUrl(GetGuaranteedCommitmentTemplateUrlRequest) returns (GetGuaranteedCommitmentTemplateUrlResponse) {
+    option (google.api.http) = {
+      get: "/v1/onboarding/aws/cftemplate/guaranteed:url"
+    };
+  }
+
+  // CreateGuaranteedCommitmentAccess verifies and registers a deployed guaranteed CloudFormation stack.
+  rpc CreateGuaranteedCommitmentAccess(CreateGuaranteedCommitmentAccessRequest) returns (CreateGuaranteedCommitmentAccessResponse) {
+    option (google.api.http) = {
+      post: "/v1/onboarding/aws/cftemplate/guaranteed"
+      body: "*"
+    };
+  }
 }
 
 // ####################### ENUMS #######################
@@ -551,6 +567,19 @@ message DeleteDraftPurchasePlanRequest {
   // Required. The plan ID to delete.
   string planId = 1;
 }
+
+message GetGuaranteedCommitmentTemplateUrlRequest {
+  // The guaranteed-commitments-provided external ID for the guaranteed-commitments IAM role trust policy.
+  string externalId = 1;
+}
+
+message CreateGuaranteedCommitmentAccessRequest {
+  // The AWS account ID (payer/target) where the stack was deployed.
+  string target = 1;
+  // The guaranteed-commitments-provided external ID.
+  string externalId = 2;
+}
+
 
 // ####################### RESPONSE MESSAGES #######################
 
@@ -1182,4 +1211,46 @@ message DeleteDraftPurchasePlanResponse {
   string planId = 1;
   // Indicates if the plan was successfully deleted
   bool success = 2;
+}
+
+message GetGuaranteedCommitmentTemplateUrlResponse {
+  // CloudFormation console launch URL pre-filled with all parameters.
+  string launchUrl = 1;
+  // S3 URL of the CloudFormation template.
+  string templateUrl = 2;
+  // CloudFormation stack name.
+  string stackName = 3;
+  // Alphaus AWS account principal.
+  string principal = 4;
+  // Alphaus/Ripple external ID for role assumption.
+  string externalId = 5;
+  // Guaranteed commitment AWS principal ARN.
+  string guaranteedCommitmentPrincipal = 6;
+  // Guaranteed commitment external ID for role assumption.
+  string guaranteedCommitmentExternalId = 7;
+}
+
+message CreateGuaranteedCommitmentAccessResponse {
+  // Target environment for the access configuration (for example, AWS account ID or organization).
+  string target = 1;
+  // ARN of the Ripple/Alphaus IAM role to be assumed for managing guaranteed commitments.
+  string rippleRoleArn = 2;
+  // External ID required to assume the Ripple/Alphaus IAM role.
+  string rippleExternalId = 3;
+  // ARN of the customer's IAM role used specifically for guaranteed-commitment operations.
+  string guaranteedCommitmentRoleArn = 4;
+  // External ID required to assume the guaranteed-commitment IAM role.
+  string guaranteedCommitmentExternalId = 5;
+  // CloudFormation stack ID created or used during the access configuration.
+  string stackId = 6;
+  // AWS region where the CloudFormation stack is deployed (for example, "us-east-1").
+  string stackRegion = 7;
+  // URL of the CloudFormation template used to create or update the stack.
+  string templateUrl = 8;
+  // Current status of the access configuration or underlying CloudFormation stack.
+  string status = 9;
+  // Last update time of this configuration, typically as an ISO 8601 timestamp.
+  string lastUpdated = 10;
+  // Whether the guaranteed commitment role was successfully verified during registration.
+  bool guaranteedCommitmentVerified = 11;
 }
