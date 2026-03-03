@@ -21,7 +21,7 @@ service Vortex {
   };
 
   // Test endpoint only
-  rpc Test(google.protobuf.Empty) returns (TestResponse) {
+  rpc Test(TestRequest) returns (TestResponse) {
     option (google.api.http) = {
       get: "/v1/testing"
     };
@@ -61,6 +61,10 @@ service Vortex {
       body: "*"
     };
   }
+}
+
+message TestRequest {
+  string message = 1;
 }
 
 // Test only 
