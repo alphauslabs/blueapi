@@ -7442,38 +7442,6 @@
         ]
       }
     },
-    "/v1/billinggroups:bulkLinkAccount/{jobId}": {
-      "get": {
-        "summary": "Gets the status of a bulk link account job.",
-        "operationId": "Billing_GetBulkLinkAccountJob",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetBulkLinkAccountJobResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "jobId",
-            "description": "Required. The job ID returned by BulkLinkAccount.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
-      }
-    },
     "/v1/billinggroups:paginated": {
       "get": {
         "summary": "Lists all billing groups with pagination support.",
@@ -7743,6 +7711,38 @@
         ],
         "tags": [
           "Cover"
+        ]
+      }
+    },
+    "/v1/bulkLinkAccountJobs/{jobId}": {
+      "get": {
+        "summary": "Gets the status of a bulk link account job.",
+        "operationId": "Billing_GetBulkLinkAccountJob",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBulkLinkAccountJobResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "jobId",
+            "description": "Required. The job ID returned by BulkLinkAccount.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
         ]
       }
     },
@@ -37061,6 +37061,10 @@
         "dryRun": {
           "type": "boolean",
           "description": "Optional. If true, validate the CSV and check for errors without actually linking accounts.\nUseful for validating CSV format and data before performing the actual bulk operation."
+        },
+        "vendor": {
+          "type": "string",
+          "description": "Required. The cloud vendor for all accounts in this CSV.\nMust be one of: aws, azure, gcp."
         }
       }
     },
