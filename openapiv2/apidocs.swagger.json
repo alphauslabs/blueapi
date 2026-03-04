@@ -1995,7 +1995,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiRole"
+              "$ref": "#/definitions/blueapiapiRole"
             }
           },
           "default": {
@@ -2067,7 +2067,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiRole"
+              "$ref": "#/definitions/blueapiapiRole"
             }
           },
           "default": {
@@ -2213,13 +2213,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/apiUser"
+                  "$ref": "#/definitions/blueapiapiUser"
                 },
                 "error": {
                   "$ref": "#/definitions/googlerpcStatus"
                 }
               },
-              "title": "Stream result of apiUser"
+              "title": "Stream result of blueapiapiUser"
             }
           },
           "default": {
@@ -2240,7 +2240,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiUser"
+              "$ref": "#/definitions/blueapiapiUser"
             }
           },
           "default": {
@@ -2274,7 +2274,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiUser"
+              "$ref": "#/definitions/blueapiapiUser"
             }
           },
           "default": {
@@ -2336,7 +2336,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiUser"
+              "$ref": "#/definitions/blueapiapiUser"
             }
           },
           "default": {
@@ -12037,6 +12037,29 @@
         ]
       }
     },
+    "/v1/me/roles": {
+      "get": {
+        "summary": "Lists the roles and cost groups assigned to the authenticated user.",
+        "operationId": "Cover_GetMyRoles",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetMyRolesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
     "/v1/me/timezone": {
       "put": {
         "summary": "Modify user's timezone",
@@ -17417,39 +17440,6 @@
         ]
       }
     },
-    "/v1/user/invite": {
-      "post": {
-        "summary": "Invites users to join the organization and assigns them roles.",
-        "operationId": "Cover_InviteUsers",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1InviteUsersResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1InviteUsersRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
     "/v1/user/settings/{id}": {
       "get": {
         "summary": "Gets the user account settings.",
@@ -17527,7 +17517,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetUserResponse"
+              "$ref": "#/definitions/blueapivortexv1GetUserResponse"
             }
           },
           "default": {
@@ -17550,7 +17540,92 @@
         ]
       }
     },
-    "/v1/user/{id}": {
+    "/v1/users": {
+      "get": {
+        "summary": "Lists all users in the organization",
+        "operationId": "Cover_ListUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListUsersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/users/invite": {
+      "post": {
+        "summary": "Invites users to join the organization and assigns them roles.",
+        "operationId": "Cover_InviteUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InviteUsersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1InviteUsersRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/users/{id}": {
+      "get": {
+        "summary": "Retrieves a user's details by their ID.",
+        "operationId": "Cover_GetUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/blueapicoverv1GetUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      },
       "delete": {
         "summary": "Deletes a user from the organization.",
         "operationId": "Cover_DeleteUser",
@@ -17581,7 +17656,7 @@
         ]
       }
     },
-    "/v1/user/{id}/reinvite": {
+    "/v1/users/{id}/reinvite": {
       "post": {
         "summary": "Reinvites a user to join the organization. This can be used when the user did not receive or lost the original invitation email.",
         "operationId": "Cover_ReinviteUser",
@@ -17620,7 +17695,7 @@
         ]
       }
     },
-    "/v1/user/{userId}": {
+    "/v1/users/{userId}": {
       "put": {
         "summary": "Updates a user's role and cost group access.",
         "operationId": "Cover_UpdateUserRole",
@@ -17654,29 +17729,6 @@
             }
           }
         ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/users": {
-      "get": {
-        "summary": "Lists all users in the organization",
-        "operationId": "Cover_ListUsers",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListUsersResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
         "tags": [
           "Cover"
         ]
@@ -24714,7 +24766,7 @@
           "title": "Optional. Description of the forecast"
         },
         "costGroup": {
-          "$ref": "#/definitions/coverCostGroup",
+          "$ref": "#/definitions/apicoverCostGroup",
           "title": "Optional. Cost Group Id and Name"
         },
         "pastActualCostRange": {
@@ -25006,16 +25058,11 @@
     "CoverUpdateUserRoleBody": {
       "type": "object",
       "properties": {
-        "roleIds": {
+        "roles": {
           "type": "array",
           "items": {
-            "type": "string"
-          }
-        },
-        "costGroupIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
+            "type": "object",
+            "$ref": "#/definitions/v1UpdateUserRoleRequestRole"
           }
         }
       }
@@ -26889,6 +26936,17 @@
         }
       }
     },
+    "UserRoleCostGroup": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
     "VerifyAwsOnboardingResponseAwsOnboardingFeatureCheck": {
       "type": "object",
       "properties": {
@@ -27963,51 +28021,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/apiPolicy"
-          }
-        }
-      }
-    },
-    "apiPolicy": {
-      "type": "object",
-      "properties": {
-        "action": {
-          "type": "string"
-        },
-        "effect": {
-          "type": "string"
-        },
-        "key": {
-          "type": "string"
-        },
-        "values": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "apiRole": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "namespace": {
-          "type": "string"
-        },
-        "permissions": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "policies": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/apiPolicy"
+            "$ref": "#/definitions/blueapiapiPolicy"
           }
         }
       }
@@ -28098,26 +28112,6 @@
         }
       },
       "description": "UsageDetails resource definition."
-    },
-    "apiUser": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "User's unique id."
-        },
-        "parent": {
-          "type": "string",
-          "description": "The user's parent. If empty or non-existent, it means this user is a root user;\notherwise, it's a subuser."
-        },
-        "metadata": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "The attributes (key/value pair) of the user. If hierarchy is supported, it will be\nseparated by '/', such as 'key/subkey=value'. See https://alphauslabs.github.io/blueapi/\nfor the list of supported attributes."
-        }
-      }
     },
     "apiUserRoleMapping": {
       "type": "object",
@@ -28785,6 +28779,18 @@
         }
       }
     },
+    "apicoverCostGroup": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "title": "cost group name"
+        }
+      }
+    },
     "apicoverEBSDetails": {
       "type": "object",
       "properties": {
@@ -28821,6 +28827,26 @@
         },
         "nodeType": {
           "type": "string"
+        }
+      }
+    },
+    "apicoverPolicy": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -28894,6 +28920,30 @@
         }
       }
     },
+    "apicoverRole": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "policies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apicoverPolicy"
+          }
+        },
+        "costgroupsIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "apicoverTagData": {
       "type": "object",
       "properties": {
@@ -28925,6 +28975,45 @@
           "format": "double"
         },
         "usageType": {
+          "type": "string"
+        }
+      }
+    },
+    "apicoverUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/coverUserRole"
+          }
+        },
+        "invitedBy": {
+          "type": "object"
+        },
+        "lastUpdated": {
+          "type": "string"
+        },
+        "createdOn": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "activated": {
+          "type": "boolean"
+        },
+        "colorTheme": {
           "type": "string"
         }
       }
@@ -30300,6 +30389,70 @@
         }
       }
     },
+    "blueapiapiPolicy": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "effect": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "blueapiapiRole": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "policies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/blueapiapiPolicy"
+          }
+        }
+      }
+    },
+    "blueapiapiUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "User's unique id."
+        },
+        "parent": {
+          "type": "string",
+          "description": "The user's parent. If empty or non-existent, it means this user is a root user;\notherwise, it's a subuser."
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "The attributes (key/value pair) of the user. If hierarchy is supported, it will be\nseparated by '/', such as 'key/subkey=value'. See https://alphauslabs.github.io/blueapi/\nfor the list of supported attributes."
+        }
+      }
+    },
     "blueapiapiUtilizationData": {
       "type": "object",
       "properties": {
@@ -30464,6 +30617,14 @@
         }
       },
       "description": "Response message wrapper for cloud costs."
+    },
+    "blueapicoverv1GetUserResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/apicoverUser"
+        }
+      }
     },
     "blueapicoverv1ListExchangeRatesResponse": {
       "type": "object",
@@ -30787,6 +30948,23 @@
           "type": "string"
         },
         "email": {
+          "type": "string"
+        }
+      }
+    },
+    "blueapivortexv1GetUserResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "orgId": {
           "type": "string"
         }
       }
@@ -31259,7 +31437,7 @@
           "type": "string"
         },
         "costgroup": {
-          "$ref": "#/definitions/coverCostGroup"
+          "$ref": "#/definitions/apicoverCostGroup"
         },
         "startDate": {
           "type": "string"
@@ -31275,18 +31453,6 @@
         },
         "lastUpdatedDate": {
           "type": "string"
-        }
-      }
-    },
-    "coverCostGroup": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string",
-          "title": "cost group name"
         }
       }
     },
@@ -33792,6 +33958,24 @@
         },
         "isDemoAccount": {
           "type": "boolean"
+        }
+      }
+    },
+    "coverUserRole": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "costgroups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/UserRoleCostGroup"
+          }
         }
       }
     },
@@ -38804,7 +38988,7 @@
           "title": "Optional. Description of the forecast"
         },
         "costGroup": {
-          "$ref": "#/definitions/coverCostGroup",
+          "$ref": "#/definitions/apicoverCostGroup",
           "title": "Required. Cost Group Id and Name"
         },
         "pastActualCostRange": {
@@ -38840,7 +39024,7 @@
           "type": "string"
         },
         "costGroup": {
-          "$ref": "#/definitions/coverCostGroup"
+          "$ref": "#/definitions/apicoverCostGroup"
         },
         "pastActualCostRange": {
           "type": "string",
@@ -41432,7 +41616,7 @@
           "type": "string"
         },
         "costGroup": {
-          "$ref": "#/definitions/coverCostGroup"
+          "$ref": "#/definitions/apicoverCostGroup"
         },
         "pastActualCostRange": {
           "type": "string",
@@ -42455,6 +42639,18 @@
       },
       "title": "Response message for GetMonthlyCostForecast"
     },
+    "v1GetMyRolesResponse": {
+      "type": "object",
+      "properties": {
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apicoverRole"
+          }
+        }
+      }
+    },
     "v1GetOnboardingStatusRequest": {
       "type": "object",
       "properties": {
@@ -43205,23 +43401,6 @@
         }
       }
     },
-    "v1GetUserResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "orgId": {
-          "type": "string"
-        }
-      }
-    },
     "v1GetUtilizationResponse": {
       "type": "object",
       "properties": {
@@ -43371,7 +43550,16 @@
       }
     },
     "v1InviteUsersResponse": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apicoverUser"
+          }
+        }
+      }
     },
     "v1InvoiceConnectedBillingGroups": {
       "type": "object",
@@ -44288,7 +44476,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/apiRole"
+            "$ref": "#/definitions/blueapiapiRole"
           }
         }
       },
@@ -45931,7 +46119,12 @@
       }
     },
     "v1ReinviteUserResponse": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/apicoverUser"
+        }
+      }
     },
     "v1RemoveCostGroupMemberResponse": {
       "type": "object",
@@ -47264,7 +47457,7 @@
           "type": "string"
         },
         "costGroup": {
-          "$ref": "#/definitions/coverCostGroup"
+          "$ref": "#/definitions/apicoverCostGroup"
         },
         "pastActualCostRange": {
           "type": "string",
@@ -47731,8 +47924,27 @@
       },
       "description": "Response message for the Iam.UpdateUserRoleMapping rpc."
     },
+    "v1UpdateUserRoleRequestRole": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "costGroupIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "v1UpdateUserRoleResponse": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/apicoverUser"
+        }
+      }
     },
     "v1UpdateUserTimezoneRequest": {
       "type": "object",

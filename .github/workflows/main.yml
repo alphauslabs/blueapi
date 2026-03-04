@@ -69,8 +69,9 @@ jobs:
         git push --set-upstream origin-tmp
         # Update blue-sdk-ts:
         cd /tmp/ && git clone https://github.com/alphauslabs/blue-sdk-ts && cd blue-sdk-ts/
+        cp -rv $WORKSPACE_ROOT/generated/ts/* .
         npm install && npm run build
-        cp -rv $WORKSPACE_ROOT/generated/ts/* . && git status
+        git status
         git config user.email "dev@mobingi.com"
         git config user.name "mobingideployer"
         git add . && git commit -am "$GITHUB_REF $GITHUB_SHA" || true
