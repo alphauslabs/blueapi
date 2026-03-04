@@ -17440,39 +17440,6 @@
         ]
       }
     },
-    "/v1/user/invite": {
-      "post": {
-        "summary": "Invites users to join the organization and assigns them roles.",
-        "operationId": "Cover_InviteUsers",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1InviteUsersResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1InviteUsersRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
     "/v1/user/settings/{id}": {
       "get": {
         "summary": "Gets the user account settings.",
@@ -17573,7 +17540,63 @@
         ]
       }
     },
-    "/v1/user/{id}": {
+    "/v1/users": {
+      "get": {
+        "summary": "Lists all users in the organization",
+        "operationId": "Cover_ListUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListUsersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/users/invite": {
+      "post": {
+        "summary": "Invites users to join the organization and assigns them roles.",
+        "operationId": "Cover_InviteUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InviteUsersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1InviteUsersRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cover"
+        ]
+      }
+    },
+    "/v1/users/{id}": {
       "get": {
         "summary": "Retrieves a user's details by their ID.",
         "operationId": "Cover_GetUser",
@@ -17633,7 +17656,7 @@
         ]
       }
     },
-    "/v1/user/{id}/reinvite": {
+    "/v1/users/{id}/reinvite": {
       "post": {
         "summary": "Reinvites a user to join the organization. This can be used when the user did not receive or lost the original invitation email.",
         "operationId": "Cover_ReinviteUser",
@@ -17672,7 +17695,7 @@
         ]
       }
     },
-    "/v1/user/{userId}": {
+    "/v1/users/{userId}": {
       "put": {
         "summary": "Updates a user's role and cost group access.",
         "operationId": "Cover_UpdateUserRole",
@@ -17706,29 +17729,6 @@
             }
           }
         ],
-        "tags": [
-          "Cover"
-        ]
-      }
-    },
-    "/v1/users": {
-      "get": {
-        "summary": "Lists all users in the organization",
-        "operationId": "Cover_ListUsers",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListUsersResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
         "tags": [
           "Cover"
         ]
