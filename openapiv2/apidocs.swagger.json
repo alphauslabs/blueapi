@@ -8357,6 +8357,37 @@
         ]
       }
     },
+    "/v1/commitments/purchaseplan/{planId}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Retrieves details of a specific purchase plan of a company.",
+        "operationId": "GuaranteedCommitments_ListPurchasePlansDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListPurchasePlansDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/commitments/purchaseplan/{planId}/draft": {
       "delete": {
         "summary": "WORK-IN-PROGRESS: Deletes a draft purchase plan.",
@@ -44119,6 +44150,18 @@
       "type": "object"
     },
     "v1ListPurchasePlansBySegmentResponse": {
+      "type": "object",
+      "properties": {
+        "plans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1DefaultPurchasePlan"
+          }
+        }
+      }
+    },
+    "v1ListPurchasePlansDetailsResponse": {
       "type": "object",
       "properties": {
         "plans": {

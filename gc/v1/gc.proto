@@ -145,6 +145,13 @@ service GuaranteedCommitments {
     };
   }
 
+  // WORK-IN-PROGRESS: Retrieves details of a specific purchase plan of a company.
+  rpc ListPurchasePlansDetails(ListPurchasePlansDetailsRequest) returns (ListPurchasePlansDetailsResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/purchaseplan/{planId}"
+    };
+  }
+
   // WORK-IN-PROGRESS: Saves a commitment purchase plan as draft.
   rpc SaveCommitmentsPlanAsDraft(SaveCommitmentsPlanAsDraftRequest) returns (DefaultPurchasePlan) {
     option (google.api.http) = {
@@ -398,6 +405,10 @@ message GetSegmentDetailsRequest {
 }
 
 message ListPurchasePlansBySegmentRequest {
+}
+
+message ListPurchasePlansDetailsRequest {
+  string planId = 1;
 }
 
 // ------------------------ ONBOARDING REQUEST ------------------------
@@ -1253,4 +1264,8 @@ message CreateGuaranteedCommitmentAccessResponse {
   string lastUpdated = 10;
   // Whether the guaranteed commitment role was successfully verified during registration.
   bool guaranteedCommitmentVerified = 11;
+}
+
+message ListPurchasePlansDetailsResponse {
+  repeated DefaultPurchasePlan plans = 1;
 }
