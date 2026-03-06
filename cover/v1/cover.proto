@@ -20,6 +20,7 @@ import "api/cover/insightreport.proto";
 import "protos/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
+import "api/cover/role.proto";
 import "google/protobuf/struct.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -68,6 +69,7 @@ service Cover {
       post: "/v1/members"
       body: "*"
     };
+    option deprecated = true;
   }
 
   // Get all the members/subusers of the company
@@ -203,6 +205,7 @@ service Cover {
     option (google.api.http) = {
       delete: "/v1/members/{userId}"
     };
+    option deprecated = true;
   }
 
   // Reset member's password
@@ -1522,7 +1525,7 @@ service Cover {
   // Invites users to join the organization and assigns them roles.
   rpc InviteUsers(InviteUsersRequest) returns (InviteUsersResponse) {
     option (google.api.http) = {
-      post: "/v1/user/invite"
+      post: "/v1/users/invite"
       body: "*"
     };
   }
@@ -1530,14 +1533,14 @@ service Cover {
   // Deletes a user from the organization.
   rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {
     option (google.api.http) = {
-      delete: "/v1/user/{id}"
+      delete: "/v1/users/{id}"
     };
   }
 
   // Updates a user's role and cost group access.
   rpc UpdateUserRole(UpdateUserRoleRequest) returns (UpdateUserRoleResponse) {
     option (google.api.http) = {
-      put: "/v1/user/{user_id}"
+      put: "/v1/users/{user_id}"
       body: "*"
     };
   }
@@ -1552,17 +1555,47 @@ service Cover {
   // Reinvites a user to join the organization. This can be used when the user did not receive or lost the original invitation email.
   rpc ReinviteUser(ReinviteUserRequest) returns (ReinviteUserResponse) {
     option (google.api.http) = {
-      post: "/v1/user/{id}/reinvite"
+      post: "/v1/users/{id}/reinvite"
       body: "*"
     };
   }
+
+  // Retrieves a user's details by their ID.
+  rpc GetUser(GetUserRequest) returns (GetUserResponse) {
+    option (google.api.http) = {
+      get: "/v1/users/{id}"
+    };
+  }
+
+  // Lists the roles and cost groups assigned to the authenticated user.
+  rpc GetMyRoles(GetMyRolesRequest) returns (GetMyRolesResponse) {
+    option (google.api.http) = {
+      get: "/v1/me/roles"
+    };
+  }
+
+}
+message GetMyRolesRequest{}
+
+message GetMyRolesResponse {
+  repeated api.cover.Role roles = 1;
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message GetUserResponse {
+  api.cover.User user = 1;
 }
 
 message ReinviteUserRequest {
   string id = 1;
 }
 
-message ReinviteUserResponse {}
+message ReinviteUserResponse {
+  api.cover.User user = 1;
+}
 
 message ListUsersRequest {}
 
@@ -1580,12 +1613,18 @@ message ListUsersResponse {
 }
 
 message UpdateUserRoleRequest {
+  message Role {
+    string id = 1;
+    repeated string cost_group_ids = 2;
+  }
+
   string user_id = 1;
-  repeated string role_ids = 2;
-  repeated string cost_group_ids = 3;
+  repeated Role roles = 2;
 }
 
-message UpdateUserRoleResponse {}
+message UpdateUserRoleResponse {
+  api.cover.User user = 1;
+}
 
 message DeleteUserRequest {
   string id = 1;
@@ -1599,7 +1638,9 @@ message InviteUsersRequest {
   repeated string cost_group_ids = 3;
 }
 
-message InviteUsersResponse {}
+message InviteUsersResponse {
+  repeated api.cover.User users = 1;
+}
 
 message ExecuteRecommendationV3Request {
   enum ExecuteType {
