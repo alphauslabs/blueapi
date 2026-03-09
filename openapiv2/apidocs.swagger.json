@@ -6603,6 +6603,38 @@
         ]
       }
     },
+    "/v1/billinggroups/bulklinkaccountjobs/{jobId}": {
+      "get": {
+        "summary": "Gets the status of a bulk link account job.",
+        "operationId": "Billing_GetBulkLinkAccountJob",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBulkLinkAccountJobResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "jobId",
+            "description": "Required. The job ID returned by BulkLinkAccount.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups/child": {
       "post": {
         "summary": "Creates a child billing group under a parent billing group",
@@ -7714,38 +7746,6 @@
         ]
       }
     },
-    "/v1/bulkLinkAccountJobs/{jobId}": {
-      "get": {
-        "summary": "Gets the status of a bulk link account job.",
-        "operationId": "Billing_GetBulkLinkAccountJob",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetBulkLinkAccountJobResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "jobId",
-            "description": "Required. The job ID returned by BulkLinkAccount.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
-      }
-    },
     "/v1/categories": {
       "get": {
         "summary": "Retrieve the categories to be utilized in the creation of the cost group.",
@@ -8352,6 +8352,37 @@
             }
           }
         },
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/commitments/purchaseplans/draft/{planId}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Retrieves the drafted purchase plans",
+        "operationId": "GuaranteedCommitments_ListDraftPurchasePlansDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListDraftPurchasePlansDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "tags": [
           "GuaranteedCommitments"
         ]
@@ -37076,6 +37107,10 @@
     "v1BulkLinkAccountRequest": {
       "type": "object",
       "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. The cloud vendor for all accounts in this CSV.\nMust be one of: aws, azure, gcp."
+        },
         "csvContent": {
           "type": "string",
           "format": "byte",
@@ -37092,10 +37127,6 @@
         "dryRun": {
           "type": "boolean",
           "description": "Optional. If true, validate the CSV and check for errors without actually linking accounts.\nUseful for validating CSV format and data before performing the actual bulk operation."
-        },
-        "vendor": {
-          "type": "string",
-          "description": "Required. The cloud vendor for all accounts in this CSV.\nMust be one of: aws, azure, gcp."
         }
       }
     },
@@ -44020,6 +44051,18 @@
           "items": {
             "type": "object",
             "$ref": "#/definitions/v1CommitmentPlanDetails"
+          }
+        }
+      }
+    },
+    "v1ListDraftPurchasePlansDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "plans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1DefaultPurchasePlan"
           }
         }
       }

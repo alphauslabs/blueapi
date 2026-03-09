@@ -167,6 +167,13 @@ service GuaranteedCommitments {
     };
   }
 
+    // WORK-IN-PROGRESS: Retrieves the drafted purchase plans
+  rpc ListDraftPurchasePlansDetails(ListDraftPurchasePlansDetailsRequest) returns (ListDraftPurchasePlansDetailsResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/purchaseplans/draft/{planId}"
+    };
+  }
+
  // WORK-IN-PROGRESS: Deletes a draft purchase plan.
   rpc DeleteDraftPurchasePlan(DeleteDraftPurchasePlanRequest) returns (DeleteDraftPurchasePlanResponse) {
     option (google.api.http) = {
@@ -408,6 +415,9 @@ message ListPurchasePlansBySegmentRequest {
 }
 
 message ListPurchasePlansDetailsRequest {
+  string planId = 1;
+}
+message ListDraftPurchasePlansDetailsRequest {
   string planId = 1;
 }
 
@@ -1267,5 +1277,8 @@ message CreateGuaranteedCommitmentAccessResponse {
 }
 
 message ListPurchasePlansDetailsResponse {
+  repeated DefaultPurchasePlan plans = 1;
+}
+message ListDraftPurchasePlansDetailsResponse {
   repeated DefaultPurchasePlan plans = 1;
 }
