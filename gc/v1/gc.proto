@@ -146,7 +146,7 @@ service GuaranteedCommitments {
   }
 
   // WORK-IN-PROGRESS: Retrieves details of a specific purchase plan of a company.
-  rpc ListPurchasePlansDetails(ListPurchasePlansDetailsRequest) returns (ListPurchasePlansDetailsResponse) {
+  rpc GetPurchasePlansDetails(GetPurchasePlansDetailsRequest) returns (GetPurchasePlansDetailsResponse) {
     option (google.api.http) = {
       get: "/v1/commitments/purchaseplans/{planId}"
     };
@@ -168,7 +168,7 @@ service GuaranteedCommitments {
   }
 
     // WORK-IN-PROGRESS: Retrieves the details of a specific draft plan.
-  rpc ListDraftPurchasePlansDetails(ListDraftPurchasePlansDetailsRequest) returns (ListDraftPurchasePlansDetailsResponse) {
+  rpc GetDraftPurchasePlansDetails(GetDraftPurchasePlansDetailsRequest) returns (GetDraftPurchasePlansDetailsResponse) {
     option (google.api.http) = {
       get: "/v1/commitments/purchaseplans/draft/{planId}"
     };
@@ -414,10 +414,10 @@ message GetSegmentDetailsRequest {
 message ListPurchasePlansBySegmentRequest {
 }
 
-message ListPurchasePlansDetailsRequest {
+message GetPurchasePlansDetailsRequest {
   string planId = 1;
 }
-message ListDraftPurchasePlansDetailsRequest {
+message GetDraftPurchasePlansDetailsRequest {
   string planId = 1;
 }
 
@@ -1276,9 +1276,9 @@ message CreateGuaranteedCommitmentAccessResponse {
   bool guaranteedCommitmentVerified = 11;
 }
 
-message ListPurchasePlansDetailsResponse {
+message GetPurchasePlansDetailsResponse {
   repeated DefaultPurchasePlan plans = 1;
 }
-message ListDraftPurchasePlansDetailsResponse {
+message GetDraftPurchasePlansDetailsResponse {
   repeated DefaultPurchasePlan plans = 1;
 }
