@@ -6768,100 +6768,6 @@
         ]
       }
     },
-    "/v1/billinggroups/children/{internalId}/customizedBillingService/{vendor}": {
-      "get": {
-        "summary": "Gets the customized billing service in child billing group. Only available in Ripple.",
-        "operationId": "Billing_GetChildBillingGroupCustomizedBillingService",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1GetChildBillingGroupCustomizedBillingServiceResponse"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1GetChildBillingGroupCustomizedBillingServiceResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "internalId",
-            "description": "Required. Internal Id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
-      },
-      "post": {
-        "summary": "Sets the customized billing service in child billing group. Only available in Ripple.",
-        "operationId": "Billing_SetChildBillingGroupCustomizedBillingService",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "internalId",
-            "description": "Required. internal id of the child billing group.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/BillingSetChildBillingGroupCustomizedBillingServiceBody"
-            }
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
-      }
-    },
     "/v1/billinggroups/children/{internalId}/invoiceSettings": {
       "put": {
         "summary": "Updates child billing group's invoice settings",
@@ -19398,6 +19304,100 @@
         ],
         "tags": [
           "Cost"
+        ]
+      }
+    },
+    "/v1/{vendor}/billinggroups/children/{internalId}/customizedBillingService": {
+      "get": {
+        "summary": "Gets the customized billing service in child billing group. Only available in Ripple.",
+        "operationId": "Billing_GetChildBillingGroupCustomizedBillingService",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1GetChildBillingGroupCustomizedBillingServiceResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of v1GetChildBillingGroupCustomizedBillingServiceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "internalId",
+            "description": "Required. Internal Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
+      "post": {
+        "summary": "Sets the customized billing service in child billing group. Only available in Ripple.",
+        "operationId": "Billing_SetChildBillingGroupCustomizedBillingService",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "internalId",
+            "description": "Required. internal id of the child billing group.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingSetChildBillingGroupCustomizedBillingServiceBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
         ]
       }
     },
