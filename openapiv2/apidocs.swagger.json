@@ -8009,117 +8009,6 @@
         ]
       }
     },
-    "/v1/commitments/plan/default": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Do not use. Retrieves the three default GuaranteedCommitments commitment plans (High Savings, Balanced, Recommended) for the specified cloud provider.",
-        "operationId": "GuaranteedCommitments_ListDefaultCommitmentsPlan",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListDefaultCommitmentPlansResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "provider",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "PROVIDER_UNSPECIFIED",
-              "AWS",
-              "AZURE",
-              "GCP",
-              "KUBERNETES",
-              "UNKNOWN"
-            ],
-            "default": "PROVIDER_UNSPECIFIED"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/commitments/plan/recommended": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Do not use. Retrieves only the recommended GuaranteedCommitments commitment plan for the specified cloud provider.",
-        "operationId": "GuaranteedCommitments_GetRecommendedCommitmentsPlan",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CommitmentPlanDetails"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "provider",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "PROVIDER_UNSPECIFIED",
-              "AWS",
-              "AZURE",
-              "GCP",
-              "KUBERNETES",
-              "UNKNOWN"
-            ],
-            "default": "PROVIDER_UNSPECIFIED"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/commitments/plan/{planId}": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Do not use. Retrieves detailed information about a specific commitment plan, including costs, savings projections, and commitment coverage.",
-        "operationId": "GuaranteedCommitments_GetCommitmentsPlanDetails",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CommitmentPlanDetails"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "planId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
     "/v1/commitments/plan/{planId}/apply": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Executes a commitment purchase plan, initiating the commitment purchase process.",
@@ -8152,158 +8041,6 @@
             "schema": {
               "$ref": "#/definitions/GuaranteedCommitmentsCommitmentsPlanApplyBody"
             }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/commitments/plan/{planId}/lineitems": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Do not use. Retrieves line items for a specific commitment plan.",
-        "operationId": "GuaranteedCommitments_ListCommitmentsPlanLineItems",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListCommitmentPlanLineItemsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "planId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "orderBy",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "desc",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "segmentId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "resourceMatchIds",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "pageSize",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/commitments/plan/{planId}/resourcematches": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Do not use. Retrieves resource matches for a specific commitment plan.",
-        "operationId": "GuaranteedCommitments_ListCommitmentsPlanResourceMatches",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListCommitmentPlanResourceMatchesResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "planId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "orderBy",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "desc",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "startDate",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "endDate",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "lineItemIds",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "pageSize",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
           }
         ],
         "tags": [
@@ -8357,7 +8094,7 @@
         ]
       }
     },
-    "/v1/commitments/purchaseplans/draft/{planId}": {
+    "/v1/commitments/purchaseplans/{draftPlanId}/draft": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Retrieves the details of a specific draft plan.",
         "operationId": "GuaranteedCommitments_GetDraftPurchasePlansDetails",
@@ -8377,7 +8114,38 @@
         },
         "parameters": [
           {
-            "name": "planId",
+            "name": "draftPlanId",
+            "description": "The draft plan ID to retrieve details for.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      },
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Deletes a drafted purchase plan.",
+        "operationId": "GuaranteedCommitments_DeleteDraftPurchasePlan",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteDraftPurchasePlanResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "draftPlanId",
+            "description": "Required. The draft plan ID to delete.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -8420,36 +8188,6 @@
       }
     },
     "/v1/commitments/purchaseplans/{planId}/draft": {
-      "delete": {
-        "summary": "WORK-IN-PROGRESS: Deletes a draft purchase plan.",
-        "operationId": "GuaranteedCommitments_DeleteDraftPurchasePlan",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DeleteDraftPurchasePlanResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "planId",
-            "description": "Required. The plan ID to delete.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      },
       "post": {
         "summary": "WORK-IN-PROGRESS: Saves a commitment purchase plan as draft.",
         "operationId": "GuaranteedCommitments_SaveCommitmentsPlanAsDraft",
@@ -8470,6 +8208,7 @@
         "parameters": [
           {
             "name": "planId",
+            "description": "Required. The commitment purchase plan ID to save as draft.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -25849,13 +25588,16 @@
           "type": "string"
         },
         "status": {
-          "type": "string"
+          "type": "string",
+          "description": "Required."
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "description": "Required."
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": "Required."
         },
         "preferredPaymentOption": {
           "type": "string"
@@ -37812,215 +37554,6 @@
         }
       }
     },
-    "v1CommitmentPlanLineItem": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "planId": {
-          "type": "string"
-        },
-        "offerId": {
-          "type": "string"
-        },
-        "leaseMenuItemId": {
-          "type": "string"
-        },
-        "accountId": {
-          "type": "string"
-        },
-        "recommendedQuantity": {
-          "type": "number",
-          "format": "double"
-        },
-        "selectedQuantity": {
-          "type": "number",
-          "format": "double"
-        },
-        "recommendedCommitment": {
-          "type": "number",
-          "format": "double"
-        },
-        "selectedCommitment": {
-          "type": "number",
-          "format": "double"
-        },
-        "isSelected": {
-          "type": "boolean"
-        },
-        "afterAmortizedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "upfrontCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "recurringCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeReservedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "coveredOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "afterCoveredUnits": {
-          "type": "number",
-          "format": "double"
-        },
-        "totalCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlyCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "savings": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlySavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "totalSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "fee": {
-          "type": "number",
-          "format": "double"
-        },
-        "discountRate": {
-          "type": "number",
-          "format": "double"
-        },
-        "breakevenHours": {
-          "type": "number",
-          "format": "double"
-        },
-        "contractTerm": {
-          "type": "string"
-        },
-        "paymentOption": {
-          "type": "string"
-        },
-        "contractSpec": {
-          "type": "object"
-        },
-        "offer": {
-          "type": "object"
-        }
-      }
-    },
-    "v1CommitmentPlanResourceMatch": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "totalUnits": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeUncoveredUnits": {
-          "type": "number",
-          "format": "double"
-        },
-        "afterCoveredUnits": {
-          "type": "number",
-          "format": "double"
-        },
-        "afterUncoveredUnits": {
-          "type": "number",
-          "format": "double"
-        },
-        "ondemandPrice": {
-          "type": "number",
-          "format": "double"
-        },
-        "ifAllOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "afterOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "coveredOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeReservedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "afterReservedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "afterCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlyBeforeCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlyAfterCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlyAfterReservedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlyAfterOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "averageSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "averageMonthlySavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "usageType": {
-          "type": "string"
-        },
-        "coverage": {
-          "type": "number",
-          "format": "double"
-        },
-        "resource": {
-          "type": "object"
-        }
-      }
-    },
     "v1CommitmentsChartData": {
       "type": "object",
       "properties": {
@@ -44015,30 +43548,6 @@
         }
       }
     },
-    "v1ListCommitmentPlanLineItemsResponse": {
-      "type": "object",
-      "properties": {
-        "lineItems": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1CommitmentPlanLineItem"
-          }
-        }
-      }
-    },
-    "v1ListCommitmentPlanResourceMatchesResponse": {
-      "type": "object",
-      "properties": {
-        "resourceMatches": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1CommitmentPlanResourceMatch"
-          }
-        }
-      }
-    },
     "v1ListCommitmentsResponse": {
       "type": "object",
       "properties": {
@@ -44066,18 +43575,6 @@
     },
     "v1ListCustomFieldRequest": {
       "type": "object"
-    },
-    "v1ListDefaultCommitmentPlansResponse": {
-      "type": "object",
-      "properties": {
-        "plans": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1CommitmentPlanDetails"
-          }
-        }
-      }
     },
     "v1ListDraftPurchasePlansResponse": {
       "type": "object",
