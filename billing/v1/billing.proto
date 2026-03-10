@@ -1008,7 +1008,7 @@ service Billing {
   // Sets the customized billing service in child billing group. Only available in Ripple.
   rpc SetChildBillingGroupCustomizedBillingService(SetChildBillingGroupCustomizedBillingServiceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/v1/billinggroups/children/{internalId}/customizedBillingService/{vendor}"
+      post: "/v1/{vendor}/billinggroups/children/{internalId}/customizedBillingService"
       body: "*"
     };
   }
@@ -1016,7 +1016,7 @@ service Billing {
   // Gets the customized billing service in child billing group. Only available in Ripple.
   rpc GetChildBillingGroupCustomizedBillingService(GetChildBillingGroupCustomizedBillingServiceRequest) returns (stream GetChildBillingGroupCustomizedBillingServiceResponse) {
     option (google.api.http) = {
-      get: "/v1/billinggroups/children/{internalId}/customizedBillingService/{vendor}"
+      get: "/v1/{vendor}/billinggroups/children/{internalId}/customizedBillingService"
     };
   }
 
@@ -1028,7 +1028,7 @@ service Billing {
   }
 
   // Returns the account's service discounts associated with the child billing group id
-  rpc ReadChildBillingGroupAccountInvoiceServiceDiscounts(ListChildBillingGroupAccountInvoiceServiceDiscountsRequest) returns (stream AccountInvoiceServiceDiscounts) {
+  rpc ReadChildBillingGroupAccountInvoiceServiceDiscounts(ReadChildBillingGroupAccountInvoiceServiceDiscountsRequest) returns (stream AccountInvoiceServiceDiscounts) {
     option (google.api.http) = {
       get: "/v1/billinggroups/children/{internalId}/serviceDiscounts/accounts:read"
     };
@@ -3529,7 +3529,7 @@ message GetChildBillingGroupInvoiceServiceDiscountsResponse {
   string id = 1;
 }
 
-message ListChildBillingGroupAccountInvoiceServiceDiscountsRequest {
+message ReadChildBillingGroupAccountInvoiceServiceDiscountsRequest {
   // Required. Child Billing Group Internal Id
   string internalId = 1;
 }
