@@ -30,13 +30,6 @@ service GuaranteedCommitments {
 
   // ####################### COMMITMENT PLANS #######################
 
-  // // WORK-IN-PROGRESS: Do not use. Retrieves detailed information about a specific commitment plan, including costs, savings projections, and commitment coverage.
-  // rpc GetCommitmentsPlanDetails(GetCommitmentPlanDetailsRequest) returns (CommitmentPlanDetails) {
-  //   option (google.api.http) = {
-  //     get: "/v1/commitments/plan/{planId}"
-  //   };
-  // }
-
   // WORK-IN-PROGRESS: Executes a commitment purchase plan, initiating the commitment purchase process.
   rpc CommitmentsPlanApply(CommitmentPlanApplyRequest) returns (CommitmentPlanDetails) {
     option (google.api.http) = {
@@ -44,35 +37,6 @@ service GuaranteedCommitments {
       body: "*"
     };
   }
-
-  // // WORK-IN-PROGRESS: Do not use. Retrieves the three default GuaranteedCommitments commitment plans (High Savings, Balanced, Recommended) for the specified cloud provider.
-  // rpc ListDefaultCommitmentsPlan(ListDefaultCommitmentPlansRequest) returns (ListDefaultCommitmentPlansResponse) {
-  //   option (google.api.http) = {
-  //     get: "/v1/commitments/plan/default"
-  //   };
-  // }
-
-  // // WORK-IN-PROGRESS: Do not use. Retrieves only the recommended GuaranteedCommitments commitment plan for the specified cloud provider.
-  // rpc GetRecommendedCommitmentsPlan(GetRecommendedCommitmentPlanRequest) returns (CommitmentPlanDetails) {
-  //   option (google.api.http) = {
-  //     get: "/v1/commitments/plan/recommended"
-  //   };
-  // }
-
-  // // WORK-IN-PROGRESS: Do not use. Retrieves line items for a specific commitment plan.
-  // rpc ListCommitmentsPlanLineItems(ListCommitmentPlanLineItemsRequest) returns (ListCommitmentPlanLineItemsResponse) {
-  //   option (google.api.http) = {
-  //     get: "/v1/commitments/plan/{planId}/lineitems"
-  //   };
-  // }
-
-  // // WORK-IN-PROGRESS: Do not use. Retrieves resource matches for a specific commitment plan.
-  // rpc ListCommitmentsPlanResourceMatches(ListCommitmentPlanResourceMatchesRequest)
-  //     returns (ListCommitmentPlanResourceMatchesResponse) {
-  //   option (google.api.http) = {
-  //     get: "/v1/commitments/plan/{planId}/resourcematches"
-  //   };
-  // }
 
   // ####################### COMMITMENTS #######################
 
@@ -145,7 +109,8 @@ service GuaranteedCommitments {
     };
   }
 
-  // WORK-IN-PROGRESS: Retrieves details of a specific purchase plan of a company.
+  // WORK-IN-PROGRESS: Retrieves full complete details of a specific purchase plan of a company.
+  // Includes the basic info, detailed metrics, commitment line items, covered infrastructure resource matches, and audit history.
   rpc GetPurchasePlansDetails(GetPurchasePlansDetailsRequest) returns (GetPurchasePlansDetailsResponse) {
     option (google.api.http) = {
       get: "/v1/commitments/purchaseplans/{planId}"
@@ -167,12 +132,6 @@ service GuaranteedCommitments {
     };
   }
 
-    // WORK-IN-PROGRESS: Retrieves the details of a specific draft plan.
-  rpc GetDraftPurchasePlansDetails(GetDraftPurchasePlansDetailsRequest) returns (GetDraftPurchasePlansDetailsResponse) {
-    option (google.api.http) = {
-      get: "/v1/commitments/purchaseplans/draft/{draftPlanId}"
-    };
-  }
 
  // WORK-IN-PROGRESS: Deletes a drafted purchase plan.
   rpc DeleteDraftPurchasePlan(DeleteDraftPurchasePlanRequest) returns (DeleteDraftPurchasePlanResponse) {
@@ -327,42 +286,10 @@ enum UsageType {
 
 message ListOrgsRequest {}
 
-// message GetCommitmentPlanDetailsRequest {
-//   string planId = 1;
-// }
 
 message CommitmentPlanApplyRequest {
   string planId = 1;
 }
-
-// message ListDefaultCommitmentPlansRequest {
-//   Provider provider = 1;
-// }
-
-// message GetRecommendedCommitmentPlanRequest {
-//   Provider provider = 1;
-// }
-
-// message ListCommitmentPlanLineItemsRequest {
-//   string planId = 1;
-//   string orderBy = 2;
-//   bool desc = 3;
-//   string segmentId = 4;
-//   repeated string resourceMatchIds = 5;
-//   int32 page = 6;
-//   int32 pageSize = 7;
-// }
-
-// message ListCommitmentPlanResourceMatchesRequest {
-//   string planId = 1;
-//   string orderBy = 2;
-//   bool desc = 3;
-//   string startDate = 4;
-//   string endDate = 5;
-//   repeated string lineItemIds = 6;
-//   int32 page = 7;
-//   int32 pageSize = 8;
-// }
 
 message ListCommitmentsRequest {}
 
@@ -403,24 +330,16 @@ message GetResourceDailyUsageRequest {
   int32 pageSize = 6;
 }
 
-// message ListSegmentsRequest {
-//   Provider provider = 1;
-// }
-
-// message GetSegmentDetailsRequest {
-//   string segmentId = 1;
-// }
-
 message ListPurchasePlansBySegmentRequest {
 }
 
 message GetPurchasePlansDetailsRequest {
   string planId = 1;
 }
-message GetDraftPurchasePlansDetailsRequest {
-  // The draft plan ID to retrieve details for.
-  string draftPlanId = 1;
-}
+// message GetDraftPurchasePlansDetailsRequest {
+//   // The draft plan ID to retrieve details for.
+//   string draftPlanId = 1;
+// }
 
 // ------------------------ ONBOARDING REQUEST ------------------------
 
@@ -643,10 +562,6 @@ message CommitmentPlanDetails {
   double totalMonthlyBeforeCost = 25;
 }
 
-// message ListDefaultCommitmentPlansResponse {
-//   repeated CommitmentPlanDetails plans = 1;
-// }
-
 message CommitmentPlanLineItem {
   string id = 1;
   string planId = 2;
@@ -678,11 +593,10 @@ message CommitmentPlanLineItem {
   string paymentOption = 28;
   google.protobuf.Struct contractSpec = 29;
   google.protobuf.Struct offer = 30;
+  string renewalReservationId = 31;
+  double coveredUnits = 32;
+  double amortizedCost = 33;
 }
-
-// message ListCommitmentPlanLineItemsResponse {
-//   repeated CommitmentPlanLineItem lineItems = 1;
-// }
 
 message CommitmentPlanResourceMatch {
   string id = 1;
@@ -708,11 +622,11 @@ message CommitmentPlanResourceMatch {
   string usageType = 21;
   double coverage = 22;
   google.protobuf.Struct resource = 23;
+  double coveredUnits = 24;
+  double explanationUnmatched = 25;
+  double ondemandCost = 26;
+  double reservedCost = 27;
 }
-
-// message ListCommitmentPlanResourceMatchesResponse {
-//   repeated CommitmentPlanResourceMatch resourceMatches = 1;
-// }
 
 message Lease {
   string id = 1;
@@ -1092,6 +1006,25 @@ message ListPurchasePlansBySegmentResponse {
   repeated DefaultPurchasePlan plans = 1;
 }
 
+message PlanHistoryUser {
+  string id = 1;
+  string username = 2;
+  string fullName = 3;
+}
+
+message PlanHistoryEntry {
+  string id = 1;
+  string message = 2;
+  string orgId = 3;
+  string relatedObjectId = 4;
+  string relatedObjectType = 5;
+  string timestamp = 6;
+  string type = 7;
+  string userId = 8;
+  google.protobuf.Value data = 9;
+  PlanHistoryUser user = 10;
+}
+
 // ------------------------ ONBOARDING RESPONSE ------------------------
 
 message RegisterOrgResponse {
@@ -1282,8 +1215,19 @@ message CreateGuaranteedCommitmentAccessResponse {
 }
 
 message GetPurchasePlansDetailsResponse {
-  repeated DefaultPurchasePlan plans = 1;
+  // Plan basic info and detailed metrics
+  
+  DefaultPurchasePlan plan = 1;
+
+  // Commitment line items (from /purchase-plans-v2/{id}/line-items).
+  repeated CommitmentPlanLineItem lineItems = 2;
+
+  // Covered infrastructure resource matches (from /purchase-plans-v2/{id}/resource-matches).
+  repeated CommitmentPlanResourceMatch resourceMatches = 3;
+
+  // Audit history of the plan (from /comments/history).
+  repeated PlanHistoryEntry history = 4;
 }
-message GetDraftPurchasePlansDetailsResponse {
-  repeated DefaultPurchasePlan plans = 1;
-}
+// message GetDraftPurchasePlansDetailsResponse {
+//   repeated DefaultPurchasePlan plans = 1;
+// }
