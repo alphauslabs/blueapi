@@ -8357,15 +8357,46 @@
         ]
       }
     },
-    "/v1/commitments/purchaseplans/{planId}": {
+    "/v1/commitments/purchaseplans/draft/{planId}": {
       "get": {
-        "summary": "WORK-IN-PROGRESS: Retrieves details of a specific purchase plan of a company.",
-        "operationId": "GuaranteedCommitments_ListPurchasePlansDetails",
+        "summary": "WORK-IN-PROGRESS: Retrieves the details of a specific draft plan.",
+        "operationId": "GuaranteedCommitments_GetDraftPurchasePlansDetails",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ListPurchasePlansDetailsResponse"
+              "$ref": "#/definitions/v1GetDraftPurchasePlansDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/commitments/purchaseplans/{planId}": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Retrieves details of a specific purchase plan of a company.",
+        "operationId": "GuaranteedCommitments_GetPurchasePlansDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetPurchasePlansDetailsResponse"
             }
           },
           "default": {
@@ -42475,6 +42506,18 @@
       },
       "title": "Response message for GetDiscountRecommendations"
     },
+    "v1GetDraftPurchasePlansDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "plans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1DefaultPurchasePlan"
+          }
+        }
+      }
+    },
     "v1GetExecutionStatusResponse": {
       "type": "object",
       "properties": {
@@ -42933,6 +42976,18 @@
         },
         "name": {
           "type": "string"
+        }
+      }
+    },
+    "v1GetPurchasePlansDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "plans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1DefaultPurchasePlan"
+          }
         }
       }
     },
@@ -44415,18 +44470,6 @@
       "type": "object"
     },
     "v1ListPurchasePlansBySegmentResponse": {
-      "type": "object",
-      "properties": {
-        "plans": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1DefaultPurchasePlan"
-          }
-        }
-      }
-    },
-    "v1ListPurchasePlansDetailsResponse": {
       "type": "object",
       "properties": {
         "plans": {
