@@ -946,7 +946,7 @@ service Billing {
   // Creates a child billing group under a parent billing group
   rpc CreateChildBillingGroup(CreateChildBillingGroupRequest) returns (CreateChildBillingGroupResponse) {
     option (google.api.http) = {
-      post: "/v1/billinggroups/child"
+      post: "/v1/billinggroups/children"
       body: "*"
     };
   }
@@ -954,14 +954,14 @@ service Billing {
   // Gets child billing group info
   rpc GetChildBillingGroup(GetChildBillingGroupRequest) returns (GetChildBillingGroupResponse) {
     option (google.api.http) = {
-      get: "/v1/billinggroups/child/{internalId}"
+      get: "/v1/billinggroups/children/{internalId}"
     };
   }
 
   // Lists child billing groups under a specific filter
-  rpc ListChildBillingGroups(ListChildBillingGroupsRequest) returns (stream ChildBillingGroup) {
+  rpc ReadChildBillingGroups(ReadChildBillingGroupsRequest) returns (stream ChildBillingGroup) {
     option (google.api.http) = {
-      post: "/v1/billinggroups/child:read"
+      post: "/v1/billinggroups/children:read"
       body: "*"
     };
   }
@@ -969,7 +969,7 @@ service Billing {
   // Updates child billing group's basic info
   rpc UpdateChildBillingGroup(UpdateChildBillingGroupRequest) returns (UpdateChildBillingGroupResponse) {
     option (google.api.http) = {
-      put: "/v1/billinggroups/child/{internalId}"
+      put: "/v1/billinggroups/children/{internalId}"
       body: "*"
     };
   }
@@ -977,14 +977,14 @@ service Billing {
   // Deletes all child billing group info
   rpc DeleteChildBillingGroup(DeleteChildBillingGroupRequest) returns (DeleteChildBillingGroupResponse) {
     option (google.api.http) = {
-      delete: "/v1/billinggroups/child/{internalId}"
+      delete: "/v1/billinggroups/children/{internalId}"
     };
   }
 
   // Updates child billing group's invoice settings
   rpc UpdateChildBillingGroupInvoiceSettings(UpdateChildBillingGroupInvoiceSettingsRequest) returns (UpdateChildBillingGroupInvoiceSettingsResponse) {
     option (google.api.http) = {
-      put: "/v1/billinggroups/child/{internalId}/invoiceSettings"
+      put: "/v1/billinggroups/children/{internalId}/invoiceSettings"
       body: "*"
     };
   }
@@ -992,7 +992,7 @@ service Billing {
   // Sets the child billing group invoice service discounts. Only available in Ripple.
   rpc SetChildBillingGroupInvoiceServiceDiscounts(SetChildBillingGroupInvoiceServiceDiscountsRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/v1/billinggroups/child/{internalId}/servicediscounts"
+      post: "/v1/billinggroups/children/{internalId}/serviceDiscounts"
       body: "*"
     };
   }
@@ -1000,7 +1000,7 @@ service Billing {
   // Sets the child billing group's account invoice service discounts. Only available in Ripple.
   rpc SetChildBillingGroupAccountInvoiceServiceDiscounts(SetChildBillingGroupAccountInvoiceServiceDiscountsRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/v1/billinggroups/child/{internalId}/servicediscounts:account"
+      post: "/v1/billinggroups/children/{internalId}/serviceDiscounts/accounts:set"
       body: "*"
     };
   }
@@ -1008,7 +1008,7 @@ service Billing {
   // Sets the customized billing service in child billing group. Only available in Ripple.
   rpc SetChildBillingGroupCustomizedBillingService(SetChildBillingGroupCustomizedBillingServiceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/v1/billinggroups/child/{internalId}/customizedbillingservice/{vendor}"
+      post: "/v1/billinggroups/children/{internalId}/customizedBillingService/{vendor}"
       body: "*"
     };
   }
@@ -1016,21 +1016,21 @@ service Billing {
   // Gets the customized billing service in child billing group. Only available in Ripple.
   rpc GetChildBillingGroupCustomizedBillingService(GetChildBillingGroupCustomizedBillingServiceRequest) returns (stream GetChildBillingGroupCustomizedBillingServiceResponse) {
     option (google.api.http) = {
-      get: "/v1/billinggroups/child/{internalId}/customizedbillingservice/{vendor}"
+      get: "/v1/billinggroups/children/{internalId}/customizedBillingService/{vendor}"
     };
   }
 
   // Returns the service discount associated with the billing group id
   rpc GetChildBillingGroupInvoiceServiceDiscounts(GetChildBillingGroupInvoiceServiceDiscountsRequest) returns (GetChildBillingGroupInvoiceServiceDiscountsResponse) {
     option (google.api.http) = {
-      get: "/v1/billinggroups/child/{internalId}/servicediscounts"
+      get: "/v1/billinggroups/children/{internalId}/serviceDiscounts"
     };
   }
 
   // Returns the account's service discounts associated with the child billing group id
-  rpc ListChildBillingGroupAccountInvoiceServiceDiscounts(ListChildBillingGroupAccountInvoiceServiceDiscountsRequest) returns (stream AccountInvoiceServiceDiscounts) {
+  rpc ReadChildBillingGroupAccountInvoiceServiceDiscounts(ListChildBillingGroupAccountInvoiceServiceDiscountsRequest) returns (stream AccountInvoiceServiceDiscounts) {
     option (google.api.http) = {
-      get: "/v1/billinggroups/child/{internalId}/servicediscounts:account"
+      get: "/v1/billinggroups/children/{internalId}/serviceDiscounts/accounts:read"
     };
   }
 
@@ -3408,7 +3408,7 @@ message GetChildBillingGroupResponse {
   ChildBillingGroup details = 1;
 }
 
-message ListChildBillingGroupsRequest {
+message ReadChildBillingGroupsRequest {
   // Root parent Id. If not empty return all child billing group under the root parent.
   // If both root and parent are empty returns all child billing groups under the MSP.
   string rootId = 1;
