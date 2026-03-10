@@ -1028,7 +1028,7 @@ service Billing {
   }
 
   // Returns the account's service discounts associated with the child billing group id
-  rpc ReadChildBillingGroupAccountInvoiceServiceDiscounts(ListChildBillingGroupAccountInvoiceServiceDiscountsRequest) returns (stream AccountInvoiceServiceDiscounts) {
+  rpc ReadChildBillingGroupAccountInvoiceServiceDiscounts(ReadChildBillingGroupAccountInvoiceServiceDiscountsRequest) returns (stream AccountInvoiceServiceDiscounts) {
     option (google.api.http) = {
       get: "/v1/billinggroups/children/{internalId}/serviceDiscounts/accounts:read"
     };
@@ -3529,7 +3529,7 @@ message GetChildBillingGroupInvoiceServiceDiscountsResponse {
   string id = 1;
 }
 
-message ListChildBillingGroupAccountInvoiceServiceDiscountsRequest {
+message ReadChildBillingGroupAccountInvoiceServiceDiscountsRequest {
   // Required. Child Billing Group Internal Id
   string internalId = 1;
 }
