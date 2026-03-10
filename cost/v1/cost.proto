@@ -327,17 +327,10 @@ service Cost {
   }
 
   // Exports the usage-based cost filter condition. Only available in Wave(Pro).
-  rpc ExportCostFiltersFile(ExportCostFiltersFileRequest) returns (ExportCostFiltersFileResponse) {
+  rpc ExportCostFiltersFile(ExportCostFiltersFileRequest) returns (protos.Operation) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costfilters/{filterId}:export"
       body: "*"
-    };
-  }
-
-  // Gets the status of an async ExportCostFiltersFile job.
-  rpc GetExportCostFiltersJob(GetExportCostFiltersJobRequest) returns (GetExportCostFiltersJobResponse) {
-    option (google.api.http) = {
-      get: "/v1/{vendor}/costfilters/jobs/{jobId}"
     };
   }
 
@@ -2117,33 +2110,6 @@ message ExportCostFiltersFileRequest {
 message ExportCostFiltersFileResponse {
   // Required. URL of exported file.
   string url = 1;
-
-  // Job ID returned immediately when the export is processed asynchronously.
-  string jobId = 2;
-}
-
-// Request message for the GetExportCostFiltersJob rpc.
-message GetExportCostFiltersJobRequest {
-  // Required. At the moment, only `aws` is supported.
-  string vendor = 1;
-
-  // Required. The job ID returned by ExportCostFiltersFile.
-  string jobId = 2;
-}
-
-// Response message for the GetExportCostFiltersJob rpc.
-message GetExportCostFiltersJobResponse {
-  // The job ID.
-  string jobId = 1;
-
-  // Current status of the job. One of: pending | processing | completed | failed.
-  string status = 2;
-
-  // URL of the exported file. Populated when status is `completed`.
-  string url = 3;
-
-  // Additional information, e.g. error details when status is `failed`.
-  string message = 4;
 }
 
 // GCP-specific options for ReadCostsRequest.

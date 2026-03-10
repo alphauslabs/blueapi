@@ -20429,45 +20429,6 @@
         ]
       }
     },
-    "/v1/{vendor}/costfilters/jobs/{jobId}": {
-      "get": {
-        "summary": "Gets the status of an async ExportCostFiltersFile job.",
-        "operationId": "Cost_GetExportCostFiltersJob",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetExportCostFiltersJobResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "jobId",
-            "description": "Required. The job ID returned by ExportCostFiltersFile.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
     "/v1/{vendor}/costfilters/{filterId}": {
       "delete": {
         "summary": "Deletes the usage-based cost filter condition. Only available in Wave(Pro).",
@@ -20561,7 +20522,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ExportCostFiltersFileResponse"
+              "$ref": "#/definitions/protosOperation"
             }
           },
           "default": {
@@ -40861,20 +40822,6 @@
         "format"
       ]
     },
-    "v1ExportCostFiltersFileResponse": {
-      "type": "object",
-      "properties": {
-        "url": {
-          "type": "string",
-          "description": "Required. URL of exported file."
-        },
-        "jobId": {
-          "type": "string",
-          "description": "Job ID returned immediately when the export is processed asynchronously."
-        }
-      },
-      "description": "Response message for the ExportCostFiltersFile rpc."
-    },
     "v1ExportData": {
       "type": "object",
       "properties": {
@@ -42531,28 +42478,6 @@
           "type": "string"
         }
       }
-    },
-    "v1GetExportCostFiltersJobResponse": {
-      "type": "object",
-      "properties": {
-        "jobId": {
-          "type": "string",
-          "description": "The job ID."
-        },
-        "status": {
-          "type": "string",
-          "description": "Current status of the job. One of: pending | processing | completed | failed."
-        },
-        "url": {
-          "type": "string",
-          "description": "URL of the exported file. Populated when status is `completed`."
-        },
-        "message": {
-          "type": "string",
-          "description": "Additional information, e.g. error details when status is `failed`."
-        }
-      },
-      "description": "Response message for the GetExportCostFiltersJob rpc."
     },
     "v1GetExportRISPRequest": {
       "type": "object",
