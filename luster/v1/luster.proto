@@ -9,6 +9,7 @@ import "api/luster/label.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/field_mask.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/luster";
 option java_package = "cloud.alphaus.api.luster";
@@ -69,10 +70,9 @@ service Luster {
 
 
   // (ALPHA) Reads contexts.
-  // スペースの読み取り。
   rpc ReadContexts(ReadContextsRequest) returns (stream api.luster.Context) {
     option (google.api.http) = {
-      post: "/v1/contexts:read"
+      post: "/v1/contexts/{space_id}:read"
       body: "*"
     };
   }
@@ -80,14 +80,14 @@ service Luster {
   // (ALPHA) Gets context.
   rpc GetContext(GetContextRequest) returns (GetContextResponse) {
     option (google.api.http) = {
-      get: "/v1/contexts/{id}"
+      get: "/v1/contexts/{space_id}/{id}"
     };
   }
 
   // (ALPHA) Creates context.
   rpc CreateContext(CreateContextRequest) returns (api.luster.Context) {
     option (google.api.http) = {
-      post: "/v1/contexts"
+      post: "/v1/contexts/{space_id}"
       body: "*"
     };
   }
@@ -95,7 +95,7 @@ service Luster {
   // (ALPHA) Updates context.
   rpc UpdateContext(UpdateContextRequest) returns (api.luster.Context) {
     option (google.api.http) = {
-      put: "/v1/contexts/{id}"
+      put: "/v1/contexts/{space_id}/{id}"
       body: "*"
     };
   }
@@ -103,14 +103,14 @@ service Luster {
   // (ALPHA) Deletes context.
   rpc DeleteContext(DeleteContextRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1/contexts/{id}"
+      delete: "/v1/contexts/{space_id}/{id}"
     };
   }
 
   // (ALPHA) Creates comment in context.
   rpc CreateContextComment(CreateContextCommentRequest) returns (api.luster.Comment) {
     option (google.api.http) = {
-      post: "/v1/contexts/{id}/comment"
+      post: "/v1/contexts/{space_id}/{context_id}/comment"
       body: "*"
     };
   }
@@ -118,7 +118,7 @@ service Luster {
   // (ALPHA) Updates comment in context.
   rpc UpdateContextComment(UpdateContextCommentRequest) returns (api.luster.Comment) {
     option (google.api.http) = {
-      put: "/v1/contexts/{id}/comment/{commentId}"
+      put: "/v1/contexts/{space_id}/{context_id}/comment/{id}"
       body: "*"
     };
   }
@@ -126,7 +126,7 @@ service Luster {
   // (ALPHA) Deletes comment in context.
   rpc DeleteContextComment(DeleteContextCommentRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1/contexts/{id}/comment/{commentId}"
+      delete: "/v1/contexts/{space_id}/{context_id}/comment/{id}"
     };
   }
 
@@ -141,27 +141,52 @@ service Luster {
 }
 
 // Request message for the Luster.ReadSpaces rpc.
-message ReadSpacesRequest {}
+message ReadSpacesRequest {
+  // Optional. field_mask
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask field_mask = 1;
+}
 
 // Request message for the Luster.GetSpace rpc.
 message GetSpaceRequest {
   // the space id.
   string id = 1;
+
+  // Optional. field_mask
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask field_mask = 2;
 }
 
 // Request message for the Luster.CreateSpace rpc.
 message CreateSpaceRequest {
-  // the space name.
+  // Required. the space name.
   string name = 1;
 
-  // the space description.
+  // Optional. the space description.
   string description = 2;
+
+  // Optional. the member ids.
+  repeated string members = 3;
 }
 
 // Request message for the Luster.UpdateSpace rpc.
 message UpdateSpaceRequest {
-  // the space id.
+  // Required. the space id.
   string id = 1;
+
+  // Optional. the space name.
+  string name = 2;
+
+  // Optional. the space description.
+  string description = 3;
+
+  // Optional. the member ids.
+  repeated string members = 4;
+
+  // Required.
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask update_mask = 5
+      [(google.api.field_behavior) = REQUIRED];
 }
 
 // Request message for the Luster.DeleteSpace rpc.
@@ -171,12 +196,19 @@ message DeleteSpaceRequest {
 }
 
 // Request message for the Luster.ReadContexts rpc.
-message ReadContextsRequest {}
+message ReadContextsRequest {
+  // Optional. field_mask
+  google.protobuf.FieldMask field_mask = 1;
+}
 
 // Request message for the Luster.GetContext rpc.
 message GetContextRequest {
   // the context id.
   string id = 1;
+
+  // Optional. field_mask
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask field_mask = 2;
 }
 
 // Response message for the Luster.GetContextResponse rpc.
@@ -190,50 +222,87 @@ message GetContextResponse  {
 
 // Request message for the Luster.CreateContext rpc.
 message CreateContextRequest {
-  // The context title.
-  string title = 1;
+  // Required. The space id.
+  string space_id = 1;
 
-  // The context content.
-  string content = 2;
+  // Required. The context title.
+  string title = 2;
+
+  // Required. The context content.
+  string content = 3;
 }
 
 // Request message for the Luster.UpdateContext rpc.
 message UpdateContextRequest {
-  // the context id.
+  // Required. the context id.
   string id = 1;
+
+  // Required. The space id.
+  string space_id = 2;
+
+  // Optional. The context title.
+  string title = 3;
+
+  // Optional. The context content.
+  string content = 4;
+
+  // Required.
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask update_mask = 5
+      [(google.api.field_behavior) = REQUIRED];
 }
 
 // Request message for the Luster.DeleteContext rpc.
 message DeleteContextRequest {
-  // the context id.
+  // Required. the context id.
   string id = 1;
+
+  // Required. The space id.
+  string space_id = 2;
 }
 
 // Request message for the Luster.CreateContextComment rpc.
 message CreateContextCommentRequest {
-  // the context id.
-  string id = 1;
+  // Required. the space id.
+  string space_id = 1;
 
-  // The comment content.
-  string content = 2;
+  // Required. the context id.
+  string context_id = 2;
+
+  // Required. The comment content.
+  string content = 3;
 }
 
 // Request message for the Luster.UpdateContextComment rpc.
 message UpdateContextCommentRequest {
-  // the context id.
+  // Required. the comment id.
   string id = 1;
 
-  // the context comment id.
-  string commentId = 2;
+  // Required. the space id.
+  string space_id = 2;
+
+  // Required. the context id.
+  string context_id = 3;
+
+  // Required. The comment content.
+  string content = 4;
+
+  // Required.
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask update_mask = 5
+      [(google.api.field_behavior) = REQUIRED];
 }
 
 // Request message for the Luster.DeleteContextComment rpc.
 message DeleteContextCommentRequest {
-  // the context id.
+  // Required. the comment id.
   string id = 1;
 
-  // the context comment id.
-  string commentId = 2;
+  // Required. the space id.
+  string space_id = 2;
+
+  // Required. the context id.
+  string context_id = 3;
 }
 
 // Request message for the Luster.CreateLabel rpc.
