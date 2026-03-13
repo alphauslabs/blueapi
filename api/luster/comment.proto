@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package blueapi.api.luster;
 
+import "google/api/field_behavior.proto";
 
 option go_package = "github.com/alphauslabs/blue-sdk-go/api/luster";
 option java_package = "cloud.alphaus.blueapi.api.luster";
@@ -18,14 +19,17 @@ message Comment {
   // The comment content.
   string content = 3;
 
-  // The comment userId.
-  string userId = 4;
+  // The comment user_id.
+  string user_id = 4
+   [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // The comment createdAt.
+  // The comment created_at.
   // "created_at": "2023-10-27T10:00:00Z"
-  string createdAt = 5;
+  string created_at = 5
+   [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // The comment updatedAt.
+  // The comment updated_at.
   // "updated_at": "2023-10-27T10:00:00Z"
-  string updatedAt = 6;
+  string updated_at = 6
+   [(google.api.field_behavior) = OUTPUT_ONLY];
 }

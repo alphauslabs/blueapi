@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package blueapi.api.luster;
 
+import "google/api/field_behavior.proto";
 
 option go_package = "github.com/alphauslabs/blue-sdk-go/api/luster";
 option java_package = "cloud.alphaus.blueapi.api.luster";
@@ -24,10 +25,13 @@ message Context {
 
   // The context content.
   //  "content": "contextの本文詳細..."
-  string content = 5;
+  string content = 5;  
+
+  // The context type.
+  ContextType context_type = 14;
 
   // The context state.
-  //  "state": "open"
+  //  "state": "open", "pending", "review", "close"
   string state = 6;
 
   // The context labels.
@@ -38,21 +42,42 @@ message Context {
   // "assignees": ["username1" "username2"]
   repeated string assignees = 8;
 
-  // The context commentsCount.
+  // The context comments_count.
   // "comments_count": 0
-  int64 commentsCount = 9;
+  int64 comments_count = 9
+   [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // The context createdAt.
+  // The context created_at.
   // "created_at": "2023-10-27T10:00:00Z"
-  string createdAt = 10;
+  string created_at = 10
+   [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // The context updatedAt.
+  // The context updated_at.
   // "updated_at": "2023-10-27T10:00:00Z"
-  string updatedAt = 11;
+  string updated_at = 11
+   [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // The context closedAt.
-  string closedAt = 12;
+  // The context closed_at.
+  // "closed_at": "2023-10-27T10:00:00Z"
+  string closed_at = 12
+   [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // The context userId.
-  string userId = 13;
+  // The context user_id.
+  string user_id = 13
+   [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// The context type.
+enum ContextType {
+  // anyone
+  ANY = 0;
+
+  // space
+  SPACE = 1;
+
+  // account
+  ACCOUNT = 2;
+
+  // cost
+  COST = 3;
 }
