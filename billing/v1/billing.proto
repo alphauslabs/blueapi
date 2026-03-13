@@ -1037,7 +1037,7 @@ service Billing {
   // Create billing group in bulk from CSV file
   rpc BulkCreateBillingGroup(BulkCreateBillingGroupRequest) returns (stream BulkCreateBillingGroupResponse) {
     option (google.api.http) = {
-      post: "/v1/billinggroups:bulkCreate"
+      post: "/v1/billinggroups:bulkCreateBillingGroup"
       body: "*"
     };
   }
@@ -1045,7 +1045,7 @@ service Billing {
   // Gets the status of a bulk create billing group job.
   rpc GetBulkCreateBillingGroupJob(GetBulkCreateBillingGroupJobRequest) returns (GetBulkCreateBillingGroupJobResponse) {
     option (google.api.http) = {
-      get: "/v1/billinggroups:bulkCreate/{jobId}"
+      get: "/v1/billinggroups/bulkcreatebillinggroupjobs/{jobId}"
     };
   }
 
@@ -3550,6 +3550,10 @@ message ChildBillingGroupInfo {
 
 
 message BulkCreateBillingGroupRequest {
+  // Required. The cloud vendor for all billing groups in this CSV.
+  // Must be one of: aws, azure, gcp.
+  string vendor = 5;
+
   // Required. The CSV file content as bytes.
   bytes csvContent = 1;
 
