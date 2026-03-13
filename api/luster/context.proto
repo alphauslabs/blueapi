@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package blueapi.api.luster;
 
+import "google/api/field_behavior.proto";
 
 option go_package = "github.com/alphauslabs/blue-sdk-go/api/luster";
 option java_package = "cloud.alphaus.blueapi.api.luster";
@@ -24,22 +25,7 @@ message Context {
 
   // The context content.
   //  "content": "contextの本文詳細..."
-  string content = 5;
-
-  // The context type.
-  enum ContextType {
-    // anyone
-    ANY = 0;
-
-    // space
-    SPACE = 1;
-
-    // account
-    ACCOUNT = 2;
-
-    // cost
-    COST = 3;
-  }
+  string content = 5;  
 
   // The context type.
   ContextType context_type = 14;
@@ -79,4 +65,19 @@ message Context {
   // The context user_id.
   string user_id = 13
    [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// The context type.
+enum ContextType {
+  // anyone
+  ANY = 0;
+
+  // space
+  SPACE = 1;
+
+  // account
+  ACCOUNT = 2;
+
+  // cost
+  COST = 3;
 }
