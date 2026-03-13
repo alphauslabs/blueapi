@@ -26,8 +26,26 @@ message Context {
   //  "content": "contextの本文詳細..."
   string content = 5;
 
+  // The context type.
+  enum ContextType {
+    // anyone
+    ANY = 0;
+
+    // space
+    SPACE = 1;
+
+    // account
+    ACCOUNT = 2;
+
+    // cost
+    COST = 3;
+  }
+
+  // The context type.
+  ContextType context_type = 14;
+
   // The context state.
-  //  "state": "open"
+  //  "state": "open", "pending", "review", "close"
   string state = 6;
 
   // The context labels.
@@ -40,19 +58,25 @@ message Context {
 
   // The context comments_count.
   // "comments_count": 0
-  int64 comments_count = 9;
+  int64 comments_count = 9
+   [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The context created_at.
   // "created_at": "2023-10-27T10:00:00Z"
-  string created_at = 10;
+  string created_at = 10
+   [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The context updated_at.
   // "updated_at": "2023-10-27T10:00:00Z"
-  string updated_at = 11;
+  string updated_at = 11
+   [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The context closed_at.
-  string closed_at = 12;
+  // "closed_at": "2023-10-27T10:00:00Z"
+  string closed_at = 12
+   [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The context user_id.
-  string user_id = 13;
+  string user_id = 13
+   [(google.api.field_behavior) = OUTPUT_ONLY];
 }
