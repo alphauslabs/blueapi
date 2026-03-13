@@ -109,6 +109,13 @@ service GuaranteedCommitments {
     };
   }
 
+  // WORK-IN-PROGRESS: Updates the status of the plan after the apply plan.
+  rpc UpdatePurchasePlansBySegment(UpdatePurchasePlansBySegmentRequest) returns (UpdatePurchasePlansBySegmentResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/purchaseplans/update"
+    };
+  }
+
   // WORK-IN-PROGRESS: Retrieves full details of a specific purchase plan of a company.
   // Includes the basic info, detailed metrics, commitment line items, covered infrastructure resource matches, and audit history.
   rpc GetPurchasePlansDetails(GetPurchasePlansDetailsRequest) returns (GetPurchasePlansDetailsResponse) {
@@ -340,6 +347,9 @@ message GetPurchasePlansDetailsRequest {
 //   // The draft plan ID to retrieve details for.
 //   string draftPlanId = 1;
 // }
+
+message UpdatePurchasePlansBySegmentRequest {
+}
 
 // ------------------------ ONBOARDING REQUEST ------------------------
 
@@ -1003,6 +1013,10 @@ message DefaultPurchasePlan {
 }
 
 message ListPurchasePlansBySegmentResponse {
+  repeated DefaultPurchasePlan plans = 1;
+}
+
+message UpdatePurchasePlansBySegmentResponse {
   repeated DefaultPurchasePlan plans = 1;
 }
 
