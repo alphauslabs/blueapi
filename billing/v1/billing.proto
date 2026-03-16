@@ -20,6 +20,7 @@ import "api/ripple/v1/accountsupportplan.proto";
 import "api/ripple/v1/adjustmententry.proto";
 import "api/adjustment.proto";
 import "api/wave/adjustment.proto";
+import "protos/operation.proto";
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
 import "google/protobuf/empty.proto";
@@ -1034,18 +1035,12 @@ service Billing {
     };
   }
 
-  // Create billing group in bulk from CSV file
-  rpc BulkCreateBillingGroup(BulkCreateBillingGroupRequest) returns (BulkCreateBillingGroupResponse) {
+  // Create billing group in bulk from CSV file.
+  // Returns a long-running operation. Poll status via the Operations service (GET /ops/v1/{name}).
+  rpc BulkCreateBillingGroup(BulkCreateBillingGroupRequest) returns (protos.Operation) {
     option (google.api.http) = {
       post: "/v1/billinggroups:bulkCreateBillingGroup"
       body: "*"
-    };
-  }
-
-  // Gets the status of a bulk create billing group job.
-  rpc GetBulkCreateBillingGroupJob(GetBulkCreateBillingGroupJobRequest) returns (GetBulkCreateBillingGroupJobResponse) {
-    option (google.api.http) = {
-      get: "/v1/billinggroups/bulkcreatebillinggroupjobs/{jobId}"
     };
   }
 
@@ -1080,17 +1075,11 @@ service Billing {
   }
 
   // Link accounts to a billing group in bulk from a CSV file.
-  rpc BulkLinkAccount(BulkLinkAccountRequest) returns (BulkLinkAccountResponse) {
+  // Returns a long-running operation. Poll status via the Operations service (GET /ops/v1/{name}).
+  rpc BulkLinkAccount(BulkLinkAccountRequest) returns (protos.Operation) {
     option (google.api.http) = {
       post: "/v1/billinggroups:bulkLinkAccount"
       body: "*"
-    };
-  }
-
-  // Gets the status of a bulk link account job.
-  rpc GetBulkLinkAccountJob(GetBulkLinkAccountJobRequest) returns (GetBulkLinkAccountJobResponse) {
-    option (google.api.http) = {
-      get: "/v1/billinggroups/bulklinkaccountjobs/{jobId}"
     };
   }
 }
@@ -3568,62 +3557,43 @@ message BulkCreateBillingGroupRequest {
   bool dryRun = 4;
 }
 
-message BulkCreateBillingGroupResponse {
-  // The job ID for polling status via GetBulkCreateBillingGroupJob.
-  string jobId = 1;
-
-  // Initial status of the job ("pending").
-  string status = 2;
-}
-
 message BulkCreateBillingGroupError {
-  // The index of the request failed (zero-based).
+  // The index of the row that failed (zero-based).
   int32 index = 1;
 
-  //The billing group ID that failed to create.
+  // The billing group ID that failed to create.
   string billingGroupId = 2;
 
   // Error message.
   string message = 3;
 }
 
-// Request message for the GetBulkCreateBillingGroupJob rpc.
-message GetBulkCreateBillingGroupJobRequest {
-  // Required. The job ID returned by BulkCreateBillingGroup.
-  string jobId = 1;
-}
-
-// Response message for the GetBulkCreateBillingGroupJob rpc.
-message GetBulkCreateBillingGroupJobResponse {
-  // The job ID.
-  string jobId = 1;
-
+// Metadata for the BulkCreateBillingGroup long-running operation.
+// Stored in protos.Operation.metadata.
+message BulkCreateBillingGroupMetadata {
   // The current status: "pending", "processing", "completed", "partial_failed", "failed".
-  string status = 2;
+  string status = 1;
 
   // Total number of billing groups to create.
-  int32 totalCount = 3;
+  int32 totalCount = 2;
 
   // Number of billing groups processed so far.
-  int32 processedCount = 4;
+  int32 processedCount = 3;
 
   // Number of billing groups successfully created.
-  int32 successCount = 5;
+  int32 successCount = 4;
 
   // Number of billing groups that failed.
-  int32 failureCount = 6;
+  int32 failureCount = 5;
 
-  // Details of failed billing groups (reuses existing BulkCreateBillingGroupError).
-  repeated BulkCreateBillingGroupError errors = 7;
+  // Details of failed billing groups.
+  repeated BulkCreateBillingGroupError errors = 6;
 
-  // Job start timestamp.
-  string startTime = 8;
+  // Job start timestamp (RFC 3339).
+  string startTime = 7;
 
   // Job end timestamp. Empty if still running.
-  string endTime = 9;
-
-  // Optional status message.
-  string message = 10;
+  string endTime = 8;
 }
 
 message ExcludeServiceEntry {
@@ -3728,14 +3698,6 @@ message BulkLinkAccountRequest {
   bool dryRun = 4;
 }
 
-message BulkLinkAccountResponse {
-  // The job ID for polling status via GetBulkLinkAccountJob.
-  string jobId = 1;
-
-  // Initial status of the job ("pending").
-  string status = 2;
-}
-
 message BulkLinkAccountError {
   // The row index of the failed entry in the CSV (zero-based, excluding header).
   int32 index = 1;
@@ -3750,39 +3712,30 @@ message BulkLinkAccountError {
   string message = 4;
 }
 
-message GetBulkLinkAccountJobRequest {
-  // Required. The job ID returned by BulkLinkAccount.
-  string jobId = 1;
-}
-
-message GetBulkLinkAccountJobResponse {
-  // The job ID.
-  string jobId = 1;
-
+// Metadata for the BulkLinkAccount long-running operation.
+// Stored in protos.Operation.metadata.
+message BulkLinkAccountMetadata {
   // The current status: "pending", "processing", "completed", "partial_failed", "failed".
-  string status = 2;
+  string status = 1;
 
   // Total number of account-link entries to process.
-  int32 totalCount = 3;
+  int32 totalCount = 2;
 
   // Number of entries processed so far.
-  int32 processedCount = 4;
+  int32 processedCount = 3;
 
   // Number of entries successfully linked.
-  int32 successCount = 5;
+  int32 successCount = 4;
 
   // Number of entries that failed.
-  int32 failureCount = 6;
+  int32 failureCount = 5;
 
   // Details of failed entries.
-  repeated BulkLinkAccountError errors = 7;
+  repeated BulkLinkAccountError errors = 6;
 
   // Job start timestamp (RFC 3339 / ISO 8601).
-  string startTime = 8;
+  string startTime = 7;
 
   // Job end timestamp. Empty if still running.
-  string endTime = 9;
-
-  // Optional human-readable status message.
-  string message = 10;
+  string endTime = 8;
 }
