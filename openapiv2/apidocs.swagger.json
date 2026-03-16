@@ -6603,6 +6603,38 @@
         ]
       }
     },
+    "/v1/billinggroups/bulkcreatebillinggroupjobs/{jobId}": {
+      "get": {
+        "summary": "Gets the status of a bulk create billing group job.",
+        "operationId": "Billing_GetBulkCreateBillingGroupJob",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBulkCreateBillingGroupJobResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "jobId",
+            "description": "Required. The job ID returned by BulkCreateBillingGroup.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups/bulklinkaccountjobs/{jobId}": {
       "get": {
         "summary": "Gets the status of a bulk link account job.",
@@ -7275,24 +7307,15 @@
         ]
       }
     },
-    "/v1/billinggroups:bulkCreate": {
+    "/v1/billinggroups:bulkCreateBillingGroup": {
       "post": {
         "summary": "Create billing group in bulk from CSV file",
         "operationId": "Billing_BulkCreateBillingGroup",
         "responses": {
           "200": {
-            "description": "A successful response.(streaming responses)",
+            "description": "A successful response.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1BulkCreateBillingGroupResponse"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1BulkCreateBillingGroupResponse"
+              "$ref": "#/definitions/v1BulkCreateBillingGroupResponse"
             }
           },
           "default": {
@@ -7310,38 +7333,6 @@
             "schema": {
               "$ref": "#/definitions/v1BulkCreateBillingGroupRequest"
             }
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
-      }
-    },
-    "/v1/billinggroups:bulkCreate/{jobId}": {
-      "get": {
-        "summary": "Gets the status of a bulk create billing group job.",
-        "operationId": "Billing_GetBulkCreateBillingGroupJob",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetBulkCreateBillingGroupJobResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "jobId",
-            "description": "Required. The job ID returned by BulkCreateBillingGroup.",
-            "in": "path",
-            "required": true,
-            "type": "string"
           }
         ],
         "tags": [
@@ -7959,12 +7950,12 @@
     "/v1/commitments/purchaseplans": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Retrieves purchase plan of a company.",
-        "operationId": "GuaranteedCommitments_UpdatePurchasePlansBySegment",
+        "operationId": "GuaranteedCommitments_ListPurchasePlansBySegment",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UpdatePurchasePlansBySegmentResponse"
+              "$ref": "#/definitions/v1ListPurchasePlansBySegmentResponse"
             }
           },
           "default": {
@@ -8105,6 +8096,39 @@
         ]
       }
     },
+    "/v1/commitments/purchaseplans:update": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Get the updated details of the plan after the apply plan.",
+        "operationId": "GuaranteedCommitments_GetUpdatedPurchasePlansBySegment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetUpdatedPurchasePlansBySegmentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetUpdatedPurchasePlansBySegmentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/commitments/{commitmentId}/chart": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Generates time-series chart data for commitment metrics over the specified time period.",
@@ -8220,40 +8244,6 @@
         ]
       }
     },
-    "/v1/contexts": {
-      "post": {
-        "summary": "(ALPHA) Creates context.",
-        "operationId": "Luster_CreateContext",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/lusterContext"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the Luster.CreateContext rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateContextRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      }
-    },
     "/v1/contexts/label": {
       "post": {
         "summary": "(ALPHA) Creates label.",
@@ -8288,71 +8278,10 @@
         ]
       }
     },
-    "/v1/contexts/{id}": {
-      "get": {
-        "summary": "(ALPHA) Gets context.",
-        "operationId": "Luster_GetContext",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetContextResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "the context id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      },
-      "delete": {
-        "summary": "(ALPHA) Deletes context.",
-        "operationId": "Luster_DeleteContext",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "the context id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      },
-      "put": {
-        "summary": "(ALPHA) Updates context.",
-        "operationId": "Luster_UpdateContext",
+    "/v1/contexts/{spaceId}": {
+      "post": {
+        "summary": "(ALPHA) Creates context.",
+        "operationId": "Luster_CreateContext",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -8369,8 +8298,8 @@
         },
         "parameters": [
           {
-            "name": "id",
-            "description": "the context id.",
+            "name": "spaceId",
+            "description": "Required. The space id.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -8380,7 +8309,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/LusterUpdateContextBody"
+              "$ref": "#/definitions/LusterCreateContextBody"
             }
           }
         ],
@@ -8389,7 +8318,7 @@
         ]
       }
     },
-    "/v1/contexts/{id}/comment": {
+    "/v1/contexts/{spaceId}/{contextId}/comment": {
       "post": {
         "summary": "(ALPHA) Creates comment in context.",
         "operationId": "Luster_CreateContextComment",
@@ -8409,8 +8338,15 @@
         },
         "parameters": [
           {
-            "name": "id",
-            "description": "the context id.",
+            "name": "spaceId",
+            "description": "Required. the space id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "contextId",
+            "description": "Required. the context id.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -8429,7 +8365,7 @@
         ]
       }
     },
-    "/v1/contexts/{id}/comment/{commentId}": {
+    "/v1/contexts/{spaceId}/{contextId}/comment/{id}": {
       "delete": {
         "summary": "(ALPHA) Deletes comment in context.",
         "operationId": "Luster_DeleteContextComment",
@@ -8450,15 +8386,22 @@
         },
         "parameters": [
           {
-            "name": "id",
-            "description": "the context id.",
+            "name": "spaceId",
+            "description": "Required. the space id.",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "name": "commentId",
-            "description": "the context comment id.",
+            "name": "contextId",
+            "description": "Required. the context id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. the comment id.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -8487,15 +8430,22 @@
         },
         "parameters": [
           {
-            "name": "id",
-            "description": "the context id.",
+            "name": "spaceId",
+            "description": "Required. the space id.",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "name": "commentId",
-            "description": "the context comment id.",
+            "name": "contextId",
+            "description": "Required. the context id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. the comment id.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -8514,9 +8464,138 @@
         ]
       }
     },
-    "/v1/contexts:read": {
+    "/v1/contexts/{spaceId}/{id}": {
+      "get": {
+        "summary": "(ALPHA) Gets context.",
+        "operationId": "Luster_GetContext",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetContextResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "spaceId",
+            "description": "Required. The space id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "the context id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "fieldMask",
+            "description": "Optional. field_mask\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Luster"
+        ]
+      },
+      "delete": {
+        "summary": "(ALPHA) Deletes context.",
+        "operationId": "Luster_DeleteContext",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "spaceId",
+            "description": "Required. The space id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. the context id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Luster"
+        ]
+      },
+      "put": {
+        "summary": "(ALPHA) Updates context.",
+        "operationId": "Luster_UpdateContext",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/lusterContext"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "spaceId",
+            "description": "Required. The space id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. the context id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LusterUpdateContextBody"
+            }
+          }
+        ],
+        "tags": [
+          "Luster"
+        ]
+      }
+    },
+    "/v1/contexts/{spaceId}:read": {
       "post": {
-        "summary": "(ALPHA) Reads contexts.\nスペースの読み取り。",
+        "summary": "(ALPHA) Reads contexts.",
         "operationId": "Luster_ReadContexts",
         "responses": {
           "200": {
@@ -8543,12 +8622,18 @@
         },
         "parameters": [
           {
+            "name": "spaceId",
+            "description": "Required. The space id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "body",
-            "description": "Request message for the Luster.ReadContexts rpc.",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ReadContextsRequest"
+              "$ref": "#/definitions/LusterReadContextsBody"
             }
           }
         ],
@@ -15998,6 +16083,13 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "fieldMask",
+            "description": "Optional. field_mask\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -16055,7 +16147,7 @@
         "parameters": [
           {
             "name": "id",
-            "description": "the space id.",
+            "description": "Required. the space id.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -25986,27 +26078,113 @@
         }
       }
     },
+    "LusterCreateContextBody": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Required. The context title."
+        },
+        "content": {
+          "type": "string",
+          "description": "Required. The context content."
+        },
+        "contextType": {
+          "$ref": "#/definitions/lusterContextType",
+          "title": "Optional. The context type.\nif not set, default: `any`"
+        }
+      },
+      "description": "Request message for the Luster.CreateContext rpc."
+    },
     "LusterCreateContextCommentBody": {
       "type": "object",
       "properties": {
         "content": {
           "type": "string",
-          "description": "The comment content."
+          "description": "Required. The comment content."
         }
       },
       "description": "Request message for the Luster.CreateContextComment rpc."
     },
+    "LusterReadContextsBody": {
+      "type": "object",
+      "properties": {
+        "fieldMask": {
+          "type": "string",
+          "title": "Optional. field_mask"
+        }
+      },
+      "description": "Request message for the Luster.ReadContexts rpc."
+    },
     "LusterUpdateContextBody": {
       "type": "object",
-      "description": "Request message for the Luster.UpdateContext rpc."
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Optional. The context title."
+        },
+        "content": {
+          "type": "string",
+          "description": "Optional. The context content."
+        },
+        "contextType": {
+          "$ref": "#/definitions/lusterContextType",
+          "title": "Optional. The context type.\nif not set, default: `any`"
+        },
+        "updateMask": {
+          "type": "string",
+          "title": "Required.\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto"
+        }
+      },
+      "description": "Request message for the Luster.UpdateContext rpc.",
+      "required": [
+        "updateMask"
+      ]
     },
     "LusterUpdateContextCommentBody": {
       "type": "object",
-      "description": "Request message for the Luster.UpdateContextComment rpc."
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "Required. The comment content."
+        },
+        "updateMask": {
+          "type": "string",
+          "title": "Required.\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto"
+        }
+      },
+      "description": "Request message for the Luster.UpdateContextComment rpc.",
+      "required": [
+        "updateMask"
+      ]
     },
     "LusterUpdateSpaceBody": {
       "type": "object",
-      "description": "Request message for the Luster.UpdateSpace rpc."
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Optional. the space name."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional. the space description."
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. the member ids."
+        },
+        "updateMask": {
+          "type": "string",
+          "title": "Required.\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto"
+        }
+      },
+      "description": "Request message for the Luster.UpdateSpace rpc.",
+      "required": [
+        "updateMask"
+      ]
     },
     "MethodConfigChargingMethod": {
       "type": "string",
@@ -28888,11 +29066,13 @@
         },
         "createdAt": {
           "type": "string",
-          "title": "The label createdAt.\n\"created_at\": \"2023-10-27T10:00:00Z\""
+          "title": "The label createdAt.\n\"created_at\": \"2023-10-27T10:00:00Z\"",
+          "readOnly": true
         },
         "updatedAt": {
           "type": "string",
-          "title": "The label updatedAt.\n\"updated_at\": \"2023-10-27T10:00:00Z\""
+          "title": "The label updatedAt.\n\"updated_at\": \"2023-10-27T10:00:00Z\"",
+          "readOnly": true
         }
       },
       "title": "The message defines the label"
@@ -34147,15 +34327,18 @@
         },
         "userId": {
           "type": "string",
-          "description": "The comment userId."
+          "description": "The comment user_id.",
+          "readOnly": true
         },
         "createdAt": {
           "type": "string",
-          "title": "The comment createdAt.\n\"created_at\": \"2023-10-27T10:00:00Z\""
+          "title": "The comment created_at.\n\"created_at\": \"2023-10-27T10:00:00Z\"",
+          "readOnly": true
         },
         "updatedAt": {
           "type": "string",
-          "title": "The comment updatedAt.\n\"updated_at\": \"2023-10-27T10:00:00Z\""
+          "title": "The comment updated_at.\n\"updated_at\": \"2023-10-27T10:00:00Z\"",
+          "readOnly": true
         }
       },
       "title": "The message defines the comment"
@@ -34183,9 +34366,13 @@
           "type": "string",
           "title": "The context content.\n \"content\": \"contextの本文詳細...\""
         },
+        "contextType": {
+          "$ref": "#/definitions/lusterContextType",
+          "description": "The context type."
+        },
         "state": {
           "type": "string",
-          "title": "The context state.\n \"state\": \"open\""
+          "title": "The context state.\n \"state\": \"open\", \"pending\", \"review\", \"close\""
         },
         "labels": {
           "type": "array",
@@ -34204,26 +34391,42 @@
         "commentsCount": {
           "type": "string",
           "format": "int64",
-          "title": "The context commentsCount.\n\"comments_count\": 0"
+          "title": "The context comments_count.\n\"comments_count\": 0",
+          "readOnly": true
         },
         "createdAt": {
           "type": "string",
-          "title": "The context createdAt.\n\"created_at\": \"2023-10-27T10:00:00Z\""
+          "title": "The context created_at.\n\"created_at\": \"2023-10-27T10:00:00Z\"",
+          "readOnly": true
         },
         "updatedAt": {
           "type": "string",
-          "title": "The context updatedAt.\n\"updated_at\": \"2023-10-27T10:00:00Z\""
+          "title": "The context updated_at.\n\"updated_at\": \"2023-10-27T10:00:00Z\"",
+          "readOnly": true
         },
         "closedAt": {
           "type": "string",
-          "description": "The context closedAt."
+          "title": "The context closed_at.\n\"closed_at\": \"2023-10-27T10:00:00Z\"",
+          "readOnly": true
         },
         "userId": {
           "type": "string",
-          "description": "The context userId."
+          "description": "The context user_id.",
+          "readOnly": true
         }
       },
       "title": "The message defines the context"
+    },
+    "lusterContextType": {
+      "type": "string",
+      "enum": [
+        "ANY",
+        "SPACE",
+        "ACCOUNT",
+        "COST"
+      ],
+      "default": "ANY",
+      "description": "The context type.\n\n - ANY: anyone\n - SPACE: space\n - ACCOUNT: account\n - COST: cost"
     },
     "lusterSpace": {
       "type": "object",
@@ -34246,6 +34449,16 @@
             "type": "string"
           },
           "description": "The members in space."
+        },
+        "createdAt": {
+          "type": "string",
+          "title": "The space created_at.\n\"created_at\": \"2023-10-27T10:00:00Z\"",
+          "readOnly": true
+        },
+        "updatedAt": {
+          "type": "string",
+          "title": "The space updated_at.\n\"updated_at\": \"2023-10-27T10:00:00Z\"",
+          "readOnly": true
         }
       },
       "title": "The message defines the space"
@@ -36431,6 +36644,10 @@
           "type": "string",
           "title": "For aws only: `default` or `imported`"
         },
+        "hasChild": {
+          "type": "boolean",
+          "description": "Indicates if this billing group has child billing groups. AWS only for now."
+        },
         "billingGroupInfo": {
           "$ref": "#/definitions/rippleBillingGroupInfo",
           "title": "The billing group info"
@@ -36748,6 +36965,10 @@
     "v1BulkCreateBillingGroupRequest": {
       "type": "object",
       "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. The cloud vendor for all billing groups in this CSV.\nMust be one of: aws, azure, gcp."
+        },
         "csvContent": {
           "type": "string",
           "format": "byte",
@@ -36770,25 +36991,13 @@
     "v1BulkCreateBillingGroupResponse": {
       "type": "object",
       "properties": {
-        "billingGroups": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1BillingGroup"
-          },
-          "description": "List of billing groups created in bulk."
-        },
-        "errors": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1BulkCreateBillingGroupError"
-          },
-          "description": "If an error occurs for a specific billing group, it will be included here."
-        },
         "jobId": {
           "type": "string",
           "description": "The job ID for polling status via GetBulkCreateBillingGroupJob."
+        },
+        "status": {
+          "type": "string",
+          "description": "Initial status of the job (\"pending\")."
         }
       }
     },
@@ -37169,14 +37378,20 @@
       "type": "object",
       "properties": {
         "basicInformation": {
-          "$ref": "#/definitions/v1ChildBillingGroupBasicInformation"
+          "$ref": "#/definitions/v1ChildBillingGroupBasicInformation",
+          "description": "Required. Basic information for the child billing group."
         },
         "invoiceSettings": {
-          "$ref": "#/definitions/v1ChildBillingGroupInvoiceSettings"
+          "$ref": "#/definitions/v1ChildBillingGroupInvoiceSettings",
+          "description": "Required. Invoice settings for the child billing group."
         },
         "billingInfo": {
           "$ref": "#/definitions/rippleBillingGroupInfo",
-          "title": "AccountInvoiceServiceDiscounts serviceDiscounts = 3;"
+          "description": "Required. Billing info for the child billing group."
+        },
+        "hasChild": {
+          "type": "boolean",
+          "description": "Indicates whether this child billing group has another child under it.\n\nAccountInvoiceServiceDiscounts serviceDiscounts = 3;"
         }
       },
       "description": "Contains basic information and invoice settings related data."
@@ -38703,20 +38918,6 @@
       },
       "description": "Request message for the Admin.CreateCloudWatchMetricsStream rpc."
     },
-    "v1CreateContextRequest": {
-      "type": "object",
-      "properties": {
-        "title": {
-          "type": "string",
-          "description": "The context title."
-        },
-        "content": {
-          "type": "string",
-          "description": "The context content."
-        }
-      },
-      "description": "Request message for the Luster.CreateContext rpc."
-    },
     "v1CreateCostExplorerAccessRequest": {
       "type": "object",
       "properties": {
@@ -39599,11 +39800,18 @@
       "properties": {
         "name": {
           "type": "string",
-          "description": "the space name."
+          "description": "Required. the space name."
         },
         "description": {
           "type": "string",
-          "description": "the space description."
+          "description": "Optional. the space description."
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. the member ids."
         }
       },
       "description": "Request message for the Luster.CreateSpace rpc."
@@ -43161,6 +43369,21 @@
         }
       }
     },
+    "v1GetUpdatedPurchasePlansBySegmentRequest": {
+      "type": "object"
+    },
+    "v1GetUpdatedPurchasePlansBySegmentResponse": {
+      "type": "object",
+      "properties": {
+        "plans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1DefaultPurchasePlan"
+          }
+        }
+      }
+    },
     "v1GetUserAccountSettingsResponse": {
       "type": "object",
       "properties": {
@@ -45355,10 +45578,6 @@
         }
       }
     },
-    "v1ReadContextsRequest": {
-      "type": "object",
-      "description": "Request message for the Luster.ReadContexts rpc."
-    },
     "v1ReadCostAttributesRequestAwsOptions": {
       "type": "object",
       "properties": {
@@ -45652,6 +45871,12 @@
     },
     "v1ReadSpacesRequest": {
       "type": "object",
+      "properties": {
+        "fieldMask": {
+          "type": "string",
+          "title": "Optional. field_mask\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto"
+        }
+      },
       "description": "Request message for the Luster.ReadSpaces rpc."
     },
     "v1ReadTagCostsRequestAwsOptions": {
@@ -47491,18 +47716,6 @@
         }
       },
       "description": "Request message for the Organization.UpdatePassword rpc."
-    },
-    "v1UpdatePurchasePlansBySegmentResponse": {
-      "type": "object",
-      "properties": {
-        "plans": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1DefaultPurchasePlan"
-          }
-        }
-      }
     },
     "v1UpdateSharedResourcesResponse": {
       "type": "object",
