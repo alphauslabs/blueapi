@@ -38,6 +38,20 @@ service GuaranteedCommitments {
     };
   }
 
+  // WORK-IN-PROGRESS: Approves or rejects a pending commitment purchase plan application.
+  rpc ApproveCommitmentPlanApply(ApproveCommitmentPlanApplyRequest) returns (CommitmentPlanDetails) {
+    option (google.api.http) = {
+      post: "/v1/commitments/plans/{planId}/approve"
+      body: "*"
+    };
+  }
+
+    // WORK-IN-PROGRESS: Lists all pending commitment plan approvals.
+  rpc ListPendingCommitmentPlanApprovals(ListPendingCommitmentPlanApprovalsRequest) returns (ListPendingCommitmentPlanApprovalsResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/plans/approvals"
+    };
+  }
   // ####################### COMMITMENTS #######################
 
   // WORK-IN-PROGRESS: Retrieves a list of commitments.
@@ -536,6 +550,15 @@ message CreateGuaranteedCommitmentAccessRequest {
   string externalId = 2;
 }
 
+message ApproveCommitmentPlanApplyRequest {
+  string planId = 1;
+  // true = approve, false = reject
+  bool approved = 2;
+   // optional reason if rejected
+  string reason = 3;
+}
+
+message ListPendingCommitmentPlanApprovalsRequest {}
 
 // ####################### RESPONSE MESSAGES #######################
 
@@ -1242,4 +1265,20 @@ message GetPurchasePlansDetailsResponse {
 
   // Audit history of the plan
   repeated PlanHistoryEntry history = 4;
+}
+
+message PendingCommitmentPlanApproval {
+  string planId = 1;
+  string companyId = 2;
+  string userId = 3;
+  string planName = 4;
+  string status = 5; // "PENDING_APPROVAL" | "APPROVED" | "REJECTED"
+  string requestedAt = 6;
+  double monthlySavings = 7;
+  double totalSavings = 8;
+  double monthlyCost = 9;
+}
+
+message ListPendingCommitmentPlanApprovalsResponse {
+  repeated PendingCommitmentPlanApproval approvals = 1;
 }
