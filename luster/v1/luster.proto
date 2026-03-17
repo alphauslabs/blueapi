@@ -238,9 +238,17 @@ message CreateContextRequest {
   // Required. The context content.
   string content = 3;
 
+  // Optional. The context labels.
+  // "labels": ["bug" "documentation"]
+  repeated string labels = 4;
+
+  // Optional. The context assignees.
+  // "assignees": ["username1" "username2"]
+  repeated string assignees = 5;
+
   // Optional. The context type.
   // if not set, default: `any`
-  api.luster.ContextType context_type = 4;
+  api.luster.ContextType context_type = 6;
 }
 
 // Request message for the Luster.UpdateContext rpc.
@@ -257,13 +265,21 @@ message UpdateContextRequest {
   // Optional. The context content.
   string content = 4;
 
+  // Optional. The context labels.
+  // "labels": ["bug" "documentation"]
+  repeated string labels = 5;
+
+  // Optional. The context assignees.
+  // "assignees": ["username1" "username2"]
+  repeated string assignees = 6;
+
   // Optional. The context type.
   // if not set, default: `any`
-  api.luster.ContextType context_type = 5;
+  api.luster.ContextType context_type = 7;
 
   // Required.
   // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
-  google.protobuf.FieldMask update_mask = 6
+  google.protobuf.FieldMask update_mask = 8
       [(google.api.field_behavior) = REQUIRED];
 }
 
