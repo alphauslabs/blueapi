@@ -27,7 +27,6 @@ service Luster {
   };
 
   // (ALPHA) Reads spaces.
-  // スペースの読み取り。
   rpc ReadSpaces(ReadSpacesRequest) returns (stream api.luster.Space) {
     option (google.api.http) = {
       post: "/v1/spaces:read"
@@ -36,7 +35,6 @@ service Luster {
   }
 
   // (ALPHA) Gets space.
-  // スペースの取得。
   rpc GetSpace(GetSpaceRequest) returns (api.luster.Space) {
     option (google.api.http) = {
       get: "/v1/spaces/{id}"
@@ -44,7 +42,6 @@ service Luster {
   }
 
   // (ALPHA) Creates space.
-  // スペースの作成。
   rpc CreateSpace(CreateSpaceRequest) returns (api.luster.Space) {
     option (google.api.http) = {
       post: "/v1/spaces"
@@ -53,7 +50,6 @@ service Luster {
   }
 
   // (ALPHA) Updates space.
-  // スペースの更新。
   rpc UpdateSpace(UpdateSpaceRequest) returns (api.luster.Space) {
     option (google.api.http) = {
       put: "/v1/spaces/{id}"
@@ -61,8 +57,7 @@ service Luster {
     };
   }
 
-  // (ALPHA) Deletes space.
-  // スペースの削除。 削除する場合はスペース内で作成したコンテクストも削除され閲覧できなくなります。
+  // (ALPHA) Deletes space. When deleted, contexts created within the space will also be deleted and cannot be viewed.
   rpc DeleteSpace(DeleteSpaceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/spaces/{id}"
@@ -161,9 +156,11 @@ message GetSpaceRequest {
 // Request message for the Luster.CreateSpace rpc.
 message CreateSpaceRequest {
   // Required. the space name.
+  // String length 1-60 characters
   string name = 1;
 
   // Optional. the space description.
+  // String length 0-1000 characters
   string description = 2;
 
   // Optional. the member ids.
@@ -176,9 +173,11 @@ message UpdateSpaceRequest {
   string id = 1;
 
   // Optional. the space name.
+  // String length 1-60 characters
   string name = 2;
 
   // Optional. the space description.
+  // String length 0-1000 characters
   string description = 3;
 
   // Optional. the member ids.
@@ -233,9 +232,11 @@ message CreateContextRequest {
   string space_id = 1;
 
   // Required. The context title.
+  // String length 1-500 characters
   string title = 2;
 
   // Required. The context content.
+  // String length 0-10000 characters
   string content = 3;
 
   // Optional. The context labels.
@@ -260,9 +261,11 @@ message UpdateContextRequest {
   string space_id = 2;
 
   // Optional. The context title.
+  // String length 1-500 characters
   string title = 3;
 
   // Optional. The context content.
+  // String length 0-10000 characters
   string content = 4;
 
   // Optional. The context labels.
@@ -304,6 +307,7 @@ message CreateContextCommentRequest {
   string context_id = 2;
 
   // Required. The comment content.
+  // String length 1-10000 characters
   string content = 3;
 }
 
@@ -319,6 +323,7 @@ message UpdateContextCommentRequest {
   string context_id = 3;
 
   // Required. The comment content.
+  // String length 1-10000 characters
   string content = 4;
 
   // Required.
@@ -342,11 +347,15 @@ message DeleteContextCommentRequest {
 // Request message for the Luster.CreateLabel rpc.
 message CreateLabelRequest {
   // The label name.
+  // String length 1-100 characters
   string name = 1;
 
   // The label color.
+  // Required format: HEX color code (#RRGGBB).
+  // Example: #FF5733 (valid), #FFF (invalid - must be 6 digits), rgb(255, 87, 51) (invalid format)
   string color = 2;
 
   // The label description.
+  // String length 0-500 characters
   string description = 3;
 }
