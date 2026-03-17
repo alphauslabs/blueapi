@@ -17,22 +17,21 @@ message Context {
   string name = 2;
 
   // The context number.
-  // 作成されるごとにnumberが採番されます。
+  // Sequential number assigned to the context.
   string number = 3;
 
   // The context title.
   string title = 4;
 
   // The context content.
-  //  "content": "contextの本文詳細..."
+  // Detailed content or description of the context.
   string content = 5;  
 
   // The context type.
   ContextType context_type = 14;
 
   // The context state.
-  //  "state": "open", "pending", "review", "close"
-  string state = 6;
+  ContextState state = 6;
 
   // The context labels.
   // "labels": ["bug" "documentation"]
@@ -69,15 +68,30 @@ message Context {
 
 // The context type.
 enum ContextType {
-  // anyone
+  // Any type of context.
   ANY = 0;
 
-  // space
+  // Space-related context.
   SPACE = 1;
 
-  // account
+  // Account-related context.
   ACCOUNT = 2;
 
-  // cost
+  // Cost-related context.
   COST = 3;
+}
+
+// The context state.
+enum ContextState {
+  // open
+  // Initial state when context is created.
+  OPEN = 0;
+
+  // in progress
+  // Indicates work is in progress.
+  IN_PROGRESS = 1;
+
+  // closed
+  // Final state indicating work is completed.
+  CLOSED = 2;
 }
