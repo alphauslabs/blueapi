@@ -134,6 +134,21 @@ service Luster {
     };
   }
 
+  // (ALPHA) Updates label.
+  rpc UpdateLabel(UpdateLabelRequest) returns (api.luster.Label) {
+    option (google.api.http) = {
+      put: "/v1/contexts/label/{id}"
+      body: "*"
+    };
+  }
+
+  // (ALPHA) Deletes label.
+  rpc DeleteLabel(DeleteLabelRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/contexts/label/{id}"
+    };
+  }
+
 }
 
 // Request message for the Luster.ReadSpaces rpc.
@@ -358,4 +373,33 @@ message CreateLabelRequest {
   // The label description.
   // String length 0-500 characters
   string description = 3;
+}
+
+// Request message for the Luster.UpdateLabel rpc.
+message UpdateLabelRequest {
+  // Required. the label id.
+  string id = 1;
+
+  // Optional. the label name.
+  string name = 2;
+
+  // The label color.
+  // Optional. format: HEX color code (#RRGGBB).
+  // Example: #FF5733 (valid), #FFF (invalid - must be 6 digits), rgb(255, 87, 51) (invalid format)
+  string color = 3;
+
+  // Optional. the description.
+  // String length 0-500 characters
+  string description = 4;
+
+  // Required.
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask update_mask = 5
+      [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request message for the Luster.DeleteLabel rpc.
+message DeleteLabelRequest {
+  // Required. the label id.
+  string id = 1;
 }
