@@ -26,7 +26,7 @@ service Luster {
     }
   };
 
-  // (ALPHA) Reads spaces.
+  // (ALPHA) [SPACE] Reads spaces.
   rpc ReadSpaces(ReadSpacesRequest) returns (stream api.luster.Space) {
     option (google.api.http) = {
       post: "/v1/spaces:read"
@@ -34,14 +34,14 @@ service Luster {
     };
   }
 
-  // (ALPHA) Gets space.
+  // (ALPHA) [SPACE] Gets space.
   rpc GetSpace(GetSpaceRequest) returns (api.luster.Space) {
     option (google.api.http) = {
       get: "/v1/spaces/{id}"
     };
   }
 
-  // (ALPHA) Creates space.
+  // (ALPHA) [SPACE] Creates space.
   rpc CreateSpace(CreateSpaceRequest) returns (api.luster.Space) {
     option (google.api.http) = {
       post: "/v1/spaces"
@@ -49,7 +49,7 @@ service Luster {
     };
   }
 
-  // (ALPHA) Updates space.
+  // (ALPHA) [SPACE] Updates space.
   rpc UpdateSpace(UpdateSpaceRequest) returns (api.luster.Space) {
     option (google.api.http) = {
       put: "/v1/spaces/{id}"
@@ -57,7 +57,8 @@ service Luster {
     };
   }
 
-  // (ALPHA) Deletes space. When deleted, contexts created within the space will also be deleted and cannot be viewed.
+  // (ALPHA) [SPACE] Deletes space. 
+  // When deleted, contexts created within the space will also be deleted and cannot be viewed.
   rpc DeleteSpace(DeleteSpaceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/spaces/{id}"
@@ -65,7 +66,7 @@ service Luster {
   }
 
 
-  // (ALPHA) Reads contexts.
+  // (ALPHA) [CONTEXT] Reads contexts.
   rpc ReadContexts(ReadContextsRequest) returns (stream api.luster.Context) {
     option (google.api.http) = {
       post: "/v1/contexts/{space_id}:read"
@@ -73,14 +74,14 @@ service Luster {
     };
   }
 
-  // (ALPHA) Gets context.
+  // (ALPHA [CONTEXT]) Gets context.
   rpc GetContext(GetContextRequest) returns (GetContextResponse) {
     option (google.api.http) = {
       get: "/v1/contexts/{space_id}/{id}"
     };
   }
 
-  // (ALPHA) Creates context.
+  // (ALPHA) [CONTEXT] Creates context.
   rpc CreateContext(CreateContextRequest) returns (api.luster.Context) {
     option (google.api.http) = {
       post: "/v1/contexts/{space_id}"
@@ -88,7 +89,7 @@ service Luster {
     };
   }
 
-  // (ALPHA) Updates context.
+  // (ALPHA) [CONTEXT] Updates context.
   rpc UpdateContext(UpdateContextRequest) returns (api.luster.Context) {
     option (google.api.http) = {
       put: "/v1/contexts/{space_id}/{id}"
@@ -96,14 +97,14 @@ service Luster {
     };
   }
 
-  // (ALPHA) Deletes context.
+  // (ALPHA) [CONTEXT] Deletes context.
   rpc DeleteContext(DeleteContextRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/contexts/{space_id}/{id}"
     };
   }
 
-  // (ALPHA) Creates comment in context.
+  // (ALPHA) [COMMENT] Creates comment in context.
   rpc CreateContextComment(CreateContextCommentRequest) returns (api.luster.Comment) {
     option (google.api.http) = {
       post: "/v1/contexts/{space_id}/{context_id}/comment"
@@ -111,7 +112,7 @@ service Luster {
     };
   }
 
-  // (ALPHA) Updates comment in context.
+  // (ALPHA) [COMMENT] Updates comment in context.
   rpc UpdateContextComment(UpdateContextCommentRequest) returns (api.luster.Comment) {
     option (google.api.http) = {
       put: "/v1/contexts/{space_id}/{context_id}/comment/{id}"
@@ -119,14 +120,22 @@ service Luster {
     };
   }
 
-  // (ALPHA) Deletes comment in context.
+  // (ALPHA) [COMMENT] Deletes comment in context.
   rpc DeleteContextComment(DeleteContextCommentRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/contexts/{space_id}/{context_id}/comment/{id}"
     };
   }
 
-  // (ALPHA) Creates label.
+  // (ALPHA) [LABEL] Reads labels.
+  rpc ReadLabels(ReadLabelsRequest) returns (stream api.luster.Label) {
+    option (google.api.http) = {
+      post: "/v1/contexts/label:read"
+      body: "*"
+    };
+  }
+
+  // (ALPHA) [LABEL] Creates label.
   rpc CreateLabel(CreateLabelRequest) returns (api.luster.Label) {
     option (google.api.http) = {
       post: "/v1/contexts/label"
@@ -134,7 +143,7 @@ service Luster {
     };
   }
 
-  // (ALPHA) Updates label.
+  // (ALPHA) [LABEL] Updates label.
   rpc UpdateLabel(UpdateLabelRequest) returns (api.luster.Label) {
     option (google.api.http) = {
       put: "/v1/contexts/label/{id}"
@@ -142,7 +151,7 @@ service Luster {
     };
   }
 
-  // (ALPHA) Deletes label.
+  // (ALPHA) [LABEL] Deletes label.
   rpc DeleteLabel(DeleteLabelRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/contexts/label/{id}"
@@ -357,6 +366,12 @@ message DeleteContextCommentRequest {
 
   // Required. the context id.
   string context_id = 3;
+}
+
+// Request message for the Luster.ReadLabels rpc.
+message ReadLabelsRequest {
+  // Optional. field_mask
+  google.protobuf.FieldMask field_mask = 1;
 }
 
 // Request message for the Luster.CreateLabel rpc.
