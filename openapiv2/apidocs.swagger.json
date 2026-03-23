@@ -31,14 +31,6 @@
       }
     },
     {
-      "name": "Flags",
-      "description": "(ALPHA) Flag API. Base URL: https://api.alphaus.cloud/m/blue",
-      "externalDocs": {
-        "description": "Service definition",
-        "url": "https://github.com/alphauslabs/blueapi/tree/main/flags"
-      }
-    },
-    {
       "name": "Cost",
       "description": "Cost API. Base URL: https://api.alphaus.cloud/m/blue/cost",
       "externalDocs": {
@@ -92,30 +84,6 @@
       "externalDocs": {
         "description": "Service definition",
         "url": "https://github.com/alphauslabs/blueapi/tree/main/prism/"
-      }
-    },
-    {
-      "name": "Vortex",
-      "description": "(Alpha) Vortex API. Base URL: https://api.alphaus.cloud/m/blue/vortex",
-      "externalDocs": {
-        "description": "Service definition",
-        "url": "https://github.com/alphauslabs/blueapi/tree/main/vortex/"
-      }
-    },
-    {
-      "name": "GuaranteedCommitments",
-      "description": "(Alpha) GuaranteedCommitments API. Base URL: https://api.alphaus.cloud/m/blue/gc",
-      "externalDocs": {
-        "description": "Service definition",
-        "url": "https://github.com/alphauslabs/blueapi/tree/main/gc/"
-      }
-    },
-    {
-      "name": "Luster",
-      "description": "(ALPHA) Luster API. Base URL: https://api.alphaus.cloud/m/blue/luster",
-      "externalDocs": {
-        "description": "Luster is a service that manages user contexts.",
-        "url": "https://github.com/alphauslabs/blueapi/tree/main/luster/"
       }
     },
     {
@@ -1099,100 +1067,6 @@
         ],
         "tags": [
           "Billing"
-        ]
-      }
-    },
-    "/flags/v1/namespace/{namespaceId}/boolean/{id}:eval": {
-      "post": {
-        "summary": "EvaluateBooleanFlag returns the boolean value of a flag for a given namespace.",
-        "operationId": "Flags_EvaluateBooleanFlag",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1EvaluateBooleanFlagResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "namespaceId",
-            "description": "Required. The namespaceId that the flag belongs to.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "Required. The flagId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/FlagsEvaluateBooleanFlagBody"
-            }
-          }
-        ],
-        "tags": [
-          "Flags"
-        ]
-      }
-    },
-    "/flags/v1/namespace/{namespaceId}/variant/{id}:eval": {
-      "post": {
-        "summary": "EvaluateVariantFlag returns the variant value of a flag for a given namespace.",
-        "operationId": "Flags_EvaluateVariantFlag",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1EvaluateVariantFlagResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "namespaceId",
-            "description": "Required. The namespaceId that the flag belongs to.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "Required. The flagId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/FlagsEvaluateVariantFlagBody"
-            }
-          }
-        ],
-        "tags": [
-          "Flags"
         ]
       }
     },
@@ -2590,7 +2464,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apirippleOrg"
+              "$ref": "#/definitions/rippleOrg"
             }
           },
           "default": {
@@ -2633,7 +2507,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/blueapiorgv1CreateOrgResponse"
+              "$ref": "#/definitions/v1CreateOrgResponse"
             }
           },
           "default": {
@@ -2650,7 +2524,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/blueapiorgv1CreateOrgRequest"
+              "$ref": "#/definitions/v1CreateOrgRequest"
             }
           }
         ],
@@ -5057,13 +4931,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/blueapicoverv1Resource"
+                  "$ref": "#/definitions/v1Resource"
                 },
                 "error": {
                   "$ref": "#/definitions/googlerpcStatus"
                 }
               },
-              "title": "Stream result of blueapicoverv1Resource"
+              "title": "Stream result of v1Resource"
             }
           },
           "default": {
@@ -7821,333 +7695,6 @@
         ]
       }
     },
-    "/v1/commitments": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Retrieves a list of commitments.",
-        "operationId": "GuaranteedCommitments_ListCommitments",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListCommitmentsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/commitments/plan/{planId}/apply": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Executes a commitment purchase plan, initiating the commitment purchase process.",
-        "operationId": "GuaranteedCommitments_CommitmentsPlanApply",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CommitmentPlanDetails"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "planId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/GuaranteedCommitmentsCommitmentsPlanApplyBody"
-            }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/commitments/purchaseplans": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Retrieves purchase plan of a company.",
-        "operationId": "GuaranteedCommitments_ListPurchasePlansBySegment",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListPurchasePlansBySegmentResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/commitments/purchaseplans/draft": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Retrieves the drafted purchase plans",
-        "operationId": "GuaranteedCommitments_ListDraftPurchasePlans",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListDraftPurchasePlansResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/commitments/purchaseplans/draft/{draftPlanId}": {
-      "delete": {
-        "summary": "WORK-IN-PROGRESS: Deletes a drafted purchase plan.",
-        "operationId": "GuaranteedCommitments_DeleteDraftPurchasePlan",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DeleteDraftPurchasePlanResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "draftPlanId",
-            "description": "Required. The draft plan ID to delete.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/commitments/purchaseplans/draft/{planId}": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Saves a commitment purchase plan as draft.",
-        "operationId": "GuaranteedCommitments_SaveCommitmentsPlanAsDraft",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DefaultPurchasePlan"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "planId",
-            "description": "Required. The commitment purchase plan ID to save as draft.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/GuaranteedCommitmentsSaveCommitmentsPlanAsDraftBody"
-            }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/commitments/purchaseplans/{planId}": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Retrieves full details of a specific purchase plan of a company.\nIncludes the basic info, detailed metrics, commitment line items, covered infrastructure resource matches, and audit history.",
-        "operationId": "GuaranteedCommitments_GetPurchasePlansDetails",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetPurchasePlansDetailsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "planId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/commitments/purchaseplans:update": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Get the updated details of the plan after the apply plan.",
-        "operationId": "GuaranteedCommitments_GetUpdatedPurchasePlansBySegment",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetUpdatedPurchasePlansBySegmentResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetUpdatedPurchasePlansBySegmentRequest"
-            }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/commitments/{commitmentId}/chart": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Generates time-series chart data for commitment metrics over the specified time period.",
-        "operationId": "GuaranteedCommitments_GetCommitmentsChart",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CommitmentsChartResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "commitmentId",
-            "description": "Required. The commitment id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "groupBy",
-            "description": "Required. The group filter. Available filters include `region`, `service`, `instanceType`, `instanceTypeFamily`, `usageType` and `operation`.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "startDate",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "endDate",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/commitments/{commitmentId}/utilization": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Generates utilization data for commitment over the active period.",
-        "operationId": "GuaranteedCommitments_GetCommitmentsUtilization",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CommitmentsUtilizationResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "commitmentId",
-            "description": "Required. The commitment id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
     "/v1/containers/costusage": {
       "post": {
         "operationId": "Cover_GetContainerCostUsage",
@@ -8177,404 +7724,6 @@
         ],
         "tags": [
           "Cover"
-        ]
-      }
-    },
-    "/v1/contexts/label": {
-      "post": {
-        "summary": "(ALPHA) Creates label.",
-        "operationId": "Luster_CreateLabel",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apilusterLabel"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the Luster.CreateLabel rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateLabelRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      }
-    },
-    "/v1/contexts/{spaceId}": {
-      "post": {
-        "summary": "(ALPHA) Creates context.",
-        "operationId": "Luster_CreateContext",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/lusterContext"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "spaceId",
-            "description": "Required. The space id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/LusterCreateContextBody"
-            }
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      }
-    },
-    "/v1/contexts/{spaceId}/{contextId}/comment": {
-      "post": {
-        "summary": "(ALPHA) Creates comment in context.",
-        "operationId": "Luster_CreateContextComment",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/lusterComment"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "spaceId",
-            "description": "Required. the space id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "contextId",
-            "description": "Required. the context id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/LusterCreateContextCommentBody"
-            }
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      }
-    },
-    "/v1/contexts/{spaceId}/{contextId}/comment/{id}": {
-      "delete": {
-        "summary": "(ALPHA) Deletes comment in context.",
-        "operationId": "Luster_DeleteContextComment",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "spaceId",
-            "description": "Required. the space id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "contextId",
-            "description": "Required. the context id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "Required. the comment id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      },
-      "put": {
-        "summary": "(ALPHA) Updates comment in context.",
-        "operationId": "Luster_UpdateContextComment",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/lusterComment"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "spaceId",
-            "description": "Required. the space id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "contextId",
-            "description": "Required. the context id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "Required. the comment id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/LusterUpdateContextCommentBody"
-            }
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      }
-    },
-    "/v1/contexts/{spaceId}/{id}": {
-      "get": {
-        "summary": "(ALPHA) Gets context.",
-        "operationId": "Luster_GetContext",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetContextResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "spaceId",
-            "description": "Required. The space id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "the context id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "fieldMask",
-            "description": "Optional. field_mask\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      },
-      "delete": {
-        "summary": "(ALPHA) Deletes context.",
-        "operationId": "Luster_DeleteContext",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "spaceId",
-            "description": "Required. The space id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "Required. the context id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      },
-      "put": {
-        "summary": "(ALPHA) Updates context.",
-        "operationId": "Luster_UpdateContext",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/lusterContext"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "spaceId",
-            "description": "Required. The space id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "Required. the context id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/LusterUpdateContextBody"
-            }
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      }
-    },
-    "/v1/contexts/{spaceId}:read": {
-      "post": {
-        "summary": "(ALPHA) Reads contexts.",
-        "operationId": "Luster_ReadContexts",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/lusterContext"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of lusterContext"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "spaceId",
-            "description": "Required. The space id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/LusterReadContextsBody"
-            }
-          }
-        ],
-        "tags": [
-          "Luster"
         ]
       }
     },
@@ -10505,72 +9654,6 @@
         ]
       }
     },
-    "/v1/invite": {
-      "post": {
-        "operationId": "Vortex_InviteUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1InviteUserRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Vortex"
-        ]
-      }
-    },
-    "/v1/invite/verify": {
-      "post": {
-        "operationId": "Vortex_VerifyInvitedUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1VerifyInvitedUserRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Vortex"
-        ]
-      }
-    },
     "/v1/invoice/displaysettings": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Gets the invoice display settings for invoice-ui",
@@ -11232,89 +10315,6 @@
         ],
         "tags": [
           "Cost"
-        ]
-      }
-    },
-    "/v1/managements/accounts": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Lists payer accounts associated with the organization.\nRetrieves all payer accounts linked to the organization, including their status and associated segments.",
-        "operationId": "GuaranteedCommitments_ListPayerAccounts",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListPayerAccountsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/managements/accounts/status": {
-      "get": {
-        "operationId": "GuaranteedCommitments_GetPayerAccountStatus",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetPayerAccountStatusResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/managements/accounts/{companyId}": {
-      "post": {
-        "operationId": "GuaranteedCommitments_SetPayerAccountEnabled",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1SetPayerAccountEnabledResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "companyId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/GuaranteedCommitmentsSetPayerAccountEnabledBody"
-            }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
         ]
       }
     },
@@ -12356,363 +11356,6 @@
         ]
       }
     },
-    "/v1/metrics": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Do not use. Retrieves key performance metrics for cloud commitments.",
-        "operationId": "GuaranteedCommitments_GetMetrics",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1MetricsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "provider",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "PROVIDER_UNSPECIFIED",
-              "AWS",
-              "AZURE",
-              "GCP",
-              "KUBERNETES",
-              "UNKNOWN"
-            ],
-            "default": "PROVIDER_UNSPECIFIED"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/onboarding": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Registers a new child organization under the channel partner.\nCreates the organization, sets up user memberships, and establishes the partnership relationship.",
-        "operationId": "GuaranteedCommitments_RegisterOrg",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1RegisterOrgResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1RegisterOrgRequest"
-            }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/onboarding/aws/cftemplate/guaranteed": {
-      "post": {
-        "summary": "CreateGuaranteedCommitmentAccess verifies and registers a deployed guaranteed CloudFormation stack.",
-        "operationId": "GuaranteedCommitments_CreateGuaranteedCommitmentAccess",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CreateGuaranteedCommitmentAccessResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateGuaranteedCommitmentAccessRequest"
-            }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/onboarding/aws/cftemplate/guaranteed:url": {
-      "get": {
-        "summary": "GetGuaranteedCommitmentTemplateUrl returns a CloudFormation launch URL for deploying\nboth Alphaus (Ripple) and Archera IAM roles in a single stack.",
-        "operationId": "GuaranteedCommitments_GetGuaranteedCommitmentTemplateUrl",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetGuaranteedCommitmentTemplateUrlResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "externalId",
-            "description": "The guaranteed-commitments-provided external ID for the guaranteed-commitments IAM role trust policy.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/onboarding/aws/cloudformation/launchstackurl": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Generates AWS CloudFormation launch stack URL.\nCreates a pre-configured URL to deploy the CloudFormation stack in the AWS console.",
-        "operationId": "GuaranteedCommitments_GetAwsLaunchStackUrl",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetAwsLaunchStackUrlResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "billingGroupId",
-            "description": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "companyId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "gcOrgId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/onboarding/aws/cloudformation/template": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Generates CloudFormation template for AWS integration.\nCreates the necessary IAM role and policy template for setting up AWS access.",
-        "operationId": "GuaranteedCommitments_GetAwsCloudFormationTemplate",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetAwsCloudFormationTemplateResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "billingGroupId",
-            "description": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "companyId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "gcOrgId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/onboarding/aws/start": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Starts the onboarding process for an organization.\nCreates or retrieves an onboarding record and sets the provider to AWS.",
-        "operationId": "GuaranteedCommitments_StartAwsOnboarding",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1StartAwsOnboardingResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1StartAwsOnboardingRequest"
-            }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/onboarding/aws/verify": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Runs AWS onboarding verification process.\nCreates a new CUR or uses an existing CUR and verifies AWS integration setup\nand returns validation status for all required features.",
-        "operationId": "GuaranteedCommitments_VerifyAwsOnboarding",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1VerifyAwsOnboardingResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1VerifyAwsOnboardingRequest"
-            }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/onboarding/billinggroup:validate": {
-      "post": {
-        "operationId": "GuaranteedCommitments_ValidateBillingGroup",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ValidateBillingGroupResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ValidateBillingGroupRequest"
-            }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
-    "/v1/onboarding/status:read": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Retrieves the latest onboarding status for an MSP or a company under an MSP.\nRetrieves the latest onboarding status for an MSP or a company under an MSP.",
-        "operationId": "GuaranteedCommitments_GetOnboardingStatus",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetOnboardingStatusResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetOnboardingStatusRequest"
-            }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
     "/v1/org": {
       "post": {
         "summary": "Creates a new organization.",
@@ -12952,39 +11595,6 @@
         ]
       }
     },
-    "/v1/organizations": {
-      "post": {
-        "summary": "Create an org in Vortex",
-        "operationId": "Vortex_CreateOrg",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/blueapivortexv1CreateOrgResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/blueapivortexv1CreateOrgRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Vortex"
-        ]
-      }
-    },
     "/v1/organizations/currency": {
       "get": {
         "summary": "Get Org's reference of currency exchange rate",
@@ -13128,48 +11738,6 @@
         ],
         "tags": [
           "Cover"
-        ]
-      }
-    },
-    "/v1/organizations:read": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: List all the registered orgs",
-        "operationId": "GuaranteedCommitments_ListOrgs",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/gcv1Org"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of gcv1Org"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ListOrgsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
         ]
       }
     },
@@ -13488,47 +12056,6 @@
         ],
         "tags": [
           "Prism"
-        ]
-      }
-    },
-    "/v1/prompts:read": {
-      "post": {
-        "operationId": "Vortex_ListPrompts",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1Prompt"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of v1Prompt"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ListPromptsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Vortex"
         ]
       }
     },
@@ -14762,84 +13289,6 @@
         ]
       }
     },
-    "/v1/resources": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Do not use. Retrieves a list of infrastructure resources for the organization.",
-        "operationId": "GuaranteedCommitments_ListResources",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListResourcesResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "provider",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "PROVIDER_UNSPECIFIED",
-              "AWS",
-              "AZURE",
-              "GCP",
-              "KUBERNETES",
-              "UNKNOWN"
-            ],
-            "default": "PROVIDER_UNSPECIFIED"
-          },
-          {
-            "name": "segmentId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "desc",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "orderBy",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "pageSize",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
     "/v1/resources/accounts/{vendor}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Returns all registered accounts that are not associated to any billing groups and accounts found in CUR for the specified month. For Ripple only",
@@ -14885,69 +13334,6 @@
         ],
         "tags": [
           "Billing"
-        ]
-      }
-    },
-    "/v1/resources/{resourceId}/dailyusage": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: Do not use. Retrieves daily usage data for a specific resource within the specified date range.",
-        "operationId": "GuaranteedCommitments_GetResourceDailyUsage",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetResourceDailyUsageResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "resourceId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "startDate",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "endDate",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "catalogSkuId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "pageSize",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
         ]
       }
     },
@@ -15960,191 +14346,6 @@
         ]
       }
     },
-    "/v1/spaces": {
-      "post": {
-        "summary": "(ALPHA) Creates space.\nスペースの作成。",
-        "operationId": "Luster_CreateSpace",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/lusterSpace"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the Luster.CreateSpace rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateSpaceRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      }
-    },
-    "/v1/spaces/{id}": {
-      "get": {
-        "summary": "(ALPHA) Gets space.\nスペースの取得。",
-        "operationId": "Luster_GetSpace",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/lusterSpace"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "the space id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "fieldMask",
-            "description": "Optional. field_mask\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      },
-      "delete": {
-        "summary": "(ALPHA) Deletes space.\nスペースの削除。 削除する場合はスペース内で作成したコンテクストも削除され閲覧できなくなります。",
-        "operationId": "Luster_DeleteSpace",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "the space id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      },
-      "put": {
-        "summary": "(ALPHA) Updates space.\nスペースの更新。",
-        "operationId": "Luster_UpdateSpace",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/lusterSpace"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "Required. the space id.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/LusterUpdateSpaceBody"
-            }
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      }
-    },
-    "/v1/spaces:read": {
-      "post": {
-        "summary": "(ALPHA) Reads spaces.\nスペースの読み取り。",
-        "operationId": "Luster_ReadSpaces",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/lusterSpace"
-                },
-                "error": {
-                  "$ref": "#/definitions/googlerpcStatus"
-                }
-              },
-              "title": "Stream result of lusterSpace"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "Request message for the Luster.ReadSpaces rpc.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ReadSpacesRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Luster"
-        ]
-      }
-    },
     "/v1/tags": {
       "get": {
         "summary": "Returns the customer details and its tags. \nPort for: m/ripple/tags/vendor/{vendor}?type={type}",
@@ -16334,7 +14535,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/blueapiprismv1TestResponse"
+              "$ref": "#/definitions/v1TestResponse"
             }
           },
           "default": {
@@ -16346,37 +14547,6 @@
         },
         "tags": [
           "Prism"
-        ]
-      }
-    },
-    "/v1/testing": {
-      "get": {
-        "summary": "Test endpoint only",
-        "operationId": "Vortex_Test",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/blueapivortexv1TestResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "message",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Vortex"
         ]
       }
     },
@@ -17217,36 +15387,6 @@
         ]
       }
     },
-    "/v1/user/{email}": {
-      "get": {
-        "operationId": "Vortex_GetUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/blueapivortexv1GetUserResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "email",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Vortex"
-        ]
-      }
-    },
     "/v1/users": {
       "get": {
         "summary": "Lists all users in the organization",
@@ -17311,7 +15451,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/blueapicoverv1GetUserResponse"
+              "$ref": "#/definitions/v1GetUserResponse"
             }
           },
           "default": {
@@ -22459,17 +20599,6 @@
       },
       "title": "AdjustmentSetting"
     },
-    "AwsOnboardingFeatureCheckAwsOnboardingFeatureStatus": {
-      "type": "string",
-      "enum": [
-        "AWS_ONBOARDING_FEATURE_STATUS_UNSPECIFIED",
-        "AWS_ONBOARDING_FEATURE_STATUS_AVAILABLE",
-        "AWS_ONBOARDING_FEATURE_STATUS_WARNING",
-        "AWS_ONBOARDING_FEATURE_STATUS_MISSING",
-        "AWS_ONBOARDING_FEATURE_STATUS_UNKNOWN"
-      ],
-      "default": "AWS_ONBOARDING_FEATURE_STATUS_UNSPECIFIED"
-    },
     "BillingAllocateAdjustmentEntryBody": {
       "type": "object",
       "properties": {
@@ -25329,24 +23458,6 @@
       ],
       "default": "OPERATOR_UNSPECIFIED"
     },
-    "FlagsEvaluateBooleanFlagBody": {
-      "type": "object",
-      "properties": {
-        "attributes": {
-          "type": "object",
-          "description": "Optional. Key-value pairs for additional context when evaluating the flag."
-        }
-      }
-    },
-    "FlagsEvaluateVariantFlagBody": {
-      "type": "object",
-      "properties": {
-        "attributes": {
-          "type": "object",
-          "description": "Optional. Key-value pairs for additional context when evaluating the flag."
-        }
-      }
-    },
     "FlowGetAwsAccountsBody": {
       "type": "object",
       "description": "Response message for the Flow.GetAwsAccounts rpc."
@@ -25542,145 +23653,6 @@
         }
       }
     },
-    "GetOnboardingStatusResponseOnboardingStatus": {
-      "type": "string",
-      "enum": [
-        "ONBOARDING_STATUS_UNSPECIFIED",
-        "ONBOARDING_STATUS_NOT_REGISTERED",
-        "ONBOARDING_STATUS_REGISTERED",
-        "ONBOARDING_STATUS_ONBOARDING_STARTED",
-        "ONBOARDING_STATUS_VERIFIED",
-        "ONBOARDING_STATUS_VERIFY_INCOMPLETE",
-        "ONBOARDING_STATUS_VERIFY_FAILED"
-      ],
-      "default": "ONBOARDING_STATUS_UNSPECIFIED",
-      "title": "- ONBOARDING_STATUS_NOT_REGISTERED: No row found in archera_users (org not registered yet)\n - ONBOARDING_STATUS_REGISTERED: Existing statuses you already persist"
-    },
-    "GuaranteedCommitmentsCommitmentsPlanApplyBody": {
-      "type": "object"
-    },
-    "GuaranteedCommitmentsSaveCommitmentsPlanAsDraftBody": {
-      "type": "object",
-      "properties": {
-        "reservationIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "resourceIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "maxUpfrontCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "provider": {
-          "$ref": "#/definitions/v1Provider"
-        },
-        "endDate": {
-          "type": "string"
-        },
-        "startDate": {
-          "type": "string"
-        },
-        "segmentId": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string",
-          "description": "Required."
-        },
-        "description": {
-          "type": "string",
-          "description": "Required."
-        },
-        "name": {
-          "type": "string",
-          "description": "Required."
-        },
-        "preferredPaymentOption": {
-          "type": "string"
-        },
-        "includedContractTerms": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "includedContractSpecs": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1ContractSpec"
-          }
-        },
-        "coverageId": {},
-        "createdAt": {
-          "type": "string"
-        },
-        "createdBy": {},
-        "dataSource": {
-          "type": "string"
-        },
-        "executionPolicy": {},
-        "flaggedActions": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "id": {
-          "type": "string"
-        },
-        "isCalculating": {
-          "type": "boolean"
-        },
-        "isDefault": {
-          "type": "boolean"
-        },
-        "isLocked": {
-          "type": "boolean"
-        },
-        "isRecommended": {
-          "type": "boolean"
-        },
-        "isRenewal": {
-          "type": "boolean"
-        },
-        "isSaved": {
-          "type": "boolean"
-        },
-        "lastModified": {
-          "type": "string"
-        },
-        "metaPlanId": {
-          "type": "string"
-        },
-        "minimumUpfrontInterestRate": {},
-        "orgId": {
-          "type": "string"
-        },
-        "planType": {
-          "type": "string"
-        },
-        "recommendWithinCoveredAccounts": {},
-        "segment": {
-          "$ref": "#/definitions/v1Segment"
-        }
-      }
-    },
-    "GuaranteedCommitmentsSetPayerAccountEnabledBody": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        }
-      }
-    },
     "IamCreatePartnerTokenBody": {
       "type": "object",
       "description": "Request message for the Iam.CreatePartnerToken rpc."
@@ -25863,50 +23835,6 @@
         }
       }
     },
-    "ListPayerAccountsResponsePayerAccount": {
-      "type": "object",
-      "properties": {
-        "accountId": {
-          "type": "string"
-        },
-        "accountName": {
-          "type": "string"
-        },
-        "billingGroupId": {
-          "type": "string"
-        },
-        "segmentId": {
-          "type": "string"
-        },
-        "status": {
-          "$ref": "#/definitions/ListPayerAccountsResponsePayerAccountStatus"
-        },
-        "companyId": {
-          "type": "string"
-        },
-        "onboardingStatus": {
-          "$ref": "#/definitions/GetOnboardingStatusResponseOnboardingStatus",
-          "title": "Latest persisted onboarding status for this payer account (if any)"
-        },
-        "verificationChecks": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/VerifyAwsOnboardingResponseAwsOnboardingFeatureCheck"
-          },
-          "description": "Detailed AWS verification results (best-effort) returned from the last VerifyAwsOnboarding call.\nThis is used by the UI to \"resume\" the onboarding flow and show which verification checks\npassed/failed when a user comes back later (e.g., after stopping at verification).\nEmpty when verification hasn't been attempted yet or when no checks were persisted."
-        }
-      }
-    },
-    "ListPayerAccountsResponsePayerAccountStatus": {
-      "type": "string",
-      "enum": [
-        "PAYER_ACCOUNT_STATUS_UNSPECIFIED",
-        "PAYER_ACCOUNT_STATUS_ENABLED",
-        "PAYER_ACCOUNT_STATUS_DISABLED"
-      ],
-      "default": "PAYER_ACCOUNT_STATUS_UNSPECIFIED"
-    },
     "ListRecommendationResponsePurchaseOption": {
       "type": "object",
       "properties": {
@@ -26020,114 +23948,6 @@
           "type": "string"
         }
       }
-    },
-    "LusterCreateContextBody": {
-      "type": "object",
-      "properties": {
-        "title": {
-          "type": "string",
-          "description": "Required. The context title."
-        },
-        "content": {
-          "type": "string",
-          "description": "Required. The context content."
-        },
-        "contextType": {
-          "$ref": "#/definitions/lusterContextType",
-          "title": "Optional. The context type.\nif not set, default: `any`"
-        }
-      },
-      "description": "Request message for the Luster.CreateContext rpc."
-    },
-    "LusterCreateContextCommentBody": {
-      "type": "object",
-      "properties": {
-        "content": {
-          "type": "string",
-          "description": "Required. The comment content."
-        }
-      },
-      "description": "Request message for the Luster.CreateContextComment rpc."
-    },
-    "LusterReadContextsBody": {
-      "type": "object",
-      "properties": {
-        "fieldMask": {
-          "type": "string",
-          "title": "Optional. field_mask"
-        }
-      },
-      "description": "Request message for the Luster.ReadContexts rpc."
-    },
-    "LusterUpdateContextBody": {
-      "type": "object",
-      "properties": {
-        "title": {
-          "type": "string",
-          "description": "Optional. The context title."
-        },
-        "content": {
-          "type": "string",
-          "description": "Optional. The context content."
-        },
-        "contextType": {
-          "$ref": "#/definitions/lusterContextType",
-          "title": "Optional. The context type.\nif not set, default: `any`"
-        },
-        "updateMask": {
-          "type": "string",
-          "title": "Required.\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto"
-        }
-      },
-      "description": "Request message for the Luster.UpdateContext rpc.",
-      "required": [
-        "updateMask"
-      ]
-    },
-    "LusterUpdateContextCommentBody": {
-      "type": "object",
-      "properties": {
-        "content": {
-          "type": "string",
-          "description": "Required. The comment content."
-        },
-        "updateMask": {
-          "type": "string",
-          "title": "Required.\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto"
-        }
-      },
-      "description": "Request message for the Luster.UpdateContextComment rpc.",
-      "required": [
-        "updateMask"
-      ]
-    },
-    "LusterUpdateSpaceBody": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Optional. the space name."
-        },
-        "description": {
-          "type": "string",
-          "description": "Optional. the space description."
-        },
-        "members": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Optional. the member ids."
-        },
-        "updateMask": {
-          "type": "string",
-          "title": "Required.\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto"
-        }
-      },
-      "description": "Request message for the Luster.UpdateSpace rpc.",
-      "required": [
-        "updateMask"
-      ]
     },
     "MethodConfigChargingMethod": {
       "type": "string",
@@ -26837,17 +24657,6 @@
         },
         "name": {
           "type": "string"
-        }
-      }
-    },
-    "VerifyAwsOnboardingResponseAwsOnboardingFeatureCheck": {
-      "type": "object",
-      "properties": {
-        "feature": {
-          "type": "string"
-        },
-        "status": {
-          "$ref": "#/definitions/AwsOnboardingFeatureCheckAwsOnboardingFeatureStatus"
         }
       }
     },
@@ -27914,7 +25723,27 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/blueapiapiPolicy"
+            "$ref": "#/definitions/apiPolicy"
+          }
+        }
+      }
+    },
+    "apiPolicy": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "effect": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
           }
         }
       }
@@ -28723,26 +26552,6 @@
         }
       }
     },
-    "apicoverPolicy": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "permissions": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "apicoverRDSDetails": {
       "type": "object",
       "properties": {
@@ -28822,14 +26631,13 @@
         "name": {
           "type": "string"
         },
-        "policies": {
+        "costgroupsIds": {
           "type": "array",
           "items": {
-            "type": "object",
-            "$ref": "#/definitions/apicoverPolicy"
+            "type": "string"
           }
         },
-        "costgroupsIds": {
+        "permissions": {
           "type": "array",
           "items": {
             "type": "string"
@@ -28988,38 +26796,6 @@
       "description": "see gcp billing data schema details:[https://cloud.google.com/billing/docs/how-to/export-data-bigquery-tables]",
       "title": "Cost for Api Response"
     },
-    "apilusterLabel": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The label id."
-        },
-        "name": {
-          "type": "string",
-          "description": "The label name."
-        },
-        "color": {
-          "type": "string",
-          "description": "The label color."
-        },
-        "description": {
-          "type": "string",
-          "description": "The label description."
-        },
-        "createdAt": {
-          "type": "string",
-          "title": "The label createdAt.\n\"created_at\": \"2023-10-27T10:00:00Z\"",
-          "readOnly": true
-        },
-        "updatedAt": {
-          "type": "string",
-          "title": "The label updatedAt.\n\"updated_at\": \"2023-10-27T10:00:00Z\"",
-          "readOnly": true
-        }
-      },
-      "title": "The message defines the label"
-    },
     "apirippleAccessGroup": {
       "type": "object",
       "properties": {
@@ -29040,27 +26816,6 @@
         }
       },
       "description": "AccessGroup resource definition."
-    },
-    "apirippleOrg": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "The unique name (or id) of the organization."
-        },
-        "email": {
-          "type": "string",
-          "description": "The registered email of the organization."
-        },
-        "metadata": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "The metadata (key/value pair) of the organization. If hierarchy is supported, it will be\nseparated by '/', such as 'metakey/subkey=value'. See https://alphauslabs.github.io/blueapi/\nfor the list of supported attributes."
-        }
-      },
-      "description": "Org resource definition."
     },
     "apiripplev1InvoiceServiceDiscounts": {
       "type": "object",
@@ -30284,26 +28039,6 @@
         }
       }
     },
-    "blueapiapiPolicy": {
-      "type": "object",
-      "properties": {
-        "action": {
-          "type": "string"
-        },
-        "effect": {
-          "type": "string"
-        },
-        "key": {
-          "type": "string"
-        },
-        "values": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "blueapiapiRole": {
       "type": "object",
       "properties": {
@@ -30323,7 +28058,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/blueapiapiPolicy"
+            "$ref": "#/definitions/apiPolicy"
           }
         }
       }
@@ -30513,14 +28248,6 @@
       },
       "description": "Response message wrapper for cloud costs."
     },
-    "blueapicoverv1GetUserResponse": {
-      "type": "object",
-      "properties": {
-        "user": {
-          "$ref": "#/definitions/apicoverUser"
-        }
-      }
-    },
     "blueapicoverv1ListExchangeRatesResponse": {
       "type": "object",
       "properties": {
@@ -30537,67 +28264,6 @@
       },
       "title": "Response message for ListExchangeRates"
     },
-    "blueapicoverv1Resource": {
-      "type": "object",
-      "properties": {
-        "date": {
-          "type": "string",
-          "title": "Format is `yyyy-mm`"
-        },
-        "orgId": {
-          "type": "string",
-          "title": "Organization ID"
-        },
-        "vendor": {
-          "type": "string",
-          "description": "Only `aws` is supported for now."
-        },
-        "account": {
-          "type": "string",
-          "title": "Resource owner account"
-        },
-        "service": {
-          "type": "string",
-          "description": "Only `AmazonEC2` is supported for now."
-        },
-        "resourceId": {
-          "type": "string",
-          "title": "Resource unique identifier"
-        },
-        "resourceType": {
-          "type": "string",
-          "title": "Only `AWS::EC2::Instance` is supported for now"
-        },
-        "cost": {
-          "type": "number",
-          "format": "double",
-          "description": "Cost incurred for the resource on specified month."
-        },
-        "properties": {
-          "type": "string",
-          "title": "Format: JSON String"
-        },
-        "recommendation": {
-          "type": "string",
-          "title": "Format: JSON String"
-        }
-      }
-    },
-    "blueapiflowv1DailyUtilization": {
-      "type": "object",
-      "properties": {
-        "currentDate": {
-          "type": "string",
-          "description": "The current date for which the utilization is reported."
-        },
-        "utilizationPercentage": {
-          "type": "number",
-          "format": "double",
-          "title": "The percentage of utilization for this specific date"
-        }
-      },
-      "description": "Daily utilization data for a specific date range."
-    },
     "blueapiflowv1GetInfoResponse": {
       "type": "object",
       "properties": {
@@ -30607,204 +28273,6 @@
       },
       "description": "Response message for the Flow.GetInfo rpc."
     },
-    "blueapigcv1Resource": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "resourceId": {
-          "type": "string"
-        },
-        "provider": {
-          "$ref": "#/definitions/v1Provider"
-        },
-        "providerResourceId": {
-          "type": "string"
-        },
-        "isSpot": {
-          "type": "boolean"
-        },
-        "name": {
-          "type": "string"
-        },
-        "resourceGroup": {
-          "type": "string"
-        },
-        "usageEnd": {
-          "type": "string"
-        },
-        "usageStart": {
-          "type": "string"
-        },
-        "tags": {
-          "type": "object"
-        },
-        "createdAt": {
-          "type": "string"
-        },
-        "updatedAt": {
-          "type": "string"
-        },
-        "instanceId": {
-          "type": "string"
-        },
-        "billingAccountId": {
-          "type": "string"
-        },
-        "subAccountId": {
-          "type": "string"
-        },
-        "managementAccountId": {
-          "type": "string"
-        },
-        "ownerAccountId": {
-          "type": "string"
-        },
-        "skuTitle": {
-          "type": "string"
-        },
-        "skuName": {
-          "type": "string"
-        },
-        "availabilityZone": {
-          "type": "string"
-        },
-        "cacheEngine": {
-          "type": "string"
-        },
-        "databaseEngine": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "family": {
-          "type": "string"
-        },
-        "fullRegionName": {
-          "type": "string"
-        },
-        "hasOndemandTerms": {
-          "type": "boolean"
-        },
-        "instanceType": {
-          "type": "string"
-        },
-        "instanceTypeFamily": {
-          "type": "string"
-        },
-        "isReservable": {
-          "type": "boolean"
-        },
-        "licenseModel": {
-          "type": "string"
-        },
-        "locationType": {
-          "type": "string"
-        },
-        "normalizationSizeFactor": {
-          "type": "string"
-        },
-        "operatingSystem": {
-          "type": "string"
-        },
-        "preInstalledSw": {
-          "type": "string"
-        },
-        "priceCurrency": {
-          "type": "string"
-        },
-        "providerService": {
-          "type": "string"
-        },
-        "providerSkuId": {
-          "type": "string"
-        },
-        "publicationDate": {
-          "type": "string"
-        },
-        "region": {
-          "type": "string"
-        },
-        "service": {
-          "type": "string"
-        },
-        "tenancy": {
-          "type": "string"
-        },
-        "usageType": {
-          "type": "string"
-        },
-        "version": {
-          "type": "string"
-        },
-        "vpcNetworkingSupport": {
-          "type": "boolean"
-        },
-        "ondemandUsageUnit": {
-          "type": "string"
-        }
-      }
-    },
-    "blueapiorgv1CreateOrgRequest": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string",
-          "title": "Required. Organization's email"
-        },
-        "description": {
-          "type": "string",
-          "title": "Required. Organization's description or company name"
-        },
-        "password": {
-          "type": "string",
-          "description": "Optional. User can decide to let the system generates the password."
-        },
-        "name": {
-          "type": "string",
-          "title": "To be used for onboarding profile"
-        },
-        "role": {
-          "type": "string"
-        },
-        "usage": {
-          "type": "string"
-        },
-        "intention": {
-          "type": "string"
-        },
-        "isAuth0Signup": {
-          "type": "boolean"
-        },
-        "customerId": {
-          "type": "string",
-          "title": "Optional. Customer Id from AWS marketplace"
-        },
-        "locale": {
-          "type": "string",
-          "description": "Optional. User locale. Default value is en if not supplied."
-        },
-        "auth0UserId": {
-          "type": "string",
-          "description": "Optional. Auth0 user id for users registering using social login."
-        }
-      },
-      "description": "Request message for the Organization.CreateOrg rpc."
-    },
-    "blueapiorgv1CreateOrgResponse": {
-      "type": "object",
-      "properties": {
-        "org": {
-          "$ref": "#/definitions/apirippleOrg"
-        },
-        "password": {
-          "type": "string"
-        }
-      },
-      "description": "Response message for the Organization.CreateOrg rpc."
-    },
     "blueapipricingv1GetInfoResponse": {
       "type": "object",
       "properties": {
@@ -30813,65 +28281,6 @@
         }
       },
       "description": "Response message for the Pricing.GetInfo rpc."
-    },
-    "blueapiprismv1TestResponse": {
-      "type": "object",
-      "properties": {
-        "response": {
-          "type": "string"
-        }
-      }
-    },
-    "blueapivortexv1CreateOrgRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        }
-      }
-    },
-    "blueapivortexv1CreateOrgResponse": {
-      "type": "object",
-      "properties": {
-        "orgId": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        }
-      }
-    },
-    "blueapivortexv1GetUserResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "orgId": {
-          "type": "string"
-        }
-      }
-    },
-    "blueapivortexv1TestResponse": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string"
-        }
-      },
-      "title": "Test only"
     },
     "costv1CostAttribute": {
       "type": "object",
@@ -34216,20 +31625,6 @@
         }
       }
     },
-    "gcv1Org": {
-      "type": "object",
-      "properties": {
-        "orgId": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        }
-      }
-    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -34252,159 +31647,6 @@
         }
       },
       "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors)."
-    },
-    "lusterComment": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The comment id."
-        },
-        "name": {
-          "type": "string",
-          "description": "The comment name."
-        },
-        "content": {
-          "type": "string",
-          "description": "The comment content."
-        },
-        "userId": {
-          "type": "string",
-          "description": "The comment user_id.",
-          "readOnly": true
-        },
-        "createdAt": {
-          "type": "string",
-          "title": "The comment created_at.\n\"created_at\": \"2023-10-27T10:00:00Z\"",
-          "readOnly": true
-        },
-        "updatedAt": {
-          "type": "string",
-          "title": "The comment updated_at.\n\"updated_at\": \"2023-10-27T10:00:00Z\"",
-          "readOnly": true
-        }
-      },
-      "title": "The message defines the comment"
-    },
-    "lusterContext": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The context id."
-        },
-        "name": {
-          "type": "string",
-          "description": "The context name."
-        },
-        "number": {
-          "type": "string",
-          "title": "The context number.\n作成されるごとにnumberが採番されます。"
-        },
-        "title": {
-          "type": "string",
-          "description": "The context title."
-        },
-        "content": {
-          "type": "string",
-          "title": "The context content.\n \"content\": \"contextの本文詳細...\""
-        },
-        "contextType": {
-          "$ref": "#/definitions/lusterContextType",
-          "description": "The context type."
-        },
-        "state": {
-          "type": "string",
-          "title": "The context state.\n \"state\": \"open\", \"pending\", \"review\", \"close\""
-        },
-        "labels": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "title": "The context labels.\n\"labels\": [\"bug\" \"documentation\"]"
-        },
-        "assignees": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "title": "The context assignees.\n\"assignees\": [\"username1\" \"username2\"]"
-        },
-        "commentsCount": {
-          "type": "string",
-          "format": "int64",
-          "title": "The context comments_count.\n\"comments_count\": 0",
-          "readOnly": true
-        },
-        "createdAt": {
-          "type": "string",
-          "title": "The context created_at.\n\"created_at\": \"2023-10-27T10:00:00Z\"",
-          "readOnly": true
-        },
-        "updatedAt": {
-          "type": "string",
-          "title": "The context updated_at.\n\"updated_at\": \"2023-10-27T10:00:00Z\"",
-          "readOnly": true
-        },
-        "closedAt": {
-          "type": "string",
-          "title": "The context closed_at.\n\"closed_at\": \"2023-10-27T10:00:00Z\"",
-          "readOnly": true
-        },
-        "userId": {
-          "type": "string",
-          "description": "The context user_id.",
-          "readOnly": true
-        }
-      },
-      "title": "The message defines the context"
-    },
-    "lusterContextType": {
-      "type": "string",
-      "enum": [
-        "ANY",
-        "SPACE",
-        "ACCOUNT",
-        "COST"
-      ],
-      "default": "ANY",
-      "description": "The context type.\n\n - ANY: anyone\n - SPACE: space\n - ACCOUNT: account\n - COST: cost"
-    },
-    "lusterSpace": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The space id."
-        },
-        "name": {
-          "type": "string",
-          "description": "The space name."
-        },
-        "description": {
-          "type": "string",
-          "description": "The space description."
-        },
-        "members": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "The members in space."
-        },
-        "createdAt": {
-          "type": "string",
-          "title": "The space created_at.\n\"created_at\": \"2023-10-27T10:00:00Z\"",
-          "readOnly": true
-        },
-        "updatedAt": {
-          "type": "string",
-          "title": "The space updated_at.\n\"updated_at\": \"2023-10-27T10:00:00Z\"",
-          "readOnly": true
-        }
-      },
-      "title": "The message defines the space"
     },
     "octoawsOctoGeneratedAWSRecommendations": {
       "type": "object",
@@ -34968,6 +32210,27 @@
         }
       },
       "description": "MethodConfig resource definition."
+    },
+    "rippleOrg": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The unique name (or id) of the organization."
+        },
+        "email": {
+          "type": "string",
+          "description": "The registered email of the organization."
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "The metadata (key/value pair) of the organization. If hierarchy is supported, it will be\nseparated by '/', such as 'metakey/subkey=value'. See https://alphauslabs.github.io/blueapi/\nfor the list of supported attributes."
+        }
+      },
+      "description": "Org resource definition."
     },
     "ripplePayer": {
       "type": "object",
@@ -35969,35 +33232,6 @@
         }
       }
     },
-    "v1Address": {
-      "type": "object",
-      "properties": {
-        "line1": {
-          "type": "string",
-          "title": "required: ex. \"123 Main St\""
-        },
-        "city": {
-          "type": "string",
-          "title": "required: ex. \"Springfield\""
-        },
-        "state": {
-          "type": "string",
-          "title": "required: ex. \"IL\""
-        },
-        "zip": {
-          "type": "string",
-          "title": "required: ex. \"62701\""
-        },
-        "country": {
-          "type": "string",
-          "title": "required: ex. \"USA\""
-        },
-        "line2": {
-          "type": "string",
-          "title": "optional: ex. \"Apt 4B\""
-        }
-      }
-    },
     "v1AdjustmentEntry": {
       "type": "object",
       "properties": {
@@ -36140,25 +33374,6 @@
         }
       },
       "description": "AdjustmentEntrySetting resource definition."
-    },
-    "v1AggregateMetrics": {
-      "type": "object",
-      "properties": {
-        "currentCoverage": {
-          "type": "number",
-          "format": "double"
-        },
-        "potentialCoverage": {
-          "type": "number",
-          "format": "double"
-        },
-        "summaries": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/v1ServiceSummary"
-          }
-        }
-      }
     },
     "v1AllocationItem": {
       "type": "object",
@@ -36472,28 +33687,6 @@
             "type": "object",
             "$ref": "#/definitions/AccountHistory"
           }
-        }
-      }
-    },
-    "v1AwsExistingCur": {
-      "type": "object",
-      "properties": {
-        "region": {
-          "type": "string",
-          "title": "required if existingCur is provided"
-        },
-        "bucket": {
-          "type": "string",
-          "title": "required if existingCur is provided"
-        },
-        "prefix": {
-          "type": "string",
-          "title": "required if existingCur is provided"
-        },
-        "reportName": {
-          "type": "string",
-          "description": "maps to \"report_name\" conceptually",
-          "title": "required if existingCur is provided"
         }
       }
     },
@@ -37367,572 +34560,6 @@
       },
       "description": "Response message for the Admin.CreateCloudWatchMetricsStream rpc."
     },
-    "v1Commitment": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "accountId": {
-          "type": "string"
-        },
-        "amortizedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "billingAccountId": {
-          "type": "string"
-        },
-        "canRebate": {
-          "type": "boolean"
-        },
-        "contractTerm": {
-          "type": "string"
-        },
-        "displayName": {
-          "type": "string"
-        },
-        "durationSeconds": {
-          "type": "number",
-          "format": "double"
-        },
-        "effectiveInstanceCount": {
-          "type": "string",
-          "format": "int64"
-        },
-        "endDate": {
-          "type": "string"
-        },
-        "instanceCount": {
-          "type": "string",
-          "format": "int64"
-        },
-        "instanceFamily": {
-          "type": "string"
-        },
-        "instanceType": {
-          "type": "string"
-        },
-        "isActive": {
-          "type": "boolean"
-        },
-        "isFlexible": {
-          "type": "boolean"
-        },
-        "isLeased": {
-          "type": "boolean"
-        },
-        "isMultiAz": {
-          "type": "boolean"
-        },
-        "leaseLockinDate": {
-          "type": "string"
-        },
-        "leaseStart": {
-          "type": "string"
-        },
-        "leasedDisplayName": {
-          "type": "string"
-        },
-        "monthlyCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlySavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "name": {
-          "type": "string"
-        },
-        "netSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "offeringId": {
-          "type": "string"
-        },
-        "paymentOption": {
-          "type": "string"
-        },
-        "potentialSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "productDescription": {
-          "type": "string"
-        },
-        "provider": {
-          "type": "string"
-        },
-        "providerReservationId": {
-          "type": "string"
-        },
-        "recurringCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "region": {
-          "type": "string"
-        },
-        "renewalPlan": {
-          "type": "string"
-        },
-        "reservationEnd": {
-          "type": "string"
-        },
-        "reservationStart": {
-          "type": "string"
-        },
-        "runningHours": {
-          "type": "number",
-          "format": "double"
-        },
-        "savings": {
-          "type": "number",
-          "format": "double"
-        },
-        "startDate": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string"
-        },
-        "transferReservationEnd": {
-          "type": "string"
-        },
-        "transferReservationStart": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "upfrontCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "utilization": {
-          "type": "number",
-          "format": "double"
-        }
-      }
-    },
-    "v1CommitmentPlanDetails": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "orgId": {
-          "type": "string"
-        },
-        "createdAt": {
-          "type": "string"
-        },
-        "isCalculating": {
-          "type": "boolean"
-        },
-        "status": {
-          "type": "string"
-        },
-        "maxTerm": {
-          "type": "string"
-        },
-        "coveredOndemandCostHourly": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeOndemandCostHourly": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeReservedCostHourly": {
-          "type": "number",
-          "format": "double"
-        },
-        "amortizedCostHourly": {
-          "type": "number",
-          "format": "double"
-        },
-        "recurringCostHourly": {
-          "type": "number",
-          "format": "double"
-        },
-        "upfrontCostHourly": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeCostHourly": {
-          "type": "number",
-          "format": "double"
-        },
-        "afterCostHourly": {
-          "type": "number",
-          "format": "double"
-        },
-        "totalCostHourly": {
-          "type": "number",
-          "format": "double"
-        },
-        "savingsHourly": {
-          "type": "number",
-          "format": "double"
-        },
-        "feeHourly": {
-          "type": "number",
-          "format": "double"
-        },
-        "commitmentCoverage": {
-          "type": "number",
-          "format": "double"
-        },
-        "minimumCommitmentCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "breakevenHours": {
-          "type": "number",
-          "format": "double"
-        },
-        "totalSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlySavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "totalMonthlyBeforeCost": {
-          "type": "number",
-          "format": "double"
-        }
-      }
-    },
-    "v1CommitmentPlanLineItem": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "planId": {
-          "type": "string"
-        },
-        "offerId": {
-          "type": "string"
-        },
-        "leaseMenuItemId": {
-          "type": "string"
-        },
-        "accountId": {
-          "type": "string"
-        },
-        "recommendedQuantity": {
-          "type": "number",
-          "format": "double"
-        },
-        "selectedQuantity": {
-          "type": "number",
-          "format": "double"
-        },
-        "recommendedCommitment": {
-          "type": "number",
-          "format": "double"
-        },
-        "selectedCommitment": {
-          "type": "number",
-          "format": "double"
-        },
-        "isSelected": {
-          "type": "boolean"
-        },
-        "afterAmortizedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "upfrontCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "recurringCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeReservedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "coveredOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "afterCoveredUnits": {
-          "type": "number",
-          "format": "double"
-        },
-        "totalCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlyCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "savings": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlySavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "totalSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "fee": {
-          "type": "number",
-          "format": "double"
-        },
-        "discountRate": {
-          "type": "number",
-          "format": "double"
-        },
-        "breakevenHours": {
-          "type": "number",
-          "format": "double"
-        },
-        "contractTerm": {
-          "type": "string"
-        },
-        "paymentOption": {
-          "type": "string"
-        },
-        "contractSpec": {
-          "type": "object"
-        },
-        "offer": {
-          "type": "object"
-        },
-        "renewalReservationId": {
-          "type": "string"
-        },
-        "coveredUnits": {
-          "type": "number",
-          "format": "double"
-        },
-        "amortizedCost": {
-          "type": "number",
-          "format": "double"
-        }
-      }
-    },
-    "v1CommitmentPlanResourceMatch": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "totalUnits": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeUncoveredUnits": {
-          "type": "number",
-          "format": "double"
-        },
-        "afterCoveredUnits": {
-          "type": "number",
-          "format": "double"
-        },
-        "afterUncoveredUnits": {
-          "type": "number",
-          "format": "double"
-        },
-        "ondemandPrice": {
-          "type": "number",
-          "format": "double"
-        },
-        "ifAllOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "afterOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "coveredOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeReservedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "afterReservedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "afterCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlyBeforeCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlyAfterCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlyAfterReservedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlyAfterOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "averageSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "averageMonthlySavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "usageType": {
-          "type": "string"
-        },
-        "coverage": {
-          "type": "number",
-          "format": "double"
-        },
-        "resource": {
-          "type": "object"
-        },
-        "coveredUnits": {
-          "type": "number",
-          "format": "double"
-        },
-        "explanationUnmatched": {
-          "type": "number",
-          "format": "double"
-        },
-        "ondemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "reservedCost": {
-          "type": "number",
-          "format": "double"
-        }
-      }
-    },
-    "v1CommitmentsChartData": {
-      "type": "object",
-      "properties": {
-        "date": {
-          "type": "string"
-        },
-        "chartKey": {
-          "type": "string"
-        },
-        "chartValue": {
-          "type": "number",
-          "format": "double"
-        }
-      }
-    },
-    "v1CommitmentsChartResponse": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1CommitmentsChartData"
-          }
-        }
-      }
-    },
-    "v1CommitmentsUtilizationData": {
-      "type": "object",
-      "properties": {
-        "utilizationDate": {
-          "type": "string"
-        },
-        "cost": {
-          "type": "number",
-          "format": "double"
-        },
-        "coveredCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "griFees": {
-          "type": "number",
-          "format": "double"
-        },
-        "netSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "potentialSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "reservationUtilization": {
-          "type": "number",
-          "format": "double"
-        },
-        "runningHours": {
-          "type": "number",
-          "format": "double"
-        },
-        "savings": {
-          "type": "number",
-          "format": "double"
-        },
-        "unutilizedCommitment": {
-          "type": "number",
-          "format": "double"
-        }
-      }
-    },
-    "v1CommitmentsUtilizationResponse": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1CommitmentsUtilizationData"
-          }
-        }
-      }
-    },
     "v1ConfirmGoogleSheetAccessRequest": {
       "type": "object",
       "properties": {
@@ -38017,23 +34644,6 @@
         "avgEfficiency": {
           "type": "number",
           "format": "double"
-        }
-      }
-    },
-    "v1ContractSpec": {
-      "type": "object",
-      "properties": {
-        "commitmentType": {
-          "type": "string"
-        },
-        "paymentOption": {
-          "type": "string"
-        },
-        "term": {
-          "type": "string"
-        },
-        "properties": {
-          "type": "object"
         }
       }
     },
@@ -39141,68 +35751,6 @@
       },
       "title": "Request message for the Iam.CreateGroupRootUser rpc"
     },
-    "v1CreateGuaranteedCommitmentAccessRequest": {
-      "type": "object",
-      "properties": {
-        "target": {
-          "type": "string",
-          "description": "The AWS account ID (payer/target) where the stack was deployed."
-        },
-        "externalId": {
-          "type": "string",
-          "description": "The guaranteed-commitments-provided external ID."
-        }
-      }
-    },
-    "v1CreateGuaranteedCommitmentAccessResponse": {
-      "type": "object",
-      "properties": {
-        "target": {
-          "type": "string",
-          "description": "Target environment for the access configuration (for example, AWS account ID or organization)."
-        },
-        "rippleRoleArn": {
-          "type": "string",
-          "description": "ARN of the Ripple/Alphaus IAM role to be assumed for managing guaranteed commitments."
-        },
-        "rippleExternalId": {
-          "type": "string",
-          "description": "External ID required to assume the Ripple/Alphaus IAM role."
-        },
-        "guaranteedCommitmentRoleArn": {
-          "type": "string",
-          "description": "ARN of the customer's IAM role used specifically for guaranteed-commitment operations."
-        },
-        "guaranteedCommitmentExternalId": {
-          "type": "string",
-          "description": "External ID required to assume the guaranteed-commitment IAM role."
-        },
-        "stackId": {
-          "type": "string",
-          "description": "CloudFormation stack ID created or used during the access configuration."
-        },
-        "stackRegion": {
-          "type": "string",
-          "description": "AWS region where the CloudFormation stack is deployed (for example, \"us-east-1\")."
-        },
-        "templateUrl": {
-          "type": "string",
-          "description": "URL of the CloudFormation template used to create or update the stack."
-        },
-        "status": {
-          "type": "string",
-          "description": "Current status of the access configuration or underlying CloudFormation stack."
-        },
-        "lastUpdated": {
-          "type": "string",
-          "description": "Last update time of this configuration, typically as an ISO 8601 timestamp."
-        },
-        "guaranteedCommitmentVerified": {
-          "type": "boolean",
-          "description": "Whether the guaranteed commitment role was successfully verified during registration."
-        }
-      }
-    },
     "v1CreateIdentityProviderRequest": {
       "type": "object",
       "properties": {
@@ -39260,24 +35808,6 @@
         }
       },
       "description": "Request message for the Iam.CreateIpFilter rpc."
-    },
-    "v1CreateLabelRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "The label name."
-        },
-        "color": {
-          "type": "string",
-          "description": "The label color."
-        },
-        "description": {
-          "type": "string",
-          "description": "The label description."
-        }
-      },
-      "description": "Request message for the Luster.CreateLabel rpc."
     },
     "v1CreateMemberRequest": {
       "type": "object",
@@ -39363,6 +35893,64 @@
         }
       },
       "description": "Request message for the Admin.CreateNotificationTypeChannels rpc."
+    },
+    "v1CreateOrgRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "title": "Required. Organization's email"
+        },
+        "description": {
+          "type": "string",
+          "title": "Required. Organization's description or company name"
+        },
+        "password": {
+          "type": "string",
+          "description": "Optional. User can decide to let the system generates the password."
+        },
+        "name": {
+          "type": "string",
+          "title": "To be used for onboarding profile"
+        },
+        "role": {
+          "type": "string"
+        },
+        "usage": {
+          "type": "string"
+        },
+        "intention": {
+          "type": "string"
+        },
+        "isAuth0Signup": {
+          "type": "boolean"
+        },
+        "customerId": {
+          "type": "string",
+          "title": "Optional. Customer Id from AWS marketplace"
+        },
+        "locale": {
+          "type": "string",
+          "description": "Optional. User locale. Default value is en if not supplied."
+        },
+        "auth0UserId": {
+          "type": "string",
+          "description": "Optional. Auth0 user id for users registering using social login."
+        }
+      },
+      "description": "Request message for the Organization.CreateOrg rpc."
+    },
+    "v1CreateOrgResponse": {
+      "type": "object",
+      "properties": {
+        "org": {
+          "$ref": "#/definitions/rippleOrg"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "description": "Response message for the Organization.CreateOrg rpc."
     },
     "v1CreateOrganizationRequest": {
       "type": "object",
@@ -39671,27 +36259,6 @@
           "$ref": "#/definitions/coverSharedResourcesCombination"
         }
       }
-    },
-    "v1CreateSpaceRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Required. the space name."
-        },
-        "description": {
-          "type": "string",
-          "description": "Optional. the space description."
-        },
-        "members": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Optional. the member ids."
-        }
-      },
-      "description": "Request message for the Luster.CreateSpace rpc."
     },
     "v1CreateTeamRequest": {
       "type": "object",
@@ -40007,6 +36574,21 @@
         }
       }
     },
+    "v1DailyUtilization": {
+      "type": "object",
+      "properties": {
+        "currentDate": {
+          "type": "string",
+          "description": "The current date for which the utilization is reported."
+        },
+        "utilizationPercentage": {
+          "type": "number",
+          "format": "double",
+          "title": "The percentage of utilization for this specific date"
+        }
+      },
+      "description": "Daily utilization data for a specific date range."
+    },
     "v1DataAccess": {
       "type": "object",
       "properties": {
@@ -40085,208 +36667,6 @@
       },
       "description": "Response message for the Admin.GetDefaultCostAccess, Admin.CreateDefaultCostAccess rpc."
     },
-    "v1DefaultPurchasePlan": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "orgId": {
-          "type": "string"
-        },
-        "segmentId": {
-          "type": "string"
-        },
-        "segment": {
-          "$ref": "#/definitions/v1Segment"
-        },
-        "status": {
-          "type": "string"
-        },
-        "planType": {
-          "type": "string"
-        },
-        "createdAt": {
-          "type": "string"
-        },
-        "lastModified": {
-          "type": "string"
-        },
-        "createdBy": {},
-        "executionPolicy": {},
-        "isDefault": {
-          "type": "boolean",
-          "title": "Flags"
-        },
-        "isRecommended": {
-          "type": "boolean"
-        },
-        "isRenewal": {
-          "type": "boolean"
-        },
-        "isCalculating": {
-          "type": "boolean"
-        },
-        "isLocked": {
-          "type": "boolean"
-        },
-        "isSaved": {
-          "type": "boolean"
-        },
-        "includedContractSpecs": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1ContractSpec"
-          },
-          "title": "Contract details"
-        },
-        "includedContractTerms": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "maxTerm": {
-          "type": "string"
-        },
-        "preferredPaymentOption": {
-          "type": "string"
-        },
-        "maxUpfrontCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "minimumUpfrontInterestRate": {
-          "type": "number",
-          "format": "double"
-        },
-        "recommendWithinCoveredAccounts": {},
-        "startDate": {
-          "type": "string",
-          "title": "Dates"
-        },
-        "endDate": {
-          "type": "string"
-        },
-        "dataSource": {
-          "type": "string"
-        },
-        "beforeCost": {
-          "type": "number",
-          "format": "double",
-          "title": "Cost metrics"
-        },
-        "afterCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeReservedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "coveredOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "amortizedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "recurringCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "upfrontCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "totalCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "totalMonthlyBeforeCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "savings": {
-          "type": "number",
-          "format": "double",
-          "title": "Savings metrics"
-        },
-        "monthlySavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "totalSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "fee": {
-          "type": "number",
-          "format": "double"
-        },
-        "commitmentCoverage": {
-          "type": "number",
-          "format": "double",
-          "title": "Coverage metrics"
-        },
-        "minimumCommitmentCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "breakevenHours": {
-          "type": "number",
-          "format": "double"
-        },
-        "aggregateMetrics": {
-          "$ref": "#/definitions/v1AggregateMetrics",
-          "title": "Aggregate data"
-        },
-        "summaries": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1PlanSummary"
-          }
-        },
-        "reservationIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "title": "IDs"
-        },
-        "resourceIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "flaggedActions": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "metaPlanId": {
-          "type": "string"
-        },
-        "coverageId": {
-          "type": "string"
-        }
-      }
-    },
     "v1DeleteAccountAccessResponse": {
       "type": "object",
       "properties": {
@@ -40341,19 +36721,6 @@
         }
       },
       "title": "Response message for DeleteCostGroup"
-    },
-    "v1DeleteDraftPurchasePlanResponse": {
-      "type": "object",
-      "properties": {
-        "planId": {
-          "type": "string",
-          "title": "The ID of the deleted plan"
-        },
-        "success": {
-          "type": "boolean",
-          "title": "Indicates if the plan was successfully deleted"
-        }
-      }
     },
     "v1DeleteExcludeServiceEntryResponse": {
       "type": "object",
@@ -40443,28 +36810,6 @@
         },
         "name": {
           "type": "string"
-        }
-      }
-    },
-    "v1EvaluateBooleanFlagResponse": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "boolean",
-          "description": "The boolean value of the flag."
-        }
-      }
-    },
-    "v1EvaluateVariantFlagResponse": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "The variant value of the flag. Empty string if no match is found."
-        },
-        "attachment": {
-          "type": "object",
-          "description": "Optional. The attachment attached to the returned variant."
         }
       }
     },
@@ -41034,23 +37379,6 @@
       },
       "description": "Response message for the Flow.GetAwsAccounts rpc."
     },
-    "v1GetAwsCloudFormationTemplateResponse": {
-      "type": "object",
-      "properties": {
-        "template": {
-          "type": "object",
-          "title": "CloudFormation template JSON object"
-        }
-      }
-    },
-    "v1GetAwsLaunchStackUrlResponse": {
-      "type": "object",
-      "properties": {
-        "url": {
-          "type": "string"
-        }
-      }
-    },
     "v1GetBillingGroupAccountSupportPlanResponse": {
       "type": "object",
       "properties": {
@@ -41314,25 +37642,6 @@
           }
         }
       }
-    },
-    "v1GetContextResponse": {
-      "type": "object",
-      "properties": {
-        "space": {
-          "$ref": "#/definitions/lusterSpace"
-        },
-        "context": {
-          "$ref": "#/definitions/lusterContext"
-        },
-        "comment": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/lusterComment"
-          }
-        }
-      },
-      "description": "Response message for the Luster.GetContextResponse rpc."
     },
     "v1GetCostAttributesResponse": {
       "type": "object",
@@ -42249,39 +38558,6 @@
         }
       }
     },
-    "v1GetGuaranteedCommitmentTemplateUrlResponse": {
-      "type": "object",
-      "properties": {
-        "launchUrl": {
-          "type": "string",
-          "description": "CloudFormation console launch URL pre-filled with all parameters."
-        },
-        "templateUrl": {
-          "type": "string",
-          "description": "S3 URL of the CloudFormation template."
-        },
-        "stackName": {
-          "type": "string",
-          "description": "CloudFormation stack name."
-        },
-        "principal": {
-          "type": "string",
-          "description": "Alphaus AWS account principal."
-        },
-        "externalId": {
-          "type": "string",
-          "description": "Alphaus/Ripple external ID for role assumption."
-        },
-        "guaranteedCommitmentPrincipal": {
-          "type": "string",
-          "description": "Guaranteed commitment AWS principal ARN."
-        },
-        "guaranteedCommitmentExternalId": {
-          "type": "string",
-          "description": "Guaranteed commitment external ID for role assumption."
-        }
-      }
-    },
     "v1GetIntegrationStatusResponse": {
       "type": "object",
       "properties": {
@@ -42422,65 +38698,6 @@
         }
       }
     },
-    "v1GetOnboardingStatusRequest": {
-      "type": "object",
-      "properties": {
-        "billingGroupId": {
-          "type": "string",
-          "title": "Optional:\n- empty =\u003e MSP-level onboarding row (isMsp = true)\n- non-empty =\u003e company under MSP (isMsp = false)"
-        },
-        "companyId": {
-          "type": "string"
-        }
-      }
-    },
-    "v1GetOnboardingStatusResponse": {
-      "type": "object",
-      "properties": {
-        "found": {
-          "type": "boolean",
-          "title": "Whether we found a corresponding row"
-        },
-        "isMsp": {
-          "type": "boolean",
-          "title": "Convenience: derived from whether billingId is empty"
-        },
-        "provider": {
-          "$ref": "#/definitions/v1Provider",
-          "description": "Vendor saved at registration (aws/azure/gcp). Optional."
-        },
-        "gcOrgId": {
-          "type": "string",
-          "title": "The org id to use for Archera upstream calls:\n- MSP: mspArcheraOrgId\n- company: archeraOrgId"
-        },
-        "onboardingId": {
-          "type": "string",
-          "title": "Latest persisted onboarding ID (if any)"
-        },
-        "onboardingStatus": {
-          "$ref": "#/definitions/GetOnboardingStatusResponseOnboardingStatus",
-          "title": "Latest persisted onboarding status"
-        },
-        "accountId": {
-          "type": "string",
-          "title": "Latest persisted AWS account id (if any)"
-        },
-        "billingGroupId": {
-          "type": "string"
-        },
-        "companyId": {
-          "type": "string"
-        },
-        "verificationChecks": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/VerifyAwsOnboardingResponseAwsOnboardingFeatureCheck"
-          },
-          "description": "Detailed AWS verification results (best-effort) returned from the last VerifyAwsOnboarding call.\nThis is used by the UI to \"resume\" the onboarding flow and show which verification checks\npassed/failed when a user comes back later (e.g., after stopping at verification).\nEmpty when verification hasn't been attempted yet or when no checks were persisted."
-        }
-      }
-    },
     "v1GetOrgFiscalMonthResponse": {
       "type": "object",
       "properties": {
@@ -42545,14 +38762,6 @@
       },
       "description": "Response message for the Cost.GetPayerAccountImportHistory rpc."
     },
-    "v1GetPayerAccountStatusResponse": {
-      "type": "object",
-      "properties": {
-        "payerAccount": {
-          "$ref": "#/definitions/ListPayerAccountsResponsePayerAccount"
-        }
-      }
-    },
     "v1GetPayerProformaReportsResponse": {
       "type": "object",
       "properties": {
@@ -42604,39 +38813,6 @@
         },
         "name": {
           "type": "string"
-        }
-      }
-    },
-    "v1GetPurchasePlansDetailsResponse": {
-      "type": "object",
-      "properties": {
-        "plan": {
-          "$ref": "#/definitions/v1DefaultPurchasePlan",
-          "title": "Plan basic info and detailed metrics"
-        },
-        "lineItems": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1CommitmentPlanLineItem"
-          },
-          "title": "Commitment line item"
-        },
-        "resourceMatches": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1CommitmentPlanResourceMatch"
-          },
-          "title": "Covered infrastructure resource matches"
-        },
-        "history": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1PlanHistoryEntry"
-          },
-          "title": "Audit history of the plan"
         }
       }
     },
@@ -42931,18 +39107,6 @@
         }
       }
     },
-    "v1GetResourceDailyUsageResponse": {
-      "type": "object",
-      "properties": {
-        "dailyUsage": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1ResourceDailyUsage"
-          }
-        }
-      }
-    },
     "v1GetRightSizingRecommendationResponse": {
       "type": "object",
       "properties": {
@@ -43139,21 +39303,6 @@
         }
       }
     },
-    "v1GetUpdatedPurchasePlansBySegmentRequest": {
-      "type": "object"
-    },
-    "v1GetUpdatedPurchasePlansBySegmentResponse": {
-      "type": "object",
-      "properties": {
-        "plans": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1DefaultPurchasePlan"
-          }
-        }
-      }
-    },
     "v1GetUserAccountSettingsResponse": {
       "type": "object",
       "properties": {
@@ -43217,6 +39366,14 @@
         },
         "hasSubscribedUpdates": {
           "type": "boolean"
+        }
+      }
+    },
+    "v1GetUserResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/apicoverUser"
         }
       }
     },
@@ -43339,14 +39496,6 @@
         }
       },
       "title": "Response message for InviteMember"
-    },
-    "v1InviteUserRequest": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string"
-        }
-      }
     },
     "v1InviteUsersRequest": {
       "type": "object",
@@ -43731,18 +39880,6 @@
       },
       "description": "Response message for the Cost.ListCalculatorRunningAccounts rpc."
     },
-    "v1ListCommitmentsResponse": {
-      "type": "object",
-      "properties": {
-        "commitments": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Commitment"
-          }
-        }
-      }
-    },
     "v1ListCostFiltersResponse": {
       "type": "object",
       "properties": {
@@ -43758,18 +39895,6 @@
     },
     "v1ListCustomFieldRequest": {
       "type": "object"
-    },
-    "v1ListDraftPurchasePlansResponse": {
-      "type": "object",
-      "properties": {
-        "plans": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1DefaultPurchasePlan"
-          }
-        }
-      }
     },
     "v1ListExcludeServicesResponse": {
       "type": "object",
@@ -44027,21 +40152,6 @@
       },
       "description": "Response message for the Admin.ListNotifications rpc."
     },
-    "v1ListOrgsRequest": {
-      "type": "object"
-    },
-    "v1ListPayerAccountsResponse": {
-      "type": "object",
-      "properties": {
-        "payerAccounts": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/ListPayerAccountsResponsePayerAccount"
-          }
-        }
-      }
-    },
     "v1ListPermissionsResponse": {
       "type": "object",
       "properties": {
@@ -44080,21 +40190,6 @@
     },
     "v1ListProjectsRequest": {
       "type": "object"
-    },
-    "v1ListPromptsRequest": {
-      "type": "object"
-    },
-    "v1ListPurchasePlansBySegmentResponse": {
-      "type": "object",
-      "properties": {
-        "plans": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1DefaultPurchasePlan"
-          }
-        }
-      }
     },
     "v1ListRecommendationResponse": {
       "type": "object",
@@ -44226,18 +40321,6 @@
     },
     "v1ListReportSchedulesRequest": {
       "type": "object"
-    },
-    "v1ListResourcesResponse": {
-      "type": "object",
-      "properties": {
-        "resources": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/blueapigcv1Resource"
-          }
-        }
-      }
     },
     "v1ListRolesResponse": {
       "type": "object",
@@ -44474,17 +40557,6 @@
         }
       }
     },
-    "v1Membership": {
-      "type": "object",
-      "properties": {
-        "role": {
-          "type": "string"
-        },
-        "username": {
-          "type": "string"
-        }
-      }
-    },
     "v1MergeSuggestedUnitsRequest": {
       "type": "object",
       "properties": {
@@ -44538,68 +40610,6 @@
       "properties": {
         "mergedUnitCost": {
           "$ref": "#/definitions/coverUnitCostData"
-        }
-      }
-    },
-    "v1MetricsResponse": {
-      "type": "object",
-      "properties": {
-        "lifetimeSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "mtdSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "purchaseAutomationEnabled": {
-          "type": "boolean"
-        },
-        "buybackAutomationEnabled": {
-          "type": "boolean"
-        },
-        "hasActionedPlan": {
-          "type": "boolean"
-        },
-        "hasPendingActions": {
-          "type": "boolean"
-        },
-        "latestExecutionDate": {
-          "type": "string"
-        },
-        "purchaseMissedSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "buybackMissedSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "totalDailyMissedSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "hourlyMissedSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "missedSavingsStartDate": {
-          "type": "string"
-        },
-        "missedSavingsEndDate": {
-          "type": "string"
-        },
-        "expiringSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "coverage": {
-          "type": "number",
-          "format": "double"
-        },
-        "utilization": {
-          "type": "number",
-          "format": "double"
         }
       }
     },
@@ -44716,17 +40726,6 @@
             "type": "object",
             "$ref": "#/definitions/coverExecutedRecommendationDetails"
           }
-        }
-      }
-    },
-    "v1OrgUser": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string"
-        },
-        "role": {
-          "type": "string"
         }
       }
     },
@@ -44967,116 +40966,6 @@
         }
       }
     },
-    "v1PlanHistoryEntry": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "message": {
-          "type": "string"
-        },
-        "orgId": {
-          "type": "string"
-        },
-        "relatedObjectId": {
-          "type": "string"
-        },
-        "relatedObjectType": {
-          "type": "string"
-        },
-        "timestamp": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "userId": {
-          "type": "string"
-        },
-        "data": {},
-        "user": {
-          "$ref": "#/definitions/v1PlanHistoryUser"
-        }
-      }
-    },
-    "v1PlanHistoryUser": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "username": {
-          "type": "string"
-        },
-        "fullName": {
-          "type": "string"
-        }
-      }
-    },
-    "v1PlanSummary": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string"
-        },
-        "provider": {
-          "type": "string"
-        },
-        "numCommitments": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "minCommitment": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlyCommitment": {
-          "type": "number",
-          "format": "double"
-        },
-        "upfrontCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "minSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "maxSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlySavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "minTermHours": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "maxTermHours": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "griPremiums": {
-          "type": "number",
-          "format": "double"
-        },
-        "beforeOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "afterOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "ifAllOndemandCost": {
-          "type": "number",
-          "format": "double"
-        }
-      }
-    },
     "v1PopulateDemoDataRequest": {
       "type": "object"
     },
@@ -45252,32 +41141,6 @@
           "type": "string"
         }
       }
-    },
-    "v1Prompt": {
-      "type": "object",
-      "properties": {
-        "content": {
-          "type": "string"
-        },
-        "fromContainerName": {
-          "type": "string"
-        },
-        "riskLevel": {
-          "type": "string"
-        }
-      }
-    },
-    "v1Provider": {
-      "type": "string",
-      "enum": [
-        "PROVIDER_UNSPECIFIED",
-        "AWS",
-        "AZURE",
-        "GCP",
-        "KUBERNETES",
-        "UNKNOWN"
-      ],
-      "default": "PROVIDER_UNSPECIFIED"
     },
     "v1ProxyCreateCompletionRequest": {
       "type": "object",
@@ -45639,16 +41502,6 @@
       },
       "description": "Request message for the ReadInvoiceOverviews rpc."
     },
-    "v1ReadSpacesRequest": {
-      "type": "object",
-      "properties": {
-        "fieldMask": {
-          "type": "string",
-          "title": "Optional. field_mask\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto"
-        }
-      },
-      "description": "Request message for the Luster.ReadSpaces rpc."
-    },
     "v1ReadTagCostsRequestAwsOptions": {
       "type": "object",
       "properties": {
@@ -45872,84 +41725,6 @@
         }
       }
     },
-    "v1RegisterOrgRequest": {
-      "type": "object",
-      "properties": {
-        "mspId": {
-          "type": "string",
-          "title": "Ripple context (not sent to GuaranteedCommitments; used for mapping/persistence)"
-        },
-        "billingId": {
-          "type": "string",
-          "description": "If present =\u003e we're onboarding an MSP customer/org (3rd layer )\nIf empty =\u003e MSP-level org (2nd layer)."
-        },
-        "name": {
-          "type": "string",
-          "title": "required"
-        },
-        "labraSubscriptionId": {
-          "type": "string"
-        },
-        "users": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1OrgUser"
-          },
-          "title": "required"
-        },
-        "domain": {
-          "type": "string"
-        },
-        "primaryAddress": {
-          "$ref": "#/definitions/v1Address",
-          "title": "required"
-        },
-        "awsMarketplaceOfferLink": {
-          "type": "string"
-        },
-        "azureMarketplaceOfferLink": {
-          "type": "string"
-        },
-        "gcpMarketplaceOfferLink": {
-          "type": "string"
-        }
-      }
-    },
-    "v1RegisterOrgResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "memberships": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Membership"
-          },
-          "title": "GuaranteedCommitments create-org response fields"
-        },
-        "domain": {
-          "type": "string"
-        },
-        "primaryAddress": {
-          "$ref": "#/definitions/v1Address"
-        },
-        "awsMarketplaceOfferLink": {
-          "type": "string"
-        },
-        "azureMarketplaceOfferLink": {
-          "type": "string"
-        },
-        "gcpMarketplaceOfferLink": {
-          "type": "string"
-        }
-      }
-    },
     "v1ReinviteUserResponse": {
       "type": "object",
       "properties": {
@@ -46134,6 +41909,52 @@
         }
       }
     },
+    "v1Resource": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "title": "Format is `yyyy-mm`"
+        },
+        "orgId": {
+          "type": "string",
+          "title": "Organization ID"
+        },
+        "vendor": {
+          "type": "string",
+          "description": "Only `aws` is supported for now."
+        },
+        "account": {
+          "type": "string",
+          "title": "Resource owner account"
+        },
+        "service": {
+          "type": "string",
+          "description": "Only `AmazonEC2` is supported for now."
+        },
+        "resourceId": {
+          "type": "string",
+          "title": "Resource unique identifier"
+        },
+        "resourceType": {
+          "type": "string",
+          "title": "Only `AWS::EC2::Instance` is supported for now"
+        },
+        "cost": {
+          "type": "number",
+          "format": "double",
+          "description": "Cost incurred for the resource on specified month."
+        },
+        "properties": {
+          "type": "string",
+          "title": "Format: JSON String"
+        },
+        "recommendation": {
+          "type": "string",
+          "title": "Format: JSON String"
+        }
+      }
+    },
     "v1ResourceAccount": {
       "type": "object",
       "properties": {
@@ -46145,66 +41966,6 @@
         },
         "registered": {
           "type": "boolean"
-        }
-      }
-    },
-    "v1ResourceDailyUsage": {
-      "type": "object",
-      "properties": {
-        "date": {
-          "type": "string"
-        },
-        "usageAccountId": {
-          "type": "string"
-        },
-        "subAccountId": {
-          "type": "string"
-        },
-        "usage": {
-          "type": "number",
-          "format": "double"
-        },
-        "reservationUsage": {
-          "type": "number",
-          "format": "double"
-        },
-        "freeTierUsage": {
-          "type": "number",
-          "format": "double"
-        },
-        "ondemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "reservedCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "ifAllOndemandCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "spotCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "freeTierSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "usageType": {
-          "type": "string"
-        },
-        "commonUsageType": {
-          "type": "string"
-        },
-        "coveredUsage": {
-          "type": "number",
-          "format": "double"
-        },
-        "uptime": {
-          "type": "number",
-          "format": "double"
         }
       }
     },
@@ -46311,26 +42072,6 @@
         }
       },
       "description": "Response message for ListSavings, RestoreSavings, SimulateSavings rpc."
-    },
-    "v1Segment": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "provider": {
-          "$ref": "#/definitions/v1Provider"
-        },
-        "isDefault": {
-          "type": "boolean"
-        },
-        "createdAt": {
-          "type": "string"
-        }
-      }
     },
     "v1SendRipplePasswordResetCodeRequest": {
       "type": "object",
@@ -46532,71 +42273,6 @@
       },
       "description": "ServiceDiscountsExport resource definition."
     },
-    "v1ServiceSummary": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "serviceName": {
-          "type": "string"
-        },
-        "provider": {
-          "type": "string"
-        },
-        "numCommitments": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "currentCoverage": {
-          "type": "number",
-          "format": "double"
-        },
-        "potentialCoverage": {
-          "type": "number",
-          "format": "double"
-        },
-        "minCommitment": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlyCommitment": {
-          "type": "number",
-          "format": "double"
-        },
-        "upfrontCost": {
-          "type": "number",
-          "format": "double"
-        },
-        "minSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "maxSavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "monthlySavings": {
-          "type": "number",
-          "format": "double"
-        },
-        "minTermHours": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "maxTermHours": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "griPremium": {
-          "type": "number",
-          "format": "double"
-        }
-      }
-    },
     "v1SetChildBillingGroupCustomizedBillingServiceRequestCustomizedBillingServiceBillingSetting": {
       "type": "object",
       "properties": {
@@ -46702,15 +42378,6 @@
         "updateCurrency": {
           "type": "string",
           "format": "int64"
-        }
-      }
-    },
-    "v1SetPayerAccountEnabledResponse": {
-      "type": "object",
-      "properties": {
-        "payerAccount": {
-          "$ref": "#/definitions/ListPayerAccountsResponsePayerAccount",
-          "title": "Updated payer account row (same shape as list)"
         }
       }
     },
@@ -46862,29 +42529,6 @@
       },
       "description": "Savings Plan Details to be used in the GetDailyUsageCostDetailsResponse."
     },
-    "v1StartAwsOnboardingRequest": {
-      "type": "object",
-      "properties": {
-        "billingGroupId": {
-          "type": "string",
-          "title": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)"
-        },
-        "companyId": {
-          "type": "string"
-        },
-        "gcOrgId": {
-          "type": "string"
-        }
-      }
-    },
-    "v1StartAwsOnboardingResponse": {
-      "type": "object",
-      "properties": {
-        "onboardingId": {
-          "type": "string"
-        }
-      }
-    },
     "v1SupportPlan": {
       "type": "string",
       "enum": [
@@ -47020,6 +42664,14 @@
         }
       },
       "title": "Response message for TerminateResource"
+    },
+    "v1TestResponse": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "string"
+        }
+      }
     },
     "v1ThirdProfitItemSection": {
       "type": "object",
@@ -47990,34 +43642,12 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/blueapiflowv1DailyUtilization"
+            "$ref": "#/definitions/v1DailyUtilization"
           },
           "title": "Array of daily utilization data for this Savings Plan"
         }
       },
       "description": "Utilization details for Savings Plans, including ARN and utilization percentage."
-    },
-    "v1ValidateBillingGroupRequest": {
-      "type": "object",
-      "properties": {
-        "companyId": {
-          "type": "string",
-          "description": "Required. Company identifier."
-        }
-      }
-    },
-    "v1ValidateBillingGroupResponse": {
-      "type": "object",
-      "properties": {
-        "ok": {
-          "type": "boolean",
-          "description": "True if the company is allowed to proceed with onboarding; false otherwise."
-        },
-        "message": {
-          "type": "string",
-          "description": "Optional human-readable reason when ok=false."
-        }
-      }
     },
     "v1ValidateResetPasswordLinkAndChangePasswordRequest": {
       "type": "object",
@@ -48159,59 +43789,6 @@
       "properties": {
         "result": {
           "type": "boolean"
-        }
-      }
-    },
-    "v1VerifyAwsOnboardingRequest": {
-      "type": "object",
-      "properties": {
-        "billingGroupId": {
-          "type": "string",
-          "title": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)"
-        },
-        "companyId": {
-          "type": "string"
-        },
-        "gcOrgId": {
-          "type": "string"
-        },
-        "onboardingId": {
-          "type": "string",
-          "title": "From /start response"
-        },
-        "accountId": {
-          "type": "string",
-          "title": "AWS account id being onboarded/verified"
-        },
-        "existingCur": {
-          "$ref": "#/definitions/v1AwsExistingCur",
-          "description": "Optional: if set, GuaranteedCommitments will use this existing CUR. If omitted, GuaranteedCommitments may create a new CUR."
-        }
-      }
-    },
-    "v1VerifyAwsOnboardingResponse": {
-      "type": "object",
-      "properties": {
-        "checks": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/VerifyAwsOnboardingResponseAwsOnboardingFeatureCheck"
-          }
-        }
-      }
-    },
-    "v1VerifyInvitedUserRequest": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string"
-        },
-        "orgId": {
-          "type": "string"
-        },
-        "code": {
-          "type": "string"
         }
       }
     },
