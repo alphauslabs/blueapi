@@ -391,32 +391,25 @@ message AwsExistingCur {
 }
 
 message RegisterOrgRequest {
-  // Ripple context (not sent to GuaranteedCommitments; used for mapping/persistence)
-  string mspId = 1;
 
-  // If present => we're onboarding an MSP customer/org (3rd layer )
-  // If empty => MSP-level org (2nd layer).
-  string billingId = 2;
-
-  // required
-  string name = 3;
-  string labraSubscriptionId = 4;
-  // required
-  repeated OrgUser users = 5;
-  string domain = 6;
-  // required
-  Address primaryAddress = 7;
-  string awsMarketplaceOfferLink = 8;
-  string azureMarketplaceOfferLink = 9;
-  string gcpMarketplaceOfferLink = 10;
+  string name = 1;
+  string labraSubscriptionId = 2;
+  repeated OrgUser users = 3;
+  string domain = 4;
+  Address primaryAddress = 5;
+  string awsMarketplaceOfferLink = 6;
+  string azureMarketplaceOfferLink = 7;
+  string gcpMarketplaceOfferLink = 8;
 }
 
 message StartAwsOnboardingRequest {
   // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
   string billingGroupId = 1;
   string companyId = 2;
-
   string gcOrgId = 3;
+
+  string payerAccountId = 4;
+  string payerAccountName = 5;
 }
 
 message GetAwsCloudFormationTemplateRequest {
@@ -425,6 +418,9 @@ message GetAwsCloudFormationTemplateRequest {
   string companyId = 2;
 
   string gcOrgId = 3;
+  
+  string payerAccountId = 4;
+  string payerAccountName = 5;
 }
 
 message GetAwsLaunchStackUrlRequest {
@@ -433,6 +429,10 @@ message GetAwsLaunchStackUrlRequest {
   string companyId = 2;
 
   string gcOrgId = 3;
+
+  
+  string payerAccountId = 4;
+  string payerAccountName = 5;
 }
 
 message VerifyAwsOnboardingRequest {
