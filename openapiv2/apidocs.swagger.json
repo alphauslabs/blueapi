@@ -6424,13 +6424,13 @@
               "type": "object",
               "properties": {
                 "result": {
-                  "$ref": "#/definitions/v1BillingGroup"
+                  "$ref": "#/definitions/billingv1BillingGroup"
                 },
                 "error": {
                   "$ref": "#/definitions/googlerpcStatus"
                 }
               },
-              "title": "Stream result of v1BillingGroup"
+              "title": "Stream result of billingv1BillingGroup"
             }
           },
           "default": {
@@ -6488,7 +6488,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1BillingGroup"
+              "$ref": "#/definitions/billingv1BillingGroup"
             }
           },
           "default": {
@@ -7138,7 +7138,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1BillingGroup"
+              "$ref": "#/definitions/billingv1BillingGroup"
             }
           },
           "default": {
@@ -10533,6 +10533,49 @@
         ]
       }
     },
+    "/v1/hubs:read": {
+      "post": {
+        "summary": "(ALPHA) [HUB] Reads hubs.",
+        "operationId": "Luster_ReadHubs",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/lusterHub"
+                },
+                "error": {
+                  "$ref": "#/definitions/googlerpcStatus"
+                }
+              },
+              "title": "Stream result of lusterHub"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the Luster.ReadHubs rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ReadHubsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Luster"
+        ]
+      }
+    },
     "/v1/info": {
       "get": {
         "summary": "For Testing Purposes Only.",
@@ -11424,6 +11467,88 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/GuaranteedCommitmentsSetPayerAccountEnabledBody"
+            }
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/managements/billinggroups": {
+      "get": {
+        "operationId": "GuaranteedCommitments_ListBillingGroups",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListBillingGroupsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/managements/billinggroups/status": {
+      "get": {
+        "operationId": "GuaranteedCommitments_GetBillingGroupStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBillingGroupStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/managements/billinggroups/{companyId}": {
+      "post": {
+        "operationId": "GuaranteedCommitments_SetBillingGroupStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SetBillingGroupStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GuaranteedCommitmentsSetBillingGroupStatusBody"
             }
           }
         ],
@@ -12820,7 +12945,7 @@
     },
     "/v1/onboarding/status:read": {
       "post": {
-        "summary": "WORK-IN-PROGRESS: Retrieves the latest onboarding status for an MSP or a company under an MSP.\nRetrieves the latest onboarding status for an MSP or a company under an MSP.",
+        "summary": "WORK-IN-PROGRESS: Retrieves the latest onboarding status for:\n- an MSP\n- a company under an MSP\n- a payer account under an MSP",
         "operationId": "GuaranteedCommitments_GetOnboardingStatus",
         "responses": {
           "200": {
@@ -25812,6 +25937,14 @@
         }
       }
     },
+    "GuaranteedCommitmentsSetBillingGroupStatusBody": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
     "GuaranteedCommitmentsSetPayerAccountEnabledBody": {
       "type": "object",
       "properties": {
@@ -25944,6 +26077,15 @@
           "type": "string"
         }
       }
+    },
+    "ListBillingGroupsResponseBillingGroupStatus": {
+      "type": "string",
+      "enum": [
+        "BILLING_GROUP_STATUS_UNSPECIFIED",
+        "BILLING_GROUP_STATUS_ENABLED",
+        "BILLING_GROUP_STATUS_DISABLED"
+      ],
+      "default": "BILLING_GROUP_STATUS_UNSPECIFIED"
     },
     "ListCalculatorRunningAccountsResponseAwsRunningAccount": {
       "type": "object",
@@ -30132,7 +30274,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1BillingGroup"
+            "$ref": "#/definitions/billingv1BillingGroup"
           },
           "description": "A list of billing groups contained in the access group."
         }
@@ -30168,6 +30310,71 @@
         }
       },
       "title": "Optional. Azure-specific options"
+    },
+    "billingv1BillingGroup": {
+      "type": "object",
+      "properties": {
+        "billingInternalId": {
+          "type": "string",
+          "description": "The billing group's internal id."
+        },
+        "billingGroupId": {
+          "type": "string",
+          "description": "The billing group id."
+        },
+        "billingGroupName": {
+          "type": "string",
+          "description": "The billing group name."
+        },
+        "companyName": {
+          "type": "string",
+          "description": "The company’s name."
+        },
+        "type": {
+          "type": "string",
+          "title": "For aws only: `default` or `imported`"
+        },
+        "hasChild": {
+          "type": "boolean",
+          "description": "Indicates if this billing group has child billing groups. AWS only for now."
+        },
+        "billingGroupInfo": {
+          "$ref": "#/definitions/rippleBillingGroupInfo",
+          "title": "The billing group info"
+        },
+        "accountOptions": {
+          "$ref": "#/definitions/v1AccountOptions",
+          "description": "The account options."
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/blueapiapiAccount"
+          },
+          "title": "List of all accounts"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apiCostTag"
+          },
+          "title": "List of all tags"
+        },
+        "invoiceSettings": {
+          "$ref": "#/definitions/v1BillingGroupInvoiceSettings",
+          "description": "The invoice settings for this billing group."
+        },
+        "additionalItems": {
+          "$ref": "#/definitions/v1BillingGroupAdditionalItems",
+          "title": "List of all additionalItems"
+        },
+        "awsOptions": {
+          "$ref": "#/definitions/billingv1AwsOptions",
+          "title": "AWS-specific options"
+        }
+      }
     },
     "billingv1InvoiceSettings": {
       "type": "object",
@@ -34556,6 +34763,34 @@
       "default": "ANY",
       "description": "The context type.\n\n - ANY: Any type of context.\n - SPACE: Space-related context.\n - ACCOUNT: Account-related context.\n - COST: Cost-related context."
     },
+    "lusterHub": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The hub id."
+        },
+        "name": {
+          "type": "string",
+          "description": "The hub name."
+        },
+        "cost": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The cost in hub."
+        },
+        "recommendation": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The recommendation in hub."
+        }
+      },
+      "title": "The message defines the hub"
+    },
     "lusterSpace": {
       "type": "object",
       "properties": {
@@ -36748,71 +36983,6 @@
         }
       },
       "title": "Request message for AddBillingAccount"
-    },
-    "v1BillingGroup": {
-      "type": "object",
-      "properties": {
-        "billingInternalId": {
-          "type": "string",
-          "description": "The billing group's internal id."
-        },
-        "billingGroupId": {
-          "type": "string",
-          "description": "The billing group id."
-        },
-        "billingGroupName": {
-          "type": "string",
-          "description": "The billing group name."
-        },
-        "companyName": {
-          "type": "string",
-          "description": "The company’s name."
-        },
-        "type": {
-          "type": "string",
-          "title": "For aws only: `default` or `imported`"
-        },
-        "hasChild": {
-          "type": "boolean",
-          "description": "Indicates if this billing group has child billing groups. AWS only for now."
-        },
-        "billingGroupInfo": {
-          "$ref": "#/definitions/rippleBillingGroupInfo",
-          "title": "The billing group info"
-        },
-        "accountOptions": {
-          "$ref": "#/definitions/v1AccountOptions",
-          "description": "The account options."
-        },
-        "accounts": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/blueapiapiAccount"
-          },
-          "title": "List of all accounts"
-        },
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/apiCostTag"
-          },
-          "title": "List of all tags"
-        },
-        "invoiceSettings": {
-          "$ref": "#/definitions/v1BillingGroupInvoiceSettings",
-          "description": "The invoice settings for this billing group."
-        },
-        "additionalItems": {
-          "$ref": "#/definitions/v1BillingGroupAdditionalItems",
-          "title": "List of all additionalItems"
-        },
-        "awsOptions": {
-          "$ref": "#/definitions/billingv1AwsOptions",
-          "title": "AWS-specific options"
-        }
-      }
     },
     "v1BillingGroupAccountSupportPlan": {
       "type": "object",
@@ -41296,10 +41466,18 @@
       "type": "object",
       "properties": {
         "billingGroup": {
-          "$ref": "#/definitions/v1BillingGroup"
+          "$ref": "#/definitions/billingv1BillingGroup"
         }
       },
       "description": "Response message for the Billing.GetBillingGroup rpc."
+    },
+    "v1GetBillingGroupStatusResponse": {
+      "type": "object",
+      "properties": {
+        "billingGroup": {
+          "$ref": "#/definitions/v1ListBillingGroupsResponseBillingGroup"
+        }
+      }
     },
     "v1GetBillingSettingResponse": {
       "type": "object",
@@ -42612,9 +42790,12 @@
       "properties": {
         "billingGroupId": {
           "type": "string",
-          "title": "Optional:\n- empty =\u003e MSP-level onboarding row (isMsp = true)\n- non-empty =\u003e company under MSP (isMsp = false)"
+          "title": "Optional:\n- all empty =\u003e MSP-level onboarding row\n- companyId set =\u003e company flow\n- payerAccountId set =\u003e payer-account flow\nbillingGroupId may accompany company flow"
         },
         "companyId": {
+          "type": "string"
+        },
+        "payerAccountId": {
           "type": "string"
         }
       }
@@ -43835,6 +44016,54 @@
         }
       },
       "description": "Response message for the Billing.ListBillingGroupsPaginated rpc."
+    },
+    "v1ListBillingGroupsResponse": {
+      "type": "object",
+      "properties": {
+        "billingGroups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ListBillingGroupsResponseBillingGroup"
+          }
+        }
+      }
+    },
+    "v1ListBillingGroupsResponseBillingGroup": {
+      "type": "object",
+      "properties": {
+        "companyId": {
+          "type": "string"
+        },
+        "billingGroupId": {
+          "type": "string"
+        },
+        "billingGroupName": {
+          "type": "string"
+        },
+        "payerAccountId": {
+          "type": "string"
+        },
+        "payerAccountName": {
+          "type": "string"
+        },
+        "segmentId": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/ListBillingGroupsResponseBillingGroupStatus"
+        },
+        "onboardingStatus": {
+          "$ref": "#/definitions/GetOnboardingStatusResponseOnboardingStatus"
+        },
+        "verificationChecks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/VerifyAwsOnboardingResponseAwsOnboardingFeatureCheck"
+          }
+        }
+      }
     },
     "v1ListBudgetsRequest": {
       "type": "object",
@@ -45755,6 +45984,16 @@
       },
       "description": "Request message for the Billing.ReadCustomizedBillingServices rpc."
     },
+    "v1ReadHubsRequest": {
+      "type": "object",
+      "properties": {
+        "fieldMask": {
+          "type": "string",
+          "title": "Optional. field_mask\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto"
+        }
+      },
+      "description": "Request message for the Luster.ReadHubs rpc."
+    },
     "v1ReadInvoiceCostsRequest": {
       "type": "object",
       "properties": {
@@ -45847,7 +46086,7 @@
       "properties": {
         "fieldMask": {
           "type": "string",
-          "title": "Optional. field_mask\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto"
+          "title": "Optional. field_mask\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto\nAvailable fields: id,name,description,members,created_at,updated_at"
         }
       },
       "description": "Request message for the Luster.ReadSpaces rpc."
@@ -46786,6 +47025,14 @@
         "griPremium": {
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "v1SetBillingGroupStatusResponse": {
+      "type": "object",
+      "properties": {
+        "billingGroup": {
+          "$ref": "#/definitions/v1ListBillingGroupsResponseBillingGroup"
         }
       }
     },
