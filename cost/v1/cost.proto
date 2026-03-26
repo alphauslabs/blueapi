@@ -1822,6 +1822,10 @@ message GetExportRISPRequest {
   string language = 2 [(google.api.field_behavior) = OPTIONAL];
   // Required. Include expired
   bool includeExpired = 3;
+  // Optional. Target export month in YYYY-MM format. Defaults to current month if empty.
+  string month = 4 [(google.api.field_behavior) = OPTIONAL];
+  // Optional. Columns to include in the CSV output. Empty means all columns.
+  repeated string columns = 5 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Request message for the ExportBillingGroupInvoiceServiceDiscounts rpc.
@@ -1829,6 +1833,8 @@ message GetExportRISPResponse {
   // csv direct download link
   // expires in 10 minutes
   string downloadLink = 1;
+  // True when the export CSV was sent as an email attachment to configured recipients.
+  bool emailSent = 2;
 }
 
 // Request message for GetUtilization
