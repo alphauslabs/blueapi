@@ -6,6 +6,7 @@ import "api/luster/space.proto";
 import "api/luster/context.proto";
 import "api/luster/comment.proto";
 import "api/luster/label.proto";
+import "api/luster/hub.proto";
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
 import "google/protobuf/empty.proto";
@@ -57,15 +58,14 @@ service Luster {
     };
   }
 
-  // (ALPHA) [SPACE] Deletes space. 
-  // 
+  // (ALPHA) [SPACE] Deletes space.
+  //
   // When deleted, contexts created within the space will also be deleted and cannot be viewed.
   rpc DeleteSpace(DeleteSpaceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/spaces/{id}"
     };
   }
-
 
   // (ALPHA) [CONTEXT] Reads contexts.
   rpc ReadContexts(ReadContextsRequest) returns (stream api.luster.Context) {
@@ -159,12 +159,21 @@ service Luster {
     };
   }
 
+  // (ALPHA) [HUB] Reads hubs.
+  rpc ReadHubs(ReadHubsRequest) returns (stream api.luster.Hub) {
+    option (google.api.http) = {
+      post: "/v1/hubs:read"
+      body: "*"
+    };
+  }
+
 }
 
 // Request message for the Luster.ReadSpaces rpc.
 message ReadSpacesRequest {
   // Optional. field_mask
   // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  // Available fields: id,name,description,members,created_at,updated_at
   google.protobuf.FieldMask field_mask = 1;
 }
 
@@ -418,4 +427,11 @@ message UpdateLabelRequest {
 message DeleteLabelRequest {
   // Required. the label id.
   string id = 1;
+}
+
+// Request message for the Luster.ReadHubs rpc.
+message ReadHubsRequest {
+  // Optional. field_mask
+  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
+  google.protobuf.FieldMask field_mask = 1;
 }

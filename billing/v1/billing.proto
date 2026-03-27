@@ -1254,9 +1254,6 @@ message CreateBillingGroupRequest {
 
   // Optional. Company's country
   string country = 19;
-
-  // Optional. If set this means this is a child BG under the parent bg specified in this field.
-  ChildBillingGroupInfo childbginfo = 20;
 }
 
 message AwsOptions {
@@ -2098,6 +2095,9 @@ message ListInvoiceRequest {
  
   // OPTIONAL: vendor (aws, azure, gcp)
   string vendor = 2;
+
+  // Optional. If set, return only child invoices for this billing group.
+  string billingInternalId = 3;
 }
 
 // Response message for the ListInvoice rpc.
@@ -3533,11 +3533,6 @@ message GetChildBillingGroupInvoiceServiceDiscountsResponse {
 message ReadChildBillingGroupAccountInvoiceServiceDiscountsRequest {
   // Required. Child Billing Group Internal Id
   string internalId = 1;
-}
-
-message ChildBillingGroupInfo {
-  string parentId = 1;
-  string rootParentId = 2;
 }
 
 
