@@ -266,6 +266,64 @@ service GuaranteedCommitments {
       body: "*"
     };
   }
+
+  // ------------------------ AZURE ONBOARDING ------------------------
+
+  // WORK-IN-PROGRESS: Starts the Azure onboarding process for an organization.
+  // Creates an onboarding record and sets the provider to Azure.
+  rpc StartAzureOnboarding(StartAzureOnboardingRequest) returns (StartAzureOnboardingResponse) {
+    option (google.api.http) = {
+      post: "/v1/onboarding/azure/start"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Verifies Azure onboarding by creating the Azure integration and generating CUR.
+  // Saves tenant ID, subscription ID, role name, blob container, resource group, and storage account.
+  rpc VerifyAzureOnboarding(VerifyAzureOnboardingRequest) returns (VerifyAzureOnboardingResponse) {
+    option (google.api.http) = {
+      post: "/v1/onboarding/azure/verify"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Lists all integrations (AWS and Azure) for the organization.
+  rpc ListIntegrations(ListIntegrationsRequest) returns (ListIntegrationsResponse) {
+    option (google.api.http) = {
+      get: "/v1/onboarding/integrations"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Retrieves full details of a specific Azure onboarding record by ID.
+  rpc GetAzureOnboarding(GetAzureOnboardingRequest) returns (AzureOnboarding) {
+    option (google.api.http) = {
+      get: "/v1/onboarding/azure/{onboardingId}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Validates the Azure app (service principal) installation for an onboarding record.
+  rpc ValidateAzureAppInstall(ValidateAzureAppInstallRequest) returns (AzureOnboarding) {
+    option (google.api.http) = {
+      post: "/v1/onboarding/azure/{onboardingId}/validate"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Verifies the Azure partner onboarding setup.
+  rpc VerifyAzurePartnerOnboarding(VerifyAzurePartnerOnboardingRequest) returns (AzureOnboarding) {
+    option (google.api.http) = {
+      post: "/v1/onboarding/azure/partner/verify"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Retrieves the Microsoft authorization URL for Azure app installation.
+  // The returned URL is used to grant the Archera service principal access to the Azure tenant.
+  rpc GetAzureAuthUrl(GetAzureAuthUrlRequest) returns (GetAzureAuthUrlResponse) {
+    option (google.api.http) = {
+      get: "/v1/onboarding/azure/{onboardingId}/authurl"
+    };
+  }
 }
 
 // ####################### ENUMS #######################
@@ -566,6 +624,70 @@ message CreateGuaranteedCommitmentAccessRequest {
   string target = 1;
   // The guaranteed-commitments-provided external ID.
   string externalId = 2;
+}
+
+// ------------------------ AZURE ONBOARDING REQUEST ------------------------
+
+message StartAzureOnboardingRequest {
+  // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
+  string billingGroupId = 1;
+  string companyId = 2;
+  string gcOrgId = 3;
+}
+
+message VerifyAzureOnboardingRequest {
+  // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
+  string billingGroupId = 1;
+  string companyId = 2;
+  string gcOrgId = 3;
+
+  // From /start response
+  string onboardingId = 4;
+
+  // Required. Azure tenant ID.
+  string tenantId = 5;
+  // Required. Azure management subscription ID.
+  string managementSubscriptionId = 6;
+  // Required. Azure account kind (e.g. "billing_account").
+  string azureAccountKind = 7;
+  // Required. List of Azure account IDs (billing account or enrollment IDs).
+  repeated string azureAccountIds = 8;
+  // Azure blob container name created for CUR export.
+  string azureBlobContainer = 9;
+  // Azure resource group name.
+  string azureResourceGroup = 10;
+  // Azure storage account name.
+  string azureStorageAccount = 11;
+  // Azure custom role name created for Archera access.
+  string azureRoleName = 12;
+  // Optional. Azure region for the resource group.
+  string azureResourceGroupRegion = 13;
+  // Optional. Azure region for the storage account.
+  string azureStorageAccountRegion = 14;
+}
+
+message ListIntegrationsRequest {}
+
+message GetAzureOnboardingRequest {
+  string onboardingId = 1;
+}
+
+message ValidateAzureAppInstallRequest {
+  string onboardingId = 1;
+}
+
+message VerifyAzurePartnerOnboardingRequest {
+  string onboardingId = 1;
+  string tenantId = 2;
+  string subscriptionId = 3;
+}
+
+message GetAzureAuthUrlRequest {
+  string onboardingId = 1;
+  // Required. Azure tenant ID.
+  string tenantId = 2;
+  // Required. Azure subscription ID.
+  string subscriptionId = 3;
 }
 
 
@@ -1304,4 +1426,135 @@ message GetPurchasePlansDetailsResponse {
 
   // Audit history of the plan
   repeated PlanHistoryEntry history = 4;
+}
+
+// ------------------------ AZURE ONBOARDING RESPONSE ------------------------
+
+message StartAzureOnboardingResponse {
+  string onboardingId = 1;
+}
+
+message AzureOnboardingFeatureCheck {
+  enum AzureOnboardingFeatureStatus {
+    AZURE_ONBOARDING_FEATURE_STATUS_UNSPECIFIED = 0;
+    AZURE_ONBOARDING_FEATURE_STATUS_AVAILABLE = 1;
+    AZURE_ONBOARDING_FEATURE_STATUS_MISSING = 2;
+  }
+
+  string feature = 1;
+  AzureOnboardingFeatureStatus status = 2;
+  repeated string detail = 3;
+}
+
+message VerifyAzureOnboardingResponse {
+  string onboardingId = 1;
+  string integrationId = 2;
+  string orgId = 3;
+  bool completed = 4;
+  string provider = 5;
+
+  // Azure tenant and subscription saved by the integration.
+  string azureTenantId = 6;
+  string azureSubscriptionId = 7;
+
+  // Azure resource names saved during onboarding.
+  string azureRoleName = 8;
+  string azureBlobContainer = 9;
+  string azureResourceGroup = 10;
+  string azureStorageAccount = 11;
+
+  // Feature check results returned by Archera.
+  repeated AzureOnboardingFeatureCheck featureChecks = 12;
+}
+
+message IntegrationOnboarding {
+  bool completed = 1;
+  string createdAt = 2;
+  google.protobuf.Value createdBy = 3;
+  string id = 4;
+  string integrationId = 5;
+  string orgId = 6;
+  string provider = 7;
+}
+
+message FeatureStatus {
+  string feature = 1;
+  string status = 2;
+  // Detail items; may be strings or structured objects depending on provider.
+  repeated google.protobuf.Value detail = 3;
+}
+
+message Integration {
+  bool active = 1;
+  google.protobuf.Struct config = 2;
+  string createdAt = 3;
+  string curEarliestData = 4;
+  string curReportName = 5;
+  bool curUsable = 6;
+  google.protobuf.Value data = 7;
+  repeated FeatureStatus featureStatuses = 8;
+  string id = 9;
+  string name = 10;
+  repeated IntegrationOnboarding onboardings = 11;
+  string orgId = 12;
+  string provider = 13;
+  string type = 14;
+  string updatedAt = 15;
+  string userId = 16;
+
+  // AWS-specific fields
+  string curBucket = 17;
+  string curBucketPrefix = 18;
+  string curBucketRegion = 19;
+  bool hasAccountManagementPermissions = 20;
+  bool isGov = 21;
+  string providerOrganizationId = 22;
+
+  // Azure-specific fields
+  string blobContainer = 23;
+  string costExportFormat = 24;
+  bool hasCurAccess = 25;
+  bool hasFullReservationAccess = 26;
+  string managementSubscriptionId = 27;
+  string resourceGroup = 28;
+  string storageAccount = 29;
+}
+
+message ListIntegrationsResponse {
+  repeated Integration integrations = 1;
+}
+
+message AzureOnboarding {
+  repeated string archeraOutboundIps = 1;
+  repeated string azureAccountIds = 2;
+  string azureAccountKind = 3;
+  google.protobuf.Value azureAppAuthValidated = 4;
+  google.protobuf.Value azureAppAuthorized = 5;
+  string azureBlobContainer = 6;
+  google.protobuf.Value azureCreateResources = 7;
+  google.protobuf.Value azureMarketplaceCompleted = 8;
+  string azurePermissionLevel = 9;
+  string azureResourceGroup = 10;
+  string azureResourceGroupRegion = 11;
+  google.protobuf.Value azureResourceGroupTags = 12;
+  string azureRoleName = 13;
+  string azureStorageAccount = 14;
+  string azureStorageAccountRegion = 15;
+  google.protobuf.Value azureStorageAccountTags = 16;
+  string azureSubscriptionId = 17;
+  string azureTenantId = 18;
+  bool completed = 19;
+  string createdAt = 20;
+  google.protobuf.Value createdBy = 21;
+  string id = 22;
+  // Full integration object; null if no integration has been created yet.
+  google.protobuf.Value integration = 23;
+  string integrationId = 24;
+  string orgId = 25;
+  string provider = 26;
+}
+
+message GetAzureAuthUrlResponse {
+  // Microsoft authorization URL to grant the Archera service principal access.
+  string authUrl = 1;
 }
