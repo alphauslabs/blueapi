@@ -498,6 +498,11 @@ message ListBillingGroupsRequest {}
 message SetBillingGroupStatusRequest {
   string companyId = 1;
   bool enabled = 2;
+
+  // temporarily required until we fully transition to the new onboarding flow.
+  // This is to avoid any breaks or crash during the transition. Will be removed once the transition is complete.
+  // Default value is false.
+  bool newVersion = 3;
 }
 
 message GetBillingGroupStatusRequest {}
@@ -505,6 +510,11 @@ message GetBillingGroupStatusRequest {}
 message ValidateBillingGroupRequest {
   // Required. Company identifier.
   string companyId = 1;
+
+  // temporarily required until we fully transition to the new onboarding flow.
+  // This is to avoid any breaks or crash during the transition. Will be removed once the transition is complete.
+  // Default value is false.
+  bool newVersion = 2;
 }
 
 message SaveCommitmentsPlanAsDraftRequest {
@@ -1165,8 +1175,23 @@ message GetOnboardingStatusResponse {
   repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 10;
 }
 
+message PayerAccountDetails {
+  string accountId = 1;
+  string accountName = 2;
+  string rippleRegistrationStatus = 3;
+
+  // Latest persisted guaranteed commitment setup/onboarding status for this payer account (if any)
+  GetOnboardingStatusResponse.OnboardingStatus gcSetupStatus = 4;
+
+  // Detailed AWS verification results (best-effort) returned from the last VerifyAwsOnboarding call.
+  // This is used by the UI to "resume" the onboarding flow and show which verification checks
+  // passed/failed when a user comes back later (e.g., after stopping at verification).
+  // Empty when verification hasn't been attempted yet or when no checks were persisted.
+  repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 8;
+}
+
 message ListPayerAccountsResponse {
-  enum PayerAccountStatus {
+enum PayerAccountStatus {
     PAYER_ACCOUNT_STATUS_UNSPECIFIED = 0;
     PAYER_ACCOUNT_STATUS_ENABLED = 1;
     PAYER_ACCOUNT_STATUS_DISABLED = 2;
@@ -1189,6 +1214,7 @@ message ListPayerAccountsResponse {
     repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 8;
   }
   repeated PayerAccount payerAccounts = 1;
+  repeated PayerAccountDetails payerAccountDetails = 2;
 }
 
 message SetPayerAccountEnabledResponse {
@@ -1211,12 +1237,14 @@ message ListBillingGroupsResponse {
     string companyId = 1;
     string billingGroupId = 2;
     string billingGroupName = 3;
-    string payerAccountId = 4;
-    string payerAccountName = 5;
-    string segmentId = 6;
-    BillingGroupStatus status = 7;
-    GetOnboardingStatusResponse.OnboardingStatus onboardingStatus = 8;
-    repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 9;
+    string companyName = 4;
+    string payerAccountId = 5;
+    string payerAccountName = 6;
+    string segmentId = 7;
+    string resourceType = 8;
+    BillingGroupStatus status = 9;
+    GetOnboardingStatusResponse.OnboardingStatus onboardingStatus = 10;
+    repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 11;
   }
 
   repeated BillingGroup billingGroups = 1;
