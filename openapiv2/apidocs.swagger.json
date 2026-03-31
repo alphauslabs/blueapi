@@ -23991,13 +23991,6 @@
     "CostExportCostFiltersFileBody": {
       "type": "object",
       "properties": {
-        "notificationChannelIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Required. The channel ids to use for notifications."
-        },
         "startTime": {
           "type": "string",
           "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20200101`."
@@ -24017,6 +24010,13 @@
         "includeTags": {
           "type": "boolean",
           "description": "Optional. If set to true, stream will include resource tags."
+        },
+        "notificationChannelIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. List of notification channel IDs to send the export result to."
         }
       },
       "description": "Request message for the ExportCostFiltersFile rpc."
@@ -25798,6 +25798,17 @@
         "name": {
           "type": "string"
         },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "GetExportRISPRequestColumns": {
+      "type": "object",
+      "properties": {
         "values": {
           "type": "array",
           "items": {
@@ -42552,6 +42563,35 @@
         "includeExpired": {
           "type": "boolean",
           "title": "Required. Include expired"
+        },
+        "month": {
+          "type": "string",
+          "description": "Optional. Target export month in YYYY-MM format. Defaults to current month if empty."
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. Columns to include in the CSV output. Empty means all columns."
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional report names to generate.\nValid values: ri_summary, sp_summary, ri_usageaccount, sp_usageaccount."
+        },
+        "columnsByQuery": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/GetExportRISPRequestColumns"
+          },
+          "description": "Optional per-query columns map. When set, values override `columns` for the matching query."
+        },
+        "checkOnly": {
+          "type": "boolean",
+          "description": "Optional. When true, only the invoice-finalization gate is checked and no export email is sent."
         }
       }
     },
@@ -42561,6 +42601,10 @@
         "downloadLink": {
           "type": "string",
           "title": "csv direct download link\nexpires in 10 minutes"
+        },
+        "emailSent": {
+          "type": "boolean",
+          "description": "True when the export CSV was sent as an email attachment to configured recipients."
         }
       },
       "description": "Request message for the ExportBillingGroupInvoiceServiceDiscounts rpc."

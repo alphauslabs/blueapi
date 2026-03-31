@@ -1814,6 +1814,10 @@ message GetCostReductionResponse {
 }
 
 message GetExportRISPRequest {  
+  message Columns {
+    repeated string values = 1;
+  }
+
   // Required. For AWS, "ri" or "sp".
   string type = 1;
   // Usually the language of the user information is used, 
@@ -1822,6 +1826,17 @@ message GetExportRISPRequest {
   string language = 2 [(google.api.field_behavior) = OPTIONAL];
   // Required. Include expired
   bool includeExpired = 3;
+  // Optional. Target export month in YYYY-MM format. Defaults to current month if empty.
+  string month = 4 [(google.api.field_behavior) = OPTIONAL];
+  // Optional. Columns to include in the CSV output. Empty means all columns.
+  repeated string columns = 5 [(google.api.field_behavior) = OPTIONAL];
+  // Optional report names to generate.
+  // Valid values: ri_summary, sp_summary, ri_usageaccount, sp_usageaccount.
+  repeated string queries = 6 [(google.api.field_behavior) = OPTIONAL];
+  // Optional per-query columns map. When set, values override `columns` for the matching query.
+  map<string, Columns> columnsByQuery = 7;
+  // Optional. When true, only the invoice-finalization gate is checked and no export email is sent.
+  bool checkOnly = 8;
 }
 
 // Request message for the ExportBillingGroupInvoiceServiceDiscounts rpc.
@@ -1829,6 +1844,8 @@ message GetExportRISPResponse {
   // csv direct download link
   // expires in 10 minutes
   string downloadLink = 1;
+  // True when the export CSV was sent as an email attachment to configured recipients.
+  bool emailSent = 2;
 }
 
 // Request message for GetUtilization
@@ -2088,9 +2105,6 @@ message ExportCostFiltersFileRequest {
   // Required. Filter Id.
   string filterId = 2;
 
-  // Required. The channel ids to use for notifications.
-  repeated string notificationChannelIds = 8;
-
   // Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20200101`.
   string startTime = 3;
 
@@ -2107,6 +2121,8 @@ message ExportCostFiltersFileRequest {
 
   // Optional. If set to true, stream will include resource tags. 
   bool includeTags = 7;
+  // Optional. List of notification channel IDs to send the export result to.
+  repeated string notificationChannelIds = 8;
 }
 
 // Response message for the ExportCostFiltersFile rpc.
