@@ -266,6 +266,77 @@ service GuaranteedCommitments {
       body: "*"
     };
   }
+
+// ####################### AZURE ONBOARDING #######################
+
+// WORK-IN-PROGRESS: Starts the Azure onboarding process.
+// Creates an onboarding record in Archera for the given org and returns the onboardingId.
+// Stores the Ripple billingGroupId/companyId association for later use.
+rpc StartAzureOnboarding(StartAzureOnboardingRequest) returns (StartAzureOnboardingResponse) {
+  option (google.api.http) = {
+    post: "/v1/onboarding/azure/start"
+    body: "*"
+  };
+}
+
+// ## Developers guide, will be deleted once documentation is in place ##
+// Used for multiple PATCH steps: setting azure resource config (step 2/3),
+// selecting account kind (step 5.5), and selecting account IDs (step 7).
+
+// WORK-IN-PROGRESS: Updates the Azure onboarding record.
+rpc UpdateAzureOnboarding(UpdateAzureOnboardingRequest) returns (AzureOnboardingState) {
+  option (google.api.http) = {
+    post: "/v1/onboarding/azure/{onboardingId}:update"
+    body: "*"
+  };
+}
+
+// WORK-IN-PROGRESS: Returns the Azure OAuth URL the user must visit to authorize Archera.
+rpc GetAzureOnboardingAuthUrl(GetAzureOnboardingAuthUrlRequest) returns (GetAzureOnboardingAuthUrlResponse) {
+  option (google.api.http) = {
+    get: "/v1/onboarding/azure/{onboardingId}/authurl"
+  };
+}
+
+
+// ## Developers guide, will be deleted once documentation is in place ##
+// Called after the user visits the auth URL (step 4).
+
+// WORK-IN-PROGRESS: Validates that the Azure app was installed and the user authorized it.
+rpc ValidateAzureAppInstall(ValidateAzureAppInstallRequest) returns (AzureOnboardingState) {
+  option (google.api.http) = {
+    post: "/v1/onboarding/azure/{onboardingId}/validate"
+    body: "*"
+  };
+}
+
+// WORK-IN-PROGRESS: Lists the available Azure subscriptions or billing accounts
+// for the user to select during onboarding.
+rpc ListAzureOnboardingAccounts(ListAzureOnboardingAccountsRequest) returns (ListAzureOnboardingAccountsResponse) {
+  option (google.api.http) = {
+    get: "/v1/onboarding/azure/{onboardingId}/accounts"
+  };
+}
+
+
+// Persists the Ripple billingGroupId/companyId mapping alongside the Archera integration.
+
+// WORK-IN-PROGRESS: Creates the Azure cloud integration after all onboarding steps complete.
+rpc CreateAzureIntegration(CreateAzureIntegrationRequest) returns (CreateAzureIntegrationResponse) {
+  option (google.api.http) = {
+    post: "/v1/onboarding/azure/integration"
+    body: "*"
+  };
+}
+
+// WORK-IN-PROGRESS: Lists Azure integrations to verify onboarding completion.
+rpc ListAzureIntegrations(ListAzureIntegrationsRequest) returns (ListAzureIntegrationsResponse) {
+  option (google.api.http) = {
+    get: "/v1/onboarding/azure/integrations"
+  };
+}
+
+
 }
 
 // ####################### ENUMS #######################
@@ -576,6 +647,133 @@ message CreateGuaranteedCommitmentAccessRequest {
   string target = 1;
   // The guaranteed-commitments-provided external ID.
   string externalId = 2;
+}
+
+// ------------------------ AZURE ONBOARDING REQUEST ------------------------
+
+// StartAzureOnboardingRequest initiates Azure onboarding (Step 1).
+// Ripple fields are required to link this Azure tenant to the correct
+// Ripple billing group and company for cost attribution and management.
+message StartAzureOnboardingRequest {
+  // Ripple billing group ID. If present => MSP customer (3rd layer), else MSP-level org (2nd layer).
+  string billingGroupId = 1;
+  // Ripple company ID within the billing group.
+  string companyId = 2;
+  // Required. Archera / GuaranteedCommitments org ID.
+  string gcOrgId = 3;
+  // Azure tenant ID.
+  string tenantId = 4;
+  // Azure management subscription ID.
+  string subscriptionId = 5;
+}
+
+// UpdateAzureOnboardingRequest updates the onboarding record (Steps 2, 5.5, 7).
+// Covers: setting azure resource config, choosing account kind, and selecting accounts.
+message UpdateAzureOnboardingRequest {
+  // Required. The onboarding ID returned from StartAzureOnboarding.
+  string onboardingId = 1;
+  // Required. Archera org ID.
+  string gcOrgId = 2;
+  // Ripple billing group ID (needed to persist Ripple context).
+  string billingGroupId = 3;
+  // Ripple company ID.
+  string companyId = 4;
+
+  // Azure fields — set only those that are being updated for this step.
+  string tenantId = 5;
+  string subscriptionId = 6;
+  // "subscription" or "billing_account"
+  string accountKind = 7;
+  repeated string accountIds = 8;
+  string blobContainer = 9;
+  string resourceGroup = 10;
+  string storageAccount = 11;
+  string roleName = 12;
+  google.protobuf.Value resourceGroupRegion = 13;
+  google.protobuf.Value storageAccountRegion = 14;
+  google.protobuf.Value resourceGroupTags = 15;
+  google.protobuf.Value storageAccountTags = 16;
+}
+
+// GetAzureOnboardingAuthUrlRequest fetches the OAuth authorization URL (Step 4).
+message GetAzureOnboardingAuthUrlRequest {
+  // Required. The onboarding ID.
+  string onboardingId = 1;
+  // Required. Archera org ID.
+  string gcOrgId = 2;
+  // Azure tenant ID.
+  string tenantId = 3;
+  // Azure management subscription ID.
+  string subscriptionId = 4;
+}
+
+// ValidateAzureAppInstallRequest validates app install after user authorizes (Step 5).
+// Contains the full azure resource config so Archera can verify permissions.
+message ValidateAzureAppInstallRequest {
+  // Required. The onboarding ID.
+  string onboardingId = 1;
+  // Required. Archera org ID.
+  string gcOrgId = 2;
+  // Integration type, e.g. "cloud/azure".
+  string type = 3;
+  string tenantId = 4;
+  string subscriptionId = 5;
+  // "subscription" or "billing_account"
+  string accountKind = 6;
+  repeated string accountIds = 7;
+  string blobContainer = 8;
+  string resourceGroup = 9;
+  string storageAccount = 10;
+  string roleName = 11;
+  google.protobuf.Value resourceGroupRegion = 12;
+  google.protobuf.Value storageAccountRegion = 13;
+  google.protobuf.Value resourceGroupTags = 14;
+  google.protobuf.Value storageAccountTags = 15;
+}
+
+// ListAzureOnboardingAccountsRequest lists available Azure accounts (Step 6).
+message ListAzureOnboardingAccountsRequest {
+  // Required. The onboarding ID.
+  string onboardingId = 1;
+  // Required. Archera org ID.
+  string gcOrgId = 2;
+}
+
+// CreateAzureIntegrationRequest creates the final Azure integration (Step 8).
+// Ripple fields are stored alongside Archera integration data to link
+// the Azure tenant to the correct Ripple billing group/company/payer context.
+message CreateAzureIntegrationRequest {
+  // Required. Archera org ID.
+  string gcOrgId = 1;
+  // Ripple billing group ID — links this Azure integration to the Ripple billing group.
+  string billingGroupId = 2;
+  // Ripple company ID — links this Azure integration to the Ripple company/customer.
+  string companyId = 3;
+  // Ripple payer account ID — if applicable, the payer account this Azure spend rolls up to.
+  string payerAccountId = 4;
+
+  // Integration type, always "cloud/azure".
+  string type = 5;
+  string tenantId = 6;
+  string subscriptionId = 7;
+  string onboardingId = 8;
+  // "subscription" or "billing_account"
+  string accountKind = 9;
+  repeated string accountIds = 10;
+  string blobContainer = 11;
+  string resourceGroup = 12;
+  string storageAccount = 13;
+  string roleName = 14;
+  google.protobuf.Value resourceGroupRegion = 15;
+  google.protobuf.Value storageAccountRegion = 16;
+  google.protobuf.Value resourceGroupTags = 17;
+  google.protobuf.Value storageAccountTags = 18;
+}
+
+// ListAzureIntegrationsRequest lists integrations to verify completion (Step 9).
+message ListAzureIntegrationsRequest {
+  // Required. Archera org ID.
+  string gcOrgId = 1;
 }
 
 
@@ -1332,4 +1530,172 @@ message GetPurchasePlansDetailsResponse {
 
   // Audit history of the plan
   repeated PlanHistoryEntry history = 4;
+}         
+
+
+// ------------------------ AZURE ONBOARDING RESPONSE ------------------------
+
+// AzureOnboardingCreatedBy identifies who triggered the onboarding.
+message AzureOnboardingCreatedBy {
+  string onboardingId = 1;
+  string username = 2;
+  string fullName = 3;
+}
+
+// AzureOnboardingState is the full Archera onboarding record state.
+// Returned by StartAzureOnboarding, UpdateAzureOnboarding, ValidateAzureAppInstall.
+message AzureOnboardingState {
+  // Archera onboarding record ID.
+  string onboardingId = 1;
+  // Archera org ID.
+  string orgId = 2;
+  string provider = 3;
+  bool completed = 4;
+  string createdAt = 5;
+  AzureOnboardingCreatedBy createdBy = 6;
+  // Linked integration object (null until integration is created).
+  google.protobuf.Value integration = 7;
+  string integrationId = 8;
+  // Outbound IPs Archera will use with this onboarding.
+  repeated string archeraOutboundIps = 9;
+
+  // Azure identity
+  string tenantId = 10;
+  string subscriptionId = 11;
+  repeated string accountIds = 12;
+  // "subscription" or "billing_account"
+  string accountKind = 13;
+
+  // Authorization state (nullable, use Value for JSON null interop)
+  google.protobuf.Value appAuthValidated = 14;
+  google.protobuf.Value appAuthorized = 15;
+
+  // Azure resource configuration
+  string blobContainer = 16;
+  string resourceGroup = 17;
+  string storageAccount = 18;
+  string roleName = 19;
+  google.protobuf.Value createResources = 20;
+  google.protobuf.Value marketplaceCompleted = 21;
+  google.protobuf.Value permissionLevel = 22;
+  google.protobuf.Value resourceGroupRegion = 23;
+  google.protobuf.Value storageAccountRegion = 24;
+  google.protobuf.Value resourceGroupTags = 25;
+  google.protobuf.Value storageAccountTags = 26;
+}
+
+// StartAzureOnboardingResponse is returned from StartAzureOnboarding.
+message StartAzureOnboardingResponse {
+  // Archera onboarding ID — pass this to all subsequent Azure onboarding RPCs.
+  string onboardingId = 1;
+  // Full onboarding state.
+  AzureOnboardingState state = 2;
+  // Ripple billing group ID
+  string billingGroupId = 3;
+  // Ripple company ID
+  string companyId = 4;
+}
+
+// GetAzureOnboardingAuthUrlResponse contains the OAuth URL (Step 4).
+message GetAzureOnboardingAuthUrlResponse {
+  // The Microsoft OAuth URL the user must open to authorize Archera.
+  string url = 1;
+}
+
+// AzureAccount is one available subscription or billing account (Step 6).
+message AzureAccount {
+  string accountId = 1;
+  string accountName = 2;
+  string accountStatus = 3;
+  // Azure account type, e.g. "FreeTrial_2014-09-01", "PayAsYouGo", etc.
+  string accountType = 4;
+  // Whether this account is eligible for Archera onboarding.
+  bool isEligible = 5;
+}
+
+// ListAzureOnboardingAccountsResponse returns accounts the user can select.
+message ListAzureOnboardingAccountsResponse {
+  repeated AzureAccount accounts = 1;
+}
+
+// AzureIntegrationFeatureStatus is a single feature check for an Azure integration (Step 9).
+message AzureIntegrationFeatureStatus {
+  string feature = 1;
+  // "available", "missing", "warning", "unknown"
+  string status = 2;
+  // Detail strings or JSON describing why a feature is missing/warning.
+  repeated string detail = 3;
+}
+
+// AzureIntegrationOnboarding is a summary of the onboarding linked to an integration.
+message AzureIntegrationOnboarding {
+  string id = 1;
+  string orgId = 2;
+  string provider = 3;
+  string integrationId = 4;
+  bool completed = 5;
+  string createdAt = 6;
+  AzureOnboardingCreatedBy createdBy = 7;
+}
+
+// AzureIntegration is the full Azure cloud integration record from Archera.
+message AzureIntegration {
+  string id = 1;
+  bool active = 2;
+  string name = 3;
+  string provider = 4;
+  // Always "cloud/azure".
+  string type = 5;
+  string orgId = 6;
+  string userId = 7;
+  string createdAt = 8;
+  string updatedAt = 9;
+
+  // Azure-specific
+  string managementSubscriptionId = 10;
+  // Azure tenant ID (stored as provider_organization_id in Archera).
+  string providerOrganizationId = 11;
+  string blobContainer = 12;
+  string resourceGroup = 13;
+  string storageAccount = 14;
+  // "FOCUS" or "ActualCost"
+  string costExportFormat = 15;
+
+  // CUR/data state
+  string curEarliestData = 16;
+  string curReportName = 17;
+  bool curUsable = 18;
+  bool hasCurAccess = 19;
+  bool hasFullReservationAccess = 20;
+
+  // Feature verification checks
+  repeated AzureIntegrationFeatureStatus featureStatuses = 21;
+  // Linked onboarding records
+  repeated AzureIntegrationOnboarding onboardings = 22;
+  // Flexible config blob (etl_enabled, use_vm_ris_not_sps, etc.)
+  google.protobuf.Struct config = 23;
+}
+
+// CreateAzureIntegrationResponse is returned after creating the Azure integration (Step 8).
+// A "tenant_already_connected" error_code is treated as success.
+message CreateAzureIntegrationResponse {
+  // True if the integration was successfully created or already existed.
+  bool success = 1;
+  // Set when the Archera API returned an error (e.g. "tenant_already_connected").
+  // "tenant_already_connected" is still considered success.
+  string errorCode = 2;
+  string errorMessage = 3;
+  // The Archera integration ID, if available.
+  string integrationId = 4;
+  // Ripple billing group ID stored with this integration.
+  string billingGroupId = 5;
+  // Ripple company ID stored with this integration.
+  string companyId = 6;
+  // Ripple payer account ID echoed back.
+  string payerAccountId = 7;
+}
+
+// ListAzureIntegrationsResponse contains all Azure integrations for the org (Step 9).
+message ListAzureIntegrationsResponse {
+  repeated AzureIntegration integrations = 1;
 }
