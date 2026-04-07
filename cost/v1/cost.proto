@@ -1842,7 +1842,9 @@ message GetExportRISPResponse {
 
 // Request message for ExportReport.
 message ExportReportRequest {
-  // Required. Cloud vendor. Currently only "aws" is supported.
+  // Optional. Cloud vendor.
+  // Accepted values: "aws", "gcp", "azure".
+  // If empty, defaults to "aws" for backward compatibility.
   string vendor = 1;
 
   // Required. Billing month in YYYY-MM format.
@@ -1854,8 +1856,7 @@ message ExportReportRequest {
 
   // Optional. Valid only for the `aws` vendor. AWS RI/SP export options.
   AwsRispExportOptions aws_options = 10;
-  // Future vendors follow the same pattern, e.g.:
-  // AzureRispExportOptions azure_options = 11;
+  // Future vendor-specific options follow the same pattern (e.g. gcp_options, azure_options).
 }
 
 // AWS RI/SP export options for ExportReport.
