@@ -26276,20 +26276,43 @@
         "resourceGroupRegion": {},
         "storageAccountRegion": {},
         "resourceGroupTags": {},
-        "storageAccountTags": {}
-      },
-      "description": "UpdateAzureOnboardingRequest updates the onboarding record (Steps 2, 5.5, 7).\nCovers: setting azure resource config, choosing account kind, and selecting accounts."
+        "storageAccountTags": {},
+        "completed": {
+          "type": "boolean",
+          "title": "---- Archera onboarding state fields (echo back from start/get response) ----"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "createdBy": {
+          "$ref": "#/definitions/v1AzureOnboardingCreatedBy"
+        },
+        "integration": {
+          "description": "Linked integration object; null until integration is created."
+        },
+        "integrationId": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string",
+          "description": "Always \"azure\"."
+        },
+        "org": {
+          "$ref": "#/definitions/v1AzureArcheraOrg",
+          "description": "The full Archera org object received from StartAzureOnboarding response.\nMust be echoed back verbatim on every PATCH call."
+        }
+      }
     },
     "GuaranteedCommitmentsValidateAzureAppInstallBody": {
       "type": "object",
       "properties": {
         "gcOrgId": {
           "type": "string",
-          "description": "Required. Archera org ID."
+          "description": "Required. The Archera org ID."
         },
         "type": {
           "type": "string",
-          "description": "Integration type, e.g. \"cloud/azure\"."
+          "description": "---- Azure resource config fields ----\nIntegration type, always \"cloud/azure\"."
         },
         "tenantId": {
           "type": "string"
@@ -26322,9 +26345,30 @@
         "resourceGroupRegion": {},
         "storageAccountRegion": {},
         "resourceGroupTags": {},
-        "storageAccountTags": {}
-      },
-      "description": "ValidateAzureAppInstallRequest validates app install after user authorizes (Step 5).\nContains the full azure resource config so Archera can verify permissions."
+        "storageAccountTags": {},
+        "completed": {
+          "type": "boolean",
+          "title": "---- Archera onboarding state fields (echo back from start/get response) ----"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "createdBy": {
+          "$ref": "#/definitions/v1AzureOnboardingCreatedBy"
+        },
+        "integration": {},
+        "integrationId": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string",
+          "description": "Always \"azure\"."
+        },
+        "org": {
+          "$ref": "#/definitions/v1AzureArcheraOrg",
+          "description": "The full Archera org object received from StartAzureOnboarding response.\nMust be echoed back verbatim."
+        }
+      }
     },
     "IamCreatePartnerTokenBody": {
       "type": "object",
@@ -37317,6 +37361,149 @@
       },
       "description": "AzureAccount is one available subscription or billing account (Step 6)."
     },
+    "v1AzureArcheraOrg": {
+      "type": "object",
+      "properties": {
+        "applyBalanceToPremiums": {
+          "type": "boolean"
+        },
+        "authSsoOnly": {
+          "type": "boolean"
+        },
+        "awsMarketplaceOfferLink": {},
+        "azureMarketplaceOfferLink": {},
+        "balance": {
+          "type": "number",
+          "format": "double"
+        },
+        "billingActive": {
+          "type": "boolean"
+        },
+        "channelPartnerType": {
+          "type": "string"
+        },
+        "channelPartnership": {},
+        "contractEnd": {},
+        "createdAt": {
+          "type": "string"
+        },
+        "currency": {},
+        "defaultUserRole": {
+          "type": "string"
+        },
+        "discountInfo": {},
+        "domain": {
+          "type": "string"
+        },
+        "effectiveDate": {},
+        "featureStatuses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1AzureArcheraOrgFeatureStatus"
+          }
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "frugalMode": {},
+        "gcpMarketplaceOfferLink": {},
+        "hasDiscount": {
+          "type": "boolean"
+        },
+        "hasGris": {
+          "type": "boolean"
+        },
+        "hasTdsPacProxyCredentials": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "string"
+        },
+        "isLeaseBuybackAutomated": {
+          "type": "boolean"
+        },
+        "isLeaseSwapAutomated": {
+          "type": "boolean"
+        },
+        "isTdsPacProxy": {
+          "type": "boolean"
+        },
+        "leaseBudget": {
+          "$ref": "#/definitions/v1AzureArcheraOrgLeaseBudget"
+        },
+        "leaseBuybackLookbackDays": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "leaseSwapLookbackDays": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "partnerId": {},
+        "planTrial": {
+          "type": "boolean"
+        },
+        "planTrialExpires": {
+          "type": "string"
+        },
+        "planTypeChosen": {
+          "type": "string"
+        },
+        "planTypeEffective": {
+          "type": "string"
+        },
+        "primaryAddress": {},
+        "promotionCode": {},
+        "providerRootSegmentIds": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Maps provider name to segment ID, e.g. {\"aws\": \"...\", \"azure\": \"...\", \"unknown\": \"...\"}"
+        }
+      },
+      "description": "AzureArcheraOrg is the full Archera org object.\nReceived from StartAzureOnboarding response and must be echoed back verbatim\non every UpdateAzureOnboarding and ValidateAzureAppInstall call."
+    },
+    "v1AzureArcheraOrgFeatureStatus": {
+      "type": "object",
+      "properties": {
+        "detail": {},
+        "feature": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "description": "AzureArcheraOrgFeatureStatus is a single feature status entry within the Archera org object."
+    },
+    "v1AzureArcheraOrgLeaseBudget": {
+      "type": "object",
+      "properties": {
+        "budget": {
+          "type": "number",
+          "format": "double"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "minTermMonths": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "description": "AzureArcheraOrgLeaseBudget is the lease budget config within the Archera org object."
+    },
     "v1AzureIntegration": {
       "type": "object",
       "properties": {
@@ -37546,7 +37733,11 @@
         "resourceGroupRegion": {},
         "storageAccountRegion": {},
         "resourceGroupTags": {},
-        "storageAccountTags": {}
+        "storageAccountTags": {},
+        "org": {
+          "$ref": "#/definitions/v1AzureArcheraOrg",
+          "description": "The full Archera org object returned from Archera. Store this and pass it\nback verbatim on every UpdateAzureOnboarding and ValidateAzureAppInstall call."
+        }
       },
       "description": "AzureOnboardingState is the full Archera onboarding record state.\nReturned by StartAzureOnboarding, UpdateAzureOnboarding, ValidateAzureAppInstall."
     },

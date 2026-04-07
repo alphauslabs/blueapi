@@ -667,8 +667,11 @@ message StartAzureOnboardingRequest {
   string subscriptionId = 5;
 }
 
-// UpdateAzureOnboardingRequest updates the onboarding record (Steps 2, 5.5, 7).
-// Covers: setting azure resource config, choosing account kind, and selecting accounts.
+
+// UpdateAzureOnboardingRequest updates the Archera onboarding record (Steps 2, 5.5, 7).
+// The full onboarding state must be passed back as Archera requires it on every PATCH.
+// The `org` field is the Archera org object received from the start/get response — pass it back verbatim.
+
 message UpdateAzureOnboardingRequest {
   // Required. The onboarding ID returned from StartAzureOnboarding.
   string onboardingId = 1;
@@ -693,6 +696,19 @@ message UpdateAzureOnboardingRequest {
   google.protobuf.Value storageAccountRegion = 14;
   google.protobuf.Value resourceGroupTags = 15;
   google.protobuf.Value storageAccountTags = 16;
+
+    // ---- Archera onboarding state fields (echo back from start/get response) ----
+  bool completed = 17;
+  string createdAt = 18;
+  AzureOnboardingCreatedBy createdBy = 19;
+  // Linked integration object; null until integration is created.
+  google.protobuf.Value integration = 20;
+  string integrationId = 21;
+  // Always "azure".
+  string provider = 22;
+  // The full Archera org object received from StartAzureOnboarding response.
+  // Must be echoed back verbatim on every PATCH call.
+  AzureArcheraOrg org = 23;
 }
 
 // GetAzureOnboardingAuthUrlRequest fetches the OAuth authorization URL (Step 4).
@@ -707,14 +723,18 @@ message GetAzureOnboardingAuthUrlRequest {
   string subscriptionId = 4;
 }
 
-// ValidateAzureAppInstallRequest validates app install after user authorizes (Step 5).
-// Contains the full azure resource config so Archera can verify permissions.
+// ValidateAzureAppInstallRequest validates Azure app install / authorization.
+// Called once before OAuth (step 3) to validate resource config,
+// and once after OAuth (step 5) to confirm the user has authorized Archera.
+// The full Archera onboarding state must be included — Archera requires it on every call.
+
 message ValidateAzureAppInstallRequest {
   // Required. The onboarding ID.
   string onboardingId = 1;
-  // Required. Archera org ID.
+  // Required. The Archera org ID.
   string gcOrgId = 2;
-  // Integration type, e.g. "cloud/azure".
+  // ---- Azure resource config fields ----
+  // Integration type, always "cloud/azure".
   string type = 3;
   string tenantId = 4;
   string subscriptionId = 5;
@@ -729,6 +749,18 @@ message ValidateAzureAppInstallRequest {
   google.protobuf.Value storageAccountRegion = 13;
   google.protobuf.Value resourceGroupTags = 14;
   google.protobuf.Value storageAccountTags = 15;
+  // ---- Archera onboarding state fields (echo back from start/get response) ----
+  bool completed = 16;
+  string createdAt = 17;
+  AzureOnboardingCreatedBy createdBy = 18;
+  google.protobuf.Value integration = 19;
+  string integrationId = 20;
+  // Always "azure".
+  string provider = 21;
+  // The full Archera org object received from StartAzureOnboarding response.
+  // Must be echoed back verbatim.
+  AzureArcheraOrg org = 22;
+
 }
 
 // ListAzureOnboardingAccountsRequest lists available Azure accounts (Step 6).
@@ -1535,6 +1567,66 @@ message GetPurchasePlansDetailsResponse {
 
 // ------------------------ AZURE ONBOARDING RESPONSE ------------------------
 
+// AzureArcheraOrgFeatureStatus is a single feature status entry within the Archera org object.
+message AzureArcheraOrgFeatureStatus {
+  google.protobuf.Value detail = 1;
+  string feature = 2;
+  string status = 3;
+  string updatedAt = 4;
+}
+
+// AzureArcheraOrgLeaseBudget is the lease budget config within the Archera org object.
+message AzureArcheraOrgLeaseBudget {
+  double budget = 1;
+  string createdAt = 2;
+  int32 minTermMonths = 3;
+}
+
+// AzureArcheraOrg is the full Archera org object.
+// Received from StartAzureOnboarding response and must be echoed back verbatim
+// on every UpdateAzureOnboarding and ValidateAzureAppInstall call.
+message AzureArcheraOrg {
+  bool applyBalanceToPremiums = 1;
+  bool authSsoOnly = 2;
+  google.protobuf.Value awsMarketplaceOfferLink = 3;
+  google.protobuf.Value azureMarketplaceOfferLink = 4;
+  double balance = 5;
+  bool billingActive = 6;
+  string channelPartnerType = 7;
+  google.protobuf.Value channelPartnership = 8;
+  google.protobuf.Value contractEnd = 9;
+  string createdAt = 10;
+  google.protobuf.Value currency = 11;
+  string defaultUserRole = 12;
+  google.protobuf.Value discountInfo = 13;
+  string domain = 14;
+  google.protobuf.Value effectiveDate = 15;
+  repeated AzureArcheraOrgFeatureStatus featureStatuses = 16;
+  repeated string features = 17;
+  google.protobuf.Value frugalMode = 18;
+  google.protobuf.Value gcpMarketplaceOfferLink = 19;
+  bool hasDiscount = 20;
+  bool hasGris = 21;
+  bool hasTdsPacProxyCredentials = 22;
+  string id = 23;
+  bool isLeaseBuybackAutomated = 24;
+  bool isLeaseSwapAutomated = 25;
+  bool isTdsPacProxy = 26;
+  AzureArcheraOrgLeaseBudget leaseBudget = 27;
+  int32 leaseBuybackLookbackDays = 28;
+  int32 leaseSwapLookbackDays = 29;
+  string name = 30;
+  google.protobuf.Value partnerId = 31;
+  bool planTrial = 32;
+  string planTrialExpires = 33;
+  string planTypeChosen = 34;
+  string planTypeEffective = 35;
+  google.protobuf.Value primaryAddress = 36;
+  google.protobuf.Value promotionCode = 37;
+  // Maps provider name to segment ID, e.g. {"aws": "...", "azure": "...", "unknown": "..."}
+  map<string, string> providerRootSegmentIds = 38;
+}
+
 // AzureOnboardingCreatedBy identifies who triggered the onboarding.
 message AzureOnboardingCreatedBy {
   string onboardingId = 1;
@@ -1582,6 +1674,9 @@ message AzureOnboardingState {
   google.protobuf.Value storageAccountRegion = 24;
   google.protobuf.Value resourceGroupTags = 25;
   google.protobuf.Value storageAccountTags = 26;
+  // The full Archera org object returned from Archera. Store this and pass it
+  // back verbatim on every UpdateAzureOnboarding and ValidateAzureAppInstall call.
+  AzureArcheraOrg org = 27;
 }
 
 // StartAzureOnboardingResponse is returned from StartAzureOnboarding.
