@@ -1830,13 +1830,24 @@ message GetExportRISPRequest {
   string month = 4 [(google.api.field_behavior) = OPTIONAL];
   // Optional. Columns to include in the CSV output. Empty means all columns.
   repeated string columns = 5 [(google.api.field_behavior) = OPTIONAL];
-  // Optional report names to generate.
+  // Optional. Report names to generate. When empty, defaults to the reports matching `type`:
+  // - type=ri: ri_summary, ri_usageaccount
+  // - type=sp: sp_summary, sp_usageaccount
+  // - type=all: ri_summary, sp_summary, ri_usageaccount, sp_usageaccount
   // Valid values: ri_summary, sp_summary, ri_usageaccount, sp_usageaccount.
   repeated string queries = 6 [(google.api.field_behavior) = OPTIONAL];
-  // Optional per-query columns map. When set, values override `columns` for the matching query.
+  // Optional. Per-query column overrides. When set, the specified columns are used instead of `columns`
+  // for the matching query. Valid keys are the same as the `queries` values:
+  // ri_summary, sp_summary, ri_usageaccount, sp_usageaccount.
   map<string, Columns> columnsByQuery = 7;
-  // Optional. When true, only the invoice-finalization gate is checked and no export email is sent.
+  // Optional. Dry-run mode: only checks whether the invoice calculation has been finalized
+  // for the requested MSP and month. No CSV is generated and no email is sent.
+  // Intended for UI use to determine if the export action should be enabled before calling
+  // without this flag.
   bool checkOnly = 8;
+  // Optional. Notification channel IDs to send the export email to.
+  // When set, overrides the default notification channel configured for the MSP.
+  repeated string notificationChannelIds = 9 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Request message for the ExportBillingGroupInvoiceServiceDiscounts rpc.
