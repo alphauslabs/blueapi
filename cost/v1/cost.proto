@@ -561,6 +561,17 @@ service Cost {
     };
   }
 
+  // Queues a vendor report export and delivers results via email notification channel.
+  // Supports multiple report types per vendor. For AWS, this covers RI/SP utilization reports.
+  // The invoice calculation for the requested month must be finalized before calling this RPC.
+  // Use check_only=true to verify finalization without generating CSVs or sending email.
+  rpc ExportReport(ExportReportRequest) returns (ExportReportResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/export/reports:queue"
+      body: "*"
+    };
+  }
+
   // Get the utilization details for an organization (or MSP).
   rpc GetUtilization(GetUtilizationRequest) returns (GetUtilizationResponse) {
     option (google.api.http) = {
@@ -1829,6 +1840,67 @@ message GetExportRISPResponse {
   // csv direct download link
   // expires in 10 minutes
   string downloadLink = 1;
+}
+
+// Request message for ExportReport.
+message ExportReportRequest {
+  // Required. Cloud vendor. Currently only "aws" is supported.
+  string vendor = 1;
+
+  // Required. Billing month in YYYY-MM format.
+  string month = 2;
+
+  // Optional. Dry-run mode: verify that the invoice calculation is finalized
+  // for the requested month without generating CSVs or sending email.
+  bool check_only = 3;
+
+  // Optional. Notification channel IDs to deliver the report.
+  // If empty, the MSP default notification channel configured in DynamoDB is used.
+  repeated string notification_channel_ids = 4 [(google.api.field_behavior) = OPTIONAL];
+
+  // Vendor-specific report options. Must match the vendor field above.
+  oneof vendor_options {
+    AwsRispExportOptions aws_risp = 10;
+    // Future vendors can be added here, e.g.:
+    // AzureExportOptions azure_risp = 11;
+  }
+}
+
+// AWS RI/SP export options for ExportReport.
+message AwsRispExportOptions {
+  // Per-report column filter container.
+  message Columns {
+    repeated string values = 1;
+  }
+
+  // Optional. Include expired RIs/SPs in the results. Default: false.
+  bool include_expired = 1;
+
+  // Optional. CSV header language: "en" or "ja". Default: "en".
+  string language = 2 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. Report queries to include in the export.
+  // Valid values: "ri_summary", "sp_summary", "ri_usageaccount", "sp_usageaccount".
+  // Default when empty: all 4 reports are included.
+  repeated string queries = 3 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. Global column filter applied to all reports.
+  // Superseded per-report by columns_by_query if that key is present.
+  repeated string columns = 4 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. Per-report column overrides.
+  // Keys must be valid query names (ri_summary, sp_summary, ri_usageaccount, sp_usageaccount).
+  map<string, Columns> columns_by_query = 5;
+}
+
+// Response message for ExportReport.
+message ExportReportResponse {
+  // True if the export email was successfully queued for delivery.
+  bool email_sent = 1;
+
+  // Only meaningful when check_only=true in the request.
+  // True if the invoice calculation is finalized for the requested month.
+  bool finalized = 2;
 }
 
 // Request message for GetUtilization
