@@ -3686,15 +3686,15 @@ message ListExcludeServicesResponse {
 }
 
 // Represents a single service with its associated names and SKUs.
-message ServiceListItem {
+message ServiceItem {
+  // Service ID.
+  string id = 1;
+
   // Service code.
-  string code = 1;
+  string code = 2;
 
   // List of display names for this service.
-  repeated string names = 2;
-
-  // Service ID.
-  string id = 3;
+  repeated string names = 3;
 
   // List of SKU codes under this service.
   repeated string skus = 4;
@@ -3713,7 +3713,7 @@ message ListServicesRequest {
 
 message ListServicesResponse {
   // List of services.
-  repeated ServiceListItem data = 1;
+  repeated ServiceItem data = 1;
 }
 
 message BulkLinkAccountRequest {
