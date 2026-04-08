@@ -1074,6 +1074,14 @@ service Billing {
     };
   }
 
+  // Lists available cloud services and their associated SKUs for a given vendor.
+  // Use this to retrieve service codes and names that can be referenced in exclude service settings.
+  rpc ListServices(ListServicesRequest) returns (ListServicesResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/services"
+    };
+  }
+
   // Link accounts to a billing group in bulk from a CSV file.
   // Returns a long-running operation. Poll status via the Operations service (GET /ops/v1/{name}).
   rpc BulkLinkAccount(BulkLinkAccountRequest) returns (protos.Operation) {
@@ -3675,6 +3683,37 @@ message ListExcludeServicesRequest {
 message ListExcludeServicesResponse {
   // List of all exclude service entries for the request.
   repeated ExcludeServiceEntry entries = 1;
+}
+
+// Represents a single service with its associated names and SKUs.
+message ServiceItem {
+  // Service ID.
+  string id = 1;
+
+  // Service code.
+  string code = 2;
+
+  // List of display names for this service.
+  repeated string names = 3;
+
+  // List of SKU codes under this service.
+  repeated string skus = 4;
+}
+
+message ListServicesRequest {
+  // Required. Cloud vendor (e.g., "gcp"). Bound from the URL path.
+  string vendor = 1;
+
+  // Optional. Service code to filter by.
+  // Example values: "6F81-5844-456A" (Cloud Storage), "95FF-2EF5-5EA1" (Compute Engine),
+  // "152E-C115-5142" (Cloud SQL).
+  // Use ListServices without this field to retrieve all available service codes.
+  string code = 2;
+}
+
+message ListServicesResponse {
+  // List of services.
+  repeated ServiceItem data = 1;
 }
 
 message BulkLinkAccountRequest {
