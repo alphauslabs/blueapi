@@ -7130,38 +7130,6 @@
         ]
       }
     },
-    "/v1/billinggroups/gcp-service": {
-      "get": {
-        "summary": "List GCP Service Entries",
-        "operationId": "Billing_ListGCPServices",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListGCPServicesResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "serviceCode",
-            "description": "Optional. GCP service code.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
-      }
-    },
     "/v1/billinggroups/merged": {
       "post": {
         "summary": "Registers a billing group with Merged Endpoints. Only available in Ripple. WORK IN PROGRESS",
@@ -22177,6 +22145,45 @@
         ],
         "tags": [
           "Cover"
+        ]
+      }
+    },
+    "/v1/{vendor}/services": {
+      "get": {
+        "summary": "List GCP Service Entries",
+        "operationId": "Billing_ListGCPServices",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListGCPServicesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Cloud vendor (e.g., \"gcp\"). Bound from the URL path.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "serviceCode",
+            "description": "Optional. GCP service code to filter by.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
         ]
       }
     },

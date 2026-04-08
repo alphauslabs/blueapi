@@ -1077,7 +1077,7 @@ service Billing {
     // List GCP Service Entries
   rpc ListGCPServices(ListGCPServicesRequest) returns (ListGCPServicesResponse) {
     option (google.api.http) = {
-      get: "/v1/billinggroups/gcp-service"
+      get: "/v1/{vendor}/services"
     };
   }
 
@@ -3700,8 +3700,11 @@ message GCPService {
 }
 
 message ListGCPServicesRequest {
-  // Optional. GCP service code.
-  string service_code = 1;
+  // Required. Cloud vendor (e.g., "gcp"). Bound from the URL path.
+  string vendor = 1;
+
+  // Optional. GCP service code to filter by.
+  string service_code = 2;
 }
 
 message ListGCPServicesResponse {
