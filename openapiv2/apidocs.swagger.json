@@ -7130,6 +7130,67 @@
         ]
       }
     },
+    "/v1/billinggroups/gcp-service-settings": {
+      "get": {
+        "summary": "List GCP Service Entries",
+        "operationId": "Billing_ListGCPServices",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListGCPServicesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "serviceCode",
+            "description": "Required. GCP service code.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "names",
+            "description": "Optional. List of service display names to filter by.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "serviceId",
+            "description": "Optional. GCP service ID.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "skus",
+            "description": "Optional. List of SKU codes to filter by.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups/merged": {
       "post": {
         "summary": "Registers a billing group with Merged Endpoints. Only available in Ripple. WORK IN PROGRESS",
@@ -42028,6 +42089,34 @@
         }
       }
     },
+    "v1GCPService": {
+      "type": "object",
+      "properties": {
+        "serviceCode": {
+          "type": "string",
+          "description": "GCP service code."
+        },
+        "names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of display names for this service."
+        },
+        "serviceId": {
+          "type": "string",
+          "description": "GCP service ID."
+        },
+        "skus": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of SKU codes under this service."
+        }
+      },
+      "description": "Represents a single GCP service with its associated names and SKUs."
+    },
     "v1GenerateOrganizationCodeRequest": {
       "type": "object"
     },
@@ -45173,6 +45262,19 @@
             "type": "object",
             "$ref": "#/definitions/coverCostForecastDetails"
           }
+        }
+      }
+    },
+    "v1ListGCPServicesResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GCPService"
+          },
+          "description": "List of GCP services."
         }
       }
     },

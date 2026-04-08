@@ -1074,6 +1074,13 @@ service Billing {
     };
   }
 
+    // List GCP Service Entries
+  rpc ListGCPServices(ListGCPServicesRequest) returns (ListGCPServicesResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/gcp-service-settings"
+    };
+  }
+
   // Link accounts to a billing group in bulk from a CSV file.
   // Returns a long-running operation. Poll status via the Operations service (GET /ops/v1/{name}).
   rpc BulkLinkAccount(BulkLinkAccountRequest) returns (protos.Operation) {
@@ -3675,6 +3682,40 @@ message ListExcludeServicesRequest {
 message ListExcludeServicesResponse {
   // List of all exclude service entries for the request.
   repeated ExcludeServiceEntry entries = 1;
+}
+
+// Represents a single GCP service with its associated names and SKUs.
+message GCPService {
+  // GCP service code.
+  string service_code = 1;
+
+  // List of display names for this service.
+  repeated string names = 2;
+
+  // GCP service ID.
+  string service_id = 3;
+
+  // List of SKU codes under this service.
+  repeated string skus = 4;
+}
+
+message ListGCPServicesRequest {
+  // Required. GCP service code.
+  string service_code = 1;
+
+  // Optional. List of service display names to filter by.
+  repeated string names = 2;
+
+  // Optional. GCP service ID.
+  string service_id = 3;
+
+  // Optional. List of SKU codes to filter by.
+  repeated string skus = 4;
+}
+
+message ListGCPServicesResponse {
+  // List of GCP services.
+  repeated GCPService data = 1;
 }
 
 message BulkLinkAccountRequest {
