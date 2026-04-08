@@ -22150,13 +22150,13 @@
     },
     "/v1/{vendor}/services": {
       "get": {
-        "summary": "List GCP Service Entries",
-        "operationId": "Billing_ListGCPServices",
+        "summary": "List GCP` Service Entries",
+        "operationId": "Billing_ListServices",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ListGCPServicesResponse"
+              "$ref": "#/definitions/v1ListServicesResponse"
             }
           },
           "default": {
@@ -22176,7 +22176,7 @@
           },
           {
             "name": "serviceCode",
-            "description": "Optional. GCP service code to filter by.",
+            "description": "Optional. Service code to filter by.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -45243,19 +45243,6 @@
         }
       }
     },
-    "v1ListGCPServicesResponse": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1GCPService"
-          },
-          "description": "List of GCP services."
-        }
-      }
-    },
     "v1ListIdentityProvidersResponse": {
       "type": "object",
       "properties": {
@@ -45714,6 +45701,19 @@
         }
       },
       "description": "Response message for the Iam.ListRoles rpc."
+    },
+    "v1ListServicesResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GCPService"
+          },
+          "description": "List of services."
+        }
+      }
     },
     "v1ListSharedResourcesResponse": {
       "type": "object",

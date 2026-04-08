@@ -1074,8 +1074,8 @@ service Billing {
     };
   }
 
-    // List GCP Service Entries
-  rpc ListGCPServices(ListGCPServicesRequest) returns (ListGCPServicesResponse) {
+    // List GCP` Service Entries
+  rpc ListServices(ListServicesRequest) returns (ListServicesResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/services"
     };
@@ -3699,16 +3699,16 @@ message GCPService {
   repeated string skus = 4;
 }
 
-message ListGCPServicesRequest {
+message ListServicesRequest {
   // Required. Cloud vendor (e.g., "gcp"). Bound from the URL path.
   string vendor = 1;
 
-  // Optional. GCP service code to filter by.
+  // Optional. Service code to filter by.
   string service_code = 2;
 }
 
-message ListGCPServicesResponse {
-  // List of GCP services.
+message ListServicesResponse {
+  // List of services.
   repeated GCPService data = 1;
 }
 
