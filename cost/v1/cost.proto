@@ -561,11 +561,11 @@ service Cost {
     };
   }
 
-  // Queues a vendor report export and delivers results via email notification channel.
+  // Exports a vendor report and delivers results via email notification channel.
   // Supports multiple report types per vendor. For AWS, this covers RI/SP utilization reports.
   rpc ExportReport(ExportReportRequest) returns (ExportReportResponse) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/export/reports:queue"
+      post: "/v1/reports:export"
       body: "*"
     };
   }
@@ -1842,13 +1842,13 @@ message GetExportRISPResponse {
 
 // Request message for ExportReport.
 message ExportReportRequest {
+  // Required. Billing month in YYYY-MM format.
+  string month = 2;
+
   // Optional. Cloud vendor.
   // Accepted values: "aws", "gcp", "azure".
   // If empty, defaults to "aws" for backward compatibility.
   string vendor = 1;
-
-  // Required. Billing month in YYYY-MM format.
-  string month = 2;
 
   // Optional. Notification channel IDs to deliver the report.
   // If empty, the MSP default notification channel configured in DynamoDB is used.
@@ -1869,13 +1869,13 @@ message AwsRispExportOptions {
   // Optional. Include expired RIs/SPs in the results. Default: false.
   bool include_expired = 1;
 
-  // Optional. CSV header language: "en" or "ja". Default: "en".
+  // Optional. CSV header language: "en" or "ja".
+  // If empty, defaults to the MSP or login user's language.
   string language = 2 [(google.api.field_behavior) = OPTIONAL];
 
-  // Optional. Report queries to include in the export.
+  // Required. Report queries to include in the export. Must contain at least 1 value.
   // Valid values: "ri_summary", "sp_summary", "ri_usageaccount", "sp_usageaccount".
-  // Default when empty: all 4 reports are included.
-  repeated string queries = 3 [(google.api.field_behavior) = OPTIONAL];
+  repeated string queries = 3 [(google.api.field_behavior) = REQUIRED];
 
   // Optional. Global column filter applied to all reports.
   // Superseded per-report by columns_by_query if that key is present.
