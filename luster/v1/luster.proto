@@ -167,12 +167,6 @@ service Luster {
     };
   }
 
-  // (ALPHA) [HUB] Gets hub.
-  rpc GetHub(GetHubRequest) returns (api.luster.Hub) {
-    option (google.api.http) = {
-      get: "/v1/hubs/{hub_type}"
-    };
-  }
 }
 
 // Request message for the Luster.ReadSpaces rpc.
@@ -440,14 +434,4 @@ message ReadHubsRequest {
   // Optional. field_mask
   // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
   google.protobuf.FieldMask field_mask = 1;
-}
-
-// Request message for the Luster.GetHub rpc.
-message GetHubRequest {
-  // Required. the hub type.
-  string hub_type = 1;
-
-  // Optional. field_mask
-  // see more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto
-  google.protobuf.FieldMask field_mask = 2;
 }
