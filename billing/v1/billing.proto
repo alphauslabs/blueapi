@@ -1090,6 +1090,16 @@ service Billing {
       body: "*"
     };
   }
+
+  // Bulk-tag multiple billing groups from a CSV file.
+  // Supports add, delete, and dry-run modes.
+  // Returns a long-running operation. Poll status via the Operations service (GET /ops/v1/{name}).
+  rpc BulkTagBillingGroup(BulkTagBillingGroupRequest) returns (protos.Operation) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups:bulkTag"
+      body: "*"
+    };
+  }
 }
 
 message BillingGroup {
@@ -3771,6 +3781,66 @@ message BulkLinkAccountMetadata {
   repeated BulkLinkAccountError errors = 6;
 
   // Job start timestamp (RFC 3339 / ISO 8601).
+  string startTime = 7;
+
+  // Job end timestamp. Empty if still running.
+  string endTime = 8;
+}
+
+// Request for BulkTagBillingGroup.
+message BulkTagBillingGroupRequest {
+  // Required. The CSV file content as bytes.
+  // Expected columns: billing_group_id, customer_id, key, value
+  bytes csvContent = 1;
+
+  // Optional. The operation mode.
+  // One of: "add" (default), "delete", "dry-run".
+  string mode = 2;
+}
+
+// Describes a single failed row in a BulkTagBillingGroup operation.
+message BulkTagBillingGroupError {
+  // The row index of the failed entry in the CSV (zero-based, excluding header).
+  int32 index = 1;
+
+  // The billing group ID from the failed row.
+  string billingGroupId = 2;
+
+  // The customer ID from the failed row.
+  string customerId = 3;
+
+  // The tag key from the failed row.
+  string key = 4;
+
+  // The tag value from the failed row.
+  string value = 5;
+
+  // Human-readable error message.
+  string message = 6;
+}
+
+// Metadata for the BulkTagBillingGroup long-running operation.
+// Stored in protos.Operation.metadata.
+message BulkTagBillingGroupMetadata {
+  // The current status: "pending", "processing", "completed", "partial_failed", "failed".
+  string status = 1;
+
+  // Total number of tag entries to process.
+  int32 totalCount = 2;
+
+  // Number of entries processed so far.
+  int32 processedCount = 3;
+
+  // Number of entries successfully processed.
+  int32 successCount = 4;
+
+  // Number of entries that failed.
+  int32 failureCount = 5;
+
+  // Details of failed entries.
+  repeated BulkTagBillingGroupError errors = 6;
+
+  // Job start timestamp (RFC 3339).
   string startTime = 7;
 
   // Job end timestamp. Empty if still running.

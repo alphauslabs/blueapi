@@ -7309,6 +7309,40 @@
         ]
       }
     },
+    "/v1/billinggroups:bulkTag": {
+      "post": {
+        "summary": "Bulk-tag multiple billing groups from a CSV file.\nSupports add, delete, and dry-run modes.\nReturns a long-running operation. Poll status via the Operations service (GET /ops/v1/{name}).",
+        "operationId": "Billing_BulkTagBillingGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protosOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request for BulkTagBillingGroup.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1BulkTagBillingGroupRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups:paginated": {
       "get": {
         "summary": "Lists all billing groups with pagination support.",
@@ -38273,6 +38307,21 @@
           "description": "Optional. If true, validate the CSV and check for errors without actually linking accounts.\nUseful for validating CSV format and data before performing the actual bulk operation."
         }
       }
+    },
+    "v1BulkTagBillingGroupRequest": {
+      "type": "object",
+      "properties": {
+        "csvContent": {
+          "type": "string",
+          "format": "byte",
+          "title": "Required. The CSV file content as bytes.\nExpected columns: billing_group_id, customer_id, key, value"
+        },
+        "mode": {
+          "type": "string",
+          "description": "Optional. The operation mode.\nOne of: \"add\" (default), \"delete\", \"dry-run\"."
+        }
+      },
+      "description": "Request for BulkTagBillingGroup."
     },
     "v1CalculateCostsRequestAwsOptions": {
       "type": "object",
