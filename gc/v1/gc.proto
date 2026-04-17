@@ -87,7 +87,7 @@ service GuaranteedCommitments {
   }
 
 
- //DEVELOPER'S NOTE: FOR Infrastructure Plan
+ // DEVELOPER'S NOTE: FOR Infrastructure Plan
 
   // WORK-IN-PROGRESS: Retrieves a paginated list of reservable infrastructure resources for a segment.
   // Supports filtering, sorting, and a date range for usage aggregation.
@@ -160,7 +160,7 @@ service GuaranteedCommitments {
   }
 
 
- //DEVELOPER'S NOTE: FOR Infrastructure Plan and custom (top-down) commitment plan
+ // DEVELOPER'S NOTE: FOR Infrastructure Plan and custom (top-down) commitment plan
 
   // WORK-IN-PROGRESS: Retrieves the available commitment types for a given provider.
   rpc GetAvailableCommitmentTypes(GetAvailableCommitmentTypesRequest) returns (GetAvailableCommitmentTypesResponse) {
@@ -169,7 +169,7 @@ service GuaranteedCommitments {
     };
   }
 
- //DEVELOPER'S NOTE: FOR Infrastructure Plan and custom (top-down) commitment plan
+ // DEVELOPER'S NOTE: FOR Infrastructure Plan and custom (top-down) commitment plan
 
   // WORK-IN-PROGRESS: Creates a custom (top-down) commitment purchase plan.
   rpc CreateCustomCommitmentPlan(CreateCustomCommitmentPlanRequest) returns (DefaultPurchasePlan) {
@@ -1217,7 +1217,11 @@ message GetResourceDailyUsageResponse {
 // It extends the basic resource shape with usage metrics, daily usage breakdown,
 // and hardware/catalog attributes needed for the Reservable Infrastructure view.
 message ReservableResource {
-  // Composite ID: "{resource_id}|{catalog_sku_org_id}|{catalog_sku_id}".
+  // Composite ID formatted as
+  // "{url_encoded_resource_id}|{url_encoded_catalog_sku_org_id}|{url_encoded_catalog_sku_id}".
+  // Each component must be URL/percent-encoded before concatenation so embedded "|"
+  // characters do not break parsing. Consumers must split on "|" and URL-decode each part.
+ 
   string id = 1;
   string resourceId = 2;
   string billingAccountId = 3;
