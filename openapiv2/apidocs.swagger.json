@@ -21859,6 +21859,54 @@
         ]
       }
     },
+    "/v1/{vendor}/payers/{id}/billingtransfer": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Setup payer's billing transfer information",
+        "operationId": "Cost_SetupPayerAccountBillingTransfer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. The vendor. Only 'aws' is supported for now.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. The Payer account ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CostSetupPayerAccountBillingTransferBody"
+            }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/{vendor}/payers/{id}/importhistory": {
       "get": {
         "summary": "Gets a payer account's import history.",
@@ -21947,61 +21995,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          }
-        ],
-        "tags": [
-          "Cost"
-        ]
-      }
-    },
-    "/v1/{vendor}/payers/{id}/{month}/billingtransfer:setup": {
-      "post": {
-        "summary": "WORK-IN-PROGRESS: Setup payer's billing transfer information",
-        "operationId": "Cost_SetupPayerAccountBillingTransfer",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. The vendor. Only 'aws' is supported for now.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "Required. The Payer account ID",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "month",
-            "description": "Required. The billing transfer month.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/CostSetupPayerAccountBillingTransferBody"
-            }
           }
         ],
         "tags": [
@@ -24897,6 +24890,10 @@
     "CostSetupPayerAccountBillingTransferBody": {
       "type": "object",
       "properties": {
+        "month": {
+          "type": "string",
+          "description": "Required. The billing transfer month."
+        },
         "s3Bucket": {
           "type": "string",
           "description": "Required. The s3 bucket where the cost and usage report can be downloaded."
@@ -24908,6 +24905,10 @@
         "roleArn": {
           "type": "string",
           "description": "Required. The Role ARN needed to access the s3 bucket."
+        },
+        "curType": {
+          "type": "string",
+          "title": "Required. The type of cur. Valid values are: 'legacy' and '2.0'"
         },
         "prefix": {
           "type": "string",

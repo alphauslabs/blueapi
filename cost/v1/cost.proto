@@ -650,7 +650,7 @@ service Cost {
   // WORK-IN-PROGRESS: Setup payer's billing transfer information
   rpc SetupPayerAccountBillingTransfer (SetupPayerAccountBillingTransferRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/payers/{id}/{month}/billingtransfer:setup"
+      post: "/v1/{vendor}/payers/{id}/billingtransfer"
       body: "*"
     };
   }
@@ -2570,7 +2570,10 @@ message SetupPayerAccountBillingTransferRequest {
   
   // Required. The Role ARN needed to access the s3 bucket.
   string role_arn = 6;
+
+  // Required. The type of cur. Valid values are: 'legacy' and '2.0'
+  string cur_type = 7;
   
   // Optional. Prefix of the report inside the bucket
-  string prefix = 7;
+  string prefix = 8;
 }
