@@ -61,15 +61,17 @@ service GuaranteedCommitments {
     };
   }
 
-  rpc ListCommitmentEntries(ListCommitmentEntriesRequest) returns (ListCommitmentEntriesResponse) {
+    // ####################### INVOICES #######################
+
+  rpc ListInvoiceEntries(ListInvoiceEntriesRequest) returns (ListInvoiceEntriesResponse) {
     option (google.api.http) = {
-      get: "/v1/commitments/entries"
+      get: "/v1/invoices/entries"
     };
   }
 
-  rpc UpdateCommitmentEntryStatus(UpdateCommitmentEntryStatusRequest) returns (UpdateCommitmentEntryStatusResponse) {
+  rpc UpdateInvoiceEntryStatus(UpdateInvoiceEntryStatusRequest) returns (UpdateInvoiceEntryStatusResponse) {
     option (google.api.http) = {
-      post: "/v1/commitments/entries/status:update"
+      post: "/v1/invoices/entries/status:update"
       body: "*"
     };
   }
@@ -420,14 +422,14 @@ message GetCommitmentsUtilizationRequest {
   string commitmentId = 1;
 }
 
-message ListCommitmentEntriesRequest {
+message ListInvoiceEntriesRequest {
   // Required. Billing period in YYYY-MM format.
   string billingPeriod = 1;
   // Optional. Filter by status: "applied" or "pending". Empty returns all.
   string status = 2;
 }
 
-message UpdateCommitmentEntryStatusRequest {
+message UpdateInvoiceEntryStatusRequest {
   // Required. Entry IDs to update.
   repeated string ids = 1;
   // Required. New status: "applied" or "pending".
@@ -1039,7 +1041,7 @@ message CommitmentsUtilizationResponse {
   repeated CommitmentsUtilizationData data = 1;
 }
 
-message CommitmentEntry {
+message InvoiceEntry {
   string id = 1;
   string lineItemId = 2;
   string mspId = 3;
@@ -1065,11 +1067,11 @@ message CommitmentEntry {
   string status = 23;
 }
 
-message ListCommitmentEntriesResponse {
-  repeated CommitmentEntry entries = 1;
+message ListInvoiceEntriesResponse {
+  repeated InvoiceEntry entries = 1;
 }
 
-message UpdateCommitmentEntryStatusResponse {
+message UpdateInvoiceEntryStatusResponse {
   bool success = 1;
   int32 updated = 2;
 }
