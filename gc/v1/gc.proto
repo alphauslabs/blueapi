@@ -61,6 +61,19 @@ service GuaranteedCommitments {
     };
   }
 
+  rpc ListCommitmentEntries(ListCommitmentEntriesRequest) returns (ListCommitmentEntriesResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/entries"
+    };
+  }
+
+  rpc UpdateCommitmentEntryStatus(UpdateCommitmentEntryStatusRequest) returns (UpdateCommitmentEntryStatusResponse) {
+    option (google.api.http) = {
+      post: "/v1/commitments/entries/status:update"
+      body: "*"
+    };
+  }
+
   // ####################### METRICS #######################
 
   // WORK-IN-PROGRESS: Do not use. Retrieves key performance metrics for cloud commitments.
@@ -405,6 +418,20 @@ message GetCommitmentsChartRequest {
 message GetCommitmentsUtilizationRequest {
   // Required. The commitment id.
   string commitmentId = 1;
+}
+
+message ListCommitmentEntriesRequest {
+  // Required. Billing period in YYYY-MM format.
+  string billingPeriod = 1;
+  // Optional. Filter by status: "applied" or "pending". Empty returns all.
+  string status = 2;
+}
+
+message UpdateCommitmentEntryStatusRequest {
+  // Required. Entry IDs to update.
+  repeated string ids = 1;
+  // Required. New status: "applied" or "pending".
+  string status = 2;
 }
 
 message GetMetricsRequest {
@@ -1010,6 +1037,41 @@ message CommitmentsUtilizationData {
 
 message CommitmentsUtilizationResponse {
   repeated CommitmentsUtilizationData data = 1;
+}
+
+message CommitmentEntry {
+  string id = 1;
+  string lineItemId = 2;
+  string mspId = 3;
+  string commitmentId = 4;
+  string invoiceId = 5;
+  string contractTerm = 6;
+  double feeRate = 7;
+  double griPremiums = 8;
+  double rebate = 9;
+  double monthlyCommitment = 10;
+  double monthlySavings = 11;
+  double netSavings = 12;
+  double utilization = 13;
+  string type = 14;
+  double amount = 15;
+  string accountId = 16;
+  string billingAccountId = 17;
+  string commitmentDisplayName = 18;
+  string commitmentLeasedName = 19;
+  string provider = 20;
+  string commitmentType = 21;
+  string billingPeriod = 22;
+  string status = 23;
+}
+
+message ListCommitmentEntriesResponse {
+  repeated CommitmentEntry entries = 1;
+}
+
+message UpdateCommitmentEntryStatusResponse {
+  bool success = 1;
+  int32 updated = 2;
 }
 
 message MetricsResponse {
