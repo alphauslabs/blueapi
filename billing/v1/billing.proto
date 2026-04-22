@@ -569,7 +569,7 @@ service Billing {
   }
 
   // Creates custom fee entries in the RIPPLE_FEES table.
-  // Used by Archera service to write commitment entries and by DTS to write custom fees directly to the RIPPLE_FEES table. Only available in Ripple.
+  // Used to write Guaranteed Commitment entries and Custom Fee entries directly to the fee table. Only available in Ripple.
   rpc CreateCustomFee(CreateCustomFeeRequest) returns (CreateCustomFeeResponse) {
     option (google.api.http) = {
       post: "/v1/{vendor}/adjustmententries/customfees"
@@ -577,9 +577,9 @@ service Billing {
     };
   }
 
-  // Lists guaranteed commitment entry items for the Guaranteed Commitment Entries UI.
-  // Reads fee entries from the RIPPLE_FEES table filtered by mobingi_type (defaults to "Commitments").
-  // Note: Commitment entries (mobingi_type="Commitments") are excluded from ReadAdjustmentEntries to avoid duplication with the Adjusting Entries UI. Only available in Ripple.
+  // Lists adjustment entry items from the fee table.
+  // Reads fee entries from the RIPPLE_FEES table, optionally filtered by mobingi_type.
+  // Note: Commitment entries (mobingi_type="COMMITMENT") are excluded from ReadAdjustmentEntries to avoid duplication with the Adjusting Entries UI. Only available in Ripple.
   rpc ListAdjustmentEntryItems(ListAdjustmentEntryItemsRequest) returns (stream AdjustmentEntryItem) {
     option (google.api.http) = {
       post: "/v1/{vendor}/adjustmententryitems:read"
@@ -2398,7 +2398,8 @@ message CustomFeeEntry {
   string feeType = 3 [(google.api.field_behavior) = REQUIRED];
 
   // Required. The entry type stored in the mobingi_type column.
-  // Used for filtering and categorization (e.g., "Commitments" for Archera, "Custom" for DTS).
+  // Used for filtering and categorization (e.g., "COMMITMENT" for Guaranteed Commitments, "CUSTOM" for Custom Fees).
+  // Accepted values: UPFRONT, SUPPORT, REGISTRAR, OTHERS, CREDIT, REFUND, COMMITMENT, CUSTOM.
   string mobingiType = 4 [(google.api.field_behavior) = REQUIRED];
 
   // Required. The fee amount (cost). Positive for charges, negative for rebates.
@@ -2423,12 +2424,12 @@ message CustomFeeEntry {
   // Optional. The time interval in ISO 8601 interval format.
   string timeInterval = 11 [(google.api.field_behavior) = OPTIONAL];
 
-  // Optional. Additional metadata as a JSON string.
-  // For Archera commitment entries, contains: commitment_id, invoice_id,
+  // Optional. Additional metadata as key-value pairs.
+  // For Guaranteed Commitment entries, may contain: commitment_id, invoice_id,
   // contract_term, fee_rate, monthly_commitment, monthly_savings, net_savings,
   // utilization, billing_account_id, commitment_display_name,
   // commitment_leased_name, provider, commitment_type.
-  string meta = 12 [(google.api.field_behavior) = OPTIONAL];
+  map<string, string> meta = 12 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Response message for the Billing.CreateCustomFee rpc.
@@ -2446,7 +2447,7 @@ message ListAdjustmentEntryItemsRequest {
   string month = 2 [(google.api.field_behavior) = REQUIRED];
 
   // Optional. Filter by entry type (mobingi_type column).
-  // Defaults to "Commitments" if empty. Used by the Guaranteed Commitment Entries UI.
+  // If not specified, returns all adjustment entry items.
   string mobingiType = 3 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Filter by apply status.
@@ -2460,8 +2461,8 @@ message AdjustmentEntryItem {
   // The standard adjustment entry fields (id, account info, entry info, settings).
   api.ripple.v1.AdjustmentEntry entry = 1;
 
-  // Additional metadata as a JSON string.
-  string meta = 2;
+  // Additional metadata as key-value pairs.
+  map<string, string> meta = 2;
 }
 
 //Request message for the Billing.ListAccountResources rpc.
