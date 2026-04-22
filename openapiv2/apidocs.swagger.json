@@ -21948,6 +21948,54 @@
         ]
       }
     },
+    "/v1/{vendor}/payers/{id}/billingtransfer": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: Setup payer's billing transfer information",
+        "operationId": "Cost_SetupPayerAccountBillingTransfer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googleRpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. The vendor. Only 'aws' is supported for now.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "Required. The Payer account ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CostSetupPayerAccountBillingTransferBody"
+            }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/{vendor}/payers/{id}/importhistory": {
       "get": {
         "summary": "Gets a payer account's import history.",
@@ -24927,6 +24975,36 @@
         }
       },
       "description": "Request message for the RegisterPayerAccountRequest rpc."
+    },
+    "CostSetupPayerAccountBillingTransferBody": {
+      "type": "object",
+      "properties": {
+        "month": {
+          "type": "string",
+          "description": "Required. The billing transfer month."
+        },
+        "s3Bucket": {
+          "type": "string",
+          "description": "Required. The s3 bucket where the cost and usage report can be downloaded."
+        },
+        "reportName": {
+          "type": "string",
+          "description": "Required. The actual name of the cost and usage report."
+        },
+        "roleArn": {
+          "type": "string",
+          "description": "Required. The Role ARN needed to access the s3 bucket."
+        },
+        "curType": {
+          "type": "string",
+          "title": "Required. The type of cur. Valid values are: 'legacy' and '2.0'"
+        },
+        "prefix": {
+          "type": "string",
+          "title": "Optional. Prefix of the report inside the bucket"
+        }
+      },
+      "title": "Request message for SetupPayerAccountBillingTransfer"
     },
     "CostUpdateAccountBody": {
       "type": "object",
@@ -45633,6 +45711,10 @@
         "billingInternalId": {
           "type": "string",
           "description": "Optional. If set, return only child invoices for this billing group."
+        },
+        "fieldMask": {
+          "type": "string",
+          "description": "Optional. Get only the value that set fieldMask.\n\nsee more info: https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto"
         }
       },
       "description": "Request message for the ListInvoice rpc."
