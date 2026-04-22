@@ -86,6 +86,17 @@ service GuaranteedCommitments {
     };
   }
 
+
+ // DEVELOPER'S NOTE: FOR Infrastructure Plan
+
+  // WORK-IN-PROGRESS: Only works for Alphaus for now. Retrieves a paginated list of reservable infrastructure resources for a segment.
+  // Supports filtering, sorting, and a date range for usage aggregation.
+  rpc ListReservableResources(ListReservableResourcesRequest) returns (ListReservableResourcesResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/resources"
+    };
+  }
+
   // ####################### SEGMENTS #######################
 
   // WORK-IN-PROGRESS: Do not use. Retrieves all segments for the specified organization and provider.
@@ -147,6 +158,27 @@ service GuaranteedCommitments {
       delete: "/v1/commitments/purchaseplans/draft/{draftPlanId}"
     };
   }
+
+
+ // DEVELOPER'S NOTE: FOR Infrastructure Plan and custom (top-down) commitment plan
+
+  // WORK-IN-PROGRESS: Only works for Alphaus for now. Retrieves the available commitment types for a given provider.
+  rpc GetAvailableCommitmentTypes(GetAvailableCommitmentTypesRequest) returns (GetAvailableCommitmentTypesResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/purchaseplans/availabletypes"
+    };
+  }
+
+ // DEVELOPER'S NOTE: FOR Infrastructure Plan and custom (top-down) commitment plan
+
+  // WORK-IN-PROGRESS: Only works for Alphaus for now. Creates a custom (top-down) commitment purchase plan.
+  rpc CreateCustomCommitmentPlan(CreateCustomCommitmentPlanRequest) returns (DefaultPurchasePlan) {
+    option (google.api.http) = {
+      post: "/v1/commitments/purchaseplans/custom"
+      body: "*"
+    };
+  }
+
   // ------------------------ ONBOARDING ------------------------
 
   // WORK-IN-PROGRESS: Registers a new child organization under the channel partner.
@@ -430,6 +462,26 @@ message GetResourceDailyUsageRequest {
   int32 pageSize = 6;
 }
 
+message ListReservableResourcesRequest {
+  // Required. The segment ID to scope the query to.
+  string segmentId = 1;
+  // // Optional. Field to sort by. Example: "ondemand_cost".
+  // string orderBy = 2;
+  // // Optional. If true, sort in descending order.
+  // bool desc = 3;
+  // // Optional. URL-encoded JSON filter expression.
+  // // Example (decoded): {"and":[{"and":[{"field":"covered_usage","op":"<","value":1}]},{"and":[{"field":"is_reservable","op":"=","value":"true"}]}]}
+  // string filter = 4;
+  // // Required. Start of the usage lookback window (YYYY-MM-DD).
+  // string startDate = 5;
+  // // Required. End of the usage lookback window (YYYY-MM-DD).
+  // string endDate = 6;
+  // // Optional. Page number (1-based).
+  // int32 page = 7;
+  // // Optional. Number of results per page.
+  // int32 pageSize = 8;
+}
+
 message ListPurchasePlansBySegmentRequest {
 }
 
@@ -637,6 +689,60 @@ message ListDraftPurchasePlansRequest {
 message DeleteDraftPurchasePlanRequest {
   // Required. The draft plan ID to delete.
   string draftPlanId = 1;
+}
+
+message GetAvailableCommitmentTypesRequest {
+  // Required. The cloud provider to query available types for.
+  // Acceptable values: "aws", "azure", "gcp".
+  string provider = 1;
+}
+
+// CreateCustomCommitmentPlanRequest creates a new top-down custom commitment plan.
+message CreateCustomCommitmentPlanRequest {
+  // Required. The cloud provider. Acceptable values: "aws", "azure", "gcp".
+  string provider = 1;
+  // Required. ISO 8601 lookback window start timestamp (e.g. "2026-04-09T02:43:39.717Z").
+  string startDate = 2;
+  // Required. ISO 8601 lookback window end timestamp (e.g. "2026-04-16T02:43:39.717Z").
+  string endDate = 3;
+  // Required. The segment ID to scope the plan to.
+  string segmentId = 4;
+  // Plan status. Use "draft" to save without submitting.
+  // Acceptable values: "draft", "submitted".
+  string status = 5;
+  // Optional. Human-readable description for the plan.
+  string description = 6;
+  // Required. Human-readable name for the plan.
+  string name = 7;
+  // List of contract specifications to include in the plan.
+  // Each entry selects a commitment category, term, payment option, and optional properties.
+  //
+  // Acceptable commitment_type values:
+  //   "aws/AmazonEC2", "aws/AmazonRDS", "aws/AmazonElastiCache",
+  //   "aws/savingsplan/Compute", "aws/savingsplan/EC2Instance", "aws/savingsplan/Database"
+  //
+  // Acceptable term values:
+  //   "thirty_day_gris"  - 30-day Archera Insured (leased: true)
+  //   "one_year_gris"    - 1-year Archera Insured (leased: true)
+  //   "one_year"         - 1-year Native Uninsured (leased: false)
+  //   "three_year"       - 3-year Native Uninsured (leased: false)
+  //
+  // Acceptable payment_option values:
+  //   "no_upfront", "partial_upfront", "all_upfront"
+  //   Note: "partial_upfront" and "all_upfront" are not available for 30-day terms.
+  //
+  // Acceptable properties keys:
+  //   "leased" (bool)          - true for Archera Insured terms, false for Native terms.
+  //   "offering_class" (string) - only for "aws/AmazonEC2"; "convertible" or "standard".
+  repeated ContractSpec includedContractSpecs = 8;
+  // List of contract term keys included in the plan.
+  // Acceptable values: "thirty_day_gris", "one_year_gris", "one_year", "three_year".
+  repeated string includedContractTerms = 9;
+  // Optional. Specific resource IDs to pin the plan to selected infrastructure resources.
+  // When populated, the server returns plan_type "infrastructure"; omit for a top-down
+  // "purchase" plan. IDs are composite strings in the format
+  // "{resource_id}|{catalog_sku_org_id}|{catalog_sku_id}" as returned by ListReservableResources.
+  repeated string resourceIds = 10;
 }
 
 message GetGuaranteedCommitmentTemplateUrlRequest {
@@ -1099,10 +1205,119 @@ message ResourceDailyUsage {
   string commonUsageType = 13;
   double coveredUsage = 14;
   double uptime = 15;
+  // Provider-specific usage type label (e.g. "BoxUsage:c5n.xlarge").
+  string providerUsageType = 16;
 }
 
 message GetResourceDailyUsageResponse {
   repeated ResourceDailyUsage dailyUsage = 1;
+}
+
+// ReservableResource is a fully-detailed infrastructure resource returned by ListReservableResources.
+// It extends the basic resource shape with usage metrics, daily usage breakdown,
+// and hardware/catalog attributes needed for the Reservable Infrastructure view.
+message ReservableResource {
+  // Composite ID formatted as
+  // "{url_encoded_resource_id}|{url_encoded_catalog_sku_org_id}|{url_encoded_catalog_sku_id}".
+  // Each component must be URL/percent-encoded before concatenation so embedded "|"
+  // characters do not break parsing. Consumers must split on "|" and URL-decode each part.
+ 
+  string id = 1;
+  string resourceId = 2;
+  string billingAccountId = 3;
+  string subAccountId = 4;
+  // Cloud provider string, e.g. "aws".
+  string provider = 5;
+  string providerResourceId = 6;
+  string providerService = 7;
+  string providerSkuId = 8;
+  bool isSpot = 9;
+  bool isReservable = 10;
+  // Display name (nullable).
+  google.protobuf.Value name = 11;
+  // Resource group (nullable).
+  google.protobuf.Value resourceGroup = 12;
+  string usageEnd = 13;
+  string usageStart = 14;
+  google.protobuf.Struct tags = 15;
+  google.protobuf.Struct providerTags = 16;
+  google.protobuf.Struct userTags = 17;
+  string createdAt = 18;
+  string updatedAt = 19;
+  string instanceId = 20;
+  // Availability zone (nullable).
+  google.protobuf.Value availabilityZone = 21;
+  // Cache engine (nullable).
+  google.protobuf.Value cacheEngine = 22;
+  string catalogSkuId = 23;
+  string catalogSkuOrgId = 24;
+  bool classicNetworkingSupport = 25;
+  string clockSpeed = 26;
+  string commonUsageType = 27;
+  // Fraction of usage covered by existing commitments (0.0–1.0).
+  double coveredUsage = 28;
+  // Database engine (nullable).
+  google.protobuf.Value databaseEngine = 29;
+  string dedicatedEbsThroughput = 30;
+  // Description (nullable).
+  google.protobuf.Value description = 31;
+  string ecu = 32;
+  bool enhancedNetworkingSupported = 33;
+  string family = 34;
+  string fullRegionName = 35;
+  bool hasOndemandTerms = 36;
+  string iconUrl = 37;
+  string integrationId = 38;
+  bool intelAvx2Available = 39;
+  bool intelAvxAvailable = 40;
+  bool intelTurboAvailable = 41;
+  // IO descriptor (nullable).
+  google.protobuf.Value io = 42;
+  bool isCurrentGeneration = 43;
+  // Multi-AZ flag (nullable).
+  google.protobuf.Value isMultiAz = 44;
+  string licenseModel = 45;
+  string locationType = 46;
+  // Memory in bytes as a string, e.g. "11274289152.0".
+  string memory = 47;
+  // SKU name (nullable).
+  google.protobuf.Value skuName = 48;
+  string skuTitle = 49;
+  double netCost = 50;
+  double netSavings = 51;
+  string networkPerformance = 52;
+  string normalizationSizeFactor = 53;
+  double ondemandCost = 54;
+  string ondemandUsageUnit = 55;
+  string operatingSystem = 56;
+  string operation = 57;
+  string physicalProcessor = 58;
+  string preInstalledSw = 59;
+  string priceCurrency = 60;
+  string processorArchitecture = 61;
+  string processorFeatures = 62;
+  string publicationDate = 63;
+  string region = 64;
+  string service = 65;
+  string source = 66;
+  string storage = 67;
+  // Tax type (nullable).
+  google.protobuf.Value taxType = 68;
+  string tenancy = 69;
+  // Fraction of time the resource was running during the lookback period.
+  double uptime = 70;
+  string usageType = 71;
+  string vcpu = 72;
+  string version = 73;
+  bool vpcNetworkingSupport = 74;
+  string instanceType = 75;
+  string instanceTypeFamily = 76;
+  // Per-day usage breakdown for the requested date range.
+  repeated ResourceDailyUsage dailyUsages = 77;
+}
+
+message ListReservableResourcesResponse {
+  repeated ReservableResource resources = 1;
 }
 
 message Segment {
@@ -1285,6 +1500,14 @@ message DefaultPurchasePlan {
   repeated string flaggedActions = 50;
   string metaPlanId = 51;
   string coverageId = 52;
+
+  // Monthly cost breakdowns (returned by CreateCustomCommitmentPlan and related endpoints)
+  double monthlyAfterCost = 53;
+  double monthlyAmortizedCost = 54;
+  double monthlyBeforeCost = 55;
+  double monthlyFee = 56;
+  // All term keys present across the plan's line items.
+  repeated string allTerms = 57;
 }
 
 message ListPurchasePlansBySegmentResponse {
@@ -1513,6 +1736,13 @@ message DeleteDraftPurchasePlanResponse {
   string planId = 1;
   // Indicates if the plan was successfully deleted
   bool success = 2;
+}
+
+message GetAvailableCommitmentTypesResponse {
+  // List of available commitment type identifiers for the requested provider.
+  // Example values: "aws/AmazonEC2", "aws/AmazonRDS", "aws/AmazonElastiCache",
+  // "aws/savingsplan/Compute", "aws/savingsplan/EC2Instance", "aws/savingsplan/Database".
+  repeated string types = 1;
 }
 
 message GetGuaranteedCommitmentTemplateUrlResponse {
