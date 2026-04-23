@@ -563,7 +563,8 @@ service Cost {
 
   // Exports a vendor report and delivers results via email notification channel.
   // Supports multiple report types per vendor. For AWS, this covers RI/SP utilization reports.
-  rpc ExportReport(ExportReportRequest) returns (ExportReportResponse) {
+  // Returns a long-running operation; use GetOperation to poll for completion.
+  rpc ExportReport(ExportReportRequest) returns (protos.Operation) {
     option (google.api.http) = {
       post: "/v1/reports:export"
       body: "*"
@@ -1891,12 +1892,6 @@ message AwsRispExportOptions {
   // Optional. Per-report column overrides.
   // Keys must be valid query names (ri_summary, sp_summary, ri_usageaccount, sp_usageaccount).
   map<string, Columns> columns_by_query = 5;
-}
-
-// Response message for ExportReport.
-message ExportReportResponse {
-  // True if the export email was successfully queued for delivery.
-  bool email_sent = 1;
 }
 
 // Request message for GetUtilization
