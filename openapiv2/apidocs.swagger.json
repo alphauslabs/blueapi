@@ -15000,13 +15000,13 @@
     },
     "/v1/reports:export": {
       "post": {
-        "summary": "Exports a vendor report and delivers results via email notification channel.\nSupports multiple report types per vendor. For AWS, this covers RI/SP utilization reports.",
+        "summary": "Exports a vendor report and delivers results via email notification channel.\nSupports multiple report types per vendor. For AWS, this covers RI/SP utilization reports.\nReturns a long-running operation; use GetOperation to poll for completion.",
         "operationId": "Cost_ExportReport",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ExportReportResponse"
+              "$ref": "#/definitions/protosOperation"
             }
           },
           "default": {
@@ -19374,6 +19374,46 @@
         ]
       }
     },
+    "/v1/{vendor}/adjustmententries/customfees": {
+      "post": {
+        "summary": "Creates custom fee entries in the RIPPLE_FEES table.\nUsed to write Guaranteed Commitment entries and Custom Fee entries directly to the fee table. Only available in Ripple.",
+        "operationId": "Billing_CreateCustomFee",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateCustomFeeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googleRpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingCreateCustomFeeBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/{vendor}/adjustmententries/{id}": {
       "get": {
         "summary": "Gets the adjustment entry. Only available in Ripple.",
@@ -19728,6 +19768,55 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/BillingRestoreAdjustmentEntryBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/{vendor}/adjustmententryitems:read": {
+      "post": {
+        "summary": "Lists adjustment entry items from the fee table.\nReads fee entries from the RIPPLE_FEES table, optionally filtered by mobingi_type.\nNote: Commitment entries (mobingi_type=\"COMMITMENT\") are excluded from ReadAdjustmentEntries to avoid duplication with the Adjusting Entries UI. Only available in Ripple.",
+        "operationId": "Billing_ListAdjustmentEntryItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1AdjustmentEntryItem"
+                },
+                "error": {
+                  "$ref": "#/definitions/googleRpcStatus"
+                }
+              },
+              "title": "Stream result of v1AdjustmentEntryItem"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googleRpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingListAdjustmentEntryItemsBody"
             }
           }
         ],
@@ -23424,6 +23513,28 @@
       },
       "description": "Request message for the CreateBillingGroupInvoiceServiceDiscounts rpc."
     },
+    "BillingCreateCustomFeeBody": {
+      "type": "object",
+      "properties": {
+        "month": {
+          "type": "string",
+          "description": "Required. The billing month. Format is `yyyymm`."
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1CustomFeeEntry"
+          },
+          "description": "Required. The fee entries to create."
+        }
+      },
+      "description": "Request message for the Billing.CreateCustomFee rpc.",
+      "required": [
+        "month",
+        "entries"
+      ]
+    },
     "BillingCreateInvoiceBody": {
       "type": "object",
       "properties": {
@@ -23506,6 +23617,27 @@
     "BillingListAccountInvoiceServiceDiscountsBody": {
       "type": "object",
       "description": "Request message for the ListAccountInvoiceServiceDiscounts rpc."
+    },
+    "BillingListAdjustmentEntryItemsBody": {
+      "type": "object",
+      "properties": {
+        "month": {
+          "type": "string",
+          "description": "Required. The billing month. Format is `yyyymm`."
+        },
+        "mobingiType": {
+          "type": "string",
+          "description": "Optional. Filter by entry type (mobingi_type column).\nIf not specified, returns all adjustment entry items."
+        },
+        "status": {
+          "type": "string",
+          "description": "Optional. Filter by apply status.\n\"applied\" returns entries where apply=true, \"pending\" returns entries where apply=false.\nIf empty, returns all entries regardless of status."
+        }
+      },
+      "description": "Request message for the Billing.ListAdjustmentEntryItems rpc.",
+      "required": [
+        "month"
+      ]
     },
     "BillingListInvoiceStatusBody": {
       "type": "object",
@@ -35655,11 +35787,11 @@
       "properties": {
         "@type": {
           "type": "string",
-          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com. As of May 2023, there are no widely used type server\nimplementations and no plans to implement one.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
         }
       },
       "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\nExample 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\nExample 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "protobufNullValue": {
       "type": "string",
@@ -35667,7 +35799,7 @@
         "NULL_VALUE"
       ],
       "default": "NULL_VALUE",
-      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
+      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\nThe JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
     },
     "protosOperation": {
       "type": "object",
@@ -37284,6 +37416,23 @@
         }
       },
       "description": "AdjustmentEntryInfo resource definition."
+    },
+    "v1AdjustmentEntryItem": {
+      "type": "object",
+      "properties": {
+        "entry": {
+          "$ref": "#/definitions/v1AdjustmentEntry",
+          "description": "The standard adjustment entry fields (id, account info, entry info, settings)."
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Additional metadata as key-value pairs."
+        }
+      },
+      "description": "An adjustment entry item with additional metadata for the Guaranteed Commitment Entries UI."
     },
     "v1AdjustmentEntrySetting": {
       "type": "object",
@@ -40670,6 +40819,17 @@
       },
       "description": "CreateCustomCommitmentPlanRequest creates a new top-down custom commitment plan."
     },
+    "v1CreateCustomFeeResponse": {
+      "type": "object",
+      "properties": {
+        "created": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number of entries successfully created."
+        }
+      },
+      "description": "Response message for the Billing.CreateCustomFee rpc."
+    },
     "v1CreateCustomFieldRequest": {
       "type": "object",
       "properties": {
@@ -41700,6 +41860,73 @@
         }
       }
     },
+    "v1CustomFeeEntry": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string",
+          "description": "Required. The linked account ID (customer_id in the fee table sort key)."
+        },
+        "payerAccountId": {
+          "type": "string",
+          "description": "Required. The payer account ID (account_id in the fee table sort key)."
+        },
+        "feeType": {
+          "type": "string",
+          "description": "Required. The fee type for the sort key type segment.\nDetermines the main Type column value in Adjusting Entries (e.g., \"Fee\")."
+        },
+        "mobingiType": {
+          "type": "string",
+          "description": "Required. The entry type stored in the mobingi_type column.\nUsed for filtering and categorization (e.g., \"COMMITMENT\" for Guaranteed Commitments, \"CUSTOM\" for Custom Fees).\nAccepted values: UPFRONT, SUPPORT, REGISTRAR, OTHERS, CREDIT, REFUND, COMMITMENT, CUSTOM."
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "description": "Required. The fee amount (cost). Positive for charges, negative for rebates."
+        },
+        "currencyCode": {
+          "type": "string",
+          "description": "Required. The currency code (e.g., \"USD\")."
+        },
+        "description": {
+          "type": "string",
+          "description": "Required. Human-readable description of the fee.\nFor commitment entries: e.g., \"Guaranteed Compute Savings Plan - Premium\"."
+        },
+        "productCode": {
+          "type": "string",
+          "description": "Optional. The product/service code (e.g., \"aws/savingsplan\")."
+        },
+        "productName": {
+          "type": "string",
+          "description": "Optional. The product/service display name (e.g., \"Compute Savings Plan\")."
+        },
+        "usageStart": {
+          "type": "string",
+          "description": "Optional. The usage start time in RFC 3339 format."
+        },
+        "timeInterval": {
+          "type": "string",
+          "description": "Optional. The time interval in ISO 8601 interval format."
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional. Additional metadata as key-value pairs.\nFor Guaranteed Commitment entries, may contain: commitment_id, invoice_id,\ncontract_term, fee_rate, monthly_commitment, monthly_savings, net_savings,\nutilization, billing_account_id, commitment_display_name,\ncommitment_leased_name, provider, commitment_type."
+        }
+      },
+      "description": "A single custom fee entry to write to the adjustments table.",
+      "required": [
+        "accountId",
+        "payerAccountId",
+        "feeType",
+        "mobingiType",
+        "amount",
+        "currencyCode",
+        "description"
+      ]
+    },
     "v1CustomField": {
       "type": "object",
       "properties": {
@@ -42442,16 +42669,6 @@
         }
       },
       "description": "Request message for ExportReport."
-    },
-    "v1ExportReportResponse": {
-      "type": "object",
-      "properties": {
-        "emailSent": {
-          "type": "boolean",
-          "description": "True if the export email was successfully queued for delivery."
-        }
-      },
-      "description": "Response message for ExportReport."
     },
     "v1ExportServiceDiscountsRequest": {
       "type": "object",
