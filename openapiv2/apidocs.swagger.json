@@ -13025,6 +13025,38 @@
         ]
       }
     },
+    "/v1/onboarding/aws/privateoffer/{payerAccountId}": {
+      "get": {
+        "summary": "Retrieves the AWS Marketplace private offer details for a payer account.\nUsed by the onboarding \"Accept Private Offer\" step.",
+        "operationId": "GuaranteedCommitments_GetAwsPrivateOffer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAwsPrivateOfferResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googleRpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "payerAccountId",
+            "description": "Required. The AWS payer account ID that the private offer targets.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/onboarding/aws/start": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Starts the onboarding process for an organization.\nCreates or retrieves an onboarding record and sets the provider to AWS.",
@@ -43045,6 +43077,42 @@
       "type": "object",
       "properties": {
         "url": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetAwsPrivateOfferResponse": {
+      "type": "object",
+      "properties": {
+        "payerAccountId": {
+          "type": "string"
+        },
+        "offerId": {
+          "type": "string",
+          "description": "AWS Marketplace offer identifier, e.g. offer-qb7i32am664jw."
+        },
+        "offerName": {
+          "type": "string",
+          "description": "Display name of the offer shown in the UI."
+        },
+        "status": {
+          "type": "string",
+          "description": "Current offer status, e.g. PENDING / ACCEPTED / EXPIRED / CREATING / FAILED."
+        },
+        "offerUrl": {
+          "type": "string"
+        },
+        "productId": {
+          "type": "string"
+        },
+        "pricePerUnit": {
+          "type": "number",
+          "format": "double"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "expirationDate": {
           "type": "string"
         }
       }

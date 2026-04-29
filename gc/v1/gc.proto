@@ -283,6 +283,14 @@ service GuaranteedCommitments {
     };
   }
 
+  // Retrieves the AWS Marketplace private offer details for a payer account.
+  // Used by the onboarding "Accept Private Offer" step.
+  rpc GetAwsPrivateOffer(GetAwsPrivateOfferRequest) returns (GetAwsPrivateOfferResponse) {
+    option (google.api.http) = {
+      get: "/v1/onboarding/aws/privateoffer/{payerAccountId}"
+    };
+  }
+
     // GetGuaranteedCommitmentTemplateUrl returns a CloudFormation launch URL for deploying
   // both Alphaus (Ripple) and Archera IAM roles in a single stack.
   rpc GetGuaranteedCommitmentTemplateUrl(GetGuaranteedCommitmentTemplateUrlRequest) returns (GetGuaranteedCommitmentTemplateUrlResponse) {
@@ -638,6 +646,11 @@ message ValidateBillingGroupRequest {
   // This is to avoid any breaks or crash during the transition. Will be removed once the transition is complete.
   // Default value is false.
   bool newVersion = 2;
+}
+
+message GetAwsPrivateOfferRequest {
+  // Required. The AWS payer account ID that the private offer targets.
+  string payerAccountId = 1;
 }
 
 message SaveCommitmentsPlanAsDraftRequest {
@@ -1725,6 +1738,27 @@ message ValidateBillingGroupResponse {
 
   // Optional values that can be shown in translated messages.
   repeated string details = 4;
+}
+
+message GetAwsPrivateOfferResponse {
+  string payerAccountId = 1;
+
+  // AWS Marketplace offer identifier, e.g. offer-qb7i32am664jw.
+  string offerId = 2;
+
+  // Display name of the offer shown in the UI.
+  string offerName = 3;
+
+  // Current offer status, e.g. PENDING / ACCEPTED / EXPIRED / CREATING / FAILED.
+  string status = 4;
+
+  string offerUrl = 5;
+
+  string productId = 6;
+  
+  double pricePerUnit = 7;
+  string createdAt = 8;
+  string expirationDate = 9;
 }
 
 message ListDraftPurchasePlansResponse {
