@@ -1,6 +1,17 @@
 # Compile for blue-sdk-go.
 echo "Compiling proto files..." && buf generate
 
+# Compile gRPC Connect services (buf.gen.connect.yaml).
+# To add a new Connect service, append a new --path flag below (e.g. --path mynewservice/v1).
+echo "Compiling gRPC Connect services..."
+buf generate --template buf.gen.connect.yaml \
+  --path vortex/v1
+
+# Fix import paths in connect-generated files: the go_package option in each .proto
+# points to github.com/alphauslabs/blueapi (not importable), so rewrite to blue-sdk-go.
+# Using perl -pi -e for cross-platform compatibility (macOS + Linux CI).
+find generated/go -name '*.connect.go' | xargs perl -pi -e 's|alphauslabs/blueapi/(\w+)"|alphauslabs/blue-sdk-go/$1/v1"|g'
+
 # Compile services for blue-sdk-python; with grpc.
 echo "Compiling Python GRPC services..."
 mkdir -p generated/py/alphausblue
@@ -9,6 +20,7 @@ python3 -m grpc_tools.protoc -I . --python_out=./generated/py/alphausblue --grpc
         ./kvstore/v1/*.proto \
         ./iam/v1/*.proto \
         ./admin/v1/*.proto \
+        ./flags/v1/*.proto \
         ./cost/v1/*.proto \
         ./billing/v1/*.proto \
         ./operations/v1/*.proto \
@@ -17,6 +29,8 @@ python3 -m grpc_tools.protoc -I . --python_out=./generated/py/alphausblue --grpc
         ./flow/v1/*.proto \
         ./prism/v1/*.proto \
         ./vortex/v1/*.proto \
+        ./gc/v1/*.proto \
+        ./luster/v1/*.proto \
         ./preferences/v1/*.proto
 
 # Compile ./api/* for blue-sdk-python; without grpc.
@@ -38,6 +52,7 @@ protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true --opena
        ./org/v1/*.proto \
        ./iam/v1/*.proto \
        ./admin/v1/*.proto \
+       ./flags/v1/*.proto \
        ./cost/v1/*.proto \
        ./billing/v1/*.proto \
        ./operations/v1/*.proto \
@@ -46,6 +61,8 @@ protoc -I . --openapiv2_out ./openapiv2 --openapiv2_opt logtostderr=true --opena
        ./flow/v1/*.proto \
        ./prism/v1/*.proto \
        ./vortex/v1/*.proto \
+       ./gc/v1/*.proto \
+       ./luster/v1/*.proto \
        ./preferences/v1/*.proto
 
 echo "Generating html docs..."
@@ -53,6 +70,7 @@ protoc --doc_out=./generated/ --doc_opt=html,index.html \
        ./org/v1/*.proto \
        ./iam/v1/*.proto \
        ./admin/v1/*.proto \
+       ./flags/v1/*.proto \
        ./cost/v1/*.proto \
        ./billing/v1/*.proto \
        ./operations/v1/*.proto \
@@ -61,4 +79,6 @@ protoc --doc_out=./generated/ --doc_opt=html,index.html \
        ./flow/v1/*.proto \
        ./prism/v1/*.proto \
        ./vortex/v1/*.proto \
+       ./gc/v1/*.proto \
+       ./luster/v1/*.proto \
        ./preferences/v1/*.proto

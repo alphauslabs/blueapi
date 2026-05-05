@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package blueapi.api.luster;
+
+import "google/api/field_behavior.proto";
+
+option go_package = "github.com/alphauslabs/blue-sdk-go/api/luster";
+option java_package = "cloud.alphaus.blueapi.api.luster";
+option java_outer_classname = "ApiLusterContextProto";
+
+// The message defines the context
+message Context {
+  // The context id.
+  string id = 1;
+
+  // The context name.
+  string name = 2;
+
+  // The context number.
+  // Sequential number assigned to the context.
+  string number = 3;
+
+  // The context title.
+  string title = 4;
+
+  // The context content.
+  // Detailed content or description of the context.
+  string content = 5;  
+
+  // The context type.
+  ContextType context_type = 14;
+
+  // The context state.
+  ContextState state = 6;
+
+  // The context labels.
+  // "labels": ["bug" "documentation"]
+  repeated string labels = 7;
+
+  // The context assignees.
+  // "assignees": ["username1" "username2"]
+  repeated string assignees = 8;
+
+  // The context comments_count.
+  // "comments_count": 0
+  int64 comments_count = 9
+   [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The context created_at.
+  // "created_at": "2023-10-27T10:00:00Z"
+  string created_at = 10
+   [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The context updated_at.
+  // "updated_at": "2023-10-27T10:00:00Z"
+  string updated_at = 11
+   [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The context closed_at.
+  // "closed_at": "2023-10-27T10:00:00Z"
+  string closed_at = 12
+   [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The context user_id.
+  string user_id = 13
+   [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// The context type.
+enum ContextType {
+  // Any type of context.
+  ANY = 0;
+
+  // Space-related context.
+  SPACE = 1;
+
+  // Account-related context.
+  ACCOUNT = 2;
+
+  // Cost-related context.
+  COST = 3;
+}
+
+// The context state.
+enum ContextState {
+  // open
+  // Initial state when context is created.
+  OPEN = 0;
+
+  // in progress
+  // Indicates work is in progress.
+  IN_PROGRESS = 1;
+
+  // closed
+  // Final state indicating work is completed.
+  CLOSED = 2;
+}

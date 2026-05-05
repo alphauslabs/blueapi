@@ -20,6 +20,7 @@ import "api/cover/insightreport.proto";
 import "protos/operation.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
+import "api/cover/role.proto";
 import "google/protobuf/struct.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -51,6 +52,7 @@ service Cover {
       post: "/v1/members/invite"
       body: "*"
     };
+    option deprecated = true;
   }
 
   // Activate the added user
@@ -67,6 +69,7 @@ service Cover {
       post: "/v1/members"
       body: "*"
     };
+    option deprecated = true;
   }
 
   // Get all the members/subusers of the company
@@ -74,6 +77,7 @@ service Cover {
     option (google.api.http) = {
       get: "/v1/members"
     };
+    option deprecated = true;
   }
 
   // Get the details of the user
@@ -81,6 +85,7 @@ service Cover {
     option (google.api.http) = {
       get: "/v1/members/{userId}"
     };
+    option deprecated = true;
   }
 
   // Get the cost group to which the member is attached
@@ -88,6 +93,7 @@ service Cover {
     option (google.api.http) = {
       get: "/v1/members/{userId}/costgroup"
     };
+    option deprecated = true;
   }
 
   // Modify member's permission
@@ -96,6 +102,7 @@ service Cover {
       put: "/v1/members/{userId}/isadmin"
       body: "*"
     };
+    option deprecated = true;
   }
 
   // Get the details of the logged-in user
@@ -198,6 +205,7 @@ service Cover {
     option (google.api.http) = {
       delete: "/v1/members/{userId}"
     };
+    option deprecated = true;
   }
 
   // Reset member's password
@@ -1493,6 +1501,221 @@ service Cover {
       body: "*"
     };
   }
+
+  rpc GetRecommendationV3(GetRecommendationV3Request) returns (GetRecommendationV3Response) {
+    option (google.api.http) = {
+      get: "/v1/recommendations"
+    };
+  }
+
+  rpc ListRecommendationsV3(ListRecommendationsV3Request) returns (stream RecommendationSummary) {
+    option (google.api.http) = {
+      post: "/v1/recommendations/summaries"
+      body: "*"
+    };
+  }
+
+  rpc ExecuteRecommendationV3(ExecuteRecommendationV3Request) returns (ExecuteRecommendationV3Response) {
+    option (google.api.http) = {
+      post: "/v1/recommendation/execute"
+      body: "*"
+    };
+  }
+
+  // Invites users to join the organization and assigns them roles.
+  rpc InviteUsers(InviteUsersRequest) returns (InviteUsersResponse) {
+    option (google.api.http) = {
+      post: "/v1/users/invite"
+      body: "*"
+    };
+  }
+
+  // Deletes a user from the organization.
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {
+    option (google.api.http) = {
+      delete: "/v1/users/{id}"
+    };
+  }
+
+  // Updates a user's role and cost group access.
+  rpc UpdateUserRole(UpdateUserRoleRequest) returns (UpdateUserRoleResponse) {
+    option (google.api.http) = {
+      put: "/v1/users/{user_id}"
+      body: "*"
+    };
+  }
+
+  // Lists all users in the organization
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
+    option (google.api.http) = {
+      get: "/v1/users"
+    };
+  }
+
+  // Reinvites a user to join the organization. This can be used when the user did not receive or lost the original invitation email.
+  rpc ReinviteUser(ReinviteUserRequest) returns (ReinviteUserResponse) {
+    option (google.api.http) = {
+      post: "/v1/users/{id}/reinvite"
+      body: "*"
+    };
+  }
+
+  // Retrieves a user's details by their ID.
+  rpc GetUser(GetUserRequest) returns (GetUserResponse) {
+    option (google.api.http) = {
+      get: "/v1/users/{id}"
+    };
+  }
+
+  // Lists the roles and cost groups assigned to the authenticated user.
+  rpc GetMyRoles(GetMyRolesRequest) returns (GetMyRolesResponse) {
+    option (google.api.http) = {
+      get: "/v1/me/roles"
+    };
+  }
+
+}
+message GetMyRolesRequest{}
+
+message GetMyRolesResponse {
+  repeated api.cover.Role roles = 1;
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message GetUserResponse {
+  api.cover.User user = 1;
+}
+
+message ReinviteUserRequest {
+  string id = 1;
+}
+
+message ReinviteUserResponse {
+  api.cover.User user = 1;
+}
+
+message ListUsersRequest {}
+
+message ListUsersResponse {
+ message UserSummary {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  repeated string roles = 4;
+  bool activated = 5;
+  string avatar = 6;
+  string color_theme = 7;
+ }
+ repeated UserSummary users = 1;
+}
+
+message UpdateUserRoleRequest {
+  message Role {
+    string id = 1;
+    repeated string cost_group_ids = 2;
+  }
+
+  string user_id = 1;
+  repeated Role roles = 2;
+}
+
+message UpdateUserRoleResponse {
+  api.cover.User user = 1;
+}
+
+message DeleteUserRequest {
+  string id = 1;
+}
+
+message DeleteUserResponse {}
+
+message InviteUsersRequest {
+  repeated string emails = 1;
+  string role_id = 2;
+  repeated string cost_group_ids = 3;
+}
+
+message InviteUsersResponse {
+  repeated api.cover.User users = 1;
+}
+
+message ExecuteRecommendationV3Request {
+  enum ExecuteType {
+    DEFAULT = 0;
+    MARK_AS_EXECUTED = 1;
+    UNDO_EXECUTED = 2;
+    SUBMIT_TEMPLATE = 3;
+    RETRY_EXECUTE = 4;
+  }
+  repeated string ids = 1;
+  ExecuteType executeType = 2;
+}
+
+message ExecuteRecommendationV3Response {
+  google.protobuf.Struct result = 1;
+}
+
+message ListRecommendationsV3Request {
+  string costgroupId = 1;
+  repeated string statuses = 2;
+  map<string, string> filters = 3;
+}
+
+message RecommendationSummary {
+  string id = 1;
+  string name = 2;
+  string target = 3;
+  string targetName = 18;
+  string category = 4;
+  string type = 5;
+  string vendor = 13;
+  string source = 19;
+  string code = 14;
+  optional string service = 15;
+  optional string region = 16;
+  optional string resourceId = 17;
+  double estimatedMonthlySavings = 6;
+  double estimatedMonthlyBeforeCost = 7;
+  double estimatedMonthlyAfterCost = 8;
+  optional string risk = 9;
+  optional string effort = 10;
+  string status = 11;
+  google.protobuf.Struct additionalDetails = 12;
+}
+
+message GetRecommendationV3Request {
+  repeated string ids = 1;
+}
+
+message GetRecommendationV3Response {
+  message RecommendationDetail {
+    string id = 1;
+    string name = 9;
+    string vendor = 2;
+    string source = 3;
+    string code = 4;
+    optional string service = 5;
+    string target = 7;
+    string targetName = 8;
+    string dateDetected = 6;
+    optional string region = 10;
+    double estimatedMonthlyBeforeCost = 11;
+    double estimatedMonthlyAfterCost = 12;
+    double estimatedMonthlySavings = 13;
+    optional string resourceId = 14;
+    string category = 15;
+    string type = 16;
+    string lastUpdated = 17;
+    string status = 18;
+    optional string risk = 19;
+    optional string effort = 20;
+    google.protobuf.Struct details = 21;
+  }
+
+  repeated RecommendationDetail recommendations = 1;
 }
 
 message GetCostForecastsDataRequest {
@@ -2476,6 +2699,8 @@ message GetAccountAccessTemplateUrlResponse {
 
   // The external id for this role. Do not change.
   string externalId = 5;
+
+  string templateVersion = 6;
 }
 
 // Request message for the ListAccountAccess rpc.

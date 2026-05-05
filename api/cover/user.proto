@@ -1,10 +1,35 @@
 syntax = "proto3";
 
 package blueapi.api.cover;
+import "google/protobuf/struct.proto";
 
 option go_package = "github.com/alphauslabs/blue-sdk-go/api/cover";
 option java_package = "cloud.alphaus.blueapi.api.cover";
 option java_outer_classname = "ApiCoverUserProto";
+
+message User {
+    message Role {
+        message CostGroup {
+            string id = 1;
+            string name = 2;
+        }
+
+        string id = 1;
+        string name = 2;
+        repeated CostGroup costgroups = 3;
+    }
+
+    string id = 1;
+    string name = 2;
+    string email = 3;
+    repeated Role roles = 4;
+    google.protobuf.Struct invited_by = 5;
+    string last_updated = 6;
+    string created_on = 7;
+    string avatar = 8;
+    bool activated = 9;
+    string color_theme = 10;
+}
 
 message UserData {
     string id = 1;
@@ -36,6 +61,7 @@ message UserData {
     bool useNewCostGroupCreationUI = 27;
     bool autoTimeZone = 28;
     bool isDemoAccount = 29;
+    option deprecated = true;
 }
 
 message MemberUserData {

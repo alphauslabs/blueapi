@@ -314,6 +314,14 @@ service Iam {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS: Unlocks ripple or wave user account.
+  rpc UnlockUserAccount(UnlockUserAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/iam/v1/{domain}/account:unlock"
+      body: "*"
+    };
+  }
 }
 
 // Request message for the Iam.WhoAmI rpc.
@@ -730,4 +738,18 @@ message UpsertRippleExperimentalPreferenceRequest {
 message UpsertRippleExperimentalPreferenceResponse {
   // The created or updated preference.
   RippleExperimentalPreference preference = 1;
+}
+
+message UnlockUserAccountRequest {
+  // Required. Valid values are 'ripple' and 'wave'
+  string domain = 1;
+
+  // Required. The email of the user account to unlock.
+  string email = 2;
+
+  // IsRoot is true if Ripple or Wave root user, false if sub user.
+  bool is_root = 3;
+
+  // Required if wave sub user.
+  string user_name = 4;
 }

@@ -1,0 +1,2068 @@
+syntax = "proto3";
+
+package blueapi.gc.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/gc";
+option java_package = "cloud.alphaus.api.gc";
+option java_outer_classname = "GuaranteedCommitmentsProto";
+
+// GuaranteedCommitments service definition.
+service GuaranteedCommitments {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "(Alpha) GuaranteedCommitments API. Base URL: https://api.alphaus.cloud/m/blue/gc"
+    external_docs: {
+      url: "https://github.com/alphauslabs/blueapi/tree/main/gc/";
+      description: "Service definition";
+    }
+  };
+
+  // WORK-IN-PROGRESS: List all the registered orgs
+  rpc ListOrgs(ListOrgsRequest) returns (stream Org) {
+    option (google.api.http) = {
+      post: "/v1/organizations:read"
+      body: "*"
+    };
+  }
+
+  // ####################### COMMITMENT PLANS #######################
+
+  // WORK-IN-PROGRESS: Executes a commitment purchase plan, initiating the commitment purchase process.
+  rpc CommitmentsPlanApply(CommitmentPlanApplyRequest) returns (CommitmentPlanDetails) {
+    option (google.api.http) = {
+      post: "/v1/commitments/plan/{planId}/apply"
+      body: "*"
+    };
+  }
+
+  // ####################### COMMITMENTS #######################
+
+  // WORK-IN-PROGRESS: Retrieves a list of commitments.
+  rpc ListCommitments(ListCommitmentsRequest) returns (ListCommitmentsResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Generates time-series chart data for commitment metrics over the specified time period.
+  rpc GetCommitmentsChart(GetCommitmentsChartRequest) returns (CommitmentsChartResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/{commitmentId}/chart"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Generates utilization data for commitment over the active period.
+  rpc GetCommitmentsUtilization(GetCommitmentsUtilizationRequest) returns (CommitmentsUtilizationResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/{commitmentId}/utilization"
+    };
+  }
+
+  // ####################### METRICS #######################
+
+  // WORK-IN-PROGRESS: Do not use. Retrieves key performance metrics for cloud commitments.
+  rpc GetMetrics(GetMetricsRequest) returns (MetricsResponse) {
+    option (google.api.http) = {
+      get: "/v1/metrics"
+    };
+  }
+
+  // ####################### RESOURCES #######################
+
+  // WORK-IN-PROGRESS: Do not use. Retrieves a list of infrastructure resources for the organization.
+  rpc ListResources(ListResourcesRequest) returns (ListResourcesResponse) {
+    option (google.api.http) = {
+      get: "/v1/resources"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Do not use. Retrieves daily usage data for a specific resource within the specified date range.
+  rpc GetResourceDailyUsage(GetResourceDailyUsageRequest) returns (GetResourceDailyUsageResponse) {
+    option (google.api.http) = {
+      get: "/v1/resources/{resourceId}/dailyusage"
+    };
+  }
+
+
+ // DEVELOPER'S NOTE: FOR Infrastructure Plan
+
+  // WORK-IN-PROGRESS: Only works for Alphaus for now. Retrieves a paginated list of reservable infrastructure resources for a segment.
+  // Supports filtering, sorting, and a date range for usage aggregation.
+  rpc ListReservableResources(ListReservableResourcesRequest) returns (ListReservableResourcesResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/resources"
+    };
+  }
+
+  // ####################### SEGMENTS #######################
+
+  // WORK-IN-PROGRESS: Do not use. Retrieves all segments for the specified organization and provider.
+  //rpc ListSegments(ListSegmentsRequest) returns (ListSegmentsResponse) {
+  //  option (google.api.http) = {
+  //    get: "/v1/segments/info"
+  //  };
+  //}
+
+  // WORK-IN-PROGRESS: Retrieves detailed information about a specific segment.
+  //rpc GetSegmentDetails(GetSegmentDetailsRequest) returns (SegmentDetails) {
+  //  option (google.api.http) = {
+  //    get: "/v1/segments/{segmentId}"
+  //  };
+  //}
+
+  // WORK-IN-PROGRESS: Retrieves purchase plan of a company.
+  rpc ListPurchasePlansBySegment(ListPurchasePlansBySegmentRequest) returns (ListPurchasePlansBySegmentResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/purchaseplans"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Get the updated details of the plan after the apply plan.
+  rpc GetUpdatedPurchasePlansBySegment(GetUpdatedPurchasePlansBySegmentRequest) returns (GetUpdatedPurchasePlansBySegmentResponse) {
+    option (google.api.http) = {
+      post: "/v1/commitments/purchaseplans:update"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Retrieves full details of a specific purchase plan of a company.
+  // Includes the basic info, detailed metrics, commitment line items, covered infrastructure resource matches, and audit history.
+  rpc GetPurchasePlansDetails(GetPurchasePlansDetailsRequest) returns (GetPurchasePlansDetailsResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/purchaseplans/{planId}"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Saves a commitment purchase plan as draft.
+  rpc SaveCommitmentsPlanAsDraft(SaveCommitmentsPlanAsDraftRequest) returns (DefaultPurchasePlan) {
+    option (google.api.http) = {
+      post: "/v1/commitments/purchaseplans/draft/{planId}"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Retrieves the drafted purchase plans
+  rpc ListDraftPurchasePlans(ListDraftPurchasePlansRequest) returns (ListDraftPurchasePlansResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/purchaseplans/draft"
+    };
+  }
+
+
+ // WORK-IN-PROGRESS: Deletes a drafted purchase plan.
+  rpc DeleteDraftPurchasePlan(DeleteDraftPurchasePlanRequest) returns (DeleteDraftPurchasePlanResponse) {
+    option (google.api.http) = {
+      delete: "/v1/commitments/purchaseplans/draft/{draftPlanId}"
+    };
+  }
+
+
+ // DEVELOPER'S NOTE: FOR Infrastructure Plan and custom (top-down) commitment plan
+
+  // WORK-IN-PROGRESS: Only works for Alphaus for now. Retrieves the available commitment types for a given provider.
+  rpc GetAvailableCommitmentTypes(GetAvailableCommitmentTypesRequest) returns (GetAvailableCommitmentTypesResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/purchaseplans/availabletypes"
+    };
+  }
+
+ // DEVELOPER'S NOTE: FOR Infrastructure Plan and custom (top-down) commitment plan
+
+  // WORK-IN-PROGRESS: Only works for Alphaus for now. Creates a custom (top-down) commitment purchase plan.
+  rpc CreateCustomCommitmentPlan(CreateCustomCommitmentPlanRequest) returns (DefaultPurchasePlan) {
+    option (google.api.http) = {
+      post: "/v1/commitments/purchaseplans/custom"
+      body: "*"
+    };
+  }
+
+  // ------------------------ ONBOARDING ------------------------
+
+  // WORK-IN-PROGRESS: Registers a new child organization under the channel partner.
+  // Creates the organization, sets up user memberships, and establishes the partnership relationship.
+  rpc RegisterOrg(RegisterOrgRequest) returns (RegisterOrgResponse) {
+    option (google.api.http) = {
+      post: "/v1/onboarding"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Starts the onboarding process for an organization.
+  // Creates or retrieves an onboarding record and sets the provider to AWS.
+  rpc StartAwsOnboarding(StartAwsOnboardingRequest) returns (StartAwsOnboardingResponse) {
+    option (google.api.http) = {
+      post: "/v1/onboarding/aws/start"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Generates CloudFormation template for AWS integration.
+  // Creates the necessary IAM role and policy template for setting up AWS access.
+  rpc GetAwsCloudFormationTemplate(GetAwsCloudFormationTemplateRequest) returns (GetAwsCloudFormationTemplateResponse) {
+    option (google.api.http) = {
+      get: "/v1/onboarding/aws/cloudformation/template"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Generates AWS CloudFormation launch stack URL.
+  // Creates a pre-configured URL to deploy the CloudFormation stack in the AWS console.
+  rpc GetAwsLaunchStackUrl(GetAwsLaunchStackUrlRequest) returns (GetAwsLaunchStackUrlResponse) {
+    option (google.api.http) = {
+      get: "/v1/onboarding/aws/cloudformation/launchstackurl"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Runs AWS onboarding verification process.
+  // Creates a new CUR or uses an existing CUR and verifies AWS integration setup
+  // and returns validation status for all required features.
+  rpc VerifyAwsOnboarding(VerifyAwsOnboardingRequest) returns (VerifyAwsOnboardingResponse) {
+    option (google.api.http) = {
+      post: "/v1/onboarding/aws/verify"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Retrieves the latest onboarding status for:
+  // - an MSP
+  // - a company under an MSP
+  // - a payer account under an MSP
+  rpc GetOnboardingStatus(GetOnboardingStatusRequest) returns (GetOnboardingStatusResponse) {
+    option (google.api.http) = {
+      post: "/v1/onboarding/status:read"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS: Lists payer accounts associated with the organization.
+  // Retrieves all payer accounts linked to the organization, including their status and associated segments.
+  rpc ListPayerAccounts(ListPayerAccountsRequest) returns (ListPayerAccountsResponse) {
+    option (google.api.http) = {
+      get: "/v1/managements/accounts"
+    };
+  }
+
+  rpc SetPayerAccountEnabled(SetPayerAccountEnabledRequest) returns (SetPayerAccountEnabledResponse) {
+    option (google.api.http) = {
+      post: "/v1/managements/accounts/{companyId}"
+      body: "*"
+    };
+  }
+
+  rpc GetPayerAccountStatus(GetPayerAccountStatusRequest) returns (GetPayerAccountStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/managements/accounts/status"
+    };
+  }
+
+  rpc ListBillingGroups(ListBillingGroupsRequest) returns (ListBillingGroupsResponse) {
+    option (google.api.http) = {
+      get: "/v1/managements/billinggroups"
+    };
+  }
+
+  rpc SetBillingGroupStatus(SetBillingGroupStatusRequest) returns (SetBillingGroupStatusResponse) {
+    option (google.api.http) = {
+      post: "/v1/managements/billinggroups/{companyId}"
+      body: "*"
+    };
+  }
+
+  rpc GetBillingGroupStatus(GetBillingGroupStatusRequest) returns (GetBillingGroupStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/managements/billinggroups/status"
+    };
+  }
+
+  rpc ValidateBillingGroup(ValidateBillingGroupRequest) returns (ValidateBillingGroupResponse) {
+  option (google.api.http) = {
+    post: "/v1/onboarding/billinggroup:validate"
+    body: "*"
+    };
+  }
+
+  // Retrieves the AWS Marketplace private offer details for a payer account.
+  // Used by the onboarding "Accept Private Offer" step.
+  rpc GetAwsPrivateOffer(GetAwsPrivateOfferRequest) returns (GetAwsPrivateOfferResponse) {
+    option (google.api.http) = {
+      get: "/v1/onboarding/aws/privateoffer/{payerAccountId}"
+    };
+  }
+
+    // GetGuaranteedCommitmentTemplateUrl returns a CloudFormation launch URL for deploying
+  // both Alphaus (Ripple) and Archera IAM roles in a single stack.
+  rpc GetGuaranteedCommitmentTemplateUrl(GetGuaranteedCommitmentTemplateUrlRequest) returns (GetGuaranteedCommitmentTemplateUrlResponse) {
+    option (google.api.http) = {
+      get: "/v1/onboarding/aws/cftemplate/guaranteed:url"
+    };
+  }
+
+  // CreateGuaranteedCommitmentAccess verifies and registers a deployed guaranteed CloudFormation stack.
+  rpc CreateGuaranteedCommitmentAccess(CreateGuaranteedCommitmentAccessRequest) returns (CreateGuaranteedCommitmentAccessResponse) {
+    option (google.api.http) = {
+      post: "/v1/onboarding/aws/cftemplate/guaranteed"
+      body: "*"
+    };
+  }
+
+// ####################### AZURE ONBOARDING #######################
+
+// WORK-IN-PROGRESS: Starts the Azure onboarding process.
+// Creates an onboarding record in Archera for the given org and returns the onboardingId.
+// Stores the Ripple billingGroupId/companyId association for later use.
+rpc StartAzureOnboarding(StartAzureOnboardingRequest) returns (StartAzureOnboardingResponse) {
+  option (google.api.http) = {
+    post: "/v1/onboarding/azure/start"
+    body: "*"
+  };
+}
+
+// ## Developers guide, will be deleted once documentation is in place ##
+// Used for multiple PATCH steps: setting azure resource config (step 2/3),
+// selecting account kind (step 5.5), and selecting account IDs (step 7).
+
+// WORK-IN-PROGRESS: Updates the Azure onboarding record.
+rpc UpdateAzureOnboarding(UpdateAzureOnboardingRequest) returns (AzureOnboardingState) {
+  option (google.api.http) = {
+    post: "/v1/onboarding/azure/{onboardingId}:update"
+    body: "*"
+  };
+}
+
+// WORK-IN-PROGRESS: Returns the Azure OAuth URL the user must visit to authorize Archera.
+rpc GetAzureOnboardingAuthUrl(GetAzureOnboardingAuthUrlRequest) returns (GetAzureOnboardingAuthUrlResponse) {
+  option (google.api.http) = {
+    get: "/v1/onboarding/azure/{onboardingId}/authurl"
+  };
+}
+
+
+// ## Developers guide, will be deleted once documentation is in place ##
+// Called after the user visits the auth URL (step 4).
+
+// WORK-IN-PROGRESS: Validates that the Azure app was installed and the user authorized it.
+rpc ValidateAzureAppInstall(ValidateAzureAppInstallRequest) returns (AzureOnboardingState) {
+  option (google.api.http) = {
+    post: "/v1/onboarding/azure/{onboardingId}/validate"
+    body: "*"
+  };
+}
+
+// WORK-IN-PROGRESS: Lists the available Azure subscriptions or billing accounts
+// for the user to select during onboarding.
+rpc ListAzureOnboardingAccounts(ListAzureOnboardingAccountsRequest) returns (ListAzureOnboardingAccountsResponse) {
+  option (google.api.http) = {
+    get: "/v1/onboarding/azure/{onboardingId}/accounts"
+  };
+}
+
+
+// Persists the Ripple billingGroupId/companyId mapping alongside the Archera integration.
+
+// WORK-IN-PROGRESS: Creates the Azure cloud integration after all onboarding steps complete.
+rpc CreateAzureIntegration(CreateAzureIntegrationRequest) returns (CreateAzureIntegrationResponse) {
+  option (google.api.http) = {
+    post: "/v1/onboarding/azure/integration"
+    body: "*"
+  };
+}
+
+// WORK-IN-PROGRESS: Lists Azure integrations to verify onboarding completion.
+rpc ListAzureIntegrations(ListAzureIntegrationsRequest) returns (ListAzureIntegrationsResponse) {
+  option (google.api.http) = {
+    get: "/v1/onboarding/azure/integrations"
+  };
+}
+
+
+}
+
+// ####################### ENUMS #######################
+
+enum Provider {
+  PROVIDER_UNSPECIFIED = 0;
+  AWS = 1;
+  AZURE = 2;
+  GCP = 3;
+  KUBERNETES = 4;
+  UNKNOWN = 5;
+}
+
+enum CommitmentStatus {
+  COMMITMENT_STATUS_UNSPECIFIED = 0;
+  NEW = 1;
+  REVIEWED = 2;
+  SCHEDULED = 3;
+  COMPLETED = 4;
+  DRAFT = 5;
+  NEEDS_REVIEW = 6;
+  IN_PROGRESS = 7;
+}
+
+enum CommitmentInventoryStatus {
+  COMMITMENT_INVENTORY_STATUS_UNSPECIFIED = 0;
+  ACTIVE = 1;
+  RETIRED = 2;
+  PAYMENT_PENDING = 3;
+  PAYMENT_FAILED = 4;
+}
+
+enum Scope {
+  SCOPE_UNSPECIFIED = 0;
+  SHARED = 1;
+  REGIONAL = 2;
+  ZONAL = 3;
+}
+
+enum UsageType {
+  USAGE_TYPE_UNSPECIFIED = 0;
+  RUNNING = 1;
+  STOPPED = 2;
+}
+
+// ####################### REQUEST MESSAGES #######################
+
+message ListOrgsRequest {}
+
+
+message CommitmentPlanApplyRequest {
+  string planId = 1;
+}
+
+message ListCommitmentsRequest {}
+
+message GetCommitmentsChartRequest {
+  // Required. The commitment id.
+  string commitmentId = 1;
+  // Required. The group filter. Available filters include `region`, `service`, `instanceType`, `instanceTypeFamily`, `usageType` and `operation`.
+  string groupBy = 2;
+  string startDate = 3;
+  string endDate = 4;
+}
+
+message GetCommitmentsUtilizationRequest {
+  // Required. The commitment id.
+  string commitmentId = 1;
+}
+
+message GetMetricsRequest {
+  Provider provider = 1;
+}
+
+message ListResourcesRequest {
+  Provider provider = 1;
+  string segmentId = 2;
+  string search = 3;
+  bool desc = 4;
+  string orderBy = 5;
+  int32 page = 6;
+  int32 pageSize = 7;
+}
+
+message GetResourceDailyUsageRequest {
+  string resourceId = 1;
+  string startDate = 2;
+  string endDate = 3;
+  string catalogSkuId = 4;
+  int32 page = 5;
+  int32 pageSize = 6;
+}
+
+message ListReservableResourcesRequest {
+  // Required. The segment ID to scope the query to.
+  string segmentId = 1;
+  // // Optional. Field to sort by. Example: "ondemand_cost".
+  // string orderBy = 2;
+  // // Optional. If true, sort in descending order.
+  // bool desc = 3;
+  // // Optional. URL-encoded JSON filter expression.
+  // // Example (decoded): {"and":[{"and":[{"field":"covered_usage","op":"<","value":1}]},{"and":[{"field":"is_reservable","op":"=","value":"true"}]}]}
+  // string filter = 4;
+  // // Required. Start of the usage lookback window (YYYY-MM-DD).
+  // string startDate = 5;
+  // // Required. End of the usage lookback window (YYYY-MM-DD).
+  // string endDate = 6;
+  // // Optional. Page number (1-based).
+  // int32 page = 7;
+  // // Optional. Number of results per page.
+  // int32 pageSize = 8;
+}
+
+message ListPurchasePlansBySegmentRequest {
+}
+
+message GetPurchasePlansDetailsRequest {
+  string planId = 1;
+}
+// message GetDraftPurchasePlansDetailsRequest {
+//   // The draft plan ID to retrieve details for.
+//   string draftPlanId = 1;
+// }
+
+message GetUpdatedPurchasePlansBySegmentRequest {
+}
+
+// ------------------------ ONBOARDING REQUEST ------------------------
+
+message OrgUser {
+  string email = 1;
+  string role = 2;
+}
+
+message Membership {
+  string role = 1;
+  string username = 2;
+}
+
+message Address {
+  // required: ex. "123 Main St"
+  string line1 = 1;
+  // required: ex. "Springfield"
+  string city = 2;
+  // required: ex. "IL"
+  string state = 3;
+  // required: ex. "62701"
+  string zip = 4;
+  // required: ex. "USA"
+  string country = 5;
+  // optional: ex. "Apt 4B"
+  string line2 = 6;
+}
+
+message AwsExistingCur {
+  // required if existingCur is provided
+  string region = 1;
+  // required if existingCur is provided
+  string bucket = 2;
+  // required if existingCur is provided
+  string prefix = 3;
+  // required if existingCur is provided
+  string reportName = 4; // maps to "report_name" conceptually
+}
+
+message RegisterOrgRequest {
+
+  string name = 1;
+  string labraSubscriptionId = 2;
+  repeated OrgUser users = 3;
+  string domain = 4;
+  Address primaryAddress = 5;
+  string awsMarketplaceOfferLink = 6;
+  string azureMarketplaceOfferLink = 7;
+  string gcpMarketplaceOfferLink = 8;
+}
+
+message StartAwsOnboardingRequest {
+  // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
+  string billingGroupId = 1;
+  string companyId = 2;
+  string gcOrgId = 3;
+
+  string payerAccountId = 4;
+  string payerAccountName = 5;
+}
+
+message GetAwsCloudFormationTemplateRequest {
+  // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
+  string billingGroupId = 1;
+  string companyId = 2;
+
+  string gcOrgId = 3;
+  
+  string payerAccountId = 4;
+  string payerAccountName = 5;
+}
+
+message GetAwsLaunchStackUrlRequest {
+  // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
+  string billingGroupId = 1;
+  string companyId = 2;
+
+  string gcOrgId = 3;
+
+  
+  string payerAccountId = 4;
+  string payerAccountName = 5;
+}
+
+message VerifyAwsOnboardingRequest {
+  // Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)
+  string billingGroupId = 1;
+  string companyId = 2;
+
+  string gcOrgId = 3;
+
+  // From /start response
+  string onboardingId = 4;
+
+  // AWS account id being onboarded/verified
+  string accountId = 5;
+
+  // Optional: if set, GuaranteedCommitments will use this existing CUR. If omitted, GuaranteedCommitments may create a new CUR.
+  AwsExistingCur existingCur = 6;
+}
+
+message GetOnboardingStatusRequest {
+  // Optional:
+  // - all empty => MSP-level onboarding row
+  // - companyId set => company flow
+  // - payerAccountId set => payer-account flow
+  // billingGroupId may accompany company flow
+  string billingGroupId = 1;
+  string companyId = 2;
+  string payerAccountId = 3;
+}
+
+message ListPayerAccountsRequest {}
+
+message SetPayerAccountEnabledRequest {
+  string companyId = 1;
+  bool enabled = 2;
+}
+
+message GetPayerAccountStatusRequest {}
+
+message ListBillingGroupsRequest {}
+
+message SetBillingGroupStatusRequest {
+  string companyId = 1;
+  bool enabled = 2;
+
+  // temporarily required until we fully transition to the new onboarding flow.
+  // This is to avoid any breaks or crash during the transition. Will be removed once the transition is complete.
+  // Default value is false.
+  bool newVersion = 3;
+}
+
+message GetBillingGroupStatusRequest {}
+
+message ValidateBillingGroupRequest {
+  // Required. Company identifier.
+  string companyId = 1;
+
+  // temporarily required until we fully transition to the new onboarding flow.
+  // This is to avoid any breaks or crash during the transition. Will be removed once the transition is complete.
+  // Default value is false.
+  bool newVersion = 2;
+}
+
+message GetAwsPrivateOfferRequest {
+  // Required. The AWS payer account ID that the private offer targets.
+  string payerAccountId = 1;
+}
+
+message SaveCommitmentsPlanAsDraftRequest {
+  // Required. The commitment purchase plan ID to save as draft.
+  string planId = 1;
+  repeated string reservationIds = 2;
+  repeated string resourceIds = 3;
+  double maxUpfrontCost = 4;
+  Provider provider = 5;
+  string endDate = 6;
+  string startDate = 7;
+  string segmentId = 8;
+  // Required.
+  string status = 9;
+  // Required.
+  string description = 10;
+  // Required.
+  string name = 11;
+  string preferredPaymentOption = 12;
+  repeated string includedContractTerms = 13;
+  repeated ContractSpec includedContractSpecs = 14;
+  google.protobuf.Value coverageId = 15;
+  string createdAt = 16;
+  google.protobuf.Value createdBy = 17;
+  string dataSource = 18;
+  google.protobuf.Value executionPolicy = 19;
+  repeated string flaggedActions = 20;
+  string id = 21;
+  bool isCalculating = 22;
+  bool isDefault = 23;
+  bool isLocked = 24;
+  bool isRecommended = 25;
+  bool isRenewal = 26;
+  bool isSaved = 27;
+  string lastModified = 28;
+  string metaPlanId = 29;
+  google.protobuf.Value minimumUpfrontInterestRate = 30;
+  string orgId = 31;
+  string planType = 32;
+  google.protobuf.Value recommendWithinCoveredAccounts = 33;
+  Segment segment = 34;
+}
+
+message ListDraftPurchasePlansRequest {
+  // If set to true, returns plans with Draft status. If set to false, returns plans with Submitted and Executed status.
+  bool isDraft = 1;
+}
+
+message DeleteDraftPurchasePlanRequest {
+  // Required. The draft plan ID to delete.
+  string draftPlanId = 1;
+}
+
+message GetAvailableCommitmentTypesRequest {
+  // Required. The cloud provider to query available types for.
+  // Acceptable values: "aws", "azure", "gcp".
+  string provider = 1;
+}
+
+// CreateCustomCommitmentPlanRequest creates a new top-down custom commitment plan.
+message CreateCustomCommitmentPlanRequest {
+  // Required. The cloud provider. Acceptable values: "aws", "azure", "gcp".
+  string provider = 1;
+  // Required. ISO 8601 lookback window start timestamp (e.g. "2026-04-09T02:43:39.717Z").
+  string startDate = 2;
+  // Required. ISO 8601 lookback window end timestamp (e.g. "2026-04-16T02:43:39.717Z").
+  string endDate = 3;
+  // Required. The segment ID to scope the plan to.
+  string segmentId = 4;
+  // Plan status. Use "draft" to save without submitting.
+  // Acceptable values: "draft", "submitted".
+  string status = 5;
+  // Optional. Human-readable description for the plan.
+  string description = 6;
+  // Required. Human-readable name for the plan.
+  string name = 7;
+  // List of contract specifications to include in the plan.
+  // Each entry selects a commitment category, term, payment option, and optional properties.
+  //
+  // Acceptable commitment_type values:
+  //   "aws/AmazonEC2", "aws/AmazonRDS", "aws/AmazonElastiCache",
+  //   "aws/savingsplan/Compute", "aws/savingsplan/EC2Instance", "aws/savingsplan/Database"
+  //
+  // Acceptable term values:
+  //   "thirty_day_gris"  - 30-day Archera Insured (leased: true)
+  //   "one_year_gris"    - 1-year Archera Insured (leased: true)
+  //   "one_year"         - 1-year Native Uninsured (leased: false)
+  //   "three_year"       - 3-year Native Uninsured (leased: false)
+  //
+  // Acceptable payment_option values:
+  //   "no_upfront", "partial_upfront", "all_upfront"
+  //   Note: "partial_upfront" and "all_upfront" are not available for 30-day terms.
+  //
+  // Acceptable properties keys:
+  //   "leased" (bool)          - true for Archera Insured terms, false for Native terms.
+  //   "offering_class" (string) - only for "aws/AmazonEC2"; "convertible" or "standard".
+  repeated ContractSpec includedContractSpecs = 8;
+  // List of contract term keys included in the plan.
+  // Acceptable values: "thirty_day_gris", "one_year_gris", "one_year", "three_year".
+  repeated string includedContractTerms = 9;
+  // Optional. Specific resource IDs to pin the plan to selected infrastructure resources.
+  // When populated, the server returns plan_type "infrastructure"; omit for a top-down
+  // "purchase" plan. IDs are composite strings in the format
+  // "{resource_id}|{catalog_sku_org_id}|{catalog_sku_id}" as returned by ListReservableResources.
+  repeated string resourceIds = 10;
+}
+
+message GetGuaranteedCommitmentTemplateUrlRequest {
+  // The guaranteed-commitments-provided external ID for the guaranteed-commitments IAM role trust policy.
+  string externalId = 1;
+}
+
+message CreateGuaranteedCommitmentAccessRequest {
+  // The AWS account ID (payer/target) where the stack was deployed.
+  string target = 1;
+  // The guaranteed-commitments-provided external ID.
+  string externalId = 2;
+}
+
+// ------------------------ AZURE ONBOARDING REQUEST ------------------------
+
+// StartAzureOnboardingRequest initiates Azure onboarding (Step 1).
+// Ripple fields are required to link this Azure tenant to the correct
+// Ripple billing group and company for cost attribution and management.
+message StartAzureOnboardingRequest {
+  // Ripple billing group ID. If present => MSP customer (3rd layer), else MSP-level org (2nd layer).
+  string billingGroupId = 1;
+  // Ripple company ID within the billing group.
+  string companyId = 2;
+  // Required. Archera / GuaranteedCommitments org ID.
+  string gcOrgId = 3;
+  // Azure tenant ID.
+  string tenantId = 4;
+  // Azure management subscription ID.
+  string subscriptionId = 5;
+}
+
+
+// UpdateAzureOnboardingRequest updates the Archera onboarding record (Steps 2, 5.5, 7).
+// The full onboarding state must be passed back as Archera requires it on every PATCH.
+// The `org` field is the Archera org object received from the start/get response — pass it back verbatim.
+
+message UpdateAzureOnboardingRequest {
+  // Required. The onboarding ID returned from StartAzureOnboarding.
+  string onboardingId = 1;
+  // Required. Archera org ID.
+  string gcOrgId = 2;
+  // Ripple billing group ID (needed to persist Ripple context).
+  string billingGroupId = 3;
+  // Ripple company ID.
+  string companyId = 4;
+
+  // Azure fields — set only those that are being updated for this step.
+  string tenantId = 5;
+  string subscriptionId = 6;
+  // "subscription" or "billing_account"
+  string accountKind = 7;
+  repeated string accountIds = 8;
+  string blobContainer = 9;
+  string resourceGroup = 10;
+  string storageAccount = 11;
+  string roleName = 12;
+  google.protobuf.Value resourceGroupRegion = 13;
+  google.protobuf.Value storageAccountRegion = 14;
+  google.protobuf.Value resourceGroupTags = 15;
+  google.protobuf.Value storageAccountTags = 16;
+
+    // ---- Archera onboarding state fields (echo back from start/get response) ----
+  bool completed = 17;
+  string createdAt = 18;
+  AzureOnboardingCreatedBy createdBy = 19;
+  // Linked integration object; null until integration is created.
+  google.protobuf.Value integration = 20;
+  string integrationId = 21;
+  // Always "azure".
+  string provider = 22;
+  // The full Archera org object received from StartAzureOnboarding response.
+  // Must be echoed back verbatim on every PATCH call.
+  AzureArcheraOrg org = 23;
+}
+
+// GetAzureOnboardingAuthUrlRequest fetches the OAuth authorization URL (Step 4).
+message GetAzureOnboardingAuthUrlRequest {
+  // Required. The onboarding ID.
+  string onboardingId = 1;
+  // Required. Archera org ID.
+  string gcOrgId = 2;
+  // Azure tenant ID.
+  string tenantId = 3;
+  // Azure management subscription ID.
+  string subscriptionId = 4;
+}
+
+// ValidateAzureAppInstallRequest validates Azure app install / authorization.
+// Called once before OAuth (step 3) to validate resource config,
+// and once after OAuth (step 5) to confirm the user has authorized Archera.
+// The full Archera onboarding state must be included — Archera requires it on every call.
+
+message ValidateAzureAppInstallRequest {
+  // Required. The onboarding ID.
+  string onboardingId = 1;
+  // Required. The Archera org ID.
+  string gcOrgId = 2;
+  // ---- Azure resource config fields ----
+  // Integration type, always "cloud/azure".
+  string type = 3;
+  string tenantId = 4;
+  string subscriptionId = 5;
+  // "subscription" or "billing_account"
+  string accountKind = 6;
+  repeated string accountIds = 7;
+  string blobContainer = 8;
+  string resourceGroup = 9;
+  string storageAccount = 10;
+  string roleName = 11;
+  google.protobuf.Value resourceGroupRegion = 12;
+  google.protobuf.Value storageAccountRegion = 13;
+  google.protobuf.Value resourceGroupTags = 14;
+  google.protobuf.Value storageAccountTags = 15;
+  // ---- Archera onboarding state fields (echo back from start/get response) ----
+  bool completed = 16;
+  string createdAt = 17;
+  AzureOnboardingCreatedBy createdBy = 18;
+  google.protobuf.Value integration = 19;
+  string integrationId = 20;
+  // Always "azure".
+  string provider = 21;
+  // The full Archera org object received from StartAzureOnboarding response.
+  // Must be echoed back verbatim.
+  AzureArcheraOrg org = 22;
+
+}
+
+// ListAzureOnboardingAccountsRequest lists available Azure accounts (Step 6).
+message ListAzureOnboardingAccountsRequest {
+  // Required. The onboarding ID.
+  string onboardingId = 1;
+  // Required. Archera org ID.
+  string gcOrgId = 2;
+}
+
+// CreateAzureIntegrationRequest creates the final Azure integration (Step 8).
+// Ripple fields are stored alongside Archera integration data to link
+// the Azure tenant to the correct Ripple billing group/company/payer context.
+message CreateAzureIntegrationRequest {
+  // Required. Archera org ID.
+  string gcOrgId = 1;
+  // Ripple billing group ID — links this Azure integration to the Ripple billing group.
+  string billingGroupId = 2;
+  // Ripple company ID — links this Azure integration to the Ripple company/customer.
+  string companyId = 3;
+  // Ripple payer account ID — if applicable, the payer account this Azure spend rolls up to.
+  string payerAccountId = 4;
+
+  // Integration type, always "cloud/azure".
+  string type = 5;
+  string tenantId = 6;
+  string subscriptionId = 7;
+  string onboardingId = 8;
+  // "subscription" or "billing_account"
+  string accountKind = 9;
+  repeated string accountIds = 10;
+  string blobContainer = 11;
+  string resourceGroup = 12;
+  string storageAccount = 13;
+  string roleName = 14;
+  google.protobuf.Value resourceGroupRegion = 15;
+  google.protobuf.Value storageAccountRegion = 16;
+  google.protobuf.Value resourceGroupTags = 17;
+  google.protobuf.Value storageAccountTags = 18;
+}
+
+// ListAzureIntegrationsRequest lists integrations to verify completion (Step 9).
+message ListAzureIntegrationsRequest {
+  // Required. Archera org ID.
+  string gcOrgId = 1;
+}
+
+
+// ####################### RESPONSE MESSAGES #######################
+
+message Org {
+  string orgId = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message CommitmentPlanDetails {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string orgId = 4;
+  string createdAt = 5;
+  bool isCalculating = 6;
+  string status = 7;
+  string maxTerm = 8;
+  double coveredOndemandCostHourly = 9;
+  double beforeOndemandCostHourly = 10;
+  double beforeReservedCostHourly = 11;
+  double amortizedCostHourly = 12;
+  double recurringCostHourly = 13;
+  double upfrontCostHourly = 14;
+  double beforeCostHourly = 15;
+  double afterCostHourly = 16;
+  double totalCostHourly = 17;
+  double savingsHourly = 18;
+  double feeHourly = 19;
+  double commitmentCoverage = 20;
+  double minimumCommitmentCost = 21;
+  double breakevenHours = 22;
+  double totalSavings = 23;
+  double monthlySavings = 24;
+  double totalMonthlyBeforeCost = 25;
+}
+
+message CommitmentPlanLineItem {
+  string id = 1;
+  string planId = 2;
+  string offerId = 3;
+  string leaseMenuItemId = 4;
+  string accountId = 5;
+  double recommendedQuantity = 6;
+  double selectedQuantity = 7;
+  double recommendedCommitment = 8;
+  double selectedCommitment = 9;
+  bool isSelected = 10;
+  double afterAmortizedCost = 11;
+  double upfrontCost = 12;
+  double recurringCost = 13;
+  double beforeCost = 14;
+  double beforeOndemandCost = 15;
+  double beforeReservedCost = 16;
+  double coveredOndemandCost = 17;
+  double afterCoveredUnits = 18;
+  double totalCost = 19;
+  double monthlyCost = 20;
+  double savings = 21;
+  double monthlySavings = 22;
+  double totalSavings = 23;
+  double fee = 24;
+  double discountRate = 25;
+  double breakevenHours = 26;
+  string contractTerm = 27;
+  string paymentOption = 28;
+  google.protobuf.Struct contractSpec = 29;
+  google.protobuf.Struct offer = 30;
+  string renewalReservationId = 31;
+  double coveredUnits = 32;
+  double amortizedCost = 33;
+}
+
+message CommitmentPlanResourceMatch {
+  string id = 1;
+  double totalUnits = 2;
+  double beforeUncoveredUnits = 3;
+  double afterCoveredUnits = 4;
+  double afterUncoveredUnits = 5;
+  double ondemandPrice = 6;
+  double ifAllOndemandCost = 7;
+  double beforeOndemandCost = 8;
+  double afterOndemandCost = 9;
+  double coveredOndemandCost = 10;
+  double beforeReservedCost = 11;
+  double afterReservedCost = 12;
+  double beforeCost = 13;
+  double afterCost = 14;
+  double monthlyBeforeCost = 15;
+  double monthlyAfterCost = 16;
+  double monthlyAfterReservedCost = 17;
+  double monthlyAfterOndemandCost = 18;
+  double averageSavings = 19;
+  double averageMonthlySavings = 20;
+  string usageType = 21;
+  double coverage = 22;
+  google.protobuf.Struct resource = 23;
+  double coveredUnits = 24;
+  double explanationUnmatched = 25;
+  double ondemandCost = 26;
+  double reservedCost = 27;
+}
+
+message Lease {
+  string id = 1;
+  string orgId = 2;
+  string providerReservationId = 3;
+  string accountId = 4;
+  string status = 5;
+  string startDate = 6;
+  string endDate = 7;
+  string lockinDate = 8;
+  double upfrontCost = 9;
+  double recurringCost = 10;
+  string createdAt = 11;
+  string updatedAt = 12;
+}
+
+message DailyUtilization {
+  string date = 1;
+  double utilization = 2;
+  double netSavings = 3;
+}
+
+message Commitment {
+  string id = 1;
+  string accountId = 2;
+  double amortizedCost = 3;
+  string billingAccountId = 4;
+  bool canRebate = 5;
+  string contractTerm = 6;
+  string displayName = 7;
+  double durationSeconds = 8;
+  int64 effectiveInstanceCount = 9;
+  string endDate = 10;
+  int64 instanceCount = 11;
+  string instanceFamily = 12;
+  string instanceType = 13;
+  bool isActive = 14;
+  bool isFlexible = 15;
+  bool isLeased = 16;
+  bool isMultiAz = 17;
+  string leaseLockinDate = 18;
+  string leaseStart = 19;
+  string leasedDisplayName = 20;
+  double monthlyCost = 21;
+  double monthlySavings = 22;
+  string name = 23;
+  double netSavings = 24;
+  string offeringId = 25;
+  string paymentOption = 26;
+  double potentialSavings = 27;
+  string productDescription = 28;
+  string provider = 29;
+  string providerReservation_id = 30;
+  double recurringCost = 31;
+  string region = 32;
+  string renewalPlan = 33;
+  string reservationEnd = 34;
+  string reservationStart = 35;
+  double runningHours = 36;
+  double savings = 37;
+  string startDate = 38;
+  string status = 39;
+  string transferReservationEnd = 40;
+  string transferReservationStart = 41;
+  string type = 42;
+  double upfrontCost = 43;
+  double utilization = 44;
+}
+
+message ListCommitmentsResponse {
+  repeated Commitment commitments = 1;
+}
+
+message CommitmentsChartData {
+  string date = 1;
+  string chartKey = 2;
+  double chartValue = 3;
+}
+
+message CommitmentsChartResponse {
+  repeated CommitmentsChartData data = 1;
+}
+
+message CommitmentsUtilizationData {
+  string utilizationDate = 1;
+  double cost = 2;
+  double coveredCost = 3;
+  double griFees = 4;
+  double netSavings = 5;
+  double potentialSavings = 6;
+  double reservationUtilization = 7;
+  double runningHours = 8;
+  double savings = 9;
+  double unutilizedCommitment = 10;
+}
+
+message CommitmentsUtilizationResponse {
+  repeated CommitmentsUtilizationData data = 1;
+}
+
+message MetricsResponse {
+  double lifetimeSavings = 1;
+  double mtdSavings = 2;
+  bool purchaseAutomationEnabled = 3;
+  bool buybackAutomationEnabled = 4;
+  bool hasActionedPlan = 5;
+  bool hasPendingActions = 6;
+  string latestExecutionDate = 7;
+  double purchaseMissedSavings = 8;
+  double buybackMissedSavings = 9;
+  double totalDailyMissedSavings = 10;
+  double hourlyMissedSavings = 11;
+  string missedSavingsStartDate = 12;
+  string missedSavingsEndDate = 13;
+  double expiringSavings = 14;
+  double coverage = 15;
+  double utilization = 16;
+}
+
+message Resource {
+  string id = 1;
+  string resourceId = 2;
+  Provider provider = 3;
+  string providerResourceId = 4;
+  bool isSpot = 5;
+  string name = 6;
+  string resourceGroup = 7;
+  string usageEnd = 8;
+  string usageStart = 9;
+  google.protobuf.Struct tags = 10;
+  string createdAt = 11;
+  string updatedAt = 12;
+  string instanceId = 13;
+  string billingAccountId = 14;
+  string subAccountId = 15;
+  string managementAccountId = 16;
+  string ownerAccountId = 17;
+  string skuTitle = 18;
+  string skuName = 19;
+  string availabilityZone = 20;
+  string cacheEngine = 21;
+  string databaseEngine = 22;
+  string description = 23;
+  string family = 24;
+  string fullRegionName = 25;
+  bool hasOndemandTerms = 26;
+  string instanceType = 27;
+  string instanceTypeFamily = 28;
+  bool isReservable = 29;
+  string licenseModel = 30;
+  string locationType = 31;
+  string normalizationSizeFactor = 32;
+  string operatingSystem = 33;
+  string preInstalledSw = 34;
+  string priceCurrency = 35;
+  string providerService = 36;
+  string providerSkuId = 37;
+  string publicationDate = 38;
+  string region = 39;
+  string service = 40;
+  string tenancy = 41;
+  string usageType = 42;
+  string version = 43;
+  bool vpcNetworkingSupport = 44;
+  string ondemandUsageUnit = 45;
+}
+
+message ListResourcesResponse {
+  repeated Resource resources = 1;
+}
+
+message ResourceDailyUsage {
+  string date = 1;
+  string usageAccountId = 2;
+  string subAccountId = 3;
+  double usage = 4;
+  double reservationUsage = 5;
+  double freeTierUsage = 6;
+  double ondemandCost = 7;
+  double reservedCost = 8;
+  double ifAllOndemandCost = 9;
+  double spotCost = 10;
+  double freeTierSavings = 11;
+  string usageType = 12;
+  string commonUsageType = 13;
+  double coveredUsage = 14;
+  double uptime = 15;
+  // Provider-specific usage type label (e.g. "BoxUsage:c5n.xlarge").
+  string providerUsageType = 16;
+}
+
+message GetResourceDailyUsageResponse {
+  repeated ResourceDailyUsage dailyUsage = 1;
+}
+
+// ReservableResource is a fully-detailed infrastructure resource returned by ListReservableResources.
+// It extends the basic resource shape with usage metrics, daily usage breakdown,
+// and hardware/catalog attributes needed for the Reservable Infrastructure view.
+message ReservableResource {
+  // Composite ID formatted as
+  // "{url_encoded_resource_id}|{url_encoded_catalog_sku_org_id}|{url_encoded_catalog_sku_id}".
+  // Each component must be URL/percent-encoded before concatenation so embedded "|"
+  // characters do not break parsing. Consumers must split on "|" and URL-decode each part.
+ 
+  string id = 1;
+  string resourceId = 2;
+  string billingAccountId = 3;
+  string subAccountId = 4;
+  // Cloud provider string, e.g. "aws".
+  string provider = 5;
+  string providerResourceId = 6;
+  string providerService = 7;
+  string providerSkuId = 8;
+  bool isSpot = 9;
+  bool isReservable = 10;
+  // Display name (nullable).
+  google.protobuf.Value name = 11;
+  // Resource group (nullable).
+  google.protobuf.Value resourceGroup = 12;
+  string usageEnd = 13;
+  string usageStart = 14;
+  google.protobuf.Struct tags = 15;
+  google.protobuf.Struct providerTags = 16;
+  google.protobuf.Struct userTags = 17;
+  string createdAt = 18;
+  string updatedAt = 19;
+  string instanceId = 20;
+  // Availability zone (nullable).
+  google.protobuf.Value availabilityZone = 21;
+  // Cache engine (nullable).
+  google.protobuf.Value cacheEngine = 22;
+  string catalogSkuId = 23;
+  string catalogSkuOrgId = 24;
+  bool classicNetworkingSupport = 25;
+  string clockSpeed = 26;
+  string commonUsageType = 27;
+  // Fraction of usage covered by existing commitments (0.0–1.0).
+  double coveredUsage = 28;
+  // Database engine (nullable).
+  google.protobuf.Value databaseEngine = 29;
+  string dedicatedEbsThroughput = 30;
+  // Description (nullable).
+  google.protobuf.Value description = 31;
+  string ecu = 32;
+  bool enhancedNetworkingSupported = 33;
+  string family = 34;
+  string fullRegionName = 35;
+  bool hasOndemandTerms = 36;
+  string iconUrl = 37;
+  string integrationId = 38;
+  bool intelAvx2Available = 39;
+  bool intelAvxAvailable = 40;
+  bool intelTurboAvailable = 41;
+  // IO descriptor (nullable).
+  google.protobuf.Value io = 42;
+  bool isCurrentGeneration = 43;
+  // Multi-AZ flag (nullable).
+  google.protobuf.Value isMultiAz = 44;
+  string licenseModel = 45;
+  string locationType = 46;
+  // Memory in bytes as a string, e.g. "11274289152.0".
+  string memory = 47;
+  // SKU name (nullable).
+  google.protobuf.Value skuName = 48;
+  string skuTitle = 49;
+  double netCost = 50;
+  double netSavings = 51;
+  string networkPerformance = 52;
+  string normalizationSizeFactor = 53;
+  double ondemandCost = 54;
+  string ondemandUsageUnit = 55;
+  string operatingSystem = 56;
+  string operation = 57;
+  string physicalProcessor = 58;
+  string preInstalledSw = 59;
+  string priceCurrency = 60;
+  string processorArchitecture = 61;
+  string processorFeatures = 62;
+  string publicationDate = 63;
+  string region = 64;
+  string service = 65;
+  string source = 66;
+  string storage = 67;
+  // Tax type (nullable).
+  google.protobuf.Value taxType = 68;
+  string tenancy = 69;
+  // Fraction of time the resource was running during the lookback period.
+  double uptime = 70;
+  string usageType = 71;
+  string vcpu = 72;
+  string version = 73;
+  bool vpcNetworkingSupport = 74;
+  string instanceType = 75;
+  string instanceTypeFamily = 76;
+  // Per-day usage breakdown for the requested date range.
+  repeated ResourceDailyUsage dailyUsages = 77;
+}
+
+message ListReservableResourcesResponse {
+  repeated ReservableResource resources = 1;
+}
+
+message Segment {
+  string id = 1;
+  string name = 2;
+  Provider provider = 3;
+  bool isDefault = 4;
+  string createdAt = 5;
+}
+
+// message ListSegmentsResponse {
+//   repeated Segment segments = 1;
+// }
+
+message SegmentCreator {
+  string id = 1;
+  string username = 2;
+  string fullName = 3;
+}
+
+message PurchasePlan {
+  string id = 1;
+  string name = 2;
+  string status = 3;
+  bool isRenewal = 4;
+}
+
+message SegmentDetails {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  Provider provider = 4;
+  repeated string cloudProviders = 5;
+  bool isDefault = 6;
+  string createdAt = 7;
+  SegmentCreator createdBy = 8;
+  string parentId = 9;
+  string status = 10;
+  string segmentClass = 11;
+  google.protobuf.Struct params = 12;
+
+  // Cost metrics
+  double monthlyCost = 13;
+  double monthlyNetCost = 14;
+  double monthlyIfAllOndemandCost = 15;
+  double monthlyOndemandCost = 16;
+  double monthlyReservedCost = 17;
+  double monthlySpotCost = 18;
+  double monthlySavings = 19;
+  double monthlyBudget = 20;
+
+  // Coverage metrics
+  double coverage = 21;
+  double recommendedCoverage = 22;
+  double targetCoverage = 23;
+
+  // Resource metrics
+  int32 monthlyResourceCount = 24;
+
+  // Purchase plans
+  repeated PurchasePlan purchasePlans = 25;
+}
+
+message ContractSpec {
+  string commitmentType = 1;
+  string paymentOption = 2;
+  string term = 3;
+  google.protobuf.Struct properties = 4;
+}
+
+message PlanSummary {
+  string key = 1;
+  string provider = 2;
+  int32 numCommitments = 3;
+  double minCommitment = 4;
+  double monthlyCommitment = 5;
+  double upfrontCost = 6;
+  double minSavings = 7;
+  double maxSavings = 8;
+  double monthlySavings = 9;
+  int32 minTermHours = 10;
+  int32 maxTermHours = 11;
+  double griPremiums = 12;
+  double beforeOndemandCost = 13;
+  double afterOndemandCost = 14;
+  double ifAllOndemandCost = 15;
+}
+
+message ServiceSummary {
+  string key = 1;
+  string name = 2;
+  string serviceName = 3;
+  string provider = 4;
+  int32 numCommitments = 5;
+  double currentCoverage = 6;
+  double potentialCoverage = 7;
+  double minCommitment = 8;
+  double monthlyCommitment = 9;
+  double upfrontCost = 10;
+  double minSavings = 11;
+  double maxSavings = 12;
+  double monthlySavings = 13;
+  int32 minTermHours = 14;
+  int32 maxTermHours = 15;
+  double griPremium = 16;
+}
+
+message AggregateMetrics {
+  double currentCoverage = 1;
+  double potentialCoverage = 2;
+  map<string, ServiceSummary> summaries = 3;
+}
+
+message DefaultPurchasePlan {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string orgId = 4;
+  string segmentId = 5;
+  Segment segment = 6;
+  string status = 7;
+  string planType = 8;
+  string createdAt = 9;
+  string lastModified = 10;
+  google.protobuf.Value createdBy = 11;
+  google.protobuf.Value executionPolicy = 12;
+
+  // Flags
+  bool isDefault = 13;
+  bool isRecommended = 14;
+  bool isRenewal = 15;
+  bool isCalculating = 16;
+  bool isLocked = 17;
+  bool isSaved = 18;
+
+  // Contract details
+  repeated ContractSpec includedContractSpecs = 19;
+  repeated string includedContractTerms = 20;
+  string maxTerm = 21;
+  string preferredPaymentOption = 22;
+  double maxUpfrontCost = 23;
+  double minimumUpfrontInterestRate = 24;
+  google.protobuf.Value recommendWithinCoveredAccounts = 25;
+
+  // Dates
+  string startDate = 26;
+  string endDate = 27;
+  string dataSource = 28;
+
+  // Cost metrics
+  double beforeCost = 29;
+  double afterCost = 30;
+  double beforeOndemandCost = 31;
+  double beforeReservedCost = 32;
+  double coveredOndemandCost = 33;
+  double amortizedCost = 34;
+  double recurringCost = 35;
+  double upfrontCost = 36;
+  double totalCost = 37;
+  double totalMonthlyBeforeCost = 38;
+
+  // Savings metrics
+  double savings = 39;
+  double monthlySavings = 40;
+  double totalSavings = 41;
+  double fee = 42;
+
+  // Coverage metrics
+  double commitmentCoverage = 43;
+  double minimumCommitmentCost = 44;
+  double breakevenHours = 45;
+
+  // Aggregate data
+  AggregateMetrics aggregateMetrics = 46;
+  repeated PlanSummary summaries = 47;
+
+  // IDs
+  repeated string reservationIds = 48;
+  repeated string resourceIds = 49;
+  repeated string flaggedActions = 50;
+  string metaPlanId = 51;
+  string coverageId = 52;
+
+  // Monthly cost breakdowns (returned by CreateCustomCommitmentPlan and related endpoints)
+  double monthlyAfterCost = 53;
+  double monthlyAmortizedCost = 54;
+  double monthlyBeforeCost = 55;
+  double monthlyFee = 56;
+  // All term keys present across the plan's line items.
+  repeated string allTerms = 57;
+}
+
+message ListPurchasePlansBySegmentResponse {
+  repeated DefaultPurchasePlan plans = 1;
+}
+
+message GetUpdatedPurchasePlansBySegmentResponse {
+  repeated DefaultPurchasePlan plans = 1;
+}
+
+message PlanHistoryUser {
+  string id = 1;
+  string username = 2;
+  string fullName = 3;
+}
+
+message PlanHistoryEntry {
+  string id = 1;
+  string message = 2;
+  string orgId = 3;
+  string relatedObjectId = 4;
+  string relatedObjectType = 5;
+  string timestamp = 6;
+  string type = 7;
+  string userId = 8;
+  google.protobuf.Value data = 9;
+  PlanHistoryUser user = 10;
+}
+
+// ------------------------ ONBOARDING RESPONSE ------------------------
+
+message RegisterOrgResponse {
+  string id = 1;
+  string name = 2;
+
+  // GuaranteedCommitments create-org response fields
+  repeated Membership memberships = 3;
+  string domain = 4;
+  Address primaryAddress = 5;
+  string awsMarketplaceOfferLink = 6;
+  string azureMarketplaceOfferLink = 7;
+  string gcpMarketplaceOfferLink = 8;
+}
+
+message StartAwsOnboardingResponse {
+  string onboardingId = 1;
+}
+
+message GetAwsCloudFormationTemplateResponse {
+  // CloudFormation template JSON object
+  google.protobuf.Struct template = 1;
+}
+
+message GetAwsLaunchStackUrlResponse {
+  string url = 1;
+}
+
+message VerifyAwsOnboardingResponse {
+  message AwsOnboardingFeatureCheck {
+    enum AwsOnboardingFeatureStatus {
+      AWS_ONBOARDING_FEATURE_STATUS_UNSPECIFIED = 0;
+      AWS_ONBOARDING_FEATURE_STATUS_AVAILABLE = 1;
+      AWS_ONBOARDING_FEATURE_STATUS_WARNING = 2;
+      AWS_ONBOARDING_FEATURE_STATUS_MISSING = 3;
+      AWS_ONBOARDING_FEATURE_STATUS_UNKNOWN = 4;
+    }
+
+    string feature = 1;
+    AwsOnboardingFeatureStatus status = 2;
+  }
+
+  repeated AwsOnboardingFeatureCheck checks = 1;
+}
+
+message GetOnboardingStatusResponse {
+  enum OnboardingStatus {
+    ONBOARDING_STATUS_UNSPECIFIED = 0;
+
+    // No row found in archera_users (org not registered yet)
+    ONBOARDING_STATUS_NOT_REGISTERED = 1;
+
+    // Existing statuses you already persist
+    ONBOARDING_STATUS_REGISTERED = 2;
+    ONBOARDING_STATUS_ONBOARDING_STARTED = 3;
+    ONBOARDING_STATUS_VERIFIED = 4;
+    ONBOARDING_STATUS_VERIFY_INCOMPLETE = 5;
+    ONBOARDING_STATUS_VERIFY_FAILED = 6;
+  }
+
+  // Whether we found a corresponding row
+  bool found = 1;
+
+  // Convenience: derived from whether billingId is empty
+  bool isMsp = 2;
+
+  // Vendor saved at registration (aws/azure/gcp). Optional.
+  Provider provider = 3;
+
+  // The org id to use for Archera upstream calls:
+  // - MSP: mspArcheraOrgId
+  // - company: archeraOrgId
+  string gcOrgId = 4;
+
+  // Latest persisted onboarding ID (if any)
+  string onboardingId = 5;
+
+  // Latest persisted onboarding status
+  OnboardingStatus onboardingStatus = 6;
+
+  // Latest persisted AWS account id (if any)
+  string accountId = 7;
+
+  string billingGroupId = 8;
+  string companyId = 9;
+
+  // Detailed AWS verification results (best-effort) returned from the last VerifyAwsOnboarding call.
+  // This is used by the UI to "resume" the onboarding flow and show which verification checks
+  // passed/failed when a user comes back later (e.g., after stopping at verification).
+  // Empty when verification hasn't been attempted yet or when no checks were persisted.
+  repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 10;
+}
+
+message PayerAccountDetails {
+  string accountId = 1;
+  string accountName = 2;
+  string rippleRegistrationStatus = 3;
+
+  // Latest persisted guaranteed commitment setup/onboarding status for this payer account (if any)
+  GetOnboardingStatusResponse.OnboardingStatus gcSetupStatus = 4;
+
+  // Detailed AWS verification results (best-effort) returned from the last VerifyAwsOnboarding call.
+  // This is used by the UI to "resume" the onboarding flow and show which verification checks
+  // passed/failed when a user comes back later (e.g., after stopping at verification).
+  // Empty when verification hasn't been attempted yet or when no checks were persisted.
+  repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 8;
+}
+
+message ListPayerAccountsResponse {
+enum PayerAccountStatus {
+    PAYER_ACCOUNT_STATUS_UNSPECIFIED = 0;
+    PAYER_ACCOUNT_STATUS_ENABLED = 1;
+    PAYER_ACCOUNT_STATUS_DISABLED = 2;
+  }
+  message PayerAccount {
+    string accountId = 1;
+    string accountName = 2;
+    string billingGroupId = 3;
+    string segmentId = 4;
+    PayerAccountStatus status = 5;
+    string companyId = 6;
+
+    // Latest persisted onboarding status for this payer account (if any)
+    GetOnboardingStatusResponse.OnboardingStatus onboardingStatus = 7;
+
+    // Detailed AWS verification results (best-effort) returned from the last VerifyAwsOnboarding call.
+    // This is used by the UI to "resume" the onboarding flow and show which verification checks
+    // passed/failed when a user comes back later (e.g., after stopping at verification).
+    // Empty when verification hasn't been attempted yet or when no checks were persisted.
+    repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 8;
+  }
+  repeated PayerAccount payerAccounts = 1;
+  repeated PayerAccountDetails payerAccountDetails = 2;
+}
+
+message SetPayerAccountEnabledResponse {
+  // Updated payer account row (same shape as list)
+  ListPayerAccountsResponse.PayerAccount payerAccount = 1;
+}
+
+message GetPayerAccountStatusResponse {
+  ListPayerAccountsResponse.PayerAccount payerAccount = 1;
+}
+
+message ListBillingGroupsResponse {
+  enum BillingGroupStatus {
+    BILLING_GROUP_STATUS_UNSPECIFIED = 0;
+    BILLING_GROUP_STATUS_ENABLED = 1;
+    BILLING_GROUP_STATUS_DISABLED = 2;
+  }
+
+  message BillingGroup {
+    string companyId = 1;
+    string billingGroupId = 2;
+    string billingGroupName = 3;
+    string companyName = 4;
+    string payerAccountId = 5;
+    string payerAccountName = 6;
+    string segmentId = 7;
+    string resourceType = 8;
+    BillingGroupStatus status = 9;
+    GetOnboardingStatusResponse.OnboardingStatus onboardingStatus = 10;
+    repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 11;
+  }
+
+  repeated BillingGroup billingGroups = 1;
+}
+
+message SetBillingGroupStatusResponse {
+  ListBillingGroupsResponse.BillingGroup billingGroup = 1;
+}
+
+message GetBillingGroupStatusResponse {
+  ListBillingGroupsResponse.BillingGroup billingGroup = 1;
+}
+
+message ValidateBillingGroupResponse {
+  // True if the company is allowed to proceed with onboarding; false otherwise.
+  bool ok = 1;
+
+  // Optional human-readable reason when ok=false.
+  string message = 2;
+
+  // Optional machine-readable code for programmatic handling when ok=false.
+  string code = 3;
+
+  // Optional values that can be shown in translated messages.
+  repeated string details = 4;
+}
+
+message GetAwsPrivateOfferResponse {
+  string payerAccountId = 1;
+
+  // AWS Marketplace offer identifier, e.g. offer-qb7i32am664jw.
+  string offerId = 2;
+
+  // Display name of the offer shown in the UI.
+  string offerName = 3;
+
+  // Current offer status, e.g. PENDING / ACCEPTED / EXPIRED / CREATING / FAILED.
+  string status = 4;
+
+  string offerUrl = 5;
+
+  string productId = 6;
+  
+  double pricePerUnit = 7;
+  string createdAt = 8;
+  string expirationDate = 9;
+}
+
+message ListDraftPurchasePlansResponse {
+  repeated DefaultPurchasePlan plans = 1;
+}
+
+message DeleteDraftPurchasePlanResponse {
+  // The ID of the deleted plan
+  string planId = 1;
+  // Indicates if the plan was successfully deleted
+  bool success = 2;
+}
+
+message GetAvailableCommitmentTypesResponse {
+  // List of available commitment type identifiers for the requested provider.
+  // Example values: "aws/AmazonEC2", "aws/AmazonRDS", "aws/AmazonElastiCache",
+  // "aws/savingsplan/Compute", "aws/savingsplan/EC2Instance", "aws/savingsplan/Database".
+  repeated string types = 1;
+}
+
+message GetGuaranteedCommitmentTemplateUrlResponse {
+  // CloudFormation console launch URL pre-filled with all parameters.
+  string launchUrl = 1;
+  // S3 URL of the CloudFormation template.
+  string templateUrl = 2;
+  // CloudFormation stack name.
+  string stackName = 3;
+  // Alphaus AWS account principal.
+  string principal = 4;
+  // Alphaus/Ripple external ID for role assumption.
+  string externalId = 5;
+  // Guaranteed commitment AWS principal ARN.
+  string guaranteedCommitmentPrincipal = 6;
+  // Guaranteed commitment external ID for role assumption.
+  string guaranteedCommitmentExternalId = 7;
+}
+
+message CreateGuaranteedCommitmentAccessResponse {
+  // Target environment for the access configuration (for example, AWS account ID or organization).
+  string target = 1;
+  // ARN of the Ripple/Alphaus IAM role to be assumed for managing guaranteed commitments.
+  string rippleRoleArn = 2;
+  // External ID required to assume the Ripple/Alphaus IAM role.
+  string rippleExternalId = 3;
+  // ARN of the customer's IAM role used specifically for guaranteed-commitment operations.
+  string guaranteedCommitmentRoleArn = 4;
+  // External ID required to assume the guaranteed-commitment IAM role.
+  string guaranteedCommitmentExternalId = 5;
+  // CloudFormation stack ID created or used during the access configuration.
+  string stackId = 6;
+  // AWS region where the CloudFormation stack is deployed (for example, "us-east-1").
+  string stackRegion = 7;
+  // URL of the CloudFormation template used to create or update the stack.
+  string templateUrl = 8;
+  // Current status of the access configuration or underlying CloudFormation stack.
+  string status = 9;
+  // Last update time of this configuration, typically as an ISO 8601 timestamp.
+  string lastUpdated = 10;
+  // Whether the guaranteed commitment role was successfully verified during registration.
+  bool guaranteedCommitmentVerified = 11;
+}
+
+message GetPurchasePlansDetailsResponse {
+
+  // Plan basic info and detailed metrics
+  DefaultPurchasePlan plan = 1;
+
+  // Commitment line item
+  repeated CommitmentPlanLineItem lineItems = 2;
+
+  // Covered infrastructure resource matches
+  repeated CommitmentPlanResourceMatch resourceMatches = 3;
+
+  // Audit history of the plan
+  repeated PlanHistoryEntry history = 4;
+}         
+
+
+// ------------------------ AZURE ONBOARDING RESPONSE ------------------------
+
+// AzureArcheraOrgFeatureStatus is a single feature status entry within the Archera org object.
+message AzureArcheraOrgFeatureStatus {
+  google.protobuf.Value detail = 1;
+  string feature = 2;
+  string status = 3;
+  string updatedAt = 4;
+}
+
+// AzureArcheraOrgLeaseBudget is the lease budget config within the Archera org object.
+message AzureArcheraOrgLeaseBudget {
+  double budget = 1;
+  string createdAt = 2;
+  int32 minTermMonths = 3;
+}
+
+// AzureArcheraOrg is the full Archera org object.
+// Received from StartAzureOnboarding response and must be echoed back verbatim
+// on every UpdateAzureOnboarding and ValidateAzureAppInstall call.
+message AzureArcheraOrg {
+  bool applyBalanceToPremiums = 1;
+  bool authSsoOnly = 2;
+  google.protobuf.Value awsMarketplaceOfferLink = 3;
+  google.protobuf.Value azureMarketplaceOfferLink = 4;
+  double balance = 5;
+  bool billingActive = 6;
+  string channelPartnerType = 7;
+  google.protobuf.Value channelPartnership = 8;
+  google.protobuf.Value contractEnd = 9;
+  string createdAt = 10;
+  google.protobuf.Value currency = 11;
+  string defaultUserRole = 12;
+  google.protobuf.Value discountInfo = 13;
+  string domain = 14;
+  google.protobuf.Value effectiveDate = 15;
+  repeated AzureArcheraOrgFeatureStatus featureStatuses = 16;
+  repeated string features = 17;
+  google.protobuf.Value frugalMode = 18;
+  google.protobuf.Value gcpMarketplaceOfferLink = 19;
+  bool hasDiscount = 20;
+  bool hasGris = 21;
+  bool hasTdsPacProxyCredentials = 22;
+  string id = 23;
+  bool isLeaseBuybackAutomated = 24;
+  bool isLeaseSwapAutomated = 25;
+  bool isTdsPacProxy = 26;
+  AzureArcheraOrgLeaseBudget leaseBudget = 27;
+  int32 leaseBuybackLookbackDays = 28;
+  int32 leaseSwapLookbackDays = 29;
+  string name = 30;
+  google.protobuf.Value partnerId = 31;
+  bool planTrial = 32;
+  string planTrialExpires = 33;
+  string planTypeChosen = 34;
+  string planTypeEffective = 35;
+  google.protobuf.Value primaryAddress = 36;
+  google.protobuf.Value promotionCode = 37;
+  // Maps provider name to segment ID, e.g. {"aws": "...", "azure": "...", "unknown": "..."}
+  map<string, string> providerRootSegmentIds = 38;
+}
+
+// AzureOnboardingCreatedBy identifies who triggered the onboarding.
+message AzureOnboardingCreatedBy {
+  string onboardingId = 1;
+  string username = 2;
+  string fullName = 3;
+}
+
+// AzureOnboardingState is the full Archera onboarding record state.
+// Returned by StartAzureOnboarding, UpdateAzureOnboarding, ValidateAzureAppInstall.
+message AzureOnboardingState {
+  // Archera onboarding record ID.
+  string onboardingId = 1;
+  // Archera org ID.
+  string orgId = 2;
+  string provider = 3;
+  bool completed = 4;
+  string createdAt = 5;
+  AzureOnboardingCreatedBy createdBy = 6;
+  // Linked integration object (null until integration is created).
+  google.protobuf.Value integration = 7;
+  string integrationId = 8;
+  // Outbound IPs Archera will use with this onboarding.
+  repeated string archeraOutboundIps = 9;
+
+  // Azure identity
+  string tenantId = 10;
+  string subscriptionId = 11;
+  repeated string accountIds = 12;
+  // "subscription" or "billing_account"
+  string accountKind = 13;
+
+  // Authorization state (nullable, use Value for JSON null interop)
+  google.protobuf.Value appAuthValidated = 14;
+  google.protobuf.Value appAuthorized = 15;
+
+  // Azure resource configuration
+  string blobContainer = 16;
+  string resourceGroup = 17;
+  string storageAccount = 18;
+  string roleName = 19;
+  google.protobuf.Value createResources = 20;
+  google.protobuf.Value marketplaceCompleted = 21;
+  google.protobuf.Value permissionLevel = 22;
+  google.protobuf.Value resourceGroupRegion = 23;
+  google.protobuf.Value storageAccountRegion = 24;
+  google.protobuf.Value resourceGroupTags = 25;
+  google.protobuf.Value storageAccountTags = 26;
+  // The full Archera org object returned from Archera. Store this and pass it
+  // back verbatim on every UpdateAzureOnboarding and ValidateAzureAppInstall call.
+  AzureArcheraOrg org = 27;
+}
+
+// StartAzureOnboardingResponse is returned from StartAzureOnboarding.
+message StartAzureOnboardingResponse {
+  // Archera onboarding ID — pass this to all subsequent Azure onboarding RPCs.
+  string onboardingId = 1;
+  // Full onboarding state.
+  AzureOnboardingState state = 2;
+  // Ripple billing group ID
+  string billingGroupId = 3;
+  // Ripple company ID
+  string companyId = 4;
+}
+
+// GetAzureOnboardingAuthUrlResponse contains the OAuth URL (Step 4).
+message GetAzureOnboardingAuthUrlResponse {
+  // The Microsoft OAuth URL the user must open to authorize Archera.
+  string url = 1;
+}
+
+// AzureAccount is one available subscription or billing account (Step 6).
+message AzureAccount {
+  string accountId = 1;
+  string accountName = 2;
+  string accountStatus = 3;
+  // Azure account type, e.g. "FreeTrial_2014-09-01", "PayAsYouGo", etc.
+  string accountType = 4;
+  // Whether this account is eligible for Archera onboarding.
+  bool isEligible = 5;
+}
+
+// ListAzureOnboardingAccountsResponse returns accounts the user can select.
+message ListAzureOnboardingAccountsResponse {
+  repeated AzureAccount accounts = 1;
+}
+
+// AzureIntegrationFeatureStatus is a single feature check for an Azure integration (Step 9).
+message AzureIntegrationFeatureStatus {
+  string feature = 1;
+  // "available", "missing", "warning", "unknown"
+  string status = 2;
+  // Detail strings or JSON describing why a feature is missing/warning.
+  repeated string detail = 3;
+}
+
+// AzureIntegrationOnboarding is a summary of the onboarding linked to an integration.
+message AzureIntegrationOnboarding {
+  string id = 1;
+  string orgId = 2;
+  string provider = 3;
+  string integrationId = 4;
+  bool completed = 5;
+  string createdAt = 6;
+  AzureOnboardingCreatedBy createdBy = 7;
+}
+
+// AzureIntegration is the full Azure cloud integration record from Archera.
+message AzureIntegration {
+  string id = 1;
+  bool active = 2;
+  string name = 3;
+  string provider = 4;
+  // Always "cloud/azure".
+  string type = 5;
+  string orgId = 6;
+  string userId = 7;
+  string createdAt = 8;
+  string updatedAt = 9;
+
+  // Azure-specific
+  string managementSubscriptionId = 10;
+  // Azure tenant ID (stored as provider_organization_id in Archera).
+  string providerOrganizationId = 11;
+  string blobContainer = 12;
+  string resourceGroup = 13;
+  string storageAccount = 14;
+  // "FOCUS" or "ActualCost"
+  string costExportFormat = 15;
+
+  // CUR/data state
+  string curEarliestData = 16;
+  string curReportName = 17;
+  bool curUsable = 18;
+  bool hasCurAccess = 19;
+  bool hasFullReservationAccess = 20;
+
+  // Feature verification checks
+  repeated AzureIntegrationFeatureStatus featureStatuses = 21;
+  // Linked onboarding records
+  repeated AzureIntegrationOnboarding onboardings = 22;
+  // Flexible config blob (etl_enabled, use_vm_ris_not_sps, etc.)
+  google.protobuf.Struct config = 23;
+}
+
+// CreateAzureIntegrationResponse is returned after creating the Azure integration (Step 8).
+// A "tenant_already_connected" error_code is treated as success.
+message CreateAzureIntegrationResponse {
+  // True if the integration was successfully created or already existed.
+  bool success = 1;
+  // Set when the Archera API returned an error (e.g. "tenant_already_connected").
+  // "tenant_already_connected" is still considered success.
+  string errorCode = 2;
+  string errorMessage = 3;
+  // The Archera integration ID, if available.
+  string integrationId = 4;
+  // Ripple billing group ID stored with this integration.
+  string billingGroupId = 5;
+  // Ripple company ID stored with this integration.
+  string companyId = 6;
+  // Ripple payer account ID echoed back.
+  string payerAccountId = 7;
+}
+
+// ListAzureIntegrationsResponse contains all Azure integrations for the org (Step 9).
+message ListAzureIntegrationsResponse {
+  repeated AzureIntegration integrations = 1;
+}

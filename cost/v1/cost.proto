@@ -82,7 +82,7 @@ service Cost {
   // For AWS, these are management accounts (formerly known as master or payer accounts); for Azure, these are subscriptions, for GCP, these are projects.
   rpc ListPayerAccountsExtended(ListPayerAccountsRequest) returns (stream PayerAccountExtended) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/payers/extended"
+      get: "/v1/{vendor}/payersextended"
     };
   }
 
@@ -92,7 +92,7 @@ service Cost {
   // For AWS, this means a management account (formerly known as master or payer account); for Azure, this means a subscription, for GCP, this means a project.
   rpc GetPayerAccountExtended(GetPayerAccountRequest) returns (PayerAccountExtended) {
     option (google.api.http) = {
-      get: "/v1/{vendor}/payers/{id}/extended"
+      get: "/v1/{vendor}/payersextended/{id}"
     };
   }
 
@@ -327,7 +327,7 @@ service Cost {
   }
 
   // Exports the usage-based cost filter condition. Only available in Wave(Pro).
-  rpc ExportCostFiltersFile(ExportCostFiltersFileRequest) returns (ExportCostFiltersFileResponse) {
+  rpc ExportCostFiltersFile(ExportCostFiltersFileRequest) returns (protos.Operation) {
     option (google.api.http) = {
       post: "/v1/{vendor}/costfilters/{filterId}:export"
       body: "*"
@@ -561,6 +561,16 @@ service Cost {
     };
   }
 
+  // Exports a vendor report and delivers results via email notification channel.
+  // Supports multiple report types per vendor. For AWS, this covers RI/SP utilization reports.
+  // Returns a long-running operation; use GetOperation to poll for completion.
+  rpc ExportReport(ExportReportRequest) returns (protos.Operation) {
+    option (google.api.http) = {
+      post: "/v1/reports:export"
+      body: "*"
+    };
+  }
+
   // Get the utilization details for an organization (or MSP).
   rpc GetUtilization(GetUtilizationRequest) returns (GetUtilizationResponse) {
     option (google.api.http) = {
@@ -637,7 +647,14 @@ service Cost {
       get: "/v1/{vendor}/calculation/prerequisites/{month}"
     };
   }
-  
+
+  // WORK-IN-PROGRESS: Setup payer's billing transfer information
+  rpc SetupPayerAccountBillingTransfer (SetupPayerAccountBillingTransferRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/payers/{id}/billingtransfer"
+      body: "*"
+    };
+  }
 }
 // Request message for the Cost.ListPayerAccounts rpc.
 message ListPayerAccountsRequest {
@@ -1831,6 +1848,52 @@ message GetExportRISPResponse {
   string downloadLink = 1;
 }
 
+// Request message for ExportReport.
+message ExportReportRequest {
+  // Required. Billing month in YYYY-MM format.
+  string month = 2;
+
+  // Optional. Cloud vendor.
+  // Accepted values: "aws", "gcp", "azure".
+  // If empty, defaults to "aws" for backward compatibility.
+  string vendor = 1;
+
+  // Optional. Notification channel IDs to deliver the report.
+  // If empty, the MSP default notification channel configured in DynamoDB is used.
+  repeated string notification_channel_ids = 4 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. Valid only for the `aws` vendor. AWS RI/SP export options.
+  AwsRispExportOptions aws_options = 10;
+  // Future vendor-specific options follow the same pattern (e.g. gcp_options, azure_options).
+}
+
+// AWS RI/SP export options for ExportReport.
+message AwsRispExportOptions {
+  // Per-report column filter container.
+  message Columns {
+    repeated string values = 1;
+  }
+
+  // Optional. Include expired RIs/SPs in the results. Default: false.
+  bool include_expired = 1;
+
+  // Optional. CSV header language: "en" or "ja".
+  // If empty, defaults to the MSP or login user's language.
+  string language = 2 [(google.api.field_behavior) = OPTIONAL];
+
+  // Required. Report queries to include in the export. Must contain at least 1 value.
+  // Valid values: "ri_summary", "sp_summary", "ri_usageaccount", "sp_usageaccount".
+  repeated string queries = 3 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Global column filter applied to all reports.
+  // Superseded per-report by columns_by_query if that key is present.
+  repeated string columns = 4 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. Per-report column overrides.
+  // Keys must be valid query names (ri_summary, sp_summary, ri_usageaccount, sp_usageaccount).
+  map<string, Columns> columns_by_query = 5;
+}
+
 // Request message for GetUtilization
 message GetUtilizationRequest {
   // Required. At the moment, only `aws` is supported.
@@ -2088,6 +2151,9 @@ message ExportCostFiltersFileRequest {
   // Required. Filter Id.
   string filterId = 2;
 
+  // Required. The channel ids to use for notifications.
+  repeated string notificationChannelIds = 8;
+
   // Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20200101`.
   string startTime = 3;
 
@@ -2201,7 +2267,7 @@ message DeleteAccountBudgetAlertsRequest {
 
 // Azure-specific options for ReadCostsRequest.
 message ReadCostsRequestAzureOptions {
-  // Optional. A comma-separated list of columns to aggregate the data into. Valid values are `serviceName`, `productName`, `region`, `chargeType`, `description`, `billableQuantity`, `effectiveUnitPrice`, `timeInterval`, `billingType`, `alternateId` and `domainName`. A special value of `none` is also supported, which means query by date or month per account only.
+  // Optional. A comma-separated list of columns to aggregate the data into. Valid values are `serviceName`, `productName`, `region`, `chargeType`, `description`, `billableQuantity`, `effectiveUnitPrice`, `timeInterval`, `billingType`, `alternateId`, `domainName` and `resourceGroup`. A special value of `none` is also supported, which means query by date or month per account only.
   //
   // For example, if you only want the services and region data, you can set this field to `serviceName,region`. Your input sequence doesn't matter (although the sequence above is recommended) as the actual sequence is already fixed in the return data (see the definition in https://github.com/alphauslabs/blueapi/blob/main/api/azure/cost.proto), which is generic to specific, top to bottom. Invalid values are discarded. Excluded columns will be empty.
   string groupByColumns = 1;
@@ -2214,6 +2280,9 @@ message ReadCostsRequestAzureOptions {
 
   // Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which case, it will use the latest exchange rates provided by https://fixer.io. If you prefer a custom exchange rate, you can append the rate to the currency's three-letter symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate should be against the US dollar (USD).
   string toCurrency = 4;
+
+  // Optional. You can set it to a single resource group or a comma-separated list of resource groups.
+  string resourceGroup = 5;
 }
 
 // Request message for the BudgetAlerts rpc.
@@ -2357,10 +2426,10 @@ message PeriodRange {
     YEAR = 3;
   }
 
-  Unit unit = 1;           // Time unit of the range
-  uint32 year = 2;         // Year (e.g., 2025)
-  uint32 starting = 3;     // Start month/quarter (1-based), ignored if YEAR
-  uint32 duration = 4;     // Length in units of unit
+  Unit unit = 1; // Time unit of the range
+  uint32 year = 2; // Year (e.g., 2025)
+  uint32 starting = 3; // Start month/quarter (1-based), ignored if YEAR
+  uint32 duration = 4; // Length in units of unit
 }
 
 // Request message for the ReadInvoiceOverviews rpc.
@@ -2478,4 +2547,31 @@ message CalculationPrerequisite {
 message ListCalculationPrerequisitesResponse {
   // Repeated list of calculation prerequisites.
   repeated CalculationPrerequisite prerequisites = 1;
+}
+
+// Request message for SetupPayerAccountBillingTransfer
+message SetupPayerAccountBillingTransferRequest {
+  // Required. The vendor. Only 'aws' is supported for now.
+  string vendor = 1;
+  
+  // Required. The Payer account ID
+  string id = 2;
+
+  // Required. The billing transfer month.
+  string month = 3;
+
+  // Required. The s3 bucket where the cost and usage report can be downloaded.
+  string s3_bucket = 4;
+  
+  // Required. The actual name of the cost and usage report.
+  string report_name = 5;
+  
+  // Required. The Role ARN needed to access the s3 bucket.
+  string role_arn = 6;
+
+  // Required. The type of cur. Valid values are: 'legacy' and '2.0'
+  string cur_type = 7;
+  
+  // Optional. Prefix of the report inside the bucket
+  string prefix = 8;
 }
