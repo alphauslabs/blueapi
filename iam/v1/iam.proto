@@ -301,14 +301,14 @@ service Iam {
   }
 
   // Gets experimental UI preferences for the authenticated MSP.
-  rpc GetExperimentalPreferences(GetExperimentalPreferencesRequest) returns (GetExperimentalPreferencesResponse) {
+  rpc GetExperimentalUIPreferences(GetExperimentalUIPreferencesRequest) returns (GetExperimentalUIPreferencesResponse) {
     option (google.api.http) = {
       get: "/iam/v1/experimentalui/preferences"
     };
   }
 
   // Creates or updates an experimental UI preference for a specific component.
-  rpc UpsertExperimentalPreference(UpsertExperimentalPreferenceRequest) returns (UpsertExperimentalPreferenceResponse) {
+  rpc UpsertExperimentalUIPreference(UpsertExperimentalUIPreferenceRequest) returns (UpsertExperimentalUIPreferenceResponse) {
     option (google.api.http) = {
       put: "/iam/v1/experimentalui/preferences/{component_id}"
       body: "*"
@@ -697,8 +697,8 @@ message ResetRipplePasswordResponse {
   string email = 2;
 }
 
-// ExperimentalPreference holds the UI version preference and banner state for a single component.
-message ExperimentalPreference {
+// ExperimentalUIPreference holds the UI version preference and banner state for a single component.
+message ExperimentalUIPreference {
   // The component identifier this preference applies to.
   string component_id = 1;
 
@@ -712,18 +712,18 @@ message ExperimentalPreference {
   google.protobuf.Timestamp updated_at = 4;
 }
 
-// Request message for the Iam.GetExperimentalPreferences rpc.
+// Request message for the Iam.GetExperimentalUIPreferences rpc.
 // The MSP identity is derived from the auth token server-side.
-message GetExperimentalPreferencesRequest {}
+message GetExperimentalUIPreferencesRequest {}
 
-// Response message for the Iam.GetExperimentalPreferences rpc.
-message GetExperimentalPreferencesResponse {
+// Response message for the Iam.GetExperimentalUIPreferences rpc.
+message GetExperimentalUIPreferencesResponse {
   // The list of experimental UI preferences for the authenticated MSP.
-  repeated ExperimentalPreference preferences = 1;
+  repeated ExperimentalUIPreference preferences = 1;
 }
 
-// Request message for the Iam.UpsertExperimentalPreference rpc.
-message UpsertExperimentalPreferenceRequest {
+// Request message for the Iam.UpsertExperimentalUIPreference rpc.
+message UpsertExperimentalUIPreferenceRequest {
   // The component identifier to create or update a preference for.
   string component_id = 1;
 
@@ -734,10 +734,10 @@ message UpsertExperimentalPreferenceRequest {
   bool banner_dismissed = 3;
 }
 
-// Response message for the Iam.UpsertExperimentalPreference rpc.
-message UpsertExperimentalPreferenceResponse {
+// Response message for the Iam.UpsertExperimentalUIPreference rpc.
+message UpsertExperimentalUIPreferenceResponse {
   // The created or updated preference.
-  ExperimentalPreference preference = 1;
+  ExperimentalUIPreference preference = 1;
 }
 
 message UnlockUserAccountRequest {
