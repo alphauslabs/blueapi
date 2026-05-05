@@ -9,6 +9,7 @@ import "api/rbac.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/iam";
 option java_package = "cloud.alphaus.api.iam";
@@ -298,14 +299,29 @@ service Iam {
       body: "*"
     };
   }
-  
+
+  // Gets experimental UI preferences for the authenticated MSP.
+  rpc GetExperimentalUIPreferences(GetExperimentalUIPreferencesRequest) returns (GetExperimentalUIPreferencesResponse) {
+    option (google.api.http) = {
+      get: "/iam/v1/experimentalui/preferences"
+    };
+  }
+
+  // Creates or updates an experimental UI preference for a specific component.
+  rpc UpsertExperimentalUIPreference(UpsertExperimentalUIPreferenceRequest) returns (UpsertExperimentalUIPreferenceResponse) {
+    option (google.api.http) = {
+      put: "/iam/v1/experimentalui/preferences/{component_id}"
+      body: "*"
+    };
+  }
+
   // WORK-IN-PROGRESS: Unlocks ripple or wave user account.
   rpc UnlockUserAccount(UnlockUserAccountRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/iam/v1/{domain}/account:unlock"
       body: "*"
     };
-  } 
+  }
 }
 
 // Request message for the Iam.WhoAmI rpc.
@@ -681,6 +697,48 @@ message ResetRipplePasswordResponse {
   string email = 2;
 }
 
+// ExperimentalUIPreference holds the UI version preference and banner state for a single component.
+message ExperimentalUIPreference {
+  // The component identifier this preference applies to.
+  string component_id = 1;
+
+  // The selected UI version for the component (e.g. "v1" or "v2").
+  string version = 2;
+
+  // Whether the experimental banner has been dismissed for this component.
+  bool banner_dismissed = 3;
+
+  // The timestamp of the last update.
+  google.protobuf.Timestamp updated_at = 4;
+}
+
+// Request message for the Iam.GetExperimentalUIPreferences rpc.
+// The MSP identity is derived from the auth token server-side.
+message GetExperimentalUIPreferencesRequest {}
+
+// Response message for the Iam.GetExperimentalUIPreferences rpc.
+message GetExperimentalUIPreferencesResponse {
+  // The list of experimental UI preferences for the authenticated MSP.
+  repeated ExperimentalUIPreference preferences = 1;
+}
+
+// Request message for the Iam.UpsertExperimentalUIPreference rpc.
+message UpsertExperimentalUIPreferenceRequest {
+  // The component identifier to create or update a preference for.
+  string component_id = 1;
+
+  // The selected UI version for the component (e.g. "v1" or "v2").
+  string version = 2;
+
+  // Whether the experimental banner has been dismissed for this component.
+  bool banner_dismissed = 3;
+}
+
+// Response message for the Iam.UpsertExperimentalUIPreference rpc.
+message UpsertExperimentalUIPreferenceResponse {
+  // The created or updated preference.
+  ExperimentalUIPreference preference = 1;
+}
 
 message UnlockUserAccountRequest {
   // Required. Valid values are 'ripple' and 'wave'
@@ -688,10 +746,10 @@ message UnlockUserAccountRequest {
 
   // Required. The email of the user account to unlock.
   string email = 2;
-  
+
   // IsRoot is true if Ripple or Wave root user, false if sub user.
   bool is_root = 3;
-  
+
   // Required if wave sub user.
   string user_name = 4;
 }

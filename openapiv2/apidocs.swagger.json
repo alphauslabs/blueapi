@@ -1924,6 +1924,69 @@
         ]
       }
     },
+    "/iam/v1/experimentalui/preferences": {
+      "get": {
+        "summary": "Gets experimental UI preferences for the authenticated MSP.",
+        "operationId": "Iam_GetExperimentalUIPreferences",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetExperimentalUIPreferencesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
+    "/iam/v1/experimentalui/preferences/{component_id}": {
+      "put": {
+        "summary": "Creates or updates an experimental UI preference for a specific component.",
+        "operationId": "Iam_UpsertExperimentalUIPreference",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpsertExperimentalUIPreferenceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "component_id",
+            "description": "The component identifier to create or update a preference for.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpsertExperimentalUIPreferenceRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Iam"
+        ]
+      }
+    },
     "/iam/v1/ripple/password:reset": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Reset ripple password using code from email",
@@ -48561,6 +48624,67 @@
         }
       },
       "title": "Response message for ResetPassword"
+    },
+    "v1ExperimentalUIPreference": {
+      "type": "object",
+      "properties": {
+        "component_id": {
+          "type": "string",
+          "description": "The component identifier this preference applies to."
+        },
+        "version": {
+          "type": "string",
+          "description": "The selected UI version for the component (e.g. \"v1\" or \"v2\")."
+        },
+        "banner_dismissed": {
+          "type": "boolean",
+          "description": "Whether the experimental banner has been dismissed for this component."
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the last update."
+        }
+      },
+      "description": "RippleExperimentalPreference holds the UI version preference and banner state for a single component."
+    },
+    "v1GetExperimentalUIPreferencesResponse": {
+      "type": "object",
+      "properties": {
+        "preferences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ExperimentalUIPreference"
+          },
+          "description": "The list of experimental UI preferences for the authenticated MSP."
+        }
+      }
+    },
+    "v1UpsertExperimentalUIPreferenceRequest": {
+      "type": "object",
+      "properties": {
+        "component_id": {
+          "type": "string",
+          "description": "The component identifier to create or update a preference for."
+        },
+        "version": {
+          "type": "string",
+          "description": "The selected UI version for the component (e.g. \"v1\" or \"v2\")."
+        },
+        "banner_dismissed": {
+          "type": "boolean",
+          "description": "Whether the experimental banner has been dismissed for this component."
+        }
+      }
+    },
+    "v1UpsertExperimentalUIPreferenceResponse": {
+      "type": "object",
+      "properties": {
+        "preference": {
+          "$ref": "#/definitions/v1ExperimentalUIPreference",
+          "description": "The created or updated preference."
+        }
+      }
     },
     "v1ResetRipplePasswordRequest": {
       "type": "object",
