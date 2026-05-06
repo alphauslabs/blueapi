@@ -87,7 +87,7 @@ service GuaranteedCommitments {
   }
 
 
- // DEVELOPER'S NOTE: FOR Infrastructure Plan
+ // DEVELOPER'S NOTE: FOR Infrastructure Plan.USED FOR RIPPLE ONLY
 
   // WORK-IN-PROGRESS: Only works for Alphaus for now. Retrieves a paginated list of reservable infrastructure resources for a segment.
   // Supports filtering, sorting, and a date range for usage aggregation.
@@ -143,6 +143,9 @@ service GuaranteedCommitments {
       body: "*"
     };
   }
+ 
+
+  // USED FOR RIPPLE AND WAVEPRO
 
   // WORK-IN-PROGRESS: Retrieves the drafted purchase plans
   rpc ListDraftPurchasePlans(ListDraftPurchasePlansRequest) returns (ListDraftPurchasePlansResponse) {
@@ -151,6 +154,7 @@ service GuaranteedCommitments {
     };
   }
 
+  // USED FOR RIPPLE ONLY
 
  // WORK-IN-PROGRESS: Deletes a drafted purchase plan.
   rpc DeleteDraftPurchasePlan(DeleteDraftPurchasePlanRequest) returns (DeleteDraftPurchasePlanResponse) {
@@ -160,7 +164,7 @@ service GuaranteedCommitments {
   }
 
 
- // DEVELOPER'S NOTE: FOR Infrastructure Plan and custom (top-down) commitment plan
+ // DEVELOPER'S NOTE: FOR Infrastructure Plan and custom (top-down) commitment plan. USED FOR RIPPLE ONLY
 
   // WORK-IN-PROGRESS: Only works for Alphaus for now. Retrieves the available commitment types for a given provider.
   rpc GetAvailableCommitmentTypes(GetAvailableCommitmentTypesRequest) returns (GetAvailableCommitmentTypesResponse) {
@@ -169,7 +173,7 @@ service GuaranteedCommitments {
     };
   }
 
- // DEVELOPER'S NOTE: FOR Infrastructure Plan and custom (top-down) commitment plan
+ // DEVELOPER'S NOTE: FOR Infrastructure Plan and custom (top-down) commitment plan. USED FOR RIPPLE ONLY
 
   // WORK-IN-PROGRESS: Only works for Alphaus for now. Creates a custom (top-down) commitment purchase plan.
   rpc CreateCustomCommitmentPlan(CreateCustomCommitmentPlanRequest) returns (DefaultPurchasePlan) {
@@ -471,8 +475,8 @@ message GetResourceDailyUsageRequest {
 }
 
 message ListReservableResourcesRequest {
-  // Required. The segment ID to scope the query to.
-  string segmentId = 1;
+  // Required. The company ID to scope the query to.
+  string companyId = 1;
   // // Optional. Field to sort by. Example: "ondemand_cost".
   // string orderBy = 2;
   // // Optional. If true, sort in descending order.
@@ -697,11 +701,13 @@ message SaveCommitmentsPlanAsDraftRequest {
 message ListDraftPurchasePlansRequest {
   // If set to true, returns plans with Draft status. If set to false, returns plans with Submitted and Executed status.
   bool isDraft = 1;
+  string companyId = 2;
 }
 
 message DeleteDraftPurchasePlanRequest {
   // Required. The draft plan ID to delete.
   string draftPlanId = 1;
+  string companyId = 2;
 }
 
 message GetAvailableCommitmentTypesRequest {
@@ -718,8 +724,8 @@ message CreateCustomCommitmentPlanRequest {
   string startDate = 2;
   // Required. ISO 8601 lookback window end timestamp (e.g. "2026-04-16T02:43:39.717Z").
   string endDate = 3;
-  // Required. The segment ID to scope the plan to.
-  string segmentId = 4;
+  // Required. The company ID to scope the plan to.
+  string companyId = 4;
   // Plan status. Use "draft" to save without submitting.
   // Acceptable values: "draft", "submitted".
   string status = 5;
