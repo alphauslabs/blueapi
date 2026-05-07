@@ -176,7 +176,7 @@ service GuaranteedCommitments {
  // DEVELOPER'S NOTE: FOR Infrastructure Plan and custom (top-down) commitment plan. USED FOR RIPPLE ONLY
 
   // WORK-IN-PROGRESS: Only works for Alphaus for now. Creates a custom (top-down) commitment purchase plan.
-  rpc CreateCustomCommitmentPlan(CreateCustomCommitmentPlanRequest) returns (DefaultPurchasePlan) {
+  rpc CreateCustomCommitmentPlan(CreateCustomCommitmentPlanRequest) returns (CreateCustomCommitmentPlanResponse) {
     option (google.api.http) = {
       post: "/v1/commitments/purchaseplans/custom"
       body: "*"
@@ -762,6 +762,9 @@ message CreateCustomCommitmentPlanRequest {
   // "purchase" plan. IDs are composite strings in the format
   // "{resource_id}|{catalog_sku_org_id}|{catalog_sku_id}" as returned by ListReservableResources.
   repeated string resourceIds = 10;
+  // For top down creation, one or more company IDs to create a plan per segment.
+  // Mutually exclusive with companyId — do not set both.
+  repeated string companyIds = 11;
 }
 
 message GetGuaranteedCommitmentTemplateUrlRequest {
@@ -1840,7 +1843,11 @@ message GetPurchasePlansDetailsResponse {
 
   // Audit history of the plan
   repeated PlanHistoryEntry history = 4;
-}         
+}
+
+message CreateCustomCommitmentPlanResponse {
+  repeated DefaultPurchasePlan plans = 1;
+          }
 
 
 // ------------------------ AZURE ONBOARDING RESPONSE ------------------------
