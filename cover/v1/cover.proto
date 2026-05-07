@@ -1508,7 +1508,7 @@ service Cover {
     };
   }
 
-  rpc ListRecommendationsV3(ListRecommendationsV3Request) returns (stream RecommendationSummary) {
+  rpc ListRecommendationsV3(ListRecommendationsV3Request) returns (ListRecommendationsV3Response) {
     option (google.api.http) = {
       post: "/v1/recommendations/summaries"
       body: "*"
@@ -1664,27 +1664,32 @@ message ListRecommendationsV3Request {
   map<string, string> filters = 3;
 }
 
-message RecommendationSummary {
-  string id = 1;
-  string name = 2;
-  string target = 3;
-  string targetName = 18;
-  string category = 4;
-  string type = 5;
-  string vendor = 13;
-  string source = 19;
-  string code = 14;
-  optional string service = 15;
-  optional string region = 16;
-  optional string resourceId = 17;
-  double estimatedMonthlySavings = 6;
-  double estimatedMonthlyBeforeCost = 7;
-  double estimatedMonthlyAfterCost = 8;
-  optional string risk = 9;
-  optional string effort = 10;
-  string status = 11;
-  google.protobuf.Struct additionalDetails = 12;
+message ListRecommendationsV3Response {
+  message RecommendationSummary {
+    string id = 1;
+    string name = 2;
+    string target = 3;
+    string targetName = 18;
+    string category = 4;
+    string type = 5;
+    string vendor = 13;
+    string source = 19;
+    string code = 14;
+    optional string service = 15;
+    optional string region = 16;
+    optional string resourceId = 17;
+    double estimatedMonthlySavings = 6;
+    double estimatedMonthlyBeforeCost = 7;
+    double estimatedMonthlyAfterCost = 8;
+    optional string risk = 9;
+    optional string effort = 10;
+    string status = 11;
+    google.protobuf.Struct additionalDetails = 12;
+  }
+
+  repeated RecommendationSummary recommendations = 1;
 }
+
 
 message GetRecommendationV3Request {
   repeated string ids = 1;
