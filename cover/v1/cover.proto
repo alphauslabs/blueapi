@@ -46,63 +46,12 @@ service Cover {
     };
   }
 
-  // Invite members to the system
-  rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {
-    option (google.api.http) = {
-      post: "/v1/members/invite"
-      body: "*"
-    };
-    option deprecated = true;
-  }
-
   // Activate the added user
   rpc ActivateUser(ActivateUserRequest) returns (ActivateUserResponse) {
     option (google.api.http) = {
       post: "/v1/members/activate"
       body: "*"
     };
-  }
-
-  // Create a member
-  rpc CreateMember(CreateMemberRequest) returns (CreateMemberResponse) {
-    option (google.api.http) = {
-      post: "/v1/members"
-      body: "*"
-    };
-    option deprecated = true;
-  }
-
-  // Get all the members/subusers of the company
-  rpc GetMembers(GetMembersRequest) returns (GetMembersResponse) {
-    option (google.api.http) = {
-      get: "/v1/members"
-    };
-    option deprecated = true;
-  }
-
-  // Get the details of the user
-  rpc GetMemberDetails(GetMemberDetailsRequest) returns (GetMemberDetailsResponse) {
-    option (google.api.http) = {
-      get: "/v1/members/{userId}"
-    };
-    option deprecated = true;
-  }
-
-  // Get the cost group to which the member is attached
-  rpc GetMemberCostGroup(GetMemberCostGroupRequest) returns (GetMemberCostGroupResponse) {
-    option (google.api.http) = {
-      get: "/v1/members/{userId}/costgroup"
-    };
-    option deprecated = true;
-  }
-
-  // Modify member's permission
-  rpc UpdateMemberPermission(UpdateMemberPermissionRequest) returns (UpdateMemberPermissionResponse) {
-    option (google.api.http) = {
-      put: "/v1/members/{userId}/isadmin"
-      body: "*"
-    };
-    option deprecated = true;
   }
 
   // Get the details of the logged-in user
@@ -198,14 +147,6 @@ service Cover {
       put: "/v1/me/attributes"
       body: "*"
     };
-  }
-
-  // Deletes a user
-  rpc DeleteMember(DeleteMemberRequest) returns (DeleteMemberResponse) {
-    option (google.api.http) = {
-      delete: "/v1/members/{userId}"
-    };
-    option deprecated = true;
   }
 
   // Reset member's password
@@ -445,22 +386,6 @@ service Cover {
     };
   } 
 
-  // Assign a member to a cost group
-  rpc AssignCostGroupMember(AssignCostGroupMemberRequest) returns (AssignCostGroupMemberResponse) {
-    option (google.api.http) = {
-      post: "/v1/costgroups/{costGroupId}/member/add"
-      body: "*"
-    };
-  }
-
-  // Remove a member from a cost group
-  rpc RemoveCostGroupMember(RemoveCostGroupMemberRequest) returns (RemoveCostGroupMemberResponse) {
-    option (google.api.http) = {
-      post: "/v1/costgroups/{costGroupId}/member/remove"
-      body: "*"
-    };
-  }
-
   // Deletes a cost group
   rpc DeleteCostGroup(DeleteCostGroupRequest) returns (DeleteCostGroupResponse) {
     option (google.api.http) = {
@@ -475,20 +400,6 @@ service Cover {
     };
   }
 
-  // Lists the account access role(s) attached to accounts under caller.
-  rpc ListAccountAccess(ListAccountAccessRequest) returns (stream AccountAccess) {
-    option (google.api.http) = {
-      post: "/v1/aws/acctaccess/all:read"
-      body: "*"
-    };
-  }
-
-  // Gets the current account role attached to the input target.
-  rpc GetAccountAccess(GetAccountAccessRequest) returns (AccountAccess) {
-    option (google.api.http) = {
-      get: "/v1/aws/acctaccess/{target}"
-    };
-  }
 
   // Gets the current account. For GCP and Azure.
   rpc GetDataAccess(GetAndDeleteDataAccessRequest) returns (DataAccess) {
@@ -611,100 +522,11 @@ service Cover {
     };
   }
 
-  // Gets the right sizing recommendation of all the accounts in the costgroup
-  rpc GetRightSizingRecommendation(GetRightSizingRecommendationRequest) returns (GetRightSizingRecommendationResponse) {
-    option (google.api.http) = {
-      get: "/v1/rightsizingrecommendation/{costGroupId}"
-    };
-  }
-
-  // Modify resource type from right sizing recommendation
-  rpc ModifyResourceType(ModifyResourceTypeRequest) returns (ModifyResourceTypeResponse) {
-    option (google.api.http) = {
-      post: "/v1/{vendor}/resource/modify"
-      body: "*"
-    };
-  }
-
-  // Terminate a resource from right sizing recommendation
-  rpc TerminateResource(TerminateResourceRequest) returns (TerminateResourceResponse) {
-    option (google.api.http) = {
-      post: "/v1/{vendor}/resource/terminate"
-      body: "*"
-    };
-  }
-
-  // Upload charge code
-  rpc UploadChargeCode(stream UploadChargeCodeRequest) returns (UploadChargeCodeResponse) {
-    option (google.api.http) = {
-      post: "/v1/chargecode/upload"
-      body: "*"
-    };
-  }
 
   // Assign payer to a linked account
   rpc AssignPayer(AssignPayerRequest) returns (AssignPayerResponse) {
     option (google.api.http) = {
       post: "/v1/{vendor}/payers"
-      body: "*"
-    };
-  }
-
-  // Get list of all payers
-  rpc GetPayers(GetPayersRequest) returns (GetPayersResponse) {
-    option (google.api.http) = {
-      get: "/v1/{vendor}/payers"
-    };
-  }
-
-  // Get list of registered accounts
-  rpc GetAccounts(GetAccountsRequest) returns (GetAccountsResponse) {
-    option (google.api.http) = {
-      get: "/v1/{vendor}/accounts/{costGroupId}"
-    };
-  }
-
-  // Get list of supported services
-  rpc GetServices(GetServicesRequest) returns (GetServicesResponse) {
-    option (google.api.http) = {
-      get: "/v1/{vendor}/services/{costGroupId}"
-    };
-  }
-
-  // Get list of available regions
-  rpc GetRegions(GetRegionsRequest) returns (GetRegionsResponse) {
-    option (google.api.http) = {
-      get: "/v1/{vendor}/regions/{costGroupId}"
-    };
-  }
-
-  // Get list of available tags
-  rpc GetTags(GetTagsRequest) returns (GetTagsResponse) {
-    option (google.api.http) = {
-      get: "/v1/{vendor}/tags/{costGroupId}"
-    };
-  }
-
-  // Lists the fees
-  rpc ListFees(ListFeesRequest) returns (stream FeeDetails) {
-    option (google.api.http) = {
-      post: "/v1/allocations/fees/all:read"
-      body: "*"
-    };
-  }
-
-  // Restore distributed fees
-  rpc RestoreFee(RestoreFeeRequest) returns (stream FeeDetails) {
-    option (google.api.http) = {
-      post: "/v1/allocations/fees/restore"
-      body: "*"
-    };
-  }
-
-  // Get all available fees for the specified cost group
-  rpc GetCostGroupFee(GetCostGroupFeeRequest) returns (stream FeeItem) {
-    option (google.api.http) = {
-      post: "/v1/allocations/fees:read"
       body: "*"
     };
   }
@@ -752,71 +574,7 @@ service Cover {
       delete: "/v1/allocators/{id}"
     };
   }
-
-  // WORK-IN-PROGRESS: Do not use.
-  rpc ProxyCreateCompletion(ProxyCreateCompletionRequest) returns (stream ProxyCreateCompletionResponse) {
-    option (google.api.http) = {
-      post: "/v1/x/pcc"
-      body: "*"
-    };
-  }
-
-  // WORK-IN-PROGRESS: Simulate fee allocator
-  rpc SimulateFeeAllocator(CreateAllocatorRequest) returns (stream FeeDetails) {
-    option (google.api.http) = {
-      post: "/v1/allocations/fees/simulate"
-      body: "*"
-    };
-  }
-
-  // WORK-IN-PROGRESS: Lists the allocated account usages
-  rpc ListAccountUsage(ListAccountUsageRequest) returns (stream AccountUsageDetails) {
-    option (google.api.http) = {
-      post: "/v1/allocations/accountusage/all:read"
-      body: "*"
-    };
-  }
-
-  // WORK-IN-PROGRESS: Restore the allocated account usages
-  rpc RestoreAccountUsage(RestoreAccountUsageRequest) returns (stream AccountUsageDetails) {
-    option (google.api.http) = {
-      post: "/v1/allocations/accountusage/restore"
-      body: "*"
-    };
-  }
-
-  // WORK-IN-PROGRESS: Simulate the output of the account usage allocation
-  rpc SimulateAccountUsage(CreateAllocatorRequest) returns (stream AccountUsageDetails) {
-    option (google.api.http) = {
-      post: "/v1/allocations/accountusage/simulate"
-      body: "*"
-    };
-  }
-
-  // WORK-IN-PROGRESS: Lists the allocated ri and sp savings
-  rpc ListSavings(ListFeesRequest) returns (stream SavingsDetails) {
-    option (google.api.http) = {
-      post: "/v1/allocations/savings/all:read"
-      body: "*"
-    };
-  }
-
-  // WORK-IN-PROGRESS: Restore the allocated ri and sp savings
-  rpc RestoreSavings(RestoreSavingsRequest) returns (stream SavingsDetails) {
-    option (google.api.http) = {
-      post: "/v1/allocations/savings/restore"
-      body: "*"
-    };
-  }
-
-  // WORK-IN-PROGRESS: Simulate the output of the ri and sp savings allocation
-  rpc SimulateSavings(CreateAllocatorRequest) returns (stream SavingsDetails) {
-    option (google.api.http) = {
-      post: "/v1/allocations/savings/simulate"
-      body: "*"
-    };
-  }
-
+  
   // WORK-IN-PROGRESS: Get all available allocation items for the specified cost group
   rpc GetCostGroupAllocation(GetCostGroupAllocationRequest) returns (stream AllocationItem) {
     option (google.api.http) = {
@@ -927,14 +685,6 @@ service Cover {
   rpc UpdateChannelDetails(UpdateChannelDetailsRequest) returns (UpdateChannelDetailsResponse) {
     option (google.api.http) = {
       put: "/v1/channels/{id}"
-      body: "*"
-    };
-  }
-
-  // Get the discount recommendations for every account in a cost group
-  rpc GetDiscountRecommendations(GetDiscountRecommendationsRequest) returns (GetDiscountRecommendationsResponse) {
-    option (google.api.http) = {
-      post: "/v1/discount"
       body: "*"
     };
   }
@@ -1119,26 +869,11 @@ service Cover {
       get: "/v1/reports/insight/summary/{costGroupId}"
     };
   }
-
-   // Lists recommendations based on specified criteria.
-   rpc ListRecommendations(ListRecommendationRequest) returns (stream ListRecommendationResponse) {
-    option (google.api.http) = {
-      get: "/v1/recommendations/optimization"
-    };
-  }
-
     // Lists recommendations based on specified criteria.
    rpc ListRecommendationsV2(ListRecommendationV2Request) returns (stream ListRecommendationResponse) {
     option (google.api.http) = {
       post: "/v1/recommendations/all:read"
       body: "*"
-    };
-  }
-
-  // Retrieves a specific recommendation by its ID.
-  rpc GetRecommendation(GetRecommendationRequest) returns (GetRecommendationResponse) {
-    option (google.api.http) = {
-      get: "/v1/recommendations/optimization/{id}"
     };
   }
 
@@ -1148,44 +883,6 @@ service Cover {
       get: '/v1/recommendations/details/{id}'
     };
   }
-
-  // Executes optimization based on a recommendation.
-  rpc ExecuteOptimization(ExecuteOptimizationRequest) returns (ExecuteOptimizationResponse) {
-    option (google.api.http) = {
-      post: "/v1/recommendations/execute"
-      body: "*"
-    };
-  }
-
-  // Get Execution status of a recommendation.
-  rpc GetExecutionStatus(GetExecutionStatusRequest) returns (stream GetExecutionStatusResponse) {
-    option (google.api.http) = {
-      get: "/v1/recommendations/execute/status"
-    };
-  }
-
-  //Mark a recommendation executed.
-  rpc MarkAsExecuted(MarkAsExecutedRequest) returns (MarkAsExecutedResponse){
-    option (google.api.http) = {
-      post: "/v1/recommendations/optimization/executed"
-      body: "*"
-    };
-  }
-
-   //Undo a executed recommendation (For recommendation).
-   rpc UndoExecutedRecommendation(UndoExecutedRecommendationRequest) returns (UndoExecutedRecommendationResponse){
-    option (google.api.http) = {
-      post: "/v1/recommendations/optimization/undo"
-      body: "*"
-    };
-  }
-
-    // Lists recommendations based on specified criteria.
-    rpc OptimizationHistory(OptimizationHistoryRequest) returns (OptimizationHistoryResponse) {
-      option (google.api.http) = {
-        get: "/v1/recommendations/optimization/history"
-      };
-    }
 
     // Sets Cost group's event indicator
     rpc SetCostGroupEventIndicator(SetCostGroupEventIndicatorRequest) returns (SetCostGroupEventIndicatorResponse) {
@@ -2072,18 +1769,6 @@ message OnboardOrgResponse {
   api.cover.UserData userData = 1;
 }
 
-// Request message for InviteMember
-message InviteMemberRequest {
-  repeated string email = 1;
-  bool isResend = 2;
-  bool inviteAsAdmin = 3;
-}
-
-// Response message for InviteMember
-message InviteMemberResponse {
-  repeated string email = 1;
-}
-
 // Request message for ActivateUser
 message ActivateUserRequest {
   string userId = 1;
@@ -2100,62 +1785,6 @@ message ActivateUserRequest {
 
 // Response message for ActivateUser
 message ActivateUserResponse {
-  api.cover.UserData userData = 1;
-}
-
-// Request message for CreateMember
-message CreateMemberRequest {
-  string email = 1;
-  string password = 2;
-  string name = 3;
-  repeated string costgroups = 4;
-}
-
-// Response message for CreateMember
-message CreateMemberResponse {
-  api.cover.UserData userData = 1;
-}
-
-// Request message for GetMembers
-message GetMembersRequest {}
-
-// Response message for GetMembers
-message GetMembersResponse {
-  repeated api.cover.UserData userData = 1;
-}
-
-// Request message for GetMemberDetails
-message GetMemberDetailsRequest {
-  // Required. UserId.
-  string userId = 1;
-}
-
-// Response message for GetMemberDetails
-message GetMemberDetailsResponse {
-  api.cover.UserData userData = 1;
-}
-
-// Request message for GetMemberCostGroup
-message GetMemberCostGroupRequest {
-  // Required. UserId.
-  string userId = 1;
-}
-
-// Response message for GetMemberCostGroup
-message GetMemberCostGroupResponse {
-  repeated api.cover.MemberCostGroup costGroups = 1;
-}
-
-// Request message for UpdateMemberPermission
-message UpdateMemberPermissionRequest {
-  // Required. UserId.
-  string userId = 1;
-  // Required. IsAdmin.
-  bool isAdmin = 2;
-}
-
-// Response message for UpdateMemberPermission
-message UpdateMemberPermissionResponse {
   api.cover.UserData userData = 1;
 }
 
@@ -2277,17 +1906,6 @@ message UpdateUserAttributesRequest {
 // Response message for UpdateUserAttributes
 message UpdateUserAttributesResponse {
   api.cover.UserData userData = 1;
-}
-
-// Request message for DeleteMember
-message DeleteMemberRequest {
-  // Required. UserId.
-  string userId = 1;
-}
-
-// Response message for DeleteMember
-message DeleteMemberResponse {
-  string userId = 1;
 }
 
 // Request message for ResetPassword
@@ -2642,35 +2260,6 @@ message UpdateCostGroupCombinationsRequest {
 message UpdateCostGroupCombinationsResponse {
   api.cover.Combinations combinations = 1;
 }
-
-// Request message for AssignCostGroupMember
-message AssignCostGroupMemberRequest {
-  // Required. Cost Group Id.
-  string costGroupId = 1;
-  // Required. User Id.
-  string userId = 2;
-}
-
-// Response message for AssignCostGroupMember
-message AssignCostGroupMemberResponse {
-  string costGroupId = 1;
-  string userId = 2;
-}
-
-// Request message for RemoveCostGroupMember
-message RemoveCostGroupMemberRequest {
-  // Required. Cost Group Id.
-  string costGroupId = 1;
-  // Required. User Id.
-  string userId = 2;
-}
-
-// Response message for RemoveCostGroupMember
-message RemoveCostGroupMemberResponse {
-  string costGroupId = 1;
-  string userId = 2;
-}
-
 // Request message for DeleteCostGroup
 message DeleteCostGroupRequest {
   // Required. Cost Group Id.
@@ -2706,15 +2295,6 @@ message GetAccountAccessTemplateUrlResponse {
   string externalId = 5;
 
   string templateVersion = 6;
-}
-
-// Request message for the ListAccountAccess rpc.
-message ListAccountAccessRequest {}
-
-// Request message for the GetAccountAccess rpc.
-message GetAccountAccessRequest {
-  // Required. The target AWS account to query.
-  string target = 1;
 }
 
 // Response message for GetAccountAccess, CreateAccountAccess rpc.
@@ -3136,89 +2716,12 @@ message CostItem {
   string allocationCategory = 19;
 }
 
-// Request message for GetRightSizingRecommendation
-message GetRightSizingRecommendationRequest {
-  // Required. Cost Group Id.
-  string costGroupId = 1;
-}
-
-// Response message for GetRightSizingRecommendation
-message GetRightSizingRecommendationResponse {
-  repeated api.cover.ResourceData resource = 1;
-}
-
-// Request message for ModifyResourceType
-message ModifyResourceTypeRequest {
-  // Required. Cloud vendor.
-  string vendor = 1;
-
-  // Required. Account Id.
-  string accountId = 2;
-
-  // Required. The resource Id.
-  string resourceId = 3;
-
-  // Required. The recommended resource type.
-  string resourceType = 4;
-
-  // Required. Resource region.
-  string region = 5;
-}
-
-// Response message for ModifyResourceType
-message ModifyResourceTypeResponse {
-  string accountId = 1;
-  string resourceId = 2;
-  string resourceType = 3;
-  string region = 4;
-}
-
-// Request message for TerminateResource
-message TerminateResourceRequest {
-  // Required. Cloud vendor.
-  string vendor = 1;
-
-  // Required. Account Id.
-  string accountId = 2;
-
-  // Required. The resource Id.
-  string resourceId = 3;
-
-  // Required. Resource region.
-  string region = 4;
-}
-
-// Response message for TerminateResource
-message TerminateResourceResponse {
-  string accountId = 1;
-  string resourceId = 2;
-  string region = 3;
-}
-
 // Status of upload file
 enum Status {
   PENDING = 0;
   IN_PROGRESS = 1;
   SUCCESS = 2;
   FAILED = 3;
-}
-
-// (WIP): Request message for Upload Charge Code
-message UploadChargeCodeRequest {
-  // Required. File name
-  string name = 1; // file name
-  // Required. File type
-  string type = 2; // file type
-  // Required. Convert file into bytes to transfer file
-  bytes file = 3; // file in bytes
-}
-
-// (WIP): Response message for Upload Charge Code
-message UploadChargeCodeResponse {
-  // File name
-  string name = 1;
-  // Status
-  Status status = 2;
 }
 
 // Request message for AssignPayer
@@ -3239,70 +2742,12 @@ message AssignPayerResponse {
   string payerId = 2;
 }
 
-// Request message for GetPayers
-message GetPayersRequest {
-  // Required. Cloud vendor.
-  string vendor = 1;
-}
-
-// Response message for GetPayers
-message GetPayersResponse {
-  repeated string payers = 1;
-}
-
-// Request message for GetAccounts
-message GetAccountsRequest {
-  // Required. Cloud vendor.
-  string vendor = 1;
-  string costGroupId = 2;
-}
-
-// Response message for GetAccounts
-message GetAccountsResponse {
-  repeated string accounts = 1;
-}
-
-// Request message for GetServices
-message GetServicesRequest {
-  // Required. Cloud vendor.
-  string vendor = 1;
-  string costGroupId = 2;
-}
-
-// Response message for GetServices
-message GetServicesResponse {
-  repeated string services = 1;
-}
-
-// Request message for GetRegions
-message GetRegionsRequest {
-  // Required. Cloud vendor.
-  string vendor = 1;
-  string costGroupId = 2;
-}
-
-// Response message for GetRegions
-message GetRegionsResponse {
-  repeated string regions = 1;
-}
-
 // Request message for GetTags
 message GetTagsRequest {
   // Required. Cloud vendor.
   string vendor = 1;
   string costGroupId = 2;
 }
-
-// Response message for GetTags
-message GetTagsResponse {
-  repeated api.cover.TagData tagData = 1;
-}
-
-// Request message for the ListFees rpc.
-message ListFeesRequest {
-  string month = 1;
-}
-
 // Response message for GetFeeDetails, CreateFeeReallocation rpc.
 message FeeDetails {
   string id = 1;
@@ -3324,30 +2769,6 @@ message FeeDetails {
   double unblendedCost = 17;
   string sourceFee = 18;
   string lastUpdate = 19;
-}
-
-// Request message for the RestoreFee rpc.
-message RestoreFeeRequest {
-  // Required. The fee to restore.
-  string feeId = 1;
-}
-
-// Request message for the GetCostGroupFee rpc.
-message GetCostGroupFeeRequest {
-  // Required. Cost Group Id.
-  string costGroupId = 1;
-  string startTime = 2;
-  string endTime = 3;
-}
-
-// Response message wrapper for cost group fees.
-message FeeItem {
-  string vendor = 1;
-  string month = 2;
-  string product = 3;
-  string account = 4;
-  string type = 5;
-  double cost = 6;
 }
 
 message Allocator {
@@ -3455,88 +2876,6 @@ message GetAllocationSourcesResponse {
 message DeleteAllocatorRequest {
   // Required. The id of the allocator to delete.
   string id = 1;
-}
-
-// Request message for the ProxyCreateCompletion rpc.
-message ProxyCreateCompletionRequest {
-  google.protobuf.Struct params = 1;
-}
-
-// Response message for the ProxyCreateCompletion rpc.
-message ProxyCreateCompletionResponse {
-  string line = 1;
-}
-
-// Response message for SimulateAccountCostAllocator rpc.
-message AccountUsageDetails {
-  string id = 1;
-  string orgId = 2;
-  string vendor = 3;
-  string account = 4;
-  string date = 5;
-  string productCode = 6;
-  string serviceCode = 7;
-  string region = 8;
-  string zone = 9;
-  string usageType = 10;
-  string instanceType = 11;
-  string operation = 12;
-  string invoiceId = 13;
-  string description = 14;
-  string resourceId = 15;
-  string tags = 16;
-  string costCategories = 17;
-  double usageAmount = 18;
-  double trueUnblendedCost = 19;
-  double unblendedCost = 20;
-  double effectiveCost = 21;
-  double amortizedCost = 22;
-  double publicOnDemandCost = 23;
-  double unusedAmortizedCost = 24;
-  string lastUpdate = 25;
-  string splitStatus = 26;
-  bool isAllocated = 27;
-  bool isApplied = 28;
-  string source = 29;
-}
-
-// Request message for the RestoreAccountUsage rpc.
-message ListAccountUsageRequest {
-  string startDate = 1;
-  string endDate = 2;
-}
-
-// Request message for the RestoreAccountUsage rpc.
-message RestoreAccountUsageRequest {
-  // Required. The account usage to restore.
-  string allocationId = 1;
-}
-
-// Request message for the RestoreSavings rpc.
-message RestoreSavingsRequest {
-  // Required. The item to restore.
-  string id = 1;
-}
-
-// Response message for ListSavings, RestoreSavings, SimulateSavings rpc.
-message SavingsDetails {
-  string id = 1;
-  string orgId = 2;
-  string vendor = 3;
-  string account = 4;
-  string month = 5;
-  string type = 6;
-  string arn = 7;
-  string productCode = 8;
-  string offerClass = 9;
-  double ondemand = 10;
-  double effectiveCost = 11;
-  double savings = 12;
-  string splitStatus = 13;
-  bool isAllocated = 14;
-  bool isApplied = 15;
-  string source = 16;
-  string lastUpdate = 17;
 }
 
 // Request message for the GetCostGroupAllocation rpc.
@@ -3894,29 +3233,6 @@ message UpdateChannelDetailsRequest {
 // Response message for UpdateChannelDetails
 message UpdateChannelDetailsResponse {
   api.cover.ChannelData channelData = 1;
-}
-
-// Request message for GetDiscountRecomemendations
-message GetDiscountRecommendationsRequest {
-
-  // Required.
-  string costGroupId = 1;
-
-  // AWS Inputs
-  api.cover.AwsInputs awsInputs = 2;
-
-  // NOT SUPPORTED YET
-  api.cover.AzureInputs azureInputs = 3;
-
-  // NOT SUPPORTED YET
-  api.cover.GcpInputs gcpInputs = 4;
-}
-
-// Response message for GetDiscountRecommendations
-message GetDiscountRecommendationsResponse {
-  api.cover.AwsDiscountRecommendations awsRecommendations = 1;
-  api.cover.AzureDiscountRecommendations azureRecommendations = 2;
-  api.cover.GcpDiscountRecommendations gcpRecommendations = 3;
 }
 
 // Request message for getting anomaly
@@ -4278,39 +3594,6 @@ message GetReportSummaryResponse{
   api.cover.SavingsSummary savingsSummary = 6;
 }
 
-message ListRecommendationRequest{
-  // Required. Cost Group Id.
-  string costgroupId = 1;
-  
-  //Required. Start date of retrieved data. If not set, the default would be today.
-  string dateRangeStart = 2;
-  
-  //Required. End date of retrieved data. If not set, the default would be today.
-  string dateRangeEnd = 3; 
-
-  //Valid inputs are: "all", "aws", "gcp", and  "azure". Default is "all".
-  string vendor = 4;
-
-  // Valid inputs are: "all", "trustedadvisor", "costexplorer", and  "costoptimizationhub". Default is "all".
-  string source = 5;
- 
-  // Valid inputs are: "in-progress", "error", "open","done" and "all"
-  string optimizationStatus = 7;
-
-  // Valid inputs are: "rate", "usage", and "all". If not set, default is "all".
-  string type = 8;
-
-  string spType = 9;
-  string rateModel = 10;
-  string paymentOption = 11;
-  string term = 12;
-  string service = 13;
-  string offeringClass = 14;
-
-  // Optional. If not set, default value is `USD`.
-  string currency = 15;
-}
-
 message ListRecommendationV2Request {
   string costgroupId = 1;
   string dateRangeStart = 2;
@@ -4368,81 +3651,6 @@ message ListRecommendationResponse{
     double upfrontCost = 9;
   }
 }
-
-message GetRecommendationRequest{
-  string id = 1;
-  string costGroupId = 2;
-
-  //Valid inputs are: "30days", "60days". and "90days". Default is "30days".
-  string periodOption = 3;
-}
-
-message GetRecommendationResponse{
-  api.cover.AWSRecommendations recommendationData = 1;
-}
-
-message ExecuteOptimizationRequest {
-  string recommendationId = 1;
-  string type = 2;
-}
-
-message ExecuteOptimizationResponse{
-  message AWSOption {
-    string approveTemplateUrl = 1;
-    string recommendationId = 2;
-    string currentStatus = 3;
-  }
-  message GCPOption {}
-  message AzureCSPOption {}
-
-  oneof Vendor {
-    AWSOption awsOption = 1;
-    GCPOption gcpOption = 2;
-    AzureCSPOption azureCspOption = 3;
-  }
-}
-
-message MarkAsExecutedRequest{
-  repeated string id = 1;
-}
-
-message MarkAsExecutedResponse{
-}
-
-message UndoExecutedRecommendationRequest{
-  repeated string id = 1;
-}
-
-message UndoExecutedRecommendationResponse{
-}
-
-message OptimizationHistoryRequest{
-    // Required. Cost Group Id.
-    string costgroupId = 1;
-  
-    //Required. Start date of retrieved data. If not set, default is three months past.
-    string dateRangeStart = 2;
-    
-    //Required. End date of retrieved data.
-    string dateRangeEnd = 3; 
-  
-    //Required. Valid inputs are: "all", "aws", "gcp", and  "azure".
-    string vendor = 4;
-  
-    // Valid inputs are: "all", "trusted-advisor", "cost-explorer", and  "cost-optimization-hub". Default is "All".
-    string source = 5;
-  
-    //Valid inputs are: "daily", "monthly". and "yearly". Default is "monthly".
-    string periodOption = 6;
-
-    // Optional. If not set, default value is `USD`.
-    string currency = 7;
-}
-
-message OptimizationHistoryResponse{
-  repeated api.cover.ExecutedRecommendationDetails executedRecommendationDetails = 2;
-}
-
 message SetCostGroupEventIndicatorRequest {
   // Required. Cost Group Id.
   string costGroupId = 1;
