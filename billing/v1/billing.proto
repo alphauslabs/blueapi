@@ -1119,6 +1119,45 @@ service Billing {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS. Gets the billing group invoice layout configs, used for overriding MSP level configs.
+  rpc GetBillingGroupInvoiceLayoutConfig(GetBillingGroupInvoiceLayoutConfigRequest) returns (GetBillingGroupInvoiceLayoutConfigResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/{id}/invoicelayoutconfig"
+    };
+  }
+
+  // WORK-IN-PROGRESS. Sets the billing group invoice layout configs.
+  rpc SetBillingGroupInvoiceLayoutConfig(SetBillingGroupInvoiceLayoutConfigRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups/{id}/invoicelayoutconfig"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS. Creates an invoice layout config.
+  rpc CreateInvoiceLayoutConfig(CreateInvoiceLayoutConfigRequest) returns (CreateInvoiceLayoutConfigResponse) {
+    option (google.api.http) = {
+      post: "/v1/invoicelayoutconfig"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS. Updates an invoice layout config.
+  rpc UpdateInvoiceLayoutConfig(UpdateInvoiceLayoutConfigRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/invoicelayoutconfig/{id}"
+      body: "*"
+    };
+  }
+
+  // WORK-IN-PROGRESS. Reads all invoice layout config under an msp.
+  rpc ReadInvoiceLayoutConfig(ReadInvoiceLayoutConfigRequest) returns (stream blueapi.api.ripple.InvoiceLayout) {
+    option (google.api.http) = {
+      post: "/v1/invoicelayoutconfig:read"
+      body: "*"
+    };
+  }
 }
 
 message BillingGroup {
@@ -3962,3 +4001,43 @@ message BulkTagBillingGroupMetadata {
   // Job end timestamp. Empty if still running.
   string endTime = 8;
 }
+
+
+message GetBillingGroupInvoiceLayoutConfigRequest {
+  // Required. The billing group internal id.
+  string id = 1;
+}
+
+
+message GetBillingGroupInvoiceLayoutConfigResponse {
+  blueapi.api.ripple.InvoiceLayout layout = 1;
+}
+
+message SetBillingGroupInvoiceLayoutConfigRequest {
+  // Required. The billing group internal id.
+  string id = 1;
+
+  // Required. The layout id.
+  string layout_id = 2;
+}
+
+message CreateInvoiceLayoutConfigRequest {
+  // Required. The actual invoice layout configs.
+  blueapi.api.ripple.InvoiceLayout layout = 1;
+}
+
+message CreateInvoiceLayoutConfigResponse {
+  // The id assigned for this layout.
+  string layout_id = 1;
+}
+
+
+message UpdateInvoiceLayoutConfigRequest {
+  // Required. The layout id to be updated
+  string id = 1;
+
+  // Required. The new layout values.
+  blueapi.api.ripple.InvoiceLayout layout = 2;
+}
+
+message ReadInvoiceLayoutConfigRequest {}
