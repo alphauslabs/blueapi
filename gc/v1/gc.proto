@@ -655,6 +655,11 @@ message ValidateBillingGroupRequest {
 message GetAwsPrivateOfferRequest {
   // Required. The AWS payer account ID that the private offer targets.
   string payerAccountId = 1;
+
+  // Optional. If true, recreate the private offer when the existing row is
+  // in a retryable terminal state: FAILED, EXPIRED, or WITHDRAWN.
+  // ACCEPTED, PENDING, and CREATING are not recreated.
+  bool recreate = 2;
 }
 
 message SaveCommitmentsPlanAsDraftRequest {
