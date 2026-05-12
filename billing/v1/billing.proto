@@ -1152,7 +1152,7 @@ service Billing {
   }
 
   // WORK-IN-PROGRESS. Reads all invoice layout config under an msp.
-  rpc ReadInvoiceLayoutConfig(ReadInvoiceLayoutConfigRequest) returns (stream blueapi.api.ripple.InvoiceLayout) {
+  rpc ReadInvoiceLayoutConfig(ReadInvoiceLayoutConfigRequest) returns (stream ReadInvoiceLayoutConfigResponse) {
     option (google.api.http) = {
       post: "/v1/invoicelayoutconfig:read"
       body: "*"
@@ -4022,8 +4022,11 @@ message SetBillingGroupInvoiceLayoutConfigRequest {
 }
 
 message CreateInvoiceLayoutConfigRequest {
+  // Required. The name of the invoice layout.
+  string name = 1;
+
   // Required. The actual invoice layout configs.
-  blueapi.api.ripple.InvoiceLayout layout = 1;
+  blueapi.api.ripple.InvoiceLayout layout = 2;
 }
 
 message CreateInvoiceLayoutConfigResponse {
@@ -4038,6 +4041,21 @@ message UpdateInvoiceLayoutConfigRequest {
 
   // Required. The new layout values.
   blueapi.api.ripple.InvoiceLayout layout = 2;
+
+  // Optional. The updated name of this invoice layout config.
+  string name = 3;
 }
 
 message ReadInvoiceLayoutConfigRequest {}
+
+
+message ReadInvoiceLayoutConfigResponse {
+  // Invoice layout config id.
+  string id = 1;
+
+  // Invoice layout config name.
+  string name = 2;
+
+
+  blueapi.api.ripple.InvoiceLayout layout = 3;
+}
