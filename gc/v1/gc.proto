@@ -1669,7 +1669,17 @@ message PayerAccountDetails {
   // This is used by the UI to "resume" the onboarding flow and show which verification checks
   // passed/failed when a user comes back later (e.g., after stopping at verification).
   // Empty when verification hasn't been attempted yet or when no checks were persisted.
-  repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 8;
+  repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 5;
+
+    // AWS Marketplace private offer status for this payer account.
+  // Values: NOT_CREATED, CREATING, PENDING, ACCEPTED, EXPIRED, FAILED, WITHDRAWN.
+  string marketplacePrivateOfferStatus = 6;
+
+  // Optional. AWS Marketplace offer ID if one has already been created.
+  string marketplacePrivateOfferId = 7;
+
+  // Optional. Expiration date of the current private offer.
+  string marketplacePrivateOfferExpirationDate = 8;
 }
 
 message ListPayerAccountsResponse {
