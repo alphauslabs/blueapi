@@ -1165,6 +1165,13 @@ service Billing {
       delete: "/v1/billinggroups/{id}/invoicelayoutconfig"
     };
   }
+  
+  // WORK-IN-PROGRESS. Delete an invoice layout config.
+  rpc DeleteInvoiceLayoutConfig(DeleteInvoiceLayoutConfigRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/invoicelayoutconfig/{id}"
+    };
+  }
 }
 
 message BillingGroup {
@@ -4086,5 +4093,10 @@ message ReadInvoiceLayoutConfigResponse {
 
 message DeleteBillingGroupInvoiceLayoutConfigRequest {
   // Required. The billing group internal id.
+  string id = 1;
+}
+
+message DeleteInvoiceLayoutConfigRequest {
+  // Required. The invoice layout config id.
   string id = 1;
 }
