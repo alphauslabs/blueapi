@@ -1158,6 +1158,13 @@ service Billing {
       body: "*"
     };
   }
+
+  // WORK-IN-PROGRESS. Unsets the billing group invoice layout config.
+  rpc DeleteBillingGroupInvoiceLayoutConfig(DeleteBillingGroupInvoiceLayoutConfigRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/billinggroups/{id}/invoicelayoutconfig"
+    };
+  }
 }
 
 message BillingGroup {
@@ -4075,4 +4082,9 @@ message ReadInvoiceLayoutConfigResponse {
 
 
   blueapi.api.ripple.InvoiceLayout layout = 3;
+}
+
+message DeleteBillingGroupInvoiceLayoutConfigRequest {
+  // Required. The billing group internal id.
+  string id = 1;
 }
