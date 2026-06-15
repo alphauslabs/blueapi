@@ -1378,7 +1378,14 @@ message RegisterAccounts {
 
   // Optional. AccountIds to be used for registration into the billing group.
   // Accepts multiple accountIds separated by a comma.
+  // Comma separated accountId are only available for aws.
   string accountId = 2;
+
+  // Optional. Only available for aws.
+  // If true all link accounts under the previously registered payer that are no longer included in the accountId field
+  // will be also removed from this billing group.
+  // This field is only applicable for RPC request not on response.
+  bool unLinkOnRemove = 3;
 }
 
 // Optional. Vendor accounts to add to the billing group
