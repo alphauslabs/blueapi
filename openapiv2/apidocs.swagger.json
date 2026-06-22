@@ -11379,6 +11379,38 @@
         ]
       }
     },
+    "/v1/managements/billinggroups/terms:accept": {
+      "post": {
+        "operationId": "GuaranteedCommitments_AcceptBillingGroupTerms",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AcceptBillingGroupTermsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AcceptBillingGroupTermsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/managements/billinggroups/{companyId}": {
       "post": {
         "operationId": "GuaranteedCommitments_SetBillingGroupStatus",
@@ -34122,6 +34154,17 @@
         }
       }
     },
+    "v1AcceptBillingGroupTermsRequest": {
+      "type": "object"
+    },
+    "v1AcceptBillingGroupTermsResponse": {
+      "type": "object",
+      "properties": {
+        "termsAcceptance": {
+          "$ref": "#/definitions/v1TermsAcceptance"
+        }
+      }
+    },
     "v1AccountAccess": {
       "type": "object",
       "properties": {
@@ -40322,6 +40365,9 @@
       "properties": {
         "billingGroup": {
           "$ref": "#/definitions/v1ListBillingGroupsResponseBillingGroup"
+        },
+        "termsAcceptance": {
+          "$ref": "#/definitions/v1TermsAcceptance"
         }
       }
     },
@@ -41602,6 +41648,9 @@
             "$ref": "#/definitions/VerifyAwsOnboardingResponseAwsOnboardingFeatureCheck"
           },
           "description": "Detailed AWS verification results (best-effort) returned from the last VerifyAwsOnboarding call.\nThis is used by the UI to \"resume\" the onboarding flow and show which verification checks\npassed/failed when a user comes back later (e.g., after stopping at verification).\nEmpty when verification hasn't been attempted yet or when no checks were persisted."
+        },
+        "termsAcceptance": {
+          "$ref": "#/definitions/v1TermsAcceptance"
         }
       }
     },
@@ -46259,6 +46308,21 @@
           "type": "string"
         }
       }
+    },
+    "v1TermsAcceptance": {
+      "type": "object",
+      "properties": {
+        "accepted": {
+          "type": "boolean"
+        },
+        "acceptedAt": {
+          "type": "string"
+        },
+        "acceptedBy": {
+          "type": "string"
+        }
+      },
+      "description": "TermsAcceptance represents the current terms acceptance state for an entity."
     },
     "v1ThirdProfitItemSection": {
       "type": "object",

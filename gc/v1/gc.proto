@@ -295,6 +295,13 @@ service GuaranteedCommitments {
     };
   }
 
+  rpc AcceptBillingGroupTerms(AcceptBillingGroupTermsRequest) returns (AcceptBillingGroupTermsResponse) {
+    option (google.api.http) = {
+      post: "/v1/managements/billinggroups/terms:accept"
+      body: "*"
+    };
+  }
+
     // GetGuaranteedCommitmentTemplateUrl returns a CloudFormation launch URL for deploying
   // both Alphaus (Ripple) and Archera IAM roles in a single stack.
   rpc GetGuaranteedCommitmentTemplateUrl(GetGuaranteedCommitmentTemplateUrlRequest) returns (GetGuaranteedCommitmentTemplateUrlResponse) {
@@ -546,6 +553,13 @@ message AwsExistingCur {
   string reportName = 4; // maps to "report_name" conceptually
 }
 
+// TermsAcceptance represents the current terms acceptance state for an entity.
+message TermsAcceptance {
+  bool accepted = 1;
+  string acceptedAt = 2;
+  string acceptedBy = 3;
+}
+
 message RegisterOrgRequest {
 
   string name = 1;
@@ -661,6 +675,9 @@ message GetAwsPrivateOfferRequest {
   // ACCEPTED, PENDING, and CREATING are not recreated.
   bool recreate = 2;
 }
+
+message AcceptBillingGroupTermsRequest {}
+
 
 message SaveCommitmentsPlanAsDraftRequest {
   // Required. The commitment purchase plan ID to save as draft.
@@ -1655,6 +1672,8 @@ message GetOnboardingStatusResponse {
   // passed/failed when a user comes back later (e.g., after stopping at verification).
   // Empty when verification hasn't been attempted yet or when no checks were persisted.
   repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 10;
+
+  TermsAcceptance termsAcceptance = 11;
 }
 
 message PayerAccountDetails {
@@ -1748,6 +1767,8 @@ message SetBillingGroupStatusResponse {
 
 message GetBillingGroupStatusResponse {
   ListBillingGroupsResponse.BillingGroup billingGroup = 1;
+
+  TermsAcceptance termsAcceptance = 2;
 }
 
 message ValidateBillingGroupResponse {
@@ -1783,6 +1804,10 @@ message GetAwsPrivateOfferResponse {
   double pricePerUnit = 7;
   string createdAt = 8;
   string expirationDate = 9;
+}
+
+message AcceptBillingGroupTermsResponse {
+  TermsAcceptance termsAcceptance = 1;
 }
 
 message ListDraftPurchasePlansResponse {
