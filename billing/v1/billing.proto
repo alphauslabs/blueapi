@@ -1904,6 +1904,11 @@ message CreateInvoiceRequest {
 
   // Optional. You can set it to a list of billing internal group id
   repeated string groups = 3;
+
+  // Optional. When true, runs the full invoice calculation pipeline without
+  // writing to production tables (RIPPLE_INVOICES). Invoice data is written to INVOICES_TEST
+  // instead, and credit/cache writes are skipped.
+  bool dry_run = 5;
 }
 
 // Request message for the GetInvoiceStatus rpc.
