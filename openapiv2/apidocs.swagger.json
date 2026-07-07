@@ -7820,6 +7820,97 @@
         ]
       }
     },
+    "/v1/commitments/reports/{month}/accounts:read": {
+      "post": {
+        "summary": "Reads per-account commitment report details for a specific month. Only available in Ripple.",
+        "operationId": "GuaranteedCommitments_ReadCommitmentReportAccounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1CommitmentReportAccount"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1CommitmentReportAccount"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "month",
+            "description": "Required. The billing month. Format: `yyyymm`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GuaranteedCommitmentsReadCommitmentReportAccountsBody"
+            }
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/commitments/reports:read": {
+      "post": {
+        "summary": "Reads monthly commitment reports for the MSP. Only available in Ripple.",
+        "operationId": "GuaranteedCommitments_ReadCommitmentReports",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1CommitmentReport"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1CommitmentReport"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ReadCommitmentReportsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/commitments/resources": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Only works for Alphaus for now. Retrieves a paginated list of reservable infrastructure resources for a segment.\nSupports filtering, sorting, and a date range for usage aggregation.",
@@ -14144,55 +14235,6 @@
         ]
       }
     },
-    "/v1/reports/{month}/accounts:read": {
-      "post": {
-        "summary": "Reads per-account commitment report details for a specific month. Only available in Ripple.",
-        "operationId": "GuaranteedCommitments_ReadCommitmentReportAccounts",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1CommitmentReportAccount"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1CommitmentReportAccount"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "month",
-            "description": "Required. The billing month. Format: `yyyymm`.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/GuaranteedCommitmentsReadCommitmentReportAccountsBody"
-            }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
     "/v1/reports:export": {
       "post": {
         "summary": "Exports a vendor report and delivers results via email notification channel.\nSupports multiple report types per vendor. For AWS, this covers RI/SP utilization reports.\nReturns a long-running operation; use GetOperation to poll for completion.",
@@ -14224,48 +14266,6 @@
         ],
         "tags": [
           "Cost"
-        ]
-      }
-    },
-    "/v1/reports:read": {
-      "post": {
-        "summary": "Reads monthly commitment reports for the MSP. Only available in Ripple.",
-        "operationId": "GuaranteedCommitments_ReadCommitmentReports",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1CommitmentReport"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1CommitmentReport"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ReadCommitmentReportsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
         ]
       }
     },
