@@ -14147,7 +14147,7 @@
     "/v1/reports/{month}/accounts:read": {
       "post": {
         "summary": "Reads per-account commitment report details for a specific month. Only available in Ripple.",
-        "operationId": "Billing_ReadCommitmentReportAccounts",
+        "operationId": "GuaranteedCommitments_ReadCommitmentReportAccounts",
         "responses": {
           "200": {
             "description": "A successful response.(streaming responses)",
@@ -14184,12 +14184,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/BillingReadCommitmentReportAccountsBody"
+              "$ref": "#/definitions/GuaranteedCommitmentsReadCommitmentReportAccountsBody"
             }
           }
         ],
         "tags": [
-          "Billing"
+          "GuaranteedCommitments"
         ]
       }
     },
@@ -14230,7 +14230,7 @@
     "/v1/reports:read": {
       "post": {
         "summary": "Reads monthly commitment reports for the MSP. Only available in Ripple.",
-        "operationId": "Billing_ReadCommitmentReports",
+        "operationId": "GuaranteedCommitments_ReadCommitmentReports",
         "responses": {
           "200": {
             "description": "A successful response.(streaming responses)",
@@ -14257,7 +14257,6 @@
         "parameters": [
           {
             "name": "body",
-            "description": "Request message for the Billing.ReadCommitmentReports rpc.",
             "in": "body",
             "required": true,
             "schema": {
@@ -14266,7 +14265,7 @@
           }
         ],
         "tags": [
-          "Billing"
+          "GuaranteedCommitments"
         ]
       }
     },
@@ -22614,10 +22613,6 @@
       },
       "description": "Request message for the Billing.ReadAdjustmentEntries rpc."
     },
-    "BillingReadCommitmentReportAccountsBody": {
-      "type": "object",
-      "description": "Request message for the Billing.ReadCommitmentReportAccounts rpc."
-    },
     "BillingReadInvoiceAdjustmentsBody": {
       "type": "object",
       "properties": {
@@ -25510,6 +25505,9 @@
       }
     },
     "GuaranteedCommitmentsCommitmentsPlanApplyBody": {
+      "type": "object"
+    },
+    "GuaranteedCommitmentsReadCommitmentReportAccountsBody": {
       "type": "object"
     },
     "GuaranteedCommitmentsSaveCommitmentsPlanAsDraftBody": {
@@ -36873,102 +36871,81 @@
       "type": "object",
       "properties": {
         "month": {
-          "type": "string",
-          "description": "Month in \"yyyy-mm\" format (e.g., \"2026-05\")."
+          "type": "string"
         },
         "billUnadjusted": {
           "type": "number",
-          "format": "double",
-          "description": "Total bill before optimization (unoptimized_bill)."
+          "format": "double"
         },
         "billOptimized": {
           "type": "number",
-          "format": "double",
-          "description": "Total bill after optimization (optimized_bill)."
+          "format": "double"
         },
         "grossSavings": {
           "type": "number",
-          "format": "double",
-          "description": "Gross savings (total_savings)."
+          "format": "double"
         },
         "riskPremium": {
           "type": "number",
-          "format": "double",
-          "description": "Risk premium charged (gri_premiums)."
+          "format": "double"
         },
         "rebates": {
           "type": "number",
-          "format": "double",
-          "description": "Rebate amount."
+          "format": "double"
         },
         "netSavings": {
           "type": "number",
-          "format": "double",
-          "description": "Net savings after premium and rebate."
+          "format": "double"
         },
         "revenueShare": {
           "type": "number",
-          "format": "double",
-          "description": "Calculated revenue share (riskPremium * revenueShareRate)."
+          "format": "double"
         },
         "revenueShareRate": {
           "type": "number",
-          "format": "double",
-          "description": "The revenue share rate applied (e.g., 0.20 for 20%)."
+          "format": "double"
         }
-      },
-      "description": "Streaming response message for the Billing.ReadCommitmentReports rpc."
+      }
     },
     "v1CommitmentReportAccount": {
       "type": "object",
       "properties": {
         "billingGroupId": {
-          "type": "string",
-          "description": "The billing group's internal id."
+          "type": "string"
         },
         "billingGroupName": {
-          "type": "string",
-          "description": "The billing group name."
+          "type": "string"
         },
         "accountId": {
-          "type": "string",
-          "description": "The linked account ID."
+          "type": "string"
         },
         "accountName": {
-          "type": "string",
-          "description": "The linked account name."
+          "type": "string"
         },
         "cloud": {
-          "type": "string",
-          "description": "Cloud provider (e.g., \"aws\")."
+          "type": "string"
         },
         "grossSavings": {
           "type": "number",
-          "format": "double",
-          "description": "Gross savings (monthly_savings from meta in RIPPLE_FEES)."
+          "format": "double"
         },
         "riskPremium": {
           "type": "number",
-          "format": "double",
-          "description": "Risk premium (positive cost from RIPPLE_FEES)."
+          "format": "double"
         },
         "rebates": {
           "type": "number",
-          "format": "double",
-          "description": "Rebates (absolute value of negative cost from RIPPLE_FEES)."
+          "format": "double"
         },
         "netSavings": {
           "type": "number",
-          "format": "double",
-          "description": "Net savings (net_savings from meta in RIPPLE_FEES)."
+          "format": "double"
         },
         "revenueShare": {
           "type": "number",
-          "format": "double",
-          "description": "Calculated revenue share (riskPremium * revenueShareRate)."
+          "format": "double"
         }
-      },
-      "description": "Streaming response message for the Billing.ReadCommitmentReportAccounts rpc."
+      }
     },
     "v1CommitmentsChartData": {
       "type": "object",
@@ -44647,8 +44624,7 @@
       }
     },
     "v1ReadCommitmentReportsRequest": {
-      "type": "object",
-      "description": "Request message for the Billing.ReadCommitmentReports rpc."
+      "type": "object"
     },
     "v1ReadCostAttributesRequestAwsOptions": {
       "type": "object",
