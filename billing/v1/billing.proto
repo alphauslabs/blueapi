@@ -590,7 +590,7 @@ service Billing {
   // Reads monthly commitment reports for the MSP. Only available in Ripple.
   rpc ReadCommitmentReports(ReadCommitmentReportsRequest) returns (stream CommitmentReport) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/commitmentreports:read"
+      post: "/v1/reports:read"
       body: "*"
     };
   }
@@ -598,7 +598,7 @@ service Billing {
   // Reads per-account commitment report details for a specific month. Only available in Ripple.
   rpc ReadCommitmentReportAccounts(ReadCommitmentReportAccountsRequest) returns (stream CommitmentReportAccount) {
     option (google.api.http) = {
-      post: "/v1/{vendor}/commitmentreports/{month}/accounts:read"
+      post: "/v1/reports/{month}/accounts:read"
       body: "*"
     };
   }
@@ -2549,8 +2549,6 @@ message AdjustmentEntryItem {
 
 // Request message for the Billing.ReadCommitmentReports rpc.
 message ReadCommitmentReportsRequest {
-  // Required. At the moment, only `aws` is supported.
-  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // Streaming response message for the Billing.ReadCommitmentReports rpc.
@@ -2558,16 +2556,16 @@ message CommitmentReport {
   // Month in "yyyy-mm" format (e.g., "2026-05").
   string month = 1;
 
-  // Total bill before optimization (unoptimized_bill from Archera).
+  // Total bill before optimization (unoptimized_bill).
   double billUnadjusted = 2;
 
-  // Total bill after optimization (optimized_bill from Archera).
+  // Total bill after optimization (optimized_bill).
   double billOptimized = 3;
 
-  // Gross savings (total_savings from Archera).
+  // Gross savings (total_savings).
   double grossSavings = 4;
 
-  // Risk premium charged (gri_premiums from Archera).
+  // Risk premium charged (gri_premiums).
   double riskPremium = 5;
 
   // Rebate amount.
@@ -2585,11 +2583,8 @@ message CommitmentReport {
 
 // Request message for the Billing.ReadCommitmentReportAccounts rpc.
 message ReadCommitmentReportAccountsRequest {
-  // Required. At the moment, only `aws` is supported.
-  string vendor = 1 [(google.api.field_behavior) = REQUIRED];
-
   // Required. The billing month. Format: `yyyymm`.
-  string month = 2 [(google.api.field_behavior) = REQUIRED];
+  string month = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // Streaming response message for the Billing.ReadCommitmentReportAccounts rpc.
