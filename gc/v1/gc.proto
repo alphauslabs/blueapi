@@ -3,6 +3,7 @@ syntax = "proto3";
 package blueapi.gc.v1;
 
 import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
 import "google/protobuf/struct.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -58,6 +59,24 @@ service GuaranteedCommitments {
   rpc GetCommitmentsUtilization(GetCommitmentsUtilizationRequest) returns (CommitmentsUtilizationResponse) {
     option (google.api.http) = {
       get: "/v1/commitments/{commitmentId}/utilization"
+    };
+  }
+
+  // ####################### REPORTS #######################
+
+  // Reads monthly commitment reports for the MSP. Only available in Ripple.
+  rpc ReadCommitmentReports(ReadCommitmentReportsRequest) returns (stream CommitmentReport) {
+    option (google.api.http) = {
+      post: "/v1/reports/invoice:read"
+      body: "*"
+    };
+  }
+
+  // Reads per-account commitment report details for a specific month. Only available in Ripple.
+  rpc ReadCommitmentReportAccounts(ReadCommitmentReportAccountsRequest) returns (stream CommitmentReportAccount) {
+    option (google.api.http) = {
+      post: "/v1/reports/invoice/{month}/accounts:read"
+      body: "*"
     };
   }
 
@@ -456,6 +475,13 @@ message GetCommitmentsChartRequest {
 message GetCommitmentsUtilizationRequest {
   // Required. The commitment id.
   string commitmentId = 1;
+}
+
+message ReadCommitmentReportsRequest {}
+
+message ReadCommitmentReportAccountsRequest {
+  // Required. The billing month. Format: `yyyymm`.
+  string month = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message GetMetricsRequest {
@@ -1160,6 +1186,31 @@ message CommitmentsUtilizationData {
 
 message CommitmentsUtilizationResponse {
   repeated CommitmentsUtilizationData data = 1;
+}
+
+message CommitmentReport {
+  string month = 1;
+  double billUnadjusted = 2;
+  double billOptimized = 3;
+  double grossSavings = 4;
+  double riskPremium = 5;
+  double rebates = 6;
+  double netSavings = 7;
+  double revenueShare = 8;
+  double revenueShareRate = 9;
+}
+
+message CommitmentReportAccount {
+  string billingGroupId = 1;
+  string billingGroupName = 2;
+  string accountId = 3;
+  string accountName = 4;
+  string cloud = 5;
+  double grossSavings = 6;
+  double riskPremium = 7;
+  double rebates = 8;
+  double netSavings = 9;
+  double revenueShare = 10;
 }
 
 message MetricsResponse {
