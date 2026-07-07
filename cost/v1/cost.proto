@@ -1862,13 +1862,14 @@ message ExportReportRequest {
   // If empty, the MSP default notification channel configured in DynamoDB is used.
   repeated string notification_channel_ids = 4 [(google.api.field_behavior) = OPTIONAL];
 
-  // Optional. Valid only for the `aws` vendor. AWS RI/SP export options.
-  AwsRispExportOptions aws_options = 10;
+  // Optional. Valid only for the `aws` vendor. AWS export report options.
+  // Supports all registered export-report queries
+  AwsExportReportOptions aws_options = 10;
   // Future vendor-specific options follow the same pattern (e.g. gcp_options, azure_options).
 }
 
-// AWS RI/SP export options for ExportReport.
-message AwsRispExportOptions {
+// AWS export report options for ExportReport.
+message AwsExportReportOptions {
   // Per-report column filter container.
   message Columns {
     repeated string values = 1;
@@ -1882,7 +1883,6 @@ message AwsRispExportOptions {
   string language = 2 [(google.api.field_behavior) = OPTIONAL];
 
   // Required. Report queries to include in the export. Must contain at least 1 value.
-  // Valid values: "ri_summary", "sp_summary", "ri_usageaccount", "sp_usageaccount".
   repeated string queries = 3 [(google.api.field_behavior) = REQUIRED];
 
   // Optional. Global column filter applied to all reports.
@@ -1890,7 +1890,7 @@ message AwsRispExportOptions {
   repeated string columns = 4 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Per-report column overrides.
-  // Keys must be valid query names (ri_summary, sp_summary, ri_usageaccount, sp_usageaccount).
+  // Keys must be valid query names for registered AWS export-report queries.
   map<string, Columns> columns_by_query = 5;
 }
 
