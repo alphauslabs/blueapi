@@ -14144,6 +14144,55 @@
         ]
       }
     },
+    "/v1/reports/{month}/accounts:read": {
+      "post": {
+        "summary": "Reads per-account commitment report details for a specific month. Only available in Ripple.",
+        "operationId": "Billing_ReadCommitmentReportAccounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1CommitmentReportAccount"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1CommitmentReportAccount"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "month",
+            "description": "Required. The billing month. Format: `yyyymm`.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingReadCommitmentReportAccountsBody"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/reports:export": {
       "post": {
         "summary": "Exports a vendor report and delivers results via email notification channel.\nSupports multiple report types per vendor. For AWS, this covers RI/SP utilization reports.\nReturns a long-running operation; use GetOperation to poll for completion.",
@@ -14175,6 +14224,49 @@
         ],
         "tags": [
           "Cost"
+        ]
+      }
+    },
+    "/v1/reports:read": {
+      "post": {
+        "summary": "Reads monthly commitment reports for the MSP. Only available in Ripple.",
+        "operationId": "Billing_ReadCommitmentReports",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1CommitmentReport"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1CommitmentReport"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for the Billing.ReadCommitmentReports rpc.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ReadCommitmentReportsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
         ]
       }
     },
@@ -19829,111 +19921,6 @@
         ]
       }
     },
-    "/v1/{vendor}/commitmentreports/{month}/accounts:read": {
-      "post": {
-        "summary": "Reads per-account commitment report details for a specific month. Only available in Ripple.",
-        "operationId": "Billing_ReadCommitmentReportAccounts",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1CommitmentReportAccount"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1CommitmentReportAccount"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "month",
-            "description": "Required. The billing month. Format: `yyyymm`.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/BillingReadCommitmentReportAccountsBody"
-            }
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
-      }
-    },
-    "/v1/{vendor}/commitmentreports:read": {
-      "post": {
-        "summary": "Reads monthly commitment reports for the MSP. Only available in Ripple.",
-        "operationId": "Billing_ReadCommitmentReports",
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "$ref": "#/definitions/v1CommitmentReport"
-                },
-                "error": {
-                  "$ref": "#/definitions/rpcStatus"
-                }
-              },
-              "title": "Stream result of v1CommitmentReport"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/BillingReadCommitmentReportsBody"
-            }
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
-      }
-    },
     "/v1/{vendor}/costattrs": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Reads the available cost attributes of an organization (Ripple) or billing group (Wave).",
@@ -22630,10 +22617,6 @@
     "BillingReadCommitmentReportAccountsBody": {
       "type": "object",
       "description": "Request message for the Billing.ReadCommitmentReportAccounts rpc."
-    },
-    "BillingReadCommitmentReportsBody": {
-      "type": "object",
-      "description": "Request message for the Billing.ReadCommitmentReports rpc."
     },
     "BillingReadInvoiceAdjustmentsBody": {
       "type": "object",
@@ -36896,22 +36879,22 @@
         "billUnadjusted": {
           "type": "number",
           "format": "double",
-          "description": "Total bill before optimization (unoptimized_bill from Archera)."
+          "description": "Total bill before optimization (unoptimized_bill)."
         },
         "billOptimized": {
           "type": "number",
           "format": "double",
-          "description": "Total bill after optimization (optimized_bill from Archera)."
+          "description": "Total bill after optimization (optimized_bill)."
         },
         "grossSavings": {
           "type": "number",
           "format": "double",
-          "description": "Gross savings (total_savings from Archera)."
+          "description": "Gross savings (total_savings)."
         },
         "riskPremium": {
           "type": "number",
           "format": "double",
-          "description": "Risk premium charged (gri_premiums from Archera)."
+          "description": "Risk premium charged (gri_premiums)."
         },
         "rebates": {
           "type": "number",
@@ -44662,6 +44645,10 @@
           "description": "Parent Id. If not empty return all child billing group under the parent only, \nIf both root and parent are empty returns all child billing groups under the MSP."
         }
       }
+    },
+    "v1ReadCommitmentReportsRequest": {
+      "type": "object",
+      "description": "Request message for the Billing.ReadCommitmentReports rpc."
     },
     "v1ReadCostAttributesRequestAwsOptions": {
       "type": "object",
