@@ -1172,6 +1172,13 @@ service Billing {
       delete: "/v1/invoicelayoutconfig/{id}"
     };
   }
+
+  // WORK-IN-PROGRESS. Lists the billing groups attached to an invoice layout config.
+  rpc ListInvoiceLayoutConfigBillingGroups(ListInvoiceLayoutConfigBillingGroupsRequest) returns (ListInvoiceLayoutConfigBillingGroupsResponse) {
+    option (google.api.http) = {
+      get: "/v1/invoicelayoutconfig/{id}/billinggroups"
+    };
+  }
 }
 
 message BillingGroup {
@@ -4112,4 +4119,14 @@ message DeleteBillingGroupInvoiceLayoutConfigRequest {
 message DeleteInvoiceLayoutConfigRequest {
   // Required. The invoice layout config id.
   string id = 1;
+}
+
+message ListInvoiceLayoutConfigBillingGroupsRequest {
+  // Required. The invoice layout config id.
+  string id = 1;
+}
+
+message ListInvoiceLayoutConfigBillingGroupsResponse {
+  // The internal ids of the billing groups attached to this layout config.
+  repeated string billinggroup_ids = 1;
 }
