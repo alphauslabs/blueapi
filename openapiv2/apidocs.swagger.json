@@ -16313,6 +16313,97 @@
         ]
       }
     },
+    "/v1/terms/document/{language}": {
+      "get": {
+        "summary": "Returns temporary read access to the active Terms of Service PDF for the\nauthenticated Ripple or WavePro product.",
+        "description": "The backend derives the product and active version from trusted\nauthentication context. The language path parameter selects the English\nor Japanese document for that active version.",
+        "operationId": "GuaranteedCommitments_GetTermsDocument",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetTermsDocumentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "language",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/terms/status": {
+      "get": {
+        "summary": "Returns the evaluated Terms of Service consent status for the authenticated\nRipple MSP or WavePro root customer.",
+        "description": "The backend derives the product and consent scope from trusted authentication\ncontext. The frontend does not provide product or consent-scope identifiers.",
+        "operationId": "GuaranteedCommitments_GetTermsConsentStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetTermsConsentStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/terms:accept": {
+      "post": {
+        "summary": "Records explicit acceptance of the currently active Terms of Service version\nfor the authenticated Ripple MSP or WavePro root customer.",
+        "description": "The frontend submits the version it displayed to the user. The backend\nderives the product, consent scope, accepting user, and acceptance time from\ntrusted request context.",
+        "operationId": "GuaranteedCommitments_AcceptTerms",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AcceptTermsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Identifies the active Terms of Service version displayed to the user.\n\nThe backend verifies that this version is still active before recording\nconsent. Product and scope are derived from authenticated request context.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AcceptTermsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/test": {
       "get": {
         "summary": "Test endpoint only.",
@@ -34228,6 +34319,31 @@
         }
       }
     },
+    "v1AcceptTermsRequest": {
+      "type": "object",
+      "properties": {
+        "versionId": {
+          "type": "string"
+        }
+      },
+      "description": "Identifies the active Terms of Service version displayed to the user.\n\nThe backend verifies that this version is still active before recording\nconsent. Product and scope are derived from authenticated request context.",
+      "required": [
+        "versionId"
+      ]
+    },
+    "v1AcceptTermsResponse": {
+      "type": "object",
+      "properties": {
+        "consent": {
+          "$ref": "#/definitions/v1TermsConsentRecord"
+        },
+        "consentStatus": {
+          "$ref": "#/definitions/v1GetTermsConsentStatusResponse",
+          "description": "Normally returns TERMS_CONSENT_STATE_CONSENTED after success."
+        }
+      },
+      "description": "Contains the saved consent and updated consent state."
+    },
     "v1AccountAccess": {
       "type": "object",
       "properties": {
@@ -42378,6 +42494,65 @@
         }
       }
     },
+    "v1GetTermsConsentStatusResponse": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "$ref": "#/definitions/v1TermsConsentState"
+        },
+        "accessAllowed": {
+          "type": "boolean",
+          "description": "Whether GC screen interaction is permitted."
+        },
+        "blocking": {
+          "type": "boolean",
+          "description": "Whether the frontend must display a blocking consent modal."
+        },
+        "showUpdateBanner": {
+          "type": "boolean",
+          "description": "Whether the frontend must display the normal-update banner."
+        },
+        "bannerExpiresAt": {
+          "type": "string",
+          "description": "Empty unless showUpdateBanner is true."
+        },
+        "activeVersion": {
+          "$ref": "#/definitions/v1TermsOfServiceVersion",
+          "description": "Absent when no active Terms of Service version exists."
+        }
+      },
+      "description": "Evaluated consent status used by the Ripple and WavePro frontends."
+    },
+    "v1GetTermsDocumentResponse": {
+      "type": "object",
+      "properties": {
+        "versionId": {
+          "type": "string",
+          "description": "Internal UUID of the active Terms of Service version."
+        },
+        "product": {
+          "type": "string",
+          "description": "\"ripple\" or \"wavepro\"."
+        },
+        "language": {
+          "type": "string",
+          "description": "\"en\" or \"ja\"."
+        },
+        "contentType": {
+          "type": "string",
+          "description": "Currently always \"application/pdf\"."
+        },
+        "url": {
+          "type": "string",
+          "description": "Short-lived signed URL for viewing the private PDF."
+        },
+        "expiresAt": {
+          "type": "string",
+          "description": "Signed URL expiration time in RFC 3339 format."
+        }
+      },
+      "description": "Contains temporary read access to one language document of the current\nactive Terms of Service version."
+    },
     "v1GetUnitMetricResponse": {
       "type": "object",
       "properties": {
@@ -43107,7 +43282,7 @@
     "v1ListInvoiceLayoutConfigBillingGroupsResponse": {
       "type": "object",
       "properties": {
-        "billingGroupIds": {
+        "billinggroupIds": {
           "type": "array",
           "items": {
             "type": "string"
@@ -46561,6 +46736,67 @@
         }
       },
       "description": "TermsAcceptance represents the current terms acceptance state for an entity."
+    },
+    "v1TermsConsentRecord": {
+      "type": "object",
+      "properties": {
+        "product": {
+          "type": "string",
+          "description": "\"ripple\" or \"wavepro\"."
+        },
+        "acceptedVersionId": {
+          "type": "string",
+          "description": "Accepted Terms of Service version UUID."
+        },
+        "acceptedBy": {
+          "type": "string",
+          "description": "Authenticated user who accepted the version."
+        },
+        "acceptedAt": {
+          "type": "string",
+          "description": "Acceptance timestamp in RFC 3339 format."
+        }
+      },
+      "description": "Recorded acceptance of one Terms of Service version."
+    },
+    "v1TermsConsentState": {
+      "type": "string",
+      "enum": [
+        "TERMS_CONSENT_STATE_UNSPECIFIED",
+        "TERMS_CONSENT_STATE_NO_ACTIVE_TOS",
+        "TERMS_CONSENT_STATE_CONSENT_REQUIRED",
+        "TERMS_CONSENT_STATE_CONSENTED",
+        "TERMS_CONSENT_STATE_UPDATE_AVAILABLE",
+        "TERMS_CONSENT_STATE_RECONSENT_REQUIRED"
+      ],
+      "default": "TERMS_CONSENT_STATE_UNSPECIFIED",
+      "description": "TermsConsentState describes the evaluated user-facing consent state for the\ncurrent product and organizational consent scope.\n\n - TERMS_CONSENT_STATE_NO_ACTIVE_TOS: No active published Terms of Service version exists.\n - TERMS_CONSENT_STATE_CONSENT_REQUIRED: An active version exists, but no version has been accepted for the\napplicable product and consent scope.\n - TERMS_CONSENT_STATE_CONSENTED: The applicable scope has sufficient consent.\n - TERMS_CONSENT_STATE_UPDATE_AVAILABLE: A normal update is available and its 14-day banner period is active.\n - TERMS_CONSENT_STATE_RECONSENT_REQUIRED: The active version requires explicit re-consent."
+    },
+    "v1TermsOfServiceVersion": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Internal version UUID."
+        },
+        "product": {
+          "type": "string",
+          "description": "\"ripple\" or \"wavepro\"."
+        },
+        "versionLabel": {
+          "type": "string",
+          "description": "Administrator-defined version label."
+        },
+        "classification": {
+          "type": "string",
+          "description": "\"NORMAL\" or \"RECONSENT\"."
+        },
+        "publishedAt": {
+          "type": "string",
+          "description": "Original publication timestamp in RFC 3339 format."
+        }
+      },
+      "description": "Active published Terms of Service version metadata."
     },
     "v1ThirdProfitItemSection": {
       "type": "object",
