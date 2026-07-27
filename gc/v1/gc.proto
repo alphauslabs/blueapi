@@ -406,10 +406,82 @@ rpc ListAzureIntegrations(ListAzureIntegrationsRequest) returns (ListAzureIntegr
   };
 }
 
+// ------------------------ TERMS OF SERVICE ------------------------
+
+// Returns the evaluated Terms of Service consent status for the authenticated
+// Ripple MSP or WavePro root customer.
+//
+// The backend derives the product and consent scope from trusted authentication
+// context. The frontend does not provide product or consent-scope identifiers.
+rpc GetTermsConsentStatus(
+  GetTermsConsentStatusRequest
+) returns (
+  GetTermsConsentStatusResponse
+) {
+  option (google.api.http) = {
+    get: "/v1/terms/status"
+  };
+}
+
+// Returns temporary read access to the active Terms of Service PDF for the
+// authenticated Ripple or WavePro product.
+//
+// The backend derives the product and active version from trusted
+// authentication context. The language path parameter selects the English
+// or Japanese document for that active version.
+rpc GetTermsDocument(
+  GetTermsDocumentRequest
+) returns (
+  GetTermsDocumentResponse
+) {
+  option (google.api.http) = {
+    get: "/v1/terms/document/{language}"
+  };
+}
+
+// Records explicit acceptance of the currently active Terms of Service version
+// for the authenticated Ripple MSP or WavePro root customer.
+//
+// The frontend submits the version it displayed to the user. The backend
+// derives the product, consent scope, accepting user, and acceptance time from
+// trusted request context.
+rpc AcceptTerms(
+  AcceptTermsRequest
+) returns (
+  AcceptTermsResponse
+) {
+  option (google.api.http) = {
+    post: "/v1/terms:accept"
+    body: "*"
+  };
+}
+
 
 }
 
 // ####################### ENUMS #######################
+
+// TermsConsentState describes the evaluated user-facing consent state for the
+// current product and organizational consent scope.
+enum TermsConsentState {
+  TERMS_CONSENT_STATE_UNSPECIFIED = 0;
+
+  // No active published Terms of Service version exists.
+  TERMS_CONSENT_STATE_NO_ACTIVE_TOS = 1;
+
+  // An active version exists, but no version has been accepted for the
+  // applicable product and consent scope.
+  TERMS_CONSENT_STATE_CONSENT_REQUIRED = 2;
+
+  // The applicable scope has sufficient consent.
+  TERMS_CONSENT_STATE_CONSENTED = 3;
+
+  // A normal update is available and its 14-day banner period is active.
+  TERMS_CONSENT_STATE_UPDATE_AVAILABLE = 4;
+
+  // The active version requires explicit re-consent.
+  TERMS_CONSENT_STATE_RECONSENT_REQUIRED = 5;
+}
 
 enum Provider {
   PROVIDER_UNSPECIFIED = 0;
@@ -453,6 +525,32 @@ enum UsageType {
 }
 
 // ####################### REQUEST MESSAGES #######################
+
+// Product and consent scope are derived from authenticated request context.
+message GetTermsConsentStatusRequest {}
+
+// Selects one language representation of the active Terms of Service.
+//
+// Supported values:
+// - "en": English
+// - "ja": Japanese
+//
+// Product and version are derived from authenticated request context.
+message GetTermsDocumentRequest {
+  string language = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+} 
+
+// Identifies the active Terms of Service version displayed to the user.
+//
+// The backend verifies that this version is still active before recording
+// consent. Product and scope are derived from authenticated request context.
+message AcceptTermsRequest {
+  string versionId = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+}
 
 message ListOrgsRequest {}
 
@@ -988,6 +1086,89 @@ message ListAzureIntegrationsRequest {
 
 
 // ####################### RESPONSE MESSAGES #######################
+
+// Active published Terms of Service version metadata.
+message TermsOfServiceVersion {
+  // Internal version UUID.
+  string id = 1;
+
+  // "ripple" or "wavepro".
+  string product = 2;
+
+  // Administrator-defined version label.
+  string versionLabel = 3;
+
+  // "NORMAL" or "RECONSENT".
+  string classification = 4;
+
+  // Original publication timestamp in RFC 3339 format.
+  string publishedAt = 5;
+}
+
+// Evaluated consent status used by the Ripple and WavePro frontends.
+message GetTermsConsentStatusResponse {
+  TermsConsentState state = 1;
+
+  // Whether GC screen interaction is permitted.
+  bool accessAllowed = 2;
+
+  // Whether the frontend must display a blocking consent modal.
+  bool blocking = 3;
+
+  // Whether the frontend must display the normal-update banner.
+  bool showUpdateBanner = 4;
+
+  // Empty unless showUpdateBanner is true.
+  string bannerExpiresAt = 5;
+
+  // Absent when no active Terms of Service version exists.
+  TermsOfServiceVersion activeVersion = 6;
+}
+
+// Contains temporary read access to one language document of the current
+// active Terms of Service version.
+message GetTermsDocumentResponse {
+  // Internal UUID of the active Terms of Service version.
+  string versionId = 1;
+
+  // "ripple" or "wavepro".
+  string product = 2;
+
+  // "en" or "ja".
+  string language = 3;
+
+  // Currently always "application/pdf".
+  string contentType = 4;
+
+  // Short-lived signed URL for viewing the private PDF.
+  string url = 5;
+
+  // Signed URL expiration time in RFC 3339 format.
+  string expiresAt = 6;
+}
+
+// Recorded acceptance of one Terms of Service version.
+message TermsConsentRecord {
+  // "ripple" or "wavepro".
+  string product = 1;
+
+  // Accepted Terms of Service version UUID.
+  string acceptedVersionId = 2;
+
+  // Authenticated user who accepted the version.
+  string acceptedBy = 3;
+
+  // Acceptance timestamp in RFC 3339 format.
+  string acceptedAt = 4;
+}
+
+// Contains the saved consent and updated consent state.
+message AcceptTermsResponse {
+  TermsConsentRecord consent = 1;
+
+  // Normally returns TERMS_CONSENT_STATE_CONSENTED after success.
+  GetTermsConsentStatusResponse consentStatus = 2;
+}
 
 message Org {
   string orgId = 1;
