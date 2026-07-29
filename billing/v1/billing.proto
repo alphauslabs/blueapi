@@ -93,6 +93,13 @@ service Billing {
     };
   }
 
+  // Gets a map of billing group internal ids to billing group identifiers.
+  rpc GetBillingGroupIdentityMap(GetBillingGroupIdentityMapRequest) returns (GetBillingGroupIdentityMapResponse) {
+    option (google.api.http) = {
+      get: "/v1/billinggroups/identitymap"
+    };
+  }
+
   // WORK-IN-PROGRESS: Gets an access group.
   rpc GetAccessGroup(GetAccessGroupRequest) returns (GetAccessGroupResponse) {
     option (google.api.http) = {
@@ -1222,6 +1229,20 @@ message BillingGroup {
   AwsOptions awsOptions = 9;
 }
 
+// Minimal billing group identifier details.
+message BillingGroupIdentity {
+  // The billing group id.
+  string billingGroupId = 1;
+
+  // The billing group name.
+  string billingGroupName = 2;
+}
+
+// Map of billingGroupInternalId to billing group identifier details.
+message BillingGroupIdentityMap {
+  map<string, BillingGroupIdentity> billingGroupInternalId = 1;
+}
+
 // Additional items for a billing group.
 message BillingGroupAdditionalItems {
   // AWS additional items
@@ -1540,6 +1561,14 @@ message GetBillingGroupRequest {
 // Response message for the Billing.GetBillingGroup rpc.
 message GetBillingGroupResponse {
   BillingGroup billingGroup = 1; 
+}
+
+// Request message for the Billing.GetBillingGroupIdentityMap rpc.
+message GetBillingGroupIdentityMapRequest {}
+
+// Response message for the Billing.GetBillingGroupIdentityMap rpc.
+message GetBillingGroupIdentityMapResponse {
+  BillingGroupIdentityMap billingGroupIdentityMap = 1;
 }
 
 // Defines the fields associated with a Wave access group.
