@@ -334,6 +334,17 @@ service Cost {
     };
   }
 
+  // Exports the usage-based cost filter as a CSV and returns the download URL synchronously.
+  // Intended for direct browser download with small datasets. For large datasets that may
+  // exceed the request timeout, use ExportCostFiltersFile with a notification channel instead.
+  // Only available in Wave(Pro).
+  rpc ExportCostFiltersFileSync(ExportCostFiltersFileRequest) returns (ExportCostFiltersFileResponse) {
+    option (google.api.http) = {
+      post: "/v1/{vendor}/costfilters/{filterId}:exportdirect"
+      body: "*"
+    };
+  }
+
   // Reads the available cost attributes of an organization (Ripple) or billing group (Wave).
   //
   // Similar to the `ReadCosts` API but without the aggregated usages and costs. At the moment, the supported `{vendor}` is `aws`. If datetime range parameters are not set, month-to-date (current month) will be returned.

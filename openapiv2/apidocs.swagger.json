@@ -20356,6 +20356,53 @@
         ]
       }
     },
+    "/v1/{vendor}/costfilters/{filterId}:exportdirect": {
+      "post": {
+        "summary": "Exports the usage-based cost filter as a CSV and returns the download URL synchronously.\nIntended for direct browser download with small datasets. For large datasets that may\nexceed the request timeout, use ExportCostFiltersFile with a notification channel instead.\nOnly available in Wave(Pro).",
+        "operationId": "Cost_ExportCostFiltersFileSync",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ExportCostFiltersFileResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. At the moment, only `aws` is supported.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "filterId",
+            "description": "Required. Filter Id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CostExportCostFiltersFileSyncBody"
+            }
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/{vendor}/costs:calculate": {
       "post": {
         "summary": "Triggers monthly calculations for costs and invoices at either organization or billing group level.",
@@ -23759,6 +23806,39 @@
       }
     },
     "CostExportCostFiltersFileBody": {
+      "type": "object",
+      "properties": {
+        "notificationChannelIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required. The channel ids to use for notifications."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Optional. The UTC date to start streaming data from. If not set, the first day of the current month will be used. Format: `yyyymmdd`. The oldest supported date is `20200101`."
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Optional. The UTC date to end the streaming data. If not set, current date will be used. Format: `yyyymmd`."
+        },
+        "groupByMonth": {
+          "type": "boolean",
+          "description": "Optional. If set to true, return data grouped by month within the date range. If you want data that is grouped per account per month, set this to `true`, then set `groupByColumns` to `none`."
+        },
+        "groupByColumns": {
+          "type": "string",
+          "description": "Optional. A comma-separated list of columns to aggregate the data into. Valid values are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `invoiceId`, `description`, and `resourceId`. A special value of `none` is also supported, which means query by date or month per account only.\n\nFor example, if you only want the services and region data, you can set this field to `productCode,region`. Your input sequence doesn't matter (although the sequence above is recommended) as the actual sequence is already fixed in the return data (see the definition in https://github.com/alphauslabs/blueapi/blob/main/api/aws/cost.proto), which is generic to specific, top to bottom. Invalid values are discarded. Excluded columns will be empty."
+        },
+        "includeTags": {
+          "type": "boolean",
+          "description": "Optional. If set to true, stream will include resource tags."
+        }
+      },
+      "description": "Request message for the ExportCostFiltersFile rpc."
+    },
+    "CostExportCostFiltersFileSyncBody": {
       "type": "object",
       "properties": {
         "notificationChannelIds": {
@@ -40099,6 +40179,16 @@
       "required": [
         "format"
       ]
+    },
+    "v1ExportCostFiltersFileResponse": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "Required. URL of exported file."
+        }
+      },
+      "description": "Response message for the ExportCostFiltersFile rpc."
     },
     "v1ExportData": {
       "type": "object",
