@@ -582,6 +582,16 @@ service Cost {
     };
   }
 
+  // Synchronously checks whether billing is finalized for a given vendor and month,
+  // without triggering an export job. Backed by the same readiness check ExportReport
+  // runs internally for the reserveshield report type; has no side effects (no export,
+  // no email, no long-running operation).
+  rpc GetInvoiceReadiness(GetInvoiceReadinessRequest) returns (GetInvoiceReadinessResponse) {
+    option (google.api.http) = {
+      get: "/v1/{vendor}/reports/invoicereadiness"
+    };
+  }
+
   // Get the utilization details for an organization (or MSP).
   rpc GetUtilization(GetUtilizationRequest) returns (GetUtilizationResponse) {
     option (google.api.http) = {
@@ -1903,6 +1913,26 @@ message AwsExportReportOptions {
   // Optional. Per-report column overrides.
   // Keys must be valid query names for registered AWS export-report queries.
   map<string, Columns> columns_by_query = 5;
+}
+
+// Request message for GetInvoiceReadiness.
+message GetInvoiceReadinessRequest {
+  // Optional. Cloud vendor.
+  // Accepted values: "aws", "gcp", "azure".
+  // If empty, defaults to "aws" for backward compatibility.
+  string vendor = 1;
+
+  // Required. Billing month in YYYY-MM format.
+  string month = 2;
+}
+
+// Response message for GetInvoiceReadiness.
+message GetInvoiceReadinessResponse {
+  // True if all usage for the requested month has an invoice ID (billing is finalized).
+  bool ready = 1;
+
+  // Human-readable explanation when ready is false. Empty when ready is true.
+  string reason = 2;
 }
 
 // Request message for GetUtilization
