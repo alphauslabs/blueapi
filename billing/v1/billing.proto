@@ -2913,7 +2913,10 @@ message GetFreeFormatResponse {
   repeated FreeFormItem freeFormat = 2;
 }
 
-message GetMonthlyMiscFeeImportTemplateRequest {}
+message GetMonthlyMiscFeeImportTemplateRequest {
+  // Optional. Template language. Supported values are "en" and "ja". Empty uses the caller's language or server default.
+  string language = 1;
+}
 
 message MonthlyMiscFeeImportTemplate {
   // Supported import format. Currently "csv".
@@ -2952,8 +2955,8 @@ message BulkImportMonthlyMiscFeesRequest {
   // Required. Selected billing cycle in YYYY-MM form; YYYYMM is accepted and normalized by the server.
   string billing_month = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. Uploaded CSV bytes.
-  bytes csv_content = 2 [(google.api.field_behavior) = REQUIRED];
+  // Required. Uploaded CSV content as normalized UTF-8 text.
+  string csv_content = 2 [(google.api.field_behavior) = REQUIRED];
 
   // Required. Original upload file name for audit metadata.
   string file_name = 3 [(google.api.field_behavior) = REQUIRED];
