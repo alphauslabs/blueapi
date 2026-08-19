@@ -582,10 +582,7 @@ service Cost {
     };
   }
 
-  // Synchronously checks whether billing is finalized for a given vendor and month,
-  // without triggering an export job. Backed by the same readiness check ExportReport
-  // runs internally for the reserveshield report type; has no side effects (no export,
-  // no email, no long-running operation).
+  // Synchronously checks billing readiness without triggering an export, email, or long-running operation.
   rpc GetInvoiceReadiness(GetInvoiceReadinessRequest) returns (GetInvoiceReadinessResponse) {
     option (google.api.http) = {
       get: "/v1/{vendor}/reports/invoicereadiness"
