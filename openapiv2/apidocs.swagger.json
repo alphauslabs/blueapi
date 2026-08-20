@@ -21636,6 +21636,45 @@
         ]
       }
     },
+    "/v1/{vendor}/reports/invoicereadiness": {
+      "get": {
+        "summary": "Synchronously checks billing readiness without triggering an export, email, or long-running operation.",
+        "operationId": "Cost_GetInvoiceReadiness",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetInvoiceReadinessResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "description": "Required. Bound from the URL path, so it cannot be empty/omitted.\nAccepted values: \"aws\", \"gcp\", \"azure\".",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "month",
+            "description": "Required. Billing month in YYYY-MM format.",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cost"
+        ]
+      }
+    },
     "/v1/{vendor}/services": {
       "get": {
         "summary": "Lists available cloud services and their associated SKUs for a given vendor.\nUse this to retrieve service codes and names that can be referenced in exclude service settings.",
@@ -41944,6 +41983,20 @@
         }
       },
       "description": "Response message for GetInvoiceDisplaySettings rpc."
+    },
+    "v1GetInvoiceReadinessResponse": {
+      "type": "object",
+      "properties": {
+        "ready": {
+          "type": "boolean",
+          "description": "True if all usage for the requested month has an invoice ID (billing is finalized)."
+        },
+        "reason": {
+          "type": "string",
+          "description": "Human-readable explanation when ready is false. Empty when ready is true."
+        }
+      },
+      "description": "Response message for GetInvoiceReadiness."
     },
     "v1GetMSPDefaultMetaResponse": {
       "type": "object",
