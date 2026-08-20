@@ -1914,13 +1914,12 @@ message AwsExportReportOptions {
 
 // Request message for GetInvoiceReadiness.
 message GetInvoiceReadinessRequest {
-  // Optional. Cloud vendor.
+  // Required. Bound from the URL path, so it cannot be empty/omitted.
   // Accepted values: "aws", "gcp", "azure".
-  // If empty, defaults to "aws" for backward compatibility.
   string vendor = 1;
 
   // Required. Billing month in YYYY-MM format.
-  string month = 2;
+  string month = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 // Response message for GetInvoiceReadiness.

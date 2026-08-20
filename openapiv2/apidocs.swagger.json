@@ -21638,7 +21638,7 @@
     },
     "/v1/{vendor}/reports/invoicereadiness": {
       "get": {
-        "summary": "Synchronously checks whether billing is finalized for a given vendor and month,\nwithout triggering an export job. Backed by the same readiness check ExportReport\nruns internally for the reserveshield report type; has no side effects (no export,\nno email, no long-running operation).",
+        "summary": "Synchronously checks billing readiness without triggering an export, email, or long-running operation.",
         "operationId": "Cost_GetInvoiceReadiness",
         "responses": {
           "200": {
@@ -21657,7 +21657,7 @@
         "parameters": [
           {
             "name": "vendor",
-            "description": "Optional. Cloud vendor.\nAccepted values: \"aws\", \"gcp\", \"azure\".\nIf empty, defaults to \"aws\" for backward compatibility.",
+            "description": "Required. Bound from the URL path, so it cannot be empty/omitted.\nAccepted values: \"aws\", \"gcp\", \"azure\".",
             "in": "path",
             "required": true,
             "type": "string"
@@ -21666,7 +21666,7 @@
             "name": "month",
             "description": "Required. Billing month in YYYY-MM format.",
             "in": "query",
-            "required": false,
+            "required": true,
             "type": "string"
           }
         ],
