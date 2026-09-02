@@ -806,22 +806,22 @@ service Billing {
     };
   }
 
-  // Validates or imports monthly miscellaneous fees from CSV.
-  rpc BulkImportMonthlyMiscFees(BulkImportMonthlyMiscFeesRequest) returns (protos.Operation) {
+  // Validates or imports monthly FreeFormItems from CSV through invoice settings.
+  rpc BulkImportMonthlyMiscFees(BulkImportMonthlyMiscFeesRequest) returns (MonthlyMiscFeeImportResult) {
     option (google.api.http) = {
       post: "/v1/monthly-misc-fees:bulkImport"
       body: "*"
     };
   }
 
-  // Lists monthly miscellaneous fee rows.
+  // Lists effective monthly FreeFormItems.
   rpc ListMonthlyMiscFees(ListMonthlyMiscFeesRequest) returns (ListMonthlyMiscFeesResponse) {
     option (google.api.http) = {
       get: "/v1/monthly-misc-fees"
     };
   }
 
-  // Deletes a monthly miscellaneous fee row.
+  // Deletes one monthly FreeFormItem through invoice settings.
   rpc DeleteMonthlyMiscFee(DeleteMonthlyMiscFeeRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/monthly-misc-fees/{row_id}"
@@ -2881,100 +2881,44 @@ message GetFreeFormatResponse {
 }
 
 message GetMonthlyMiscFeeImportTemplateRequest {
-  // Optional. Template language. Supported values are "en" and "ja". Empty uses the caller's language or server default.
+  // Optional. Template language. Supported values are "en" and "ja".
   string language = 1;
 }
 
 message MonthlyMiscFeeImportTemplate {
-  // Supported import format. Currently "csv".
   string format = 1;
-
-  // Supported format version. Currently "misc_fee_import_v1".
   string format_version = 2;
-
-  // CSV header columns in required order.
   repeated string headers = 3;
-
-  // Example CSV row matching the current format version.
   repeated string sample_row = 4;
-
-  // Supported modes: "dry-run", "replace-month", and "merge".
   repeated string allowed_modes = 5;
-
-  // Maximum upload size in bytes.
   int64 max_file_size_bytes = 6;
-
-  // Maximum data rows accepted per CSV file.
   int32 max_rows = 7;
-
-  // Field-level validation rules for UI guidance.
-  repeated MonthlyMiscFeeImportFieldRule field_rules = 8;
-}
-
-message MonthlyMiscFeeImportFieldRule {
-  string field = 1;
-  bool required = 2;
-  string format = 3;
-  string description = 4;
 }
 
 message BulkImportMonthlyMiscFeesRequest {
-  // Required. Selected billing cycle in YYYY-MM form; YYYYMM is accepted and normalized by the server.
+  // Required. Selected billing cycle in YYYY-MM form; YYYYMM is normalized.
   string billing_month = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Required. Uploaded CSV content as normalized UTF-8 text.
   string csv_content = 2 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. Original upload file name for audit metadata.
+  // Required. Original upload file name for audit and result display.
   string file_name = 3 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. One of "dry-run", "replace-month", or "merge". Empty or unrecognized
-  // values are rejected with INVALID_ARGUMENT rather than silently defaulting.
-  string mode = 4;
+  // Required. "dry-run" validates only; "merge" upserts FreeFormItems by label.
+  string mode = 4 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. Import format. Currently "csv".
   string format = 5 [(google.api.field_behavior) = REQUIRED];
-
-  // Required. Import format version. Currently "misc_fee_import_v1".
   string format_version = 6 [(google.api.field_behavior) = REQUIRED];
-
-  // Optional. Idempotency key for write-mode imports.
-  string idempotency_key = 7;
 }
 
 message ListMonthlyMiscFeesRequest {
-  // Required. Billing cycle in YYYY-MM form; YYYYMM is accepted and normalized by the server.
   string billing_month = 1 [(google.api.field_behavior) = REQUIRED];
-
-  // Optional. Exact billing group ID filter.
   string billing_group_id = 2;
-
-  // Optional. Case-insensitive billing group name query.
   string billing_group_name_query = 3;
-
-  // Optional. Case-insensitive item or fee tag query.
   string item_query = 4;
-
-  // Optional. Source filter, e.g. "csv", "ui", or "migration".
-  string source = 5;
-
-  // Optional. User identifier that last updated the row.
-  string updated_by = 6;
-
-  // Optional. RFC3339 lower bound for updated_at.
-  string updated_after = 7;
-
-  // Optional. RFC3339 upper bound for updated_at.
-  string updated_before = 8;
-
-  // Optional. Page size for pagination. Default and maximum are server-defined.
-  int32 page_size = 9;
-
-  // Optional. Opaque page token from a previous response.
-  string page_token = 10;
-
-  // Optional. Stable sort expression. Defaults to billing_group_name, item_name, row_id.
-  string sort = 11;
+  int32 page_size = 5;
+  string page_token = 6;
 }
 
 message ListMonthlyMiscFeesResponse {
@@ -2984,10 +2928,8 @@ message ListMonthlyMiscFeesResponse {
 }
 
 message DeleteMonthlyMiscFeeRequest {
-  // Required. Server-owned row ID.
+  // An opaque ID returned by ListMonthlyMiscFees.
   string row_id = 1 [(google.api.field_behavior) = REQUIRED];
-
-  // Required. Billing month used to reject cross-month deletion mistakes.
   string billing_month = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
@@ -2996,66 +2938,41 @@ message MonthlyMiscFee {
   string billing_month = 2;
   string billing_group_id = 3;
   string billing_group_name = 4;
-  string item_name = 5;
-  string quantity = 6;
-  string unit_cost = 7;
-  string amount = 8;
-  string source = 9;
-  string import_job_id = 10;
-  string created_by = 11;
-  string created_at = 12;
-  string updated_by = 13;
-  string updated_at = 14;
-
-  // Cloud vendor selected for this CSV row.
-  string vendor = 15;
+  string vendor = 5;
+  string item_name = 6;
+  uint32 quantity = 7;
+  int64 unit_cost = 8;
+  int64 amount = 9;
+  bool enabled = 10;
+  // One of "saved", "created", or "default".
+  string source = 11;
 }
 
 message MonthlyMiscFeeImportResult {
-  string import_job_id = 1;
-  string status = 2;
-  string mode = 3;
-  string billing_month = 4;
-  string file_name = 5;
-  string file_hash = 6;
-  int32 total_rows = 7;
-  int32 valid_rows = 8;
-  int32 inserted_rows = 9;
-  int32 updated_rows = 10;
-  int32 unchanged_rows = 11;
-  int32 deleted_rows = 12;
-  int32 failed_rows = 13;
-  int32 replace_month_existing_rows = 14;
-  string export_ref = 15;
-  repeated MonthlyMiscFeeImportRowResult row_results = 16;
-  string created_by = 17;
-  string created_at = 18;
-  string updated_at = 19;
+  string status = 1;
+  string billing_month = 2;
+  string file_name = 3;
+  int32 total_rows = 4;
+  int32 valid_rows = 5;
+  int32 inserted_rows = 6;
+  int32 updated_rows = 7;
+  int32 unchanged_rows = 8;
+  int32 failed_rows = 9;
+  repeated MonthlyMiscFeeImportRowResult row_results = 10;
 }
 
 message MonthlyMiscFeeImportRowResult {
   int32 csv_row_number = 1;
   string action = 2;
-  string row_id = 3;
-  string billing_month = 4;
-  string billing_group_id = 5;
-  string billing_group_name = 6;
-  string item_name = 7;
-  string quantity = 8;
-  string unit_cost = 9;
-  string amount = 10;
-  MonthlyMiscFeeImportPreviousValue previous_value = 11;
-  repeated MonthlyMiscFeeValidationError validation_errors = 12;
-  string note = 13;
-
-  // Cloud vendor selected for this CSV row.
-  string vendor = 14;
-}
-
-message MonthlyMiscFeeImportPreviousValue {
-  string quantity = 1;
-  string unit_cost = 2;
-  string amount = 3;
+  string billing_group_id = 3;
+  string billing_group_name = 4;
+  string vendor = 5;
+  string item_name = 6;
+  uint32 quantity = 7;
+  int64 unit_cost = 8;
+  int64 amount = 9;
+  bool enabled = 10;
+  repeated MonthlyMiscFeeValidationError validation_errors = 11;
 }
 
 message MonthlyMiscFeeValidationError {
