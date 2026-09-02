@@ -821,39 +821,6 @@ service Billing {
     };
   }
 
-  // Gets a monthly miscellaneous fee row.
-  rpc GetMonthlyMiscFee(GetMonthlyMiscFeeRequest) returns (MonthlyMiscFee) {
-    option (google.api.http) = {
-      get: "/v1/monthly-misc-fees/{row_id}"
-    };
-  }
-
-  // Exports monthly miscellaneous fee rows using the list filters.
-  rpc ExportMonthlyMiscFees(ExportMonthlyMiscFeesRequest) returns (ExportMonthlyMiscFeesResponse) {
-    option (google.api.http) = {
-      get: "/v1/monthly-misc-fees:export"
-    };
-  }
-
-  // Gets a completed monthly miscellaneous fee import result.
-  rpc GetMonthlyMiscFeeImport(GetMonthlyMiscFeeImportRequest) returns (MonthlyMiscFeeImportResult) {
-    option (google.api.http) = {
-      get: "/v1/monthly-misc-fee-imports/{import_job_id}"
-    };
-  }
-
-  // Creates or updates a monthly miscellaneous fee row.
-  rpc UpsertMonthlyMiscFee(UpsertMonthlyMiscFeeRequest) returns (MonthlyMiscFee) {
-    option (google.api.http) = {
-      put: "/v1/monthly-misc-fees/{row_id}"
-      body: "*"
-      additional_bindings: {
-        put: "/v1/monthly-misc-fees"
-        body: "*"
-      }
-    };
-  }
-
   // Deletes a monthly miscellaneous fee row.
   rpc DeleteMonthlyMiscFee(DeleteMonthlyMiscFeeRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -2961,7 +2928,8 @@ message BulkImportMonthlyMiscFeesRequest {
   // Required. Original upload file name for audit metadata.
   string file_name = 3 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. One of "dry-run", "replace-month", or "merge". Empty defaults to "dry-run".
+  // Required. One of "dry-run", "replace-month", or "merge". Empty or unrecognized
+  // values are rejected with INVALID_ARGUMENT rather than silently defaulting.
   string mode = 4;
 
   // Required. Import format. Currently "csv".
@@ -3015,70 +2983,6 @@ message ListMonthlyMiscFeesResponse {
   int32 total_count = 3;
 }
 
-message GetMonthlyMiscFeeRequest {
-  // Required. Server-owned row ID.
-  string row_id = 1 [(google.api.field_behavior) = REQUIRED];
-
-  // Required. Billing month used to reject cross-month access or mutation mistakes.
-  string billing_month = 2 [(google.api.field_behavior) = REQUIRED];
-}
-
-message ExportMonthlyMiscFeesRequest {
-  // Required. Billing cycle in YYYY-MM form; YYYYMM is accepted and normalized by the server.
-  string billing_month = 1 [(google.api.field_behavior) = REQUIRED];
-
-  // Optional. Exact billing group ID filter.
-  string billing_group_id = 2;
-
-  // Optional. Case-insensitive billing group name query.
-  string billing_group_name_query = 3;
-
-  // Optional. Case-insensitive item or fee tag query.
-  string item_query = 4;
-
-  // Optional. Source filter, e.g. "csv", "ui", or "migration".
-  string source = 5;
-
-  // Optional. User identifier that last updated the row.
-  string updated_by = 6;
-
-  // Optional. RFC3339 lower bound for updated_at.
-  string updated_after = 7;
-
-  // Optional. RFC3339 upper bound for updated_at.
-  string updated_before = 8;
-
-  // Optional. Stable sort expression. Defaults to billing_group_name, item_name, row_id.
-  string sort = 9;
-}
-
-message ExportMonthlyMiscFeesResponse {
-  // CSV file bytes when the export is returned inline.
-  bytes csv_content = 1;
-
-  // Optional staged export reference or direct download URL.
-  string export_ref = 2;
-
-  // Export file name suggested to clients.
-  string file_name = 3;
-}
-
-message GetMonthlyMiscFeeImportRequest {
-  // Required. Import job ID returned by BulkImportMonthlyMiscFees.
-  string import_job_id = 1 [(google.api.field_behavior) = REQUIRED];
-}
-
-message UpsertMonthlyMiscFeeRequest {
-  // Optional for create, required for updating an existing server-owned row.
-  string row_id = 1;
-
-  // Required. Full row value to create or update.
-  MonthlyMiscFee row = 2 [(google.api.field_behavior) = REQUIRED];
-
-  // Optional. Idempotency key for UI retry safety.
-  string idempotency_key = 3;
-}
-
 message DeleteMonthlyMiscFeeRequest {
   // Required. Server-owned row ID.
   string row_id = 1 [(google.api.field_behavior) = REQUIRED];
@@ -3102,6 +3006,9 @@ message MonthlyMiscFee {
   string created_at = 12;
   string updated_by = 13;
   string updated_at = 14;
+
+  // Cloud vendor selected for this CSV row.
+  string vendor = 15;
 }
 
 message MonthlyMiscFeeImportResult {
@@ -3140,6 +3047,9 @@ message MonthlyMiscFeeImportRowResult {
   MonthlyMiscFeeImportPreviousValue previous_value = 11;
   repeated MonthlyMiscFeeValidationError validation_errors = 12;
   string note = 13;
+
+  // Cloud vendor selected for this CSV row.
+  string vendor = 14;
 }
 
 message MonthlyMiscFeeImportPreviousValue {
