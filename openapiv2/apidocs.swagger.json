@@ -13121,6 +13121,45 @@
         ]
       }
     },
+    "/v1/onboarding/azure/integration/{onboardingId}": {
+      "delete": {
+        "summary": "WORK-IN-PROGRESS: Removes an Azure integration from Archera and clears the local record for the given onboardingId.",
+        "operationId": "GuaranteedCommitments_DeleteAzureIntegration",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteAzureIntegrationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "onboardingId",
+            "description": "Required. Identifies which onboarding's integration to delete.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "gcOrgId",
+            "description": "Required. Archera org ID.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/onboarding/azure/integrations": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Lists Azure integrations to verify onboarding completion.",
@@ -40448,6 +40487,26 @@
         }
       },
       "title": "Response message for DeleteAlert"
+    },
+    "v1DeleteAzureIntegrationResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "description": "True only when the operation is fully complete: the integration was\nremoved from Archera AND\nall local data for the given onboardingId was cleared."
+        },
+        "errorCode": {
+          "type": "string",
+          "title": "Set on failure, or on the \"not_found\"-as-success case"
+        },
+        "errorMessage": {
+          "type": "string"
+        },
+        "integrationId": {
+          "type": "string"
+        }
+      },
+      "title": "DeleteAzureIntegrationResponse is returned after removing the Azure integration.\nA \"not_found\" errorCode is treated as success"
     },
     "v1DeleteBudgetResponse": {
       "type": "object",

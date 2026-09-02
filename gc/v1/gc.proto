@@ -406,6 +406,15 @@ rpc ListAzureIntegrations(ListAzureIntegrationsRequest) returns (ListAzureIntegr
   };
 }
 
+// USED FOR RIPPLE ONLY
+
+// WORK-IN-PROGRESS: Removes an Azure integration from Archera and clears the local record for the given onboardingId.
+rpc DeleteAzureIntegration(DeleteAzureIntegrationRequest) returns (DeleteAzureIntegrationResponse) {
+  option (google.api.http) = {
+    delete: "/v1/onboarding/azure/integration/{onboardingId}"
+  };
+}
+
 // ------------------------ TERMS OF SERVICE ------------------------
 
 // Returns the evaluated Terms of Service consent status for the authenticated
@@ -1082,6 +1091,16 @@ message CreateAzureIntegrationRequest {
 message ListAzureIntegrationsRequest {
   // Required. Archera org ID.
   string gcOrgId = 1;
+}
+
+// DeleteAzureIntegrationRequest identifies which Azure integration to remove.
+// integrationId is intentionally not a request field — it is resolved
+// server-side from onboardingId.
+message DeleteAzureIntegrationRequest {
+  // Required. Archera org ID. 
+  string gcOrgId = 1;
+  // Required. Identifies which onboarding's integration to delete.
+  string onboardingId = 2;
 }
 
 
@@ -2355,4 +2374,17 @@ message CreateAzureIntegrationResponse {
 // ListAzureIntegrationsResponse contains all Azure integrations for the org (Step 9).
 message ListAzureIntegrationsResponse {
   repeated AzureIntegration integrations = 1;
+}
+
+// DeleteAzureIntegrationResponse is returned after removing the Azure integration.
+// A "not_found" errorCode is treated as success
+message DeleteAzureIntegrationResponse {
+  // True only when the operation is fully complete: the integration was
+  // removed from Archera AND
+  // all local data for the given onboardingId was cleared.
+  bool success = 1;
+  // Set on failure, or on the "not_found"-as-success case
+  string errorCode = 2;
+  string errorMessage = 3;
+  string integrationId = 4;
 }
