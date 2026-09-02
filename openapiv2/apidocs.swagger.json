@@ -7841,7 +7841,7 @@
         "parameters": [
           {
             "name": "companyId",
-            "description": "Required. The company ID to scope the query to.\n\n// Optional. Field to sort by. Example: \"ondemand_cost\".\n string orderBy = 2;\n // Optional. If true, sort in descending order.\n bool desc = 3;\n // Optional. URL-encoded JSON filter expression.\n // Example (decoded): {\"and\":[{\"and\":[{\"field\":\"covered_usage\",\"op\":\"<\",\"value\":1}]},{\"and\":[{\"field\":\"is_reservable\",\"op\":\"=\",\"value\":\"true\"}]}]}\n string filter = 4;\n // Required. Start of the usage lookback window (YYYY-MM-DD).\n string startDate = 5;\n // Required. End of the usage lookback window (YYYY-MM-DD).\n string endDate = 6;\n // Optional. Page number (1-based).\n int32 page = 7;\n // Optional. Number of results per page.\n int32 pageSize = 8;",
+            "description": "Required. The company ID to scope the query to.\n\n// Optional. Field to sort by. Example: \"ondemand_cost\".\n string orderBy = 2;\n // Optional. If true, sort in descending order.\n bool desc = 3;\n // Optional. URL-encoded JSON filter expression.\n // Example (decoded): {\"and\":[{\"and\":[{\"field\":\"covered_usage\",\"op\":\"\u003c\",\"value\":1}]},{\"and\":[{\"field\":\"is_reservable\",\"op\":\"=\",\"value\":\"true\"}]}]}\n string filter = 4;\n // Required. Start of the usage lookback window (YYYY-MM-DD).\n string startDate = 5;\n // Required. End of the usage lookback window (YYYY-MM-DD).\n string endDate = 6;\n // Optional. Page number (1-based).\n int32 page = 7;\n // Optional. Number of results per page.\n int32 pageSize = 8;",
             "in": "query",
             "required": false,
             "type": "string"
@@ -10731,7 +10731,7 @@
         ]
       }
     },
-    "/v1/invoice/{date}:create&savesettings": {
+    "/v1/invoice/{date}:create\u0026savesettings": {
       "post": {
         "summary": "Creates an invoice and add settings. Only available in Ripple.",
         "operationId": "Billing_CreateInvoiceWithSettings",
@@ -12372,7 +12372,7 @@
     },
     "/v1/monthly-misc-fees": {
       "get": {
-        "summary": "Lists effective monthly FreeFormItems.",
+        "summary": "Lists monthly miscellaneous fee rows.",
         "operationId": "Billing_ListMonthlyMiscFees",
         "responses": {
           "200": {
@@ -12391,30 +12391,63 @@
         "parameters": [
           {
             "name": "billingMonth",
+            "description": "Required. Billing cycle in YYYY-MM form; YYYYMM is accepted and normalized by the server.",
             "in": "query",
             "required": true,
             "type": "string"
           },
           {
             "name": "billingGroupId",
+            "description": "Optional. Exact billing group ID filter.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "billingGroupNameQuery",
+            "description": "Optional. Case-insensitive billing group name query.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "itemQuery",
+            "description": "Optional. Case-insensitive item or fee tag query.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "source",
+            "description": "Optional. Source filter, e.g. \"csv\", \"ui\", or \"migration\".",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "updatedBy",
+            "description": "Optional. User identifier that last updated the row.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "updatedAfter",
+            "description": "Optional. RFC3339 lower bound for updated_at.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "updatedBefore",
+            "description": "Optional. RFC3339 upper bound for updated_at.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "pageSize",
+            "description": "Optional. Page size for pagination. Default and maximum are server-defined.",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -12422,6 +12455,14 @@
           },
           {
             "name": "pageToken",
+            "description": "Optional. Opaque page token from a previous response.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort",
+            "description": "Optional. Stable sort expression. Defaults to billing_group_name, item_name, row_id.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -12430,11 +12471,79 @@
         "tags": [
           "Billing"
         ]
+      },
+      "put": {
+        "summary": "Creates or updates a monthly miscellaneous fee row.",
+        "operationId": "Billing_UpsertMonthlyMiscFee2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1MonthlyMiscFee"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpsertMonthlyMiscFeeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
       }
     },
     "/v1/monthly-misc-fees/{rowId}": {
+      "get": {
+        "summary": "Gets a monthly miscellaneous fee row.",
+        "operationId": "Billing_GetMonthlyMiscFee",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1MonthlyMiscFee"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "rowId",
+            "description": "Required. Server-owned row ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "billingMonth",
+            "description": "Required. Billing month used to reject cross-month access or mutation mistakes.",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
       "delete": {
-        "summary": "Deletes one monthly FreeFormItem through invoice settings.",
+        "summary": "Deletes a monthly miscellaneous fee row.",
         "operationId": "Billing_DeleteMonthlyMiscFee",
         "responses": {
           "200": {
@@ -12454,16 +12563,55 @@
         "parameters": [
           {
             "name": "rowId",
-            "description": "An opaque ID returned by ListMonthlyMiscFees.",
+            "description": "Required. Server-owned row ID.",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "billingMonth",
+            "description": "Required. Billing month used to reject cross-month deletion mistakes.",
             "in": "query",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      },
+      "put": {
+        "summary": "Creates or updates a monthly miscellaneous fee row.",
+        "operationId": "Billing_UpsertMonthlyMiscFee",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1MonthlyMiscFee"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "rowId",
+            "description": "Optional for create, required for updating an existing server-owned row.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingUpsertMonthlyMiscFeeBody"
+            }
           }
         ],
         "tags": [
@@ -12473,13 +12621,13 @@
     },
     "/v1/monthly-misc-fees:bulkImport": {
       "post": {
-        "summary": "Validates or imports monthly FreeFormItems from CSV through invoice settings.",
+        "summary": "Validates or imports monthly miscellaneous fees from CSV.",
         "operationId": "Billing_BulkImportMonthlyMiscFees",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1MonthlyMiscFeeImportResult"
+              "$ref": "#/definitions/protosOperation"
             }
           },
           "default": {
@@ -12497,6 +12645,94 @@
             "schema": {
               "$ref": "#/definitions/v1BulkImportMonthlyMiscFeesRequest"
             }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/monthly-misc-fees:export": {
+      "get": {
+        "summary": "Exports monthly miscellaneous fee rows using the list filters.",
+        "operationId": "Billing_ExportMonthlyMiscFees",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ExportMonthlyMiscFeesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "billingMonth",
+            "description": "Required. Billing cycle in YYYY-MM form; YYYYMM is accepted and normalized by the server.",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "billingGroupId",
+            "description": "Optional. Exact billing group ID filter.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "billingGroupNameQuery",
+            "description": "Optional. Case-insensitive billing group name query.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "itemQuery",
+            "description": "Optional. Case-insensitive item or fee tag query.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "source",
+            "description": "Optional. Source filter, e.g. \"csv\", \"ui\", or \"migration\".",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "updatedBy",
+            "description": "Optional. User identifier that last updated the row.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "updatedAfter",
+            "description": "Optional. RFC3339 lower bound for updated_at.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "updatedBefore",
+            "description": "Optional. RFC3339 upper bound for updated_at.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort",
+            "description": "Optional. Stable sort expression. Defaults to billing_group_name, item_name, row_id.",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -12525,7 +12761,7 @@
         "parameters": [
           {
             "name": "language",
-            "description": "Optional. Template language. Supported values are \"en\" and \"ja\".",
+            "description": "Optional. Template language. Supported values are \"en\" and \"ja\". Empty uses the caller's language or server default.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -12655,7 +12891,7 @@
         "parameters": [
           {
             "name": "billingGroupId",
-            "description": "Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)",
+            "description": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)",
             "in": "query",
             "required": false,
             "type": "string"
@@ -12711,7 +12947,7 @@
         "parameters": [
           {
             "name": "billingGroupId",
-            "description": "Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)",
+            "description": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)",
             "in": "query",
             "required": false,
             "type": "string"
@@ -14838,7 +15074,7 @@
     "/v1/resellers": {
       "get": {
         "summary": "ListResellers",
-        "description": "**Lists all the reseller accounts.**\n> **Only available in Ripple.**",
+        "description": "**Lists all the reseller accounts.**\n\u003e **Only available in Ripple.**",
         "operationId": "Billing_ListResellers",
         "responses": {
           "200": {
@@ -20875,7 +21111,7 @@
     "/v1/{vendor}/exchangerate/{month}": {
       "get": {
         "summary": "ListExchangeRates",
-        "description": "Lists all exchange rate.\n> Only available in Ripple.",
+        "description": "Lists all exchange rate.\n\u003e Only available in Ripple.",
         "operationId": "Billing_ListExchangeRates",
         "responses": {
           "200": {
@@ -23743,6 +23979,22 @@
         }
       },
       "title": "BillingGroup tags adding setting"
+    },
+    "BillingUpsertMonthlyMiscFeeBody": {
+      "type": "object",
+      "properties": {
+        "row": {
+          "$ref": "#/definitions/v1MonthlyMiscFee",
+          "description": "Required. Full row value to create or update."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "description": "Optional. Idempotency key for UI retry safety."
+        }
+      },
+      "required": [
+        "row"
+      ]
     },
     "ContainerCostUsageRequestFilterCriteria": {
       "type": "object",
@@ -28253,7 +28505,7 @@
           }
         }
       },
-      "description": "ConfigFilters resource definition.\nA map of \"key:value\" config filters. The key indicates the adjustment key while the value is the filter adjustment value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you want to query lineitems with the adjustment `productCode:AmazonEC2`, set to `{\"productCode\":\"AmazonEC2\"}`. You can also use regular expressions for adjustment values, such as `{\"description\":\"re:[A-Za-z0-9]*\"}`.\nList of available adjustment keys: productCode, type, description\nFor example value on productCode: AmazonEC2, AmazonRDS, AWSLambda, etc.\nFor example value on type: Fee, Refund, SppDiscount, etc."
+      "description": "ConfigFilters resource definition.\nA map of \"key:value\" config filters. The key indicates the adjustment key while the value is the filter adjustment value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the adjustment `productCode:AmazonEC2`, set to `{\"productCode\":\"AmazonEC2\"}`. You can also use regular expressions for adjustment values, such as `{\"description\":\"re:[A-Za-z0-9]*\"}`.\nList of available adjustment keys: productCode, type, description\nFor example value on productCode: AmazonEC2, AmazonRDS, AWSLambda, etc.\nFor example value on type: Fee, Refund, SppDiscount, etc."
     },
     "apiCostTag": {
       "type": "object",
@@ -31813,7 +32065,7 @@
             "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
-          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
+          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
         },
         "tagFilters": {
           "type": "array",
@@ -31821,7 +32073,7 @@
             "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
-          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
+          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
         }
       },
       "description": "AWS-specific options for CreateCostGroupRequest."
@@ -31835,7 +32087,7 @@
             "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
-          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
+          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
         },
         "tagFilters": {
           "type": "array",
@@ -31843,7 +32095,7 @@
             "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
-          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
+          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
         }
       },
       "description": "AzureCsp-specific options for CreateCostGroupRequest."
@@ -31857,7 +32109,7 @@
             "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
-          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
+          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
         },
         "tagFilters": {
           "type": "array",
@@ -31865,7 +32117,7 @@
             "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
-          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
+          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
         }
       },
       "description": "Azure-specific options for CreateCostGroupRequest."
@@ -31887,7 +32139,7 @@
             "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
-          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
+          "description": "Optional. A list of filtering options. See [ReadCostsRequestAwsOptionsFilters] for more information on each filter item. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
         },
         "labelFilters": {
           "type": "array",
@@ -31968,7 +32220,7 @@
             "type": "object",
             "$ref": "#/definitions/coverCostGroupOptionsFilters"
           },
-          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you like to filter `serviceDescriptinon` to return only `Cloud Spanner`, set to `{\"serviceDescription\":\"eq:Cloud Spanner\"}` or `{\"serviceDescription\":\"Cloud Spanner\"}`. You can also use a regular expression like `{\"serviceDescription\":\"re:Cloud Spanner|BigQuery\"}`, which means return all Cloud Spanner or BigQuery lineitems. Or reverse regexp, such as `{\"serviceDescription\":\"!re:^Cloud Spanner$\"}`, which means return all items except `Cloud Spanner`."
+          "description": "Optional. A list of filtering options. Multiple filter items will use the logical 'or' operator, e.g. filter1 || filter2 || filter3, etc.\nA map of \"key:value\" column filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `serviceDescriptinon` to return only `Cloud Spanner`, set to `{\"serviceDescription\":\"eq:Cloud Spanner\"}` or `{\"serviceDescription\":\"Cloud Spanner\"}`. You can also use a regular expression like `{\"serviceDescription\":\"re:Cloud Spanner|BigQuery\"}`, which means return all Cloud Spanner or BigQuery lineitems. Or reverse regexp, such as `{\"serviceDescription\":\"!re:^Cloud Spanner$\"}`, which means return all items except `Cloud Spanner`."
         },
         "tagFilters": {
           "type": "array",
@@ -33669,7 +33921,7 @@
         }
       },
       "additionalProperties": {},
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
     "protobufNullValue": {
       "type": "string",
@@ -34908,7 +35160,7 @@
           "title": "Empty if direct link in request is disabled in request"
         }
       },
-      "description": "AccountServiceDiscountsExport resource definition.\n\ndata is [blueapi.api.ripple.v1.ExportData]\n\ncontent. Base64 encoded value.\nFor example,\ncontent :`YmlsbGluZ0dyb3VwSWQsYmlsbGluZ0dyb3VwTmFtZSxWZW5kb3IsQWNjb3VudElkLEFjY291bnROYW1lLFNlcnZpY2UgUHJlbWl1bXMmRGlzY291bnRzDQo=`\nDecoding this value by en, get `billingGroupId,billingGroupName,Vendor,AccountId,AccountName,Service Premiums&Discounts`.\ncontent :`6KuL5rGC44Kw44Or44O844OXSUQs6KuL5rGC44Kw44Or44O844OX5ZCNLOODmeODs+ODgOODvCzjgqLjgqvjgqbjg7Pjg4hJRCzjgqLjgqvjgqbjg7Pjg4jlkI0s44K144O844OT44K55Ymy5byV44O75Ymy5aKX6Kit5a6aDQo=`\nDecoding this value by ja, get `請求グループID,請求グループ名,ベンダー,アカウントID,アカウント名,サービス割引・割増設定`.\n\ndownloadedRows. Downloaded content lines.\n\ntotalRows.Total of content lines."
+      "description": "AccountServiceDiscountsExport resource definition.\n\ndata is [blueapi.api.ripple.v1.ExportData]\n\ncontent. Base64 encoded value.\nFor example,\ncontent :`YmlsbGluZ0dyb3VwSWQsYmlsbGluZ0dyb3VwTmFtZSxWZW5kb3IsQWNjb3VudElkLEFjY291bnROYW1lLFNlcnZpY2UgUHJlbWl1bXMmRGlzY291bnRzDQo=`\nDecoding this value by en, get `billingGroupId,billingGroupName,Vendor,AccountId,AccountName,Service Premiums\u0026Discounts`.\ncontent :`6KuL5rGC44Kw44Or44O844OXSUQs6KuL5rGC44Kw44Or44O844OX5ZCNLOODmeODs+ODgOODvCzjgqLjgqvjgqbjg7Pjg4hJRCzjgqLjgqvjgqbjg7Pjg4jlkI0s44K144O844OT44K55Ymy5byV44O75Ymy5aKX6Kit5a6aDQo=`\nDecoding this value by ja, get `請求グループID,請求グループ名,ベンダー,アカウントID,アカウント名,サービス割引・割増設定`.\n\ndownloadedRows. Downloaded content lines.\n\ntotalRows.Total of content lines."
     },
     "v1AccountToAdd": {
       "type": "object",
@@ -36450,7 +36702,7 @@
       "properties": {
         "billingMonth": {
           "type": "string",
-          "description": "Required. Selected billing cycle in YYYY-MM form; YYYYMM is normalized."
+          "description": "Required. Selected billing cycle in YYYY-MM form; YYYYMM is accepted and normalized by the server."
         },
         "csvContent": {
           "type": "string",
@@ -36458,24 +36710,29 @@
         },
         "fileName": {
           "type": "string",
-          "description": "Required. Original upload file name for audit and result display."
+          "description": "Required. Original upload file name for audit metadata."
         },
         "mode": {
           "type": "string",
-          "description": "Required. \"dry-run\" validates only; \"merge\" upserts FreeFormItems by label."
+          "description": "Required. One of \"dry-run\", \"replace-month\", or \"merge\". Empty defaults to \"dry-run\"."
         },
         "format": {
-          "type": "string"
+          "type": "string",
+          "description": "Required. Import format. Currently \"csv\"."
         },
         "formatVersion": {
-          "type": "string"
+          "type": "string",
+          "description": "Required. Import format version. Currently \"misc_fee_import_v1\"."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "description": "Optional. Idempotency key for write-mode imports."
         }
       },
       "required": [
         "billingMonth",
         "csvContent",
         "fileName",
-        "mode",
         "format",
         "formatVersion"
       ]
@@ -36672,7 +36929,7 @@
       "properties": {
         "formula": {
           "type": "string",
-          "description": "Required. Our modifier formula. The final result should be a number. Integers are converted to floating points.\n\nSupported operators are `*`, `/`, `+`, `-`, and `%`. You can use parenthesis `()` to control precedence. Additional supported operators include `==`, `!=`, `!`, `>`, `<`, `>=`, `<=`, and the ternary operator `? :`, or `cond ? expr1 : expr2`.\nExamples:\n `1 + 2 * 3` = 7\n `(1 + 2) * 3` = 9\n `7.8 % 5` = 2.8\n `true ? 1.1 : 2.2` = 1.1\n `1 > 2 ? 1.1 : 2.2` = 2.2\n\nYou can use the `cost` variable to reference the original lineitem cost. For example, if you want to add $10 to the cost, you can use the formula: `cost + 10`. For trueunblended-type billing groups, `cost` refers to the calculated trueunblended cost.\n\nThe `usage` variable refers to the usage amount of a lineitem. For example, if you want to use a different rate of $1.5, you can use the formula: `usage * 1.5`.\n\nThe `unblendedcost` variable refers to the lineitem's unblended cost as indicated in the CUR. Note that the `unblendedcost` variable is different than the `cost` variable, although there are cases where the two are equal.\n\nThe `ondemandrate` variable refers to the lineitem's public ondemand rate as indicated in the CUR.\n\nYou can check out this [guide](https://alphauslabs.github.io/docs/guides/aws-cost-mods/) for more examples."
+          "description": "Required. Our modifier formula. The final result should be a number. Integers are converted to floating points.\n\nSupported operators are `*`, `/`, `+`, `-`, and `%`. You can use parenthesis `()` to control precedence. Additional supported operators include `==`, `!=`, `!`, `\u003e`, `\u003c`, `\u003e=`, `\u003c=`, and the ternary operator `? :`, or `cond ? expr1 : expr2`.\nExamples:\n `1 + 2 * 3` = 7\n `(1 + 2) * 3` = 9\n `7.8 % 5` = 2.8\n `true ? 1.1 : 2.2` = 1.1\n `1 \u003e 2 ? 1.1 : 2.2` = 2.2\n\nYou can use the `cost` variable to reference the original lineitem cost. For example, if you want to add $10 to the cost, you can use the formula: `cost + 10`. For trueunblended-type billing groups, `cost` refers to the calculated trueunblended cost.\n\nThe `usage` variable refers to the usage amount of a lineitem. For example, if you want to use a different rate of $1.5, you can use the formula: `usage * 1.5`.\n\nThe `unblendedcost` variable refers to the lineitem's unblended cost as indicated in the CUR. Note that the `unblendedcost` variable is different than the `cost` variable, although there are cases where the two are equal.\n\nThe `ondemandrate` variable refers to the lineitem's public ondemand rate as indicated in the CUR.\n\nYou can check out this [guide](https://alphauslabs.github.io/docs/guides/aws-cost-mods/) for more examples."
         },
         "descriptionModifier": {
           "$ref": "#/definitions/v1CalculatorCostModifierAwsOptionsModifierDescriptionModifier",
@@ -36714,7 +36971,7 @@
           }
         }
       },
-      "description": "A map of \"key:value\" attribute filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you like your modifiers to apply to `productCode:AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means apply to all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means apply to all items except `AmazonEC2`. Valid keys are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `description`, and `resourceId`."
+      "description": "A map of \"key:value\" attribute filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like your modifiers to apply to `productCode:AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means apply to all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means apply to all items except `AmazonEC2`. Valid keys are `productCode`, `serviceCode`, `region`, `zone`, `usageType`, `instanceType`, `operation`, `description`, and `resourceId`."
     },
     "v1CalculatorCostModifierAzureOptions": {
       "type": "object",
@@ -36762,7 +37019,7 @@
       "properties": {
         "formula": {
           "type": "string",
-          "description": "Required. Our modifier formula. The final result should be a number. Integers are converted to floating points.\n\nSupported operators are `*`, `/`, `+`, `-`, and `%`. You can use parenthesis `()` to control precedence. Additional supported operators include `==`, `!=`, `!`, `>`, `<`, `>=`, `<=`, and the ternary operator `? :`, or `cond ? expr1 : expr2`.\nExamples:\n `1 + 2 * 3` = 7\n `(1 + 2) * 3` = 9\n `7.8 % 5` = 2.8\n `true ? 1.1 : 2.2` = 1.1\n `1 > 2 ? 1.1 : 2.2` = 2.2\n\nYou can use the `cost` variable to reference the original lineitem cost. For example, if you want to add $10 to the cost, you can use the formula: `cost + 10`. For trueunblended-type billing groups, `cost` refers to the calculated trueunblended cost.\n\nThe `quantity` variable refers to the billable quantity amount of a lineitem. For example, if you want to use a different rate of $1.5, you can use the formula: `quantity * 1.5`.\n\nThe `unitPrice` variable refers to the lineitem's effective unit price as indicated in the Azure invoice.\n\nYou can check out this [guide](https://alphauslabs.github.io/docs/guides/aws-cost-mods/) for more examples."
+          "description": "Required. Our modifier formula. The final result should be a number. Integers are converted to floating points.\n\nSupported operators are `*`, `/`, `+`, `-`, and `%`. You can use parenthesis `()` to control precedence. Additional supported operators include `==`, `!=`, `!`, `\u003e`, `\u003c`, `\u003e=`, `\u003c=`, and the ternary operator `? :`, or `cond ? expr1 : expr2`.\nExamples:\n `1 + 2 * 3` = 7\n `(1 + 2) * 3` = 9\n `7.8 % 5` = 2.8\n `true ? 1.1 : 2.2` = 1.1\n `1 \u003e 2 ? 1.1 : 2.2` = 2.2\n\nYou can use the `cost` variable to reference the original lineitem cost. For example, if you want to add $10 to the cost, you can use the formula: `cost + 10`. For trueunblended-type billing groups, `cost` refers to the calculated trueunblended cost.\n\nThe `quantity` variable refers to the billable quantity amount of a lineitem. For example, if you want to use a different rate of $1.5, you can use the formula: `quantity * 1.5`.\n\nThe `unitPrice` variable refers to the lineitem's effective unit price as indicated in the Azure invoice.\n\nYou can check out this [guide](https://alphauslabs.github.io/docs/guides/aws-cost-mods/) for more examples."
         },
         "descriptionModifier": {
           "$ref": "#/definitions/v1CalculatorCostModifierAzureOptionsModifierDescriptionModifier",
@@ -36797,7 +37054,7 @@
           }
         }
       },
-      "description": "A map of \"key:value\" attribute filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you like your modifiers to apply to `productId:CFQ7TTC0LFLX` (Microsoft 365 E3), set to `{\"productId\":\"eq:CFQ7TTC0LFLX\"}` or `{\"productId\":\"CFQ7TTC0LFLX\"}`. You can also use a regular expression like `{\"productId\":\"re:CFQ7TTC0LFLX|DZH318Z0BQ4L\"}`, which means apply to all `Microsoft 365 E3` or `Virtual Machines Ev3 Series` lineitems. Or reverse regexp, such as `{\"productId\":\"!re:^CFQ7TTC0LFLX$\"}`, which means apply to all items except `Microsoft 365 E3`. Valid keys are `productId`, `productName`, `skuId`, `skuName`, `description`, `category` and `domainName`."
+      "description": "A map of \"key:value\" attribute filters. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like your modifiers to apply to `productId:CFQ7TTC0LFLX` (Microsoft 365 E3), set to `{\"productId\":\"eq:CFQ7TTC0LFLX\"}` or `{\"productId\":\"CFQ7TTC0LFLX\"}`. You can also use a regular expression like `{\"productId\":\"re:CFQ7TTC0LFLX|DZH318Z0BQ4L\"}`, which means apply to all `Microsoft 365 E3` or `Virtual Machines Ev3 Series` lineitems. Or reverse regexp, such as `{\"productId\":\"!re:^CFQ7TTC0LFLX$\"}`, which means apply to all items except `Microsoft 365 E3`. Valid keys are `productId`, `productName`, `skuId`, `skuName`, `description`, `category` and `domainName`."
     },
     "v1CheckAccountsResponse": {
       "type": "object",
@@ -40640,6 +40897,24 @@
       },
       "description": "Response message for the ExportBillingGroupCsv rpc."
     },
+    "v1ExportMonthlyMiscFeesResponse": {
+      "type": "object",
+      "properties": {
+        "csvContent": {
+          "type": "string",
+          "format": "byte",
+          "description": "CSV file bytes when the export is returned inline."
+        },
+        "exportRef": {
+          "type": "string",
+          "description": "Optional staged export reference or direct download URL."
+        },
+        "fileName": {
+          "type": "string",
+          "description": "Export file name suggested to clients."
+        }
+      }
+    },
     "v1ExportReportRequest": {
       "type": "object",
       "properties": {
@@ -42383,7 +42658,7 @@
       "properties": {
         "billingGroupId": {
           "type": "string",
-          "title": "Optional:\n- all empty => MSP-level onboarding row\n- companyId set => company flow\n- payerAccountId set => payer-account flow\nbillingGroupId may accompany company flow"
+          "title": "Optional:\n- all empty =\u003e MSP-level onboarding row\n- companyId set =\u003e company flow\n- payerAccountId set =\u003e payer-account flow\nbillingGroupId may accompany company flow"
         },
         "companyId": {
           "type": "string"
@@ -43152,7 +43427,7 @@
           "title": "Empty if direct link in request is disabled in request"
         }
       },
-      "description": "GroupServiceDiscountsExport resource definition.\n`Group` refer to `BillingGroup`.\n\ndata is [blueapi.api.ripple.v1.ExportData]\n\ncontent. Base64 encoded value.\nFor example,\ncontent :`YmlsbGluZ0dyb3VwSWQsYmlsbGluZ0dyb3VwTmFtZSxTZXJ2aWNlIFByZW1pdW1zJkRpc2NvdW50cw0K`\nDecoding this value by en, get `billingGroupId,billingGroupName,Service Premiums&Discounts`.\ncontent :`6KuL5rGC44Kw44Or44O844OXSUQs6KuL5rGC44Kw44Or44O844OX5ZCNLOOCteODvOODk+OCueWJsuW8leODu+WJsuWil+ioreWumg0K`\nDecoding this value by ja, get `請求グループID,請求グループ名,サービス割引・割増設定`.\n\ndownloadedRows. Downloaded content lines.\n\ntotalRows.Total of content lines."
+      "description": "GroupServiceDiscountsExport resource definition.\n`Group` refer to `BillingGroup`.\n\ndata is [blueapi.api.ripple.v1.ExportData]\n\ncontent. Base64 encoded value.\nFor example,\ncontent :`YmlsbGluZ0dyb3VwSWQsYmlsbGluZ0dyb3VwTmFtZSxTZXJ2aWNlIFByZW1pdW1zJkRpc2NvdW50cw0K`\nDecoding this value by en, get `billingGroupId,billingGroupName,Service Premiums\u0026Discounts`.\ncontent :`6KuL5rGC44Kw44Or44O844OXSUQs6KuL5rGC44Kw44Or44O844OX5ZCNLOOCteODvOODk+OCueWJsuW8leODu+WJsuWil+ioreWumg0K`\nDecoding this value by ja, get `請求グループID,請求グループ名,サービス割引・割増設定`.\n\ndownloadedRows. Downloaded content lines.\n\ntotalRows.Total of content lines."
     },
     "v1ImportCurFilesRequest": {
       "type": "object",
@@ -44624,43 +44899,88 @@
         "billingGroupName": {
           "type": "string"
         },
-        "vendor": {
-          "type": "string"
-        },
         "itemName": {
           "type": "string"
         },
         "quantity": {
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         },
         "unitCost": {
-          "type": "string",
-          "format": "int64"
+          "type": "string"
         },
         "amount": {
-          "type": "string",
-          "format": "int64"
-        },
-        "enabled": {
-          "type": "boolean"
+          "type": "string"
         },
         "source": {
-          "type": "string",
-          "description": "One of \"saved\", \"created\", or \"default\"."
+          "type": "string"
+        },
+        "importJobId": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedBy": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "v1MonthlyMiscFeeImportFieldRule": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "format": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "v1MonthlyMiscFeeImportPreviousValue": {
+      "type": "object",
+      "properties": {
+        "quantity": {
+          "type": "string"
+        },
+        "unitCost": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "string"
         }
       }
     },
     "v1MonthlyMiscFeeImportResult": {
       "type": "object",
       "properties": {
+        "importJobId": {
+          "type": "string"
+        },
         "status": {
+          "type": "string"
+        },
+        "mode": {
           "type": "string"
         },
         "billingMonth": {
           "type": "string"
         },
         "fileName": {
+          "type": "string"
+        },
+        "fileHash": {
           "type": "string"
         },
         "totalRows": {
@@ -44683,9 +45003,20 @@
           "type": "integer",
           "format": "int32"
         },
+        "deletedRows": {
+          "type": "integer",
+          "format": "int32"
+        },
         "failedRows": {
           "type": "integer",
           "format": "int32"
+        },
+        "replaceMonthExistingRows": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "exportRef": {
+          "type": "string"
         },
         "rowResults": {
           "type": "array",
@@ -44693,6 +45024,15 @@
             "type": "object",
             "$ref": "#/definitions/v1MonthlyMiscFeeImportRowResult"
           }
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
         }
       }
     },
@@ -44706,32 +45046,32 @@
         "action": {
           "type": "string"
         },
+        "rowId": {
+          "type": "string"
+        },
+        "billingMonth": {
+          "type": "string"
+        },
         "billingGroupId": {
           "type": "string"
         },
         "billingGroupName": {
           "type": "string"
         },
-        "vendor": {
-          "type": "string"
-        },
         "itemName": {
           "type": "string"
         },
         "quantity": {
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         },
         "unitCost": {
-          "type": "string",
-          "format": "int64"
+          "type": "string"
         },
         "amount": {
-          "type": "string",
-          "format": "int64"
+          "type": "string"
         },
-        "enabled": {
-          "type": "boolean"
+        "previousValue": {
+          "$ref": "#/definitions/v1MonthlyMiscFeeImportPreviousValue"
         },
         "validationErrors": {
           "type": "array",
@@ -44739,6 +45079,9 @@
             "type": "object",
             "$ref": "#/definitions/v1MonthlyMiscFeeValidationError"
           }
+        },
+        "note": {
+          "type": "string"
         }
       }
     },
@@ -44746,36 +45089,51 @@
       "type": "object",
       "properties": {
         "format": {
-          "type": "string"
+          "type": "string",
+          "description": "Supported import format. Currently \"csv\"."
         },
         "formatVersion": {
-          "type": "string"
+          "type": "string",
+          "description": "Supported format version. Currently \"misc_fee_import_v1\"."
         },
         "headers": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "CSV header columns in required order."
         },
         "sampleRow": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "Example CSV row matching the current format version."
         },
         "allowedModes": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "Supported modes: \"dry-run\", \"replace-month\", and \"merge\"."
         },
         "maxFileSizeBytes": {
           "type": "string",
-          "format": "int64"
+          "format": "int64",
+          "description": "Maximum upload size in bytes."
         },
         "maxRows": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": "Maximum data rows accepted per CSV file."
+        },
+        "fieldRules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1MonthlyMiscFeeImportFieldRule"
+          },
+          "description": "Field-level validation rules for UI guidance."
         }
       }
     },
@@ -45615,7 +45973,7 @@
           }
         }
       },
-      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
+      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
     },
     "v1ReadCostsRequestAwsOptionsTagFilters": {
       "type": "object",
@@ -45627,7 +45985,7 @@
           }
         }
       },
-      "description": "A map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
+      "description": "A map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
     },
     "v1ReadCostsRequestAzureOptions": {
       "type": "object",
@@ -45711,7 +46069,7 @@
           }
         }
       },
-      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you like to filter `service` to return only `Compute Engine`, set to `{\"service\":\"eq:Compute Engine\"}` or `{\"service\":\"Compute Engine\"}`. You can also use a regular expression like `{\"service\":\"re:Compute Engine|Cloud Storage\"}`, which means return all Compute Engine or Cloud Storage lineitems. Or reverse regexp, such as `{\"service\":\"!re:^Cloud Engine$\"}`, which means return all items except `Cloud Engine`."
+      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `service` to return only `Compute Engine`, set to `{\"service\":\"eq:Compute Engine\"}` or `{\"service\":\"Compute Engine\"}`. You can also use a regular expression like `{\"service\":\"re:Compute Engine|Cloud Storage\"}`, which means return all Compute Engine or Cloud Storage lineitems. Or reverse regexp, such as `{\"service\":\"!re:^Cloud Engine$\"}`, which means return all items except `Cloud Engine`."
     },
     "v1ReadCostsRequestOptionsFilters": {
       "type": "object",
@@ -45723,7 +46081,7 @@
           }
         }
       },
-      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
+      "description": "A map of \"key:value\" column filters. Dependent on `groupByColumns` and/or `groupByMonth`. The key indicates the column name while the value is the filter value prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you like to filter `productCode` to return only `AmazonEC2`, set to `{\"productCode\":\"eq:AmazonEC2\"}` or `{\"productCode\":\"AmazonEC2\"}`. You can also use a regular expression like `{\"productCode\":\"re:AmazonEC2|AmazonRDS\"}`, which means return all AmazonEC2 or AmazonRDS lineitems. Or reverse regexp, such as `{\"productCode\":\"!re:^AmazonEC2$\"}`, which means return all items except `AmazonEC2`."
     },
     "v1ReadCustomizedBillingServicesRequest": {
       "type": "object",
@@ -45931,7 +46289,7 @@
           }
         }
       },
-      "description": "A map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 && mapfilter2 && mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
+      "description": "A map of \"key:value\" tag filters. The key indicates the tag key while the value is the filter tag value which can be prefixed by either \"eq:\" (equal), \"re:\" (regular expressions based on https://github.com/google/re2), or \"!re:\" (reverse \"re:\"). No prefix is the same as \"eq:\". Multiple map items will use the logical 'and' operator, e.g. mapfilter1 \u0026\u0026 mapfilter2 \u0026\u0026 mapfilter3, etc.\n\nFor example, if you want to query lineitems with the tag `project:MY_PROJECT`, set to `{\"project\":\"MY_PROJECT\"}`. You can also use regular expressions for tag values, such as `{\"name\":\"re:[A-Za-z0-9]*\"}`."
     },
     "v1RegisterAccounts": {
       "type": "object",
@@ -47196,7 +47554,7 @@
       "properties": {
         "billingGroupId": {
           "type": "string",
-          "title": "Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)"
+          "title": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)"
         },
         "companyId": {
           "type": "string"
@@ -47225,7 +47583,7 @@
       "properties": {
         "billingGroupId": {
           "type": "string",
-          "description": "Ripple billing group ID. If present => MSP customer (3rd layer), else MSP-level org (2nd layer)."
+          "description": "Ripple billing group ID. If present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)."
         },
         "companyId": {
           "type": "string",
@@ -48297,6 +48655,26 @@
       },
       "description": "Response message for the Iam.UpsertExperimentalUIPreference rpc."
     },
+    "v1UpsertMonthlyMiscFeeRequest": {
+      "type": "object",
+      "properties": {
+        "rowId": {
+          "type": "string",
+          "description": "Optional for create, required for updating an existing server-owned row."
+        },
+        "row": {
+          "$ref": "#/definitions/v1MonthlyMiscFee",
+          "description": "Required. Full row value to create or update."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "description": "Optional. Idempotency key for UI retry safety."
+        }
+      },
+      "required": [
+        "row"
+      ]
+    },
     "v1UsageCostDetails": {
       "type": "object",
       "properties": {
@@ -48577,7 +48955,7 @@
       "properties": {
         "billingGroupId": {
           "type": "string",
-          "title": "Optional: if present => MSP customer (3rd layer), else MSP-level org (2nd layer)"
+          "title": "Optional: if present =\u003e MSP customer (3rd layer), else MSP-level org (2nd layer)"
         },
         "companyId": {
           "type": "string"
