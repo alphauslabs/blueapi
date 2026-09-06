@@ -1092,6 +1092,18 @@ service Billing {
     };
   }
 
+  // Update invoice settings on existing billing groups in bulk from a CSV file.
+  // Unlike BulkCreateBillingGroup, a blank CSV cell preserves the billing group's existing
+  // value for that setting rather than clearing it, and a row referencing a billing group
+  // that does not exist fails only that row (no implicit create).
+  // Returns a long-running operation. Poll status via the Operations service (GET /ops/v1/{name}).
+  rpc BulkUpdateBillingGroup(BulkUpdateBillingGroupRequest) returns (protos.Operation) {
+    option (google.api.http) = {
+      post: "/v1/billinggroups:bulkUpdate"
+      body: "*"
+    };
+  }
+
   // Create Exclude Service Entry
   rpc CreateExcludeServiceEntry(CreateExcludeServiceEntryRequest) returns (CreateExcludeServiceEntryResponse) {
     option (google.api.http) = {
@@ -3943,6 +3955,151 @@ message BulkCreateBillingGroupMetadata {
 
   // Job end timestamp. Empty if still running.
   string endTime = 8;
+
+  // Per-row normalized Invoice Settings results, populated for dryRun requests and for
+  // completed executions. Reused by BulkUpdateBillingGroupMetadata so Dry-run and execution
+  // for both Create and Update share one row-result shape.
+  repeated BulkBillingGroupInvoiceSettingsRow rows = 9;
+}
+
+// A single Invoice Settings field's normalized value together with where that value came from.
+message NormalizedInvoiceSettingField {
+  // Canonical string-encoded normalized value. Empty if the setting has no value.
+  string value = 1;
+
+  // Where this value came from. One of: "uploaded", "existing", "default_derived",
+  // "org_derived", "connection_resolved". "existing" means the value was carried
+  // forward unchanged from the billing group's current stored state (the common case
+  // for a blank Update CSV cell — see BulkUpdateBillingGroup's merge semantics).
+  // Omitted (empty) if the server cannot determine a classification.
+  // A field the Bulk CSV schema does not accept as an input column (e.g. support_amount_target)
+  // must never be classified as "uploaded".
+  string source = 2;
+}
+
+// Server-normalized Invoice Settings for a single bulk row, as they will be (Dry-run) or were
+// (execution) applied. Shared by BulkCreateBillingGroup and BulkUpdateBillingGroup results.
+message NormalizedInvoiceSettings {
+  NormalizedInvoiceSettingField calcType = 1;
+  NormalizedInvoiceSettingField displayCost = 2;
+  NormalizedInvoiceSettingField supportAmountTarget = 3;
+  NormalizedInvoiceSettingField supportFeeCalcTarget = 4;
+  NormalizedInvoiceSettingField substitutionFeeCalcTarget = 5;
+  NormalizedInvoiceSettingField invoiceTemplate = 6;
+  NormalizedInvoiceSettingField customService = 7;
+  NormalizedInvoiceSettingField serviceDiscounts = 8;
+  // Complete per-vendor normalized invoice settings. These fields are additive;
+  // fields 1-8 above retain their original numbers.
+  NormalizedInvoiceSettingField currency = 9;
+  NormalizedInvoiceSettingField taxRate = 10;
+  NormalizedInvoiceSettingField discountRate = 11;
+  NormalizedInvoiceSettingField discountTargetUsage = 12;
+  NormalizedInvoiceSettingField discountCalcLogic = 13;
+  NormalizedInvoiceSettingField substitutionFee = 14;
+  NormalizedInvoiceSettingField substitutionRate = 15;
+  NormalizedInvoiceSettingField substitutionFix = 16;
+  NormalizedInvoiceSettingField substitutionFeeTargetUsage = 17;
+  NormalizedInvoiceSettingField substitutionFeeCalcType = 18;
+  NormalizedInvoiceSettingField supportFee = 19;
+  NormalizedInvoiceSettingField supportRate = 20;
+  NormalizedInvoiceSettingField supportFix = 21;
+  NormalizedInvoiceSettingField supportFeeAdjustment = 22;
+}
+
+// Per-row result for a bulk Create or Update Invoice Settings operation.
+message BulkBillingGroupInvoiceSettingsRow {
+  // The canonical logical data-row index in the original CSV (zero-based,
+  // excluding the header when hasHeader is true). This index is preserved for
+  // valid rows, parse errors, and worker results; it is never compressed after
+  // a malformed or missing row.
+  int32 index = 1;
+
+  // The billing group ID. For Update, the resolved existing billing group. For Create,
+  // populated once known (empty for a row that has not yet been processed on a dryRun).
+  string billingGroupId = 2;
+
+  // Row status: "valid", "invalid", "not_found", "created", "updated", or "failed".
+  string status = 3;
+
+  // Human-readable error message(s) for this row, if any.
+  repeated string errors = 4;
+
+  // The normalized Invoice Settings this row will produce (dryRun) or produced (execution).
+  NormalizedInvoiceSettings normalizedSettings = 5;
+
+  // Explicit row disposition. Supported values include "ready", "invalid",
+  // "not_found", "updated", and "failed". It is separate from status so a
+  // terminal operation status cannot be mistaken for row success.
+  string disposition = 6;
+
+  // One-based physical CSV line number when known, including a header line.
+  // Zero means the line number was not available.
+  int32 csvLineNumber = 7;
+}
+
+message BulkUpdateBillingGroupRequest {
+  // Required. The cloud vendor for all billing groups in this CSV.
+  // Must be one of: aws, azure, gcp.
+  string vendor = 5;
+
+  // Required. The CSV file content as bytes.
+  bytes csvContent = 1;
+
+  // Optional. The delimiter used in the CSV file. Defaults to comma (,).
+  string delimiter = 2;
+
+  // Optional. Whether the CSV file has a header row. Defaults to true.
+  bool hasHeader = 3;
+
+  // Optional. If true, validate the CSV and resolve/merge against existing billing group
+  // state, returning the normalized result, without persisting any change.
+  bool dryRun = 4;
+}
+
+message BulkUpdateBillingGroupError {
+  // The index of the row that failed (zero-based).
+  int32 index = 1;
+
+  // The billing group ID from the failed row, if present in the CSV.
+  string billingGroupId = 2;
+
+  // Error message.
+  string message = 3;
+
+  // Failure reason code: "not_found", "validation_failed", or "connection_resolution_failed".
+  string reason = 4;
+}
+
+// Metadata for the BulkUpdateBillingGroup long-running operation.
+// Stored in protos.Operation.metadata.
+message BulkUpdateBillingGroupMetadata {
+  // The current status: "pending", "processing", "completed", "partial_failed", "failed".
+  string status = 1;
+
+  // Total number of rows to process.
+  int32 totalCount = 2;
+
+  // Number of rows processed so far.
+  int32 processedCount = 3;
+
+  // Number of rows successfully updated.
+  int32 successCount = 4;
+
+  // Number of rows that failed (including not-found billing groups).
+  int32 failureCount = 5;
+
+  // Details of failed rows.
+  repeated BulkUpdateBillingGroupError errors = 6;
+
+  // Job start timestamp (RFC 3339).
+  string startTime = 7;
+
+  // Job end timestamp. Empty if still running.
+  string endTime = 8;
+
+  // Per-row normalized Invoice Settings results, populated for dryRun requests and for
+  // completed executions.
+  repeated BulkBillingGroupInvoiceSettingsRow rows = 9;
 }
 
 message ExcludeServiceEntry {
