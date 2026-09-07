@@ -4018,7 +4018,10 @@ message BulkBillingGroupInvoiceSettingsRow {
   // populated once known (empty for a row that has not yet been processed on a dryRun).
   string billingGroupId = 2;
 
-  // Row status: "valid", "invalid", "not_found", "created", "updated", or "failed".
+  // Row status: "valid" (Dry-run row ready), "invalid" (parse/validation failure),
+  // "not_found" (referenced billing group does not exist), "updated" (execution
+  // succeeded), "failed" (row-level failure during execution). "created" is reserved
+  // for the Create side of this shared row-result shape.
   string status = 3;
 
   // Human-readable error message(s) for this row, if any.
@@ -4027,9 +4030,13 @@ message BulkBillingGroupInvoiceSettingsRow {
   // The normalized Invoice Settings this row will produce (dryRun) or produced (execution).
   NormalizedInvoiceSettings normalizedSettings = 5;
 
-  // Explicit row disposition. Supported values include "ready", "invalid",
-  // "not_found", "updated", and "failed". It is separate from status so a
-  // terminal operation status cannot be mistaken for row success.
+  // Explicit row disposition. Values: "ready" (Dry-run row will update), "invalid"
+  // (parse/validation failure), "not_found" (referenced billing group does not exist),
+  // "connection_resolution_failed" (service-discount connection resolution failed),
+  // "unsupported_field" (a requested setting is not supported, e.g. non-blank
+  // custom_service), "updated" (execution succeeded), "failed" (any other row-level
+  // execution failure). It is separate from status so a terminal operation status
+  // cannot be mistaken for row success.
   string disposition = 6;
 
   // One-based physical CSV line number when known, including a header line.
@@ -4048,7 +4055,13 @@ message BulkUpdateBillingGroupRequest {
   // Optional. The delimiter used in the CSV file. Defaults to comma (,).
   string delimiter = 2;
 
-  // Optional. Whether the CSV file has a header row. Defaults to true.
+  // Optional. Whether the first CSV line names the columns. When true, the first
+  // line is read as a header and columns are matched by name. When false OR omitted
+  // (proto3 scalar default), the CSV is interpreted using the canonical bulk-update
+  // column order (the same order as the downloadable template, headerless).
+  // Callers SHOULD set this field explicitly. Unlike BulkCreateBillingGroup — which
+  // always interprets the first CSV line as a header — Bulk Update honors this field
+  // as given, and the value is preserved on the async execution payload.
   bool hasHeader = 3;
 
   // Optional. If true, validate the CSV and resolve/merge against existing billing group
@@ -4057,7 +4070,10 @@ message BulkUpdateBillingGroupRequest {
 }
 
 message BulkUpdateBillingGroupError {
-  // The index of the row that failed (zero-based).
+  // The canonical logical data-row index of the failed row (zero-based, excluding
+  // the header line when hasHeader is true). Same definition as
+  // BulkBillingGroupInvoiceSettingsRow.index: preserved for parse errors and worker
+  // results, never compressed after a malformed or missing row.
   int32 index = 1;
 
   // The billing group ID from the failed row, if present in the CSV.
@@ -4066,7 +4082,11 @@ message BulkUpdateBillingGroupError {
   // Error message.
   string message = 3;
 
-  // Failure reason code: "not_found", "validation_failed", or "connection_resolution_failed".
+  // Failure reason code: "not_found" (billing group does not exist),
+  // "validation_failed" (CSV parse or validation failure),
+  // "connection_resolution_failed" (service-discount connection resolution failed),
+  // or "unsupported_field" (a requested setting is not supported, e.g. non-blank
+  // custom_service).
   string reason = 4;
 }
 
