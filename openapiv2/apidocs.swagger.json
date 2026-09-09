@@ -2816,6 +2816,29 @@
         ]
       }
     },
+    "/org/v1:syncFeatureFlags": {
+      "post": {
+        "summary": "Self-heals the caller's own Wave feature-flag state against the MSP's\nroot Ripple state, correcting any drift caused by a missed or delayed\nsync, and returns the corrected state.",
+        "operationId": "Organization_SyncFeatureFlags",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SyncFeatureFlagsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Organization"
+        ]
+      }
+    },
     "/org/v1:verify": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Verifies an organization using the key received from the verification email.\nThe verification key is only valid for a day.",
@@ -40664,6 +40687,22 @@
         "format"
       ]
     },
+    "v1FeatureFlagState": {
+      "type": "object",
+      "properties": {
+        "featureName": {
+          "type": "string"
+        },
+        "featureId": {
+          "type": "string",
+          "description": "The Wave feature UUID, as used by Wave's own $flag(feature_id) checks."
+        },
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "description": "A single Wave feature flag's corrected state."
+    },
     "v1FeatureSetting": {
       "type": "object",
       "properties": {
@@ -47303,6 +47342,19 @@
           "description": "Array of column names that can be used to specify what columns should `/{vendor}/pricing` return.\nFor usage information, visit https://labs.alphaus.cloud/blueapidocs/#/Pricing/Pricing_GetPricing."
         }
       }
+    },
+    "v1SyncFeatureFlagsResponse": {
+      "type": "object",
+      "properties": {
+        "flags": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1FeatureFlagState"
+          }
+        }
+      },
+      "description": "Response message for the Organization.SyncFeatureFlags rpc."
     },
     "v1TagSetting": {
       "type": "object",
