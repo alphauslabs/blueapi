@@ -806,7 +806,9 @@ service Billing {
     };
   }
 
-  // Validates or imports monthly FreeFormItems from CSV through invoice settings.
+  // Validates or imports monthly FreeFormItems from CSV through invoice settings. The CSV
+  // supplies each row's own billing month, billing group, and vendor; there is no
+  // request-level billing_month or vendor to scope the call.
   rpc BulkImportMonthlyMiscFees(BulkImportMonthlyMiscFeesRequest) returns (MonthlyMiscFeeImportResult) {
     option (google.api.http) = {
       post: "/v1/monthly-misc-fees:bulkImport"
@@ -2888,16 +2890,28 @@ message GetMonthlyMiscFeeImportTemplateRequest {
 message MonthlyMiscFeeImportTemplate {
   string format = 1;
   string format_version = 2;
+
+  // CSV header columns in required order. Has no "enabled" column: every item the
+  // workflow imports is saved as enabled.
   repeated string headers = 3;
+
   repeated string sample_row = 4;
+
+  // Supported values for BulkImportMonthlyMiscFeesRequest.mode: "merge" and "replace".
+  // Preview vs. apply is controlled separately by BulkImportMonthlyMiscFeesRequest.dry_run,
+  // not by this field.
   repeated string allowed_modes = 5;
+
   int64 max_file_size_bytes = 6;
   int32 max_rows = 7;
 }
 
 message BulkImportMonthlyMiscFeesRequest {
-  // Required. Selected billing cycle in YYYY-MM form; YYYYMM is normalized.
-  string billing_month = 1 [(google.api.field_behavior) = REQUIRED];
+  // Removed: a request no longer selects a billing month. Each CSV row supplies its own
+  // billing_month, billing_group_id, and vendor, so one upload can span any combination of
+  // billing groups, vendors, and invoice months.
+  reserved 1;
+  reserved "billing_month";
 
   // Required. Uploaded CSV content as normalized UTF-8 text.
   string csv_content = 2 [(google.api.field_behavior) = REQUIRED];
@@ -2905,11 +2919,20 @@ message BulkImportMonthlyMiscFeesRequest {
   // Required. Original upload file name for audit and result display.
   string file_name = 3 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. "dry-run" validates only; "merge" upserts FreeFormItems by label.
+  // Required. "merge" upserts each row's item by label, leaving every other existing item for
+  // that billing group and vendor untouched. "replace" sets the complete additional-item list
+  // for each (billing_month, billing_group_id, vendor) combination the CSV names to exactly
+  // that combination's CSV rows, removing any existing item the CSV omits for it; a
+  // "replace" CSV must contain rows for exactly one billing_month, and the request is
+  // rejected before saving anything if it spans more than one.
   string mode = 4 [(google.api.field_behavior) = REQUIRED];
 
   string format = 5 [(google.api.field_behavior) = REQUIRED];
   string format_version = 6 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. When true, validates and returns the planned result for either mode without
+  // saving anything.
+  bool dry_run = 7;
 }
 
 message ListMonthlyMiscFeesRequest {
@@ -2950,7 +2973,11 @@ message MonthlyMiscFee {
 
 message MonthlyMiscFeeImportResult {
   string status = 1;
-  string billing_month = 2;
+
+  // Removed: a result can now span multiple billing months. See billing_months below.
+  reserved 2;
+  reserved "billing_month";
+
   string file_name = 3;
   int32 total_rows = 4;
   int32 valid_rows = 5;
@@ -2959,11 +2986,36 @@ message MonthlyMiscFeeImportResult {
   int32 unchanged_rows = 8;
   int32 failed_rows = 9;
   repeated MonthlyMiscFeeImportRowResult row_results = 10;
+
+  // Existing items removed because a "replace"-mode CSV omitted them from a combination it
+  // touched. Always 0 in "merge" mode.
+  int32 removed_rows = 11;
+
+  // Every distinct billing month, in "YYYY-MM" form, a valid row in this file touches.
+  repeated string billing_months = 12;
+
+  // Every distinct vendor a valid row in this file touches.
+  repeated string vendors = 13;
+
+  // Every distinct billing group a valid row in this file touches.
+  repeated MonthlyMiscFeeImportGroupSummary billing_groups = 14;
+}
+
+message MonthlyMiscFeeImportGroupSummary {
+  string billing_group_id = 1;
+  string billing_group_name = 2;
 }
 
 message MonthlyMiscFeeImportRowResult {
+  // The 1-based CSV row this result corresponds to. 0 when action is "remove", since a
+  // removal has no corresponding CSV row.
   int32 csv_row_number = 1;
+
+  // One of "insert", "update", "unchanged", "invalid", or "remove". "remove" only appears in
+  // "replace" mode, for an existing item the CSV silently drops from a combination it
+  // otherwise touches.
   string action = 2;
+
   string billing_group_id = 3;
   string billing_group_name = 4;
   string vendor = 5;
@@ -2973,6 +3025,10 @@ message MonthlyMiscFeeImportRowResult {
   int64 amount = 9;
   bool enabled = 10;
   repeated MonthlyMiscFeeValidationError validation_errors = 11;
+
+  // The row's own billing month in "YYYY-MM" form. Always populated, including for "remove"
+  // results, since a request can span multiple months.
+  string billing_month = 12;
 }
 
 message MonthlyMiscFeeValidationError {
