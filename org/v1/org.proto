@@ -86,6 +86,15 @@ service Organization {
       delete: "/org/v1"
     };
   }
+
+  // Self-heals the caller's own Wave feature-flag state against the MSP's
+  // root Ripple state, correcting any drift caused by a missed or delayed
+  // sync, and returns the corrected state.
+  rpc SyncFeatureFlags(SyncFeatureFlagsRequest) returns (SyncFeatureFlagsResponse) {
+    option (google.api.http) = {
+      post: "/org/v1:syncFeatureFlags"
+    };
+  }
 }
 
 // Request message for the Organization.CreateOrg rpc.
@@ -147,3 +156,21 @@ message UpdatePasswordRequest {
 
 // Request message for the Organization.DeleteOrg rpc.
 message DeleteOrgRequest {}
+
+// Request message for the Organization.SyncFeatureFlags rpc.
+message SyncFeatureFlagsRequest {}
+
+// A single Wave feature flag's corrected state.
+message FeatureFlagState {
+  string featureName = 1;
+
+  // The Wave feature UUID, as used by Wave's own $flag(feature_id) checks.
+  string featureId = 2;
+
+  bool enabled = 3;
+}
+
+// Response message for the Organization.SyncFeatureFlags rpc.
+message SyncFeatureFlagsResponse {
+  repeated FeatureFlagState flags = 1;
+}
