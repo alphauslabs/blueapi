@@ -12471,7 +12471,8 @@
     },
     "/v1/monthly-misc-fees:bulkImport": {
       "post": {
-        "summary": "Validates or imports monthly miscellaneous fees from CSV.",
+        "summary": "Validates or imports monthly FreeFormItems from CSV through invoice settings.",
+        "description": "The CSV supplies each row's own billing month, billing group, and vendor; there is no\nrequest-level billing_month or vendor to scope the call.",
         "operationId": "Billing_BulkImportMonthlyMiscFees",
         "responses": {
           "200": {
@@ -36446,21 +36447,17 @@
     "v1BulkImportMonthlyMiscFeesRequest": {
       "type": "object",
       "properties": {
-        "billingMonth": {
-          "type": "string",
-          "description": "Required. Selected billing cycle in YYYY-MM form; YYYYMM is accepted and normalized by the server."
-        },
         "csvContent": {
           "type": "string",
           "description": "Required. Uploaded CSV content as normalized UTF-8 text."
         },
         "fileName": {
           "type": "string",
-          "description": "Required. Original upload file name for audit metadata."
+          "description": "Required. Original upload file name for audit and result display."
         },
         "mode": {
           "type": "string",
-          "description": "Required. One of \"dry-run\", \"replace-month\", or \"merge\". Empty defaults to \"dry-run\"."
+          "description": "Required. \"merge\" upserts each row's item by label, leaving every other existing item for\nthat billing group and vendor untouched. \"replace\" sets the complete additional-item list\nfor each (billing_month, billing_group_id, vendor) combination the CSV names to exactly\nthat combination's CSV rows, removing any existing item the CSV omits for it; a\n\"replace\" CSV must contain rows for exactly one billing_month, and the request is\nrejected before saving anything if it spans more than one."
         },
         "format": {
           "type": "string",
@@ -36470,13 +36467,13 @@
           "type": "string",
           "description": "Required. Import format version. Currently \"misc_fee_import_v1\"."
         },
-        "idempotencyKey": {
-          "type": "string",
-          "description": "Optional. Idempotency key for write-mode imports."
+        "dryRun": {
+          "type": "boolean",
+          "description": "Optional. When true, validates and returns the planned result for either mode without\nsaving anything."
         }
       },
+      "description": "No billing_month or vendor field: each CSV row supplies its own, so one upload can span\nany combination of billing groups, vendors, and invoice months.",
       "required": [
-        "billingMonth",
         "csvContent",
         "fileName",
         "mode",
@@ -44670,13 +44667,21 @@
         }
       }
     },
+    "v1MonthlyMiscFeeImportGroupSummary": {
+      "type": "object",
+      "properties": {
+        "billingGroupId": {
+          "type": "string"
+        },
+        "billingGroupName": {
+          "type": "string"
+        }
+      }
+    },
     "v1MonthlyMiscFeeImportResult": {
       "type": "object",
       "properties": {
         "status": {
-          "type": "string"
-        },
-        "billingMonth": {
           "type": "string"
         },
         "fileName": {
@@ -44712,18 +44717,48 @@
             "type": "object",
             "$ref": "#/definitions/v1MonthlyMiscFeeImportRowResult"
           }
+        },
+        "removedRows": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Existing items removed because a \"replace\"-mode CSV omitted them from a combination it\ntouched. Always 0 in \"merge\" mode."
+        },
+        "billingMonths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Every distinct billing month, in \"YYYY-MM\" form, a valid row in this file touches."
+        },
+        "vendors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Every distinct vendor a valid row in this file touches."
+        },
+        "billingGroups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1MonthlyMiscFeeImportGroupSummary"
+          },
+          "description": "Every distinct billing group a valid row in this file touches."
         }
-      }
+      },
+      "description": "No singular billing_month field: a result can now span multiple billing months. See\nbilling_months below."
     },
     "v1MonthlyMiscFeeImportRowResult": {
       "type": "object",
       "properties": {
         "csvRowNumber": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": "The 1-based CSV row this result corresponds to. 0 when action is \"remove\", since a\nremoval has no corresponding CSV row."
         },
         "action": {
-          "type": "string"
+          "type": "string",
+          "description": "One of \"insert\", \"update\", \"unchanged\", \"invalid\", or \"remove\". \"remove\" only appears in\n\"replace\" mode, for an existing item the CSV silently drops from a combination it\notherwise touches."
         },
         "billingGroupId": {
           "type": "string"
@@ -44758,6 +44793,10 @@
             "type": "object",
             "$ref": "#/definitions/v1MonthlyMiscFeeValidationError"
           }
+        },
+        "billingMonth": {
+          "type": "string",
+          "description": "The row's own billing month in \"YYYY-MM\" form. Always populated, including for \"remove\"\nresults, since a request can span multiple months."
         }
       }
     },
@@ -44777,7 +44816,7 @@
           "items": {
             "type": "string"
           },
-          "description": "CSV header columns in required order."
+          "description": "CSV header columns in required order. Has no \"enabled\" column: every item the\nworkflow imports is saved as enabled."
         },
         "sampleRow": {
           "type": "array",
@@ -44791,7 +44830,7 @@
           "items": {
             "type": "string"
           },
-          "description": "Supported modes: \"dry-run\", \"replace-month\", and \"merge\"."
+          "description": "Supported values for BulkImportMonthlyMiscFeesRequest.mode: \"merge\" and \"replace\".\nPreview vs. apply is controlled separately by BulkImportMonthlyMiscFeesRequest.dry_run,\nnot by this field."
         },
         "maxFileSizeBytes": {
           "type": "string",
