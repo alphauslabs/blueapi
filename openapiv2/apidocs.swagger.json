@@ -6103,6 +6103,39 @@
         ]
       }
     },
+    "/v1/billinggroups:bulkUpdate": {
+      "post": {
+        "summary": "Update invoice settings on existing billing groups in bulk from a CSV file.\nUnlike BulkCreateBillingGroup, a blank CSV cell preserves the billing group's existing\nvalue for that setting rather than clearing it, and a row referencing a billing group\nthat does not exist fails only that row (no implicit create).\nReturns a long-running operation. Poll status via the Operations service (GET /ops/v1/{name}).",
+        "operationId": "Billing_BulkUpdateBillingGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protosOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1BulkUpdateBillingGroupRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/billinggroups/billingconductor/{id}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Gets all Billing Groups in AWS Billing Conductor(ABC) for specific payer id.",
@@ -36441,6 +36474,32 @@
         "dryRun": {
           "type": "boolean",
           "description": "Optional. If true, validate the CSV and check for errors without actually creating billing groups.\nUseful for validating CSV format and data before performing the actual bulk creation."
+        }
+      }
+    },
+    "v1BulkUpdateBillingGroupRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. The cloud vendor for all billing groups in this CSV.\nMust be one of: aws, azure, gcp."
+        },
+        "csvContent": {
+          "type": "string",
+          "format": "byte",
+          "description": "Required. The CSV file content as bytes."
+        },
+        "delimiter": {
+          "type": "string",
+          "description": "Optional. The delimiter used in the CSV file. Defaults to comma (,)."
+        },
+        "hasHeader": {
+          "type": "boolean",
+          "description": "Optional. Whether the first CSV line names the columns. When true, the first\nline is read as a header and columns are matched by name. When false OR omitted\n(proto3 scalar default), the CSV is interpreted using the canonical bulk-update\ncolumn order (the same order as the downloadable template, headerless).\nCallers SHOULD set this field explicitly. Unlike BulkCreateBillingGroup — which\nalways interprets the first CSV line as a header — Bulk Update honors this field\nas given, and the value is preserved on the async execution payload."
+        },
+        "dryRun": {
+          "type": "boolean",
+          "description": "Optional. If true, validate the CSV and resolve/merge against existing billing group\nstate, returning the normalized result, without persisting any change."
         }
       }
     },
