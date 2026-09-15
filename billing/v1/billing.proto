@@ -698,11 +698,19 @@ service Billing {
     };
   }
 
-  // Returns the customer details and its tags. 
+  // Returns the customer details and its tags.
   // Port for: m/ripple/tags/vendor/{vendor}?type={type}
   rpc GetTags(GetTagsRequest) returns (stream TagData) {
     option (google.api.http) = {
       get: "/v1/tags"
+    };
+  }
+
+  // Returns one page of the distinct values for a single customer's tag key, for
+  // drilling down into a key beyond GetTags' per-key cap (see Tags.truncated).
+  rpc ListTagValues(ListTagValuesRequest) returns (ListTagValuesResponse) {
+    option (google.api.http) = {
+      get: "/v1/tags:values"
     };
   }
 
@@ -2806,11 +2814,47 @@ message TagData {
 message Tags {
   string key = 1;
   repeated string values = 2;
+
+  // Total number of distinct values recorded for this key, regardless of how
+  // many are present in `values` above.
+  int32 totalValueCount = 3;
+
+  // True if `values` does not contain all of this key's distinct values (its
+  // count exceeds the server-side per-key cap). Use ListTagValues to page
+  // through the full list.
+  bool truncated = 4;
 }
 
 message GetTagsRequest {
   string vendor = 1;
   string type = 2;
+}
+
+// Request message for the Billing.ListTagValues rpc.
+message ListTagValuesRequest {
+  string vendor = 1;
+  string customerId = 2;
+  string tagKey = 3;
+
+  // Optional. Page number for pagination. Starts from 1. Default is 1.
+  int32 pageNumber = 4;
+
+  // Optional. Page size for pagination. Default is 50, maximum is 1000.
+  int32 pageSize = 5;
+}
+
+// Response message for the Billing.ListTagValues rpc.
+message ListTagValuesResponse {
+  // This page's distinct values.
+  repeated string values = 1;
+
+  // Total distinct-value count for this (customerId, tagKey), consistent
+  // with Tags.totalValueCount.
+  int32 totalValueCount = 2;
+
+  int32 pageNumber = 3;
+  int32 pageSize = 4;
+  int32 totalPages = 5;
 }
 
 message CustomField {
