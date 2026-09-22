@@ -9827,10 +9827,21 @@
         "parameters": [
           {
             "name": "language",
-            "description": "Usually the language of the user information is used, \nbut it may be a different language due to cahce.\nIn that case, you can use this option to change the language of CSV.",
+            "description": "Usually the language of the user information is used,\nbut it may be a different language due to cahce.\nIn that case, you can use this option to change the language of CSV.",
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "billingGroupIds",
+            "description": "Optional. Restricts the export to these child billing group internal ids.\nEvery id must resolve to a child of the caller's authorized root billing\ngroup. When empty, the export is unscoped (root-wide), matching prior\nbehavior.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
           }
         ],
         "tags": [
@@ -9859,7 +9870,7 @@
         "parameters": [
           {
             "name": "language",
-            "description": "Usually the language of the user information is used, \nbut it may be a different language due to cahce.\nIn that case, you can use this option to change the language of CSV.",
+            "description": "Usually the language of the user information is used,\nbut it may be a different language due to cahce.\nIn that case, you can use this option to change the language of CSV.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -9870,6 +9881,17 @@
             "in": "query",
             "required": false,
             "type": "boolean"
+          },
+          {
+            "name": "billingGroupIds",
+            "description": "Optional. Restricts the export to these child billing group internal ids.\nEvery id must resolve to a child of the caller's authorized root billing\ngroup. When empty, the export is unscoped (root-wide), matching prior\nbehavior.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
           }
         ],
         "tags": [
@@ -16396,7 +16418,7 @@
     },
     "/v1/tags": {
       "get": {
-        "summary": "Returns the customer details and its tags. \nPort for: m/ripple/tags/vendor/{vendor}?type={type}",
+        "summary": "Returns the customer details and its tags.\nPort for: m/ripple/tags/vendor/{vendor}?type={type}",
         "operationId": "Billing_GetTags",
         "responses": {
           "200": {
@@ -16433,6 +16455,65 @@
             "in": "query",
             "required": false,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/tags:values": {
+      "get": {
+        "summary": "Returns one page of the distinct values for a single customer's tag key, for\ndrilling down into a key beyond GetTags' per-key cap (see Tags.truncated).",
+        "operationId": "Billing_ListTagValues",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListTagValuesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vendor",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "customerId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "tagKey",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageNumber",
+            "description": "Optional. Page number for pagination. Starts from 1. Default is 1.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "description": "Optional. Page size for pagination. Default is 50, maximum is 1000.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "tags": [
@@ -25935,7 +26016,7 @@
         "ONBOARDING_STATUS_VERIFY_FAILED"
       ],
       "default": "ONBOARDING_STATUS_UNSPECIFIED",
-      "description": "- ONBOARDING_STATUS_NOT_REGISTERED: No row found in archera_users (org not registered yet)\n - ONBOARDING_STATUS_REGISTERED: Existing statuses you already persist"
+      "title": "- ONBOARDING_STATUS_NOT_REGISTERED: No row found in archera_users (org not registered yet)\n - ONBOARDING_STATUS_REGISTERED: Existing statuses you already persist"
     },
     "GetRecommendationV3ResponseRecommendationDetail": {
       "type": "object",
@@ -40569,11 +40650,18 @@
         },
         "language": {
           "type": "string",
-          "description": "Optional. At the moment, `ja`,`en` is supported.\n\nUsually the language of the user information is used, \nbut it may be a different language due to cahce.\nIn that case, you can use this option to change the language of CSV."
+          "description": "Optional. At the moment, `ja`,`en` is supported.\n\nUsually the language of the user information is used,\nbut it may be a different language due to cahce.\nIn that case, you can use this option to change the language of CSV."
         },
         "directLink": {
           "type": "boolean",
           "title": "Returns a directLink if set to true"
+        },
+        "billingGroupIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. Restricts the export to these child billing group internal ids.\nEvery id must resolve to a child of the caller's authorized root billing\ngroup. When empty, the export is unscoped (root-wide), matching prior\nbehavior."
         }
       },
       "description": "Request message for the ExportAccountInvoiceServiceDiscounts rpc.",
@@ -40629,11 +40717,18 @@
         },
         "language": {
           "type": "string",
-          "description": "Optional. At the moment, `ja`,`en` is supported.\n\nUsually the language of the user information is used, \nbut it may be a different language due to cahce.\nIn that case, you can use this option to change the language of CSV."
+          "description": "Optional. At the moment, `ja`,`en` is supported.\n\nUsually the language of the user information is used,\nbut it may be a different language due to cahce.\nIn that case, you can use this option to change the language of CSV."
         },
         "directLink": {
           "type": "boolean",
           "title": "Returns a directLink if set to true"
+        },
+        "billingGroupIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional. Restricts the export to these child billing group internal ids.\nEvery id must resolve to a child of the caller's authorized root billing\ngroup. When empty, the export is unscoped (root-wide), matching prior\nbehavior."
         }
       },
       "description": "Request message for the ExportBillingGroupInvoiceServiceDiscounts rpc.",
@@ -44345,6 +44440,36 @@
         }
       }
     },
+    "v1ListTagValuesResponse": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "This page's distinct values."
+        },
+        "totalValueCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total distinct-value count for this (customerId, tagKey), consistent\nwith Tags.totalValueCount."
+        },
+        "pageNumber": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "description": "Response message for the Billing.ListTagValues rpc."
+    },
     "v1ListTeamMembersRequest": {
       "type": "object"
     },
@@ -47473,6 +47598,15 @@
           "items": {
             "type": "string"
           }
+        },
+        "totalValueCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total number of distinct values recorded for this key, regardless of how\nmany are present in `values` above."
+        },
+        "truncated": {
+          "type": "boolean",
+          "description": "True if `values` does not contain all of this key's distinct values (its\ncount exceeds the server-side per-key cap). Use ListTagValues to page\nthrough the full list."
         }
       }
     },
