@@ -893,7 +893,9 @@ message CreateCustomCommitmentPlanRequest {
   //
   // Acceptable commitment_type values:
   //   "aws/AmazonEC2", "aws/AmazonRDS", "aws/AmazonElastiCache",
-  //   "aws/savingsplan/Compute", "aws/savingsplan/EC2Instance", "aws/savingsplan/Database"
+  //   "aws/savingsplan/Compute", "aws/savingsplan/EC2Instance", "aws/savingsplan/Database",
+  //   "azure/savingsplan/Compute", "azure/savingsplan/Database",
+  //   "azure/Virtual Machines", "azure/SQL Database", "azure/Storage", "azure/Azure Monitor"
   //
   // Acceptable term values:
   //   "thirty_day_gris"  - 30-day Archera Insured (leased: true)
@@ -2012,6 +2014,7 @@ message ListBillingGroupsResponse {
     BillingGroupStatus status = 9;
     GetOnboardingStatusResponse.OnboardingStatus onboardingStatus = 10;
     repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 11;
+    string provider = 12;
   }
 
   repeated BillingGroup billingGroups = 1;
