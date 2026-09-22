@@ -6103,39 +6103,6 @@
         ]
       }
     },
-    "/v1/billinggroups:bulkUpdate": {
-      "post": {
-        "summary": "Update invoice settings on existing billing groups in bulk from a CSV file.\nUnlike BulkCreateBillingGroup, a blank CSV cell preserves the billing group's existing\nvalue for that setting rather than clearing it, and a row referencing a billing group\nthat does not exist fails only that row (no implicit create).\nReturns a long-running operation. Poll status via the Operations service (GET /ops/v1/{name}).",
-        "operationId": "Billing_BulkUpdateBillingGroup",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/protosOperation"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1BulkUpdateBillingGroupRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Billing"
-        ]
-      }
-    },
     "/v1/billinggroups/billingconductor/{id}": {
       "get": {
         "summary": "WORK-IN-PROGRESS: Gets all Billing Groups in AWS Billing Conductor(ABC) for specific payer id.",
@@ -7059,6 +7026,39 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1BulkTagBillingGroupRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
+    "/v1/billinggroups:bulkUpdate": {
+      "post": {
+        "summary": "Update invoice settings on existing billing groups in bulk from a CSV file.\nUnlike BulkCreateBillingGroup, a blank CSV cell preserves the billing group's existing\nvalue for that setting rather than clearing it, and a row referencing a billing group\nthat does not exist fails only that row (no implicit create).\nReturns a long-running operation. Poll status via the Operations service (GET /ops/v1/{name}).",
+        "operationId": "Billing_BulkUpdateBillingGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protosOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1BulkUpdateBillingGroupRequest"
             }
           }
         ],
@@ -12396,7 +12396,7 @@
     },
     "/v1/monthly-misc-fees": {
       "get": {
-        "summary": "Lists monthly miscellaneous fee rows.",
+        "summary": "Lists effective monthly FreeFormItems.",
         "operationId": "Billing_ListMonthlyMiscFees",
         "responses": {
           "200": {
@@ -12415,35 +12415,30 @@
         "parameters": [
           {
             "name": "billingMonth",
-            "description": "Required. Billing cycle in YYYY-MM form; YYYYMM is accepted and normalized by the server.",
             "in": "query",
             "required": true,
             "type": "string"
           },
           {
             "name": "billingGroupId",
-            "description": "Optional. Exact billing group ID filter.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "billingGroupNameQuery",
-            "description": "Optional. Case-insensitive billing group name query.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "itemQuery",
-            "description": "Optional. Case-insensitive item or fee tag query.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "pageSize",
-            "description": "Optional. Page size for pagination. Default and maximum are server-defined.",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -12451,7 +12446,6 @@
           },
           {
             "name": "pageToken",
-            "description": "Optional. Opaque page token from a previous response.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -12464,7 +12458,7 @@
     },
     "/v1/monthly-misc-fees/{rowId}": {
       "delete": {
-        "summary": "Deletes a monthly miscellaneous fee row.",
+        "summary": "Deletes one monthly FreeFormItem through invoice settings.",
         "operationId": "Billing_DeleteMonthlyMiscFee",
         "responses": {
           "200": {
@@ -12484,14 +12478,13 @@
         "parameters": [
           {
             "name": "rowId",
-            "description": "Required. Server-owned row ID.",
+            "description": "An opaque ID returned by ListMonthlyMiscFees.",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "billingMonth",
-            "description": "Required. Billing month used to reject cross-month deletion mistakes.",
             "in": "query",
             "required": true,
             "type": "string"
@@ -12504,8 +12497,7 @@
     },
     "/v1/monthly-misc-fees:bulkImport": {
       "post": {
-        "summary": "Validates or imports monthly FreeFormItems from CSV through invoice settings.",
-        "description": "The CSV supplies each row's own billing month, billing group, and vendor; there is no\nrequest-level billing_month or vendor to scope the call.",
+        "summary": "Validates or imports monthly FreeFormItems from CSV through invoice settings. The CSV\nsupplies each row's own billing month, billing group, and vendor; there is no\nrequest-level billing_month or vendor to scope the call.",
         "operationId": "Billing_BulkImportMonthlyMiscFees",
         "responses": {
           "200": {
@@ -12524,6 +12516,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "No billing_month or vendor field: each CSV row supplies its own, so one upload can span\nany combination of billing groups, vendors, and invoice months.",
             "in": "body",
             "required": true,
             "schema": {
@@ -12557,7 +12550,7 @@
         "parameters": [
           {
             "name": "language",
-            "description": "Optional. Template language. Supported values are \"en\" and \"ja\". Empty uses the caller's language or server default.",
+            "description": "Optional. Template language. Supported values are \"en\" and \"ja\".",
             "in": "query",
             "required": false,
             "type": "string"
@@ -36477,32 +36470,6 @@
         }
       }
     },
-    "v1BulkUpdateBillingGroupRequest": {
-      "type": "object",
-      "properties": {
-        "vendor": {
-          "type": "string",
-          "description": "Required. The cloud vendor for all billing groups in this CSV.\nMust be one of: aws, azure, gcp."
-        },
-        "csvContent": {
-          "type": "string",
-          "format": "byte",
-          "description": "Required. The CSV file content as bytes."
-        },
-        "delimiter": {
-          "type": "string",
-          "description": "Optional. The delimiter used in the CSV file. Defaults to comma (,)."
-        },
-        "hasHeader": {
-          "type": "boolean",
-          "description": "Optional. Whether the first CSV line names the columns. When true, the first\nline is read as a header and columns are matched by name. When false OR omitted\n(proto3 scalar default), the CSV is interpreted using the canonical bulk-update\ncolumn order (the same order as the downloadable template, headerless).\nCallers SHOULD set this field explicitly. Unlike BulkCreateBillingGroup — which\nalways interprets the first CSV line as a header — Bulk Update honors this field\nas given, and the value is preserved on the async execution payload."
-        },
-        "dryRun": {
-          "type": "boolean",
-          "description": "Optional. If true, validate the CSV and resolve/merge against existing billing group\nstate, returning the normalized result, without persisting any change."
-        }
-      }
-    },
     "v1BulkImportMonthlyMiscFeesRequest": {
       "type": "object",
       "properties": {
@@ -36519,12 +36486,10 @@
           "description": "Required. \"merge\" upserts each row's item by label, leaving every other existing item for\nthat billing group and vendor untouched. \"replace\" sets the complete additional-item list\nfor each (billing_month, billing_group_id, vendor) combination the CSV names to exactly\nthat combination's CSV rows, removing any existing item the CSV omits for it; a\n\"replace\" CSV must contain rows for exactly one billing_month, and the request is\nrejected before saving anything if it spans more than one."
         },
         "format": {
-          "type": "string",
-          "description": "Required. Import format. Currently \"csv\"."
+          "type": "string"
         },
         "formatVersion": {
-          "type": "string",
-          "description": "Required. Import format version. Currently \"misc_fee_import_v1\"."
+          "type": "string"
         },
         "dryRun": {
           "type": "boolean",
@@ -36580,6 +36545,32 @@
         }
       },
       "description": "Request for BulkTagBillingGroup."
+    },
+    "v1BulkUpdateBillingGroupRequest": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "Required. The cloud vendor for all billing groups in this CSV.\nMust be one of: aws, azure, gcp."
+        },
+        "csvContent": {
+          "type": "string",
+          "format": "byte",
+          "description": "Required. The CSV file content as bytes."
+        },
+        "delimiter": {
+          "type": "string",
+          "description": "Optional. The delimiter used in the CSV file. Defaults to comma (,)."
+        },
+        "hasHeader": {
+          "type": "boolean",
+          "description": "Optional. Whether the first CSV line names the columns. When true, the first\nline is read as a header and columns are matched by name. When false OR omitted\n(proto3 scalar default), the CSV is interpreted using the canonical bulk-update\ncolumn order (the same order as the downloadable template, headerless).\nCallers SHOULD set this field explicitly. Unlike BulkCreateBillingGroup — which\nalways interprets the first CSV line as a header — Bulk Update honors this field\nas given, and the value is preserved on the async execution payload."
+        },
+        "dryRun": {
+          "type": "boolean",
+          "description": "Optional. If true, validate the CSV and resolve/merge against existing billing group\nstate, returning the normalized result, without persisting any change."
+        }
+      }
     },
     "v1CalculateCostsRequestAwsOptions": {
       "type": "object",
@@ -38814,7 +38805,7 @@
             "type": "object",
             "$ref": "#/definitions/v1ContractSpec"
           },
-          "description": "List of contract specifications to include in the plan.\nEach entry selects a commitment category, term, payment option, and optional properties.\n\nAcceptable commitment_type values:\n  \"aws/AmazonEC2\", \"aws/AmazonRDS\", \"aws/AmazonElastiCache\",\n  \"aws/savingsplan/Compute\", \"aws/savingsplan/EC2Instance\", \"aws/savingsplan/Database\"\n\nAcceptable term values:\n  \"thirty_day_gris\"  - 30-day Archera Insured (leased: true)\n  \"one_year_gris\"    - 1-year Archera Insured (leased: true)\n  \"one_year\"         - 1-year Native Uninsured (leased: false)\n  \"three_year\"       - 3-year Native Uninsured (leased: false)\n\nAcceptable payment_option values:\n  \"no_upfront\", \"partial_upfront\", \"all_upfront\"\n  Note: \"partial_upfront\" and \"all_upfront\" are not available for 30-day terms.\n\nAcceptable properties keys:\n  \"leased\" (bool)          - true for Archera Insured terms, false for Native terms.\n  \"offering_class\" (string) - only for \"aws/AmazonEC2\"; \"convertible\" or \"standard\"."
+          "description": "List of contract specifications to include in the plan.\nEach entry selects a commitment category, term, payment option, and optional properties.\n\nAcceptable commitment_type values:\n  \"aws/AmazonEC2\", \"aws/AmazonRDS\", \"aws/AmazonElastiCache\",\n  \"aws/savingsplan/Compute\", \"aws/savingsplan/EC2Instance\", \"aws/savingsplan/Database\",\n  \"azure/savingsplan/Compute\", \"azure/savingsplan/Database\",\n  \"azure/Virtual Machines\", \"azure/SQL Database\", \"azure/Storage\", \"azure/Azure Monitor\"\n\nAcceptable term values:\n  \"thirty_day_gris\"  - 30-day Archera Insured (leased: true)\n  \"one_year_gris\"    - 1-year Archera Insured (leased: true)\n  \"one_year\"         - 1-year Native Uninsured (leased: false)\n  \"three_year\"       - 3-year Native Uninsured (leased: false)\n\nAcceptable payment_option values:\n  \"no_upfront\", \"partial_upfront\", \"all_upfront\"\n  Note: \"partial_upfront\" and \"all_upfront\" are not available for 30-day terms.\n\nAcceptable properties keys:\n  \"leased\" (bool)          - true for Archera Insured terms, false for Native terms.\n  \"offering_class\" (string) - only for \"aws/AmazonEC2\"; \"convertible\" or \"standard\"."
         },
         "includedContractTerms": {
           "type": "array",
@@ -43638,6 +43629,9 @@
             "type": "object",
             "$ref": "#/definitions/VerifyAwsOnboardingResponseAwsOnboardingFeatureCheck"
           }
+        },
+        "provider": {
+          "type": "string"
         }
       }
     },
@@ -44722,7 +44716,8 @@
           "type": "boolean"
         },
         "source": {
-          "type": "string"
+          "type": "string",
+          "description": "One of \"saved\", \"created\", or \"default\"."
         }
       }
     },
@@ -44863,12 +44858,10 @@
       "type": "object",
       "properties": {
         "format": {
-          "type": "string",
-          "description": "Supported import format. Currently \"csv\"."
+          "type": "string"
         },
         "formatVersion": {
-          "type": "string",
-          "description": "Supported format version. Currently \"misc_fee_import_v1\"."
+          "type": "string"
         },
         "headers": {
           "type": "array",
@@ -44881,8 +44874,7 @@
           "type": "array",
           "items": {
             "type": "string"
-          },
-          "description": "Example CSV row matching the current format version."
+          }
         },
         "allowedModes": {
           "type": "array",
@@ -44893,13 +44885,11 @@
         },
         "maxFileSizeBytes": {
           "type": "string",
-          "format": "int64",
-          "description": "Maximum upload size in bytes."
+          "format": "int64"
         },
         "maxRows": {
           "type": "integer",
-          "format": "int32",
-          "description": "Maximum data rows accepted per CSV file."
+          "format": "int32"
         }
       }
     },
