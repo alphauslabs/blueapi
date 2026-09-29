@@ -9842,6 +9842,18 @@
               "type": "string"
             },
             "collectionFormat": "multi"
+          },
+          {
+            "name": "layers",
+            "description": "Optional. Exports every billing group at these layers across all root\nbilling groups under the caller's MSP, in a single file. `0` is Root and\n`1`-`4` are child layers. When set, the file gains a first `Layer` column\n(`Root`, `Layer 1`-`Layer 4`).\nMutually exclusive with `billingGroupIds`. When empty, behavior is\nunchanged.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "collectionFormat": "multi"
           }
         ],
         "tags": [
@@ -9890,6 +9902,18 @@
             "type": "array",
             "items": {
               "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "layers",
+            "description": "Optional. Exports every billing group at these layers across all root\nbilling groups under the caller's MSP, in a single file. `0` is Root and\n`1`-`4` are child layers. When set, the file gains a first `Layer` column\n(`Root`, `Layer 1`-`Layer 4`).\nMutually exclusive with `billingGroupIds`. When empty, behavior is\nunchanged.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
             },
             "collectionFormat": "multi"
           }
@@ -40670,6 +40694,14 @@
             "type": "string"
           },
           "description": "Optional. Restricts the export to these child billing group internal ids.\nEvery id must resolve to a child of the caller's authorized root billing\ngroup. When empty, the export is unscoped (root-wide), matching prior\nbehavior."
+        },
+        "layers": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": "Optional. Exports every billing group at these layers across all root\nbilling groups under the caller's MSP, in a single file. `0` is Root and\n`1`-`4` are child layers. When set, the file gains a first `Layer` column\n(`Root`, `Layer 1`-`Layer 4`).\nMutually exclusive with `billingGroupIds`. When empty, behavior is\nunchanged."
         }
       },
       "description": "Request message for the ExportAccountInvoiceServiceDiscounts rpc.",
@@ -40737,6 +40769,14 @@
             "type": "string"
           },
           "description": "Optional. Restricts the export to these child billing group internal ids.\nEvery id must resolve to a child of the caller's authorized root billing\ngroup. When empty, the export is unscoped (root-wide), matching prior\nbehavior."
+        },
+        "layers": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": "Optional. Exports every billing group at these layers across all root\nbilling groups under the caller's MSP, in a single file. `0` is Root and\n`1`-`4` are child layers. When set, the file gains a first `Layer` column\n(`Root`, `Layer 1`-`Layer 4`).\nMutually exclusive with `billingGroupIds`. When empty, behavior is\nunchanged."
         }
       },
       "description": "Request message for the ExportBillingGroupInvoiceServiceDiscounts rpc.",
