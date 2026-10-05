@@ -280,15 +280,6 @@ service GuaranteedCommitments {
     };
   }
 
-  // Lists all Azure payer accounts (CSP and EA) registered to the organization,
-  // each with its resolved agreement type — the official source for the Azure
-  // accounts listing's EA tab (and, eventually, CSP tab) row data.
-  rpc ListAzurePayerAccounts(ListAzurePayerAccountsRequest) returns (ListAzurePayerAccountsResponse) {
-    option (google.api.http) = {
-      get: "/v1/managements/azure/accounts"
-    };
-  }
-
   rpc ListBillingGroups(ListBillingGroupsRequest) returns (ListBillingGroupsResponse) {
     option (google.api.http) = {
       get: "/v1/managements/billinggroups"
@@ -783,8 +774,6 @@ message SetPayerAccountEnabledRequest {
 }
 
 message GetPayerAccountStatusRequest {}
-
-message ListAzurePayerAccountsRequest {}
 
 message ListBillingGroupsRequest {}
 
@@ -2006,28 +1995,6 @@ message SetPayerAccountEnabledResponse {
 
 message GetPayerAccountStatusResponse {
   ListPayerAccountsResponse.PayerAccount payerAccount = 1;
-}
-
-message ListAzurePayerAccountsResponse {
-  enum AccountStatus {
-    ACCOUNT_STATUS_UNSPECIFIED = 0;
-    ACCOUNT_STATUS_SETUP_IN_PROGRESS = 1;
-    ACCOUNT_STATUS_NEEDS_RIPPLE_SETUP = 2;
-    ACCOUNT_STATUS_VERIFIED = 3;
-  }
-  // Account is one Azure payer account registered to the organization,
-  // combining Ripple's payer-account registration with Azure's resolved agreement type.
-  message Account {
-    // The identifier the client registered this payer account under.
-    string id = 1;
-    // Display name for the payer account.
-    string name = 2;
-    // Azure's resolved agreement type for this account, e.g. "Enterprise Agreement".
-    string agreementType = 3;
-    // Listing-level onboarding-lifecycle status.
-    AccountStatus status = 4;
-  }
-  repeated Account accounts = 1;
 }
 
 message ListBillingGroupsResponse {
