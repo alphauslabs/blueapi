@@ -1959,6 +1959,12 @@ message PayerAccountDetails {
 
   // Optional. Contracted end date of the current marketplace agreement, as reported by AWS.
   string marketplaceAgreementEndDate = 10;
+
+  // The vendor this payer account is registered under.
+  Provider vendor = 11;
+
+  // Optional. Agreement type, e.g. "Enterprise Agreement". Only populated when vendor is AZURE; empty otherwise.
+  optional string agreementType = 12;
 }
 
 message ListPayerAccountsResponse {
@@ -1983,12 +1989,6 @@ enum PayerAccountStatus {
     // passed/failed when a user comes back later (e.g., after stopping at verification).
     // Empty when verification hasn't been attempted yet or when no checks were persisted.
     repeated VerifyAwsOnboardingResponse.AwsOnboardingFeatureCheck verificationChecks = 8;
-
-    // The vendor this payer account is registered under.
-    Provider vendor = 9;
-
-    // Optional. Agreement type, e.g. "Enterprise Agreement". Only populated when vendor is AZURE; empty otherwise.
-    optional string agreementType = 10;
   }
   repeated PayerAccount payerAccounts = 1;
   repeated PayerAccountDetails payerAccountDetails = 2;
