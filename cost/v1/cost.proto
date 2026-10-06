@@ -915,8 +915,11 @@ message UpdateAccountRequest {
   // Optional.
   string name = 3;
 
-  // Optional. A free-text note/memo about this account.
-  string note = 4;
+  // Optional. A free-text note/memo about this account. Left out of the
+  // update entirely when not set, so this field can distinguish "don't
+  // touch the note" from "clear it to empty" - unlike CreateAccountRequest's
+  // note (a plain `string`, where there's no existing value to preserve).
+  optional string note = 4;
 }
 
 // Request message for the Cost.DeleteAccount rpc.
