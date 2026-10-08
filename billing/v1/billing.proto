@@ -3019,8 +3019,12 @@ message MonthlyMiscFee {
   int64 unit_cost = 8;
   int64 amount = 9;
   bool enabled = 10;
-  // One of "saved", "created", or "default".
+  // "saved" when the month has a saved invoice setting for this billing group and vendor,
+  // otherwise "default" (the billing group's enabled default items).
   string source = 11;
+  // The currency of the effective invoice setting, e.g. "JPY" or "USD". unit_cost and amount
+  // are in this currency.
+  string currency = 12;
 }
 
 // No singular billing_month field: a result can now span multiple billing months. See
@@ -3058,6 +3062,10 @@ message MonthlyMiscFeeImportGroupSummary {
 message MonthlyMiscFeeImportRowResult {
   // The 1-based CSV row this result corresponds to. 0 when action is "remove", since a
   // removal has no corresponding CSV row.
+  //
+  // For "invalid" results, billing_month, billing_group_id, vendor, item_name, quantity and
+  // unit_cost hold the row's values as written in the file, wherever they could be read, so a
+  // client can show which row failed.
   int32 csv_row_number = 1;
 
   // One of "insert", "update", "unchanged", "invalid", or "remove". "remove" only appears in
@@ -3078,6 +3086,15 @@ message MonthlyMiscFeeImportRowResult {
   // The row's own billing month in "YYYY-MM" form. Always populated, including for "remove"
   // results, since a request can span multiple months.
   string billing_month = 12;
+
+  // The currency of the billing group and vendor's effective invoice setting. unit_cost and
+  // amount are in this currency. Empty for "invalid" results.
+  string currency = 13;
+
+  // Where the billing group and vendor's items come from before this import: "saved" or
+  // "default". An import saves every "default" combination it names as the month's first
+  // saved setting. Empty for "invalid" results.
+  string source = 14;
 }
 
 message MonthlyMiscFeeValidationError {

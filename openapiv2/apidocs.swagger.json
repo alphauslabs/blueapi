@@ -44902,7 +44902,11 @@
         },
         "source": {
           "type": "string",
-          "description": "One of \"saved\", \"created\", or \"default\"."
+          "description": "\"saved\" when the month has a saved invoice setting for this billing group and vendor,\notherwise \"default\" (the billing group's enabled default items)."
+        },
+        "currency": {
+          "type": "string",
+          "description": "The currency of the effective invoice setting, e.g. \"JPY\" or \"USD\". unit_cost and amount\nare in this currency."
         }
       }
     },
@@ -44993,7 +44997,7 @@
         "csvRowNumber": {
           "type": "integer",
           "format": "int32",
-          "description": "The 1-based CSV row this result corresponds to. 0 when action is \"remove\", since a\nremoval has no corresponding CSV row."
+          "description": "The 1-based CSV row this result corresponds to. 0 when action is \"remove\", since a\nremoval has no corresponding CSV row.\n\nFor \"invalid\" results, billing_month, billing_group_id, vendor, item_name, quantity and\nunit_cost hold the row's values as written in the file, wherever they could be read, so a\nclient can show which row failed."
         },
         "action": {
           "type": "string",
@@ -45036,6 +45040,14 @@
         "billingMonth": {
           "type": "string",
           "description": "The row's own billing month in \"YYYY-MM\" form. Always populated, including for \"remove\"\nresults, since a request can span multiple months."
+        },
+        "currency": {
+          "type": "string",
+          "description": "The currency of the billing group and vendor's effective invoice setting. unit_cost and\namount are in this currency. Empty for \"invalid\" results."
+        },
+        "source": {
+          "type": "string",
+          "description": "Where the billing group and vendor's items come from before this import: \"saved\" or\n\"default\". An import saves every \"default\" combination it names as the month's first\nsaved setting. Empty for \"invalid\" results."
         }
       }
     },
