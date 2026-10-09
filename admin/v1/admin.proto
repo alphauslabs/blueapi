@@ -39,6 +39,29 @@ service Admin {
     };
   }
 
+  // Creates an account group.
+  rpc CreateAccountGroup(CreateAccountGroupRequest) returns (CreateAccountGroupResponse) {
+    option (google.api.http) = {
+      post: "/admin/v1/acctgroups"
+      body: "*"
+    };
+  }
+
+  // Updates an account group. The account id list fully replaces the group's current membership.
+  rpc UpdateAccountGroup(UpdateAccountGroupRequest) returns (UpdateAccountGroupResponse) {
+    option (google.api.http) = {
+      put: "/admin/v1/acctgroups/{id}"
+      body: "*"
+    };
+  }
+
+  // Deletes an account group.
+  rpc DeleteAccountGroup(DeleteAccountGroupRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/admin/v1/acctgroups/{id}"
+    };
+  }
+
   // Gets a CloudFormation launch URL for enabling the default cross-account access to your account's cost information based on type. See comments on the type for more information on what each template does.
   rpc GetDefaultCostAccessTemplateUrl(GetDefaultCostAccessTemplateUrlRequest) returns (GetDefaultCostAccessTemplateUrlResponse) {
     option (google.api.http) = {
@@ -242,7 +265,10 @@ service Admin {
 }
 
 // Request message for the Admin.ListAccountGroups rpc.
-message ListAccountGroupsRequest {}
+message ListAccountGroupsRequest {
+  // Optional. Scopes the list to a single vendor for Wave callers (one of 'aws', 'azure', 'gcp'); lists across all vendors when empty. No effect for Ripple callers.
+  string vendor = 1;
+}
 
 // Response message for the Admin.ListAccountGroups rpc.
 message ListAccountGroupsResponse {
@@ -252,11 +278,48 @@ message ListAccountGroupsResponse {
 // Request message for the Admin.GetAccountGroup rpc.
 message GetAccountGroupRequest {
   string id = 1;
+  // Required for Wave callers (one of 'aws', 'azure', 'gcp'); needed to resolve the group's storage key. No effect for Ripple callers.
+  string vendor = 2;
 }
 
 // Response message for the Admin.GetAccountGroup rpc.
 message GetAccountGroupResponse {
   api.AccountGroup acctGroup = 1;
+}
+
+// Request message for the Admin.CreateAccountGroup rpc.
+message CreateAccountGroupRequest {
+  string name = 1;
+  repeated string accountIds = 2;
+  // Required for Wave callers (one of 'aws', 'azure', 'gcp'). No effect for Ripple callers.
+  string vendor = 3;
+}
+
+// Response message for the Admin.CreateAccountGroup rpc.
+message CreateAccountGroupResponse {
+  api.AccountGroup acctGroup = 1;
+}
+
+// Request message for the Admin.UpdateAccountGroup rpc.
+message UpdateAccountGroupRequest {
+  string id = 1;
+  string name = 2;
+  // The complete new membership of the group. Fully replaces the current members; not a delta.
+  repeated string accountIds = 3;
+  // Required for Wave callers (one of 'aws', 'azure', 'gcp'). No effect for Ripple callers.
+  string vendor = 4;
+}
+
+// Response message for the Admin.UpdateAccountGroup rpc.
+message UpdateAccountGroupResponse {
+  api.AccountGroup acctGroup = 1;
+}
+
+// Request message for the Admin.DeleteAccountGroup rpc.
+message DeleteAccountGroupRequest {
+  string id = 1;
+  // Required for Wave callers (one of 'aws', 'azure', 'gcp'). No effect for Ripple callers.
+  string vendor = 2;
 }
 
 // Request message for the Admin.GetDefaultCostAccessTemplateUrl rpc.
