@@ -2841,6 +2841,10 @@ message ListTagValuesRequest {
 
   // Optional. Page size for pagination. Default is 50, maximum is 1000.
   int32 pageSize = 5;
+
+  // Optional. Only return values containing this text, case-insensitive.
+  // When set, totalValueCount and totalPages describe the matching values.
+  string search = 6;
 }
 
 // Response message for the Billing.ListTagValues rpc.
@@ -2849,7 +2853,7 @@ message ListTagValuesResponse {
   repeated string values = 1;
 
   // Total distinct-value count for this (customerId, tagKey), consistent
-  // with Tags.totalValueCount.
+  // with Tags.totalValueCount. With search set, the count of matching values.
   int32 totalValueCount = 2;
 
   int32 pageNumber = 3;
