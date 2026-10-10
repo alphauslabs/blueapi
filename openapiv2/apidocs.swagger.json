@@ -12922,6 +12922,38 @@
         ]
       }
     },
+    "/v1/onboarding/azure/ea/configure": {
+      "post": {
+        "operationId": "GuaranteedCommitments_ConfigureAzureEaOnboarding",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ConfigureAzureEaOnboardingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ConfigureAzureEaOnboardingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/onboarding/azure/integration": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Creates the Azure cloud integration after all onboarding steps complete.",
@@ -16538,6 +16570,13 @@
             "required": false,
             "type": "integer",
             "format": "int32"
+          },
+          {
+            "name": "search",
+            "description": "Optional. Only return values containing this text, case-insensitive.\nWhen set, totalValueCount and totalPages describe the matching values.",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -23827,6 +23866,18 @@
         }
       },
       "title": "BillingGroup tags adding setting"
+    },
+    "ConfigureAzureEaOnboardingRequestAction": {
+      "type": "string",
+      "enum": [
+        "START_ONBOARDING",
+        "SUBMIT_PAYER_DETAILS",
+        "CONFIGURE_GC_RESOURCE_STORAGE",
+        "CHECK_AUTHORIZATION",
+        "SUBMIT_ACCOUNT_SCOPE",
+        "COMPLETE_ONBOARDING"
+      ],
+      "default": "START_ONBOARDING"
     },
     "ContainerCostUsageRequestFilterCriteria": {
       "type": "object",
@@ -37689,6 +37740,52 @@
         }
       }
     },
+    "v1ConfigureAzureEaOnboardingRequest": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "$ref": "#/definitions/ConfigureAzureEaOnboardingRequestAction"
+        },
+        "onboardingId": {
+          "type": "string"
+        },
+        "billingId": {
+          "type": "string"
+        },
+        "billingName": {
+          "type": "string"
+        },
+        "appId": {
+          "type": "string"
+        },
+        "tenantId": {
+          "type": "string"
+        },
+        "clientSecret": {
+          "type": "string"
+        },
+        "accountScopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "subscriptionId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "action"
+      ]
+    },
+    "v1ConfigureAzureEaOnboardingResponse": {
+      "type": "object",
+      "properties": {
+        "onboardingId": {
+          "type": "string"
+        }
+      }
+    },
     "v1ConfirmGoogleSheetAccessRequest": {
       "type": "object",
       "properties": {
@@ -44513,7 +44610,7 @@
         "totalValueCount": {
           "type": "integer",
           "format": "int32",
-          "description": "Total distinct-value count for this (customerId, tagKey), consistent\nwith Tags.totalValueCount."
+          "description": "Total distinct-value count for this (customerId, tagKey), consistent\nwith Tags.totalValueCount. With search set, the count of matching values."
         },
         "pageNumber": {
           "type": "integer",
@@ -45306,7 +45403,7 @@
         },
         "agreementType": {
           "type": "string",
-          "description": "Optional. Agreement type, e.g. \"Enterprise Agreement\". Only populated when vendor is AZURE; empty otherwise."
+          "description": "Optional. Agreement type, e.g. \"azureea\". Only populated when vendor is AZURE; empty otherwise."
         }
       }
     },
