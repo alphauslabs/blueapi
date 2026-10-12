@@ -1964,6 +1964,11 @@ message CreateInvoiceRequest {
 
   // Optional. You can set it to a list of billing internal group id
   repeated string groups = 3;
+
+  // Optional. By default, each billing group in `groups` also creates the
+  // invoices of all its child billing groups. If true, only the billing
+  // groups in `groups` are created. Ignored when `allGroups` is true.
+  bool excludeDescendants = 5;
 }
 
 // Request message for the GetInvoiceStatus rpc.
