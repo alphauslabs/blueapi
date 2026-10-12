@@ -406,6 +406,15 @@ rpc ListAzureIntegrations(ListAzureIntegrationsRequest) returns (ListAzureIntegr
   };
 }
 
+// ------------------------ AZURE EA INTEGRATION ------------------------
+
+rpc ConfigureAzureEaOnboarding(ConfigureAzureEaOnboardingRequest) returns (ConfigureAzureEaOnboardingResponse) {
+  option (google.api.http) = {
+    post: "/v1/onboarding/azure/ea/configure"
+    body: "*"
+  };
+}
+
 // USED FOR RIPPLE ONLY
 
 // WORK-IN-PROGRESS: Removes an Azure integration from Archera and clears the local record for the given onboardingId.
@@ -534,6 +543,37 @@ enum UsageType {
 }
 
 // ####################### REQUEST MESSAGES #######################
+
+message ConfigureAzureEaOnboardingRequest {
+  enum Action {
+    START_ONBOARDING = 0;
+    SUBMIT_PAYER_DETAILS = 1;
+    CONFIGURE_GC_RESOURCE_STORAGE = 2;
+    CHECK_AUTHORIZATION = 3;
+    SUBMIT_ACCOUNT_SCOPE = 4;
+    COMPLETE_ONBOARDING = 5;
+  }
+
+  Action action = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+  optional string onboardingId = 2;
+  optional string billingId = 3;
+  optional string billingName = 4;
+  optional string appId = 5;
+  optional string tenantId = 6;
+  optional string clientSecret = 7;
+  repeated string accountScopes = 8;
+  optional string subscriptionId = 9;
+}
+
+message ConfigureAzureEaOnboardingResponse {
+  string onboardingId = 1;
+}
+
+message ConfigureAzureEaGCResponse {
+  string onboardingId = 1;
+}
 
 // Product and consent scope are derived from authenticated request context.
 message GetTermsConsentStatusRequest {}
@@ -1963,7 +2003,7 @@ message PayerAccountDetails {
   // The vendor this payer account is registered under.
   Provider vendor = 11;
 
-  // Optional. Agreement type, e.g. "Enterprise Agreement". Only populated when vendor is AZURE; empty otherwise.
+  // Optional. Agreement type, e.g. "azureea". Only populated when vendor is AZURE; empty otherwise.
   optional string agreementType = 12;
 }
 
