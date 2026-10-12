@@ -23116,11 +23116,23 @@
           "items": {
             "type": "string"
           },
-          "title": "billingInternalId of invoice to download\nignored if allBillingGroups is set to true"
+          "description": "Optional. Billing internal IDs of invoices to download.\nIgnored if allBillingGroups is true. Cannot be combined with non-empty layers."
         },
         "allBillingGroups": {
           "type": "boolean",
-          "title": "If true, download all created invoice"
+          "description": "Optional. If true, download all created invoices.\nCannot be true when layers is non-empty."
+        },
+        "layers": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": "Optional. MSP-wide layers to export: 0 = Root, 1-4 = child layers.\nResolved across the caller's accessible roots, independent of table filters.\nOnly groups with a created invoice for date are converted.\nValues must be in 0-4; duplicates count once. Invalid values or combinations\nwith billinggroups or allBillingGroups=true return InvalidArgument.\nEmpty layers retain the existing billinggroups/allBillingGroups behavior.\nLayer exports require the authenticated MSP to be enabled for hierarchy;\notherwise the service returns PermissionDenied, including for Root only.\nMultiple distinct layers use localized layer folders in the zip; one layer\nuses a flat layout. Layer-export filenames include the billing internal ID\nso groups with the same name have distinct entries."
+        },
+        "previewOnly": {
+          "type": "boolean",
+          "description": "Optional. If true, return layerCounts without converting PDFs, creating\nprogress markers, or looking up or writing zip artifacts.\nRequires non-empty layers; otherwise returns InvalidArgument.\nUses the same hierarchy eligibility, access and created-invoice selection\nas conversion. A preview with no eligible invoices succeeds with zero counts;\nconversion with no eligible invoices returns an error instead of an empty zip.\nOmit or set false for conversion and subsequent progress polling."
         }
       }
     },
@@ -38040,11 +38052,20 @@
       "type": "object",
       "properties": {
         "progress": {
-          "type": "string"
+          "type": "string",
+          "description": "Conversion progress. Empty for preview-only responses."
         },
         "downloadUrl": {
           "type": "string",
-          "title": "returns \"\" when not ready\nreturns the direct download link"
+          "description": "Direct download link when conversion is ready; empty otherwise, including\nfor preview-only responses."
+        },
+        "layerCounts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": "Distinct billing groups with a created invoice at each requested layer.\nPopulated only for preview_only=true, with an entry for every requested\nlayer (0 = Root, 1-4 = child layers), including zero counts.\nCounts billing groups, not vendors or CSV rows. Empty for conversion responses."
         }
       }
     },
