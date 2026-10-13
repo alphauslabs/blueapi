@@ -3348,9 +3348,11 @@ message PreviewBillingGroupCsvExportResponse {
 // Confirm durable consumption before returning a link, then delete the selection.
 // Persistence/write/upload/signing failures must not return a success link.
 // Default request budget: 34 minutes (2 preparation + 30 export + 2 response).
+// Pre-claim is manifest metadata only; chunk/group checks run after the claim.
 // Cap accepted work at min(claim time + 30 minutes, caller deadline - 2 minutes).
 // Honor shorter caller deadlines and cancellation; exhausted preparation fails
-// with DeadlineExceeded before claiming. Detailed lease/cleanup rules are in OpenSpec.
+// with DeadlineExceeded before claiming. Claim release/cleanup use a detached
+// bounded context. Detailed lease/cleanup rules are in OpenSpec.
 // Existing export RPCs remain supported without preview tokens.
 message ExportPreviewedBillingGroupCsvRequest {
   // Required. Token from PreviewBillingGroupCsvExport, sent in the request body.
