@@ -3292,119 +3292,84 @@ message ExportInvoiceSettingCsvResponse {
   string downloadLink = 1;
 }
 
-// Request message for PreviewBillingGroupCsvExport.
-// Resolves the same authenticated scope and row eligibility as the selected
-// CSV exporter and stores the eligible root/child IDs and their layers for reuse.
-// Invalid requests return InvalidArgument. Authorization failures
-// use the same policy as the corresponding layer export and return PermissionDenied.
+// Stores eligible groups for a layer-scoped CSV export.
+// Invalid type/options/layers return InvalidArgument; denied access returns
+// PermissionDenied. Capacity overflow returns ResourceExhausted. Read or storage
+// failures return an error, never partial counts or a usable token.
 message PreviewBillingGroupCsvExportRequest {
-  // CSV exporter whose eligibility rules are used for the preview.
+  // Exporter whose row eligibility rules determine the selection.
   enum ExportType {
-    // Unspecified or unknown export types are invalid.
+    // Invalid; choose a supported exporter.
     EXPORT_TYPE_UNSPECIFIED = 0;
     // ExportBillingGroupCsv.
     EXPORT_TYPE_BILLING_GROUP_DETAIL = 1;
-    // ExportInvoiceSettingCsv, including the UI's reseller charges export.
+    // ExportInvoiceSettingCsv, also used for reseller charges.
     EXPORT_TYPE_INVOICE_SETTINGS = 2;
-    // ExportBillingGroupInvoiceServiceDiscounts with format CSV.
+    // ExportBillingGroupInvoiceServiceDiscounts, CSV format.
     EXPORT_TYPE_BILLING_GROUP_SERVICE_DISCOUNTS = 3;
-    // ExportAccountInvoiceServiceDiscounts with format CSV.
+    // ExportAccountInvoiceServiceDiscounts, CSV format.
     EXPORT_TYPE_ACCOUNT_SERVICE_DISCOUNTS = 4;
   }
 
-  // Required. Must identify one of the four CSV exporters above.
+  // Required. Supported CSV exporter.
   ExportType export_type = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. Non-empty MSP-wide layer selection: 0 = Root, 1-4 = child layers.
-  // Reject values outside 0-4; sort and deduplicate valid values. Resolve across
-  // all accessible roots using the same complete, uncached root/child loaders
-  // as direct layer export, independent of UI filters, cached tables, or hasChild flags.
-  // Unlike the export requests, an empty selection is invalid for preview.
-  // Explicit billingGroupIds are not supported by this layer-preview RPC.
+  // Required. Non-empty MSP-wide layers: 0 = Root, 1-4 = children.
+  // Values outside 0-4 are invalid; duplicates count once.
+  // Membership is resolved by the backend, independent of UI filters/flags.
   repeated int32 layers = 2 [(google.api.field_behavior) = REQUIRED];
 
-  // Optional. Mirrors ExportInvoiceSettingCsv.includeMiscellaneous.
-  // Defaults to false. True is valid only for EXPORT_TYPE_INVOICE_SETTINGS; otherwise reject
-  // with InvalidArgument. Preview must load the same eligibility/output
-  // dependencies as export, including miscellaneous records when requested.
+  // Optional. Include miscellaneous items. Defaults to false.
+  // True is valid only for EXPORT_TYPE_INVOICE_SETTINGS.
   bool include_miscellaneous = 3 [(google.api.field_behavior) = OPTIONAL];
 }
 
-// Response message for PreviewBillingGroupCsvExport.
-// Required root, child, settings, account/resource, discount, template and
-// miscellaneous reads consumed by the selected export must propagate failures,
-// including failed sub-reads of aggregate loaders. Do not return partial counts.
-// Successfully absent optional records follow the selected export's eligibility.
+// Returned after the complete eligible selection is stored.
+// Preview generates no CSV or download link.
 message PreviewBillingGroupCsvExportResponse {
-  // Distinct billing groups contributing at least one final CSV data row at
-  // each requested layer, not vendor/account rows or raw hierarchy membership.
-  // Contains every requested layer, including successful zero counts; no extra
-  // layers. All exporters share hierarchy membership, while row eligibility
-  // and therefore counts may differ by export type and options.
-  // Counts describe the saved eligible selection. Preview creates no CSV or
-  // signed download link. An all-zero preview still succeeds with a token.
+  // Distinct groups contributing CSV rows per requested layer, including zero.
+  // Counts groups once despite multiple vendor/account rows. No extra layers.
   map<int32, int32> layer_counts = 1;
 
-  // Opaque, cryptographically random token bound server-side to the authenticated
-  // MSP, principal, export type/options and eligible root/child IDs by layer.
-  // Returned only after the complete selection is durably stored and ready.
-  // Valid for 10 minutes from preview completion and consumed by the first
-  // successful export of a chosen subset. Treat as sensitive; do not log it.
-  // No group IDs or settings are embedded in or returned with the token.
+  // Sensitive opaque token bound to the authenticated MSP/principal and export
+  // type/options. Single-use on successful export; contains no group IDs.
+  // Do not log it or send it in URLs.
   string preview_token = 2;
 
-  // Absolute expiry of preview_token. Backend must enforce expiry on every use,
-  // independently of asynchronous storage cleanup. Re-preview after expiry.
+  // Acceptance expiry: 10 minutes after preview completion.
+  // Storage cleanup is separate; accepted exports may finish after this time.
   google.protobuf.Timestamp expires_at = 3;
 }
 
-// Request message for ExportPreviewedBillingGroupCsv.
-// The server reuses the saved selection and export type/options; it does not
-// repeat hierarchy discovery. Missing/expired tokens return FailedPrecondition
-// and require a new preview. Tokens owned by a different authenticated MSP or
-// principal, or selections no longer authorized, return PermissionDenied.
-// Load current settings and check existence/current access for every selected
-// group with error-propagating batched reads. Do not trust possession of a token
-// as authorization. If a selected group was deleted or would no longer emit a
-// CSV row, fail the whole request with FailedPrecondition and require re-preview;
-// never silently drop a group or add newly discovered groups. Settings are not
-// snapshotted: values may change while saved IDs/layer assignments stay fixed.
-// Atomically claim the token for one active export; concurrent attempts return
-// Aborted and may retry. A failed export releases its own claim for retry while
-// unexpired. Claims use expiring fenced leases so crashed workers cannot leave
-// tokens stuck or complete after losing ownership. After successful write,
-// upload and signing, mark the token consumed and delete all saved selection
-// payload/chunks. Durable cleanup retries and TTL cover failed deletion.
-// Consumed tokens return FailedPrecondition and require a new preview, including
-// when the original success response was lost. A minimal consumed marker may
-// remain until expiry, but contains no group IDs, settings, options or link.
-// Artifact write/upload/signing failures return errors, not success links.
+// Exports saved IDs/layers with current settings and authorization checks.
+// Does not rediscover membership. Missing/expired/consumed tokens or deleted/
+// ineligible groups return FailedPrecondition; lost access returns PermissionDenied.
+// Concurrent claims return Aborted. Failed exports may retry before token expiry.
+// Confirm durable consumption before returning a link, then delete the selection.
+// Persistence/write/upload/signing failures must not return a success link.
+// Default request budget: 34 minutes (2 preparation + 30 export + 2 response).
+// Cap accepted work at min(claim time + 30 minutes, caller deadline - 2 minutes).
+// Honor shorter caller deadlines and cancellation; exhausted preparation fails
+// with DeadlineExceeded before claiming. Detailed lease/cleanup rules are in OpenSpec.
+// Existing export RPCs remain supported without preview tokens.
 message ExportPreviewedBillingGroupCsvRequest {
-  // Required. Token returned by PreviewBillingGroupCsvExport. Send in the body,
-  // not a URL/query parameter. No client-supplied group IDs or export type/options.
+  // Required. Token from PreviewBillingGroupCsvExport, sent in the request body.
   string preview_token = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. Non-empty subset of the token's previewed layers, 0 = Root and
-  // 1-4 = child layers. Normalize duplicates and ordering. Out-of-range values,
-  // empty lists or layers not covered by the token return InvalidArgument.
-  // A selection with zero eligible groups returns FailedPrecondition.
-  // Root IDs use the saved root selection, not the child-only billingGroupIds path.
+  // Required. Non-empty subset of previewed layers, 0 = Root and 1-4 = children.
+  // Invalid/uncovered values return InvalidArgument; duplicates count once.
+  // Root uses saved root IDs. A zero-group selection returns FailedPrecondition.
   repeated int32 layers = 2 [(google.api.field_behavior) = REQUIRED];
 
-  // Optional. CSV localization: en or ja; empty uses the authenticated user's
-  // language. Other non-empty values return InvalidArgument. Does not change
-  // membership or the options bound to the token.
+  // Optional. en or ja; empty uses the user's language. Other values are invalid.
+  // Does not change the selection or token-bound options.
   string language = 3 [(google.api.field_behavior) = OPTIONAL];
 }
 
-// Response message for ExportPreviewedBillingGroupCsv.
 message ExportPreviewedBillingGroupCsvResponse {
-  // Signed CSV download link, returned only after the full isolated artifact is
-  // successfully written, completed and uploaded, and signing succeeds.
-  // CSV includes the localized leading Layer column even for Root only.
-  // Link lifetime is independent of the selection token's expiry. Successful
-  // export consumes the token and triggers deletion of saved membership; obtain
-  // a new preview to export a different subset.
+  // Signed CSV link after successful artifact creation and durable consumption.
+  // Includes the localized Layer column, even for Root only. The saved selection
+  // is deleted; another export needs a new preview. Link expiry is independent.
   string download_link = 1;
 }
 
