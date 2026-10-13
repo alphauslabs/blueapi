@@ -26,6 +26,7 @@ import "google/api/field_behavior.proto";
 import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/alphauslabs/blueapi/billing";
 option java_package = "cloud.alphaus.api.billing";
@@ -866,10 +867,20 @@ service Billing {
   }
 
   // (BETA) Previews eligible billing group counts for a layer-scoped CSV export.
-  // Read-only: does not generate CSVs, upload objects, or sign download links.
+  // Stores a short-lived selection; does not generate CSVs or download links.
   rpc PreviewBillingGroupCsvExport(PreviewBillingGroupCsvExportRequest) returns (PreviewBillingGroupCsvExportResponse) {
     option (google.api.http) = {
       post: "/v1/exportcsv/billing-group:preview"
+      body: "*"
+    };
+  }
+
+  // (BETA) Exports a previously previewed billing group selection.
+  // Uses the saved root/child IDs and layer assignments without rediscovering
+  // hierarchy membership. All export types return a signed CSV download link.
+  rpc ExportPreviewedBillingGroupCsv(ExportPreviewedBillingGroupCsvRequest) returns (ExportPreviewedBillingGroupCsvResponse) {
+    option (google.api.http) = {
+      post: "/v1/exportcsv/billing-group:exportPreviewed"
       body: "*"
     };
   }
@@ -3283,7 +3294,8 @@ message ExportInvoiceSettingCsvResponse {
 
 // Request message for PreviewBillingGroupCsvExport.
 // Resolves the same authenticated scope and row eligibility as the selected
-// CSV exporter. Invalid requests return InvalidArgument. Authorization failures
+// CSV exporter and stores the eligible root/child IDs and their layers for reuse.
+// Invalid requests return InvalidArgument. Authorization failures
 // use the same policy as the corresponding layer export and return PermissionDenied.
 message PreviewBillingGroupCsvExportRequest {
   // CSV exporter whose eligibility rules are used for the preview.
@@ -3306,7 +3318,7 @@ message PreviewBillingGroupCsvExportRequest {
   // Required. Non-empty MSP-wide layer selection: 0 = Root, 1-4 = child layers.
   // Reject values outside 0-4; sort and deduplicate valid values. Resolve across
   // all accessible roots using the same complete, uncached root/child loaders
-  // as export, independent of UI filters, cached tables, or hasChild flags.
+  // as direct layer export, independent of UI filters, cached tables, or hasChild flags.
   // Unlike the export requests, an empty selection is invalid for preview.
   // Explicit billingGroupIds are not supported by this layer-preview RPC.
   repeated int32 layers = 2 [(google.api.field_behavior) = REQUIRED];
@@ -3329,9 +3341,71 @@ message PreviewBillingGroupCsvExportResponse {
   // Contains every requested layer, including successful zero counts; no extra
   // layers. All exporters share hierarchy membership, while row eligibility
   // and therefore counts may differ by export type and options.
-  // Preview creates no export artifacts. Export resolves current data again,
-  // so membership/counts may change between preview and export.
+  // Counts describe the saved eligible selection. Preview creates no CSV or
+  // signed download link. An all-zero preview still succeeds with a token.
   map<int32, int32> layer_counts = 1;
+
+  // Opaque, cryptographically random token bound server-side to the authenticated
+  // MSP, principal, export type/options and eligible root/child IDs by layer.
+  // Returned only after the complete selection is durably stored and ready.
+  // Valid for 10 minutes from preview completion and consumed by the first
+  // successful export of a chosen subset. Treat as sensitive; do not log it.
+  // No group IDs or settings are embedded in or returned with the token.
+  string preview_token = 2;
+
+  // Absolute expiry of preview_token. Backend must enforce expiry on every use,
+  // independently of asynchronous storage cleanup. Re-preview after expiry.
+  google.protobuf.Timestamp expires_at = 3;
+}
+
+// Request message for ExportPreviewedBillingGroupCsv.
+// The server reuses the saved selection and export type/options; it does not
+// repeat hierarchy discovery. Missing/expired tokens return FailedPrecondition
+// and require a new preview. Tokens owned by a different authenticated MSP or
+// principal, or selections no longer authorized, return PermissionDenied.
+// Load current settings and check existence/current access for every selected
+// group with error-propagating batched reads. Do not trust possession of a token
+// as authorization. If a selected group was deleted or would no longer emit a
+// CSV row, fail the whole request with FailedPrecondition and require re-preview;
+// never silently drop a group or add newly discovered groups. Settings are not
+// snapshotted: values may change while saved IDs/layer assignments stay fixed.
+// Atomically claim the token for one active export; concurrent attempts return
+// Aborted and may retry. A failed export releases its own claim for retry while
+// unexpired. Claims use expiring fenced leases so crashed workers cannot leave
+// tokens stuck or complete after losing ownership. After successful write,
+// upload and signing, mark the token consumed and delete all saved selection
+// payload/chunks. Durable cleanup retries and TTL cover failed deletion.
+// Consumed tokens return FailedPrecondition and require a new preview, including
+// when the original success response was lost. A minimal consumed marker may
+// remain until expiry, but contains no group IDs, settings, options or link.
+// Artifact write/upload/signing failures return errors, not success links.
+message ExportPreviewedBillingGroupCsvRequest {
+  // Required. Token returned by PreviewBillingGroupCsvExport. Send in the body,
+  // not a URL/query parameter. No client-supplied group IDs or export type/options.
+  string preview_token = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. Non-empty subset of the token's previewed layers, 0 = Root and
+  // 1-4 = child layers. Normalize duplicates and ordering. Out-of-range values,
+  // empty lists or layers not covered by the token return InvalidArgument.
+  // A selection with zero eligible groups returns FailedPrecondition.
+  // Root IDs use the saved root selection, not the child-only billingGroupIds path.
+  repeated int32 layers = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. CSV localization: en or ja; empty uses the authenticated user's
+  // language. Other non-empty values return InvalidArgument. Does not change
+  // membership or the options bound to the token.
+  string language = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Response message for ExportPreviewedBillingGroupCsv.
+message ExportPreviewedBillingGroupCsvResponse {
+  // Signed CSV download link, returned only after the full isolated artifact is
+  // successfully written, completed and uploaded, and signing succeeds.
+  // CSV includes the localized leading Layer column even for Root only.
+  // Link lifetime is independent of the selection token's expiry. Successful
+  // export consumes the token and triggers deletion of saved membership; obtain
+  // a new preview to export a different subset.
+  string download_link = 1;
 }
 
 message GetBillingGroupInvoiceServiceDiscountsRequest {

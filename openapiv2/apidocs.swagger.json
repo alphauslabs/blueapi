@@ -9983,9 +9983,43 @@
         ]
       }
     },
+    "/v1/exportcsv/billing-group:exportPreviewed": {
+      "post": {
+        "summary": "(BETA) Exports a previously previewed billing group selection.\nUses the saved root/child IDs and layer assignments without rediscovering\nhierarchy membership. All export types return a signed CSV download link.",
+        "operationId": "Billing_ExportPreviewedBillingGroupCsv",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ExportPreviewedBillingGroupCsvResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for ExportPreviewedBillingGroupCsv.\nThe server reuses the saved selection and export type/options; it does not\nrepeat hierarchy discovery. Missing/expired tokens return FailedPrecondition\nand require a new preview. Tokens owned by a different authenticated MSP or\nprincipal, or selections no longer authorized, return PermissionDenied.\nLoad current settings and check existence/current access for every selected\ngroup with error-propagating batched reads. Do not trust possession of a token\nas authorization. If a selected group was deleted or would no longer emit a\nCSV row, fail the whole request with FailedPrecondition and require re-preview;\nnever silently drop a group or add newly discovered groups. Settings are not\nsnapshotted: values may change while saved IDs/layer assignments stay fixed.\nAtomically claim the token for one active export; concurrent attempts return\nAborted and may retry. A failed export releases its own claim for retry while\nunexpired. Claims use expiring fenced leases so crashed workers cannot leave\ntokens stuck or complete after losing ownership. After successful write,\nupload and signing, mark the token consumed and delete all saved selection\npayload/chunks. Durable cleanup retries and TTL cover failed deletion.\nConsumed tokens return FailedPrecondition and require a new preview, including\nwhen the original success response was lost. A minimal consumed marker may\nremain until expiry, but contains no group IDs, settings, options or link.\nArtifact write/upload/signing failures return errors, not success links.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ExportPreviewedBillingGroupCsvRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/exportcsv/billing-group:preview": {
       "post": {
-        "summary": "(BETA) Previews eligible billing group counts for a layer-scoped CSV export.\nRead-only: does not generate CSVs, upload objects, or sign download links.",
+        "summary": "(BETA) Previews eligible billing group counts for a layer-scoped CSV export.\nStores a short-lived selection; does not generate CSVs or download links.",
         "operationId": "Billing_PreviewBillingGroupCsvExport",
         "responses": {
           "200": {
@@ -9997,14 +10031,14 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/rpcStatus"
+              "$ref": "#/definitions/googlerpcStatus"
             }
           }
         },
         "parameters": [
           {
             "name": "body",
-            "description": "Request message for PreviewBillingGroupCsvExport.\nResolves the same authenticated scope and row eligibility as the selected\nCSV exporter. Invalid requests return InvalidArgument. Authorization failures\nuse the same policy as the corresponding layer export and return PermissionDenied.",
+            "description": "Request message for PreviewBillingGroupCsvExport.\nResolves the same authenticated scope and row eligibility as the selected\nCSV exporter and stores the eligible root/child IDs and their layers for reuse.\nInvalid requests return InvalidArgument. Authorization failures\nuse the same policy as the corresponding layer export and return PermissionDenied.",
             "in": "body",
             "required": true,
             "schema": {
@@ -41113,6 +41147,42 @@
       },
       "description": "Response message for the ExportBillingGroupCsv rpc."
     },
+    "v1ExportPreviewedBillingGroupCsvRequest": {
+      "type": "object",
+      "properties": {
+        "previewToken": {
+          "type": "string",
+          "description": "Required. Token returned by PreviewBillingGroupCsvExport. Send in the body,\nnot a URL/query parameter. No client-supplied group IDs or export type/options."
+        },
+        "layers": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": "Required. Non-empty subset of the token's previewed layers, 0 = Root and\n1-4 = child layers. Normalize duplicates and ordering. Out-of-range values,\nempty lists or layers not covered by the token return InvalidArgument.\nA selection with zero eligible groups returns FailedPrecondition.\nRoot IDs use the saved root selection, not the child-only billingGroupIds path."
+        },
+        "language": {
+          "type": "string",
+          "description": "Optional. CSV localization: en or ja; empty uses the authenticated user's\nlanguage. Other non-empty values return InvalidArgument. Does not change\nmembership or the options bound to the token."
+        }
+      },
+      "description": "Request message for ExportPreviewedBillingGroupCsv.\nThe server reuses the saved selection and export type/options; it does not\nrepeat hierarchy discovery. Missing/expired tokens return FailedPrecondition\nand require a new preview. Tokens owned by a different authenticated MSP or\nprincipal, or selections no longer authorized, return PermissionDenied.\nLoad current settings and check existence/current access for every selected\ngroup with error-propagating batched reads. Do not trust possession of a token\nas authorization. If a selected group was deleted or would no longer emit a\nCSV row, fail the whole request with FailedPrecondition and require re-preview;\nnever silently drop a group or add newly discovered groups. Settings are not\nsnapshotted: values may change while saved IDs/layer assignments stay fixed.\nAtomically claim the token for one active export; concurrent attempts return\nAborted and may retry. A failed export releases its own claim for retry while\nunexpired. Claims use expiring fenced leases so crashed workers cannot leave\ntokens stuck or complete after losing ownership. After successful write,\nupload and signing, mark the token consumed and delete all saved selection\npayload/chunks. Durable cleanup retries and TTL cover failed deletion.\nConsumed tokens return FailedPrecondition and require a new preview, including\nwhen the original success response was lost. A minimal consumed marker may\nremain until expiry, but contains no group IDs, settings, options or link.\nArtifact write/upload/signing failures return errors, not success links.",
+      "required": [
+        "previewToken",
+        "layers"
+      ]
+    },
+    "v1ExportPreviewedBillingGroupCsvResponse": {
+      "type": "object",
+      "properties": {
+        "downloadLink": {
+          "type": "string",
+          "description": "Signed CSV download link, returned only after the full isolated artifact is\nsuccessfully written, completed and uploaded, and signing succeeds.\nCSV includes the localized leading Layer column even for Root only.\nLink lifetime is independent of the selection token's expiry. Successful\nexport consumes the token and triggers deletion of saved membership; obtain\na new preview to export a different subset."
+        }
+      },
+      "description": "Response message for ExportPreviewedBillingGroupCsv."
+    },
     "v1ExportReportRequest": {
       "type": "object",
       "properties": {
@@ -45947,14 +46017,14 @@
             "type": "integer",
             "format": "int32"
           },
-          "description": "Required. Non-empty MSP-wide layer selection: 0 = Root, 1-4 = child layers.\nReject values outside 0-4; sort and deduplicate valid values. Resolve across\nall accessible roots using the same complete, uncached root/child loaders\nas export, independent of UI filters, cached tables, or hasChild flags.\nUnlike the export requests, an empty selection is invalid for preview.\nExplicit billingGroupIds are not supported by this layer-preview RPC."
+          "description": "Required. Non-empty MSP-wide layer selection: 0 = Root, 1-4 = child layers.\nReject values outside 0-4; sort and deduplicate valid values. Resolve across\nall accessible roots using the same complete, uncached root/child loaders\nas direct layer export, independent of UI filters, cached tables, or hasChild flags.\nUnlike the export requests, an empty selection is invalid for preview.\nExplicit billingGroupIds are not supported by this layer-preview RPC."
         },
         "includeMiscellaneous": {
           "type": "boolean",
           "description": "Optional. Mirrors ExportInvoiceSettingCsv.includeMiscellaneous.\nDefaults to false. True is valid only for EXPORT_TYPE_INVOICE_SETTINGS; otherwise reject\nwith InvalidArgument. Preview must load the same eligibility/output\ndependencies as export, including miscellaneous records when requested."
         }
       },
-      "description": "Request message for PreviewBillingGroupCsvExport.\nResolves the same authenticated scope and row eligibility as the selected\nCSV exporter. Invalid requests return InvalidArgument. Authorization failures\nuse the same policy as the corresponding layer export and return PermissionDenied.",
+      "description": "Request message for PreviewBillingGroupCsvExport.\nResolves the same authenticated scope and row eligibility as the selected\nCSV exporter and stores the eligible root/child IDs and their layers for reuse.\nInvalid requests return InvalidArgument. Authorization failures\nuse the same policy as the corresponding layer export and return PermissionDenied.",
       "required": [
         "exportType",
         "layers"
@@ -45969,7 +46039,16 @@
             "type": "integer",
             "format": "int32"
           },
-          "description": "Distinct billing groups contributing at least one final CSV data row at\neach requested layer, not vendor/account rows or raw hierarchy membership.\nContains every requested layer, including successful zero counts; no extra\nlayers. All exporters share hierarchy membership, while row eligibility\nand therefore counts may differ by export type and options.\nPreview creates no export artifacts. Export resolves current data again,\nso membership/counts may change between preview and export."
+          "description": "Distinct billing groups contributing at least one final CSV data row at\neach requested layer, not vendor/account rows or raw hierarchy membership.\nContains every requested layer, including successful zero counts; no extra\nlayers. All exporters share hierarchy membership, while row eligibility\nand therefore counts may differ by export type and options.\nCounts describe the saved eligible selection. Preview creates no CSV or\nsigned download link. An all-zero preview still succeeds with a token."
+        },
+        "previewToken": {
+          "type": "string",
+          "description": "Opaque, cryptographically random token bound server-side to the authenticated\nMSP, principal, export type/options and eligible root/child IDs by layer.\nReturned only after the complete selection is durably stored and ready.\nValid for 10 minutes from preview completion and consumed by the first\nsuccessful export of a chosen subset. Treat as sensitive; do not log it.\nNo group IDs or settings are embedded in or returned with the token."
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Absolute expiry of preview_token. Backend must enforce expiry on every use,\nindependently of asynchronous storage cleanup. Re-preview after expiry."
         }
       },
       "description": "Response message for PreviewBillingGroupCsvExport.\nRequired root, child, settings, account/resource, discount, template and\nmiscellaneous reads consumed by the selected export must propagate failures,\nincluding failed sub-reads of aggregate loaders. Do not return partial counts.\nSuccessfully absent optional records follow the selected export's eligibility."
