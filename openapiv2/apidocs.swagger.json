@@ -9983,6 +9983,40 @@
         ]
       }
     },
+    "/v1/exportcsv/billing-group:preview": {
+      "post": {
+        "summary": "(BETA) Previews eligible billing group counts for a layer-scoped CSV export.\nRead-only: does not generate CSVs, upload objects, or sign download links.",
+        "operationId": "Billing_PreviewBillingGroupCsvExport",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PreviewBillingGroupCsvExportResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for PreviewBillingGroupCsvExport.\nResolves the same authenticated scope and row eligibility as the selected\nCSV exporter. Invalid requests return InvalidArgument. Authorization failures\nuse the same policy as the corresponding layer export and return PermissionDenied.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1PreviewBillingGroupCsvExportRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Billing"
+        ]
+      }
+    },
     "/v1/exportcsv/invoice-setting": {
       "get": {
         "summary": "Exports the invoice settings into csv format",
@@ -27157,6 +27191,18 @@
         "YEAR"
       ],
       "default": "UNIT_UNSPECIFIED"
+    },
+    "PreviewBillingGroupCsvExportRequestExportType": {
+      "type": "string",
+      "enum": [
+        "EXPORT_TYPE_UNSPECIFIED",
+        "EXPORT_TYPE_BILLING_GROUP_DETAIL",
+        "EXPORT_TYPE_INVOICE_SETTINGS",
+        "EXPORT_TYPE_BILLING_GROUP_SERVICE_DISCOUNTS",
+        "EXPORT_TYPE_ACCOUNT_SERVICE_DISCOUNTS"
+      ],
+      "default": "EXPORT_TYPE_UNSPECIFIED",
+      "description": "CSV exporter whose eligibility rules are used for the preview.\n\n - EXPORT_TYPE_UNSPECIFIED: Unspecified or unknown export types are invalid.\n - EXPORT_TYPE_BILLING_GROUP_DETAIL: ExportBillingGroupCsv.\n - EXPORT_TYPE_INVOICE_SETTINGS: ExportInvoiceSettingCsv, including the UI's reseller charges export.\n - EXPORT_TYPE_BILLING_GROUP_SERVICE_DISCOUNTS: ExportBillingGroupInvoiceServiceDiscounts with format CSV.\n - EXPORT_TYPE_ACCOUNT_SERVICE_DISCOUNTS: ExportAccountInvoiceServiceDiscounts with format CSV."
     },
     "PricingGetPricingBody": {
       "type": "object",
@@ -45887,6 +45933,46 @@
     },
     "v1Preference": {
       "type": "object"
+    },
+    "v1PreviewBillingGroupCsvExportRequest": {
+      "type": "object",
+      "properties": {
+        "exportType": {
+          "$ref": "#/definitions/PreviewBillingGroupCsvExportRequestExportType",
+          "description": "Required. Must identify one of the four CSV exporters above."
+        },
+        "layers": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": "Required. Non-empty MSP-wide layer selection: 0 = Root, 1-4 = child layers.\nReject values outside 0-4; sort and deduplicate valid values. Resolve across\nall accessible roots using the same complete, uncached root/child loaders\nas export, independent of UI filters, cached tables, or hasChild flags.\nUnlike the export requests, an empty selection is invalid for preview.\nExplicit billingGroupIds are not supported by this layer-preview RPC."
+        },
+        "includeMiscellaneous": {
+          "type": "boolean",
+          "description": "Optional. Mirrors ExportInvoiceSettingCsv.includeMiscellaneous.\nDefaults to false. True is valid only for EXPORT_TYPE_INVOICE_SETTINGS; otherwise reject\nwith InvalidArgument. Preview must load the same eligibility/output\ndependencies as export, including miscellaneous records when requested."
+        }
+      },
+      "description": "Request message for PreviewBillingGroupCsvExport.\nResolves the same authenticated scope and row eligibility as the selected\nCSV exporter. Invalid requests return InvalidArgument. Authorization failures\nuse the same policy as the corresponding layer export and return PermissionDenied.",
+      "required": [
+        "exportType",
+        "layers"
+      ]
+    },
+    "v1PreviewBillingGroupCsvExportResponse": {
+      "type": "object",
+      "properties": {
+        "layerCounts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": "Distinct billing groups contributing at least one final CSV data row at\neach requested layer, not vendor/account rows or raw hierarchy membership.\nContains every requested layer, including successful zero counts; no extra\nlayers. All exporters share hierarchy membership, while row eligibility\nand therefore counts may differ by export type and options.\nPreview creates no export artifacts. Export resolves current data again,\nso membership/counts may change between preview and export."
+        }
+      },
+      "description": "Response message for PreviewBillingGroupCsvExport.\nRequired root, child, settings, account/resource, discount, template and\nmiscellaneous reads consumed by the selected export must propagate failures,\nincluding failed sub-reads of aggregate loaders. Do not return partial counts.\nSuccessfully absent optional records follow the selected export's eligibility."
     },
     "v1PreviewGoogleSheetRequest": {
       "type": "object",

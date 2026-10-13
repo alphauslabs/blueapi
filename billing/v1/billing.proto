@@ -865,6 +865,15 @@ service Billing {
     };
   }
 
+  // (BETA) Previews eligible billing group counts for a layer-scoped CSV export.
+  // Read-only: does not generate CSVs, upload objects, or sign download links.
+  rpc PreviewBillingGroupCsvExport(PreviewBillingGroupCsvExportRequest) returns (PreviewBillingGroupCsvExportResponse) {
+    option (google.api.http) = {
+      post: "/v1/exportcsv/billing-group:preview"
+      body: "*"
+    };
+  }
+
   // Update billing group basic information
   rpc UpdateBillingGroupBasicInformation(UpdateBillingGroupBasicInformationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -3270,6 +3279,59 @@ message ExportInvoiceSettingCsvResponse {
   // csv direct download link
   // expires in 10 minutes
   string downloadLink = 1;
+}
+
+// Request message for PreviewBillingGroupCsvExport.
+// Resolves the same authenticated scope and row eligibility as the selected
+// CSV exporter. Invalid requests return InvalidArgument. Authorization failures
+// use the same policy as the corresponding layer export and return PermissionDenied.
+message PreviewBillingGroupCsvExportRequest {
+  // CSV exporter whose eligibility rules are used for the preview.
+  enum ExportType {
+    // Unspecified or unknown export types are invalid.
+    EXPORT_TYPE_UNSPECIFIED = 0;
+    // ExportBillingGroupCsv.
+    EXPORT_TYPE_BILLING_GROUP_DETAIL = 1;
+    // ExportInvoiceSettingCsv, including the UI's reseller charges export.
+    EXPORT_TYPE_INVOICE_SETTINGS = 2;
+    // ExportBillingGroupInvoiceServiceDiscounts with format CSV.
+    EXPORT_TYPE_BILLING_GROUP_SERVICE_DISCOUNTS = 3;
+    // ExportAccountInvoiceServiceDiscounts with format CSV.
+    EXPORT_TYPE_ACCOUNT_SERVICE_DISCOUNTS = 4;
+  }
+
+  // Required. Must identify one of the four CSV exporters above.
+  ExportType export_type = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. Non-empty MSP-wide layer selection: 0 = Root, 1-4 = child layers.
+  // Reject values outside 0-4; sort and deduplicate valid values. Resolve across
+  // all accessible roots using the same complete, uncached root/child loaders
+  // as export, independent of UI filters, cached tables, or hasChild flags.
+  // Unlike the export requests, an empty selection is invalid for preview.
+  // Explicit billingGroupIds are not supported by this layer-preview RPC.
+  repeated int32 layers = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Mirrors ExportInvoiceSettingCsv.includeMiscellaneous.
+  // Defaults to false. True is valid only for EXPORT_TYPE_INVOICE_SETTINGS; otherwise reject
+  // with InvalidArgument. Preview must load the same eligibility/output
+  // dependencies as export, including miscellaneous records when requested.
+  bool include_miscellaneous = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Response message for PreviewBillingGroupCsvExport.
+// Required root, child, settings, account/resource, discount, template and
+// miscellaneous reads consumed by the selected export must propagate failures,
+// including failed sub-reads of aggregate loaders. Do not return partial counts.
+// Successfully absent optional records follow the selected export's eligibility.
+message PreviewBillingGroupCsvExportResponse {
+  // Distinct billing groups contributing at least one final CSV data row at
+  // each requested layer, not vendor/account rows or raw hierarchy membership.
+  // Contains every requested layer, including successful zero counts; no extra
+  // layers. All exporters share hierarchy membership, while row eligibility
+  // and therefore counts may differ by export type and options.
+  // Preview creates no export artifacts. Export resolves current data again,
+  // so membership/counts may change between preview and export.
+  map<int32, int32> layer_counts = 1;
 }
 
 message GetBillingGroupInvoiceServiceDiscountsRequest {
