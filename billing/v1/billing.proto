@@ -869,6 +869,7 @@ service Billing {
   // (BETA) Previews eligible billing group counts for a layer-scoped CSV export.
   // Stores a short-lived selection; does not generate CSVs or download links.
   rpc PreviewBillingGroupCsvExport(PreviewBillingGroupCsvExportRequest) returns (PreviewBillingGroupCsvExportResponse) {
+    option deprecated = true;
     option (google.api.http) = {
       post: "/v1/exportcsv/billing-group:preview"
       body: "*"
@@ -879,8 +880,27 @@ service Billing {
   // Uses the saved root/child IDs and layer assignments without rediscovering
   // hierarchy membership. All export types return a signed CSV download link.
   rpc ExportPreviewedBillingGroupCsv(ExportPreviewedBillingGroupCsvRequest) returns (ExportPreviewedBillingGroupCsvResponse) {
+    option deprecated = true;
     option (google.api.http) = {
       post: "/v1/exportcsv/billing-group:exportPreviewed"
+      body: "*"
+    };
+  }
+
+  // (BETA) Returns eligible internal IDs grouped by root/layer and distinct counts.
+  // Stateless: no CSV, saved selection or token. Uses the exporter's row eligibility.
+  rpc PreviewBillingGroupCsvHierarchy(PreviewBillingGroupCsvHierarchyRequest) returns (PreviewBillingGroupCsvHierarchyResponse) {
+    option (google.api.http) = {
+      post: "/v1/exportcsv/billing-group:previewHierarchy"
+      body: "*"
+    };
+  }
+
+  // (BETA) Exports an exact client-held grouped selection with current data/access.
+  // Validates parent chains without rediscovering the full MSP. No preview required.
+  rpc ExportBillingGroupCsvHierarchy(ExportBillingGroupCsvHierarchyRequest) returns (ExportBillingGroupCsvHierarchyResponse) {
+    option (google.api.http) = {
+      post: "/v1/exportcsv/billing-group:exportHierarchy"
       body: "*"
     };
   }
@@ -4750,4 +4770,58 @@ message ListInvoiceLayoutConfigBillingGroupsRequest {
 message ListInvoiceLayoutConfigBillingGroupsResponse {
   // The internal ids of the billing groups attached to this layout config.
   repeated string billinggroup_ids = 1;
+}
+
+// Stateless grouped preview/export reuses the existing exporter enum.
+message BillingGroupCsvLayerSelection {
+  // 0 = Root; 1-4 = parent-hop depth. Other values are invalid.
+  int32 layer = 1;
+  // Internal IDs, not display IDs. Empty is valid in previews; export needs IDs.
+  // Duplicates within this list count once; conflicting assignments are invalid.
+  repeated string billing_group_ids = 2;
+}
+
+message BillingGroupCsvHierarchy {
+  // Internal root ID for validation/inheritance; does not implicitly export Root.
+  string root_id = 1;
+  // One record per requested/selected layer; lists preserve sibling children.
+  // A non-empty Layer 0 list must contain only root_id. No nested parent tree.
+  repeated BillingGroupCsvLayerSelection layers = 2;
+}
+
+message PreviewBillingGroupCsvHierarchyRequest {
+  PreviewBillingGroupCsvExportRequest.ExportType export_type = 1 [(google.api.field_behavior) = REQUIRED];
+  // Non-empty layers 0-4. Duplicates normalize; membership is backend-resolved.
+  repeated int32 layers = 2 [(google.api.field_behavior) = REQUIRED];
+  // Only valid for invoice settings, including reseller charges.
+  bool include_miscellaneous = 3;
+}
+
+message PreviewBillingGroupCsvHierarchyResponse {
+  // Every requested layer, including zero. Counts distinct eligible IDs, not rows.
+  map<int32, int32> layer_counts = 1;
+  // Sorted roots/layers/IDs. Roots with no eligible IDs may be omitted.
+  // Returned roots include each requested layer, with empty lists where needed.
+  repeated BillingGroupCsvHierarchy hierarchies = 2;
+}
+
+// Exact selection, not proof of preview. No server selection storage or token.
+// Missing/unknown/foreign IDs under the authenticated MSP use the same generic
+// FailedPrecondition; do not probe other MSPs. Stale root/depth/eligibility also
+// requires re-preview. Identity/feature or known in-MSP access denial uses
+// PermissionDenied. Empty/all-empty scope, invalid options/layers and conflicting
+// assignments use InvalidArgument. ResourceExhausted reports configured limits.
+// Existing export APIs keep their contracts. Required read/write/upload/sign
+// failures must never return partial CSV success. Honor caller cancellation.
+message ExportBillingGroupCsvHierarchyRequest {
+  PreviewBillingGroupCsvExportRequest.ExportType export_type = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated BillingGroupCsvHierarchy hierarchies = 2 [(google.api.field_behavior) = REQUIRED];
+  // en or ja; empty uses the caller's language.
+  string language = 3;
+  bool include_miscellaneous = 4;
+}
+
+message ExportBillingGroupCsvHierarchyResponse {
+  // Signed link to this request's completed private CSV, with a Layer column.
+  string download_link = 1;
 }
