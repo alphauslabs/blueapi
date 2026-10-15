@@ -873,11 +873,10 @@ service Billing {
     };
   }
 
-  // (BETA, Ripple) Returns eligible internal IDs grouped by root/layer and counts.
-  // Stateless: no CSV, saved selection or token. Uses the exporter's row eligibility.
-  // Configured group/serialized-response limits are checked before returning IDs.
-  // Overflow returns ResourceExhausted with count/byte limits and no partial result;
-  // preview fewer layers. Limits must fit both preview/export transport envelopes.
+  // (BETA, Ripple) Returns exportable IDs by root/layer and counts for confirmation.
+  // Creates no CSV or saved selection. Count/byte overflow returns ResourceExhausted
+  // with limits and no partial result. Request fewer layers to reduce size.
+  // Limits must fit both preview and export transports.
   rpc PreviewBillingGroupCsvHierarchy(PreviewBillingGroupCsvHierarchyRequest) returns (PreviewBillingGroupCsvHierarchyResponse) {
     option (google.api.http) = {
       post: "/v1/exportcsv/billing-group:previewHierarchy"
@@ -3199,13 +3198,10 @@ message ExportAccountInvoiceServiceDiscountsRequest {
   // unchanged.
   repeated int32 layers = 5 [(google.api.field_behavior) = OPTIONAL];
 
-  // Optional, Ripple. Exact grouped IDs, usually forwarded from preview.
-  // Omitted: existing unscoped, billingGroupIds and layers behavior is unchanged.
-  // Present: must contain at least one ID; never falls back to an unscoped export.
-  // Mutually exclusive with billingGroupIds and layers; conflicts are InvalidArgument.
-  // Uses this RPC's exporter, language and options; no preview call is required.
-  // Includes a localized leading Layer column. See BillingGroupCsvSelection.
-  // Preserves format=CSV and directLink behavior and the existing response shape.
+  // Optional, Ripple. Export these exact groups with a localized Layer column.
+  // Omit to keep existing behavior. Empty selections or use with billingGroupIds
+  // or layers return InvalidArgument. See BillingGroupCsvSelection for validation.
+  // Existing CSV format, directLink option and response are unchanged.
   BillingGroupCsvSelection selection = 6 [(google.api.field_behavior) = OPTIONAL];
 }
 
@@ -3238,13 +3234,10 @@ message ExportBillingGroupInvoiceServiceDiscountsRequest {
   // unchanged.
   repeated int32 layers = 5 [(google.api.field_behavior) = OPTIONAL];
 
-  // Optional, Ripple. Exact grouped IDs, usually forwarded from preview.
-  // Omitted: existing unscoped, billingGroupIds and layers behavior is unchanged.
-  // Present: must contain at least one ID; never falls back to an unscoped export.
-  // Mutually exclusive with billingGroupIds and layers; conflicts are InvalidArgument.
-  // Uses this RPC's exporter, language and options; no preview call is required.
-  // Includes a localized leading Layer column. See BillingGroupCsvSelection.
-  // Preserves format=CSV and directLink behavior and the existing response shape.
+  // Optional, Ripple. Export these exact groups with a localized Layer column.
+  // Omit to keep existing behavior. Empty selections or use with billingGroupIds
+  // or layers return InvalidArgument. See BillingGroupCsvSelection for validation.
+  // Existing CSV format, directLink option and response are unchanged.
   BillingGroupCsvSelection selection = 6 [(google.api.field_behavior) = OPTIONAL];
 }
 
@@ -3270,12 +3263,9 @@ message ExportBillingGroupCsvRequest {
   // unchanged.
   repeated int32 layers = 4 [(google.api.field_behavior) = OPTIONAL];
 
-  // Optional, Ripple. Exact grouped IDs, usually forwarded from preview.
-  // Omitted: existing unscoped, billingGroupIds and layers behavior is unchanged.
-  // Present: must contain at least one ID; never falls back to an unscoped export.
-  // Mutually exclusive with billingGroupIds and layers; conflicts are InvalidArgument.
-  // Uses this RPC's exporter, language and options; no preview call is required.
-  // Includes a localized leading Layer column. See BillingGroupCsvSelection.
+  // Optional, Ripple. Export these exact groups with a localized Layer column.
+  // Omit to keep existing behavior. Empty selections or use with billingGroupIds
+  // or layers return InvalidArgument. See BillingGroupCsvSelection for validation.
   BillingGroupCsvSelection selection = 5 [(google.api.field_behavior) = OPTIONAL];
 }
 
@@ -3310,12 +3300,9 @@ message ExportInvoiceSettingCsvRequest {
   // unchanged.
   repeated int32 layers = 5 [(google.api.field_behavior) = OPTIONAL];
 
-  // Optional, Ripple. Exact grouped IDs, usually forwarded from preview.
-  // Omitted: existing unscoped, billingGroupIds and layers behavior is unchanged.
-  // Present: must contain at least one ID; never falls back to an unscoped export.
-  // Mutually exclusive with billingGroupIds and layers; conflicts are InvalidArgument.
-  // Uses this RPC's exporter, language and options; no preview call is required.
-  // Includes a localized leading Layer column. See BillingGroupCsvSelection.
+  // Optional, Ripple. Export these exact groups with a localized Layer column.
+  // Omit to keep existing behavior. Empty selections or use with billingGroupIds
+  // or layers return InvalidArgument. See BillingGroupCsvSelection for validation.
   BillingGroupCsvSelection selection = 6 [(google.api.field_behavior) = OPTIONAL];
 }
 
@@ -4703,7 +4690,7 @@ message ListInvoiceLayoutConfigBillingGroupsResponse {
   repeated string billinggroup_ids = 1;
 }
 
-// CSV exporter for Ripple grouped previews and exact-selection exports.
+// CSV type used to preview exportable Ripple billing groups.
 enum BillingGroupCsvExportType {
   // Invalid; select a supported exporter.
   BILLING_GROUP_CSV_EXPORT_TYPE_UNSPECIFIED = 0;
@@ -4717,7 +4704,7 @@ enum BillingGroupCsvExportType {
   BILLING_GROUP_CSV_EXPORT_TYPE_ACCOUNT_SERVICE_DISCOUNTS = 4;
 }
 
-// Eligible or selected Ripple billing-group internal IDs at one hierarchy depth.
+// Ripple billing-group IDs at one layer.
 message BillingGroupCsvLayerSelection {
   // 0 = Root; 1-4 = parent-hop depth. Other values are invalid.
   int32 layer = 1;
@@ -4726,29 +4713,27 @@ message BillingGroupCsvLayerSelection {
   repeated string billing_group_ids = 2;
 }
 
-// Ripple billing-group IDs grouped by layer under one internal root ID.
+// Ripple billing-group IDs grouped by layer under a root.
 message BillingGroupCsvHierarchy {
-  // Internal root ID for validation/inheritance; does not implicitly export Root.
+  // Internal root ID. Root rows require an explicit Layer 0 selection.
   string root_id = 1;
-  // One record per requested/selected layer; lists preserve sibling children.
-  // A non-empty Layer 0 list must contain only root_id. No nested parent tree.
+  // One list per layer, including all siblings. Layer 0 can contain only root_id.
   repeated BillingGroupCsvLayerSelection layers = 2;
 }
 
-// Export type/options and MSP-wide layers for a stateless Ripple grouped preview.
+// Ripple export type, options and layers to preview across the MSP.
 message PreviewBillingGroupCsvHierarchyRequest {
-  // Required supported CSV exporter; UNSPECIFIED and unknown values are invalid.
+  // Required CSV type. UNSPECIFIED and unknown values are invalid.
   BillingGroupCsvExportType export_type = 1 [(google.api.field_behavior) = REQUIRED];
-  // Non-empty layers 0-4. Duplicates normalize; membership is backend-resolved.
+  // Required layers 0-4. Duplicates count once; backend resolves membership.
   repeated int32 layers = 2 [(google.api.field_behavior) = REQUIRED];
-  // Optional; defaults false. True is valid only for the invoice-settings exporter,
-  // including reseller charges; other export types return InvalidArgument.
+  // Defaults false. True is only valid for invoice settings/reseller charges;
+  // other types return InvalidArgument.
   bool include_miscellaneous = 3;
 }
 
-// Complete eligible Ripple IDs and counts; creates no saved selection or token.
-// Exceeding configured group/serialized-byte limits returns ResourceExhausted
-// instead of this response; IDs/counts are never truncated. Request fewer layers.
+// Complete exportable Ripple IDs and counts. No selection is stored.
+// Count/byte overflow returns ResourceExhausted, never partial results.
 message PreviewBillingGroupCsvHierarchyResponse {
   // Every requested layer, including zero. Counts distinct eligible IDs, not rows.
   map<int32, int32> layer_counts = 1;
@@ -4757,21 +4742,18 @@ message PreviewBillingGroupCsvHierarchyResponse {
   repeated BillingGroupCsvHierarchy hierarchies = 2;
 }
 
-// Exact Ripple selection for the existing exporter RPCs; no saved state or token.
-// Presence selects exact IDs; an empty message or all-empty lists is InvalidArgument.
-// Current settings/access/eligibility are used; new groups are not added.
-// Missing/unknown/foreign IDs under the authenticated MSP use the same generic
-// FailedPrecondition; do not probe other MSPs. Stale root/depth/eligibility requires
-// re-preview. Identity/feature or known in-MSP access denial uses PermissionDenied.
-// Invalid layers, duplicate root/layer records or conflicting ID assignments use
-// InvalidArgument. Configured group/serialized-request limits return
-// ResourceExhausted with actionable limits; submit fewer selected layers.
-// Limits must fit both preview and export transport envelopes. Required reads,
-// writes, uploads or signing failures must never return partial CSV success.
-// Honor caller cancellation. Omission preserves existing exporter behavior.
+// Exact Ripple groups to export. No preview call or stored selection is required.
+// Empty selections, invalid layers, duplicate root/layer records and conflicting
+// ID assignments return InvalidArgument. Current root, depth, access and row
+// eligibility are checked; new groups are not added.
+// Missing, unknown and foreign-MSP IDs return the same generic FailedPrecondition,
+// without cross-MSP lookups. Changed root/depth/eligibility requires re-preview.
+// Identity/feature denial or denied access to a known in-MSP group is PermissionDenied.
+// Count/request-byte overflow returns ResourceExhausted with limits; select fewer
+// layers. Limits must fit preview/export transports. Honor cancellation and fail
+// required reads/writes/uploads/signing without returning partial success.
 message BillingGroupCsvSelection {
-  // Non-empty exact selection with at least one internal ID overall.
-  // Usually copied from preview; prior preview is not required. Current root,
-  // depth, access and eligibility are validated; root context never selects Root.
+  // Required groups with at least one ID overall. Usually copied from preview.
+  // Root context alone does not select Root rows.
   repeated BillingGroupCsvHierarchy hierarchies = 1 [(google.api.field_behavior) = REQUIRED];
 }
