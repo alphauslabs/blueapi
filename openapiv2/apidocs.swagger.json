@@ -26353,7 +26353,7 @@
         "ONBOARDING_STATUS_VERIFY_FAILED"
       ],
       "default": "ONBOARDING_STATUS_UNSPECIFIED",
-      "description": "- ONBOARDING_STATUS_NOT_REGISTERED: No row found in archera_users (org not registered yet)\n - ONBOARDING_STATUS_REGISTERED: Existing statuses you already persist"
+      "title": "- ONBOARDING_STATUS_NOT_REGISTERED: No row found in archera_users (org not registered yet)\n - ONBOARDING_STATUS_REGISTERED: Existing statuses you already persist"
     },
     "GetRecommendationV3ResponseRecommendationDetail": {
       "type": "object",
@@ -36700,7 +36700,7 @@
           "items": {
             "type": "string"
           },
-          "description": "Internal IDs, not display IDs. Empty is valid in previews; export needs IDs.\nDuplicates within this list count once; conflicting assignments are invalid."
+          "description": "Internal IDs, not display IDs. Empty layer lists are valid in both preview\nand export; a selection needs at least one ID overall. Duplicates within\nthis list count once; conflicting assignments are invalid."
         }
       },
       "description": "Ripple billing-group IDs at one layer."
@@ -36717,7 +36717,7 @@
           "description": "Required groups with at least one ID overall. Usually copied from preview.\nRoot context alone does not select Root rows."
         }
       },
-      "description": "Exact Ripple groups to export. No preview call or stored selection is required.\nEmpty selections, invalid layers, duplicate root/layer records and conflicting\nID assignments return InvalidArgument. Current root, depth, access and row\neligibility are checked; new groups are not added.\nMissing, unknown and foreign-MSP IDs return the same generic FailedPrecondition,\nwithout cross-MSP lookups. Changed root/depth/eligibility requires re-preview.\nIdentity/feature denial or denied access to a known in-MSP group is PermissionDenied.\nCount/request-byte overflow returns ResourceExhausted with limits; select fewer\nlayers. Limits must fit preview/export transports. Honor cancellation and fail\nrequired reads/writes/uploads/signing without returning partial success.",
+      "description": "Exact Ripple groups to export. No preview call or stored selection is required.\nIDs obtained from preview are only valid for that preview's export type and\noptions (such as include_miscellaneous); reusing them with a different\nexporter or options may fail eligibility checks.\nEmpty selections, invalid layers, duplicate root/layer records and conflicting\nID assignments return InvalidArgument. Current root, depth, access and row\neligibility are checked; new groups are not added.\nMissing, unknown and foreign-MSP IDs return the same generic FailedPrecondition,\nwithout cross-MSP lookups. Changed root/depth/eligibility requires re-preview.\nIdentity/feature denial or denied access to a known in-MSP group is PermissionDenied.\nCount/request-byte overflow returns ResourceExhausted with limits; select fewer\nlayers. Limits must fit preview/export transports. Honor cancellation and fail\nrequired reads/writes/uploads/signing without returning partial success.",
       "required": [
         "hierarchies"
       ]

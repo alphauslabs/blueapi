@@ -4708,8 +4708,9 @@ enum BillingGroupCsvExportType {
 message BillingGroupCsvLayerSelection {
   // 0 = Root; 1-4 = parent-hop depth. Other values are invalid.
   int32 layer = 1;
-  // Internal IDs, not display IDs. Empty is valid in previews; export needs IDs.
-  // Duplicates within this list count once; conflicting assignments are invalid.
+  // Internal IDs, not display IDs. Empty layer lists are valid in both preview
+  // and export; a selection needs at least one ID overall. Duplicates within
+  // this list count once; conflicting assignments are invalid.
   repeated string billing_group_ids = 2;
 }
 
@@ -4743,6 +4744,9 @@ message PreviewBillingGroupCsvHierarchyResponse {
 }
 
 // Exact Ripple groups to export. No preview call or stored selection is required.
+// IDs obtained from preview are only valid for that preview's export type and
+// options (such as include_miscellaneous); reusing them with a different
+// exporter or options may fail eligibility checks.
 // Empty selections, invalid layers, duplicate root/layer records and conflicting
 // ID assignments return InvalidArgument. Current root, depth, access and row
 // eligibility are checked; new groups are not added.
