@@ -29,7 +29,7 @@ service Feedback {
 
   // CreateFeedback stores one feedback submission.
   //
-  // The call is idempotent on `submission_id`: sending the same id again
+  // The call is idempotent on `submissionId`: sending the same id again
   // (for example, a client retry after a timeout) returns success without
   // creating a second record. Applies to both Wave and Ripple.
   rpc CreateFeedback(CreateFeedbackRequest) returns (CreateFeedbackResponse) {
@@ -54,7 +54,7 @@ message CreateFeedbackRequest {
   // Required. Client-generated UUID (RFC 4122) that identifies this submission.
   // Used as the idempotency key: a retry with the same id does not create a
   // second record.
-  string submission_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string submissionId = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Required. One of: `bug`, `hard_to_use`, `request`, `question`.
   string category = 2 [(google.api.field_behavior) = REQUIRED];
@@ -73,16 +73,16 @@ message CreateFeedbackRequest {
   string locale = 6 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Release identifier of the UI build.
-  string app_release = 7 [(google.api.field_behavior) = OPTIONAL];
+  string appRelease = 7 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Deployment environment reported by the UI (for example `dev`, `next`, `prod`).
-  string telemetry_env = 8 [(google.api.field_behavior) = OPTIONAL];
+  string telemetryEnv = 8 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Browser viewport size at submission time.
   Viewport viewport = 9 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Client clock at submission time. In JSON this is an RFC 3339 string.
-  google.protobuf.Timestamp client_sent_at = 10 [(google.api.field_behavior) = OPTIONAL];
+  google.protobuf.Timestamp clientSentAt = 10 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // CreateFeedbackResponse is empty; success is indicated by the status code.
