@@ -9753,6 +9753,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request for GetSavingsOpportunities. The MSP is taken from the caller.",
             "in": "body",
             "required": true,
             "schema": {
@@ -9786,6 +9787,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request for GetPerformanceSummary.",
             "in": "body",
             "required": true,
             "schema": {
@@ -9819,6 +9821,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request for GetBillingGroupRegistration. The MSP is taken from the caller.",
             "in": "body",
             "required": true,
             "schema": {
@@ -16486,6 +16489,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request for ListExpiringCommitments.",
             "in": "body",
             "required": true,
             "schema": {
@@ -16519,6 +16523,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request for GetSimulatorInputs.",
             "in": "body",
             "required": true,
             "schema": {
@@ -16552,6 +16557,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request for CalculateProjectedRevenue.",
             "in": "body",
             "required": true,
             "schema": {
@@ -37054,17 +37060,20 @@
           "description": "The billing group's company ID."
         },
         "billingGroupId": {
-          "type": "string"
+          "type": "string",
+          "description": "The billing group ID shown in Ripple."
         },
         "billingGroupName": {
-          "type": "string"
+          "type": "string",
+          "description": "The billing group name shown in Ripple."
         },
         "resourceType": {
           "type": "string",
           "description": "`account` or `tag`."
         },
         "bucket": {
-          "$ref": "#/definitions/v1RegistrationBucket"
+          "$ref": "#/definitions/v1RegistrationBucket",
+          "description": "The billing group's registration bucket."
         },
         "progressAvailable": {
           "type": "boolean",
@@ -37399,6 +37408,7 @@
           "description": "Required. One series per coverage row and horizon of the simulator's Projected Revenue Report."
         }
       },
+      "description": "Request for CalculateProjectedRevenue.",
       "required": [
         "series"
       ]
@@ -37414,7 +37424,8 @@
           },
           "description": "One result per request series, in the same order."
         }
-      }
+      },
+      "description": "Response for CalculateProjectedRevenue."
     },
     "v1CalculationPrerequisite": {
       "type": "object",
@@ -41514,24 +41525,28 @@
           "description": "The AWS account that owns the commitment."
         },
         "accountName": {
-          "type": "string"
+          "type": "string",
+          "description": "The name of `accountId`."
         },
         "payerId": {
           "type": "string",
           "description": "The payer account of `accountId`."
         },
         "billingGroupId": {
-          "type": "string"
+          "type": "string",
+          "description": "The billing group of `accountId`."
         },
         "billingGroupName": {
-          "type": "string"
+          "type": "string",
+          "description": "The name of `billingGroupId`."
         },
         "registrationBucket": {
           "$ref": "#/definitions/v1RegistrationBucket",
           "description": "The registration bucket of the billing group."
         },
         "type": {
-          "$ref": "#/definitions/v1ExpiringCommitmentType"
+          "$ref": "#/definitions/v1ExpiringCommitmentType",
+          "description": "Whether this is an RI or an SP."
         },
         "instanceType": {
           "type": "string",
@@ -41571,7 +41586,7 @@
         "EXPIRING_COMMITMENT_TYPE_SP"
       ],
       "default": "EXPIRING_COMMITMENT_TYPE_UNSPECIFIED",
-      "description": " - EXPIRING_COMMITMENT_TYPE_RI: A Reserved Instance.\n - EXPIRING_COMMITMENT_TYPE_SP: A Savings Plan."
+      "description": "The kind of an expiring commitment.\n\n - EXPIRING_COMMITMENT_TYPE_UNSPECIFIED: Not set. Never returned.\n - EXPIRING_COMMITMENT_TYPE_RI: A Reserved Instance.\n - EXPIRING_COMMITMENT_TYPE_SP: A Savings Plan."
     },
     "v1ExportAccountInvoiceServiceDiscountsRequest": {
       "type": "object",
@@ -42307,7 +42322,8 @@
       }
     },
     "v1GetBillingGroupRegistrationRequest": {
-      "type": "object"
+      "type": "object",
+      "description": "Request for GetBillingGroupRegistration. The MSP is taken from the caller."
     },
     "v1GetBillingGroupResponse": {
       "type": "object",
@@ -43723,6 +43739,7 @@
           "description": "Required. Last month of the range, inclusive. Format: `yyyymm`. A month after the current month is\nclamped to the current month."
         }
       },
+      "description": "Request for GetPerformanceSummary.",
       "required": [
         "startMonth",
         "endMonth"
@@ -44059,7 +44076,8 @@
       "description": "Response message for the Flow.GetSPToPurchaseDetails rpc."
     },
     "v1GetSavingsOpportunitiesRequest": {
-      "type": "object"
+      "type": "object",
+      "description": "Request for GetSavingsOpportunities. The MSP is taken from the caller."
     },
     "v1GetSettingsHistoryResponse": {
       "type": "object",
@@ -44133,6 +44151,7 @@
           "description": "Required. The `id` of each selected row from ListExpiringCommitments. At most 500."
         }
       },
+      "description": "Request for GetSimulatorInputs.",
       "required": [
         "commitmentIds"
       ]
@@ -44148,7 +44167,8 @@
           },
           "description": "One entry per requested `commitmentIds` value, in the same order."
         }
-      }
+      },
+      "description": "Response for GetSimulatorInputs."
     },
     "v1GetSupportedServicesResponse": {
       "type": "object",
@@ -44972,7 +44992,8 @@
           "type": "string",
           "description": "Optional. A `nextPageToken` from a previous call, to retrieve the next page. All other request\nfields must match the call that returned the token."
         }
-      }
+      },
+      "description": "Request for ListExpiringCommitments."
     },
     "v1ListExpiringCommitmentsResponse": {
       "type": "object",
@@ -45002,7 +45023,8 @@
           },
           "description": "When the Aqua data was last synced."
         }
-      }
+      },
+      "description": "Response for ListExpiringCommitments."
     },
     "v1ListForecastsRequest": {
       "type": "object"
@@ -46513,13 +46535,16 @@
           "description": "Totals for the equal-length range immediately before `current`."
         },
         "netSavingsChange": {
-          "$ref": "#/definitions/v1PercentChange"
+          "$ref": "#/definitions/v1PercentChange",
+          "description": "Change in net savings from `previous` to `current`."
         },
         "riskPremiumChange": {
-          "$ref": "#/definitions/v1PercentChange"
+          "$ref": "#/definitions/v1PercentChange",
+          "description": "Change in risk premium from `previous` to `current`."
         },
         "rebatesChange": {
-          "$ref": "#/definitions/v1PercentChange"
+          "$ref": "#/definitions/v1PercentChange",
+          "description": "Change in rebates from `previous` to `current`."
         },
         "revenueShareChange": {
           "$ref": "#/definitions/v1PercentChange",
@@ -47043,11 +47068,13 @@
       "properties": {
         "coverage": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": "The `coverage` of the matching request series."
         },
         "horizonMonths": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": "The `horizonMonths` of the matching request series."
         },
         "revenueShare": {
           "type": "number",
@@ -47719,7 +47746,7 @@
         "REGISTRATION_BUCKET_UNREGISTERED"
       ],
       "default": "REGISTRATION_BUCKET_UNSPECIFIED",
-      "description": " - REGISTRATION_BUCKET_REGISTERED: Enabled for Guaranteed Commitments in Service Management.\n - REGISTRATION_BUCKET_PARTIALLY_REGISTERED: Not enabled, and at least one of its payers has begun onboarding.\n - REGISTRATION_BUCKET_UNREGISTERED: Not enabled, and no payer has begun onboarding, or no payer progress can be determined."
+      "description": "A billing group's Guaranteed Commitments registration state, as shown on the dashboard.\n\n - REGISTRATION_BUCKET_UNSPECIFIED: Not set. Never returned.\n - REGISTRATION_BUCKET_REGISTERED: Enabled for Guaranteed Commitments in Service Management.\n - REGISTRATION_BUCKET_PARTIALLY_REGISTERED: Not enabled, and at least one of its payers has begun onboarding.\n - REGISTRATION_BUCKET_UNREGISTERED: Not enabled, and no payer has begun onboarding, or no payer progress can be determined."
     },
     "v1ReinviteUserResponse": {
       "type": "object",
@@ -48825,10 +48852,12 @@
           "description": "The AWS service, e.g. `Amazon EC2`."
         },
         "instanceType": {
-          "type": "string"
+          "type": "string",
+          "description": "The instance type priced, e.g. `m5.large`."
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "The AWS region priced, e.g. `ap-northeast-1`."
         },
         "quantity": {
           "type": "integer",
@@ -49150,19 +49179,24 @@
       "type": "object",
       "properties": {
         "riNoUpfront": {
-          "$ref": "#/definitions/v1ReservationPrice"
+          "$ref": "#/definitions/v1ReservationPrice",
+          "description": "Standard RI, No Upfront."
         },
         "riPartialUpfront": {
-          "$ref": "#/definitions/v1ReservationPrice"
+          "$ref": "#/definitions/v1ReservationPrice",
+          "description": "Standard RI, Partial Upfront."
         },
         "riAllUpfront": {
-          "$ref": "#/definitions/v1ReservationPrice"
+          "$ref": "#/definitions/v1ReservationPrice",
+          "description": "Standard RI, All Upfront."
         },
         "computeSavingsPlan": {
-          "$ref": "#/definitions/v1ReservationPrice"
+          "$ref": "#/definitions/v1ReservationPrice",
+          "description": "Compute Savings Plan, No Upfront."
         },
         "ec2SavingsPlan": {
-          "$ref": "#/definitions/v1ReservationPrice"
+          "$ref": "#/definitions/v1ReservationPrice",
+          "description": "EC2 Instance Savings Plan, No Upfront."
         }
       },
       "description": "Prices of every reservation option for one term length."

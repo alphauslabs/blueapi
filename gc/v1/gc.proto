@@ -687,8 +687,10 @@ message ReadCommitmentReportAccountsRequest {
   string month = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
+// Request for GetBillingGroupRegistration. The MSP is taken from the caller.
 message GetBillingGroupRegistrationRequest {}
 
+// Request for GetPerformanceSummary.
 message GetPerformanceSummaryRequest {
   // Required. First month of the range, inclusive. Format: `yyyymm`.
   string startMonth = 1 [(google.api.field_behavior) = REQUIRED];
@@ -697,8 +699,10 @@ message GetPerformanceSummaryRequest {
   string endMonth = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
+// Request for GetSavingsOpportunities. The MSP is taken from the caller.
 message GetSavingsOpportunitiesRequest {}
 
+// Request for ListExpiringCommitments.
 message ListExpiringCommitmentsRequest {
   // Optional. Billing group IDs to include. Empty means all billing groups.
   repeated string billingGroupIds = 1;
@@ -722,11 +726,13 @@ message ListExpiringCommitmentsRequest {
   string pageToken = 7;
 }
 
+// Request for GetSimulatorInputs.
 message GetSimulatorInputsRequest {
   // Required. The `id` of each selected row from ListExpiringCommitments. At most 500.
   repeated string commitmentIds = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
+// Request for CalculateProjectedRevenue.
 message CalculateProjectedRevenueRequest {
   // Required. One series per coverage row and horizon of the simulator's Projected Revenue Report.
   repeated ProjectedPremiumSeries series = 1 [(google.api.field_behavior) = REQUIRED];
@@ -1556,7 +1562,9 @@ message CommitmentReportAccount {
   double revenueShare = 10;
 }
 
+// A billing group's Guaranteed Commitments registration state, as shown on the dashboard.
 enum RegistrationBucket {
+  // Not set. Never returned.
   REGISTRATION_BUCKET_UNSPECIFIED = 0;
   // Enabled for Guaranteed Commitments in Service Management.
   REGISTRATION_BUCKET_REGISTERED = 1;
@@ -1566,7 +1574,9 @@ enum RegistrationBucket {
   REGISTRATION_BUCKET_UNREGISTERED = 3;
 }
 
+// The kind of an expiring commitment.
 enum ExpiringCommitmentType {
+  // Not set. Never returned.
   EXPIRING_COMMITMENT_TYPE_UNSPECIFIED = 0;
   // A Reserved Instance.
   EXPIRING_COMMITMENT_TYPE_RI = 1;
@@ -1605,10 +1615,13 @@ message BillingGroupRegistration {
 message BillingGroupRegistrationItem {
   // The billing group's company ID.
   string companyId = 1;
+  // The billing group ID shown in Ripple.
   string billingGroupId = 2;
+  // The billing group name shown in Ripple.
   string billingGroupName = 3;
   // `account` or `tag`.
   string resourceType = 4;
+  // The billing group's registration bucket.
   RegistrationBucket bucket = 5;
   // False for tag billing groups, billing groups without payer accounts, and when
   // `payerProgressAvailable` is false. The payer counts are then unset.
@@ -1654,8 +1667,11 @@ message PerformanceSummary {
   PerformanceTotals current = 1;
   // Totals for the equal-length range immediately before `current`.
   PerformanceTotals previous = 2;
+  // Change in net savings from `previous` to `current`.
   PercentChange netSavingsChange = 3;
+  // Change in risk premium from `previous` to `current`.
   PercentChange riskPremiumChange = 4;
+  // Change in rebates from `previous` to `current`.
   PercentChange rebatesChange = 5;
   // Unset when `revenueShareAvailable` is false.
   PercentChange revenueShareChange = 6;
@@ -1697,13 +1713,17 @@ message ExpiringCommitment {
   string service = 2;
   // The AWS account that owns the commitment.
   string accountId = 3;
+  // The name of `accountId`.
   string accountName = 4;
   // The payer account of `accountId`.
   string payerId = 5;
+  // The billing group of `accountId`.
   string billingGroupId = 6;
+  // The name of `billingGroupId`.
   string billingGroupName = 7;
   // The registration bucket of the billing group.
   RegistrationBucket registrationBucket = 8;
+  // Whether this is an RI or an SP.
   ExpiringCommitmentType type = 9;
   // Instance type for RIs; instance family or plan type for SPs.
   string instanceType = 10;
@@ -1719,6 +1739,7 @@ message ExpiringCommitment {
   double monthlyCost = 15;
 }
 
+// Response for ListExpiringCommitments.
 message ListExpiringCommitmentsResponse {
   // One page of expiring RIs/SPs.
   repeated ExpiringCommitment commitments = 1;
@@ -1742,10 +1763,15 @@ message ReservationPrice {
 
 // Prices of every reservation option for one term length.
 message TermPricing {
+  // Standard RI, No Upfront.
   ReservationPrice riNoUpfront = 1;
+  // Standard RI, Partial Upfront.
   ReservationPrice riPartialUpfront = 2;
+  // Standard RI, All Upfront.
   ReservationPrice riAllUpfront = 3;
+  // Compute Savings Plan, No Upfront.
   ReservationPrice computeSavingsPlan = 4;
+  // EC2 Instance Savings Plan, No Upfront.
   ReservationPrice ec2SavingsPlan = 5;
 }
 
@@ -1759,7 +1785,9 @@ message SimulatorInput {
   string reason = 3;
   // The AWS service, e.g. `Amazon EC2`.
   string service = 4;
+  // The instance type priced, e.g. `m5.large`.
   string instanceType = 5;
+  // The AWS region priced, e.g. `ap-northeast-1`.
   string region = 6;
   // Number of instances covered.
   int32 quantity = 7;
@@ -1771,6 +1799,7 @@ message SimulatorInput {
   TermPricing threeYear = 10;
 }
 
+// Response for GetSimulatorInputs.
 message GetSimulatorInputsResponse {
   // One entry per requested `commitmentIds` value, in the same order.
   repeated SimulatorInput inputs = 1;
@@ -1798,12 +1827,15 @@ message ProjectedPremiumSeries {
 
 // Projected MSP revenue share for one coverage row and horizon.
 message ProjectedRevenue {
+  // The `coverage` of the matching request series.
   int32 coverage = 1;
+  // The `horizonMonths` of the matching request series.
   int32 horizonMonths = 2;
   // Each month's premium multiplied by that month's rate, summed. USD.
   double revenueShare = 3;
 }
 
+// Response for CalculateProjectedRevenue.
 message CalculateProjectedRevenueResponse {
   // One result per request series, in the same order.
   repeated ProjectedRevenue results = 1;
