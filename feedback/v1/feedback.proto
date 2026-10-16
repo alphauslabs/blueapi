@@ -3,6 +3,7 @@ syntax = "proto3";
 package blueapi.feedback.v1;
 
 import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
 import "google/protobuf/timestamp.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -42,10 +43,10 @@ service Feedback {
 // Viewport is the size of the browser viewport at submission time, in CSS pixels.
 message Viewport {
   // Width in CSS pixels.
-  int32 w = 1;
+  int32 width = 1 [(google.api.field_behavior) = OPTIONAL];
 
   // Height in CSS pixels.
-  int32 h = 2;
+  int32 height = 2 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // CreateFeedbackRequest is one feedback submission.
@@ -53,35 +54,35 @@ message CreateFeedbackRequest {
   // Required. Client-generated UUID (RFC 4122) that identifies this submission.
   // Used as the idempotency key: a retry with the same id does not create a
   // second record.
-  string submission_id = 1;
+  string submission_id = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Required. One of: `bug`, `hard_to_use`, `request`, `question`.
-  string category = 2;
+  string category = 2 [(google.api.field_behavior) = REQUIRED];
 
   // Required. Free-text body written by the user. 1 to 5000 characters.
-  string body = 3;
+  string body = 3 [(google.api.field_behavior) = REQUIRED];
 
   // Optional. Path of the screen the user was on (for example `/invoices`).
-  string route = 4;
+  string route = 4 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Name of the micro-frontend that rendered the screen
   // (for example `billing`).
-  string mfe = 5;
+  string mfe = 5 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. UI language at submission time (for example `ja`, `en`).
-  string locale = 6;
+  string locale = 6 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Release identifier of the UI build.
-  string app_release = 7;
+  string app_release = 7 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Deployment environment reported by the UI (for example `dev`, `next`, `prod`).
-  string telemetry_env = 8;
+  string telemetry_env = 8 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Browser viewport size at submission time.
-  Viewport viewport = 9;
+  Viewport viewport = 9 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Client clock at submission time. In JSON this is an RFC 3339 string.
-  google.protobuf.Timestamp client_sent_at = 10;
+  google.protobuf.Timestamp client_sent_at = 10 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // CreateFeedbackResponse is empty; success is indicated by the status code.
