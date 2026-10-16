@@ -9734,8 +9734,8 @@
     },
     "/v1/dashboard/opportunities:read": {
       "post": {
-        "summary": "Reads the savings opportunity summary for RIs/SPs expiring within 90 days in billing groups that are\nnot Registered. Only available in Ripple.",
-        "operationId": "GuaranteedCommitments_ReadSavingsOpportunities",
+        "summary": "Gets the savings opportunity summary for RIs/SPs expiring within 90 days in billing groups that are\nnot Registered. Only available in Ripple.",
+        "operationId": "GuaranteedCommitments_GetSavingsOpportunities",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -9756,7 +9756,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ReadSavingsOpportunitiesRequest"
+              "$ref": "#/definitions/v1GetSavingsOpportunitiesRequest"
             }
           }
         ],
@@ -9767,8 +9767,8 @@
     },
     "/v1/dashboard/performance:read": {
       "post": {
-        "summary": "Reads Archera performance totals (net savings, risk premium, rebates, revenue share) for a month range,\nand for the equal-length range immediately before it. Only available in Ripple.",
-        "operationId": "GuaranteedCommitments_ReadPerformanceSummary",
+        "summary": "Gets Archera performance totals (net savings, risk premium, rebates, revenue share) for a month range,\nand for the equal-length range immediately before it. Covers every billing group with Archera activity\nin the range. Only available in Ripple.",
+        "operationId": "GuaranteedCommitments_GetPerformanceSummary",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -9789,7 +9789,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ReadPerformanceSummaryRequest"
+              "$ref": "#/definitions/v1GetPerformanceSummaryRequest"
             }
           }
         ],
@@ -9800,8 +9800,8 @@
     },
     "/v1/dashboard/registration:read": {
       "post": {
-        "summary": "Reads the MSP's billing groups grouped into registration buckets (Registered, Partially Registered,\nUnregistered), with per-billing-group payer onboarding progress. Only available in Ripple.",
-        "operationId": "GuaranteedCommitments_ReadBillingGroupRegistration",
+        "summary": "Gets the MSP's billing groups grouped into registration buckets (Registered, Partially Registered,\nUnregistered), with each billing group's payer onboarding progress. Only available in Ripple.",
+        "operationId": "GuaranteedCommitments_GetBillingGroupRegistration",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -9822,7 +9822,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ReadBillingGroupRegistrationRequest"
+              "$ref": "#/definitions/v1GetBillingGroupRegistrationRequest"
             }
           }
         ],
@@ -16467,7 +16467,7 @@
     },
     "/v1/simulator/expiring:read": {
       "post": {
-        "summary": "Lists expiring RIs/SPs, filtered, sorted and paginated server-side. Only available in Ripple.",
+        "summary": "Lists the MSP's expiring RIs/SPs, filtered, ordered and paginated server-side. Only available in Ripple.",
         "operationId": "GuaranteedCommitments_ListExpiringCommitments",
         "responses": {
           "200": {
@@ -16500,13 +16500,13 @@
     },
     "/v1/simulator/inputs:read": {
       "post": {
-        "summary": "Reads the pricing inputs the simulator needs for the selected expiring RIs/SPs. Only available in Ripple.",
-        "operationId": "GuaranteedCommitments_ReadSimulatorInputs",
+        "summary": "Gets the pricing inputs the simulator needs for the selected expiring RIs/SPs. Only available in Ripple.",
+        "operationId": "GuaranteedCommitments_GetSimulatorInputs",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ReadSimulatorInputsResponse"
+              "$ref": "#/definitions/v1GetSimulatorInputsResponse"
             }
           },
           "default": {
@@ -16522,7 +16522,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ReadSimulatorInputsRequest"
+              "$ref": "#/definitions/v1GetSimulatorInputsRequest"
             }
           }
         ],
@@ -16533,7 +16533,7 @@
     },
     "/v1/simulator/revenue:calculate": {
       "post": {
-        "summary": "Calculates projected MSP revenue share from simulated risk premiums, applying the MSP's revenue-share\nrate for each month. Only available in Ripple.",
+        "summary": "Calculates projected MSP revenue share from simulated risk premiums, applying the MSP's revenue-share\nrate for each month (0.20 for months with no configured rate). Returns an error, rather than a figure\nat the default rate, when the rate cannot be read. Only available in Ripple.",
         "operationId": "GuaranteedCommitments_CalculateProjectedRevenue",
         "responses": {
           "200": {
@@ -37005,46 +37005,53 @@
       "properties": {
         "registeredCount": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": "Billing groups enabled for Guaranteed Commitments."
         },
         "partiallyRegisteredCount": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": "Billing groups not enabled, with at least one payer that has begun onboarding."
         },
         "unregisteredCount": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": "All other billing groups."
         },
         "totalCount": {
           "type": "integer",
           "format": "int32",
-          "description": "Always the sum of the three counts."
+          "description": "All billing groups. Always the sum of the three counts."
         },
         "payerProgressAvailable": {
           "type": "boolean",
-          "description": "False when this deployment cannot map billing groups to payers. Partially Registered is then\nalways empty, and every not-enabled billing group is Unregistered."
+          "description": "False when this deployment cannot map billing groups to payers. Partially Registered is then always\nempty, and every billing group that is not enabled is Unregistered."
         },
         "billingGroups": {
           "type": "array",
           "items": {
             "type": "object",
             "$ref": "#/definitions/v1BillingGroupRegistrationItem"
-          }
+          },
+          "description": "Every billing group and its bucket."
         },
         "freshness": {
           "type": "array",
           "items": {
             "type": "object",
             "$ref": "#/definitions/v1DataFreshness"
-          }
+          },
+          "description": "When the billing group and onboarding data was last synced."
         }
-      }
+      },
+      "description": "The MSP's billing groups grouped into registration buckets."
     },
     "v1BillingGroupRegistrationItem": {
       "type": "object",
       "properties": {
         "companyId": {
-          "type": "string"
+          "type": "string",
+          "description": "The billing group's company ID."
         },
         "billingGroupId": {
           "type": "string"
@@ -37075,13 +37082,15 @@
         },
         "totalPayers": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": "All payers of the billing group's accounts."
         },
         "awaitingEnablementOnly": {
           "type": "boolean",
           "description": "True when the billing group is not enabled and all of its payers are verified."
         }
-      }
+      },
+      "description": "One billing group's registration bucket and payer onboarding progress."
     },
     "v1BillingGroupSection": {
       "type": "object",
@@ -37387,7 +37396,7 @@
             "type": "object",
             "$ref": "#/definitions/v1ProjectedPremiumSeries"
           },
-          "description": "Required. One series per coverage row and horizon of the Projected Revenue Report."
+          "description": "Required. One series per coverage row and horizon of the simulator's Projected Revenue Report."
         }
       },
       "required": [
@@ -41494,19 +41503,22 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Opaque row identifier, passed to ReadSimulatorInputs."
+          "description": "Opaque row identifier, passed to GetSimulatorInputs."
         },
         "service": {
-          "type": "string"
+          "type": "string",
+          "description": "The AWS service, e.g. `Amazon EC2`."
         },
         "accountId": {
-          "type": "string"
+          "type": "string",
+          "description": "The AWS account that owns the commitment."
         },
         "accountName": {
           "type": "string"
         },
         "payerId": {
-          "type": "string"
+          "type": "string",
+          "description": "The payer account of `accountId`."
         },
         "billingGroupId": {
           "type": "string"
@@ -41515,7 +41527,8 @@
           "type": "string"
         },
         "registrationBucket": {
-          "$ref": "#/definitions/v1RegistrationBucket"
+          "$ref": "#/definitions/v1RegistrationBucket",
+          "description": "The registration bucket of the billing group."
         },
         "type": {
           "$ref": "#/definitions/v1ExpiringCommitmentType"
@@ -41545,20 +41558,10 @@
         "monthlyCost": {
           "type": "number",
           "format": "double",
-          "description": "The existing commitment's current monthly charge, in USD."
+          "description": "The existing commitment's current monthly charge, covering its whole quantity. USD."
         }
-      }
-    },
-    "v1ExpiringCommitmentSortField": {
-      "type": "string",
-      "enum": [
-        "EXPIRING_COMMITMENT_SORT_FIELD_UNSPECIFIED",
-        "EXPIRING_COMMITMENT_SORT_FIELD_EXPIRY_DATE",
-        "EXPIRING_COMMITMENT_SORT_FIELD_UTILIZATION",
-        "EXPIRING_COMMITMENT_SORT_FIELD_MONTHLY_COST"
-      ],
-      "default": "EXPIRING_COMMITMENT_SORT_FIELD_UNSPECIFIED",
-      "description": " - EXPIRING_COMMITMENT_SORT_FIELD_UNSPECIFIED: Sorts by expiry date."
+      },
+      "description": "One expiring RI or SP."
     },
     "v1ExpiringCommitmentType": {
       "type": "string",
@@ -41567,7 +41570,8 @@
         "EXPIRING_COMMITMENT_TYPE_RI",
         "EXPIRING_COMMITMENT_TYPE_SP"
       ],
-      "default": "EXPIRING_COMMITMENT_TYPE_UNSPECIFIED"
+      "default": "EXPIRING_COMMITMENT_TYPE_UNSPECIFIED",
+      "description": " - EXPIRING_COMMITMENT_TYPE_RI: A Reserved Instance.\n - EXPIRING_COMMITMENT_TYPE_SP: A Savings Plan."
     },
     "v1ExportAccountInvoiceServiceDiscountsRequest": {
       "type": "object",
@@ -42301,6 +42305,9 @@
           "title": "Service discount id"
         }
       }
+    },
+    "v1GetBillingGroupRegistrationRequest": {
+      "type": "object"
     },
     "v1GetBillingGroupResponse": {
       "type": "object",
@@ -43704,6 +43711,23 @@
       },
       "description": "Response message for Cost.GetPayerProformaReports rpc."
     },
+    "v1GetPerformanceSummaryRequest": {
+      "type": "object",
+      "properties": {
+        "startMonth": {
+          "type": "string",
+          "description": "Required. First month of the range, inclusive. Format: `yyyymm`."
+        },
+        "endMonth": {
+          "type": "string",
+          "description": "Required. Last month of the range, inclusive. Format: `yyyymm`. A month after the current month is\nclamped to the current month."
+        }
+      },
+      "required": [
+        "startMonth",
+        "endMonth"
+      ]
+    },
     "v1GetPricingResponse": {
       "type": "object",
       "properties": {
@@ -44034,6 +44058,9 @@
       },
       "description": "Response message for the Flow.GetSPToPurchaseDetails rpc."
     },
+    "v1GetSavingsOpportunitiesRequest": {
+      "type": "object"
+    },
     "v1GetSettingsHistoryResponse": {
       "type": "object",
       "properties": {
@@ -44092,6 +44119,34 @@
       "properties": {
         "sharedResources": {
           "$ref": "#/definitions/coverSharedResourcesCombination"
+        }
+      }
+    },
+    "v1GetSimulatorInputsRequest": {
+      "type": "object",
+      "properties": {
+        "commitmentIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required. The `id` of each selected row from ListExpiringCommitments. At most 500."
+        }
+      },
+      "required": [
+        "commitmentIds"
+      ]
+    },
+    "v1GetSimulatorInputsResponse": {
+      "type": "object",
+      "properties": {
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1SimulatorInput"
+          },
+          "description": "One entry per requested `commitmentIds` value, in the same order."
         }
       }
     },
@@ -44890,12 +44945,12 @@
         "expirationWindowDays": {
           "type": "integer",
           "format": "int32",
-          "description": "Optional. Days from today: `30`, `60` or `90`. Defaults to `90`."
+          "description": "Optional. Include commitments expiring within this many days from today, inclusive: `30`, `60` or `90`.\nDefaults to `90`."
         },
         "utilizationBelow": {
           "type": "integer",
           "format": "int32",
-          "description": "Optional. Exclusive upper bound on 30-day utilization: `50`, `70` or `80`. `0` means no threshold."
+          "description": "Optional. Include only commitments whose 30-day utilization is below this percentage: `50`, `70` or\n`80`. `0` means no threshold. When set, commitments younger than 30 days (which have no utilization)\nare excluded."
         },
         "registrationBuckets": {
           "type": "array",
@@ -44905,22 +44960,17 @@
           "description": "Optional. Registration buckets to include. Empty means all buckets."
         },
         "orderBy": {
-          "$ref": "#/definitions/v1ExpiringCommitmentSortField",
-          "description": "Optional. Sort field. Defaults to expiry date."
-        },
-        "desc": {
-          "type": "boolean",
-          "description": "Optional. Sort descending. Defaults to ascending."
-        },
-        "page": {
-          "type": "integer",
-          "format": "int32",
-          "description": "Optional. Page number, 1-based. Defaults to `1`."
+          "type": "string",
+          "description": "Optional. Comma-separated fields to order by, each optionally followed by ` desc`, following AIP-132.\nSupported fields: `expiryDate`, `utilization`, `monthlyCost`. Defaults to `expiryDate`. Commitments\nwithout utilization sort last when ordering by `utilization`, in either direction."
         },
         "pageSize": {
           "type": "integer",
           "format": "int32",
-          "description": "Optional. Rows per page. Defaults to `50`, maximum `200`."
+          "description": "Optional. Maximum rows to return. Defaults to `50`; values above `200` are coerced to `200`."
+        },
+        "pageToken": {
+          "type": "string",
+          "description": "Optional. A `nextPageToken` from a previous call, to retrieve the next page. All other request\nfields must match the call that returned the token."
         }
       }
     },
@@ -44932,9 +44982,14 @@
           "items": {
             "type": "object",
             "$ref": "#/definitions/v1ExpiringCommitment"
-          }
+          },
+          "description": "One page of expiring RIs/SPs."
         },
-        "totalCount": {
+        "nextPageToken": {
+          "type": "string",
+          "description": "Token for the next page. Empty when there are no more pages."
+        },
+        "totalSize": {
           "type": "integer",
           "format": "int32",
           "description": "Rows matching the filters across all pages."
@@ -44944,7 +44999,8 @@
           "items": {
             "type": "object",
             "$ref": "#/definitions/v1DataFreshness"
-          }
+          },
+          "description": "When the Aqua data was last synced."
         }
       }
     },
@@ -46147,7 +46203,8 @@
       "type": "object",
       "properties": {
         "billingGroupId": {
-          "type": "string"
+          "type": "string",
+          "description": "Must belong to the caller's MSP."
         },
         "month": {
           "type": "string",
@@ -46155,9 +46212,11 @@
         },
         "premium": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "Simulated risk premium for the month. USD."
         }
-      }
+      },
+      "description": "A simulated risk premium for one billing group and month."
     },
     "v1NonTagGroupSetting": {
       "type": "object",
@@ -46436,19 +46495,22 @@
         },
         "value": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "The change in percent, e.g. `-12.5` for a 12.5% decrease."
         }
-      }
+      },
+      "description": "Percentage change from a previous total to a current one."
     },
     "v1PerformanceSummary": {
       "type": "object",
       "properties": {
         "current": {
-          "$ref": "#/definitions/v1PerformanceTotals"
+          "$ref": "#/definitions/v1PerformanceTotals",
+          "description": "Totals for the requested range."
         },
         "previous": {
           "$ref": "#/definitions/v1PerformanceTotals",
-          "description": "The equal-length range immediately before `current`."
+          "description": "Totals for the equal-length range immediately before `current`."
         },
         "netSavingsChange": {
           "$ref": "#/definitions/v1PercentChange"
@@ -46460,58 +46522,65 @@
           "$ref": "#/definitions/v1PercentChange"
         },
         "revenueShareChange": {
-          "$ref": "#/definitions/v1PercentChange"
+          "$ref": "#/definitions/v1PercentChange",
+          "description": "Unset when `revenueShareAvailable` is false."
         },
         "revenueShareAvailable": {
           "type": "boolean",
-          "description": "False when the MSP's revenue-share rate could not be read. Revenue share is then unavailable,\nnever computed at the default rate."
+          "description": "False when the MSP's revenue-share rate could not be read. Revenue share is then unavailable, never\ncomputed at the default rate."
         },
         "hasActivity": {
           "type": "boolean",
-          "description": "False when no billing group had Archera activity in the current range."
+          "description": "False when no billing group had Archera activity in the requested range."
         },
         "inProgress": {
           "type": "boolean",
-          "description": "True when the current range includes the current, still incomplete month."
+          "description": "True when the requested range includes the current, still incomplete month."
         },
         "freshness": {
           "type": "array",
           "items": {
             "type": "object",
             "$ref": "#/definitions/v1DataFreshness"
-          }
+          },
+          "description": "When the Archera data was last synced."
         }
-      }
+      },
+      "description": "Archera performance for a month range compared with the preceding range."
     },
     "v1PerformanceTotals": {
       "type": "object",
       "properties": {
         "startMonth": {
           "type": "string",
-          "description": "Format: `yyyymm`."
+          "description": "First month of the range. Format: `yyyymm`."
         },
         "endMonth": {
           "type": "string",
-          "description": "Format: `yyyymm`."
+          "description": "Last month of the range. Format: `yyyymm`."
         },
         "netSavings": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "Net savings, as supplied by Archera: what customers keep after paying for the guarantee. USD."
         },
         "riskPremium": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "Risk premium charged for the guarantee. USD."
         },
         "rebates": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "Rebates returned for the commitments. USD."
         },
         "revenueShare": {
           "type": "number",
           "format": "double",
-          "description": "Unset when `PerformanceSummary.revenueShareAvailable` is false."
+          "description": "The MSP's revenue share: each month's risk premium multiplied by that month's rate, summed. USD.\nUnset when `PerformanceSummary.revenueShareAvailable` is false."
         }
-      }
+      },
+      "description": "Archera performance totals for a month range. All amounts are in USD."
     },
     "v1PeriodOverPeriodOptionSection": {
       "type": "object",
@@ -46963,9 +47032,11 @@
           "items": {
             "type": "object",
             "$ref": "#/definitions/v1MonthlyPremium"
-          }
+          },
+          "description": "Premiums for the months inside this horizon."
         }
-      }
+      },
+      "description": "The simulated premiums for one coverage row and horizon of the Projected Revenue Report."
     },
     "v1ProjectedRevenue": {
       "type": "object",
@@ -46980,9 +47051,11 @@
         },
         "revenueShare": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "Each month's premium multiplied by that month's rate, summed. USD."
         }
-      }
+      },
+      "description": "Projected MSP revenue share for one coverage row and horizon."
     },
     "v1Prompt": {
       "type": "object",
@@ -47037,9 +47110,6 @@
           "description": "Optional. Set to US dollars (USD) by default (AWS CUR's default currency). You can set it to the desired three-letter currency symbol (i.e. JPY, EUR, GBP), in which case, it will use the latest exchange rates provided by https://fixer.io. If you prefer a custom exchange rate, you can append the rate to the currency's three-letter symbol. For example, `JPY:110.622` for the Japanese Yen. Note that the exchange rate should be against the US dollar (USD)."
         }
       }
-    },
-    "v1ReadBillingGroupRegistrationRequest": {
-      "type": "object"
     },
     "v1ReadBudgetAlertsRequest": {
       "type": "object",
@@ -47400,53 +47470,6 @@
         }
       },
       "description": "Request message for the Luster.ReadLabels rpc."
-    },
-    "v1ReadPerformanceSummaryRequest": {
-      "type": "object",
-      "properties": {
-        "startMonth": {
-          "type": "string",
-          "description": "Required. First month of the range, inclusive. Format: `yyyymm`."
-        },
-        "endMonth": {
-          "type": "string",
-          "description": "Required. Last month of the range, inclusive. Format: `yyyymm`. Months after the current month are clamped to it."
-        }
-      },
-      "required": [
-        "startMonth",
-        "endMonth"
-      ]
-    },
-    "v1ReadSavingsOpportunitiesRequest": {
-      "type": "object"
-    },
-    "v1ReadSimulatorInputsRequest": {
-      "type": "object",
-      "properties": {
-        "commitmentIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Required. The `id` of each selected row from ListExpiringCommitments. At most 500."
-        }
-      },
-      "required": [
-        "commitmentIds"
-      ]
-    },
-    "v1ReadSimulatorInputsResponse": {
-      "type": "object",
-      "properties": {
-        "inputs": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1SimulatorInput"
-          }
-        }
-      }
     },
     "v1ReadSpacesRequest": {
       "type": "object",
@@ -48020,17 +48043,20 @@
       "properties": {
         "available": {
           "type": "boolean",
-          "description": "False when this option is not offered for the instance."
+          "description": "False when this option is not offered for the instance; the prices are then unset."
         },
         "hourly": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "Hourly price for one instance. USD."
         },
         "upfront": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "Upfront price for one instance for the whole term. USD."
         }
-      }
+      },
+      "description": "The price of one reservation option for a single instance."
     },
     "v1ResetDemoDataRequest": {
       "type": "object"
@@ -48236,33 +48262,37 @@
         "potentialMonthlySavings": {
           "type": "number",
           "format": "double",
-          "description": "Projected monthly savings if the expiring RIs/SPs were replaced with GRI, at the simulator's default settings."
+          "description": "Projected monthly savings if the expiring RIs/SPs were replaced with GRI. USD."
         },
         "existingMonthlySavings": {
           "type": "number",
           "format": "double",
-          "description": "Monthly savings under the existing RIs/SPs, for the comparison chart."
+          "description": "Monthly savings under the existing RIs/SPs, for comparison. USD."
         },
         "expiringCommitmentCount": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": "Number of expiring RIs/SPs counted."
         },
         "estimatedRevenueShare": {
           "type": "number",
           "format": "double",
-          "description": "Each commitment's estimated monthly premium at the rate for the month after it expires, summed.\nUnset when `revenueShareAvailable` is false."
+          "description": "Each commitment's estimated monthly risk premium at the MSP's rate for the month after it expires,\nsummed. USD. Unset when `revenueShareAvailable` is false."
         },
         "revenueShareAvailable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "False when the MSP's revenue-share rate could not be read."
         },
         "freshness": {
           "type": "array",
           "items": {
             "type": "object",
             "$ref": "#/definitions/v1DataFreshness"
-          }
+          },
+          "description": "When the Archera and Aqua data was last synced."
         }
-      }
+      },
+      "description": "Savings opportunity summary for RIs/SPs expiring within 90 days in billing groups that are not\nRegistered. Savings and premiums use the simulator's default settings (1-Year Guarantee, 100% coverage,\n100% utilization)."
     },
     "v1Segment": {
       "type": "object",
@@ -48779,17 +48809,20 @@
       "type": "object",
       "properties": {
         "commitmentId": {
-          "type": "string"
+          "type": "string",
+          "description": "The `id` from ListExpiringCommitments."
         },
         "priced": {
           "type": "boolean",
           "description": "False when the commitment could not be priced; `reason` says why and the pricing fields are unset."
         },
         "reason": {
-          "type": "string"
+          "type": "string",
+          "description": "Why the commitment could not be priced. Empty when `priced` is true."
         },
         "service": {
-          "type": "string"
+          "type": "string",
+          "description": "The AWS service, e.g. `Amazon EC2`."
         },
         "instanceType": {
           "type": "string"
@@ -48799,19 +48832,24 @@
         },
         "quantity": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": "Number of instances covered."
         },
         "onDemandHourly": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "description": "On-demand hourly price for one instance. USD."
         },
         "oneYear": {
-          "$ref": "#/definitions/v1TermPricing"
+          "$ref": "#/definitions/v1TermPricing",
+          "description": "Prices for one-year terms."
         },
         "threeYear": {
-          "$ref": "#/definitions/v1TermPricing"
+          "$ref": "#/definitions/v1TermPricing",
+          "description": "Prices for three-year terms."
         }
-      }
+      },
+      "description": "The simulator's pricing inputs for one expiring commitment."
     },
     "v1SpDetails": {
       "type": "object",
@@ -49126,7 +49164,8 @@
         "ec2SavingsPlan": {
           "$ref": "#/definitions/v1ReservationPrice"
         }
-      }
+      },
+      "description": "Prices of every reservation option for one term length."
     },
     "v1TermsAcceptance": {
       "type": "object",
