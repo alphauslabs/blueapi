@@ -676,7 +676,7 @@ service Cost {
 }
 // Request message for the Cost.ListPayerAccounts rpc.
 message ListPayerAccountsRequest {
-  // Required. At the moment, only `aws` is supported.
+  // Required. The supported vendors are `aws`, `gcp` and `azure`. Only available in Ripple for `gcp` and `azure`.
   string vendor = 1;
 
   // Optional. Get only the value that set fieldMask.
@@ -880,12 +880,18 @@ message CreateAccountRequestGcpOptions {
   string managementBillingId = 2;
 }
 
+// Azure-specific options for registering an account.
+message CreateAccountRequestAzureOptions {
+  // Required. The payer (management) account of the Azure account.
+  string managementAccountId = 1;
+}
+
 // Request message for the Cost.CreateAccount rpc.
 message CreateAccountRequest {
-  // Required. At the moment, only `aws` is supported.
+  // Required. The supported vendors are `aws`, `gcp` and `azure`.
   string vendor = 1;
 
-  // Required. The account id to register.
+  // Required. The account id to register. For `azure`, this is the subscription id.
   string id = 2;
 
   // Optional. If empty, set to the value of `id`.
@@ -902,6 +908,9 @@ message CreateAccountRequest {
 
   // Optional. A free-text note/memo about this account.
   string note = 7;
+
+  // Required for the `azure` vendor. Azure-specific options.
+  CreateAccountRequestAzureOptions azureOptions = 8;
 }
 
 // Request message for the Cost.UpdateAccount rpc.
