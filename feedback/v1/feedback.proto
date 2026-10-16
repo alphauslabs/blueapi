@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package blueapi.feedback.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/alphauslabs/blueapi/feedback";
+option java_package = "cloud.alphaus.api.feedback";
+option java_outer_classname = "FeedbackProto";
+
+// Feedback service definition.
+//
+// Receives in-product feedback (bug reports, usability issues, requests,
+// questions) written by a signed-in user from inside the Wave / Ripple UI.
+// The sender is identified from the access token on the server side; the
+// request carries no identity fields. Submissions are write-only through this
+// API (there is no read or reply RPC).
+service Feedback {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "(ALPHA) Feedback API. Base URL: https://api.alphaus.cloud/m/blue"
+    external_docs: {
+      url: "https://github.com/alphauslabs/blueapi/tree/main/feedback/";
+      description: "Service definition";
+    }
+  };
+
+  // CreateFeedback stores one feedback submission.
+  //
+  // The call is idempotent on `submission_id`: sending the same id again
+  // (for example, a client retry after a timeout) returns success without
+  // creating a second record. Applies to both Wave and Ripple.
+  rpc CreateFeedback(CreateFeedbackRequest) returns (CreateFeedbackResponse) {
+    option (google.api.http) = {
+      post: "/feedback/v1"
+      body: "*"
+    };
+  }
+}
+
+// Viewport is the size of the browser viewport at submission time, in CSS pixels.
+message Viewport {
+  // Width in CSS pixels.
+  int32 w = 1;
+
+  // Height in CSS pixels.
+  int32 h = 2;
+}
+
+// CreateFeedbackRequest is one feedback submission.
+message CreateFeedbackRequest {
+  // Required. Client-generated UUID (RFC 4122) that identifies this submission.
+  // Used as the idempotency key: a retry with the same id does not create a
+  // second record.
+  string submission_id = 1;
+
+  // Required. One of: `bug`, `hard_to_use`, `request`, `question`.
+  string category = 2;
+
+  // Required. Free-text body written by the user. 1 to 5000 characters.
+  string body = 3;
+
+  // Optional. Path of the screen the user was on (for example `/invoices`).
+  string route = 4;
+
+  // Optional. Name of the micro-frontend that rendered the screen
+  // (for example `billing`).
+  string mfe = 5;
+
+  // Optional. UI language at submission time (for example `ja`, `en`).
+  string locale = 6;
+
+  // Optional. Release identifier of the UI build.
+  string app_release = 7;
+
+  // Optional. Deployment environment reported by the UI (for example `dev`, `next`, `prod`).
+  string telemetry_env = 8;
+
+  // Optional. Browser viewport size at submission time.
+  Viewport viewport = 9;
+
+  // Optional. Client clock at submission time. In JSON this is an RFC 3339 string.
+  google.protobuf.Timestamp client_sent_at = 10;
+}
+
+// CreateFeedbackResponse is empty; success is indicated by the status code.
+message CreateFeedbackResponse {}
