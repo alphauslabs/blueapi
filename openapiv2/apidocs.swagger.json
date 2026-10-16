@@ -125,6 +125,14 @@
         "description": "Service definition",
         "url": "https://github.com/alphauslabs/blueapi/tree/main/preferences/"
       }
+    },
+    {
+      "name": "Feedback",
+      "description": "(ALPHA) Feedback API. Base URL: https://api.alphaus.cloud/m/blue",
+      "externalDocs": {
+        "description": "Service definition",
+        "url": "https://github.com/alphauslabs/blueapi/tree/main/feedback/"
+      }
     }
   ],
   "host": "api.alphaus.cloud",
@@ -1221,6 +1229,41 @@
         ],
         "tags": [
           "Billing"
+        ]
+      }
+    },
+    "/feedback/v1": {
+      "post": {
+        "summary": "CreateFeedback stores one feedback submission.",
+        "description": "The call is idempotent on `submission_id`: sending the same id again\n(for example, a client retry after a timeout) returns success without\ncreating a second record. Applies to both Wave and Ripple.",
+        "operationId": "Feedback_CreateFeedback",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateFeedbackResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "CreateFeedbackRequest is one feedback submission.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateFeedbackRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Feedback"
         ]
       }
     },
@@ -39508,6 +39551,62 @@
         }
       }
     },
+    "v1CreateFeedbackRequest": {
+      "type": "object",
+      "properties": {
+        "submissionId": {
+          "type": "string",
+          "description": "Required. Client-generated UUID (RFC 4122) that identifies this submission.\nUsed as the idempotency key: a retry with the same id does not create a\nsecond record."
+        },
+        "category": {
+          "type": "string",
+          "description": "Required. One of: `bug`, `hard_to_use`, `request`, `question`."
+        },
+        "body": {
+          "type": "string",
+          "description": "Required. Free-text body written by the user. 1 to 5000 characters."
+        },
+        "route": {
+          "type": "string",
+          "description": "Optional. Path of the screen the user was on (for example `/invoices`)."
+        },
+        "mfe": {
+          "type": "string",
+          "description": "Optional. Name of the micro-frontend that rendered the screen\n(for example `billing`)."
+        },
+        "locale": {
+          "type": "string",
+          "description": "Optional. UI language at submission time (for example `ja`, `en`)."
+        },
+        "appRelease": {
+          "type": "string",
+          "description": "Optional. Release identifier of the UI build."
+        },
+        "telemetryEnv": {
+          "type": "string",
+          "description": "Optional. Deployment environment reported by the UI (for example `dev`, `next`, `prod`)."
+        },
+        "viewport": {
+          "$ref": "#/definitions/v1Viewport",
+          "description": "Optional. Browser viewport size at submission time."
+        },
+        "clientSentAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. Client clock at submission time. In JSON this is an RFC 3339 string."
+        }
+      },
+      "description": "CreateFeedbackRequest is one feedback submission.",
+      "required": [
+        "submissionId",
+        "category",
+        "body"
+      ]
+    },
+    "v1CreateFeedbackResponse": {
+      "type": "object",
+      "description": "CreateFeedbackResponse is empty; success is indicated by the status code."
+    },
     "v1CreateFreeFormatRequest": {
       "type": "object",
       "properties": {
@@ -49612,6 +49711,22 @@
           "type": "boolean"
         }
       }
+    },
+    "v1Viewport": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Width in CSS pixels."
+        },
+        "height": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Height in CSS pixels."
+        }
+      },
+      "description": "Viewport is the size of the browser viewport at submission time, in CSS pixels."
     },
     "v1WaveFeature": {
       "type": "object",
