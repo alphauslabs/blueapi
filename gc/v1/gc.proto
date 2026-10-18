@@ -80,6 +80,62 @@ service GuaranteedCommitments {
     };
   }
 
+  // ####################### COMMITMENT DASHBOARD & SIMULATOR #######################
+
+  // Gets the MSP's billing groups grouped into registration buckets (Registered, Partially Registered,
+  // Unregistered), with each billing group's payer onboarding progress. Only available in Ripple.
+  rpc GetBillingGroupRegistration(GetBillingGroupRegistrationRequest) returns (BillingGroupRegistration) {
+    option (google.api.http) = {
+      post: "/v1/dashboard/registration:read"
+      body: "*"
+    };
+  }
+
+  // Gets Archera performance totals (net savings, risk premium, rebates, revenue share) for a month range,
+  // and for the equal-length range immediately before it. Covers every billing group with Archera activity
+  // in the range. Only available in Ripple.
+  rpc GetPerformanceSummary(GetPerformanceSummaryRequest) returns (PerformanceSummary) {
+    option (google.api.http) = {
+      post: "/v1/dashboard/performance:read"
+      body: "*"
+    };
+  }
+
+  // Gets the savings opportunity summary for RIs/SPs expiring within 90 days in billing groups that are
+  // not Registered. Only available in Ripple.
+  rpc GetSavingsOpportunities(GetSavingsOpportunitiesRequest) returns (SavingsOpportunities) {
+    option (google.api.http) = {
+      post: "/v1/dashboard/opportunities:read"
+      body: "*"
+    };
+  }
+
+  // Lists the MSP's expiring RIs/SPs, filtered, ordered and paginated server-side. Only available in Ripple.
+  rpc ListExpiringCommitments(ListExpiringCommitmentsRequest) returns (ListExpiringCommitmentsResponse) {
+    option (google.api.http) = {
+      post: "/v1/simulator/expiring:read"
+      body: "*"
+    };
+  }
+
+  // Gets the pricing inputs the simulator needs for the selected expiring RIs/SPs. Only available in Ripple.
+  rpc GetSimulatorInputs(GetSimulatorInputsRequest) returns (GetSimulatorInputsResponse) {
+    option (google.api.http) = {
+      post: "/v1/simulator/inputs:read"
+      body: "*"
+    };
+  }
+
+  // Calculates projected MSP revenue share from simulated risk premiums, applying the MSP's revenue-share
+  // rate for each month (0.20 for months with no configured rate). Returns an error, rather than a figure
+  // at the default rate, when the rate cannot be read. Only available in Ripple.
+  rpc CalculateProjectedRevenue(CalculateProjectedRevenueRequest) returns (CalculateProjectedRevenueResponse) {
+    option (google.api.http) = {
+      post: "/v1/simulator/revenue:calculate"
+      body: "*"
+    };
+  }
+
   // ####################### METRICS #######################
 
   // WORK-IN-PROGRESS: Do not use. Retrieves key performance metrics for cloud commitments.
@@ -629,6 +685,57 @@ message ReadCommitmentReportsRequest {}
 message ReadCommitmentReportAccountsRequest {
   // Required. The billing month. Format: `yyyymm`.
   string month = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request for GetBillingGroupRegistration. The MSP is taken from the caller.
+message GetBillingGroupRegistrationRequest {}
+
+// Request for GetPerformanceSummary.
+message GetPerformanceSummaryRequest {
+  // Required. First month of the range, inclusive. Format: `yyyymm`.
+  string startMonth = 1 [(google.api.field_behavior) = REQUIRED];
+  // Required. Last month of the range, inclusive. Format: `yyyymm`. A month after the current month is
+  // clamped to the current month.
+  string endMonth = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request for GetSavingsOpportunities. The MSP is taken from the caller.
+message GetSavingsOpportunitiesRequest {}
+
+// Request for ListExpiringCommitments.
+message ListExpiringCommitmentsRequest {
+  // Optional. Billing group IDs to include. Empty means all billing groups.
+  repeated string billingGroupIds = 1;
+  // Optional. Include commitments expiring within this many days from today, inclusive: `30`, `60` or `90`.
+  // Defaults to `90`.
+  int32 expirationWindowDays = 2;
+  // Optional. Include only commitments whose 30-day utilization is below this percentage: `50`, `70` or
+  // `80`. `0` means no threshold. When set, commitments younger than 30 days (which have no utilization)
+  // are excluded.
+  int32 utilizationBelow = 3;
+  // Optional. Registration buckets to include. Empty means all buckets.
+  repeated RegistrationBucket registrationBuckets = 4;
+  // Optional. Comma-separated fields to order by, each optionally followed by ` desc`, following AIP-132.
+  // Supported fields: `expiryDate`, `utilization`, `monthlyCost`. Defaults to `expiryDate`. Commitments
+  // without utilization sort last when ordering by `utilization`, in either direction.
+  string orderBy = 5;
+  // Optional. Maximum rows to return. Defaults to `50`; values above `200` are coerced to `200`.
+  int32 pageSize = 6;
+  // Optional. A `nextPageToken` from a previous call, to retrieve the next page. All other request
+  // fields must match the call that returned the token.
+  string pageToken = 7;
+}
+
+// Request for GetSimulatorInputs.
+message GetSimulatorInputsRequest {
+  // Required. The `id` of each selected row from ListExpiringCommitments. At most 500.
+  repeated string commitmentIds = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request for CalculateProjectedRevenue.
+message CalculateProjectedRevenueRequest {
+  // Required. One series per coverage row and horizon of the simulator's Projected Revenue Report.
+  repeated ProjectedPremiumSeries series = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message GetMetricsRequest {
@@ -1453,6 +1560,285 @@ message CommitmentReportAccount {
   double rebates = 8;
   double netSavings = 9;
   double revenueShare = 10;
+}
+
+// A billing group's Guaranteed Commitments registration state, as shown on the dashboard.
+enum RegistrationBucket {
+  // Not set. Never returned.
+  REGISTRATION_BUCKET_UNSPECIFIED = 0;
+  // Enabled for Guaranteed Commitments in Service Management.
+  REGISTRATION_BUCKET_REGISTERED = 1;
+  // Not enabled, and at least one of its payers has begun onboarding.
+  REGISTRATION_BUCKET_PARTIALLY_REGISTERED = 2;
+  // Not enabled, and no payer has begun onboarding, or no payer progress can be determined.
+  REGISTRATION_BUCKET_UNREGISTERED = 3;
+}
+
+// The kind of an expiring commitment.
+enum ExpiringCommitmentType {
+  // Not set. Never returned.
+  EXPIRING_COMMITMENT_TYPE_UNSPECIFIED = 0;
+  // A Reserved Instance.
+  EXPIRING_COMMITMENT_TYPE_RI = 1;
+  // A Savings Plan.
+  EXPIRING_COMMITMENT_TYPE_SP = 2;
+}
+
+// When the data behind a response was last synced from its source.
+message DataFreshness {
+  // The source: `archera` or `aqua`.
+  string source = 1;
+  // Last sync time, RFC3339. Empty when it cannot be determined.
+  string lastSynced = 2;
+}
+
+// The MSP's billing groups grouped into registration buckets.
+message BillingGroupRegistration {
+  // Billing groups enabled for Guaranteed Commitments.
+  int32 registeredCount = 1;
+  // Billing groups not enabled, with at least one payer that has begun onboarding.
+  int32 partiallyRegisteredCount = 2;
+  // All other billing groups.
+  int32 unregisteredCount = 3;
+  // All billing groups. Always the sum of the three counts.
+  int32 totalCount = 4;
+  // False when this deployment cannot map billing groups to payers. Partially Registered is then always
+  // empty, and every billing group that is not enabled is Unregistered.
+  bool payerProgressAvailable = 5;
+  // Every billing group and its bucket.
+  repeated BillingGroupRegistrationItem billingGroups = 6;
+  // When the billing group and onboarding data was last synced.
+  repeated DataFreshness freshness = 7;
+}
+
+// One billing group's registration bucket and payer onboarding progress.
+message BillingGroupRegistrationItem {
+  // The billing group's company ID.
+  string companyId = 1;
+  // The billing group ID shown in Ripple.
+  string billingGroupId = 2;
+  // The billing group name shown in Ripple.
+  string billingGroupName = 3;
+  // `account` or `tag`.
+  string resourceType = 4;
+  // The billing group's registration bucket.
+  RegistrationBucket bucket = 5;
+  // False for tag billing groups, billing groups without payer accounts, and when
+  // `payerProgressAvailable` is false. The payer counts are then unset.
+  bool progressAvailable = 6;
+  // Payers whose latest onboarding status is `VERIFIED`.
+  int32 verifiedPayers = 7;
+  // Payers that have begun onboarding, including verified ones.
+  int32 begunPayers = 8;
+  // All payers of the billing group's accounts.
+  int32 totalPayers = 9;
+  // True when the billing group is not enabled and all of its payers are verified.
+  bool awaitingEnablementOnly = 10;
+}
+
+// Archera performance totals for a month range. All amounts are in USD.
+message PerformanceTotals {
+  // First month of the range. Format: `yyyymm`.
+  string startMonth = 1;
+  // Last month of the range. Format: `yyyymm`.
+  string endMonth = 2;
+  // Net savings, as supplied by Archera: what customers keep after paying for the guarantee. USD.
+  double netSavings = 3;
+  // Risk premium charged for the guarantee. USD.
+  double riskPremium = 4;
+  // Rebates returned for the commitments. USD.
+  double rebates = 5;
+  // The MSP's revenue share: each month's risk premium multiplied by that month's rate, summed. USD.
+  // Unset when `PerformanceSummary.revenueShareAvailable` is false.
+  double revenueShare = 6;
+}
+
+// Percentage change from a previous total to a current one.
+message PercentChange {
+  // False when the previous total is zero; `value` is then unset.
+  bool applicable = 1;
+  // The change in percent, e.g. `-12.5` for a 12.5% decrease.
+  double value = 2;
+}
+
+// Archera performance for a month range compared with the preceding range.
+message PerformanceSummary {
+  // Totals for the requested range.
+  PerformanceTotals current = 1;
+  // Totals for the equal-length range immediately before `current`.
+  PerformanceTotals previous = 2;
+  // Change in net savings from `previous` to `current`.
+  PercentChange netSavingsChange = 3;
+  // Change in risk premium from `previous` to `current`.
+  PercentChange riskPremiumChange = 4;
+  // Change in rebates from `previous` to `current`.
+  PercentChange rebatesChange = 5;
+  // Unset when `revenueShareAvailable` is false.
+  PercentChange revenueShareChange = 6;
+  // False when the MSP's revenue-share rate could not be read. Revenue share is then unavailable, never
+  // computed at the default rate.
+  bool revenueShareAvailable = 7;
+  // False when no billing group had Archera activity in the requested range.
+  bool hasActivity = 8;
+  // True when the requested range includes the current, still incomplete month.
+  bool inProgress = 9;
+  // When the Archera data was last synced.
+  repeated DataFreshness freshness = 10;
+}
+
+// Savings opportunity summary for RIs/SPs expiring within 90 days in billing groups that are not
+// Registered. Savings and premiums use the simulator's default settings (1-Year Guarantee, 100% coverage,
+// 100% utilization).
+message SavingsOpportunities {
+  // Projected monthly savings if the expiring RIs/SPs were replaced with GRI. USD.
+  double potentialMonthlySavings = 1;
+  // Monthly savings under the existing RIs/SPs, for comparison. USD.
+  double existingMonthlySavings = 2;
+  // Number of expiring RIs/SPs counted.
+  int32 expiringCommitmentCount = 3;
+  // Each commitment's estimated monthly risk premium at the MSP's rate for the month after it expires,
+  // summed. USD. Unset when `revenueShareAvailable` is false.
+  double estimatedRevenueShare = 4;
+  // False when the MSP's revenue-share rate could not be read.
+  bool revenueShareAvailable = 5;
+  // When the Archera and Aqua data was last synced.
+  repeated DataFreshness freshness = 6;
+}
+
+// One expiring RI or SP.
+message ExpiringCommitment {
+  // Opaque row identifier, passed to GetSimulatorInputs.
+  string id = 1;
+  // The AWS service, e.g. `Amazon EC2`.
+  string service = 2;
+  // The AWS account that owns the commitment.
+  string accountId = 3;
+  // The name of `accountId`.
+  string accountName = 4;
+  // The payer account of `accountId`.
+  string payerId = 5;
+  // The billing group of `accountId`.
+  string billingGroupId = 6;
+  // The name of `billingGroupId`.
+  string billingGroupName = 7;
+  // The registration bucket of the billing group.
+  RegistrationBucket registrationBucket = 8;
+  // Whether this is an RI or an SP.
+  ExpiringCommitmentType type = 9;
+  // Instance type for RIs; instance family or plan type for SPs.
+  string instanceType = 10;
+  // Number of reserved instances. `1` for SPs.
+  int32 quantity = 11;
+  // Format: `yyyy-mm-dd`.
+  string expiryDate = 12;
+  // False when the commitment is younger than 30 days. `utilization` is then unset.
+  bool utilizationAvailable = 13;
+  // Average utilization over the trailing 30 days, 0 to 100.
+  double utilization = 14;
+  // The existing commitment's current monthly charge, covering its whole quantity. USD.
+  double monthlyCost = 15;
+}
+
+// Response for ListExpiringCommitments.
+message ListExpiringCommitmentsResponse {
+  // One page of expiring RIs/SPs.
+  repeated ExpiringCommitment commitments = 1;
+  // Token for the next page. Empty when there are no more pages.
+  string nextPageToken = 2;
+  // Rows matching the filters across all pages.
+  int32 totalSize = 3;
+  // When the Aqua data was last synced.
+  repeated DataFreshness freshness = 4;
+}
+
+// The price of one reservation option for a single instance.
+message ReservationPrice {
+  // False when this option is not offered for the instance; the prices are then unset.
+  bool available = 1;
+  // Hourly price for one instance. USD.
+  double hourly = 2;
+  // Upfront price for one instance for the whole term. USD.
+  double upfront = 3;
+}
+
+// Prices of every reservation option for one term length.
+message TermPricing {
+  // Standard RI, No Upfront.
+  ReservationPrice riNoUpfront = 1;
+  // Standard RI, Partial Upfront.
+  ReservationPrice riPartialUpfront = 2;
+  // Standard RI, All Upfront.
+  ReservationPrice riAllUpfront = 3;
+  // Compute Savings Plan, No Upfront.
+  ReservationPrice computeSavingsPlan = 4;
+  // EC2 Instance Savings Plan, No Upfront.
+  ReservationPrice ec2SavingsPlan = 5;
+}
+
+// The simulator's pricing inputs for one expiring commitment.
+message SimulatorInput {
+  // The `id` from ListExpiringCommitments.
+  string commitmentId = 1;
+  // False when the commitment could not be priced; `reason` says why and the pricing fields are unset.
+  bool priced = 2;
+  // Why the commitment could not be priced. Empty when `priced` is true.
+  string reason = 3;
+  // The AWS service, e.g. `Amazon EC2`.
+  string service = 4;
+  // The instance type priced, e.g. `m5.large`.
+  string instanceType = 5;
+  // The AWS region priced, e.g. `ap-northeast-1`.
+  string region = 6;
+  // Number of instances covered.
+  int32 quantity = 7;
+  // On-demand hourly price for one instance. USD.
+  double onDemandHourly = 8;
+  // Prices for one-year terms.
+  TermPricing oneYear = 9;
+  // Prices for three-year terms.
+  TermPricing threeYear = 10;
+}
+
+// Response for GetSimulatorInputs.
+message GetSimulatorInputsResponse {
+  // One entry per requested `commitmentIds` value, in the same order.
+  repeated SimulatorInput inputs = 1;
+}
+
+// A simulated risk premium for one billing group and month.
+message MonthlyPremium {
+  // Must belong to the caller's MSP.
+  string billingGroupId = 1;
+  // Format: `yyyymm`.
+  string month = 2;
+  // Simulated risk premium for the month. USD.
+  double premium = 3;
+}
+
+// The simulated premiums for one coverage row and horizon of the Projected Revenue Report.
+message ProjectedPremiumSeries {
+  // The report row's coverage, 0 to 100.
+  int32 coverage = 1;
+  // `1`, `12` or `36`.
+  int32 horizonMonths = 2;
+  // Premiums for the months inside this horizon.
+  repeated MonthlyPremium premiums = 3;
+}
+
+// Projected MSP revenue share for one coverage row and horizon.
+message ProjectedRevenue {
+  // The `coverage` of the matching request series.
+  int32 coverage = 1;
+  // The `horizonMonths` of the matching request series.
+  int32 horizonMonths = 2;
+  // Each month's premium multiplied by that month's rate, summed. USD.
+  double revenueShare = 3;
+}
+
+// Response for CalculateProjectedRevenue.
+message CalculateProjectedRevenueResponse {
+  // One result per request series, in the same order.
+  repeated ProjectedRevenue results = 1;
 }
 
 message MetricsResponse {
