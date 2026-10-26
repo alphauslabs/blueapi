@@ -3577,6 +3577,14 @@ message UpdateBillingGroupLinkedResourcesRequest {
   optional NonTagSetting nonTagSetting = 6;
 
   optional AccountOptions accountOptions = 7;
+
+  // Optional. Explicit account membership replacement for `byAccounts`
+  // selection. When true, `accounts` is the complete desired membership for
+  // `vendor`, including an empty list, which removes all of the vendor's
+  // accounts from the billing group without deleting the account records.
+  // When false (default), an empty `accounts` together with `accountOptions`
+  // is treated as an options-only update and membership is left unchanged.
+  bool replaceAccounts = 8;
 }
 
 message UpdateBillingGroupInvoiceSettingsRequest {
