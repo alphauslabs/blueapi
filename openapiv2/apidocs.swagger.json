@@ -10639,6 +10639,38 @@
         ]
       }
     },
+    "/v1/gcp/{onboardingId}/deploymentscript": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: GetGCPDeploymentScript retrieves the GCP deployment script for the given onboarding ID.",
+        "operationId": "GuaranteedCommitments_GetGCPDeploymentScript",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetGCPDeploymentScriptResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "onboardingId",
+            "description": "Onboarding ID for the GCP account.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/gdrive/share": {
       "post": {
         "operationId": "Prism_ShareGDrive",
@@ -19095,38 +19127,6 @@
         ],
         "tags": [
           "Prism"
-        ]
-      }
-    },
-    "/v1/{onboardingId}/gcp/deploymentscript": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: GetGCPDeploymentScript retrieves the GCP deployment script for the given onboarding ID.",
-        "operationId": "GuaranteedCommitments_GetGCPDeploymentScript",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetGCPDeploymentScriptResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "onboardingId",
-            "description": "Onboarding ID for the GCP account.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
         ]
       }
     },
@@ -38627,7 +38627,7 @@
         "COMPLETE_ONBOARDING"
       ],
       "default": "ACTION_UNSPECIFIED",
-      "description": "Action to be performed for GCP onboarding.\n\n - START_ONBOARDING: Starts the GCP onboarding process. This generates onboarding ID that will be used in subsequent steps.\n - SUBMIT_PAYER_DETAILS: Submits the payer details for GCP onboarding. This step requires the onboarding ID generated in the previous step.\nThis step involves providing the necessary payer information to proceed with GCP onboarding.\n - COMPLETE_ONBOARDING: Verifies the provided information and completes the GCP onboarding process."
+      "description": "Action to be performed for GCP onboarding.\n\n - ACTION_UNSPECIFIED: Unspecified action for GCP onboarding. This should not be used in practice.\n - START_ONBOARDING: Starts the GCP onboarding process. This generates onboarding ID that will be used in subsequent steps.\n - SUBMIT_PAYER_DETAILS: Submits the payer details for GCP onboarding. This step requires the onboarding ID generated in the previous step.\nThis step involves providing the necessary payer information to proceed with GCP onboarding.\n - COMPLETE_ONBOARDING: Verifies the provided information and completes the GCP onboarding process."
     },
     "v1ConfigureGCPOnboardingResponse": {
       "type": "object",
