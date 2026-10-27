@@ -543,7 +543,7 @@ rpc ConfigureGCPOnboarding(ConfigureGCPOnboardingRequest) returns (ConfigureGCPO
 // WORK-IN-PROGRESS: GetGCPDeploymentScript retrieves the GCP deployment script for the given onboarding ID.
 rpc GetGCPDeploymentScript(GetGCPDeploymentScriptRequest) returns (GetGCPDeploymentScriptResponse) {
   option (google.api.http) = {
-    get: "/v1/gcp/{onboardingId}/deploymentscript"
+    get: "/v1/onboarding/gcp/{onboardingId}/deploymentscript"
   };
 }
 
@@ -2480,22 +2480,28 @@ message PayerAccountDetails {
   // Optional. Agreement type, e.g. "azureea". Only populated when vendor is AZURE; empty otherwise.
   optional string agreementType = 12;
 
-  // GCP project ID associated with this payer account.
+  // Optional. GCP project ID associated with this payer account.
+  // Only populated when vendor is GCP; empty otherwise.
   optional string projectId = 13;
 
-  // GCP organization ID associated with this payer account.
+  // Optional. GCP organization ID associated with this payer account.
+  // Only populated when vendor is GCP; empty otherwise.
   optional string organizationId = 14;
 
-  // Name of the billing dataset that contains the billing data for this GCP account.
+  // Optional. Name of the BigQuery dataset that contains the billing data for
+  // this GCP account. Only populated when vendor is GCP; empty otherwise.
   optional string billingDataset = 15;
 
-  // Location of the billing data for this GCP account.
+  // Optional. Location of the billing data for this GCP account.
+  // Only populated when vendor is GCP; empty otherwise.
   optional string dataLocation = 16;
 
-  // Name of the pricing dataset for this GCP account.
+  // Optional. Name of the pricing dataset for this GCP account.
+  // Only populated when vendor is GCP; empty otherwise.
   optional string pricingDataset = 17;
 
-  // Name of the committed use discount (CUD) dataset for this GCP account.
+  // Optional. Name of the committed use discount (CUD) dataset for this GCP
+  // account. Only populated when vendor is GCP; empty otherwise.
   optional string cudDataset = 18;
 }
 

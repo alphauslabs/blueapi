@@ -10639,38 +10639,6 @@
         ]
       }
     },
-    "/v1/gcp/{onboardingId}/deploymentscript": {
-      "get": {
-        "summary": "WORK-IN-PROGRESS: GetGCPDeploymentScript retrieves the GCP deployment script for the given onboarding ID.",
-        "operationId": "GuaranteedCommitments_GetGCPDeploymentScript",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetGCPDeploymentScriptResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "onboardingId",
-            "description": "Onboarding ID for the GCP account.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
     "/v1/gdrive/share": {
       "post": {
         "operationId": "Prism_ShareGDrive",
@@ -13719,6 +13687,38 @@
             "schema": {
               "$ref": "#/definitions/v1ConfigureGCPOnboardingRequest"
             }
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/onboarding/gcp/{onboardingId}/deploymentscript": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: GetGCPDeploymentScript retrieves the GCP deployment script for the given onboarding ID.",
+        "operationId": "GuaranteedCommitments_GetGCPDeploymentScript",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetGCPDeploymentScriptResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "onboardingId",
+            "description": "Onboarding ID for the GCP account.",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
@@ -46699,27 +46699,27 @@
         },
         "projectId": {
           "type": "string",
-          "description": "GCP project ID associated with this payer account."
+          "description": "Optional. GCP project ID associated with this payer account.\nOnly populated when vendor is GCP; empty otherwise."
         },
         "organizationId": {
           "type": "string",
-          "description": "GCP organization ID associated with this payer account."
+          "description": "Optional. GCP organization ID associated with this payer account.\nOnly populated when vendor is GCP; empty otherwise."
         },
         "billingDataset": {
           "type": "string",
-          "description": "Name of the billing dataset that contains the billing data for this GCP account."
+          "description": "Optional. Name of the BigQuery dataset that contains the billing data for\nthis GCP account. Only populated when vendor is GCP; empty otherwise."
         },
         "dataLocation": {
           "type": "string",
-          "description": "Location of the billing data for this GCP account."
+          "description": "Optional. Location of the billing data for this GCP account.\nOnly populated when vendor is GCP; empty otherwise."
         },
         "pricingDataset": {
           "type": "string",
-          "description": "Name of the pricing dataset for this GCP account."
+          "description": "Optional. Name of the pricing dataset for this GCP account.\nOnly populated when vendor is GCP; empty otherwise."
         },
         "cudDataset": {
           "type": "string",
-          "description": "Name of the committed use discount (CUD) dataset for this GCP account."
+          "description": "Optional. Name of the committed use discount (CUD) dataset for this GCP\naccount. Only populated when vendor is GCP; empty otherwise."
         }
       }
     },
