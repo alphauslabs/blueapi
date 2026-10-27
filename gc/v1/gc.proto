@@ -543,7 +543,7 @@ rpc ConfigureGCPOnboarding(ConfigureGCPOnboardingRequest) returns (ConfigureGCPO
 // WORK-IN-PROGRESS: GetGCPDeploymentScript retrieves the GCP deployment script for the given onboarding ID.
 rpc GetGCPDeploymentScript(GetGCPDeploymentScriptRequest) returns (GetGCPDeploymentScriptResponse) {
   option (google.api.http) = {
-    get: "/v1/gcp/{onboardingId}/deploymentscript"
+    get: "/v1/{onboardingId}/gcp/deploymentscript"
   };
 }
 
@@ -632,6 +632,7 @@ message GetGCPDeploymentScriptResponse {
 
 // Request message for configuring GCP onboarding.
 message ConfigureGCPOnboardingRequest {
+  // Action to be performed for GCP onboarding.
   enum Action {
     ACTION_UNSPECIFIED = 0;
     // Starts the GCP onboarding process. This generates onboarding ID that will be used in subsequent steps.
@@ -643,22 +644,33 @@ message ConfigureGCPOnboardingRequest {
     COMPLETE_ONBOARDING = 3;
   }
 
+  // Action to be performed for GCP onboarding. This determines the step in the onboarding process that will be executed.
   Action action = 1 [
     (google.api.field_behavior) = REQUIRED
   ];
+  // Onboarding ID generated in the previous step of the GCP onboarding process. Required for subsequent actions.
   optional string onboardingId = 2;
+  // Billing account ID associated with the GCP onboarding.
   optional string billingAccountId = 3;
+  // Name of the GCP account.
   optional string accountName = 4;
+  // GCP organization ID associated with the onboarding.
   optional string organizationId = 5;
+  // GCP project ID associated with the onboarding.
   optional string projectId = 6;
+  // Name of the billing dataset that contains the billing data for this GCP account.
   optional string billingDataset = 7;
+  // Location of the billing data for this GCP account.
   optional string dataLocation = 8;
+  // Name of the pricing dataset for this GCP account.
   optional string pricingDataset = 9;
+  // Name of the committed use discount (CUD) dataset for this GCP account.
   optional string cudDataset = 10;
 }
 
 // Response message for configuring GCP onboarding.
 message ConfigureGCPOnboardingResponse {
+  // Onboarding ID generated for the GCP account during the onboarding process.
   string onboardingId = 1;
 }
 
