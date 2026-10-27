@@ -10639,9 +10639,9 @@
         ]
       }
     },
-    "/v1/gcp/deployment-script/{onboardingId}": {
+    "/v1/gcp/{onboardingId}/deploymentscript": {
       "get": {
-        "summary": "GetGCPDeploymentScript retrieves the GCP deployment script for the given onboarding ID.",
+        "summary": "WORK-IN-PROGRESS: GetGCPDeploymentScript retrieves the GCP deployment script for the given onboarding ID.",
         "operationId": "GuaranteedCommitments_GetGCPDeploymentScript",
         "responses": {
           "200": {
@@ -10660,6 +10660,7 @@
         "parameters": [
           {
             "name": "onboardingId",
+            "description": "Onboarding ID for the GCP account.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -13693,7 +13694,7 @@
     },
     "/v1/onboarding/gcp/configure": {
       "post": {
-        "summary": "ConfigureGCPOnboarding configures the GCP onboarding process for the authenticated user.",
+        "summary": "WORK-IN-PROGRESS: ConfigureGCPOnboarding configures the GCP onboarding process for the authenticated user.",
         "operationId": "GuaranteedCommitments_ConfigureGCPOnboarding",
         "responses": {
           "200": {
@@ -38615,7 +38616,8 @@
         "SUBMIT_PAYER_DETAILS",
         "COMPLETE_ONBOARDING"
       ],
-      "default": "ACTION_UNSPECIFIED"
+      "default": "ACTION_UNSPECIFIED",
+      "description": " - START_ONBOARDING: Starts the GCP onboarding process. This generates onboarding ID that will be used in subsequent steps.\n - SUBMIT_PAYER_DETAILS: Submits the payer details for GCP onboarding. This step requires the onboarding ID generated in the previous step.\nThis step involves providing the necessary payer information to proceed with GCP onboarding.\n - COMPLETE_ONBOARDING: Verifies the provided information and completes the GCP onboarding process."
     },
     "v1ConfigureGCPOnboardingResponse": {
       "type": "object",
@@ -43588,7 +43590,8 @@
       "type": "object",
       "properties": {
         "deploymentScript": {
-          "type": "string"
+          "type": "string",
+          "description": "Generated deployment script that can be used to deploy the necessary resources for GCP onboarding."
         }
       },
       "description": "Response message containing the GCP deployment script."
@@ -46684,22 +46687,28 @@
           "description": "Optional. Agreement type, e.g. \"azureea\". Only populated when vendor is AZURE; empty otherwise."
         },
         "projectId": {
-          "type": "string"
+          "type": "string",
+          "description": "GCP project ID associated with this payer account."
         },
         "organizationId": {
-          "type": "string"
+          "type": "string",
+          "description": "GCP organization ID associated with this payer account."
         },
         "billingDataset": {
-          "type": "string"
+          "type": "string",
+          "description": "Name of the billing dataset that contains the billing data for this GCP account."
         },
         "dataLocation": {
-          "type": "string"
+          "type": "string",
+          "description": "Location of the billing data for this GCP account."
         },
         "pricingDataset": {
-          "type": "string"
+          "type": "string",
+          "description": "Name of the pricing dataset for this GCP account."
         },
         "cudDataset": {
-          "type": "string"
+          "type": "string",
+          "description": "Name of the committed use discount (CUD) dataset for this GCP account."
         }
       }
     },

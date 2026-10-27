@@ -532,7 +532,7 @@ rpc AcceptTerms(
 
 // ------------------------ GCP INTEGRATION ------------------------
 
-// ConfigureGCPOnboarding configures the GCP onboarding process for the authenticated user.
+// WORK-IN-PROGRESS: ConfigureGCPOnboarding configures the GCP onboarding process for the authenticated user.
 rpc ConfigureGCPOnboarding(ConfigureGCPOnboardingRequest) returns (ConfigureGCPOnboardingResponse) {
   option (google.api.http) = {
     post: "/v1/onboarding/gcp/configure"
@@ -540,10 +540,10 @@ rpc ConfigureGCPOnboarding(ConfigureGCPOnboardingRequest) returns (ConfigureGCPO
   };
 }
 
-// GetGCPDeploymentScript retrieves the GCP deployment script for the given onboarding ID.
+// WORK-IN-PROGRESS: GetGCPDeploymentScript retrieves the GCP deployment script for the given onboarding ID.
 rpc GetGCPDeploymentScript(GetGCPDeploymentScriptRequest) returns (GetGCPDeploymentScriptResponse) {
   option (google.api.http) = {
-    get: "/v1/gcp/deployment-script/{onboardingId}"
+    get: "/v1/gcp/{onboardingId}/deploymentscript"
   };
 }
 
@@ -618,6 +618,7 @@ enum UsageType {
 
 // Request message for retrieving the GCP deployment script.
 message GetGCPDeploymentScriptRequest {
+  // Onboarding ID for the GCP account.
   string onboardingId = 1 [
     (google.api.field_behavior) = REQUIRED
   ];
@@ -625,6 +626,7 @@ message GetGCPDeploymentScriptRequest {
 
 // Response message containing the GCP deployment script.
 message GetGCPDeploymentScriptResponse {
+  // Generated deployment script that can be used to deploy the necessary resources for GCP onboarding.
   string deploymentScript = 1;
 }
 
@@ -632,8 +634,12 @@ message GetGCPDeploymentScriptResponse {
 message ConfigureGCPOnboardingRequest {
   enum Action {
     ACTION_UNSPECIFIED = 0;
+    // Starts the GCP onboarding process. This generates onboarding ID that will be used in subsequent steps.
     START_ONBOARDING = 1;
+    // Submits the payer details for GCP onboarding. This step requires the onboarding ID generated in the previous step.
+    // This step involves providing the necessary payer information to proceed with GCP onboarding.
     SUBMIT_PAYER_DETAILS = 2;
+    // Verifies the provided information and completes the GCP onboarding process.
     COMPLETE_ONBOARDING = 3;
   }
 
@@ -2450,11 +2456,17 @@ message PayerAccountDetails {
 
   // GCP fields
 
+  // GCP project ID associated with this payer account.
   optional string projectId = 13;
+  // GCP organization ID associated with this payer account.
   optional string organizationId = 14;
+  // Name of the billing dataset that contains the billing data for this GCP account.
   optional string billingDataset = 15;
+  // Location of the billing data for this GCP account.
   optional string dataLocation = 16;
+  // Name of the pricing dataset for this GCP account.
   optional string pricingDataset = 17;
+  // Name of the committed use discount (CUD) dataset for this GCP account.
   optional string cudDataset = 18;
 }
 
