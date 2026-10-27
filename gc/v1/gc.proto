@@ -530,6 +530,22 @@ rpc AcceptTerms(
   };
 }
 
+// ------------------------ GCP INTEGRATION ------------------------
+
+// ConfigureGCPOnboarding configures the GCP onboarding process for the authenticated user.
+rpc ConfigureGCPOnboarding(ConfigureGCPOnboardingRequest) returns (ConfigureGCPOnboardingResponse) {
+  option (google.api.http) = {
+    post: "/v1/onboarding/gcp/configure"
+    body: "*"
+  };
+}
+
+// GetGCPDeploymentScript retrieves the GCP deployment script for the given onboarding ID.
+rpc GetGCPDeploymentScript(GetGCPDeploymentScriptRequest) returns (GetGCPDeploymentScriptResponse) {
+  option (google.api.http) = {
+    get: "/v1/gcp/deployment-script/{onboardingId}"
+  };
+}
 
 }
 
@@ -599,6 +615,46 @@ enum UsageType {
 }
 
 // ####################### REQUEST MESSAGES #######################
+
+// Request message for retrieving the GCP deployment script.
+message GetGCPDeploymentScriptRequest {
+  string onboardingId = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+}
+
+// Response message containing the GCP deployment script.
+message GetGCPDeploymentScriptResponse {
+  string deploymentScript = 1;
+}
+
+// Request message for configuring GCP onboarding.
+message ConfigureGCPOnboardingRequest {
+  enum Action {
+    ACTION_UNSPECIFIED = 0;
+    START_ONBOARDING = 1;
+    SUBMIT_PAYER_DETAILS = 2;
+    COMPLETE_ONBOARDING = 3;
+  }
+
+  Action action = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+  optional string onboardingId = 2;
+  optional string billingAccountId = 3;
+  optional string accountName = 4;
+  optional string organizationId = 5;
+  optional string projectId = 6;
+  optional string billingDataset = 7;
+  optional string dataLocation = 8;
+  optional string pricingDataset = 9;
+  optional string cudDataset = 10;
+}
+
+// Response message for configuring GCP onboarding.
+message ConfigureGCPOnboardingResponse {
+  string onboardingId = 1;
+}
 
 message ConfigureAzureEaOnboardingRequest {
   enum Action {
@@ -2391,6 +2447,15 @@ message PayerAccountDetails {
 
   // Optional. Agreement type, e.g. "azureea". Only populated when vendor is AZURE; empty otherwise.
   optional string agreementType = 12;
+
+  // GCP fields
+
+  optional string projectId = 13;
+  optional string organizationId = 14;
+  optional string billingDataset = 15;
+  optional string dataLocation = 16;
+  optional string pricingDataset = 17;
+  optional string cudDataset = 18;
 }
 
 message ListPayerAccountsResponse {

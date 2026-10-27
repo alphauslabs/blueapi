@@ -10639,6 +10639,37 @@
         ]
       }
     },
+    "/v1/gcp/deployment-script/{onboardingId}": {
+      "get": {
+        "summary": "GetGCPDeploymentScript retrieves the GCP deployment script for the given onboarding ID.",
+        "operationId": "GuaranteedCommitments_GetGCPDeploymentScript",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetGCPDeploymentScriptResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "onboardingId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/gdrive/share": {
       "post": {
         "operationId": "Prism_ShareGDrive",
@@ -13652,6 +13683,40 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1ValidateBillingGroupRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/onboarding/gcp/configure": {
+      "post": {
+        "summary": "ConfigureGCPOnboarding configures the GCP onboarding process for the authenticated user.",
+        "operationId": "GuaranteedCommitments_ConfigureGCPOnboarding",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ConfigureGCPOnboardingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for configuring GCP onboarding.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ConfigureGCPOnboardingRequest"
             }
           }
         ],
@@ -24371,18 +24436,6 @@
         }
       },
       "title": "BillingGroup tags adding setting"
-    },
-    "ConfigureAzureEaOnboardingRequestAction": {
-      "type": "string",
-      "enum": [
-        "START_ONBOARDING",
-        "SUBMIT_PAYER_DETAILS",
-        "CONFIGURE_GC_RESOURCE_STORAGE",
-        "CHECK_AUTHORIZATION",
-        "SUBMIT_ACCOUNT_SCOPE",
-        "COMPLETE_ONBOARDING"
-      ],
-      "default": "START_ONBOARDING"
     },
     "ContainerCostUsageRequestFilterCriteria": {
       "type": "object",
@@ -38461,7 +38514,7 @@
       "type": "object",
       "properties": {
         "action": {
-          "$ref": "#/definitions/ConfigureAzureEaOnboardingRequestAction"
+          "$ref": "#/definitions/v1ConfigureAzureEaOnboardingRequestAction"
         },
         "onboardingId": {
           "type": "string"
@@ -38495,6 +38548,18 @@
         "action"
       ]
     },
+    "v1ConfigureAzureEaOnboardingRequestAction": {
+      "type": "string",
+      "enum": [
+        "START_ONBOARDING",
+        "SUBMIT_PAYER_DETAILS",
+        "CONFIGURE_GC_RESOURCE_STORAGE",
+        "CHECK_AUTHORIZATION",
+        "SUBMIT_ACCOUNT_SCOPE",
+        "COMPLETE_ONBOARDING"
+      ],
+      "default": "START_ONBOARDING"
+    },
     "v1ConfigureAzureEaOnboardingResponse": {
       "type": "object",
       "properties": {
@@ -38502,6 +38567,64 @@
           "type": "string"
         }
       }
+    },
+    "v1ConfigureGCPOnboardingRequest": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "$ref": "#/definitions/v1ConfigureGCPOnboardingRequestAction"
+        },
+        "onboardingId": {
+          "type": "string"
+        },
+        "billingAccountId": {
+          "type": "string"
+        },
+        "accountName": {
+          "type": "string"
+        },
+        "organizationId": {
+          "type": "string"
+        },
+        "projectId": {
+          "type": "string"
+        },
+        "billingDataset": {
+          "type": "string"
+        },
+        "dataLocation": {
+          "type": "string"
+        },
+        "pricingDataset": {
+          "type": "string"
+        },
+        "cudDataset": {
+          "type": "string"
+        }
+      },
+      "description": "Request message for configuring GCP onboarding.",
+      "required": [
+        "action"
+      ]
+    },
+    "v1ConfigureGCPOnboardingRequestAction": {
+      "type": "string",
+      "enum": [
+        "ACTION_UNSPECIFIED",
+        "START_ONBOARDING",
+        "SUBMIT_PAYER_DETAILS",
+        "COMPLETE_ONBOARDING"
+      ],
+      "default": "ACTION_UNSPECIFIED"
+    },
+    "v1ConfigureGCPOnboardingResponse": {
+      "type": "object",
+      "properties": {
+        "onboardingId": {
+          "type": "string"
+        }
+      },
+      "description": "Response message for configuring GCP onboarding."
     },
     "v1ConfirmGoogleSheetAccessRequest": {
       "type": "object",
@@ -43461,6 +43584,15 @@
         }
       }
     },
+    "v1GetGCPDeploymentScriptResponse": {
+      "type": "object",
+      "properties": {
+        "deploymentScript": {
+          "type": "string"
+        }
+      },
+      "description": "Response message containing the GCP deployment script."
+    },
     "v1GetGuaranteedCommitmentTemplateUrlResponse": {
       "type": "object",
       "properties": {
@@ -46550,6 +46682,24 @@
         "agreementType": {
           "type": "string",
           "description": "Optional. Agreement type, e.g. \"azureea\". Only populated when vendor is AZURE; empty otherwise."
+        },
+        "projectId": {
+          "type": "string"
+        },
+        "organizationId": {
+          "type": "string"
+        },
+        "billingDataset": {
+          "type": "string"
+        },
+        "dataLocation": {
+          "type": "string"
+        },
+        "pricingDataset": {
+          "type": "string"
+        },
+        "cudDataset": {
+          "type": "string"
         }
       }
     },
