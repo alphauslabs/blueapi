@@ -21045,7 +21045,7 @@
         "parameters": [
           {
             "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
+            "description": "Required. Supported values are `aws` and `gcp`.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -21076,7 +21076,7 @@
         "parameters": [
           {
             "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
+            "description": "Required. Supported values are `aws` and `gcp`.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -21117,7 +21117,7 @@
         "parameters": [
           {
             "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
+            "description": "Required. Supported values are `aws` and `gcp`.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -21154,7 +21154,7 @@
         "parameters": [
           {
             "name": "vendor",
-            "description": "Required. At the moment, only `aws` is supported.",
+            "description": "Required. Supported values are `aws` and `gcp`.",
             "in": "path",
             "required": true,
             "type": "string"
@@ -24684,19 +24684,23 @@
       "properties": {
         "filterName": {
           "type": "string",
-          "title": "Required. Filter Name. Specify characters between 1 ~ 100"
+          "description": "Required. Filter name, 1 to 100 bytes long in UTF-8 (multi-byte characters count as more than one byte). Other lengths return `OUT_OF_RANGE`."
         },
         "groupId": {
           "type": "string",
-          "description": "Required. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro)."
+          "description": "Required. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro).\n\nFor GCP, must be your own billing group (company) ID; any other value returns `NOT_FOUND`."
         },
         "accountId": {
           "type": "string",
-          "description": "Required. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization."
+          "description": "Required. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization.\n\nFor GCP, each entry is a project ID or an account group ID (`grp-` prefix), or set this to `*` for all accounts in your billing group or access group. Entries that cannot be resolved return `NOT_FOUND`."
         },
         "awsOptions": {
           "$ref": "#/definitions/v1ReadCostsRequestAwsOptions",
-          "description": "Required. Valid only for the `aws` vendor. AWS-specific options."
+          "description": "Required for the `aws` vendor; not used for other vendors. AWS-specific options."
+        },
+        "gcpOptions": {
+          "$ref": "#/definitions/v1ReadCostsRequestGcpOptions",
+          "description": "Required for the `gcp` vendor; not used for other vendors. GCP-specific options, saved exactly as sent. A filter with an empty key returns `INVALID_ARGUMENT`."
         }
       },
       "description": "Request message for the CreateCostFilters rpc."
@@ -25329,19 +25333,23 @@
       "properties": {
         "filterName": {
           "type": "string",
-          "title": "Required. Filter Name. Specify characters between 1 ~ 100"
+          "description": "Required. Filter name, 1 to 100 bytes long in UTF-8 (multi-byte characters count as more than one byte). Other lengths return `OUT_OF_RANGE`."
         },
         "groupId": {
           "type": "string",
-          "description": "Required. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro)."
+          "description": "Required. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro).\n\nFor GCP, must be your own billing group (company) ID; any other value returns `NOT_FOUND`."
         },
         "accountId": {
           "type": "string",
-          "description": "Required. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization."
+          "description": "Required. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization.\n\nFor GCP, each entry is a project ID or an account group ID (`grp-` prefix), or set this to `*` for all accounts in your billing group or access group. Entries that cannot be resolved return `NOT_FOUND`."
         },
         "awsOptions": {
           "$ref": "#/definitions/v1ReadCostsRequestAwsOptions",
-          "description": "Required. Valid only for the `aws` vendor. AWS-specific options."
+          "description": "Required for the `aws` vendor; not used for other vendors. AWS-specific options."
+        },
+        "gcpOptions": {
+          "$ref": "#/definitions/v1ReadCostsRequestGcpOptions",
+          "description": "Required for the `gcp` vendor; not used for other vendors. GCP-specific options, saved exactly as sent. A filter with an empty key returns `INVALID_ARGUMENT`."
         }
       },
       "description": "Request message for the UpdateCostFilters rpc."
@@ -32029,15 +32037,19 @@
         },
         "groupId": {
           "type": "string",
-          "description": "Optional. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro)."
+          "description": "Optional. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.\n\nFor AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro).\n\nFor GCP, this is your own billing group (company) ID."
         },
         "accountId": {
           "type": "string",
-          "description": "Optional. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization."
+          "description": "Optional. You can set it to a single account or a comma-separated list of accounts.\n\nFor AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization.\n\nFor GCP, the saved project IDs, account group IDs (`grp-` prefix), or `*`."
         },
         "awsOptions": {
           "$ref": "#/definitions/v1ReadCostsRequestAwsOptions",
           "description": "Optional. Valid only for the `aws` vendor. AWS-specific options."
+        },
+        "gcpOptions": {
+          "$ref": "#/definitions/v1ReadCostsRequestGcpOptions",
+          "description": "Optional. Valid only for the `gcp` vendor. GCP-specific options, returned exactly as saved so they can be reused in `ReadCosts`."
         }
       },
       "description": "Response message for the ListCostFilters rpc."

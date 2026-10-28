@@ -2096,7 +2096,7 @@ message GetBreakevenPointResponse {
 
 // Request message for the ListCostFilters rpc.
 message ListCostFiltersRequest {
-  // Required. At the moment, only `aws` is supported.
+  // Required. Supported values are `aws` and `gcp`.
   string vendor = 1;
 }
 
@@ -2119,37 +2119,51 @@ message ListCostFilters {
   // Optional. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.
   //
   // For AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro).
+  //
+  // For GCP, this is your own billing group (company) ID.
   string groupId = 4;
 
   // Optional. You can set it to a single account or a comma-separated list of accounts.
   //
   // For AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization.
+  //
+  // For GCP, the saved project IDs, account group IDs (`grp-` prefix), or `*`.
   string accountId = 5;
 
   // Optional. Valid only for the `aws` vendor. AWS-specific options.
   ReadCostsRequestAwsOptions awsOptions = 6;
+
+  // Optional. Valid only for the `gcp` vendor. GCP-specific options, returned exactly as saved so they can be reused in `ReadCosts`.
+  ReadCostsRequestGcpOptions gcpOptions = 7;
 }
 
 // Request message for the CreateCostFilters rpc.
 message CreateCostFiltersRequest {
-  // Required. At the moment, only `aws` is supported.
+  // Required. Supported values are `aws` and `gcp`.
   string vendor = 1;
 
-  // Required. Filter Name. Specify characters between 1 ~ 100
+  // Required. Filter name, 1 to 100 bytes long in UTF-8 (multi-byte characters count as more than one byte). Other lengths return `OUT_OF_RANGE`.
   string filterName = 2;
 
   // Required. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.
   //
   // For AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro).
+  //
+  // For GCP, must be your own billing group (company) ID; any other value returns `NOT_FOUND`.
   string groupId = 3;
 
   // Required. You can set it to a single account or a comma-separated list of accounts.
   //
   // For AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization.
+  //
+  // For GCP, each entry is a project ID or an account group ID (`grp-` prefix), or set this to `*` for all accounts in your billing group or access group. Entries that cannot be resolved return `NOT_FOUND`.
   string accountId = 4;
 
-  // Required. Valid only for the `aws` vendor. AWS-specific options.
+  // Required for the `aws` vendor; not used for other vendors. AWS-specific options.
   ReadCostsRequestAwsOptions awsOptions = 5;
+
+  // Required for the `gcp` vendor; not used for other vendors. GCP-specific options, saved exactly as sent. A filter with an empty key returns `INVALID_ARGUMENT`.
+  ReadCostsRequestGcpOptions gcpOptions = 6;
 }
 
 // Response message for the CreateCostFilters rpc.
@@ -2160,27 +2174,34 @@ message CreateCostFiltersResponse {
 
 // Request message for the UpdateCostFilters rpc.
 message UpdateCostFiltersRequest {
-  // Required. At the moment, only `aws` is supported.
+  // Required. Supported values are `aws` and `gcp`.
   string vendor = 1;
 
   // Required. Filter Id.
   string filterId = 2;
 
-  // Required. Filter Name. Specify characters between 1 ~ 100
+  // Required. Filter name, 1 to 100 bytes long in UTF-8 (multi-byte characters count as more than one byte). Other lengths return `OUT_OF_RANGE`.
   string filterName = 3;
 
   // Required. If set, reads the usage-based cost details of this group. Only valid for Ripple users. Implied as the parent billing group for Wave(Pro) users.
   //
   // For AWS Ripple, only billing internal ids are supported at the moment. Overriden when `accountId` is set to anything other than `*`. Set this and `accountId` to `*` to read the usage-based cost details of the whole organization. Optional for AWS Wave(Pro).
+  //
+  // For GCP, must be your own billing group (company) ID; any other value returns `NOT_FOUND`.
   string groupId = 4;
 
   // Required. You can set it to a single account or a comma-separated list of accounts.
   //
   // For AWS, setting this will override `groupId`. Set this and `groupId` to `*` to read the usage-based cost details of the whole organization.
+  //
+  // For GCP, each entry is a project ID or an account group ID (`grp-` prefix), or set this to `*` for all accounts in your billing group or access group. Entries that cannot be resolved return `NOT_FOUND`.
   string accountId = 5;
 
-  // Required. Valid only for the `aws` vendor. AWS-specific options.
+  // Required for the `aws` vendor; not used for other vendors. AWS-specific options.
   ReadCostsRequestAwsOptions awsOptions = 6;
+
+  // Required for the `gcp` vendor; not used for other vendors. GCP-specific options, saved exactly as sent. A filter with an empty key returns `INVALID_ARGUMENT`.
+  ReadCostsRequestGcpOptions gcpOptions = 7;
 }
 
 // Response message for the UpdateCostFilters rpc.
@@ -2191,7 +2212,7 @@ message UpdateCostFiltersResponse {
 
 // Request message for the DeleteCostFilters rpc.
 message DeleteCostFiltersRequest {
-  // Required. At the moment, only `aws` is supported.
+  // Required. Supported values are `aws` and `gcp`.
   string vendor = 1;
 
   // Required. Filter Id to delete.
