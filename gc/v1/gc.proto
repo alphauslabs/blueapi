@@ -530,6 +530,22 @@ rpc AcceptTerms(
   };
 }
 
+// ------------------------ GCP INTEGRATION ------------------------
+
+// WORK-IN-PROGRESS: ConfigureGCPOnboarding configures the GCP onboarding process for the authenticated user.
+rpc ConfigureGCPOnboarding(ConfigureGCPOnboardingRequest) returns (ConfigureGCPOnboardingResponse) {
+  option (google.api.http) = {
+    post: "/v1/onboarding/gcp/configure"
+    body: "*"
+  };
+}
+
+// WORK-IN-PROGRESS: GetGCPDeploymentScript retrieves the GCP deployment script for the given onboarding ID.
+rpc GetGCPDeploymentScript(GetGCPDeploymentScriptRequest) returns (GetGCPDeploymentScriptResponse) {
+  option (google.api.http) = {
+    get: "/v1/onboarding/gcp/{onboardingId}/deploymentscript"
+  };
+}
 
 }
 
@@ -599,6 +615,78 @@ enum UsageType {
 }
 
 // ####################### REQUEST MESSAGES #######################
+
+// Request message for retrieving the GCP deployment script.
+message GetGCPDeploymentScriptRequest {
+  // Onboarding ID for the GCP account.
+  string onboardingId = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+}
+
+// Response message containing the GCP deployment script.
+message GetGCPDeploymentScriptResponse {
+  // Generated deployment script that can be used to deploy the necessary resources for GCP onboarding.
+  string deploymentScript = 1;
+}
+
+// Request message for configuring GCP onboarding.
+message ConfigureGCPOnboardingRequest {
+  // Action to be performed for GCP onboarding.
+  enum Action {
+
+    // Unspecified action for GCP onboarding. This should not be used in practice.
+    ACTION_UNSPECIFIED = 0;
+
+    // Starts the GCP onboarding process. This generates onboarding ID that will be used in subsequent steps.
+    START_ONBOARDING = 1;
+
+    // Submits the payer details for GCP onboarding. This step requires the onboarding ID generated in the previous step.
+    // This step involves providing the necessary payer information to proceed with GCP onboarding.
+    SUBMIT_PAYER_DETAILS = 2;
+
+    // Verifies the provided information and completes the GCP onboarding process.
+    COMPLETE_ONBOARDING = 3;
+  }
+
+  // Action to be performed for GCP onboarding. This determines the step in the onboarding process that will be executed.
+  Action action = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+
+  // Onboarding ID generated in the previous step of the GCP onboarding process. Required for subsequent actions.
+  optional string onboardingId = 2;
+
+  // Billing account ID associated with the GCP onboarding.
+  optional string billingAccountId = 3;
+
+  // Name of the GCP account.
+  optional string accountName = 4;
+
+  // GCP organization ID associated with the onboarding.
+  optional string organizationId = 5;
+
+  // GCP project ID associated with the onboarding.
+  optional string projectId = 6;
+  
+  // Name of the billing dataset that contains the billing data for this GCP account.
+  optional string billingDataset = 7;
+
+  // Location of the billing data for this GCP account.
+  optional string dataLocation = 8;
+
+  // Name of the pricing dataset for this GCP account.
+  optional string pricingDataset = 9;
+
+  // Name of the committed use discount (CUD) dataset for this GCP account.
+  optional string cudDataset = 10;
+}
+
+// Response message for configuring GCP onboarding.
+message ConfigureGCPOnboardingResponse {
+  // Onboarding ID generated for the GCP account during the onboarding process.
+  string onboardingId = 1;
+}
 
 message ConfigureAzureEaOnboardingRequest {
   enum Action {
@@ -2391,6 +2479,30 @@ message PayerAccountDetails {
 
   // Optional. Agreement type, e.g. "azureea". Only populated when vendor is AZURE; empty otherwise.
   optional string agreementType = 12;
+
+  // Optional. GCP project ID associated with this payer account.
+  // Only populated when vendor is GCP; empty otherwise.
+  optional string projectId = 13;
+
+  // Optional. GCP organization ID associated with this payer account.
+  // Only populated when vendor is GCP; empty otherwise.
+  optional string organizationId = 14;
+
+  // Optional. Name of the BigQuery dataset that contains the billing data for
+  // this GCP account. Only populated when vendor is GCP; empty otherwise.
+  optional string billingDataset = 15;
+
+  // Optional. Location of the billing data for this GCP account.
+  // Only populated when vendor is GCP; empty otherwise.
+  optional string dataLocation = 16;
+
+  // Optional. Name of the pricing dataset for this GCP account.
+  // Only populated when vendor is GCP; empty otherwise.
+  optional string pricingDataset = 17;
+
+  // Optional. Name of the committed use discount (CUD) dataset for this GCP
+  // account. Only populated when vendor is GCP; empty otherwise.
+  optional string cudDataset = 18;
 }
 
 message ListPayerAccountsResponse {

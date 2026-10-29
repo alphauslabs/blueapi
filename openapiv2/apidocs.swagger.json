@@ -13660,6 +13660,72 @@
         ]
       }
     },
+    "/v1/onboarding/gcp/configure": {
+      "post": {
+        "summary": "WORK-IN-PROGRESS: ConfigureGCPOnboarding configures the GCP onboarding process for the authenticated user.",
+        "operationId": "GuaranteedCommitments_ConfigureGCPOnboarding",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ConfigureGCPOnboardingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Request message for configuring GCP onboarding.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ConfigureGCPOnboardingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
+    "/v1/onboarding/gcp/{onboardingId}/deploymentscript": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: GetGCPDeploymentScript retrieves the GCP deployment script for the given onboarding ID.",
+        "operationId": "GuaranteedCommitments_GetGCPDeploymentScript",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetGCPDeploymentScriptResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "onboardingId",
+            "description": "Onboarding ID for the GCP account.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/onboarding/status:read": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Retrieves the latest onboarding status for:\n- an MSP\n- a company under an MSP\n- a payer account under an MSP",
@@ -24371,18 +24437,6 @@
         }
       },
       "title": "BillingGroup tags adding setting"
-    },
-    "ConfigureAzureEaOnboardingRequestAction": {
-      "type": "string",
-      "enum": [
-        "START_ONBOARDING",
-        "SUBMIT_PAYER_DETAILS",
-        "CONFIGURE_GC_RESOURCE_STORAGE",
-        "CHECK_AUTHORIZATION",
-        "SUBMIT_ACCOUNT_SCOPE",
-        "COMPLETE_ONBOARDING"
-      ],
-      "default": "START_ONBOARDING"
     },
     "ContainerCostUsageRequestFilterCriteria": {
       "type": "object",
@@ -38473,7 +38527,7 @@
       "type": "object",
       "properties": {
         "action": {
-          "$ref": "#/definitions/ConfigureAzureEaOnboardingRequestAction"
+          "$ref": "#/definitions/v1ConfigureAzureEaOnboardingRequestAction"
         },
         "onboardingId": {
           "type": "string"
@@ -38507,6 +38561,18 @@
         "action"
       ]
     },
+    "v1ConfigureAzureEaOnboardingRequestAction": {
+      "type": "string",
+      "enum": [
+        "START_ONBOARDING",
+        "SUBMIT_PAYER_DETAILS",
+        "CONFIGURE_GC_RESOURCE_STORAGE",
+        "CHECK_AUTHORIZATION",
+        "SUBMIT_ACCOUNT_SCOPE",
+        "COMPLETE_ONBOARDING"
+      ],
+      "default": "START_ONBOARDING"
+    },
     "v1ConfigureAzureEaOnboardingResponse": {
       "type": "object",
       "properties": {
@@ -38514,6 +38580,76 @@
           "type": "string"
         }
       }
+    },
+    "v1ConfigureGCPOnboardingRequest": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "$ref": "#/definitions/v1ConfigureGCPOnboardingRequestAction",
+          "description": "Action to be performed for GCP onboarding. This determines the step in the onboarding process that will be executed."
+        },
+        "onboardingId": {
+          "type": "string",
+          "description": "Onboarding ID generated in the previous step of the GCP onboarding process. Required for subsequent actions."
+        },
+        "billingAccountId": {
+          "type": "string",
+          "description": "Billing account ID associated with the GCP onboarding."
+        },
+        "accountName": {
+          "type": "string",
+          "description": "Name of the GCP account."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "GCP organization ID associated with the onboarding."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "GCP project ID associated with the onboarding."
+        },
+        "billingDataset": {
+          "type": "string",
+          "description": "Name of the billing dataset that contains the billing data for this GCP account."
+        },
+        "dataLocation": {
+          "type": "string",
+          "description": "Location of the billing data for this GCP account."
+        },
+        "pricingDataset": {
+          "type": "string",
+          "description": "Name of the pricing dataset for this GCP account."
+        },
+        "cudDataset": {
+          "type": "string",
+          "description": "Name of the committed use discount (CUD) dataset for this GCP account."
+        }
+      },
+      "description": "Request message for configuring GCP onboarding.",
+      "required": [
+        "action"
+      ]
+    },
+    "v1ConfigureGCPOnboardingRequestAction": {
+      "type": "string",
+      "enum": [
+        "ACTION_UNSPECIFIED",
+        "START_ONBOARDING",
+        "SUBMIT_PAYER_DETAILS",
+        "COMPLETE_ONBOARDING"
+      ],
+      "default": "ACTION_UNSPECIFIED",
+      "description": "Action to be performed for GCP onboarding.\n\n - ACTION_UNSPECIFIED: Unspecified action for GCP onboarding. This should not be used in practice.\n - START_ONBOARDING: Starts the GCP onboarding process. This generates onboarding ID that will be used in subsequent steps.\n - SUBMIT_PAYER_DETAILS: Submits the payer details for GCP onboarding. This step requires the onboarding ID generated in the previous step.\nThis step involves providing the necessary payer information to proceed with GCP onboarding.\n - COMPLETE_ONBOARDING: Verifies the provided information and completes the GCP onboarding process."
+    },
+    "v1ConfigureGCPOnboardingResponse": {
+      "type": "object",
+      "properties": {
+        "onboardingId": {
+          "type": "string",
+          "description": "Onboarding ID generated for the GCP account during the onboarding process."
+        }
+      },
+      "description": "Response message for configuring GCP onboarding."
     },
     "v1ConfirmGoogleSheetAccessRequest": {
       "type": "object",
@@ -43473,6 +43609,16 @@
         }
       }
     },
+    "v1GetGCPDeploymentScriptResponse": {
+      "type": "object",
+      "properties": {
+        "deploymentScript": {
+          "type": "string",
+          "description": "Generated deployment script that can be used to deploy the necessary resources for GCP onboarding."
+        }
+      },
+      "description": "Response message containing the GCP deployment script."
+    },
     "v1GetGuaranteedCommitmentTemplateUrlResponse": {
       "type": "object",
       "properties": {
@@ -46562,6 +46708,30 @@
         "agreementType": {
           "type": "string",
           "description": "Optional. Agreement type, e.g. \"azureea\". Only populated when vendor is AZURE; empty otherwise."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Optional. GCP project ID associated with this payer account.\nOnly populated when vendor is GCP; empty otherwise."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Optional. GCP organization ID associated with this payer account.\nOnly populated when vendor is GCP; empty otherwise."
+        },
+        "billingDataset": {
+          "type": "string",
+          "description": "Optional. Name of the BigQuery dataset that contains the billing data for\nthis GCP account. Only populated when vendor is GCP; empty otherwise."
+        },
+        "dataLocation": {
+          "type": "string",
+          "description": "Optional. Location of the billing data for this GCP account.\nOnly populated when vendor is GCP; empty otherwise."
+        },
+        "pricingDataset": {
+          "type": "string",
+          "description": "Optional. Name of the pricing dataset for this GCP account.\nOnly populated when vendor is GCP; empty otherwise."
+        },
+        "cudDataset": {
+          "type": "string",
+          "description": "Optional. Name of the committed use discount (CUD) dataset for this GCP\naccount. Only populated when vendor is GCP; empty otherwise."
         }
       }
     },
