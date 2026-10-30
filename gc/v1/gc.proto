@@ -355,6 +355,26 @@ service GuaranteedCommitments {
     };
   }
 
+  // Ripple only. Gets a billing group's GC purchase notification setting, together with
+  // the MSP's Ripple notification channels to choose from. Returns a disabled setting
+  // with no channels when none has been saved. Wave callers get PERMISSION_DENIED.
+  rpc GetBillingGroupPurchaseNotification(GetBillingGroupPurchaseNotificationRequest) returns (GetBillingGroupPurchaseNotificationResponse) {
+    option (google.api.http) = {
+      get: "/v1/managements/billinggroups/{companyId}/purchasenotification"
+    };
+  }
+
+  // Ripple only. Replaces a billing group's GC purchase notification setting. Newly added
+  // channel IDs must exist and belong to the caller's MSP; channels already saved are not
+  // re-checked. When enabled, at least one channel must be enabled and have a destination.
+  // Wave callers get PERMISSION_DENIED.
+  rpc UpdateBillingGroupPurchaseNotification(UpdateBillingGroupPurchaseNotificationRequest) returns (BillingGroupPurchaseNotification) {
+    option (google.api.http) = {
+      put: "/v1/managements/billinggroups/{companyId}/purchasenotification"
+      body: "*"
+    };
+  }
+
   rpc ValidateBillingGroup(ValidateBillingGroupRequest) returns (ValidateBillingGroupResponse) {
   option (google.api.http) = {
     post: "/v1/onboarding/billinggroup:validate"
@@ -1023,6 +1043,24 @@ message SetBillingGroupStatusRequest {
 }
 
 message GetBillingGroupStatusRequest {}
+
+// Request message for the GuaranteedCommitments.GetBillingGroupPurchaseNotification rpc.
+message GetBillingGroupPurchaseNotificationRequest {
+  // Required. The billing group's company ID. Must be one of the caller's MSP companies.
+  string companyId = 1;
+}
+
+// Request message for the GuaranteedCommitments.UpdateBillingGroupPurchaseNotification rpc.
+message UpdateBillingGroupPurchaseNotificationRequest {
+  // Required. The billing group's company ID. Must be one of the caller's MSP companies.
+  string companyId = 1;
+
+  // Whether to notify on GC purchases made from this billing group.
+  bool enabled = 2;
+
+  // Ripple notification channel IDs to notify. Replaces the stored list.
+  repeated string notificationChannelIds = 3;
+}
 
 message ValidateBillingGroupRequest {
   // Required. Company identifier.
@@ -2574,6 +2612,53 @@ message GetBillingGroupStatusResponse {
   ListBillingGroupsResponse.BillingGroup billingGroup = 1;
 
   TermsAcceptance termsAcceptance = 2;
+}
+
+// A billing group's GC purchase notification setting (Ripple only).
+message BillingGroupPurchaseNotification {
+  // The billing group's company ID.
+  string companyId = 1;
+
+  // Whether GC purchases from this billing group are notified.
+  bool enabled = 2;
+
+  // Ripple notification channel IDs, as stored. An ID missing from the MSP's available
+  // channels refers to a channel that has since been deleted.
+  repeated string notificationChannelIds = 3;
+
+  // Who last updated the setting. Empty if never saved.
+  string updatedBy = 4;
+
+  // When the setting was last updated, RFC3339. Empty if never saved.
+  string updatedAt = 5;
+}
+
+// A Ripple notification channel the MSP can choose. Never includes destinations
+// (email addresses or webhook URLs).
+message NotificationChannelSummary {
+  // The channel ID.
+  string id = 1;
+
+  // The channel's display name.
+  string name = 2;
+
+  // The channel type: "email", "slack" or "msteams".
+  string type = 3;
+
+  // Whether the channel is enabled in Ripple.
+  bool enabled = 4;
+
+  // Whether the channel can receive notifications: enabled and has a destination.
+  bool usable = 5;
+}
+
+// Response message for the GuaranteedCommitments.GetBillingGroupPurchaseNotification rpc.
+message GetBillingGroupPurchaseNotificationResponse {
+  // The billing group's setting.
+  BillingGroupPurchaseNotification setting = 1;
+
+  // The MSP's Ripple notification channels.
+  repeated NotificationChannelSummary availableChannels = 2;
 }
 
 message ValidateBillingGroupResponse {
