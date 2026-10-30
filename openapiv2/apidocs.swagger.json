@@ -11946,76 +11946,6 @@
         ]
       }
     },
-    "/v1/managements/billinggroups/{companyId}/purchasenotification": {
-      "get": {
-        "summary": "Ripple only. Gets a billing group's GC purchase notification setting, together with\nthe MSP's Ripple notification channels to choose from. When none has been saved, the\nsetting is disabled with empty notificationChannelIds; availableChannels lists all of\nthe MSP's channels whether or not a setting was saved. Wave callers get PERMISSION_DENIED.",
-        "operationId": "GuaranteedCommitments_GetBillingGroupPurchaseNotification",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetBillingGroupPurchaseNotificationResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "companyId",
-            "description": "Required. The billing group's company ID. Must be one of the caller's MSP companies.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      },
-      "put": {
-        "summary": "Ripple only. Replaces a billing group's GC purchase notification setting. Newly added\nchannel IDs must exist and belong to the caller's MSP; channels already saved are not\nre-checked. When enabled, at least one channel must be enabled and have a destination.\nWave callers get PERMISSION_DENIED.",
-        "operationId": "GuaranteedCommitments_UpdateBillingGroupPurchaseNotification",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1BillingGroupPurchaseNotification"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "companyId",
-            "description": "Required. The billing group's company ID. Must be one of the caller's MSP companies.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/GuaranteedCommitmentsUpdateBillingGroupPurchaseNotificationBody"
-            }
-          }
-        ],
-        "tags": [
-          "GuaranteedCommitments"
-        ]
-      }
-    },
     "/v1/marketplace/info": {
       "post": {
         "summary": "Adding orgId to marketplace customers",
@@ -13037,6 +12967,76 @@
         ],
         "tags": [
           "Billing"
+        ]
+      }
+    },
+    "/v1/notifications/billinggroups/{companyId}/purchase": {
+      "get": {
+        "summary": "Ripple only. Gets a billing group's GC purchase notification setting, together with\nthe MSP's Ripple notification channels to choose from. When none has been saved, the\nsetting is disabled with empty notificationChannelIds; availableChannels lists all of\nthe MSP's channels whether or not a setting was saved. Wave callers get PERMISSION_DENIED.",
+        "operationId": "GuaranteedCommitments_GetBillingGroupPurchaseNotification",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBillingGroupPurchaseNotificationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "companyId",
+            "description": "Required. The billing group's company ID. Must be one of the caller's MSP companies.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      },
+      "put": {
+        "summary": "Ripple only. Replaces a billing group's GC purchase notification setting. Newly added\nchannel IDs must exist and belong to the caller's MSP; channels already saved are not\nre-checked. When enabled, at least one channel must be enabled and have a destination.\nWave callers get PERMISSION_DENIED.",
+        "operationId": "GuaranteedCommitments_UpdateBillingGroupPurchaseNotification",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1BillingGroupPurchaseNotification"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "companyId",
+            "description": "Required. The billing group's company ID. Must be one of the caller's MSP companies.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GuaranteedCommitmentsUpdateBillingGroupPurchaseNotificationBody"
+            }
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
         ]
       }
     },
