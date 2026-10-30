@@ -356,8 +356,9 @@ service GuaranteedCommitments {
   }
 
   // Ripple only. Gets a billing group's GC purchase notification setting, together with
-  // the MSP's Ripple notification channels to choose from. Returns a disabled setting
-  // with no channels when none has been saved. Wave callers get PERMISSION_DENIED.
+  // the MSP's Ripple notification channels to choose from. When none has been saved, the
+  // setting is disabled with empty notificationChannelIds; availableChannels lists all of
+  // the MSP's channels whether or not a setting was saved. Wave callers get PERMISSION_DENIED.
   rpc GetBillingGroupPurchaseNotification(GetBillingGroupPurchaseNotificationRequest) returns (GetBillingGroupPurchaseNotificationResponse) {
     option (google.api.http) = {
       get: "/v1/managements/billinggroups/{companyId}/purchasenotification"
