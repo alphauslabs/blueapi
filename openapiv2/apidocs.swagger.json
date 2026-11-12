@@ -149,7 +149,7 @@
   "paths": {
     "/admin/v1/acctgroups": {
       "get": {
-        "summary": "Lists all account groups.",
+        "summary": "Lists all account groups. Wave sub-users require ReadGroups or ModifyGroups;\ngroup resource policies limit which groups are returned.",
         "operationId": "Admin_ListAccountGroups",
         "responses": {
           "200": {
@@ -188,7 +188,7 @@
         ]
       },
       "post": {
-        "summary": "Creates an account group.",
+        "summary": "Creates an account group. Wave sub-users require ModifyGroups.",
         "operationId": "Admin_CreateAccountGroup",
         "responses": {
           "200": {
@@ -222,7 +222,7 @@
     },
     "/admin/v1/acctgroups/{id}": {
       "get": {
-        "summary": "Gets an account group.",
+        "summary": "Gets an account group. Wave sub-users require ReadGroups or ModifyGroups\nand access to the requested group under their group resource policies.",
         "operationId": "Admin_GetAccountGroup",
         "responses": {
           "200": {
@@ -258,7 +258,7 @@
         ]
       },
       "delete": {
-        "summary": "Deletes an account group.",
+        "summary": "Deletes an account group. Wave sub-users require ModifyGroups and access\nto the requested group under their group resource policies.",
         "operationId": "Admin_DeleteAccountGroup",
         "responses": {
           "200": {
@@ -295,7 +295,7 @@
         ]
       },
       "put": {
-        "summary": "Updates an account group. The account id list fully replaces the group's current membership.",
+        "summary": "Updates an account group. The account id list fully replaces the group's current membership.\nWave sub-users require ModifyGroups and access to the requested group.",
         "operationId": "Admin_UpdateAccountGroup",
         "responses": {
           "200": {
@@ -22773,7 +22773,7 @@
     },
     "/v1/{vendor}/tags": {
       "get": {
-        "summary": "Lists all vendor tags.",
+        "summary": "Lists all vendor tags. Wave sub-users require ReadTags for AWS.",
         "operationId": "Cost_ListTags",
         "responses": {
           "200": {
@@ -22828,7 +22828,7 @@
     },
     "/v1/{vendor}/tags/groups/{groupId}": {
       "get": {
-        "summary": "Lists all vendor tags.",
+        "summary": "Lists all vendor tags. Wave sub-users require ReadTags for AWS.",
         "operationId": "Cost_ListTags2",
         "responses": {
           "200": {
