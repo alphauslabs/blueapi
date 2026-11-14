@@ -1830,6 +1830,27 @@ message SavingsOpportunities {
   bool revenueShareAvailable = 5;
   // When the Archera and Aqua data was last synced.
   repeated DataFreshness freshness = 6;
+  // The billing groups behind these figures, one per billing group with a counted commitment.
+  // Sorted by `potentialMonthlySavings`, highest first, then by name; billing groups with no
+  // priced commitment come last.
+  repeated BillingGroupOpportunity billingGroups = 7;
+}
+
+// One billing group's share of the Savings Opportunities figures.
+message BillingGroupOpportunity {
+  // The billing group ID shown in Ripple.
+  string billingGroupId = 1;
+  // The billing group name shown in Ripple.
+  string billingGroupName = 2;
+  // The billing group's registration bucket. Partially Registered or Unregistered.
+  RegistrationBucket bucket = 3;
+  // This billing group's share of `SavingsOpportunities.potentialMonthlySavings`: the sum over its
+  // priced commitments. USD. Unset when `pricedCommitmentCount` is 0.
+  double potentialMonthlySavings = 4;
+  // This billing group's expiring RIs/SPs counted in `SavingsOpportunities.expiringCommitmentCount`.
+  int32 expiringCommitmentCount = 5;
+  // How many of those could be priced. When 0, the billing group has no savings figure.
+  int32 pricedCommitmentCount = 6;
 }
 
 // One expiring RI or SP.
