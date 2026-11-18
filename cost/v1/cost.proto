@@ -1928,6 +1928,14 @@ message AwsExportReportOptions {
   // Optional. Per-report column overrides.
   // Keys must be valid query names for registered AWS export-report queries.
   map<string, Columns> columns_by_query = 5;
+
+  // Optional. Payer account IDs (12 digits each) to limit the export to.
+  // If empty, all payers are included.
+  // Only payer-scoped report types accept this field. At the moment that is
+  // the RDS RI report type, whose query is "rds_ri_usage".
+  // A non-empty list with queries of any other report type rejects the whole
+  // request with InvalidArgument.
+  repeated string payer_ids = 6 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Request message for GetInvoiceReadiness.
@@ -1938,6 +1946,18 @@ message GetInvoiceReadinessRequest {
 
   // Required. Billing month in YYYY-MM format.
   string month = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. Export report type whose readiness to check.
+  // Accepted values: "reserveshield", "rdsri".
+  // If empty, defaults to "reserveshield", so existing callers are unchanged.
+  // Unknown report types, or types without a readiness check, return InvalidArgument.
+  string report_type = 3 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. Payer account IDs (12 digits each) to limit the check to.
+  // If empty, all payers are checked.
+  // Only payer-scoped report types accept this field. At the moment that is "rdsri".
+  // A non-empty list with an empty or any other report type returns InvalidArgument.
+  repeated string payer_ids = 4 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Response message for GetInvoiceReadiness.
