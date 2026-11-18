@@ -22678,14 +22678,14 @@
           },
           {
             "name": "reportType",
-            "description": "Optional. Export report type whose readiness to check, e.g. \"rdsri\".\nIf empty, defaults to \"reserveshield\", so existing callers are unchanged.\nUnknown report types, or types without a readiness check, return InvalidArgument.",
+            "description": "Optional. Export report type whose readiness to check.\nAccepted values: \"reserveshield\", \"rdsri\".\nIf empty, defaults to \"reserveshield\", so existing callers are unchanged.\nUnknown report types, or types without a readiness check, return InvalidArgument.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "payerIds",
-            "description": "Optional. Payer account IDs (12 digits each) to limit the check to.\nIf empty, all payers are checked.\nOnly payer-scoped report types accept this field;\na non-empty list with any other report type returns InvalidArgument.",
+            "description": "Optional. Payer account IDs (12 digits each) to limit the check to.\nIf empty, all payers are checked.\nOnly payer-scoped report types accept this field. At the moment that is \"rdsri\".\nA non-empty list with an empty or any other report type returns InvalidArgument.",
             "in": "query",
             "required": false,
             "type": "array",
@@ -36505,7 +36505,7 @@
           "items": {
             "type": "string"
           },
-          "description": "Optional. Payer account IDs (12 digits each) to limit the export to.\nIf empty, all payers are included.\nOnly report types that support payer scope accept this field;\na non-empty list with any other report type returns InvalidArgument."
+          "description": "Optional. Payer account IDs (12 digits each) to limit the export to.\nIf empty, all payers are included.\nOnly payer-scoped report types accept this field. At the moment that is\nthe RDS RI report type, whose query is \"rds_ri_usage\".\nA non-empty list with queries of any other report type rejects the whole\nrequest with InvalidArgument."
         }
       },
       "description": "AWS export report options for ExportReport.",
