@@ -7973,6 +7973,37 @@
         ]
       }
     },
+    "/v1/commitments/purchaseplans/{planId}/history": {
+      "get": {
+        "summary": "WORK-IN-PROGRESS: Retrieves the activity history of a specific purchase plan.\nReturns only plan activity events (no comments), oldest first.",
+        "operationId": "GuaranteedCommitments_GetPurchasePlanHistory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetPurchasePlanHistoryResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "GuaranteedCommitments"
+        ]
+      }
+    },
     "/v1/commitments/purchaseplans:update": {
       "post": {
         "summary": "WORK-IN-PROGRESS: Get the updated details of the plan after the apply plan.",
@@ -44128,6 +44159,19 @@
         },
         "name": {
           "type": "string"
+        }
+      }
+    },
+    "v1GetPurchasePlanHistoryResponse": {
+      "type": "object",
+      "properties": {
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PlanHistoryEntry"
+          },
+          "title": "Plan activity events only, oldest first"
         }
       }
     },

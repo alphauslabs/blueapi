@@ -211,6 +211,14 @@ service GuaranteedCommitments {
     };
   }
 
+  // WORK-IN-PROGRESS: Retrieves the activity history of a specific purchase plan.
+  // Returns only plan activity events (no comments), oldest first.
+  rpc GetPurchasePlanHistory(GetPurchasePlanHistoryRequest) returns (GetPurchasePlanHistoryResponse) {
+    option (google.api.http) = {
+      get: "/v1/commitments/purchaseplans/{planId}/history"
+    };
+  }
+
   // WORK-IN-PROGRESS: Saves a commitment purchase plan as draft.
   rpc SaveCommitmentsPlanAsDraft(SaveCommitmentsPlanAsDraftRequest) returns (DefaultPurchasePlan) {
     option (google.api.http) = {
@@ -894,6 +902,10 @@ message ListPurchasePlansBySegmentRequest {
 }
 
 message GetPurchasePlansDetailsRequest {
+  string planId = 1;
+}
+
+message GetPurchasePlanHistoryRequest {
   string planId = 1;
 }
 // message GetDraftPurchasePlansDetailsRequest {
@@ -2801,6 +2813,11 @@ message GetPurchasePlansDetailsResponse {
 
   // Audit history of the plan
   repeated PlanHistoryEntry history = 4;
+}
+
+message GetPurchasePlanHistoryResponse {
+  // Plan activity events only, oldest first
+  repeated PlanHistoryEntry history = 1;
 }
 
 message CreateCustomCommitmentPlanResponse {
