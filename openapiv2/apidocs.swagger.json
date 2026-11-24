@@ -37164,6 +37164,39 @@
       },
       "description": "Response row for paginated billing groups table."
     },
+    "v1BillingGroupOpportunity": {
+      "type": "object",
+      "properties": {
+        "billingGroupId": {
+          "type": "string",
+          "description": "The billing group ID shown in Ripple."
+        },
+        "billingGroupName": {
+          "type": "string",
+          "description": "The billing group name shown in Ripple."
+        },
+        "bucket": {
+          "$ref": "#/definitions/v1RegistrationBucket",
+          "description": "The billing group's registration bucket. Partially Registered or Unregistered."
+        },
+        "potentialMonthlySavings": {
+          "type": "number",
+          "format": "double",
+          "description": "This billing group's share of `SavingsOpportunities.potentialMonthlySavings`: the sum over its\npriced commitments. USD. Unset when `pricedCommitmentCount` is 0."
+        },
+        "expiringCommitmentCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "This billing group's expiring RIs/SPs counted in `SavingsOpportunities.expiringCommitmentCount`."
+        },
+        "pricedCommitmentCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "How many of those could be priced. When 0, the billing group has no savings figure."
+        }
+      },
+      "description": "One billing group's share of the Savings Opportunities figures."
+    },
     "v1BillingGroupPurchaseNotification": {
       "type": "object",
       "properties": {
@@ -48795,6 +48828,14 @@
             "$ref": "#/definitions/v1DataFreshness"
           },
           "description": "When the Archera and Aqua data was last synced."
+        },
+        "billingGroups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1BillingGroupOpportunity"
+          },
+          "description": "The billing groups behind these figures, one per billing group with a counted commitment.\nSorted by `potentialMonthlySavings`, highest first, then by name; billing groups with no\npriced commitment come last."
         }
       },
       "description": "Savings opportunity summary for RIs/SPs expiring within 90 days in billing groups that are not\nRegistered. Savings and premiums use the simulator's default settings (1-Year Guarantee, 100% coverage,\n100% utilization)."
