@@ -25,21 +25,23 @@ service Admin {
     }
   };
 
-  // Lists all account groups.
+  // Lists all account groups. Wave sub-users require ReadGroups or ModifyGroups;
+  // group resource policies limit which groups are returned.
   rpc ListAccountGroups(ListAccountGroupsRequest) returns (stream ListAccountGroupsResponse) {
     option (google.api.http) = {
       get: "/admin/v1/acctgroups"
     };
   }
 
-  // Gets an account group.
+  // Gets an account group. Wave sub-users require ReadGroups or ModifyGroups
+  // and access to the requested group under their group resource policies.
   rpc GetAccountGroup(GetAccountGroupRequest) returns (GetAccountGroupResponse) {
     option (google.api.http) = {
       get: "/admin/v1/acctgroups/{id}"
     };
   }
 
-  // Creates an account group.
+  // Creates an account group. Wave sub-users require ModifyGroups.
   rpc CreateAccountGroup(CreateAccountGroupRequest) returns (CreateAccountGroupResponse) {
     option (google.api.http) = {
       post: "/admin/v1/acctgroups"
@@ -48,6 +50,7 @@ service Admin {
   }
 
   // Updates an account group. The account id list fully replaces the group's current membership.
+  // Wave sub-users require ModifyGroups and access to the requested group.
   rpc UpdateAccountGroup(UpdateAccountGroupRequest) returns (UpdateAccountGroupResponse) {
     option (google.api.http) = {
       put: "/admin/v1/acctgroups/{id}"
@@ -55,7 +58,8 @@ service Admin {
     };
   }
 
-  // Deletes an account group.
+  // Deletes an account group. Wave sub-users require ModifyGroups and access
+  // to the requested group under their group resource policies.
   rpc DeleteAccountGroup(DeleteAccountGroupRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/admin/v1/acctgroups/{id}"
