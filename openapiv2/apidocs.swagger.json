@@ -37225,6 +37225,25 @@
           "type": "integer",
           "format": "int32",
           "description": "How many of those could be priced. When 0, the billing group has no savings figure."
+        },
+        "onDemandSpend": {
+          "type": "number",
+          "format": "double",
+          "description": "This billing group's share of `SavingsOpportunities.onDemandSpend`. USD. Unset for a tag\nbilling group, or when `SavingsOpportunities.onDemandAvailable` is false."
+        },
+        "coveredSpend": {
+          "type": "number",
+          "format": "double",
+          "description": "This billing group's share of `SavingsOpportunities.coveredSpend`. USD. Unset for a tag billing\ngroup, or when `SavingsOpportunities.onDemandAvailable` is false."
+        },
+        "riSpCoverage": {
+          "type": "number",
+          "format": "double",
+          "description": "This billing group's RI/SP coverage, as a percentage from 0 to 100. Unset when it had no\ncountable usage, for a tag billing group, or when `SavingsOpportunities.onDemandAvailable` is\nfalse."
+        },
+        "tagBillingGroup": {
+          "type": "boolean",
+          "description": "True for a tag billing group. Its usage cannot be attributed by account, so its on-demand\nfigures are not available."
         }
       },
       "description": "One billing group's share of the Savings Opportunities figures."
@@ -48881,7 +48900,35 @@
             "type": "object",
             "$ref": "#/definitions/v1BillingGroupOpportunity"
           },
-          "description": "The billing groups behind these figures, one per billing group with a counted commitment.\nSorted by `potentialMonthlySavings`, highest first, then by name; billing groups with no\npriced commitment come last."
+          "description": "The billing groups behind these figures: each billing group with a counted commitment, and,\nwhen `onDemandAvailable` is true, each billing group with `onDemandSpend` above zero and\nnothing expiring. Billing groups with a priced commitment come first, by\n`potentialMonthlySavings`, highest first; the rest follow by `onDemandSpend`, highest first;\nties by name. When `onDemandAvailable` is false, only billing groups with a counted commitment\nare listed, and those with no priced commitment come last, by name."
+        },
+        "onDemandSpend": {
+          "type": "number",
+          "format": "double",
+          "description": "What the same billing groups paid at on-demand rates in `onDemandMonth` for usage an RI or\nSavings Plan could have covered: the unblended cost of `Usage` line items in the MSP's Cost and\nUsage Report, for the services Guaranteed Commitments supports. Tag billing groups are not\nincluded. USD. Unset when `onDemandAvailable` is false."
+        },
+        "coveredSpend": {
+          "type": "number",
+          "format": "double",
+          "description": "The on-demand-equivalent cost (public on-demand cost of `DiscountedUsage` and\n`SavingsPlanCoveredUsage` line items) of the same usage already covered by an RI or Savings\nPlan in `onDemandMonth`. USD. Unset when `onDemandAvailable` is false."
+        },
+        "riSpCoverage": {
+          "type": "number",
+          "format": "double",
+          "description": "RI/SP coverage in `onDemandMonth`, as a percentage from 0 to 100:\n`coveredSpend` ÷ (`coveredSpend` + `onDemandSpend`) × 100. Unset when there was no countable\nusage (coverage is not applicable) or when `onDemandAvailable` is false."
+        },
+        "onDemandMonth": {
+          "type": "string",
+          "description": "The month `onDemandSpend`, `coveredSpend` and `riSpCoverage` cover, as `yyyy-mm`: the last\ncomplete calendar month in UTC, or the month before it during the first five days of a month."
+        },
+        "onDemandAvailable": {
+          "type": "boolean",
+          "description": "False when the Cost and Usage Report data could not be read. The other figures are unaffected."
+        },
+        "excludedTagBillingGroupCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "How many not-Registered tag billing groups were left out of the on-demand figures, since their\nusage cannot be attributed by account."
         }
       },
       "description": "Savings opportunity summary for RIs/SPs expiring within 90 days in billing groups that are not\nRegistered. Savings and premiums use the simulator's default settings (1-Year Guarantee, 100% coverage,\n100% utilization)."
