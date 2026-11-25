@@ -1847,10 +1847,34 @@ message SavingsOpportunities {
   bool revenueShareAvailable = 5;
   // When the Archera and Aqua data was last synced.
   repeated DataFreshness freshness = 6;
-  // The billing groups behind these figures, one per billing group with a counted commitment.
-  // Sorted by `potentialMonthlySavings`, highest first, then by name; billing groups with no
-  // priced commitment come last.
+  // The billing groups behind these figures: each billing group with a counted commitment, and,
+  // when `onDemandAvailable` is true, each billing group with `onDemandSpend` above zero and
+  // nothing expiring. Billing groups with a priced commitment come first, by
+  // `potentialMonthlySavings`, highest first; the rest follow by `onDemandSpend`, highest first;
+  // ties by name. When `onDemandAvailable` is false, only billing groups with a counted commitment
+  // are listed, and those with no priced commitment come last, by name.
   repeated BillingGroupOpportunity billingGroups = 7;
+  // What the same billing groups paid at on-demand rates in `onDemandMonth` for usage an RI or
+  // Savings Plan could have covered: the unblended cost of `Usage` line items in the MSP's Cost and
+  // Usage Report, for the services Guaranteed Commitments supports. Tag billing groups are not
+  // included. USD. Unset when `onDemandAvailable` is false.
+  double onDemandSpend = 8;
+  // The on-demand-equivalent cost (public on-demand cost of `DiscountedUsage` and
+  // `SavingsPlanCoveredUsage` line items) of the same usage already covered by an RI or Savings
+  // Plan in `onDemandMonth`. USD. Unset when `onDemandAvailable` is false.
+  double coveredSpend = 9;
+  // RI/SP coverage in `onDemandMonth`, as a percentage from 0 to 100:
+  // `coveredSpend` ÷ (`coveredSpend` + `onDemandSpend`) × 100. Unset when there was no countable
+  // usage (coverage is not applicable) or when `onDemandAvailable` is false.
+  optional double riSpCoverage = 10;
+  // The month `onDemandSpend`, `coveredSpend` and `riSpCoverage` cover, as `yyyy-mm`: the last
+  // complete calendar month in UTC, or the month before it during the first five days of a month.
+  string onDemandMonth = 11;
+  // False when the Cost and Usage Report data could not be read. The other figures are unaffected.
+  bool onDemandAvailable = 12;
+  // How many not-Registered tag billing groups were left out of the on-demand figures, since their
+  // usage cannot be attributed by account.
+  int32 excludedTagBillingGroupCount = 13;
 }
 
 // One billing group's share of the Savings Opportunities figures.
@@ -1868,6 +1892,19 @@ message BillingGroupOpportunity {
   int32 expiringCommitmentCount = 5;
   // How many of those could be priced. When 0, the billing group has no savings figure.
   int32 pricedCommitmentCount = 6;
+  // This billing group's share of `SavingsOpportunities.onDemandSpend`. USD. Unset for a tag
+  // billing group, or when `SavingsOpportunities.onDemandAvailable` is false.
+  double onDemandSpend = 7;
+  // This billing group's share of `SavingsOpportunities.coveredSpend`. USD. Unset for a tag billing
+  // group, or when `SavingsOpportunities.onDemandAvailable` is false.
+  double coveredSpend = 8;
+  // This billing group's RI/SP coverage, as a percentage from 0 to 100. Unset when it had no
+  // countable usage, for a tag billing group, or when `SavingsOpportunities.onDemandAvailable` is
+  // false.
+  optional double riSpCoverage = 9;
+  // True for a tag billing group. Its usage cannot be attributed by account, so its on-demand
+  // figures are not available.
+  bool tagBillingGroup = 10;
 }
 
 // One expiring RI or SP.
