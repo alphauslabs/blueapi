@@ -1078,6 +1078,14 @@ message UpdateBillingGroupPurchaseNotificationRequest {
 
   // Ripple notification channel IDs to notify. Replaces the stored list.
   repeated string notificationChannelIds = 3;
+
+  // Whether to notify when a purchase is submitted (accepted by Archera). Omit to keep the
+  // stored value; true when nothing is stored.
+  optional bool notifySubmitted = 4;
+
+  // Whether to notify when a purchased plan is activated (Archera completes it). Omit to keep
+  // the stored value; true when nothing is stored.
+  optional bool notifyActivated = 5;
 }
 
 message ValidateBillingGroupRequest {
@@ -2670,6 +2678,14 @@ message BillingGroupPurchaseNotification {
 
   // When the setting was last updated, RFC3339. Empty if never saved.
   string updatedAt = 5;
+
+  // Whether a submitted purchase (accepted by Archera) is notified. Always set in responses;
+  // true for a setting saved before this field existed or never saved.
+  optional bool notifySubmitted = 6;
+
+  // Whether an activated plan (completed by Archera) is notified. Always set in responses;
+  // true for a setting saved before this field existed or never saved.
+  optional bool notifyActivated = 7;
 }
 
 // A Ripple notification channel the MSP can choose. Never includes destinations
